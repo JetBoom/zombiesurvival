@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "Models/Weapons/v_pza/PoisonZombie_sheet"
+	"$bumpmap" "Models/Weapons/v_pza/PoisonZombie_sheet_normal"
+	"$envmap" "env_cubemap"
+	"$normalmapalphaenvmapmask" 1
+	"$selfillum" "1"
+}

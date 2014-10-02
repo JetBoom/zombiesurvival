@@ -1,0 +1,6 @@
+VertexLitGeneric
+{
+	"$basetexture"	"models\weapons\hammer2"
+	"$envmap" "env_cubemap"
+
+}

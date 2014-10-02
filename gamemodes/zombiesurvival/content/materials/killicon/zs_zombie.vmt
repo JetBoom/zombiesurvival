@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$translucent" 1
+	"$basetexture" "killicon/zs_zombie"
+	"$vertexcolor" 0
+	"$ignorez" 1
+	"$additive" 1
+}

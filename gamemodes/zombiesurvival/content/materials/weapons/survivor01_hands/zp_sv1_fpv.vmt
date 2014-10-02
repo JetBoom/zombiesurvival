@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "weapons\survivor01_hands\zp_sv1_FPV"
+		"$bumpmap" "weapons\survivor01_hands\zp_sv1_FPV_NM"
+}

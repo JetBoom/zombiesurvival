@@ -1,0 +1,1 @@
+SRL={{["Class"]="zombiegasses",["Angles"]=Angle(0,34.391754150391,0),["Position"]=Vector(-475.69149780273,1811.4334716797,24.03125)}}

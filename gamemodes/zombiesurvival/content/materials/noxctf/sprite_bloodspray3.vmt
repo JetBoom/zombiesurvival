@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "Decals/blood3"
+	"$translucent" "1"
+	"$vertexcolor" 1
+	"$vertexalpha" "1"
+}

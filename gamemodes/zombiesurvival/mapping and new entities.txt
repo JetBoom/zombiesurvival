@@ -1,0 +1,206 @@
+Zombie Survival also sports powerful new entities that let you change the game around. Check out some of the zs_obj_ maps for examples.
+This might not be updated so it's always best to check this: http://www.noxiousnet.com/forums/index.php?topic=2373.0 since this is basically a copy-paste.
+
+	====================
+	= IMPORTANT THINGS =
+	====================
+
+* The filter by team ID's for filter_team are: Zombie: 3 and Human: 4.
+* Non-ZS weapons are removed from the map when it starts.
+* prop_door_rotating is breakable and can be torn off their hinges. Locked doors are invulnerable!
+* func_door_rotating is breakable as long as the brush is as small as a door is.
+* func_physbox are BREAKABLE no matter what.
+* item_ammo_crate is removed from the map when it starts.
+* People on the same team do not collide with each other.
+* Having _obj_ or objective in the map name automatically turns off dynamic zombie spawning. You can use logic_dynamicspawning to manually turn it back on.
+* The game automatically chooses the spawn point closest to the average position of all humans.
+
+	=======================
+	= TIPS AND GUIDELINES =
+	=======================
+
+* Never add secret rooms to your map. This isn't Zombie-Strike: Fullbright and you will only degrade the impression of your maps.
+* Props play a BIG part in ZS! Humans can pick them up, pull them, drag them, throw them, arrange them, and even build with them. Make sure props are PHYSICAL PROPS, NOT STATIC! Humans will want to use those props!
+* Zombies have the ability to see in pitch black areas with their dark to light vision.
+* Zombie spawns have noxious gases around them that damage humans and heal zombies. Place spawns intelligently.
+* Zombie spawn areas should be hazardous to humans. High up ledges or places to backpedal in to are a no-no. In an ideal ZS map, humans should never want to even step foot in or near the zombie spawn.
+* Bottlenecks are obvious camping spots.
+* Humans will only spawn when their client is ready or 30 seconds after joining on the server.
+* If there is a spot that is safer than another, you can bet that the humans will go there right when the game begins. Make sure to have multiple holding areas and make it so each of the areas have disadvantages!
+  A classic example of what not to do is to have a big main house and one or two small houses. The small houses will never get used because the big one is almost always more secure!
+  Another example is the three-story house. You have your first floor, second floor, and an attic.
+  The greatest mistake a mapper can make is to make it so the upper floors are safer than the bottom ones instead of having it so the upper ones are last-ditch spots.
+  This can EASILY be avoided by adding windows, holes in walls, and other environmental things.
+  Your map could be the best looking thing in the world but if there's one room that's safer than the rest, the humans will always go there and you might as well just delete the rest of the map.
+* Humans have an oxygen meter before they start to drown. Zombies don't.
+* Humans may have flashlights but they still can't see across a long, dark hallway or across a dark field (without graphics card setting changes or flashlight hacks). Zombies can.
+* Humans will find ways to exploit the map, weather it be jumping off the map bounds, jamming an elevator, or finding an extremely exploitable camping spot.
+  Make sure to test your map for these spots and always TRY and exploit your own map.
+* Not everyone has Counter-Strike: Source or Episode 2. Use HL2 models, materials, and sounds unless you plan on pakratting the content.
+* zs_somethinghouse is a completely unoriginal name.
+
+	===============
+	= ENTITY LIST =
+	===============
+
+info_player_human - Humans can spawn here.
+info_player_zombie - Zombies can spawn here.
+info_player_undead - Zombies can also spawn here.
+info_player_redeemed - Redeemed players can spawn here. Use of this is optional.
+Spawnpoints have a keyvalue "disabled" 1/0 and an input "disable" and "enable" to make it so players can't spawn at them dynamically.
+
+logic_beats - Allows you to turn beats (the ambient music) on or off.
+Keyvalues:
+	enabled <0/1> - Should beats be on or off.
+Inputs:
+	enable - Enables beats.
+	disable - Disables beats.
+
+logic_dynamicspawning - Allows you to control dynamic spawning.
+Dynamic spawning is a new feature where zombies will spawn on top of each other if no humans can see it and the zombie is not too close to any humans.
+This is on by default except in maps with _obj_ or objective in their names.
+Keyvalues:
+	enabled <0/1> - Should dynamic spawning be on?
+Inputs:
+	enable - Enables dynamic spawning.
+	disable - Disables dynamic spawning.
+
+logic_points - Allows you to control and call outputs based on points.
+Keyvalues: None
+Inputs:
+	addtoactivator <number> - Adds <number> to the activator.
+	addtocaller <number> - Adds <number> to the caller.
+	takefromactivator <number> - Takes <number> from the activator.
+	takefromcaller <number> - Takes <number> from the caller.
+	setactivatoramount <number> - Sets the amount that activator has to <number>.
+	setcalleramount <number> - Same as above but with the caller.
+	callifactivatorhave <number> - If the activator has this amount then OnConditionPassed is thrown, otherwise OnConditionFailed.
+	callifactivatornothave <number> - Same as above but logic is reversed.
+	callifcallerhave <number> - Same as above but with caller.
+	callifcallernothave <number> - Same as above but with caller.
+Outputs:
+	OnConditionPassed - Thrown by ourselves when a condition is passed. The activator is always the player in question. The arguments are the amount that was checked against.
+	OnConditionFailed - Thrown by ourselves when a condition is failed. Same as above.
+
+logic_startingloadout - Allows you to control what people start with.
+Keyvalues:
+	startingloadout (see below)
+Inputs:
+	setstartingoadout - Sets the starting load out for all new humans. This is a comma-separated list of entity classes which is then separated by colons. For example: "weapon_zs_peashooter:1,weapon_zs_axe:1,item_ammo_pistol:2" would give everyone a peashooter, an axe, and spawn two boxes of pistol ammo on them. It also accepts "none" for absolutely no starting items and "worth" for using the worth menu (default).
+
+logic_brains - All inputs and outputs are the same as logic_points but this works for brains (kills as a zombie). Two new inputs are added.
+Keyvalues: None
+Inputs:
+	redeemactivator - Instantly redeems the activator.
+	redeemcaller - Instantly redeems the caller.
+	setredeembrains <number> - Sets the amount of brains required for a zombie to automatically redeem. Setting it to 0 means no automatic redemptions.
+
+logic_worth - Allows you to control Worth.
+Keyvalues:
+	startingworth <number> - The amount of Worth to start with. Use 0 to disable Worth.
+Inputs:
+	setstartingworth <number> - Sets the amount of worth to start with.
+
+logic_pickups - Allows you to control how much stuff people can pickup in the map. Only things placed by the mapper work with this system. Stuff from dead humans doesn't count.
+Keyvalues:
+	maxweaponpickups <number> - How many weapons a player can pickup from the map.
+	maxammopickups <number> - How many ammo boxes a player can pickup from the map.
+	maxflashlightpickups <number> - How many flashlight batteries a player can pickup from the map.
+	weaponrequiredforammo <0 or 1> - If 1 then players must have a weapon that takes the ammo before being able to pick up an ammo box.
+Inputs:
+	setmaxweaponpickups <number> - Same as above.
+	setmaxammopickups <number> - Same as above.
+	setmaxflashlightpickups <number> - Same as above.
+	setweaponrequiredforammo <0 or 1> - Same as above.
+
+logic_classunlock - Allows you to control class unlocks.
+Keyvalues:
+	class <name> - Sets the name of the class to watch for any outputs.
+Outputs:
+	OnClassUnlocked - Called when the class we're watching's class is unlocked by the game. This output isn't called if the class is unlocked by any logic_classunlock entities, only by the game.
+Inputs:
+	unlockclass <name> - Forces a class to be unlocked.
+	lockclass <name> - Forces a class to be locked.
+
+point_worldhint - Allows you to create 3D hints and information tags.
+Keyvalues:
+	hint <hint> - The hint to display.
+	viewer <team number or 0 or -1> - The team that can view us. Use 0 for everyone, -1 for no one (inactive), 3 for zombie, and 4 for human.
+	range <number or 0 for infinite> - The range from the player's camera we must be in to see this hint. It can also be 0 for infinite which is the default.
+Inputs:
+	sethint <hint> - Same as the hint key value.
+	setviewer <team number or 0 or -1> - Same as the viewer key value.
+	setrange <number or 0 for infinite> - Same as the range key value.
+
+zombiegasses - Manually place a point for the zombies' noxious gases.
+To get these new entities, just make a info_player_start entity and rename the entity class to one of those. Don't worry about obsolete, it doesn't matter.
+
+logic_winlose
+Inputs:
+	win: Humans win the game, map over.
+	lose: Humans lose the game, map over.
+Outputs:
+	OnWin: Called when humans win even if not by this entity.
+	OnLose: Vice versa.
+
+logic_pickupdrop
+Keyvalues:
+	EntityToWatch - targetname of the entity to watch for the below OUTPUTS.
+Outputs:
+	OnPickedUp - Activator is the player, caller is the entity that was picked up.
+	OnDropped - Activator is the player, caller is the entity that was picked up.
+Inputs:
+	ForceDrop - arguments is the targetname of what you want to use. Forces the dropping of something that's picked up by a human.
+	DisablePickup - arguments is the targetname of what you want to use. Disables human pickups. Does not force dropping if currently carried, use the above input.
+	EnablePickup - arguments is the targetname of what you want to use. Enables human pickups.
+
+logic_waves
+Keyvalues:
+	wave - any On* outputs will watch for this wave. Use -1 for all waves.
+Outputs:
+	OnWaveEnd - Called when the wave ends.
+	OnWaveStart - Called when the wave starts.
+Inputs:
+	AdvanceWave - Advances to the next wave and sets the wave to active.
+	EndWave - Sets the time that the wave ends to this very moment.
+	StartWave - Sets the time that the wave begins to this very moment.
+	SetWave <wave number> - Sets the wave to <wave number>. This does not change the wave state between active and inactive.
+	SetWaves <number of waves> - Sets the total amount of waves to <number of waves>. Don't worry about class unlocks, the gamemode does not use the max waves value directly.
+	SetWaveStart <time> - Sets the time that the wave will start to TimeNow + <time>. You should use this instead of delayed entity inputs.
+	SetWaveEnd <time> - Same as above but for the time that the wave ends.
+
+logic_barricade
+Inputs:
+	disablethese - Takes the arguments in the form of a comma-separated array and disables any entities with that name. For example, disablethese objective1,somethingimportant,somethingelse. This would disable nailing of those entities.
+	enablethese - Same as above but enables instead of disables.
+
+prop_nail - Allows you to manually place nails.
+Keyvalues:
+	healthoverride <health> - Sets the nail's maximum health to a specific number.
+	healthmultiplier <number> - Multiply the nail's default maximum health by this number.
+	unremovable <1/0> - Set to 1 to make this nail unremovable by players.
+Inputs:
+	sethealth <health> - Sets the nail's remaining health.
+	attachto <targetname> - Parent to this entity.
+	nailto <targetname> - Nail to this entity. Use attachto first and then this to weld the two. Use "worldspawn" here to weld to the world.
+	setname <displayname> - Display this text as the owner name.
+	setunremovable <1/0> - Set if this nail is unremovable.
+	toggleunmovable - Toggle unremovable state.
+
+prop_playergib - Allows you to manually place gibs.
+Keyvalues:
+	lifetime <length> - Overrides how long for this gib should live. 0 for never automatically remove.
+	gibtype <type> - Overrides the gib's type (skull, spine, etc. This is a number not a model or name).
+
+logic_infliction
+Keyvalues:
+	infliction: Defines infliction to watch for (float between 0.0 - 1.0).
+Outputs:
+	OnInflictionReached: Called when the above value is reached.
+	OnLastHuman: Called when there is one person alive. !caller and !activator are both the last human's entity.
+
+point_zsmessage
+Keyvalues:
+	team ("zombie", "human", "private", or "all"): Filter which team gets the message. You can use private if you only want the activator to get the message or all for every player on the server.
+Inputs:
+	message ("msg"): What to display. Supports the markup library. http://wiki.garrysmod.com/?title=Markup.Parse
