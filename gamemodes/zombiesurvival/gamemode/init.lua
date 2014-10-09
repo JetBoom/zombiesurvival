@@ -1871,7 +1871,7 @@ function GM:GiveRandomEquipment(pl)
 end
 
 function GM:PlayerCanCheckout(pl)
-	return pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not self.CheckedOut[pl:UniqueID()] and not self.StartingLoadout and not self.ZombieEscape and self.StartingWorth > 0
+	return pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not self.CheckedOut[pl:UniqueID()] and not self.StartingLoadout and not self.ZombieEscape and self.StartingWorth > 0 and self:GetWave() < 2
 end
 
 concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
@@ -2467,6 +2467,7 @@ function GM:OnPlayerChangedTeam(pl, oldteam, newteam)
 		pl:SetPoints(0)
 		pl.DamagedBy = {}
 		pl:SetBarricadeGhosting(false)
+		self.CheckedOut[pl:UniqueID()] = true
 	elseif newteam == TEAM_HUMAN then
 		self.PreviouslyDied[pl:UniqueID()] = nil
 	end
