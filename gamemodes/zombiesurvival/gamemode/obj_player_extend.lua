@@ -426,11 +426,15 @@ function meta:BarricadeGhostingThink()
 end
 
 function meta:ShouldNotCollide(ent)
-	if ent:IsPlayer() then
-		return self:Team() == ent:Team() or self.NoCollideAll or ent.NoCollideAll
+	if ent:IsValid() then
+		if ent:IsPlayer() then
+			return self:Team() == ent:Team() or self.NoCollideAll or ent.NoCollideAll
+		end
+
+		return self:GetBarricadeGhosting() and ent:IsBarricadeProp() or self:Team() == TEAM_HUMAN and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD)
 	end
 
-	return self:GetBarricadeGhosting() and ent:IsBarricadeProp() or self:Team() == TEAM_HUMAN and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD)
+	return false
 end
 
 local function nocollidetimer(self, timername)
