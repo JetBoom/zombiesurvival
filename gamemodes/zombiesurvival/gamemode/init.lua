@@ -1059,14 +1059,14 @@ function GM:LastHuman(pl)
 			net.WriteEntity(pl or NULL)
 		net.Broadcast()
 
+		for _, ent in pairs(ents.FindByClass("logic_infliction")) do
+			ent:Input("onlasthuman", pl, pl, pl and pl:IsValid() and pl:EntIndex() or -1)
+		end
+
 		LASTHUMAN = true
 	end
 
 	self.TheLastHuman = pl
-
-	for _, ent in pairs(ents.FindByClass("logic_infliction")) do
-		ent:Input("onlasthuman", pl, pl, pl and pl:IsValid() and pl:EntIndex() or -1)
-	end
 end
 
 function GM:PlayerHealedTeamMember(pl, other, health, wep)
