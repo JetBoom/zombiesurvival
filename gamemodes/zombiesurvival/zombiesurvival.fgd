@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////
-// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (24th July 2014)       	 //
+// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (29th October 2014) 		 //
 // If there are any bugs with this file, or any additions that need to be made   //
 // make a post at: http://www.noxiousnet.com/forums/index.php?topic=14910        //		
 ///////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +170,35 @@
 	input setendtouchdeathclass(string) : "Set On Leaving Respawn Class keyvalue."
 	input setonetime(integer)           : "Set One Time keyvalue. <boolean>"
 	input setinstantchange(integer)     : "Set Change Instantly keyvalue. <boolean>"
+]
+
+@SolidClass base(Targetname) = trigger_bossclass : "ZS: A zombie that touches this brush"
+[
+	enabled(choices)        : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	silent(choices)        : "Silent" : 0 : "If yes then then the server does not announce that a player has become the new boss." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	instantchange(choices)     : "Change Instantly?" : 1 : "If yes then anyone who gets swapped will instantly be changed right on the spot." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	// Inputs
+	input enable(void)                  : "Enable the entity."
+	input disable(void)                 : "Disable the entity."
+	input seton(integer)                : "Set Enabled keyvalue. <boolean>"
+	input setsilent(integer)            : "Set Silent keyvalue. <boolean>"
+	input setinstantchange(integer)     : "Set Change Instantly keyvalue. <boolean>"
+	// Outputs
+	output OnBossTouched(void)			: "Set when a boss starts touching the brush. Is not fired when a zombie becomes a boss in this volume."
 ]
 
 ///////////////////////////////////////////////////////////////////////////////////
