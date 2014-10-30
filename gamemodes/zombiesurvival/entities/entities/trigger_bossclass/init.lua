@@ -48,7 +48,7 @@ function ENT:StartTouch(ent)
 			self:Input("onbosstouched",ent,self,string.lower(ent:GetZombieClassTable().Name))
 		else
 			local prevpos = ent:GetPos()
-			local prevang = ent:GetAngles()
+			local prevang = ent:EyeAngles()
 			GAMEMODE:SpawnBossZombie(ent, self.Silent)
 			if self.InstantChange then
 				ent:SetPos(prevpos)

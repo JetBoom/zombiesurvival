@@ -52,7 +52,7 @@ function ENT:Touch(ent)
 				if string.lower(v.Name) == self.TouchClass then
 					local prev = ent:GetZombieClass()
 					local prevpos = ent:GetPos()
-					local prevang = ent:GetAngles()
+					local prevang = ent:EyeAngles()
 					ent:SetZombieClass(k)
 					ent:UnSpectateAndSpawn()
 					if self.OneTime then
