@@ -197,6 +197,7 @@
 	input seton(integer)                : "Set Enabled keyvalue. <boolean>"
 	input setsilent(integer)            : "Set Silent keyvalue. <boolean>"
 	input setinstantchange(integer)     : "Set Change Instantly keyvalue. <boolean>"
+	input spawnboss(void)				: "Spawns the boss using the zombie with the highest score"
 	// Outputs
 	output OnBossTouched(void)			: "Set when a boss starts touching the brush. Is not fired when a zombie becomes a boss in this volume."
 ]
@@ -412,6 +413,10 @@
 		"thumper" 		: "Turrets"
 	]
 	amount(integer)	: "Amount" : 0 : "Amount of ammo that collecting this item gives"
+]
+@PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
+[
+	weapontype(string)    : "weapon_type"  : "weapon_zs_m4"   : "Weapon type this entity becomes"
 ]
 
 @PointClass base(Targetname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."

@@ -15,6 +15,8 @@ function ENT:AcceptInput(name, activator, caller, args)
 	name = string.lower(name)
 	if string.sub(name, 1, 2) == "on" then
 		self:FireOutput(name, activator, caller, args)
+	elseif name == "spawnboss" then
+		GAMEMODE:SpawnBossZombie(false, self.Silent)
 	elseif name == "seton" then
 		self.On = tonumber(args) == 1
 		return true
