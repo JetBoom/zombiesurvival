@@ -54,7 +54,8 @@ function ENT:Explode(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 		self:AddEFlags(EFL_SETTING_UP_BONES)
 
 		local followed = false
-		if eHitEntity:GetBoneCount() > 1 then
+		local bonecount = eHitEntity:GetBoneCount()
+		if bonecount and bonecount > 1 then
 			local boneindex = eHitEntity:NearestBone(vHitPos)
 			if boneindex and boneindex > 0 then
 				self:FollowBone(eHitEntity, boneindex)

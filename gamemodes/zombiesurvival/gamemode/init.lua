@@ -377,6 +377,7 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_centernotify")
 	util.AddNetworkString("zs_topnotify")
 	util.AddNetworkString("zs_zvols")
+	util.AddNetworkString("zs_classunlock")
 
 	util.AddNetworkString("zs_playerredeemed")
 	util.AddNetworkString("zs_dohulls")
@@ -1230,6 +1231,16 @@ function GM:RestartLua()
 	self.TheLastHuman = nil
 	self.LastBossZombieSpawned = nil
 	self.UseSigils = nil
+
+	-- logic_pickups
+	self.MaxWeaponPickups = nil
+	self.MaxAmmoPickups = nil
+	self.MaxFlashlightPickups = nil
+	self.WeaponRequiredForAmmo = nil
+	for _, pl in pairs(player.GetAll()) do
+		pl.AmmoPickups = nil
+		pl.WeaponPickups = nil
+	end
 
 	self.OverrideEndSlomo = nil
 	if type(GetGlobalBool("endcamera", 1)) ~= "number" then
@@ -3523,6 +3534,7 @@ end
 
 function GM:SetWave(wave)
 	local previouslylocked = {}
+	local UnlockedClasses = {}
 	for i, classtab in ipairs(GAMEMODE.ZombieClasses) do
 		if not gamemode.Call("IsClassUnlocked", classid) then
 			previouslylocked[i] = true
@@ -3533,12 +3545,25 @@ function GM:SetWave(wave)
 
 	for classid in pairs(previouslylocked) do
 		if gamemode.Call("IsClassUnlocked", classid) then
+			table.insert(UnlockedClasses, classid)
 			for _, ent in pairs(ents.FindByClass("logic_classunlock")) do
 				local classname = GAMEMODE.ZombieClasses[classid].Name
 				if ent.Class == string.lower(classname) then
 					ent:Input("onclassunlocked", ent, ent, classname)
 				end
 			end
+		end
+	end
+
+	if #UnlockedClasses > 0 then
+		for _, pl in pairs(player.GetAll()) do
+			local classnames = {}
+			for __, classid in pairs(UnlockedClasses) do
+				table.insert(classnames, translate.ClientGet(pl, self.ZombieClasses[classid].TranslationName))
+			end
+			net.Start("zs_classunlock")
+				net.WriteString(string.AndSeparate(classnames))
+			net.Send(pl)
 		end
 	end
 end

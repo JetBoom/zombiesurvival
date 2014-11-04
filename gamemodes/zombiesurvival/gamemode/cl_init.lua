@@ -1700,21 +1700,14 @@ net.Receive("zs_wavestart", function(length)
 		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Get("final_wave"), {killicon = "default"})
 		GAMEMODE:CenterNotify(translate.Get("final_wave_sub"))
 	else
-		local UnlockedClasses = {}
-		for i, tab in ipairs(GAMEMODE.ZombieClasses) do
-			if tab.Wave <= wave and not tab.Unlocked then
-				tab.Unlocked = true
-				UnlockedClasses[#UnlockedClasses + 1] = translate.Get(tab.TranslationName)
-			end
-		end
-
 		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Format("wave_x_has_begun", wave), {killicon = "default"})
-		if #UnlockedClasses > 0 then
-			GAMEMODE:CenterNotify(COLOR_GREEN, translate.Format("x_unlocked", string.AndSeparate(UnlockedClasses)))
-		end
 	end
 
 	surface_PlaySound("ambient/creatures/town_zombie_call1.wav")
+end)
+
+net.Receive("zs_classunlock", function(length)
+	GAMEMODE:CenterNotify(COLOR_GREEN, net.ReadString())
 end)
 
 net.Receive("zs_waveend", function(length)
