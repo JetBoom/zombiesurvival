@@ -3545,7 +3545,12 @@ function GM:SetWave(wave)
 
 	for classid in pairs(previouslylocked) do
 		if gamemode.Call("IsClassUnlocked", classid) then
-			table.insert(UnlockedClasses, classid)
+			local classtab = self.ZombieClasses[classid]
+			if not classtab.UnlockedNotify then
+				classtab.UnlockedNotify = true
+				table.insert(UnlockedClasses, classid)
+			end
+
 			for _, ent in pairs(ents.FindByClass("logic_classunlock")) do
 				local classname = GAMEMODE.ZombieClasses[classid].Name
 				if ent.Class == string.lower(classname) then

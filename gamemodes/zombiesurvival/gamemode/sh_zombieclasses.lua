@@ -91,6 +91,10 @@ function GM:RegisterZombieClasses()
 				ErrorNoHalt("CLASS "..tostring(v.Name).." uses base class "..base.." but it doesn't exist!")
 			end
 		end
+
+		if v.Unlocked or v.Wave == 0 then
+			v.UnlockedNotify = true
+		end
 	end
 
 	self:ReorderZombieClasses()
