@@ -130,6 +130,12 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
+	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Automatic suicide when changing classes")
+	check:SetConVar("zs_suicideonchange")
+	check:SizeToContents()
+	list:AddItem(check)
+
 	list:AddItem(EasyLabel(Window, "Weapon HUD display style", "DefaultFontSmall", color_white))
 	local dropdown = vgui.Create("DComboBox", Window)
 	dropdown:SetMouseInputEnabled(true)

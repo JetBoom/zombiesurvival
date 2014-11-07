@@ -128,6 +128,28 @@ local draw_GetFontHeight = draw.GetFontHeight
 
 local MedicalAuraDistance = 400
 
+GM.LifeStatsBrainsEaten = 0
+GM.LifeStatsHumanDamage = 0
+GM.LifeStatsBarricadeDamage = 0
+GM.InputMouseX = 0
+GM.InputMouseY = 0
+GM.LastTimeDead = 0
+GM.LastTimeAlive = 0
+GM.HeartBeatTime = 0
+GM.FOVLerp = 1
+GM.HurtEffect = 0
+GM.PrevHealth = 0
+GM.SuppressArsenalTime = 0
+GM.ZombieThirdPerson = false
+GM.Beats = {}
+
+GM.DeathFog = 0
+GM.FogStart = 0
+GM.FogEnd = 8000
+GM.FogRed = 30
+GM.FogGreen = 30
+GM.FogBlue = 30
+
 function GM:ClickedPlayerButton(pl, button)
 end
 
@@ -146,8 +168,6 @@ function GM:TopNotify(...)
 	end
 end
 
-GM.InputMouseX = 0
-GM.InputMouseY = 0
 function GM:_InputMouseApply(cmd, x, y, ang)
 	self.InputMouseX = x
 	self.InputMouseY = y
@@ -295,12 +315,6 @@ function GM:PostDrawSkyBox()
 	cam.End3D()
 end
 
-GM.DeathFog = 0
-GM.FogStart = 0
-GM.FogEnd = 8000
-GM.FogRed = 30
-GM.FogGreen = 30
-GM.FogBlue = 30
 function GM:GetFogData()
 	local fogstart, fogend = render.GetFogDistances()
 	local fogr, fogg, fogb = render.GetFogColor()
@@ -427,9 +441,6 @@ function GM:GetDynamicSpawning()
 	return not GetGlobalBool("DynamicSpawningDisabled", false)
 end
 
-GM.LastTimeDead = 0
-GM.LastTimeAlive = 0
-
 function GM:TrackLastDeath()
 	if MySelf:Alive() then
 		self.LastTimeAlive = CurTime()
@@ -467,10 +478,6 @@ function GM:PostRender()
 end
 
 local lastwarntim = -1
-GM.HeartBeatTime = 0
-GM.FOVLerp = 1
-GM.HurtEffect = 0
-GM.PrevHealth = 0
 local NextGas = 0
 function GM:_Think()
 	if self:GetEscapeStage() == ESCAPESTAGE_DEATH then
@@ -980,7 +987,6 @@ local function FirstOfGoodType(a)
 	end
 end
 
-GM.Beats = {}
 function GM:InitializeBeats()
 	local _, dirs = file.Find("sound/zombiesurvival/beats/*", "GAME")
 	for _, dirname in pairs(dirs) do
@@ -1144,7 +1150,6 @@ function GM:HumanMenu()
 	panel:OpenMenu()
 end
 
-GM.ZombieThirdPerson = false
 function GM:PlayerBindPress(pl, bind, wasin)
 	if bind == "gmod_undo" or bind == "undo" then
 		RunConsoleCommand("+zoom")
@@ -1276,6 +1281,11 @@ function GM:_CreateMove(cmd)
 			end
 		end
 	else
+		local buttons = cmd:GetButtons()
+		if bit.band(buttons, IN_ZOOM) ~= 0 then
+			cmd:SetButtons(buttons - IN_ZOOM)
+		end
+
 		MySelf:CallZombieFunction("CreateMove", cmd)
 	end
 end
@@ -1566,7 +1576,6 @@ function GM:CloseWorth()
 	end
 end
 
-GM.SuppressArsenalTime = 0
 function GM:SuppressArsenalUpgrades(suppresstime)
 	self.SuppressArsenalTime = math.max(CurTime() + suppresstime, self.SuppressArsenalTime)
 end

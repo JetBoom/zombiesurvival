@@ -1,17 +1,126 @@
-local function PlayerInitialSpawn(pl)
-	http.Fetch("http://www.noxiousnet.com/api/player/memberlevel?steamid="..pl:SteamID(), function(body, len, headers, code)
-		local level = tonumber(body)
-		if level == 1 or level == 2 then
-			pl._SUPPORTER_ = true
-			pl:PrintMessage(HUD_PRINTCONSOLE, "GREETINGS FROM NOX, FELLOW SUPPORTER!")
+-- TODO: Make requests buffer for 3 seconds or so using ?steamids=a,b,c,d
+-- TODO: _SUPPORTER_ needs to be networked
+
+local SUPPORTER_MESSAGE = "JetBoom says \"thank you for supporting my gamemodes!\" to you."
+
+local CACHE = {
+	MaxSize = 128,
+	Cache = {}
+}
+
+function CACHE:Set(steamid, memberlevel, nolookup)
+	if nolookup then
+		table.insert(self.Cache, {steamid, memberlevel})
+	else
+		for i, tab in pairs(self.Cache) do
+			if tab[1] == steamid then
+				tab[2] = memberlevel
+				return
+			end
 		end
-	end)
+
+		table.insert(self.Cache, {steamid, memberlevel})
+	end
+
+	if #self.Cache > self.MaxSize then
+		table.remove(self.Cache, 1)
+	end
 end
 
---if not NDB then
-	--hook.Add("PlayerInitialSpawn", "noxapi", PlayerInitialSpawn)
---end
+function CACHE:Get(steamid)
+	for i, tab in pairs(self.Cache) do
+		if tab[1] == steamid then
+			return tab[2]
+		end
+	end
+end
+
+function CACHE:Remove(steamid)
+	for i, tab in pairs(self.Cache) do
+		if tab[1] == steamid then
+			table.remove(self.Cache, i)
+			break
+		end
+	end
+end
+
+function CACHE:Save()
+	local tosave = {}
+
+	for steamid, level in pairs(self.Cache) do
+		table.insert(tosave, steamid.."="..level)
+	end
+
+	file.Write("noxapi_cache.txt", table.concat(tosave, "\n"))
+end
+
+function CACHE:Load()
+	if file.Exists("noxapi_cache.txt", "DATA") then
+		self.Cache = {}
+
+		for i, line in pairs(string.Explode("\n", file.Read("noxapi_cache.txt", "DATA"))) do
+			local cont = string.Explode("=", line)
+			local steamid, memberlevel = cont[1], tonumber(cont[2]) or 0
+
+			self:Set(steamid, memberlevel, true)
+		end
+	end
+end
+
+--[[hook.Add("PlayerInitialSpawn", "noxapi", function(pl)
+	if NDB then return end
+
+	local steamid = pl:SteamID()
+	local memberlevel = CACHE:Get(steamid)
+	if memberlevel then
+		if level == 1 or level == 2 then
+			pl._SUPPORTER_ = true
+			pl:PrintMessage(HUD_PRINTCONSOLE, SUPPORTER_MESSAGE)
+		end
+	else
+		http.Fetch("http://www.noxiousnet.com/api/player/memberlevel?steamid="..steamid, function(body, len, headers, code)
+			local level = tonumber(body) or 0
+
+			if level == 1 or level == 2 then
+				pl._SUPPORTER_ = true
+				pl:PrintMessage(HUD_PRINTCONSOLE, SUPPORTER_MESSAGE)
+			end
+
+			CACHE:Set(steamid, level)
+		end)
+	end
+end)
 
 hook.Add("Initialize", "noxapi", function()
 	resource.AddFile("materials/noxiousnet/noxicon.png")
+
+	if not NDB then
+		CACHE:Load()
+	end
 end)
+
+hook.Add("ShutDown", "noxapi", function()
+	if not NDB then
+		CACHE:Save()
+	end
+end)
+
+concommand.Add("noxapi_forcerefresh", function(sender, command, arguments)
+	if NDB or sender._ForcedNoxAPILookup or sender._SUPPORTER_ then return end
+	sender._ForcedNoxAPILookup = true
+
+	local steamid = sender:SteamID()
+
+	CACHE:Remove(steamid)
+
+	http.Fetch("http://www.noxiousnet.com/api/player/memberlevel?steamid="..steamid, function(body, len, headers, code)
+		local level = tonumber(body) or 0
+
+		if level == 1 or level == 2 then
+			pl._SUPPORTER_ = true
+			pl:PrintMessage(HUD_PRINTCONSOLE, SUPPORTER_MESSAGE)
+		end
+
+		CACHE:Set(steamid, level)
+	end)
+end)]]

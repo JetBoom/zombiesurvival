@@ -7,7 +7,7 @@ CLASS.Wave = 0
 CLASS.Unlocked = true
 
 CLASS.Health = 150
-CLASS.Speed = 170
+CLASS.Speed = 160
 
 CLASS.Points = 4
 

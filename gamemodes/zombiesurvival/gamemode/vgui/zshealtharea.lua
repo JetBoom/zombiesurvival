@@ -35,6 +35,8 @@ function PANEL:Init()
 		if lp:IsValid() then
 			return lp:GetPoisonDamage()
 		end
+
+		return 0
 	end
 	poisonstatus.MemberMaxValue = 50
 	poisonstatus:Dock(TOP)
@@ -49,9 +51,30 @@ function PANEL:Init()
 		if lp:IsValid() then
 			return lp:GetBleedDamage()
 		end
+
+		return 0
 	end
 	bleedstatus.MemberMaxValue = 20
 	bleedstatus:Dock(TOP)
+
+	local ghoultouchstatus = vgui.Create("ZSHealthStatus", contents)
+	ghoultouchstatus:SetTall(20)
+	ghoultouchstatus:SetAlpha(200)
+	ghoultouchstatus:SetColor(Color(255, 0, 0))
+	ghoultouchstatus:SetMemberName("GHOUL TOUCH!")
+	ghoultouchstatus.GetMemberValue = function(me)
+		local lp = LocalPlayer()
+		if lp:IsValid() then
+			local status = lp:GetStatus("ghoultouch")
+			if status and status:IsValid() then
+				return math.max(status.DieTime - CurTime(), 0)
+			end
+		end
+
+		return 0
+	end
+	ghoultouchstatus.MemberMaxValue = 10
+	ghoultouchstatus:Dock(TOP)
 
 	self:ParentToHUD()
 	self:InvalidateLayout()

@@ -217,7 +217,7 @@ function meta:ProcessDamage(dmginfo)
 
 	if self:Team() == TEAM_UNDEAD then
 		if self ~= attacker then
-			dmginfo:SetDamage(dmginfo:GetDamage() * GAMEMODE:GetZombieDamageScale(dmginfo:GetDamagePosition(), pl))
+			dmginfo:SetDamage(dmginfo:GetDamage() * GAMEMODE:GetZombieDamageScale(dmginfo:GetDamagePosition(), self))
 		end
 
 		return self:CallZombieFunction("ProcessDamage", dmginfo)

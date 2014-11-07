@@ -101,6 +101,7 @@ function meta:TrySpawnAsGoreChild()
 			local deathclass = self.DeathClass
 			self:SetZombieClassName("Gore Child")
 			self.DeathClass = nil
+			self.DidntSpawnOnSpawnPoint = true
 			self:UnSpectateAndSpawn()
 			self.DeathClass = deathclass
 			self:SetPos(ent:GetPos())

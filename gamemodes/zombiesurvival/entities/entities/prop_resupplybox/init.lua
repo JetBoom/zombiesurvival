@@ -146,7 +146,9 @@ function ENT:Use(activator, caller)
 	if activator ~= owner and owner:IsValid() and owner:IsPlayer() and owner:Team() == TEAM_HUMAN then
 		owner.ResupplyBoxUsedByOthers = owner.ResupplyBoxUsedByOthers + 1
 
-		owner:AddPoints(1)
+		if owner.ResupplyBoxUsedByOthers % 2 == 0 then
+			owner:AddPoints(1)
+		end
 
 		net.Start("zs_commission")
 			net.WriteEntity(self)

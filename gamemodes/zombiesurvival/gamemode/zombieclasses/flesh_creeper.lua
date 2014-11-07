@@ -10,6 +10,7 @@ CLASS.Health = 100
 CLASS.SWEP = "weapon_zs_fleshcreeper"
 CLASS.Model = Model("models/antlion.mdl")
 CLASS.Speed = 175
+CLASS.JumpPower = 220
 
 CLASS.Points = 4
 
