@@ -20,14 +20,17 @@ if CLIENT then
 	}
 end
 
-SWEP.Primary.Damage = 18
+SWEP.Primary.Damage = 14
 SWEP.Primary.NumShots = 2
 SWEP.Primary.Delay = 0.2
 
-SWEP.Primary.ClipSize = 15
+SWEP.Primary.ClipSize = 14
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
+
+SWEP.ConeMax = 0.07
+SWEP.ConeMin = 0.03
 
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 80, 75)

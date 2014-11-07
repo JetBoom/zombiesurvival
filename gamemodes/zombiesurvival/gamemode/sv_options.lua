@@ -18,11 +18,6 @@ cvars.AddChangeCallback("zs_bosszombies", function(cvar, oldvalue, newvalue)
 	GAMEMODE.BossZombies = tonumber(newvalue) == 1
 end)
 
-GM.BossZombiePlayersRequired = CreateConVar("zs_bosszombiethreshold", "10", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Don't summon boss zombies if less than this amount of players. 0 to disable."):GetInt()
-cvars.AddChangeCallback("zs_bosszombiethreshold", function(cvar, oldvalue, newvalue)
-	GAMEMODE.BossZombiePlayersRequired = tonumber(newvalue) or 0
-end)
-
 GM.OutnumberedHealthBonus = CreateConVar("zs_outnumberedhealthbonus", "4", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Give zombies some extra maximum health if there are less than or equal to this many zombies. 0 to disable."):GetInt()
 cvars.AddChangeCallback("zs_outnumberedhealthbonus", function(cvar, oldvalue, newvalue)
 	GAMEMODE.OutnumberedHealthBonus = tonumber(newvalue) or 0

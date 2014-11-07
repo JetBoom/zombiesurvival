@@ -84,7 +84,8 @@ end
 
 function ENT:Use(activator, caller)
 	local ishuman = activator:Team() == TEAM_HUMAN and activator:Alive()
-	if not self:GetObjectOwner():IsValid() and ishuman then
+
+	if not self.NoTakeOwnership and not self:GetObjectOwner():IsValid() and ishuman then
 		self:SetObjectOwner(activator)
 	end
 

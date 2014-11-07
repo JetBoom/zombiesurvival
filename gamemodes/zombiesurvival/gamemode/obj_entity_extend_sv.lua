@@ -61,11 +61,6 @@ local function CheckItemCreated(self)
 			table.insert(tab, ent)
 		end
 	end
-	for _, ent in pairs(ents.FindByClass("prop_flashlightbattery")) do
-		if not ent.PlacedInMap then
-			table.insert(tab, ent)
-		end
-	end
 	for _, ent in pairs(ents.FindByClass("prop_weapon")) do
 		if not ent.PlacedInMap then
 			table.insert(tab, ent)

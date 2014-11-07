@@ -6,13 +6,18 @@ end
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 26
-SWEP.MeleeForceScale = 0.1
+SWEP.MeleeDamage = 15
+SWEP.MeleeForceScale = 0.5
+SWEP.SlowDownScale = 0.25
+--[[SWEP.MeleeForceScale = 0.1
 SWEP.SlowDownScale = 2.25
-SWEP.SlowDownImmunityTime = 2
+SWEP.SlowDownImmunityTime = 2]]
 
 function SWEP:ApplyMeleeDamage(ent, trace, damage)
 	ent:PoisonDamage(damage, self.Owner, self, trace.HitPos)
+	if SERVER and ent:IsPlayer() then
+		ent:GiveStatus("ghoultouch", 10)
+	end
 end
 
 function SWEP:Reload()

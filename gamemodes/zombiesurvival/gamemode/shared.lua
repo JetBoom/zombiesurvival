@@ -491,6 +491,8 @@ function GM:ShouldUseAlternateDynamicSpawn()
 end
 
 function GM:GetZombieDamageScale(pos, ignore)
+	if LASTHUMAN then return self.ZombieDamageMultiplier end
+
 	return self.ZombieDamageMultiplier * (1 - self:GetDamageResistance(self:GetFearMeterPower(pos, TEAM_UNDEAD, ignore)))
 end
 

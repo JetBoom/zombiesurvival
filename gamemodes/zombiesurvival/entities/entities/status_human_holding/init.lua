@@ -101,6 +101,9 @@ function ENT:OnRemove()
 			object:CollisionRulesChanged()
 		end
 
+		object._LastDroppedBy = owner
+		object._LastDropped = CurTime()
+
 		for _, ent in pairs(ents.FindByClass("logic_pickupdrop")) do
 			if ent.EntityToWatch == object:GetName() and ent:IsValid() then
 				ent:Input("ondropped", owner, object, "")

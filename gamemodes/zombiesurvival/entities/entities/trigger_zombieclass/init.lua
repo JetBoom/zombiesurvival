@@ -54,6 +54,7 @@ function ENT:Touch(ent)
 					local prevpos = ent:GetPos()
 					local prevang = ent:EyeAngles()
 					ent:SetZombieClass(k)
+					ent.DidntSpawnOnSpawnPoint = true
 					ent:UnSpectateAndSpawn()
 					if self.OneTime then
 						ent.DeathClass = prev
@@ -87,6 +88,7 @@ function ENT:EndTouch(ent)
 					local prevpos = ent:GetPos()
 					local prevang = ent:GetAngles()
 					ent:SetZombieClass(k)
+					ent.DidntSpawnOnSpawnPoint = true
 					ent:UnSpectateAndSpawn()
 					if self.OneTime then
 						ent.DeathClass = prev
