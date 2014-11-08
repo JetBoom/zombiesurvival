@@ -1,4 +1,5 @@
 -- Sometimes persistent ones don't get created.
+-- Sometimes persistent ones don't get created.
 local dummy = CreateClientConVar("_zs_dummyconvar", 1, false, false)
 local oldCreateClientConVar = CreateClientConVar
 function CreateClientConVar(...)

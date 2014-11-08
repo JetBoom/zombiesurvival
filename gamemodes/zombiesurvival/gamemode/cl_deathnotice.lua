@@ -63,7 +63,7 @@ killicon.AddFont("weapon_slam", "zsdeathnotice", "*", color_white)
 killicon.AddFont("weapon_crowbar", "zsdeathnotice", "6", color_white)
 
 killicon.AddFont("headshot", "zsdeathnoticecs", "D", color_white)
-killicon.Add("redeem", "killicon/redeem", color_white)
+killicon.Add("redeem", "killicon/redeem_v2", color_white)
 
 killicon.Add("weapon_zs_zombie", "zombiesurvival/killicons/zombie", color_white)
 killicon.Add("weapon_zs_freshdead", "zombiesurvival/killicons/zombie", color_white)

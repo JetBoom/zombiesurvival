@@ -216,8 +216,8 @@ function GM:AddResources()
 	end
 
 	resource.AddFile("materials/refract_ring.vmt")
-	resource.AddFile("materials/killicon/redeem.vtf")
-	resource.AddFile("materials/killicon/redeem.vmt")
+	resource.AddFile("materials/killicon/redeem_v2.vtf")
+	resource.AddFile("materials/killicon/redeem_v2.vmt")
 	resource.AddFile("materials/killicon/zs_axe.vtf")
 	resource.AddFile("materials/killicon/zs_keyboard.vtf")
 	resource.AddFile("materials/killicon/zs_sledgehammer.vtf")
@@ -1670,20 +1670,13 @@ function GM:GetDynamicSpawning()
 end
 
 function GM:PlayerRedeemed(pl, silent, noequip)
-	if not silent then
-		net.Start("zs_playerredeemed")
-			net.WriteEntity(pl)
-			net.WriteString(pl:Name())
-		net.Broadcast()
-	end
-
 	pl:RemoveStatus("overridemodel", false, true)
 
 	pl:ChangeTeam(TEAM_HUMAN)
-	pl:DoHulls()
 	if not noequip then pl.m_PreRedeem = true end
 	pl:UnSpectateAndSpawn()
 	pl.m_PreRedeem = nil
+	pl:DoHulls()
 
 	local frags = pl:Frags()
 	if frags < 0 then
@@ -1697,6 +1690,13 @@ function GM:PlayerRedeemed(pl, silent, noequip)
 	pl:SetZombieClass(self.DefaultZombieClass)
 
 	pl.SpawnedTime = CurTime()
+
+	if not silent then
+		net.Start("zs_playerredeemed")
+			net.WriteEntity(pl)
+			net.WriteString(pl:Name())
+		net.Broadcast()
+	end
 end
 
 function GM:PlayerDisconnected(pl)
