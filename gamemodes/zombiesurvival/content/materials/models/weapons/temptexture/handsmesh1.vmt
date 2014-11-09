@@ -1,4 +1,4 @@
 "VertexLitGeneric"
 {
-	"$baseTexture" "models\weapons\temptexture\handsmesh1"
+	"$baseTexture" "models/weapons/temptexture/handsmesh1"
 }
