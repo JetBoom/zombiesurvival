@@ -70,7 +70,7 @@ function LightVisible(posa, posb, ...)
 		end
 	end
 
-	return not util.TraceLine({start = posa, endpos = posb, mask = MASK_SHOT_OPAQUE, filter}).Hit
+	return not util.TraceLine({start = posa, endpos = posb, mask = MASK_SHOT_OPAQUE, filter = filter}).Hit
 end
 
 function WorldVisible(posa, posb)
