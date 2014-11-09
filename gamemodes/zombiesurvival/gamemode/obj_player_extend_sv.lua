@@ -764,7 +764,7 @@ function meta:AddBrains(amount)
 	self:CheckRedeem()
 end
 
-meta.GetBrains = self.Frags
+meta.GetBrains = meta.Frags
 
 function meta:CheckRedeem(instant)
 	if not self:IsValid() or self:Team() ~= TEAM_UNDEAD
