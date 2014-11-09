@@ -149,7 +149,7 @@ function PANEL:Think()
 			self:SetModel(model)
 
 			if IsValid(self.Entity) then
-				local mins, maxs = lp:GetRenderBounds()
+				local mins, maxs = lp:OBBMins(), lp:OBBMaxs()
 				self:SetCamPos(mins:Distance(maxs) * Vector(0, -0.9, 0.4))
 				self:SetLookAt((mins + maxs) / 2)
 				self.Entity:SetModelScale(modelscale, 0)
