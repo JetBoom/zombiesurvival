@@ -120,6 +120,11 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 	if tr.HitGroup == HITGROUP_HEAD then
 		local ent = tr.Entity
 		if ent:IsValid() and ent:IsPlayer() then
+			if ent:Team() == TEAM_UNDEAD and ent:GetZombieClassTable().Boss then
+				GenericBulletCallback(attacker, tr, dmginfo)
+				return
+			end
+
 			ent.Gibbed = CurTime()
 		end
 
@@ -128,5 +133,6 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 		end
 	end
 
+	INFDAMAGEFLOATER = true
 	GenericBulletCallback(attacker, tr, dmginfo)
 end

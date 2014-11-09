@@ -2462,7 +2462,12 @@ function GM:DamageFloater(attacker, victim, dmginfo)
 	if dmgpos == vector_origin then dmgpos = victim:NearestPoint(attacker:EyePos()) end
 
 	net.Start(victim:IsPlayer() and "zs_dmg" or "zs_dmg_prop")
-		net.WriteUInt(math.ceil(dmginfo:GetDamage()), 16)
+		if INFDAMAGEFLOATER then
+			INFDAMAGEFLOATER = nil
+			net.WriteUInt(9999, 16)
+		else
+			net.WriteUInt(math.ceil(dmginfo:GetDamage()), 16)
+		end
 		net.WriteVector(dmgpos)
 	net.Send(attacker)
 end
