@@ -764,8 +764,14 @@ function meta:AddBrains(amount)
 	self:CheckRedeem()
 end
 
+meta.GetBrains = self.Frags
+
 function meta:CheckRedeem(instant)
-	if self:IsValid() and self:Team() == TEAM_UNDEAD and GAMEMODE:GetRedeemBrains() > 0 and GAMEMODE:GetRedeemBrains() <= self:Frags() and GAMEMODE:GetWave() ~= GAMEMODE:GetNumberOfWaves() and not self.NoRedeeming and not self:GetZombieClassTable().Boss then
+	if not self:IsValid() or self:Team() ~= TEAM_UNDEAD
+	or GAMEMODE:GetRedeemBrains() <= 0 or self:GetBrains() < GAMEMODE:GetRedeemBrains()
+	or GAMEMODE.NoRedeeming or self:GetZombieClassTable().Boss then return end
+
+	if GAMEMODE:GetWave() ~= GAMEMODE:GetNumberOfWaves() or not GAMEMODE.ObjectiveMap and GAMEMODE:GetNumberOfWaves() == 1 and CurTime() < GAMEMODE:GetWaveEnd() - 300 then
 		if instant then
 			self:Redeem()
 		else

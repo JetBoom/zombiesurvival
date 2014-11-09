@@ -45,11 +45,11 @@ function ENT:KeyValue(key, value)
 	end
 end
 
-function ENT:Touch(ent)
+function ENT:DoTouch(ent, class_name, death_class_name)
 	if self.On and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_UNDEAD then
-		if self.TouchClass and self.TouchClass ~= string.lower(ent:GetZombieClassTable().Name) then
+		if class_name and class_name ~= string.lower(ent:GetZombieClassTable().Name) then
 			for k, v in ipairs(GAMEMODE.ZombieClasses) do
-				if string.lower(v.Name) == self.TouchClass then
+				if string.lower(v.Name) == class_name then
 					local prev = ent:GetZombieClass()
 					local prevpos = ent:GetPos()
 					local prevang = ent:EyeAngles()
@@ -67,9 +67,9 @@ function ENT:Touch(ent)
 					break
 				end
 			end
-		elseif self.TouchDeathClass and self.TouchDeathClass ~= string.lower(ent:GetZombieClassTable().Name) then
+		elseif death_class_name and death_class_name ~= string.lower(ent:GetZombieClassTable().Name) then
 			for k, v in ipairs(GAMEMODE.ZombieClasses) do
-				if string.lower(v.Name) == self.TouchDeathClass then
+				if string.lower(v.Name) == death_class_name then
 					ent.DeathClass = k
 					break
 				end
@@ -77,37 +77,12 @@ function ENT:Touch(ent)
 		end
 	end
 end
+
+function ENT:Touch(ent)
+	self:DoTouch(ent, self.TouchClass, self.TouchDeathClass)
+end
 ENT.StartTouch = ENT.Touch
 
 function ENT:EndTouch(ent)
-	if self.On and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_UNDEAD then
-		if self.EndTouchClass and self.EndTouchClass ~= string.lower(ent:GetZombieClassTable().Name) then
-			for k, v in ipairs(GAMEMODE.ZombieClasses) do
-				if string.lower(v.Name) == self.EndTouchClass then
-					local prev = ent:GetZombieClass()
-					local prevpos = ent:GetPos()
-					local prevang = ent:GetAngles()
-					ent:SetZombieClass(k)
-					ent.DidntSpawnOnSpawnPoint = true
-					ent:UnSpectateAndSpawn()
-					if self.OneTime then
-						ent.DeathClass = prev
-					end
-					if self.InstantChange then
-						ent:SetPos(prevpos)
-						ent:SetEyeAngles(prevang)
-					end
-
-					break
-				end
-			end
-		elseif self.EndTouchDeathClass and self.EndTouchDeathClass ~= string.lower(ent:GetZombieClassTable().Name) then
-			for k, v in ipairs(GAMEMODE.ZombieClasses) do
-				if string.lower(v.Name) == self.EndTouchDeathClass then
-					ent.DeathClass = k
-					break
-				end
-			end
-		end
-	end
+	self:DoTouch(ent, self.EndTouchClass, self.EndTouchDeathClass)
 end
