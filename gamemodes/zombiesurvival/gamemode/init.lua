@@ -357,9 +357,9 @@ function GM:Initialize()
 		self.ObjectiveMap = true
 	end
 
-	if string.sub(mapname, 1, 3) == "zm_" then
+	--[[if string.sub(mapname, 1, 3) == "zm_" then
 		NOZOMBIEGASSES = true
-	end
+	end]]
 
 	game.ConsoleCommand("fire_dmgscale 1\n")
 	game.ConsoleCommand("mp_flashlight 1\n")
@@ -651,39 +651,45 @@ function GM:CreateZombieGas()
 	if NOZOMBIEGASSES then return end
 
 	local humanspawns = team.GetValidSpawnPoint(TEAM_HUMAN)
+	local zombiespawns = team.GetValidSpawnPoint(TEAM_UNDEAD)
 
-	for _, spawn in pairs(team.GetValidSpawnPoint(TEAM_UNDEAD)) do
+	for _, zombie_spawn in pairs(zombiespawns) do
 		local gasses = ents.FindByClass("zombiegasses")
-		local numgasses = #gasses
-		if 4 < numgasses then
-			break
-		elseif numgasses == 0 or math.random(4) == 1 then
-			local spawnpos = spawn:GetPos() + Vector(0, 0, 24)
-			local near = false
+		if 4 < #gasses then
+			return
+		end
 
-			if not self.ZombieEscape then
-				for _, humspawn in pairs(humanspawns) do
-					if humspawn:IsValid() and humspawn:GetPos():Distance(spawnpos) < 400 then
-						near = true
-						break
-					end
+		if #gasses > 0 and math.random(5) ~= 1 then
+			continue
+		end
+
+		local spawnpos = zombie_spawn:GetPos() + Vector(0, 0, 24)
+
+		local near = false
+
+		if not self.ZombieEscape then
+			for __, human_spawn in pairs(humanspawns) do
+				if human_spawn:IsValid() and human_spawn:GetPos():Distance(spawnpos) < 500 then
+					near = true
+					break
 				end
 			end
-			if not near then
-				for _, gas in pairs(gasses) do
-					if gas:GetPos():Distance(spawnpos) < 300 then
-						near = true
-						break
-					end
+		end
+
+		if not near then
+			for __, gas in pairs(gasses) do
+				if gas:GetPos():Distance(spawnpos) < 350 then
+					near = true
+					break
 				end
 			end
+		end
 
-			if not near then
-				local ent = ents.Create("zombiegasses")
-				if ent:IsValid() then
-					ent:SetPos(spawnpos)
-					ent:Spawn()
-				end
+		if not near then
+			local ent = ents.Create("zombiegasses")
+			if ent:IsValid() then
+				ent:SetPos(spawnpos)
+				ent:Spawn()
 			end
 		end
 	end
