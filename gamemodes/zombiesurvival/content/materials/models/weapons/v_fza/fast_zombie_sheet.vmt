@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/weapons/v_fza/fast_zombie_sheet"
+	"$bumpmap" "models/weapons/v_fza/fast_zombie_sheet_normal"
+}

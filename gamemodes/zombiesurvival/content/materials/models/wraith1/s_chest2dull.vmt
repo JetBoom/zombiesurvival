@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	// Original shader: VertexLitMaskedEnvMappedTexture
+	"$basetexture" "models/wraith1/s_chest2dull"
+	"$envmap" "models/wraith1/stalkerspec"
+	"$envmapmask" "models/wraith1/s_chest2mask"
+	"$envmapsphere" 1
+}
