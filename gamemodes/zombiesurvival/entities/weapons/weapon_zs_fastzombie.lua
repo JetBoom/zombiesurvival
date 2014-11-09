@@ -225,6 +225,13 @@ function SWEP:StartPounce()
 		owner:SetGroundEntity(NULL)
 		owner:SetVelocity((1 - 0.5 * (owner:GetLegDamage() / GAMEMODE.MaxLegDamage)) * self.PounceVelocity * dir)
 		owner:SetAnimation(PLAYER_JUMP)
+	else
+		self:SetNextSecondaryFire(CurTime())
+		self.m_ViewAngles = nil
+		self.NextAllowJump = CurTime()
+		self.NextAllowPounce = CurTime() + self.PounceDelay
+		self:SetNextPrimaryFire(CurTime() + 0.1)
+		self.Owner:ResetJumpPower()
 	end
 end
 
