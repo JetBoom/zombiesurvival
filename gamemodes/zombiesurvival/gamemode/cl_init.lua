@@ -127,7 +127,7 @@ local draw_SimpleTextBlurry = draw.SimpleTextBlurry
 local draw_SimpleTextBlur = draw.SimpleTextBlur
 local draw_GetFontHeight = draw.GetFontHeight
 
-local MedicalAuraDistance = 400
+local MedicalAuraDistance = 300
 
 GM.LifeStatsBrainsEaten = 0
 GM.LifeStatsHumanDamage = 0
@@ -1337,7 +1337,7 @@ function GM:_PrePlayerDraw(pl)
 	if pl.status_overridemodel and pl.status_overridemodel:IsValid() and self:ShouldDrawLocalPlayer(MySelf) then -- We need to do this otherwise the player's real model shows up for some reason.
 		undomodelblend = true
 		render.SetBlend(0)
-	elseif MySelf:Team() == TEAM_HUMAN and pl ~= MySelf and pl:Team() == TEAM_HUMAN then
+	elseif MySelf:Team() == TEAM_HUMAN and pl ~= MySelf and pl:Team() == TEAM_HUMAN and not self.MedicalAura then
 		local radius = self.TransparencyRadius
 		if radius > 0 then
 			local eyepos = EyePos()

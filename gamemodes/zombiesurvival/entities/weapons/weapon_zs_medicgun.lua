@@ -80,12 +80,6 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 	end
 end
 
---[[function SWEP:Initialize()
-	if CLIENT and self:GetOwner() == LocalPlayer() and LocalPlayer():GetActiveWeapon() == self then
-		hook.Add("PostPlayerDraw", "PostPlayerDrawMedical", GAMEMODE.PostPlayerDrawMedical)
-	end
-end]]
-
 function SWEP:Deploy()
 	gamemode.Call("WeaponDeployed", self.Owner, self)
 
@@ -93,6 +87,7 @@ function SWEP:Deploy()
 
 	if CLIENT then
 		hook.Add("PostPlayerDraw", "PostPlayerDrawMedical", GAMEMODE.PostPlayerDrawMedical)
+		GAMEMODE.MedicalAura = true
 	end
 
 	return true
@@ -101,6 +96,7 @@ end
 function SWEP:Holster()
 	if CLIENT then
 		hook.Remove("PostPlayerDraw", "PostPlayerDrawMedical")
+		GAMEMODE.MedicalAura = false
 	end
 
 	return true

@@ -15,7 +15,7 @@ function GM:ReceivedCommission(crate, buyer, points)
 end
 
 function GM:HealedOtherPlayer(other, points)
-	gamemode.Call("FloatingScore", other, "floatingscore", points)
+	gamemode.Call("FloatingScore", other, "floatingscore_heal", points, nil, true)
 end
 
 function GM:RepairedObject(other, points)
@@ -23,10 +23,16 @@ function GM:RepairedObject(other, points)
 end
 
 local cvarNoFloatingScore = CreateClientConVar("zs_nofloatingscore", 0, true, false)
-function GM:FloatingScore(victim, effectname, frags, flags)
+function GM:FloatingScore(victim, effectname, frags, flags, override_allow)
+	if cvarNoFloatingScore:GetBool() then return end
+
 	local isvec = type(victim) == "Vector"
 
-	if cvarNoFloatingScore:GetBool() or not isvec and (not victim:IsValid() or victim:IsPlayer() and victim:Team() == MySelf:Team()) then return end
+	if not isvec then
+		if not victim:IsValid() or victim:IsPlayer() and victim:Team() == MySelf:Team() and not override_allow then
+			return
+		end
+	end
 
 	effectname = effectname or "floatingscore"
 
