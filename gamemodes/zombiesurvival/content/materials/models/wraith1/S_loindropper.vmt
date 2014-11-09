@@ -1,6 +1,0 @@
-"VertexLitGeneric"
-{
-	// Original shader: VertexLitAlphaTestedTexture
-	"$basetexture" "models/wraith1/s_loindropper"
-	"$alphatest" 1
-}
