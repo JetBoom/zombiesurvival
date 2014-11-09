@@ -22,7 +22,7 @@ function ENT:Think()
 				local eyepos = pl:GetShootPos()
 				local nearest = owner:NearestPoint(eyepos)
 				local dist = eyepos:Distance(nearest)
-				if dist <= 300 and TrueVisible(eyepos, nearest) then
+				if dist <= 300 and LightVisible(eyepos, nearest, owner, pl) then
 					local dot = (nearest - eyepos):GetNormalized():Dot(pl:GetAimVector())
 					if dot >= 0.85 then
 						local damage = (1 - dist / 300) * dot * 7
@@ -40,7 +40,7 @@ function ENT:Think()
 			local eyepos = ent:GetSpotLightPos()
 			local nearest = owner:NearestPoint(eyepos)
 			local dist = eyepos:Distance(nearest)
-			if dist <= 500 and TrueVisibleFilters(eyepos, nearest, owner, ent) then
+			if dist <= 500 and LightVisible(eyepos, nearest, owner, ent) then
 				local dot = (nearest - eyepos):GetNormalized():Dot(ent:GetSpotLightAngles():Forward())
 				if dot >= 0.85 then
 					local damage = (1 - dist / 500) * dot * 8

@@ -60,6 +60,19 @@ function TrueVisibleFilters(posa, posb, ...)
 	return not util.TraceLine({start = posa, endpos = posb, filter = filt, mask = MASK_SHOT}).Hit
 end
 
+MASK_SHOT_OPAQUE = bit.bor(MASK_SHOT, CONTENTS_OPAQUE)
+-- Literally if photon particles can reach point b from point a.
+function LightVisible(posa, posb, ...)
+	local filter = {}
+	if ... ~= nil then
+		for k, v in pairs({...}) do
+			filter[#filter + 1] = v
+		end
+	end
+
+	return not util.TraceLine({start = posa, endpos = posb, mask = MASK_SHOT_OPAQUE, filter}).Hit
+end
+
 function WorldVisible(posa, posb)
 	return not util.TraceLine({start = posa, endpos = posb, mask = MASK_SOLID_BRUSHONLY}).Hit
 end
