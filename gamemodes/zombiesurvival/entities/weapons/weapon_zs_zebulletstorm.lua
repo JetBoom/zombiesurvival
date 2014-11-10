@@ -28,9 +28,9 @@ function SWEP:SetIronsights(b)
 
 	if self.IronSightsHoldType then
 		if b then
-			self:SetWeaponHoldType(self.IronSightsHoldType)
+			self:SetHoldType(self.IronSightsHoldType)
 		else
-			self:SetWeaponHoldType(self.HoldType)
+			self:SetHoldType(self.HoldType)
 		end
 	end
 

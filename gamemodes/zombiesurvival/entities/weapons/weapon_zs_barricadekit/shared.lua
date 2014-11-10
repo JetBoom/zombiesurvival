@@ -21,7 +21,7 @@ end
 SWEP.WalkSpeed = SPEED_SLOWEST
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("rpg")
+	self:SetHoldType("rpg")
 	self:SetDeploySpeed(1.1)
 end
 

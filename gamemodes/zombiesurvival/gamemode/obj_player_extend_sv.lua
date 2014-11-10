@@ -248,51 +248,23 @@ function meta:GiveEmptyWeapon(weptype)
 	end
 end
 
-meta.OldGive = meta.Give
+local OldGive = meta.Give
 function meta:Give(weptype)
 	if self:Team() ~= TEAM_HUMAN then
-		self:OldGive(weptype)
-		return
+		return OldGive(self, weptype)
 	end
 
 	local weps = self:GetWeapons()
 	local autoswitch = #weps == 1 and weps[1]:IsValid() and weps[1].AutoSwitchFrom
 
-	self:OldGive(weptype)
+	local ret = OldGive(self, weptype)
 
 	if autoswitch then
 		self:SelectWeapon(weptype)
 	end
+
+	return ret
 end
-
--- Here for when garry makes weapons use 357 ammo like he does every other update.
---[[local oldgive = meta.Give
-function meta:Give(...)
-	local wep = oldgive(self, ...)
-	if wep:IsValid() then
-		if wep.Primary and wep.Primary.Ammo and wep.Primary.Ammo ~= "none" then
-			self:RemoveAmmo(wep.Primary.DefaultClip - wep.Primary.ClipSize, "357")
-			wep:SetClip1(0)
-
-			if wep.Primary.DefaultClip > wep.Primary.ClipSize then
-				self:GiveAmmo(wep.Primary.DefaultClip, wep.Primary.Ammo, true)
-			end
-			wep:SetClip1(wep.Primary.ClipSize)
-			self:RemoveAmmo(wep.Primary.ClipSize, wep.Primary.Ammo)
-		end
-		if wep.Secondary and wep.Secondary.Ammo and wep.Secondary.Ammo ~= "none" then
-			self:RemoveAmmo(wep.Secondary.DefaultClip - wep.Secondary.ClipSize, "357")
-			wep:SetClip2(0)
-
-			if wep.Secondary.DefaultClip > wep.Secondary.ClipSize then
-				self:GiveAmmo(wep.Secondary.DefaultClip, wep.Secondary.Ammo, true)
-			end
-			wep:SetClip2(wep.Secondary.ClipSize)
-			self:RemoveAmmo(wep.Secondary.ClipSize, wep.Secondary.Ammo)
-		end
-	end
-	return wep
-end]]
 
 function meta:StartFeignDeath(force)
 	local feigndeath = self.FeignDeath

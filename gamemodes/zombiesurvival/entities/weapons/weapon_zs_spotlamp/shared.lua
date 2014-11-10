@@ -18,7 +18,7 @@ SWEP.WalkSpeed = SPEED_NORMAL
 SWEP.FullWalkSpeed = SPEED_SLOWEST
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("slam")
+	self:SetHoldType("slam")
 	self:SetDeploySpeed(1.1)
 	self:HideViewAndWorldModel()
 end
