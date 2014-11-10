@@ -195,7 +195,6 @@ function SWEP:MeleeSwing()
 				dmginfo:SetAttacker(owner)
 				dmginfo:SetInflictor(self)
 				dmginfo:SetDamageType(self.DamageType)
-				dmginfo:SetDamageForce(self.MeleeDamage * 20 * owner:GetAimVector())
 				if hitent:IsPlayer() then
 					hitent:MeleeViewPunch(damage)
 					if hitent:IsHeadcrab() then
@@ -206,6 +205,9 @@ function SWEP:MeleeSwing()
 
 					if self.MeleeKnockBack > 0 then
 						hitent:ThrowFromPositionSetZ(tr.HitPos, self.MeleeKnockBack, nil, true)
+					end
+					if hitent:IsPlayer() and hitent:WouldDieFrom(damage, dmginfo:GetDamagePosition()) then
+						dmginfo:SetDamageForce(math.min(self.MeleeDamage, 50) * 400 * owner:GetAimVector())
 					end
 				end
 

@@ -248,6 +248,20 @@ function meta:GiveEmptyWeapon(weptype)
 	end
 end
 
+meta.OldGive = meta.Give
+function meta:Give(weptype)
+	if self:Team() ~= TEAM_HUMAN then return end
+
+	local weps = self:GetWeapons()
+	local autoswitch = #weps == 1 and weps[1]:IsValid() and weps[1].AutoSwitchFrom
+
+	self:OldGive(weptype)
+
+	if autoswitch then
+		self:SelectWeapon(weptype)
+	end
+end
+
 -- Here for when garry makes weapons use 357 ammo like he does every other update.
 --[[local oldgive = meta.Give
 function meta:Give(...)

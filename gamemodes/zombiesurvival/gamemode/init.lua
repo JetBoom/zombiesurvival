@@ -3514,6 +3514,8 @@ function GM:PlayerSpawn(pl)
 		pl:SetNoTarget(false)
 		pl:SetMaxHealth(100)
 
+		pl:Give("weapon_zs_fists")
+
 		if self.ZombieEscape then
 			pl:Give("weapon_zs_zeknife")
 			pl:Give("weapon_zs_zegrenade")

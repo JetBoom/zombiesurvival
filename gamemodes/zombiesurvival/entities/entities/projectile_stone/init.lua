@@ -44,7 +44,7 @@ function ENT:StartTouch(ent)
 
 		if ent ~= owner and ent:Team() ~= self.Team then
 			ent:EmitSound("weapons/crossbow/hitbod"..math.random(2)..".wav")
-			ent:TakeDamage(self.Damage, owner, self)
+			ent:TakeSpecialDamage(self.Damage, DMG_CLUB, owner, self, nil, Vector(0, 0, 60000))
 			self:Explode()
 		end
 	end

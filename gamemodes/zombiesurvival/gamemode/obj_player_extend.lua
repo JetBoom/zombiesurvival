@@ -208,6 +208,10 @@ function meta:GetLegDamage()
 	return math.max(0, base - CurTime())
 end
 
+function meta:WouldDieFrom(damage, hitpos)
+	return self:Health() <= damage * GAMEMODE:GetZombieDamageScale(hitpos, self)
+end
+
 function meta:ProcessDamage(dmginfo)
 	local attacker, inflictor = dmginfo:GetAttacker(), dmginfo:GetInflictor()
 
