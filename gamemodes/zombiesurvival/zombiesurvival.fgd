@@ -1,165 +1,170 @@
-///////////////////////////////////////////////////////////////////////////////////
-// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (29th October 2014) 		 //
-// If there are any bugs with this file, or any additions that need to be made   //
-// make a post at: http://www.noxiousnet.com/forums/index.php?topic=14910        //		
-///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (10th November 2014)     //
+// If there are any bugs with this file, or any additions that need to be made  //
+// make a post at: http://www.noxiousnet.com/forums/index.php?topic=14910       //
+//////////////////////////////////////////////////////////////////////////////////
 
 @include "base.fgd"
 @include "halflife2.fgd"
 @include "hl2mp.fgd"
 
-///////////////////////////////////////////////////////////////////////////////////
-// Gamemode - Brush Entities //////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Brush Entities /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 @SolidClass base(Targetname) = func_noair : "ZS: Anyone inside this brush requires air"
 [
-	enabled(choices)        : "Enabled" : 0 : "Enable the brush entity." =
+	// Keys
+	enabled(choices)    : "Enabled" : 0 : "Enable the brush entity." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
-	input enable(void)                  : "Enable the entity."
-	input disable(void)                 : "Disable the entity."
-	input toggle(void)                  : "Toggle the entity."
+	
+	// Inputs
+	input enable(void)  : "Enable the entity."
+	input disable(void) : "Disable the entity."
+	input toggle(void)  : "Toggle the entity."
 ]
 
 @SolidClass base(Targetname) = trigger_zombieclass : "ZS: You can directly control the changing of classes with this."
 [
-	enabled(choices)        : "Enabled" : 0 : "Enable the brush entity." =
+	// Keys
+	enabled(choices)             : "Enabled" : 0 : "Enable the brush entity." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
-	touchclass(choices)		: "On Touch Class"		: "zombie" : "Any living zombie touching the brush will be set to this class name." =
+	touchclass(choices)          : "On Touch Class" : "zombie" : "Any living zombie touching the brush will be set to this class name." =
 	[
-		"crow"				: "Crow"
-		"will o' wisp"		: "Will O' Wisp"
-		"zombie" 	    	: "Zombie"
-		"classic Zombie"	: "Classic Zombie"
-		"fresh dead"		: "Fresh Dead"
-		"zombie legs"       : "Zombie Legs"
-		"zombie torso"      : "Zombie Torso"
-		"flesh creeper"		: "Flesh Creeper"
-		"headcrab"          : "Headcrab"
-		"fast headcrab"     : "Fast Headcrab"
-		"poison headcrab"   : "Poison Headcrab"
-		"ghoul"             : "Ghoul"
-		"wraith"            : "Wraith"
-		"bloated zombie"	: "Bloated Zombie"
-		"fast zombie"       : "Fast Zombie"
-		"fast zombie legs"  : "Fast Zombie Legs"
-		"poison zombie"     : "Poison Zombie"
-		"chem zombie"       : "Chem Zombie"
-		"nightmare"         : "Nightmare"
-		"puke pus"          : "Puke Pus"
-		"the tickle monster": "The Tickle Monster"
-		"shade"             : "Shade"
-		"bonemesh"			: "Bonemesh"
-		"the butcher"       : "The Butcher"
-		"super zombie"		: "Super Zombie"
-		"gore child"		: "Gore Child"
-		"giga gore child"	: "Giga Gore Child"
+		"crow"               : "Crow"
+		"will o' wisp"       : "Will O' Wisp"
+		"zombie"             : "Zombie"
+		"classic Zombie"     : "Classic Zombie"
+		"fresh dead"         : "Fresh Dead"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"headcrab"           : "Headcrab"
+		"fast headcrab"      : "Fast Headcrab"
+		"poison headcrab"    : "Poison Headcrab"
+		"ghoul"              : "Ghoul"
+		"wraith"             : "Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"poison zombie"      : "Poison Zombie"
+		"chem zombie"        : "Chem Zombie"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"the tickle monster" : "The Tickle Monster"
+		"shade"              : "Shade"
+		"bonemesh"           : "Bonemesh"
+		"the butcher"        : "The Butcher"
+		"super zombie"       : "Super Zombie"
+		"gore child"         : "Gore Child"
+		"giga gore child"    : "Giga Gore Child"
 	]
-	endtouchclass(choices)  : "On Leaving Class"	: "zombie" : "Same as Touching Class but for when leaving the brush." =
+	endtouchclass(choices)       : "On Leaving Class" : "zombie" : "Same as Touching Class but for when leaving the brush." =
 	[
-		"crow"				: "Crow"
-		"will o' wisp"		: "Will O' Wisp"
-		"zombie" 	    	: "Zombie"
-		"classic Zombie"	: "Classic Zombie"
-		"fresh dead"		: "Fresh Dead"
-		"zombie legs"       : "Zombie Legs"
-		"zombie torso"      : "Zombie Torso"
-		"flesh creeper"		: "Flesh Creeper"
-		"headcrab"          : "Headcrab"
-		"fast headcrab"     : "Fast Headcrab"
-		"poison headcrab"   : "Poison Headcrab"
-		"ghoul"             : "Ghoul"
-		"wraith"            : "Wraith"
-		"bloated zombie"	: "Bloated Zombie"
-		"fast zombie"       : "Fast Zombie"
-		"fast zombie legs"  : "Fast Zombie Legs"
-		"poison zombie"     : "Poison Zombie"
-		"chem zombie"       : "Chem Zombie"
-		"nightmare"         : "Nightmare"
-		"puke pus"          : "Puke Pus"
-		"the tickle monster": "The Tickle Monster"
-		"shade"             : "Shade"
-		"bonemesh"			: "Bonemesh"
-		"the butcher"       : "The Butcher"
-		"super zombie"		: "Super Zombie"
-		"gore child"		: "Gore Child"
-		"giga gore child"	: "Giga Gore Child"
+		"crow"               : "Crow"
+		"will o' wisp"       : "Will O' Wisp"
+		"zombie"             : "Zombie"
+		"classic Zombie"     : "Classic Zombie"
+		"fresh dead"         : "Fresh Dead"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"headcrab"           : "Headcrab"
+		"fast headcrab"      : "Fast Headcrab"
+		"poison headcrab"    : "Poison Headcrab"
+		"ghoul"              : "Ghoul"
+		"wraith"             : "Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"poison zombie"      : "Poison Zombie"
+		"chem zombie"        : "Chem Zombie"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"the tickle monster" : "The Tickle Monster"
+		"shade"              : "Shade"
+		"bonemesh"           : "Bonemesh"
+		"the butcher"        : "The Butcher"
+		"super zombie"       : "Super Zombie"
+		"gore child"         : "Gore Child"
+		"giga gore child"    : "Giga Gore Child"
 	]
-	touchdeathclass(choices): "On Touch Respawn Class"    : "zombie" : "Any living zombie touching the brush will be set to this class name on death." =
+	touchdeathclass(choices)     : "On Touch Respawn Class" : "zombie" : "Any living zombie touching the brush will be set to this class name on death." =
 	[
-		"crow"				: "Crow"
-		"will o' wisp"		: "Will O' Wisp"
-		"zombie" 	    	: "Zombie"
-		"classic Zombie"	: "Classic Zombie"
-		"fresh dead"		: "Fresh Dead"
-		"zombie legs"       : "Zombie Legs"
-		"zombie torso"      : "Zombie Torso"
-		"flesh creeper"		: "Flesh Creeper"
-		"headcrab"          : "Headcrab"
-		"fast headcrab"     : "Fast Headcrab"
-		"poison headcrab"   : "Poison Headcrab"
-		"ghoul"             : "Ghoul"
-		"wraith"            : "Wraith"
-		"bloated zombie"	: "Bloated Zombie"
-		"fast zombie"       : "Fast Zombie"
-		"fast zombie legs"  : "Fast Zombie Legs"
-		"poison zombie"     : "Poison Zombie"
-		"chem zombie"       : "Chem Zombie"
-		"nightmare"         : "Nightmare"
-		"puke pus"          : "Puke Pus"
-		"the tickle monster": "The Tickle Monster"
-		"shade"             : "Shade"
-		"bonemesh"			: "Bonemesh"
-		"the butcher"       : "The Butcher"
-		"super zombie"		: "Super Zombie"
-		"gore child"		: "Gore Child"
-		"giga gore child"	: "Giga Gore Child"
+		"crow"               : "Crow"
+		"will o' wisp"       : "Will O' Wisp"
+		"zombie"             : "Zombie"
+		"classic Zombie"     : "Classic Zombie"
+		"fresh dead"         : "Fresh Dead"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"headcrab"           : "Headcrab"
+		"fast headcrab"      : "Fast Headcrab"
+		"poison headcrab"    : "Poison Headcrab"
+		"ghoul"              : "Ghoul"
+		"wraith"             : "Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"poison zombie"      : "Poison Zombie"
+		"chem zombie"        : "Chem Zombie"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"the tickle monster" : "The Tickle Monster"
+		"shade"              : "Shade"
+		"bonemesh"           : "Bonemesh"
+		"the butcher"        : "The Butcher"
+		"super zombie"       : "Super Zombie"
+		"gore child"         : "Gore Child"
+		"giga gore child"    : "Giga Gore Child"
 	]
-	endtouchdeathclass(choices) : "On Leaving Respawn Class"  : "zombie" : "Same as Touching Respawn Class but for when leaving the brush." =
+	endtouchdeathclass(choices)  : "On Leaving Respawn Class" : "zombie" : "Same as Touching Respawn Class but for when leaving the brush." =
 	[
-		"crow"				: "Crow"
-		"will o' wisp"		: "Will O' Wisp"
-		"zombie" 	    	: "Zombie"
-		"classic Zombie"	: "Classic Zombie"
-		"fresh dead"		: "Fresh Dead"
-		"zombie legs"       : "Zombie Legs"
-		"zombie torso"      : "Zombie Torso"
-		"flesh creeper"		: "Flesh Creeper"
-		"headcrab"          : "Headcrab"
-		"fast headcrab"     : "Fast Headcrab"
-		"poison headcrab"   : "Poison Headcrab"
-		"ghoul"             : "Ghoul"
-		"wraith"            : "Wraith"
-		"bloated zombie"	: "Bloated Zombie"
-		"fast zombie"       : "Fast Zombie"
-		"fast zombie legs"  : "Fast Zombie Legs"
-		"poison zombie"     : "Poison Zombie"
-		"chem zombie"       : "Chem Zombie"
-		"nightmare"         : "Nightmare"
-		"puke pus"          : "Puke Pus"
-		"the tickle monster": "The Tickle Monster"
-		"shade"             : "Shade"
-		"bonemesh"			: "Bonemesh"
-		"the butcher"       : "The Butcher"
-		"super zombie"		: "Super Zombie"
-		"gore child"		: "Gore Child"
-		"giga gore child"	: "Giga Gore Child"
+		"crow"               : "Crow"
+		"will o' wisp"       : "Will O' Wisp"
+		"zombie"             : "Zombie"
+		"classic Zombie"     : "Classic Zombie"
+		"fresh dead"         : "Fresh Dead"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"headcrab"           : "Headcrab"
+		"fast headcrab"      : "Fast Headcrab"
+		"poison headcrab"    : "Poison Headcrab"
+		"ghoul"              : "Ghoul"
+		"wraith"             : "Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"poison zombie"      : "Poison Zombie"
+		"chem zombie"        : "Chem Zombie"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"the tickle monster" : "The Tickle Monster"
+		"shade"              : "Shade"
+		"bonemesh"           : "Bonemesh"
+		"the butcher"        : "The Butcher"
+		"super zombie"       : "Super Zombie"
+		"gore child"         : "Gore Child"
+		"giga gore child"    : "Giga Gore Child"
 	]
-	onetime(choices)           : "One Time?" : 0 : "If yes then anyone who gets swapped will be respawned as the last class they were before the change." =
-	[
-		1 : "Yes"
-		0 : "No"
-	]
-	instantchange(choices)     : "Change Instantly?" : 1 : "If yes then anyone who gets swapped will instantly be changed right on the spot." =
+	onetime(choices)             : "One Time?" : 0 : "If yes then anyone who gets swapped will be respawned as the last class they were before the change." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
+	instantchange(choices)       : "Change Instantly?" : 1 : "If yes then anyone who gets swapped will instantly be changed right on the spot." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	
 	// Inputs
 	input enable(void)                  : "Enable the entity."
 	input disable(void)                 : "Disable the entity."
@@ -174,32 +179,33 @@
 
 @SolidClass base(Targetname) = trigger_bossclass : "ZS: A zombie that touches this brush"
 [
+	// Keys
 	enabled(choices)        : "Enabled" : 0 : "Enable the brush entity." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
-
 	silent(choices)        : "Silent" : 0 : "If yes then then the server does not announce that a player has become the new boss." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
-
-	instantchange(choices)     : "Change Instantly?" : 1 : "If yes then anyone who gets swapped will instantly be changed right on the spot." =
+	instantchange(choices) : "Change Instantly?" : 1 : "If yes then anyone who gets swapped will instantly be changed right on the spot." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
+	
 	// Inputs
 	input enable(void)                  : "Enable the entity."
 	input disable(void)                 : "Disable the entity."
 	input seton(integer)                : "Set Enabled keyvalue. <boolean>"
 	input setsilent(integer)            : "Set Silent keyvalue. <boolean>"
 	input setinstantchange(integer)     : "Set Change Instantly keyvalue. <boolean>"
-	input spawnboss(void)				: "Spawns the boss using the zombie with the highest score"
+	input spawnboss(void)               : "Spawns the boss using the zombie with the highest score"
+	
 	// Outputs
-	output OnBossTouched(void)			: "Set when a boss starts touching the brush. Is not fired when a zombie becomes a boss in this volume."
+	output OnBossTouched(void)          : "Set when a boss starts touching the brush. Is not fired when a zombie becomes a boss in this volume."
 ]
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -208,11 +214,13 @@
 
 @BaseClass base(Targetname) = ZSSpawn
 [
-	disabled(choices) : "Disabled" : 0 : "If disabled, players cannot spawn here." =
+	// Keys
+	disabled(choices)   : "Disabled" : 0 : "If disabled, players cannot spawn here." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
+	
 	// Inputs
 	input enable(void)  : "Enable the spawn point."
 	input disable(void) : "Disable the spawn point."
@@ -237,24 +245,27 @@
 
 @PointClass base(Targetname) = logic_beats  : "ZS: Allows you to turn beats (the ambient music) on or off."
 [
-	enabled(choices) : "Enabled" : 1 : "Allows ZS beats" =
+	// Keys
+	enabled(choices)    : "Enabled" : 1 : "Allows ZS beats" =
 	[
 		1 : "Yes"
-		0 : "No"		
+		0 : "No"
 	]
+	
 	// Inputs
 	input enable(void)  : "Enables beats."
 	input disable(void) : "Disables beats."
-	// Outputs
 ]
 
 @PointClass base(Targetname) = logic_dynamicspawning : "ZS: Allows you to control dynamic spawning."
 [
+	// Keys
 	enabled(choices)    : "Enabled" : 1 : "Should dynamic spawning be on?" =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
+	
 	// Inputs
 	input enable(void)  : "Enable dynamic spawning."
 	input disable(void) : "Disable dynamic spawning."
@@ -262,12 +273,15 @@
 
 @PointClass base(Origin) iconsprite("particles/smokey") sphere( radius ) = zombiegasses  : "ZS: Manually place a point for the zombies' noxious gases."
 [
+	// Keys
 	radius(integer) : "Radius" : 250 : "Radius that this can damage humans/heal zombies."
 ]
 
 @PointClass base(Targetname) = logic_pickupdrop : "ZS: Controls events when players pickup or drop things."
 [
+	// Keys
 	EntityToWatch(target_destination) : "Entity to Watch" : " " : "Name of the entity to watch (for outputs)."
+	
 	// Inputs
 	input ForceDrop(string)           : "Forces the dropping of something that's picked up by a human."
 	input DisablePickup(string)       : "Disables human pickups for the specified entity. Does not force dropping if currently carried, use the above input."
@@ -314,50 +328,56 @@
 	input redeemactivator(void)           : "Instantly redeems the activator."
 	input redeemcaller(void)              : "Instantly redeems the caller."
 	input setredeembrains(integer)        : "Sets the amount of brains required for a zombie to automatically redeem. Setting it to 0 means no automatic redemptions."
-
+	
 	// Outputs
-	output OnConditionPassed(void) : "Thrown by ourselves when a condition is passed. The activator is always the player in question. The arguments are the amount that was checked against."
-	output OnConditionFailed(void) : "Thrown by ourselves when a condition is failed. The activator is always the player in question. The arguments are the amount that was checked against."
+	output OnConditionPassed(void)        : "Thrown by ourselves when a condition is passed. The activator is always the player in question. The arguments are the amount that was checked against."
+	output OnConditionFailed(void)        : "Thrown by ourselves when a condition is failed. The activator is always the player in question. The arguments are the amount that was checked against."
 ]
 
-@PointClass base(Targetname) = logic_startingloadout  : "ZS: Allows you to control what people start with."
+@PointClass base(Targetname) = logic_startingloadout : "ZS: Allows you to control what people start with."
 [
-	startingloadout(string) : "Starting Loadout" : "worth" : "Sets the starting load out for all new humans. This is a comma-separated list of entity classes which is then separated by colons. For example: weapon_zs_peashooter:1,weapon_zs_axe:1,item_ammo_pistol:2 would give everyone a peashooter, an axe, and spawn two boxes of pistol ammo on them. It also accepts none for absolutely no starting items and worth for using the worth menu (default)."
+	// Keys
+	startingloadout(string)          : "Starting Loadout" : "worth" : "Sets the starting load out for all new humans. This is a comma-separated list of entity classes which is then separated by colons. For example: weapon_zs_peashooter:1,weapon_zs_axe:1,item_ammo_pistol:2 would give everyone a peashooter, an axe, and spawn two boxes of pistol ammo on them. It also accepts none for absolutely no starting items and worth for using the worth menu (default)."
+	
 	// Inputs
 	input setstartingloadout(string) : "Sets the keyvalue"
 ]
 
-@PointClass base(Targetname) = logic_worth  : "ZS: Allows you to control Worth."
+@PointClass base(Targetname) = logic_worth : "ZS: Allows you to control Worth."
 [
-	startingworth(integer)    : "Starting Worth" : 100 : "The amount of Worth to start with. Use 0 to disable Worth."
+	// Keys
+	startingworth(integer)          : "Starting Worth" : 100 : "The amount of Worth to start with. Use 0 to disable Worth."
+	
 	// Inputs
 	input setstartingworth(integer) : "Sets the amount of worth to start with."
 ]
 
-@PointClass base(Targetname) = logic_barricade  : "ZS: Allows or disallows specific entities from being nailed."
+@PointClass base(Targetname) = logic_barricade : "ZS: Allows or disallows specific entities from being nailed."
 [
 	// Inputs
 	input disablethese(string) : "Takes the arguments in the form of a comma-separated array and disables any entities with that name. For example, disablethese objective1,somethingimportant,somethingelse. This would disable nailing of those entities."
 	input enablethese(string)  : "Takes the arguments in the form of a comma-separated array and enables any entities with that name. For example, enablethese objective1,somethingimportant,somethingelse. This would enable nailing of those entities."
 ]
 
-@PointClass base(Targetname) = logic_difficulty  : "ZS: Adjusts the difficulty of the game."
+@PointClass base(Targetname) = logic_difficulty : "ZS: Adjusts the difficulty of the game."
 [
 	// Inputs
 	input setzombiespeedmultiplier(float)  : "Multiplyer for Zombie speed."
 	input setzombiedamagemultiplier(float) : "Multiplyer for Zombie damage."
 ]
 
-@PointClass base(Targetname) = logic_pickups  : "ZS: Allows you to control how much stuff people can pickup in the map. Only things placed by the mapper work with this system. Stuff from dead humans doesn't count."
+@PointClass base(Targetname) = logic_pickups : "ZS: Allows you to control how much stuff people can pickup in the map. Only things placed by the mapper work with this system. Stuff from dead humans doesn't count."
 [
-	maxweaponpickups(integer)      : "Max Weapon Pickups"      : 5 : "How many weapons a player can pickup from the map."
-	maxammopickups(integer)        : "Max Ammo Pickups"        : 5 : "How many ammo boxes a player can pickup from the map."
-	maxflashlightpickups(integer)  : "Max Flashlight Pickups"  : 5 : "How many flashlight batteries a player can pickup from the map."
-	weaponrequiredforammo(choices) : "Correct Weapon Required" : 0 : "If 1 then players must have a weapon that takes the ammo before being able to pick up an ammo box." =
+	// Keys
+	maxweaponpickups(integer)               : "Max Weapon Pickups"      : 5 : "How many weapons a player can pickup from the map."
+	maxammopickups(integer)                 : "Max Ammo Pickups"        : 5 : "How many ammo boxes a player can pickup from the map."
+	maxflashlightpickups(integer)           : "Max Flashlight Pickups"  : 5 : "How many flashlight batteries a player can pickup from the map."
+	weaponrequiredforammo(choices)          : "Correct Weapon Required" : 0 : "If 1 then players must have a weapon that takes the ammo before being able to pick up an ammo box." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
+	
 	// Inputs
 	input setmaxweaponpickups(integer)      : "Set the number of weapons a player can pickup from the map."
 	input setmaxammopickups(integer)        : "Set the number of ammo boxes a player can pickup from the map."
@@ -367,69 +387,86 @@
 
 @PointClass base(Targetname) = logic_classunlock  : "ZS: Allows you to control class unlocks."
 [
-	class(string) : "Class" : "zombie" : "Sets the name of the class to watch for any outputs."
-	// Inputs
-	input unlockclass(string)    : "Forces a class to be unlocked."
-	input lockclass(string)      : "Forces a class to be locked."
-	// Outputs
-	output OnClassUnlocked(void) : "Called when the class we're watching's class is unlocked by the game. This output isn't called if the class is unlocked by any logic_classunlock entities, only by the game."
-]
-
-@PointClass studio("models/crossbow_bolt.mdl") base(Targetname) = prop_nail  : "ZS: Allows you to manually place nails."
-[
-	healthoverride(integer) : "Health Override" : 210 : "Sets the nail's maximum health to a specific number."
-	healthmultiplier(float) : "Health Multiply" : 1   : "Multiply the nail's default maximum health by this number."
-	unremovable(choices)    : "Unremovable"     : 0   : "Set to yes to make this nail unremovable by players." =
+	// Keys
+	class(string)                   : "Class" : "zombie" : "Sets the name of the class to watch for any outputs."
+	bossesenabled(choices)          : "Enable Bosses" : 1 : "When enabled, bosses spawn at wave end as normal." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
+	
+	// Inputs
+	input unlockclass(string)       : "Forces a class to be unlocked."
+	input lockclass(string)         : "Forces a class to be locked."
+	input setbossesenabled(integer) : "Enables or disables boss zombies."
+	
+	// Outputs
+	output OnClassUnlocked(void)    : "Called when the class we're watching's class is unlocked by the game. This output isn't called if the class is unlocked by any logic_classunlock entities, only by the game."
+]
+
+@PointClass studio("models/crossbow_bolt.mdl") base(Targetname) = prop_nail  : "ZS: Allows you to manually place nails."
+[
+	// Keys
+	healthoverride(integer)          : "Health Override" : 210 : "Sets the nail's maximum health to a specific number."
+	healthmultiplier(float)          : "Health Multiply" : 1   : "Multiply the nail's default maximum health by this number."
+	unremovable(choices)             : "Unremovable"     : 0   : "Set to yes to make this nail unremovable by players." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	
+	// Inputs
 	input sethealth(integer)         : "Sets the nail's remaining health."
 	input attachto(string)           : "Parent to this entity."
 	input nailto(string)             : "Nail to this entity. Use attachto first and then this to weld the two. Use 'worldspawn' here to weld to the world."
 	input setname(string)            : "Display this text as the owner name."
 	input setunremovable(integer)    : "Set if this nail is unremovable."
-	input toggleunremovable(integer) : "Toggle unremovable state."	
+	input toggleunremovable(integer) : "Toggle unremovable state."
 ]
 
 @PointClass studio("models/Items/BoxMRounds.mdl") base(Targetname, Angles) = prop_ammo  : "ZS: Game Specific Ammo."
 [
-	ammotype(choices)    : "Ammo Type"  : "pistol"   : "Ammo type this entity becomes" =
+	// Keys
+	ammotype(choices) : "Ammo Type"  : "pistol"   : "Ammo type this entity becomes" =
 	[
-		"pistol" 		: "Pistol"
-		"smg1" 			: "Sub-Machine Gun"
-		"ar2" 			: "Assault Rifle"
-		"pulse"			: "Pulse"
-		"buckshot" 		: "Shotgun"
-		"357" 			: "Rifle"
-		"XBowBolt" 		: "Crossbow Bolts"
-		"grenade"		: "Grenades"
-		"SniperRound" 		: "Barricade Boards"
-		"sniperpenetratedround"	: "Det-Packs"
-		"Battery" 		: "Medical Ammo"
-		"striderminigun" 	: "Message Beacons"
-		"GaussEnergy" 		: "Nails"
-		"stone"   		: "Stones"
-		"thumper" 		: "Turrets"
+		"pistol"                : "Pistol"
+		"smg1"                  : "Sub-Machine Gun"
+		"ar2"                   : "Assault Rifle"
+		"pulse"                 : "Pulse"
+		"buckshot"              : "Shotgun"
+		"357"                   : "Rifle"
+		"XBowBolt"              : "Crossbow Bolts"
+		"grenade"               : "Grenades"
+		"SniperRound"           : "Barricade Boards"
+		"sniperpenetratedround" : "Det-Packs"
+		"Battery"               : "Medical Ammo"
+		"striderminigun"        : "Message Beacons"
+		"GaussEnergy"           : "Nails"
+		"stone"                 : "Stones"
+		"thumper"               : "Turrets"
 	]
-	amount(integer)	: "Amount" : 0 : "Amount of ammo that collecting this item gives"
+	amount(integer)  : "Amount" : 0 : "Amount of ammo that collecting this item gives"
 ]
+
 @PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
 [
-	weapontype(string)    : "weapon_type"  : "weapon_zs_m4"   : "Weapon type this entity becomes"
+	// Keys
+	weapontype(string) : "weapon_type" : "weapon_zs_m4" : "Weapon type this entity becomes"
 ]
 
 @PointClass base(Targetname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."
 [
-	hint(string)    : "Hint"    : " " : "The hint to display."
-	viewer(choices) : "Seen By" : 0   : "The team that can view us." =
+	// Keys
+	hint(string)             : "Hint"    : " " : "The hint to display."
+	viewer(choices)          : "Seen By" : 0   : "The team that can view us." =
 	[
 		"-1" : "Disabled"
 		"0"  : "Everyone"
 		"3"  : "Zombies"
 		"4"  : "Humans"
 	]
-	range(integer) : "Range" : 0 : "The range from the player's camera we must be in to see this hint. It can also be 0 for infinite."
+	range(integer)           : "Range" : 0 : "The range from the player's camera we must be in to see this hint. It can also be 0 for infinite."
+	
 	// Inputs
 	input sethint(string)    : "Sets the hint to display."
 	input setviewer(integer) : "Sets the team that can view us. Use 0 for everyone, -1 for no one (inactive), 3 for zombie, and 4 for human."
@@ -438,47 +475,46 @@
 
 @PointClass base(Targetname) = prop_playergib  : "ZS: Allows you to manually place gibs."
 [
-// "models/gibs/HGIBS.mdl"
-// "models/gibs/HGIBS_spine.mdl"
-// "models/gibs/HGIBS_rib.mdl"
-// "models/gibs/HGIBS_scapula.mdl"
-// "models/gibs/antlion_gib_medium_2.mdl"
-// "models/gibs/Antlion_gib_Large_1.mdl"
-// "models/gibs/Strider_Gib4.mdl"
+	// Keys
 	gibtype(choices) : "Gib Type"  : 1 : "Overrides the gib's type." =
 	[
-		1 : "Skull"
-		2 : "Spine"
-		3 : "Rib"
-		4 : "Scapula"
-		7 : "Small Chunk"
-		5 : "Medium Chunk"
-		6 : "Large Chunk"
+		1 : "Skull"        // "models/gibs/HGIBS.mdl"
+		2 : "Spine"        // "models/gibs/HGIBS_spine.mdl"
+		3 : "Rib"          // "models/gibs/HGIBS_rib.mdl"
+		4 : "Scapula"      // "models/gibs/HGIBS_scapula.mdl"
+		7 : "Small Chunk"  // "models/gibs/antlion_gib_medium_2.mdl"
+		5 : "Medium Chunk" // "models/gibs/Antlion_gib_Large_1.mdl"
+		6 : "Large Chunk"  // "models/gibs/Strider_Gib4.mdl"
 	]
 	lifetime(integer) : "Lifetime" : 0 : "Overrides how long for this gib should live. 0 for never automatically remove."
 ]
 	
-@PointClass base(Targetname) = logic_winlose  : "ZS: When activated, this will end the round immediately, with the specified outcome."
+@PointClass base(Targetname) = logic_winlose : "ZS: When activated, this will end the round immediately, with the specified outcome."
 [
 	// Inputs
 	input win(void)     : "Humans win the game, map over."
 	input lose(void)    : "Humans lose the game, map over."
+	
 	// Outputs 
 	output onwin(void)  : "Called when humans win even if not by this entity."
 	output onlose(void) : "Called when humans lose even if not by this entity."
 ]
 
-@PointClass base(Targetname) = logic_infliction  : "ZS: Watches for the specified infliction level."
+@PointClass base(Targetname) = logic_infliction : "ZS: Watches for the specified infliction level."
 [
+	// Keys
 	infliction(float)                : "Infliction" : "0.5" : "Defines infliction to watch for (float between 0.0 - 1.0)."
+	
 	// Outputs
 	output OnInflictionReached(void) : "Called when the specified infliction level has been reached."
 	output OnLastHuman(void)         : "Called when there is one person alive. !caller and !activator are both the last human's entity."
 ]
 
-@PointClass base(Targetname) = logic_waves  : "ZS: Watches for the start of the specified wave."
-[	
-	wave(integer) : "Wave" : 1 : "Any On* outputs will watch for this wave. Use -1 for all waves."
+@PointClass base(Targetname) = logic_waves : "ZS: Watches for the start of the specified wave."
+[
+	// Keys
+	wave(integer)               : "Wave" : 1 : "Any On* outputs will watch for this wave. Use -1 for all waves."
+	
 	// Inputs
 	input AdvanceWave(void)     : "Advances to the next wave and sets the wave to active."
 	input EndWave(void)         : "Sets the time that the wave ends to this very moment."
@@ -487,20 +523,24 @@
 	input SetWaves(integer)     : "Sets the total amount of waves to the number specified. Don't worry about class unlocks, the gamemode does not use the max waves value directly."
 	input SetWaveStart(integer) : "Sets the time that the wave will start to TimeNow + <time>. You should use this instead of delayed entity inputs." 
 	input SetWaveEnd(integer)   : "Sets the time that the wave will end to TimeNow + <time>. You should use this instead of delayed entity inputs."
+	
 	// Outputs
 	output OnWaveStart(void)    : "Called when the specified wave has started."
 	output OnWaveEnd(void)      : "Called when the specified wave has ended."
 ]
 
-@PointClass base(Targetname) = point_zsmessage  : "ZS: Custom message that is displayed with the specified message."
+@PointClass base(Targetname) = point_zsmessage : "ZS: Custom message that is displayed with the specified message."
 [
-	team(choices) : "Team" : "all" : "Filter which team gets the message." =
+	// Keys
+	team(choices)                       : "Team" : "all" : "Filter which team gets the message." =
 	[
 		"zombie"  : "Zombies"
 		"human"   : "Humans"
 		"private" : "Activator Only"
 		"all"     : "All"
 	]
+	
+	// Inputs
 	input message(string)               : "What to display. Supports the markup library."
 	input sethumanhudmessage(string)    : "Set a message to display in the human wave hud."
 	input setzombiehudmessage(string)   : "Set a message to display in the zombie wave hud."
@@ -508,7 +548,7 @@
 	input clearzombiehudmessage(void)   : "Clear the message to display in the zombie wave hud."
 ]
 
-@PointClass base(Targetname) = logic_pantsmode  : "ZS: When activated, this will set the special Pants Mode on."
+@PointClass base(Targetname) = logic_pantsmode : "ZS: When activated, this will set the special Pants Mode on."
 [
 	// Inputs
 	input enable(void)  : "Enables pants mode."
@@ -517,19 +557,20 @@
 
 @PointClass base(Targetname) = info_gamehud : "ZS: Allows you to control a custom message that appears on the wave HUD for each team. Can be used to display objectives or other information."
 [
-	message(string)    : "Message"    : " " : "The hint to display."
-	viewer(choices) : "Seen By" : 0   : "The team that can view us." =
+	// Keys
+	message(string)         : "Message" : " " : "The hint to display."
+	viewer(choices)         : "Seen By" :  0  : "The team that can view us." =
 	[
 		"-1" : "Disabled"
 		"0"  : "Everyone"
 		"3"  : "Zombies"
 		"4"  : "Humans"
 	]
+	
 	// Inputs
-	input setmessage(string)    : "Sets the hint to display."
+	input setmessage(string) : "Sets the hint to display."
 	input setviewer(integer) : "Sets the team that can view us. Use 0 for everyone, -1 for no one (inactive), 3 for zombie, and 4 for human."
 ]
-
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Gamemode - Worth Weapons + Items ///////////////////////////////////////////////
@@ -741,7 +782,7 @@
 "A hunting rifle that deals high amount of damage at the cost of slow reload speed. " []
 
 ///////////////////////////////////////////////////////////////////////////////////
-// Gamemode - Crafting Weapons  //|||||////////////////////////////////////////////
+// Gamemode - Crafting Weapons ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 
 @PointClass base(Weapon) studio("models/props_c17/oildrum001_explosive.mdl") = weapon_zs_megamasher : "Craftable Weapon.\n"+
