@@ -240,7 +240,7 @@ end
 function meta:GiveEmptyWeapon(weptype)
 	if not self:HasWeapon(weptype) then
 		local wep = self:Give(weptype)
-		if wep:IsValid() and wep:IsWeapon() then
+		if wep and wep:IsValid() and wep:IsWeapon() then
 			wep:EmptyAll()
 		end
 
@@ -250,7 +250,10 @@ end
 
 meta.OldGive = meta.Give
 function meta:Give(weptype)
-	if self:Team() ~= TEAM_HUMAN then return end
+	if self:Team() ~= TEAM_HUMAN then
+		self:OldGive(weptype)
+		return
+	end
 
 	local weps = self:GetWeapons()
 	local autoswitch = #weps == 1 and weps[1]:IsValid() and weps[1].AutoSwitchFrom
