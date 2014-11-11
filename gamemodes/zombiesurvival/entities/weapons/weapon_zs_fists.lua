@@ -22,6 +22,9 @@ SWEP.NoMagazine = true
 SWEP.Undroppable = true
 SWEP.NoPickupNotification = true
 
+SWEP.Primary.Ammo = "none"
+SWEP.Secondary.Ammo = "none"
+
 local SwingSound = Sound( "weapons/slam/throw.wav" )
 local HitSound = Sound( "Flesh.ImpactHard" )
 
