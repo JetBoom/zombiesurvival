@@ -2,6 +2,7 @@ ENT.Type = "point"
 
 function ENT:Initialize()
 	self.Class = self.Class or 1
+	self.BossesEnabled = GAMEMODE.BossZombies
 end
 
 function ENT:Think()
@@ -50,6 +51,8 @@ function ENT:AcceptInput(name, activator, caller, args)
 				v.IsDefault = nil
 			end
 		end
+	elseif name == "setbossesenabled" then
+		self:KeyValue("BossesEnabled",args)
 	end
 end
 
@@ -57,6 +60,10 @@ function ENT:KeyValue(key, value)
 	key = string.lower(key)
 	if key == "class" then
 		self.Class = value or self.Class
+	elseif key == "bossesenabled" then
+		local enabled = tonumber(value) == 1
+		self.BossesEnabled = enabled
+		GAMEMODE.BossZombies = enabled
 	elseif string.sub(key, 1, 2) == "on" then
 		self:AddOnOutput(key, value)
 	end
