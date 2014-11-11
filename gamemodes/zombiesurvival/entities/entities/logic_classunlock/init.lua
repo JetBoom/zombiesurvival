@@ -52,7 +52,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 			end
 		end
 	elseif name == "setbossesenabled" then
-		self:SetKeyValue("BossesEnabled",args)
+		self:KeyValue("BossesEnabled",args)
 	end
 end
 
