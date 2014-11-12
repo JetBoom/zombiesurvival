@@ -796,3 +796,9 @@
 
 @PointClass base(Weapon) studio("models/weapons/w_hammer.mdl") = weapon_zs_electrohammer : "Craftable Weapon.\n"+
 "Recipe: Battery and Hammer " []
+
+@PointClass base(Weapon) studio("models/weapons/w_pist_usp.mdl") = weapon_zs_waraxe : "Craftable Weapon.\n"+
+"Recipe: 2x Battleaxe Handguns " []
+
+@PointClass base(Weapon) studio("models/manhack.mdl") = weapon_zs_manhack : "Craftable Weapon.\n"+
+"Recipe: Sawblade and Manhack" []
