@@ -3,9 +3,13 @@ if not meta then return end
 
 function meta:GetDefaultBarricadeHealth()
 	local mass = 2
-	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		mass = phys:GetMass()
+	if self._OriginalMass then
+		mass = self._OriginalMass
+	else
+		local phys = self:GetPhysicsObject()
+		if phys:IsValid() then
+			mass = phys:GetMass()
+		end
 	end
 
 	return math.Clamp(mass * GAMEMODE.BarricadeHealthMassFactor + self:GetVolume() * GAMEMODE.BarricadeHealthVolumeFactor, GAMEMODE.BarricadeHealthMin, GAMEMODE.BarricadeHealthMax)
