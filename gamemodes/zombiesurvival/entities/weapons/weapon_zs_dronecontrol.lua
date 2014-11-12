@@ -40,7 +40,7 @@ SWEP.NoPickupNotification = true
 SWEP.HoldType = "slam"
 
 function SWEP:Initialize()
-	self:SetHoldType(self.HoldType)
+	self:SetWeaponHoldType(self.HoldType)
 	self:SetDeploySpeed(10)
 end
 

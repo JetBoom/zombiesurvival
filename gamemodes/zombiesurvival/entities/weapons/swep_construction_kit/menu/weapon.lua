@@ -172,7 +172,7 @@ local pweapon_holdtype = SimplePanel( pweapon )
 		end
 		hbox.OnSelect = function(panel,index,value)
 			if (!value) then return end
-			wep:SetHoldType( value )
+			wep:SetWeaponHoldType( value )
 			wep.HoldType = value
 			RunConsoleCommand("swepck_setholdtype", value)
 		end

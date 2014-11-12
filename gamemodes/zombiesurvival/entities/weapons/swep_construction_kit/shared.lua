@@ -76,7 +76,7 @@ local sck_class = ""
 
 function SWEP:Initialize()
 
-	self:SetHoldType(self.HoldType)
+	self:SetWeaponHoldType(self.HoldType)
 	
 	self:SetIronSights( true )
 	self:ResetIronSights()

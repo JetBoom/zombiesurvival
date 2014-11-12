@@ -29,7 +29,7 @@ local function Cmd_SetHoldType( pl, cmd, args )
 	local holdtype = args[1]
 	local wep = GetSCKSWEP( pl )
 	if (IsValid(wep) and holdtype and table.HasValue( wep:GetHoldTypes(), holdtype )) then
-		wep:SetHoldType( holdtype )
+		wep:SetWeaponHoldType( holdtype )
 		wep.HoldType = holdtype
 	end	
 

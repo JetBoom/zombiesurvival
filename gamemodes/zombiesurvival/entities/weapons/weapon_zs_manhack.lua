@@ -53,7 +53,7 @@ SWEP.Secondary.Ammo = "none"
 SWEP.WalkSpeed = SPEED_FAST
 
 function SWEP:Initialize()
-	self:SetHoldType("grenade")
+	self:SetWeaponHoldType("grenade")
 	self:SetDeploySpeed(1.1)
 
 	if CLIENT then

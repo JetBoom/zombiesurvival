@@ -33,7 +33,7 @@ SWEP.EmptyWhenPurchased = true
 function SWEP:Initialize()
 	if not self:IsValid() then return end --???
 
-	self:SetHoldType(self.HoldType)
+	self:SetWeaponHoldType(self.HoldType)
 	self:SetDeploySpeed(1.1)
 
 	-- Maybe we didn't want to convert the weapon to the new system...
@@ -89,9 +89,9 @@ function SWEP:SetIronsights(b)
 
 	if self.IronSightsHoldType then
 		if b then
-			self:SetHoldType(self.IronSightsHoldType)
+			self:SetWeaponHoldType(self.IronSightsHoldType)
 		else
-			self:SetHoldType(self.HoldType)
+			self:SetWeaponHoldType(self.HoldType)
 		end
 	end
 

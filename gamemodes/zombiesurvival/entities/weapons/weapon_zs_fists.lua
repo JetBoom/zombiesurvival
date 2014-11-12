@@ -29,8 +29,8 @@ local SwingSound = Sound( "weapons/slam/throw.wav" )
 local HitSound = Sound( "Flesh.ImpactHard" )
 
 function SWEP:Initialize()
-	--self:SetHoldType("normal")
-	self:SetHoldType("fist")
+	--self:SetWeaponHoldType("normal")
+	self:SetWeaponHoldType("fist")
 end
 
 function SWEP:PreDrawViewModel(vm, wep, pl)
@@ -50,7 +50,7 @@ function SWEP:UpdateNextIdle()
 end
 
 function SWEP:PrimaryAttack(right)
-	--self:SetHoldType("fist")
+	--self:SetWeaponHoldType("fist")
 	self:SetNextIdleHoldType(CurTime() + 2)
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	self.WalkSpeed = 165
@@ -197,7 +197,7 @@ function SWEP:Think()
 	local idle_holdtype_time = self:GetNextIdleHoldType()
 
 	if idle_holdtype_time > 0 and curtime >= idle_holdtype_time then
-		--self:SetHoldType("normal")
+		--self:SetWeaponHoldType("normal")
 		self:SetNextIdleHoldType(0)
 		self.WalkSpeed = SPEED_NORMAL
 		self.Owner:ResetSpeed()
