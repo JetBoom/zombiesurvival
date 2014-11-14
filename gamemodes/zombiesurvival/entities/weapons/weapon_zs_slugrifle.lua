@@ -129,10 +129,10 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 		end
 
 		if gamemode.Call("PlayerShouldTakeDamage", ent, attacker) then
+			INFDAMAGEFLOATER = true
 			ent:SetHealth(math.max(ent:Health() - 400, 1))
 		end
 	end
 
-	INFDAMAGEFLOATER = true
 	GenericBulletCallback(attacker, tr, dmginfo)
 end
