@@ -23,7 +23,7 @@
 	// Inputs
 	input enable(void)  : "Enable the entity."
 	input disable(void) : "Disable the entity."
-	input toggle(void)  : "Toggle the entity."
+	input seton(integer)  : "Enable or Disable the entity."
 ]
 
 @SolidClass base(Targetname) = trigger_zombieclass : "ZS: You can directly control the changing of classes with this."
