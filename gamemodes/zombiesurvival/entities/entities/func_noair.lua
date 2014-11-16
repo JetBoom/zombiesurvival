@@ -43,14 +43,14 @@ function ENT:Leave(ent)
 end
 
 function ENT:Touch(ent)
-	if ent:IsPlayer() and ent.NoAirBrush == self and not self.On then
+	if not self.On and ent:IsPlayer() and ent.NoAirBrush == self then
 		self:Leave(ent)
 	end
 end
 
 function ENT:StartTouch(ent)
 	if self.On and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_HUMAN and not ent.NoAirBrush then
-		ent.NoAirBrush = self
+		self:Enter(ent)
 	end
 end
 
