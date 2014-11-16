@@ -76,10 +76,24 @@ end
 end
 
 hook.Add("Initialize", "RegisterDummyEntities", function()
-	scripted_ents.Register(ENT, "weapon_elite")
-	scripted_ents.Register(ENT, "weapon_knife")
-	scripted_ents.Register(ENT, "weapon_deagle")
 	scripted_ents.Register(ENT, "ammo_50ae")
 	scripted_ents.Register(ENT, "ammo_556mm_box")
 	scripted_ents.Register(ENT, "player_weaponstrip")
+	
+	--CSS Weapons for ZE map parenting
+	for i, weapon in pairs(CSSWEAPONS) do
+		weapons.Register({Base = "weapon_map_base"},weapon) 
+	end
+end)
+
+hook.Add( "PlayerCanPickupWeapon", "RestrictMapWeapons", function( ply, wep )
+
+	local weps = ply:GetWeapons()
+		
+	--Only allow one special weapon per player
+	for k, v in pairs(weps) do
+		if table.HasValue( CSSWEAPONS, v:GetClass() ) or v:GetClass()=="weapon_map_base" then return false end
+	end
+		
+	return true
 end)
