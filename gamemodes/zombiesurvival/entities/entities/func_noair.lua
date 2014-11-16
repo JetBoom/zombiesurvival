@@ -39,7 +39,6 @@ end
 
 function ENT:Leave(ent)
 	ent.NoAirBrush = nil
-	ent:RemoveStatus("drown", false, true)
 end
 
 function ENT:Touch(ent)
