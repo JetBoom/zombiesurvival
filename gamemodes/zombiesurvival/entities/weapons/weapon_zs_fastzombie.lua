@@ -19,8 +19,8 @@ SWEP.Primary.Delay = 0.32
 
 SWEP.PounceDamage = 10
 SWEP.PounceDamageType = DMG_IMPACT
-SWEP.PounceReach = 32
-SWEP.PounceSize = 16
+SWEP.PounceReach = 20
+SWEP.PounceSize = 12
 SWEP.PounceStartDelay = 0.5
 SWEP.PounceDelay = 1.25
 SWEP.PounceVelocity = 700
@@ -85,22 +85,28 @@ function SWEP:Think()
 		if owner:IsOnGround() or owner:WaterLevel() >= 2 then
 			self:StopPounce()
 		else
+			local dir = owner:GetAimVector()
+			dir.z = math.Clamp(dir.z, -0.5, 0.9)
+			dir:Normalize()
+
 			owner:LagCompensation(true)
 
-			local hit = false
-			local traces = owner:PenetratingMeleeTrace(self.PounceReach, self.PounceSize, nil, owner:LocalToWorld(owner:OBBCenter()))
+			local traces = owner:PenetratingMeleeTrace(self.PounceReach, self.PounceSize, nil, owner:LocalToWorld(owner:OBBCenter()), dir)
 			local damage = self:GetDamage(self:GetTracesNumPlayers(traces), self.PounceDamage)
 
+			local hit = false
 			for _, trace in ipairs(traces) do
 				if not trace.Hit then continue end
 
-				hit = true
-
 				if trace.HitWorld then
-					self:MeleeHitWorld(trace)
+					if trace.HitNormal.z < 0.8 then
+						hit = true
+						self:MeleeHitWorld(trace)
+					end
 				else
 					local ent = trace.Entity
 					if ent and ent:IsValid() then
+						hit = true
 						self:MeleeHit(ent, trace, damage, 10)
 					end
 				end
@@ -218,12 +224,11 @@ function SWEP:StartPounce()
 			owner:EmitSound("NPC_FastZombie.Scream")
 		end
 
-		local dir = owner:GetAimVector()
-		dir.z = math.max(0.25, dir.z)
-		dir:Normalize()
+		local ang = owner:EyeAngles()
+		ang.pitch = math.min(-20, ang.pitch)
 
 		owner:SetGroundEntity(NULL)
-		owner:SetVelocity((1 - 0.5 * (owner:GetLegDamage() / GAMEMODE.MaxLegDamage)) * self.PounceVelocity * dir)
+		owner:SetVelocity((1 - 0.5 * (owner:GetLegDamage() / GAMEMODE.MaxLegDamage)) * self.PounceVelocity * ang:Forward())
 		owner:SetAnimation(PLAYER_JUMP)
 	else
 		self:SetNextSecondaryFire(CurTime())

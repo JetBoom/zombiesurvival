@@ -505,11 +505,12 @@ function meta:MeleeTrace(distance, size, filter, start)
 	return self:TraceHull(distance, MASK_SOLID, size, filter, start)
 end
 
-function meta:PenetratingMeleeTrace(distance, size, prehit, start)
+function meta:PenetratingMeleeTrace(distance, size, prehit, start, dir)
 	start = start or self:GetShootPos()
+	dir = dir or self:GetAimVector()
 
 	local t = {}
-	local trace = {start = start, endpos = start + self:GetAimVector() * distance, filter = self:GetMeleeFilter(), mask = MASK_SOLID, mins = Vector(-size, -size, -size), maxs = Vector(size, size, size)}
+	local trace = {start = start, endpos = start + dir * distance, filter = self:GetMeleeFilter(), mask = MASK_SOLID, mins = Vector(-size, -size, -size), maxs = Vector(size, size, size)}
 	local onlyhitworld
 	for i=1, 50 do
 		local tr = util.TraceHull(trace)
