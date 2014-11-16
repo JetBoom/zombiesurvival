@@ -44,6 +44,7 @@ end
 
 function ENT:Touch(ent)
 	if self.On and ent:IsPlayer() and ent.NoAirBrush == self then
+		ent.NoAirBrush = self
 		self:Enter(ent)
 	end
 end
