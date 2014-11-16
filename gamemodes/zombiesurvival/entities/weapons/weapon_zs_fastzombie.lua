@@ -19,7 +19,7 @@ SWEP.Primary.Delay = 0.32
 
 SWEP.PounceDamage = 10
 SWEP.PounceDamageType = DMG_IMPACT
-SWEP.PounceReach = 20
+SWEP.PounceReach = 26
 SWEP.PounceSize = 12
 SWEP.PounceStartDelay = 0.5
 SWEP.PounceDelay = 1.25
