@@ -43,8 +43,9 @@ function ENT:Leave(ent)
 end
 
 function ENT:Touch(ent)
-	if ent:IsPlayer() and ent.NoAirBrush == self and not self.On then
-		self:Leave(ent)
+	if self.On and ent:IsPlayer() and ent.NoAirBrush == self then
+		ent.NoAirBrush = self
+		self:Enter(ent)
 	end
 end
 
