@@ -1737,7 +1737,9 @@ end
 function GM:EvaluatePropFreeze(ent, neighbors)
 	if not ent then
 		for _, e in pairs(ents.GetAll()) do
-			self:EvaluatePropFreeze(e)
+			if e:IsValid() then
+				self:EvaluatePropFreeze(e)
+			end
 		end
 
 		return

@@ -3,10 +3,12 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
+ENT.DieTime = 0
+
 function ENT:Initialize()
 	self.m_Health = 25
 
-	if not self.DieTime then
+	if self.DieTime == 0 then
 		self.DieTime = CurTime() + GAMEMODE.GibLifeTime
 	end
 
