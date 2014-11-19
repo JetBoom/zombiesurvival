@@ -179,7 +179,7 @@ GM.ValidBeaconMessages = {
 	"message_beacon_5",
 	"message_beacon_6",
 	"message_beacon_7",
-	"message_beacon_8",
+	--"message_beacon_8",
 	"message_beacon_9",
 	"message_beacon_10",
 	"message_beacon_11",
