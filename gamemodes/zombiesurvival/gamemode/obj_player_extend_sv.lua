@@ -758,7 +758,7 @@ meta.GetBrains = meta.Frags
 function meta:CheckRedeem(instant)
 	if not self:IsValid() or self:Team() ~= TEAM_UNDEAD
 	or GAMEMODE:GetRedeemBrains() <= 0 or self:GetBrains() < GAMEMODE:GetRedeemBrains()
-	or GAMEMODE.NoRedeeming or self:GetZombieClassTable().Boss then return end
+	or GAMEMODE.NoRedeeming or self.NoRedeeming or self:GetZombieClassTable().Boss then return end
 
 	if GAMEMODE:GetWave() ~= GAMEMODE:GetNumberOfWaves() or not GAMEMODE.ObjectiveMap and GAMEMODE:GetNumberOfWaves() == 1 and CurTime() < GAMEMODE:GetWaveEnd() - 300 then
 		if instant then
