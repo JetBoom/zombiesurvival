@@ -444,7 +444,7 @@ end
 local function nocollidetimer(self, timername)
 	if self:IsValid() then
 		for _, e in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
-			if e:IsPlayer() and e ~= self and GAMEMODE:ShouldCollide(self, e) then
+			if e and e:IsValid() and e:IsPlayer() and e ~= self and GAMEMODE:ShouldCollide(self, e) then
 				return
 			end
 		end
@@ -459,7 +459,7 @@ function meta:TemporaryNoCollide(force)
 	if self:GetCollisionGroup() ~= COLLISION_GROUP_PLAYER and not force then return end
 
 	for _, e in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
-		if e:IsPlayer() and e ~= self and GAMEMODE:ShouldCollide(self, e) then
+		if e and e:IsValid() and e:IsPlayer() and e ~= self and GAMEMODE:ShouldCollide(self, e) then
 			self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
 
 			local timername = "TemporaryNoCollide"..self:UniqueID()
@@ -547,7 +547,7 @@ function meta:ActiveBarricadeGhosting(override)
 	if self:Team() ~= TEAM_HUMAN and not override or not self:GetBarricadeGhosting() then return false end
 
 	for _, ent in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
-		if self:ShouldBarricadeGhostWith(ent) then return true end
+		if ent and ent:IsValid() and self:ShouldBarricadeGhostWith(ent) then return true end
 	end
 
 	return false

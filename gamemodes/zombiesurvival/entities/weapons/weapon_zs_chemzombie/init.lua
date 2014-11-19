@@ -15,7 +15,7 @@ function SWEP:Think()
 
 		local origin = self.Owner:LocalToWorld(self.Owner:OBBCenter())
 		for _, ent in pairs(ents.FindInSphere(origin, 40)) do
-			if ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() and TrueVisible(origin, ent:NearestPoint(origin)) then
+			if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() and TrueVisible(origin, ent:NearestPoint(origin)) then
 				ent:PoisonDamage(1, self.Owner, self)
 			end
 		end

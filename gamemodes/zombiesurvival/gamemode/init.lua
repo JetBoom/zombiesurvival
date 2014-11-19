@@ -787,7 +787,7 @@ function GM:PlayerSelectSpawn(pl)
 				local blocked
 				local spawnpos = spawn:GetPos()
 				for _, ent in pairs(ents.FindInBox(spawnpos + playermins, spawnpos + playermaxs)) do
-					if ent:IsPlayer() and not spawninplayer or string.sub(ent:GetClass(), 1, 5) == "prop_" then
+					if ent and ent:IsValid() and ent:IsPlayer() and not spawninplayer or string.sub(ent:GetClass(), 1, 5) == "prop_" then
 						blocked = true
 						break
 					end
@@ -1737,7 +1737,7 @@ end
 function GM:EvaluatePropFreeze(ent, neighbors)
 	if not ent then
 		for _, e in pairs(ents.GetAll()) do
-			if e:IsValid() then
+			if e and e:IsValid() then
 				self:EvaluatePropFreeze(e)
 			end
 		end

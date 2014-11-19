@@ -37,7 +37,7 @@ function ENT:AcceptInput(name, activator, caller, arg)
 
 	local vPos = self:GetPos()
 	for _, ent in pairs(ents.FindInSphere(vPos, self:GetRadius())) do
-		if ent:IsPlayer() and ent:Alive() and WorldVisible(vPos, ent:NearestPoint(vPos)) then
+		if ent and ent:IsValid() and ent:IsPlayer() and ent:Alive() and WorldVisible(vPos, ent:NearestPoint(vPos)) then
 			if ent:Team() == TEAM_UNDEAD then
 				--[[if ent:Health() < ent:GetMaxHealth() and not ent:GetZombieClassTable().Boss then
 					ent:SetHealth(math.min(ent:GetMaxZombieHealth(), ent:Health() + self.Heal))

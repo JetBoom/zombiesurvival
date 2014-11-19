@@ -37,7 +37,7 @@ hook.Add("InitPostEntityMap", "zombieescape", function(fromze)
 	end
 
 	for _, ent in pairs(ents.GetAll()) do
-		if ent.ZEDelete then
+		if ent and ent.ZEDelete and ent:IsValid() then
 			ent:Remove()
 		end
 	end

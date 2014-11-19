@@ -153,7 +153,7 @@ end
 local function barricadetimer(self, timername)
 	if self:IsValid() then
 		for _, e in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
-			if e:IsPlayer() and e:Alive() then
+			if e and e:IsValid() and e:IsPlayer() and e:Alive() then
 				return
 			end
 		end
@@ -169,7 +169,7 @@ function meta:TemporaryBarricadeObject()
 	if self.IsBarricadeObject then return end
 
 	for _, e in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
-		if e:IsPlayer() and e:Alive() then
+		if e and e:IsValid() and e:IsPlayer() and e:Alive() then
 			self.IsBarricadeObject = true
 			self:CollisionRulesChanged()
 

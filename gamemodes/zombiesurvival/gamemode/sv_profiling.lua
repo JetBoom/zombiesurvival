@@ -128,10 +128,12 @@ function GM:ProfilerPlayerValid(pl)
 
 	-- Are they near a trigger hurt?
 	for _, ent in pairs(ents.FindInSphere(plcenter, 256)) do
-		local entclass = ent:GetClass()
-		if entclass == "trigger_hurt" then
-			--print('trigger hurt')
-			return false
+		if ent and ent:IsValid() then
+			local entclass = ent:GetClass()
+			if entclass == "trigger_hurt" then
+				--print('trigger hurt')
+				return false
+			end
 		end
 	end
 

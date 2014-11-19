@@ -367,7 +367,7 @@ end
 
 local function GetNailOwner(nail, filter)
 	for _, ent in pairs(ents.GetAll()) do
-		if ent ~= filter and ent.Nails then
+		if ent and ent ~= filter and ent.Nails and ent:isValid() then
 			for __, n in pairs(ent.Nails) do
 				if n == nail then
 					return ent

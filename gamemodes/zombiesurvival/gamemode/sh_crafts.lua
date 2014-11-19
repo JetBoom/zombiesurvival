@@ -182,7 +182,7 @@ function GM:CanCraft(pl, craft)
 	if not pl:IsValid() or not pl:Alive() or pl:Team() ~= TEAM_HUMAN then return false end
 
 	local plpos = pl:EyePos()
-	local entities = ents.FindInSphere(plpos, self.CraftingRange)
+	local entities = ents.FindValidInSphere(plpos, self.CraftingRange)
 
 	if craft.CanCraft and not craft:CanCraft(pl, entities, plpos) then return false end
 
