@@ -29,7 +29,7 @@ function SWEP:Reload()
 	if not ent or not gamemode.Call("CanRemoveNail", owner, ent) then return end
 
 	local nailowner = ent:GetOwner()
-	if nailowner:IsValid() and nailowner ~= owner and nailowner:Team() == TEAM_HUMAN and not gamemode.Call("PlayerIsAdmin", owner) and not gamemode.Call("CanRemoveOthersNail", owner, nailowner, ent) then return end
+	if nailowner:IsValid() and nailowner:IsPlayer() and nailowner ~= owner and nailowner:Team() == TEAM_HUMAN and not gamemode.Call("PlayerIsAdmin", owner) and not gamemode.Call("CanRemoveOthersNail", owner, nailowner, ent) then return end
 
 	self:SetNextPrimaryFire(CurTime() + 1)
 
@@ -44,7 +44,7 @@ function SWEP:Reload()
 
 	ent:GetParent():RemoveNail(ent, nil, self.Owner)
 
-	if nailowner and nailowner ~= owner and nailowner:Team() == TEAM_HUMAN then
+	if nailowner and nailowner:IsValid() and nailowner:IsPlayer() and nailowner ~= owner and nailowner:Team() == TEAM_HUMAN then
 		if not gamemode.Call("PlayerIsAdmin", owner) and (nailowner:Frags() >= 75 or owner:Frags() < 75) then
 			owner:GivePenalty(30)
 			owner:ReflectDamage(20)
