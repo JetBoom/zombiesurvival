@@ -17,7 +17,7 @@ function MakepEndBoard(winner)
 		pEndBoard = nil
 	end
 
-	local localwin = winner == TEAM_HUMAN and LocalPlayer():Team() == winner
+	local localwin = winner == TEAM_HUMAN and LocalPlayer():IsValid() and LocalPlayer():Team() == winner
 
 	local wid = 640
 
