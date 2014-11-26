@@ -89,7 +89,9 @@ function ENT:Use(activator, caller)
 				wep:SetClip2(self:GetClip2())
 			end
 
-			activator.WeaponPickups = (activator.WeaponPickups or 0) + 1
+			if self.PlacedInMap then
+				activator.WeaponPickups = (activator.WeaponPickups or 0) + 1
+			end
 
 			self:RemoveNextFrame()
 		end

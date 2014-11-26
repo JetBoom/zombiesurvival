@@ -62,7 +62,9 @@ function ENT:Use(activator, caller)
 
 			activator:GiveAmmo(self:GetAmmo(), self:GetAmmoType())
 
-			activator.AmmoPickups = (activator.AmmoPickups or 0) + 1
+			if self.PlacedInMap then
+				activator.AmmoPickups = (activator.AmmoPickups or 0) + 1
+			end
 
 			self:RemoveNextFrame(0)
 		else
