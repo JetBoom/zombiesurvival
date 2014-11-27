@@ -250,7 +250,7 @@ end
 
 meta.OldSetPhysicsAttacker = meta.SetPhysicsAttacker
 function meta:SetPhysicsAttacker(ent)
-	if self:GetClass() == "func_physbox" and ent:IsValid() then
+	if string.sub(self:GetClass(), 1, 12) == "func_physbox" and ent:IsValid() then
 		self.PBAttacker = ent
 		self.NPBAttacker = CurTime() + 1
 	end
