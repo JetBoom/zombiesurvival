@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (10th November 2014)     //
+// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (30th November 2014)     //
 // If there are any bugs with this file, or any additions that need to be made  //
 // make a post at: http://www.noxiousnet.com/forums/index.php?topic=14910       //
 //////////////////////////////////////////////////////////////////////////////////
@@ -555,21 +555,34 @@
 	input disable(void) : "Disables pants mode."
 ]
 
-@PointClass base(Targetname) = info_gamehud : "ZS: Allows you to control a custom message that appears on the wave HUD for each team. Can be used to display objectives or other information."
+@PointClass base(Targetname) = info_custommessage : "ZS: Allows several substrings to be concatenated together to form one message, attaches to messaging entities like game_text, point_worldhint and point_zsmessage"
 [
 	// Keys
-	message(string)         : "Message" : " " : "The hint to display."
-	viewer(choices)         : "Seen By" :  0  : "The team that can view us." =
+	displayentity(target_destination) : "Target Messaging Entity" : "" : "The entity used to display the message, can be a targetname of a class game_text, point_worldhint or point_zsmessage"
+	zsmessagemode(choices)            : "Point_zsmessage Method" :  0  : "If using a point_zsmessage, select the method of display with this key" =
 	[
-		"-1" : "Disabled"
-		"0"  : "Everyone"
-		"3"  : "Zombies"
-		"4"  : "Humans"
+		"0"  : "Centred HUD Message"
+		"1"  : "Corner Human HUD Message"
+		"2"  : "Corner Zombie HUD Message"
 	]
+	string01(string)                  : "String 01" : "" : "Part 01 of the full string, there can be up to 99 of these."
+	string02(string)                  : "String 02" : "" : "Part 02 of the full string, there can be up to 99 of these."
+	string03(string)                  : "String 03" : "" : "Part 03 of the full string, there can be up to 99 of these."
+	string04(string)                  : "String 04" : "" : "Part 04 of the full string, there can be up to 99 of these."
+	string05(string)                  : "String 05" : "" : "Part 05 of the full string, there can be up to 99 of these."
+	string06(string)                  : "String 06" : "" : "Part 06 of the full string, there can be up to 99 of these."
 	
 	// Inputs
-	input setmessage(string) : "Sets the hint to display."
-	input setviewer(integer) : "Sets the team that can view us. Use 0 for everyone, -1 for no one (inactive), 3 for zombie, and 4 for human."
+	input displaystrings(string)      : "Concatenates and displays the full string using the attached entity"
+	input setstring01(string)         : "Sets part 01 of the full string, there can be up to 99 of these."
+	input setstring02(string)         : "Sets part 02 of the full string, there can be up to 99 of these."
+	input setstring03(string)         : "Sets part 03 of the full string, there can be up to 99 of these."
+	input setstring04(string)         : "Sets part 04 of the full string, there can be up to 99 of these."
+	input setstring05(string)         : "Sets part 05 of the full string, there can be up to 99 of these."
+	input setstring06(string)         : "Sets part 06 of the full string, there can be up to 99 of these."
+	
+	// Outputs
+	output OnDisplayed(void)          : "Called when the message has successfully displayed."
 ]
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -687,6 +700,9 @@
 @PointClass base(Weapon) studio("models/props_interiors/Furniture_Lamp01a.mdl") = weapon_zs_lamp : 
 "Lamp them one." []
 
+@PointClass base(Weapon) studio("models/props_lab/cleaver.mdl") = weapon_zs_butcherknife :
+"A large cleaver, for hacking and slashing body parts." []
+
 @PointClass base(Weapon) studio("models/weapons/w_sledgehammer.mdl") = weapon_zs_sledgehammer : 
 "The most powerful melee weapon in the game. However, it has a very low firing rate and it greatly slows down the walking speed of the player. It is useful for defensive purposes, or for killing weakened zombies." []
 
@@ -775,7 +791,6 @@
 @PointClass base(Weapon) studio("models/weapons/w_smg_tmp.mdl") = weapon_zs_silencer : 
 "Ammo Type: SMG.\n"+
 "It can unleash an incredible amount of punishment to any zombie in seconds at the cost of the ammunition going quickly. " []
-
 
 @PointClass base(Weapon) studio("models/weapons/w_snip_awp.mdl") = weapon_zs_hunter : 
 "Ammo Type: Rifle.\n"+
