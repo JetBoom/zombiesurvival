@@ -70,6 +70,7 @@ AddCSLuaFile("vgui/dammocounter.lua")
 AddCSLuaFile("vgui/dpingmeter.lua")
 AddCSLuaFile("vgui/dteamheading.lua")
 AddCSLuaFile("vgui/dsidemenu.lua")
+AddCSLuaFile("vgui/dmodelkillicon.lua")
 
 AddCSLuaFile("vgui/dexroundedpanel.lua")
 AddCSLuaFile("vgui/dexroundedframe.lua")

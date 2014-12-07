@@ -26,7 +26,7 @@ local function DoFleshThrow(pl, wep)
 				ent:SetPos(startpos + heading * 8)
 				ent:SetOwner(pl)
 				ent:Spawn()
-				ent:SetTeamID(TEAM_UNDEAD)
+
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() then
 					phys:SetVelocityInstantaneous(heading * math.Rand(340, 550))

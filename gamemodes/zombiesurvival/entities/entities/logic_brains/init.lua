@@ -1,10 +1,8 @@
 ENT.Base = "logic_points"
 ENT.Type = "point"
 
-ENT.ValidTeam = TEAM_UNDEAD
-
 function ENT:Add(pl, amount)
-	if pl and pl:IsValid() and pl:IsPlayer() and pl:Team() == self.ValidTeam then
+	if pl and pl:IsValid() and pl:IsPlayer() and pl:Team() == TEAM_UNDEAD then
 		amount = math.Round(amount)
 		if amount < 0 then
 			pl:TakeBrains(-amount)

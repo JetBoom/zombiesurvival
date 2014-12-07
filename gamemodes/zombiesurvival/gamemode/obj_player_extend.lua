@@ -1,8 +1,6 @@
 local meta = FindMetaTable("Player")
 if not meta then return end
 
-meta.GetTeamID = meta.Team
-
 function meta:GetMaxHealthEx()
 	if self:Team() == TEAM_UNDEAD then
 		return self:GetMaxZombieHealth()

@@ -20,6 +20,7 @@ include("vgui/dteamcounter.lua")
 include("vgui/dmodelpanelex.lua")
 include("vgui/dammocounter.lua")
 include("vgui/dteamheading.lua")
+include("vgui/dmodelkillicon.lua")
 
 include("vgui/dexroundedpanel.lua")
 include("vgui/dexroundedframe.lua")
