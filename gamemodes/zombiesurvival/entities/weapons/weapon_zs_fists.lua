@@ -2,7 +2,12 @@ AddCSLuaFile()
 
 SWEP.PrintName = "Fists"
 
-SWEP.WalkSpeed = SPEED_NORMAL
+if GAMEMODE.ZombieEscape then
+	SWEP.WalkSpeed = SPEED_ZOMBIEESCAPE_NORMAL
+else
+	SWEP.WalkSpeed = SPEED_NORMAL
+end
+
 SWEP.IsMelee = true
 
 SWEP.UseHands = true
@@ -186,7 +191,7 @@ function SWEP:Deploy()
 	if SERVER then
 		self:SetCombo(0)
 	end
-	
+	self.Owner:ResetSpeed()
 	return true
 end
 
@@ -199,7 +204,11 @@ function SWEP:Think()
 	if idle_holdtype_time > 0 and curtime >= idle_holdtype_time then
 		--self:SetWeaponHoldType("normal")
 		self:SetNextIdleHoldType(0)
-		self.WalkSpeed = SPEED_NORMAL
+		if GAMEMODE.ZombieEscape then 
+			self.WalkSpeed = SPEED_ZOMBIEESCAPE_NORMAL
+		else
+			self.WalkSpeed = SPEED_NORMAL
+		end
 		self.Owner:ResetSpeed()
 	end
 	
