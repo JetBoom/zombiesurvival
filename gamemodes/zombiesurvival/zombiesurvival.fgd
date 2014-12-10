@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (30th November 2014)     //
+// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (9th December 2014)      //
 // If there are any bugs with this file, or any additions that need to be made  //
 // make a post at: http://www.noxiousnet.com/forums/index.php?topic=14910       //
 //////////////////////////////////////////////////////////////////////////////////
@@ -491,13 +491,32 @@
 	
 @PointClass base(Targetname) = logic_winlose : "ZS: When activated, this will end the round immediately, with the specified outcome."
 [
-	// Inputs
-	input win(void)     : "Humans win the game, map over."
-	input lose(void)    : "Humans lose the game, map over."
+	// Keys
+	endslowmo(choices)            : "Enable Slow Motion Effect?" : 1 : "Enables or disables the slow motion effect at the end of the round." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	endcamera(choices)            : "Enable Custom Camera?" : 0 : "Enables or disables an end round camera." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]	
+	endcamerapos(vector)          : "Custom Camera Vector" : "" : "Sets the position of the end round camera."
+	winmusic(sound)               : "Win Music" : "default" : "The music that plays when the human team have won the round. 'default' for normal function"
+	losemusic(sound)              : "Lose Music" : "default" : "The music that plays when the human team have lost the round. 'default' for normal function"
 	
+	// Inputs
+	input win(void)               : "Humans win the game, map over."
+	input lose(void)              : "Humans lose the game, map over."
+	input setendslomo(integer)    : "Enables or disables the slow motion effect at the end of the round."
+	input setendcamera(integer)   : "Enables or disables an end round camera."
+	input setendcamerapos(vector) : "Sets the vector for where the end round camera should go to."
+	input setwinmusic(string)     : "The music that plays when the human team have won the round. 'default' for normal function."
+	input setlosemusic(string)    : "The music that plays when the human team have lost the round. 'default' for normal function."
 	// Outputs 
-	output onwin(void)  : "Called when humans win even if not by this entity."
-	output onlose(void) : "Called when humans lose even if not by this entity."
+	output onwin(void)         : "Called when humans win even if not by this entity."
+	output onlose(void)        : "Called when humans lose even if not by this entity."
 ]
 
 @PointClass base(Targetname) = logic_infliction : "ZS: Watches for the specified infliction level."
@@ -561,9 +580,9 @@
 	displayentity(target_destination) : "Target Messaging Entity" : "" : "The entity used to display the message, can be a targetname of a class game_text, point_worldhint or point_zsmessage"
 	zsmessagemode(choices)            : "Point_zsmessage Method" :  0  : "If using a point_zsmessage, select the method of display with this key" =
 	[
-		"0"  : "Centred HUD Message"
-		"1"  : "Corner Human HUD Message"
-		"2"  : "Corner Zombie HUD Message"
+		0  : "Centred HUD Message"
+		1  : "Corner Human HUD Message"
+		2  : "Corner Zombie HUD Message"
 	]
 	string01(string)                  : "String 01" : "" : "Part 01 of the full string, there can be up to 99 of these."
 	string02(string)                  : "String 02" : "" : "Part 02 of the full string, there can be up to 99 of these."

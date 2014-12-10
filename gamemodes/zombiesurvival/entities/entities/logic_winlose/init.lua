@@ -43,7 +43,7 @@ function ENT:KeyValue(key, value)
 		GAMEMODE.OverrideEndSlomo = value == "1"
 	elseif key == "endcamera" then
 		SetGlobalBool("endcamera", value == "1")
-	elseif key == "setendcamerapos" then
+	elseif key == "endcamerapos" then
 		SetGlobalVector("endcamerapos", Vector(value))
 	elseif key == "winmusic" then
 		if value == "default" then
