@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (9th December 2014)      //
+// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (15th December 2014)     //
 // If there are any bugs with this file, or any additions that need to be made  //
 // make a post at: http://www.noxiousnet.com/forums/index.php?topic=14910       //
 //////////////////////////////////////////////////////////////////////////////////
@@ -404,7 +404,7 @@
 	output OnClassUnlocked(void)    : "Called when the class we're watching's class is unlocked by the game. This output isn't called if the class is unlocked by any logic_classunlock entities, only by the game."
 ]
 
-@PointClass studio("models/crossbow_bolt.mdl") base(Targetname) = prop_nail  : "ZS: Allows you to manually place nails."
+@PointClass studio("models/crossbow_bolt.mdl") base(Targetname,Angles) = prop_nail  : "ZS: Allows you to manually place nails."
 [
 	// Keys
 	healthoverride(integer)          : "Health Override" : 210 : "Sets the nail's maximum health to a specific number."
@@ -604,9 +604,26 @@
 	output OnDisplayed(void)          : "Called when the message has successfully displayed."
 ]
 
+@PointClass base(Targetname) = logic_stripweapons : "ZS: Allows the map to strip all or specific weapons by classname"
+[
+	// Keys
+	keepfists(choices)            : "Keep Fists" : 1 : "If yes, the stripallweapons input strips all weapons but fists" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	
+	// Inputs
+	input stripweapon(string)     : "Strips a single weapon as mentioned in arguments"
+	input stripallweapons(string) : "Strips all the weapons the activator has, keeps fists if flag is true"
+	input setkeepfists(integer)   : "If 1 the next stripallweapons inputs strip all weapons but fists"
+]
+
 ///////////////////////////////////////////////////////////////////////////////////
 // Gamemode - Worth Weapons + Items ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
+
+@PointClass base(Weapon) = weapon_map_base : "Used for creating parentable map made weapons" []
 
 @PointClass base(Weapon) studio("models/weapons/w_pistol.mdl") = weapon_zs_owens:
 "Ammo Type: Pistol.\n"+
