@@ -596,19 +596,21 @@ end
 
 function GM:ReplaceMapWeapons()
 	for _, ent in pairs(ents.FindByClass("weapon_*")) do
-		if string.sub(ent:GetClass(), 1, 10) == "weapon_zs_" then
-			local wep = ents.Create("prop_weapon")
-			if wep:IsValid() then
-				wep:SetPos(ent:GetPos())
-				wep:SetAngles(ent:GetAngles())
-				wep:SetWeaponType(ent:GetClass())
-				wep:SetShouldRemoveAmmo(false)
-				wep:Spawn()
-				wep.IsPreplaced = true
+		local wepclass = ent:GetClass()
+		if wepclass ~= "weapon_map_base" then
+			if string.sub(wepclass, 1, 10) == "weapon_zs_" then
+				local wep = ents.Create("prop_weapon")
+				if wep:IsValid() then
+					wep:SetPos(ent:GetPos())
+					wep:SetAngles(ent:GetAngles())
+					wep:SetWeaponType(ent:GetClass())
+					wep:SetShouldRemoveAmmo(false)
+					wep:Spawn()
+					wep.IsPreplaced = true
+				end
 			end
+			ent:Remove()
 		end
-
-		ent:Remove()
 	end
 end
 
