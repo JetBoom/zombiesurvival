@@ -43,7 +43,7 @@ end
 
 function ENT:Use(activator, caller)
 	if activator:IsPlayer() and activator:Alive() and not activator:KeyDown(GAMEMODE.UtilityKey) and activator:Team() ~= TEAM_UNDEAD and not self.Removing then
-		if not self.PlacedInMap or not GAMEMODE.MaxAmmoBoxPickups or (activator.AmmoPickups or 0) < GAMEMODE.MaxAmmoBoxPickups or team.NumPlayers(TEAM_HUMAN) <= 1 then
+		if not self.PlacedInMap or not GAMEMODE.MaxAmmoPickups or (activator.AmmoPickups or 0) < GAMEMODE.MaxAmmoPickups or team.NumPlayers(TEAM_HUMAN) <= 1 then
 			if self.PlacedInMap and GAMEMODE.WeaponRequiredForAmmo and team.NumPlayers(TEAM_HUMAN) > 1 then
 				local hasweapon = false
 				for _, wep in pairs(activator:GetWeapons()) do
