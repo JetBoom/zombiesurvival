@@ -407,21 +407,21 @@
 @PointClass studio("models/crossbow_bolt.mdl") base(Targetname,Angles) = prop_nail  : "ZS: Allows you to manually place nails."
 [
 	// Keys
-	healthoverride(integer)          : "Health Override" : 210 : "Sets the nail's maximum health to a specific number."
-	healthmultiplier(float)          : "Health Multiply" : 1   : "Multiply the nail's default maximum health by this number."
-	unremovable(choices)             : "Unremovable"     : 0   : "Set to yes to make this nail unremovable by players." =
+	healthoverride(integer)            : "Health Override" : -1 : "Sets the nail's maximum health to a specific number. Set to -1 or 0 to disable override"
+	healthmultiplier(float)            : "Health Multiply" : 1  : "Multiply the nail's default maximum health by this number."
+	unremovable(choices)               : "Unremovable"     : 0  : "Set to yes to make this nail unremovable by players." =
 	[
 		1 : "Yes"
 		0 : "No"
 	]
 	
 	// Inputs
-	input sethealth(integer)         : "Sets the nail's remaining health."
-	input attachto(string)           : "Parent to this entity."
-	input nailto(string)             : "Nail to this entity. Use attachto first and then this to weld the two. Use 'worldspawn' here to weld to the world."
-	input setname(string)            : "Display this text as the owner name."
-	input setunremovable(integer)    : "Set if this nail is unremovable."
-	input toggleunremovable(integer) : "Toggle unremovable state."
+	input sethealth(integer)           : "Sets the nail's remaining health."
+	input attachto(target_destination) : "Parent to this entity."
+	input nailto(target_destination)   : "Nail to this entity. Use attachto first and then this to weld the two. Use 'worldspawn' here to weld to the world."
+	input setname(string)              : "Display this text as the owner name."
+	input setunremovable(integer)      : "Set if this nail is unremovable."
+	input toggleunremovable(integer)   : "Toggle unremovable state."
 ]
 
 @PointClass studio("models/Items/BoxMRounds.mdl") base(Targetname, Parentname, Angles) = prop_ammo  : "ZS: Game Specific Ammo."

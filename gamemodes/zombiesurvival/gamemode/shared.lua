@@ -470,7 +470,11 @@ function GM:CanPlaceNail(pl, tr)
 end
 
 function GM:CanRemoveNail(pl, nail)
-	return true
+	if nail.m_NailUnremovable then 
+		return false 
+	else
+		return true
+	end
 end
 
 function GM:GetDamageResistance(fearpower)
