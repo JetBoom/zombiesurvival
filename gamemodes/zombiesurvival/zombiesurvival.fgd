@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////
-// NoXiousNet Zombie Survival FGD - Last Edit by Benjy (15th December 2014)     //
+// NoXiousNet Zombie Survival FGD                                               //
 // If there are any bugs with this file, or any additions that need to be made  //
 // make a post at: http://www.noxiousnet.com/forums/index.php?topic=14910       //
 //////////////////////////////////////////////////////////////////////////////////
@@ -424,7 +424,7 @@
 	input toggleunremovable(integer) : "Toggle unremovable state."
 ]
 
-@PointClass studio("models/Items/BoxMRounds.mdl") base(Targetname, Angles) = prop_ammo  : "ZS: Game Specific Ammo."
+@PointClass studio("models/Items/BoxMRounds.mdl") base(Targetname, Parentname, Angles) = prop_ammo  : "ZS: Game Specific Ammo."
 [
 	// Keys
 	ammotype(choices) : "Ammo Type"  : "pistol"   : "Ammo type this entity becomes" =
@@ -448,13 +448,13 @@
 	amount(integer)  : "Amount" : 0 : "Amount of ammo that collecting this item gives"
 ]
 
-@PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
+@PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Parentname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
 [
 	// Keys
 	weapontype(string) : "weapon_type" : "weapon_zs_m4" : "Weapon type this entity becomes"
 ]
 
-@PointClass base(Targetname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."
+@PointClass base(Targetname, Parentname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."
 [
 	// Keys
 	hint(string)             : "Hint"    : " " : "The hint to display."
@@ -473,7 +473,7 @@
 	input setrange(float)    : "Sets the range from the player's camera we must be in to see this hint. It can also be 0 for infinite which is the default."
 ]
 
-@PointClass base(Targetname) = prop_playergib  : "ZS: Allows you to manually place gibs."
+@PointClass base(Targetname, Parentname) = prop_playergib  : "ZS: Allows you to manually place gibs."
 [
 	// Keys
 	gibtype(choices) : "Gib Type"  : 1 : "Overrides the gib's type." =
