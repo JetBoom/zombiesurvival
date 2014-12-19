@@ -205,21 +205,6 @@ function meta:GetLegDamage()
 	return math.max(0, self.LegDamage - CurTime())
 end
 
-function meta:AddAntiBunnyHopTime(time)
-	self:SetAntiBunnyHopTime(math.max(CurTime(), self.ABHT) + time)
-end
-
-function meta:SetAntiBunnyHopTime(time)
-	self.ABHT = math.min(CurTime() + 4.5, time)
-	--[[if SERVER then
-		self:UpdateAntiBunnyHopTime()
-	end]]
-end
-
-function meta:GetAntiBunnyHopTime()
-	return math.max(0, self.ABHT - CurTime())
-end
-
 function meta:WouldDieFrom(damage, hitpos)
 	return self:Health() <= damage * GAMEMODE:GetZombieDamageScale(hitpos, self)
 end

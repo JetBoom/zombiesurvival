@@ -391,12 +391,8 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 
 	if isundead then
 		if pl:GetZombieClassTable().NoFallDamage then return true end
-	else
+	elseif SERVER then
 		pl:PreventSkyCade()
-	end
-
-	if speed > 100 then
-		pl:AddAntiBunnyHopTime(1)
 	end
 
 	if isundead then
