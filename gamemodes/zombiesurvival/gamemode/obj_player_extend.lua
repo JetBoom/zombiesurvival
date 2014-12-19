@@ -141,10 +141,6 @@ function meta:SetZombieClassName(classname)
 	end
 end
 
-function meta:AddLegDamage(damage)
-	self:SetLegDamage(self:GetLegDamage() + damage)
-end
-
 function meta:SetPoints(points)
 	self:SetDTInt(1, points)
 end
@@ -183,6 +179,10 @@ function meta:GetUnlucky()
 	return self.m_Unlucky
 end
 
+function meta:AddLegDamage(damage)
+	self:SetLegDamage(self:GetLegDamage() + damage)
+end
+
 function meta:SetLegDamage(damage)
 	self.LegDamage = CurTime() + math.min(GAMEMODE.MaxLegDamage, damage * 0.125)
 	if SERVER then
@@ -202,8 +202,22 @@ function meta:RawCapLegDamage(time)
 end
 
 function meta:GetLegDamage()
-	local base = self.LegDamage or 0
-	return math.max(0, base - CurTime())
+	return math.max(0, self.LegDamage - CurTime())
+end
+
+function meta:AddAntiBunnyHopTime(time)
+	self:SetAntiBunnyHopTime(math.max(CurTime(), self.ABHT) + time)
+end
+
+function meta:SetAntiBunnyHopTime(time)
+	self.ABHT = math.min(CurTime() + 4.5, time)
+	--[[if SERVER then
+		self:UpdateAntiBunnyHopTime()
+	end]]
+end
+
+function meta:GetAntiBunnyHopTime()
+	return math.max(0, self.ABHT - CurTime())
 end
 
 function meta:WouldDieFrom(damage, hitpos)

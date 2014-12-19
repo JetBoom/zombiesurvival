@@ -149,8 +149,12 @@ GM:AddStartingItem("medgun", "Medic Gun", nil, ITEMCAT_TOOLS, 45, "weapon_zs_med
 GM:AddStartingItem("150mkit", "150 Medical Kit power", "150 extra power for the Medical Kit.", ITEMCAT_TOOLS, 30, nil, function(pl) pl:GiveAmmo(150, "Battery", true) end, "models/healthvial.mdl")
 GM:AddStartingItem("arscrate", "Arsenal Crate", nil, ITEMCAT_TOOLS, 50, "weapon_zs_arsenalcrate").Countables = "prop_arsenalcrate"
 GM:AddStartingItem("resupplybox", "Resupply Box", nil, ITEMCAT_TOOLS, 70, "weapon_zs_resupplybox").Countables = "prop_resupplybox"
-local item = GM:AddStartingItem("infturret", "Infrared Gun Turret", nil, ITEMCAT_TOOLS, 75, "weapon_zs_gunturret")
-item.Countables = "prop_gunturret"
+local item = GM:AddStartingItem("infturret", "Infrared Gun Turret", nil, ITEMCAT_TOOLS, 75, nil, function(pl)
+	pl:GiveEmptyWeapon("weapon_zs_gunturret")
+	pl:GiveAmmo(1, "thumper")
+	pl:GiveAmmo(250, "smg1")
+end)
+item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
 item.NoClassicMode = true
 local item = GM:AddStartingItem("manhack", "Manhack", nil, ITEMCAT_TOOLS, 60, "weapon_zs_manhack")
 item.Countables = "prop_manhack"
@@ -239,7 +243,12 @@ GM:AddPointShopItem("crphmr", "Carpenter's Hammer", nil, ITEMCAT_TOOLS, 50, "wea
 GM:AddPointShopItem("wrench", "Mechanic's Wrench", nil, ITEMCAT_TOOLS, 25, "weapon_zs_wrench").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate", "Arsenal Crate", nil, ITEMCAT_TOOLS, 50, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", "Resupply Box", nil, ITEMCAT_TOOLS, 200, "weapon_zs_resupplybox")
-GM:AddPointShopItem("infturret", "Infrared Gun Turret", nil, ITEMCAT_TOOLS, 50, "weapon_zs_gunturret").NoClassicMode = true
+local item = GM:AddPointShopItem("infturret", "Infrared Gun Turret", nil, ITEMCAT_TOOLS, 50, nil, function(pl)
+	pl:GiveEmptyWeapon("weapon_zs_gunturret")
+	pl:GiveAmmo(1, "thumper")
+	pl:GiveAmmo(250, "smg1")
+end)
+item.NoClassicMode = true
 GM:AddPointShopItem("manhack", "Manhack", nil, ITEMCAT_TOOLS, 45, "weapon_zs_manhack")
 GM:AddPointShopItem("barricadekit", "'Aegis' Barricade Kit", nil, ITEMCAT_TOOLS, 125, "weapon_zs_barricadekit")
 GM:AddPointShopItem("nail", "Nail", "It's just one nail.", ITEMCAT_TOOLS, 5, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true

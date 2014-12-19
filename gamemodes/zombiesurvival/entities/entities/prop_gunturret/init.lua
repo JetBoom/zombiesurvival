@@ -114,7 +114,7 @@ function ENT:FireTurret(src, dir)
 
 			self:StartBulletKnockback()
 			self:FireBullets({Num = 1, Src = src, Dir = dir, Spread = Vector(0.05, 0.05, 0), Tracer = 1, Force = 1, Damage = 12, Callback = BulletCallback})
-			self:DoBulletKnockback(0.05)
+			self:DoBulletKnockback(0.04)
 			self:EndBulletKnockback()
 		else
 			self:SetNextFire(CurTime() + 2)
@@ -202,7 +202,8 @@ function ENT:OnPackedUp(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 
-	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth(), self:GetAmmo())
+	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
+	pl:GiveAmmo(self:GetAmmo(), "smg1")
 
 	self:Remove()
 end

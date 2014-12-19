@@ -380,6 +380,8 @@ function GM:LocalPlayerFound()
 	self.GUIMousePressed = self._GUIMousePressed
 	self.HUDWeaponPickedUp = self._HUDWeaponPickedUp
 
+	LocalPlayer().LegDamage = 0
+
 	if render.GetDXLevel() >= 80 then
 		self.RenderScreenspaceEffects = self._RenderScreenspaceEffects
 	end
@@ -1245,7 +1247,7 @@ function GM:_CreateMove(cmd)
 		return
 	end
 
-	if MySelf:GetLegDamage() >= 0.5 then
+	if MySelf:GetAntiBunnyHopTime() >= 2 or MySelf:GetLegDamage() >= 0.5 then
 		local buttons = cmd:GetButtons()
 		if bit.band(buttons, IN_JUMP) ~= 0 then
 			cmd:SetButtons(buttons - IN_JUMP)

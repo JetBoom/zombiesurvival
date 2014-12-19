@@ -395,20 +395,24 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 		pl:PreventSkyCade()
 	end
 
-	if not isundead or not pl:GetZombieClassTable().NoFallSlowdown then
-		pl:RawCapLegDamage(CurTime() + math.min(2, speed * 0.0035))
+	if speed > 100 then
+		pl:AddAntiBunnyHopTime(1)
 	end
 
-	if SERVER then
-		if isundead then
-			speed = math.max(0, speed - 200)
+	if isundead then
+		speed = math.max(0, speed - 200)
+	end
+
+	local damage = (0.1 * (speed - 525)) ^ 1.45
+	if hitfloater then damage = damage / 2 end
+
+	if math.floor(damage) > 0 then
+		if damage >= 5 and (not isundead or not pl:GetZombieClassTable().NoFallSlowdown) then
+			pl:RawCapLegDamage(CurTime() + math.min(2, damage * 0.038))
 		end
 
-		local damage = (0.1 * (speed - 525)) ^ 1.45
-		if hitfloater then damage = damage / 2 end
-
-		if math.floor(damage) > 0 then
-			if 20 <= damage and damage < pl:Health() then
+		if SERVER then
+			if damage >= 30 and damage < pl:Health() then
 				pl:KnockDown(damage * 0.05)
 			end
 			pl:TakeSpecialDamage(damage, DMG_FALL, game.GetWorld(), game.GetWorld(), pl:GetPos())

@@ -3,7 +3,7 @@ ENT.RenderGroup = RENDERGROUP_BOTH
 
 ENT.SearchDistance = 768
 ENT.MinimumAimDot = 0.5
-ENT.DefaultAmmo = 250
+ENT.DefaultAmmo = 0 --250
 ENT.MaxAmmo = 1000
 
 ENT.NoReviveFromKills = true

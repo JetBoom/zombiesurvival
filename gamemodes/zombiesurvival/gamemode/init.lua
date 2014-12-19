@@ -1600,6 +1600,8 @@ function GM:PlayerInitialSpawnRound(pl)
 
 	pl.BonusDamageCheck = 0
 
+	pl.LegDamage = 0
+
 	pl.DamageDealt = {}
 	pl.DamageDealt[TEAM_UNDEAD] = 0
 	pl.DamageDealt[TEAM_HUMAN] = 0
@@ -3523,22 +3525,24 @@ function GM:PlayerSpawn(pl)
 		pl:SetNoTarget(false)
 		pl:SetMaxHealth(100)
 
-		pl:Give("weapon_zs_fists")
-
 		if self.ZombieEscape then
 			pl:Give("weapon_zs_zeknife")
 			pl:Give("weapon_zs_zegrenade")
 			pl:Give(table.Random(self.ZombieEscapeWeapons))
-		elseif self.StartingLoadout then
-			self:GiveStartingLoadout(pl)
-		elseif pl.m_PreRedeem then
-			if self.RedeemLoadout then
-				for _, class in pairs(self.RedeemLoadout) do
-					pl:Give(class)
+		else
+			pl:Give("weapon_zs_fists")
+			
+			if self.StartingLoadout then
+				self:GiveStartingLoadout(pl)
+			elseif pl.m_PreRedeem then
+				if self.RedeemLoadout then
+					for _, class in pairs(self.RedeemLoadout) do
+						pl:Give(class)
+					end
+				else
+					pl:Give("weapon_zs_redeemers")
+					pl:Give("weapon_zs_swissarmyknife")
 				end
-			else
-				pl:Give("weapon_zs_redeemers")
-				pl:Give("weapon_zs_swissarmyknife")
 			end
 		end
 
