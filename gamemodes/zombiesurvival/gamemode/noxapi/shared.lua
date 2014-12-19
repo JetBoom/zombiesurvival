@@ -7,5 +7,5 @@ function meta:IsNoxSupporter()
 		return memberlevel == MEMBER_GOLD or memberlevel == MEMBER_DIAMOND
 	end
 
-	return self._SUPPORTER_
+	return self:GetDTBool(15)
 end
