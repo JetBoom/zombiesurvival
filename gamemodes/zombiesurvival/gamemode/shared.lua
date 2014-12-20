@@ -456,7 +456,7 @@ function GM:ScalePlayerDamage(pl, hitgroup, dmginfo)
 		end
 	end
 
-	if (hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG) and self:PlayerShouldTakeDamage(pl, dmginfo:GetAttacker()) then
+	if SERVER and (hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG) and self:PlayerShouldTakeDamage(pl, dmginfo:GetAttacker()) then
 		pl:AddLegDamage(dmginfo:GetDamage())
 	end
 end
