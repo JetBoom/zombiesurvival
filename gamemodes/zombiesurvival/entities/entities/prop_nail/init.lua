@@ -51,8 +51,8 @@ function ENT:AttachTo(baseent, attachent, physbone, physbone2)
 
 	if baseent:GetBarricadeHealth() == 0 then
 		local health = baseent:GetDefaultBarricadeHealth()
-		if self.HealthOveride > 0 then health = self.HealthOveride end
-		health = health * self.HealthMultiplier
+		if self.HealthOveride and self.HealthOveride > 0 then health = self.HealthOveride end
+		health = health * (self.HealthMultiplier or 1)
 		baseent:SetMaxBarricadeHealth(health)
 		baseent:SetBarricadeHealth(health)
 		baseent:SetBarricadeRepairs(baseent:GetMaxBarricadeRepairs())
