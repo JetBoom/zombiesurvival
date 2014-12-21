@@ -717,7 +717,7 @@ function GM:PlayerSelectSpawn(pl)
 	if pl.m_PreRedeem and teamid == TEAM_HUMAN and #self.RedeemSpawnPoints >= 1 then
 		tab = self.RedeemSpawnPoints
 	elseif teamid == TEAM_UNDEAD then
-		if pl:GetZombieClassTable().Boss and #self.BossSpawnPoints >= 1 then
+		if pl:GetZombieClassTable().Boss and (not pl.DeathClass or self.ZombieClasses[pl.DeathClass].Boss) and #self.BossSpawnPoints >= 1 then
 			tab = self.BossSpawnPoints
 		elseif self.DynamicSpawning --[[and CurTime() >= self:GetWaveStart() + 1]] then -- If we're a bit in the wave then we can spawn on top of heavily dense groups with no humans looking at us.
 			if self:ShouldUseAlternateDynamicSpawn() then
