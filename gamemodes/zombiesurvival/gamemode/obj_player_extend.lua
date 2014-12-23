@@ -202,7 +202,7 @@ function meta:RawCapLegDamage(time)
 end
 
 function meta:GetLegDamage()
-	return math.max(0, self.LegDamage - CurTime())
+	return math.max(0, (self.LegDamage or 0) - CurTime())
 end
 
 function meta:WouldDieFrom(damage, hitpos)
