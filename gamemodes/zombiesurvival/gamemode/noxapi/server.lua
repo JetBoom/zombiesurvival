@@ -47,8 +47,8 @@ end
 function CACHE:Save()
 	local tosave = {}
 
-	for steamid, level in pairs(self.Cache) do
-		table.insert(tosave, steamid.."="..level)
+	for _, cached in pairs(self.Cache) do
+		table.insert(tosave, cached[1].."="..cached[2])
 	end
 
 	file.Write("noxapi_cache.txt", table.concat(tosave, "\n"))
@@ -69,28 +69,36 @@ end
 
 function CACHE:BufferRequest()
 	local IDS = {}
+	local steamid_to_player = {}
+	local steamids = {}
 	for i=1, math.min(10, #Buffer) do
 		IDS[#IDS + 1] = {Buffer[1][1], Buffer[1][2]}
+		steamids[#steamids + 1] = Buffer[1][1]
 		table.remove(Buffer, 1)
 	end
-	local SIDS = {}
-	for k, v in pairs(IDS) do
-		SIDS[k] = v[1]
+	for _, pl in pairs(player.GetAll()) do
+		steamid_to_player[pl:SteamID()] = pl
 	end
 
-	http.Fetch("http://www.noxiousnet.com/api/player/memberlevel?steamids="..table.concat(SIDS, ","), function(body, len, headers, code)
+	http.Fetch("http://www.noxiousnet.com/api/player/memberlevel?steamids="..table.concat(steamids, ","), function(body, len, headers, code)
 		local levels = string.Explode(",", body)
-		if #levels == #SIDS then
+		if #levels == #IDS then
+			local allplayers = player.GetAll()
+
 			for k, v in pairs(levels) do
-				local steamid = IDS[k][1]
+				local kv = string.Explode("=", v)
+				if #kv == 2 then
+					local steamid = kv[1]
+					local level = tonumber(kv[2]) or 0
+					local pl = steamid_to_player[steamid]
 
-				local pl = IDS[k][2]
-				if pl and pl:IsValid() then
-					pl:SetDTBool(15, true)
-					pl:PrintMessage(HUD_PRINTTALK, SUPPORTER_MESSAGE)
+					if (level == 1 or level == 2) and pl and pl:IsValid() then
+						pl:SetDTBool(15, true)
+						pl:PrintMessage(HUD_PRINTTALK, SUPPORTER_MESSAGE)
+					end
+
+					CACHE:Set(steamid, level)
 				end
-
-				CACHE:Set(steamid, level)
 			end
 		end
 	end)
@@ -112,22 +120,11 @@ hook.Add("PlayerInitialSpawn", "noxapi", function(pl)
 	local steamid = pl:SteamID()
 	local memberlevel = CACHE:Get(steamid)
 	if memberlevel then
-		if level == 1 or level == 2 then
+		if memberlevel == 1 or memberlevel == 2 then
 			pl:SetDTBool(15, true)
 			pl:PrintMessage(HUD_PRINTTALK, SUPPORTER_MESSAGE)
 		end
 	else
-		http.Fetch("http://www.noxiousnet.com/api/player/memberlevel?steamid="..steamid, function(body, len, headers, code)
-			local level = tonumber(body) or 0
-
-			if level == 1 or level == 2 then
-				pl:SetDTBool(15, true)
-				pl:PrintMessage(HUD_PRINTTALK, SUPPORTER_MESSAGE)
-			end
-
-			CACHE:Set(steamid, level)
-		end)
-
 		table.insert(Buffer, {steamid, pl})
 		CACHE:WaitForBuffer()
 	end
