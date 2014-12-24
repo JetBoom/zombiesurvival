@@ -154,6 +154,36 @@
 		"gore child"         : "Gore Child"
 		"giga gore child"    : "Giga Gore Child"
 	]
+	onlywhenclass(choices)  : "Player Must Be This Class" : "disabled" : "Set this to a specific class to change only these zombie types." =
+	[
+		"disabled"           : "Disabled"
+		"will o' wisp"       : "Will O' Wisp"
+		"zombie"             : "Zombie"
+		"classic Zombie"     : "Classic Zombie"
+		"fresh dead"         : "Fresh Dead"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"headcrab"           : "Headcrab"
+		"fast headcrab"      : "Fast Headcrab"
+		"poison headcrab"    : "Poison Headcrab"
+		"ghoul"              : "Ghoul"
+		"wraith"             : "Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"poison zombie"      : "Poison Zombie"
+		"chem zombie"        : "Chem Zombie"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"the tickle monster" : "The Tickle Monster"
+		"shade"              : "Shade"
+		"bonemesh"           : "Bonemesh"
+		"the butcher"        : "The Butcher"
+		"super zombie"       : "Super Zombie"
+		"gore child"         : "Gore Child"
+		"giga gore child"    : "Giga Gore Child"
+	]
 	onetime(choices)             : "One Time?" : 0 : "If yes then anyone who gets swapped will be respawned as the last class they were before the change." =
 	[
 		1 : "Yes"
@@ -175,6 +205,7 @@
 	input setendtouchdeathclass(string) : "Set On Leaving Respawn Class keyvalue."
 	input setonetime(integer)           : "Set One Time keyvalue. <boolean>"
 	input setinstantchange(integer)     : "Set Change Instantly keyvalue. <boolean>"
+	input setonlywhenclass(string)      : "Set Only When Class keyvalue."
 ]
 
 @SolidClass base(Targetname) = trigger_bossclass : "ZS: A zombie that touches this brush"
