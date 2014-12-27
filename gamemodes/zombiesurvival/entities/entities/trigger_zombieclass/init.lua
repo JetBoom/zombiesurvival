@@ -5,7 +5,10 @@ function ENT:Initialize()
 
 	if self.On == nil then self.On = true end
 	if self.InstantChange == nil then self.InstantChange = true end
-	if self.OnlyWhenClass == nil then self.OnlyWhenClass = -1 end
+	if self.OnlyWhenClass == nil then 
+		self.OnlyWhenClass = {} 
+		self.OnlyWhenClass[1] = -1 
+	end
 end
 
 function ENT:Think()
@@ -34,15 +37,17 @@ function ENT:KeyValue(key, value)
 	elseif key == "touchclass" then
 		self.TouchClass = string.lower(value)
 	elseif key == "onlywhenclass" then
+		self.OnlyWhenClass = {}
 		if value == "disabled" then 
-			self.OnlyWhenClass = -1
+			self.OnlyWhenClass[1] = -1
 		else
-			for k, v in ipairs(GAMEMODE.ZombieClasses) do
-				if string.lower(v.Name) == value then
-					self.OnlyWhenClass = k
-					break
-				else
-					self.OnlyWhenClass = -1
+			self.OnlyWhenClass[1] = -1
+			for i, allowed_class in pairs(string.Explode(",", string.lower(value))) do
+				for k, v in ipairs(GAMEMODE.ZombieClasses) do
+					if string.lower(v.Name) == allowed_class then
+						self.OnlyWhenClass[i] = k
+						break
+					end
 				end
 			end
 		end
@@ -65,7 +70,7 @@ function ENT:DoTouch(ent, class_name, death_class_name)
 			for k, v in ipairs(GAMEMODE.ZombieClasses) do
 				if string.lower(v.Name) == class_name then
 					local prev = ent:GetZombieClass()
-					if self.OnlyWhenClass == prev or self.OnlyWhenClass == -1 then
+					if table.HasValue( self.OnlyWhenClass, prev ) or self.OnlyWhenClass[1] == -1 then
 						local prevpos = ent:GetPos()
 						local prevang = ent:EyeAngles()
 						ent:SetZombieClass(k)
