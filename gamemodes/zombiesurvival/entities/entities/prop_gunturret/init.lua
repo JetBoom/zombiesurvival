@@ -183,7 +183,7 @@ function ENT:Use(activator, caller)
 				activator:RemoveAmmo(togive, "smg1")
 				activator:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
 				self:EmitSound("npc/turret_floor/click1.wav")
-				gamemode.Call("PlayerRepairedObject", activator, self, togive * 1.5, self)
+				--gamemode.Call("PlayerRepairedObject", activator, self, togive * 1.5, self)
 			end
 		else
 			self:SetObjectOwner(activator)
