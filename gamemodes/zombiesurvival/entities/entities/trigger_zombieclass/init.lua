@@ -66,13 +66,14 @@ end
 
 function ENT:DoTouch(ent, class_name, death_class_name)
 	if self.On and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_UNDEAD then
-		if class_name and class_name ~= string.lower(ent:GetZombieClassTable().Name) then
-			for k, v in ipairs(GAMEMODE.ZombieClasses) do
-				if string.lower(v.Name) == class_name then
-					local prev = ent:GetZombieClass()
-					if table.HasValue( self.OnlyWhenClass, prev ) or self.OnlyWhenClass[1] == -1 then
+		local prev = ent:GetZombieClass()
+		if table.HasValue( self.OnlyWhenClass, prev ) or self.OnlyWhenClass[1] == -1 then
+			if class_name and class_name ~= string.lower(ent:GetZombieClassTable().Name) then
+				for k, v in ipairs(GAMEMODE.ZombieClasses) do
+					if string.lower(v.Name) == class_name then
 						local prevpos = ent:GetPos()
 						local prevang = ent:EyeAngles()
+						ent:KillSilent()
 						ent:SetZombieClass(k)
 						ent.DidntSpawnOnSpawnPoint = true
 						ent:UnSpectateAndSpawn()
@@ -83,15 +84,16 @@ function ENT:DoTouch(ent, class_name, death_class_name)
 							ent:SetPos(prevpos)
 							ent:SetEyeAngles(prevang)
 						end
+						break
 					end
-					break
 				end
 			end
-		elseif death_class_name and death_class_name ~= string.lower(ent:GetZombieClassTable().Name) then
-			for k, v in ipairs(GAMEMODE.ZombieClasses) do
-				if string.lower(v.Name) == death_class_name then
-					ent.DeathClass = k
+			if death_class_name and death_class_name ~= string.lower(ent:GetZombieClassTable().Name) then
+				for k, v in ipairs(GAMEMODE.ZombieClasses) do
+					if string.lower(v.Name) == death_class_name then
+						ent.DeathClass = k
 					break
+					end
 				end
 			end
 		end
