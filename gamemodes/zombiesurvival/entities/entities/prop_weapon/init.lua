@@ -8,7 +8,11 @@ ENT.CleanupPriority = 1
 
 function ENT:Initialize()
 	self.m_Health = 200
-
+	self.IgnorePickupCount = self.IgnorePickupCount or false
+	self.Forced = self.Forced or false
+	self.NeverRemove = self.NeverRemove or false
+	self.IgnoreUse = self.IgnoreUse or false
+	
 	local weptab = weapons.GetStored(self:GetWeaponType())
 	if weptab and not weptab.BoxPhysicsMax then
 		self:PhysicsInit(SOLID_VPHYSICS)
@@ -53,17 +57,22 @@ function ENT:GetShouldRemoveAmmo()
 end
 
 function ENT:Use(activator, caller)
-	if not activator:IsPlayer()
+	if self.IgnoreUse then return end
+	self:GiveToActivator(activator, caller)
+end
+
+function ENT:GiveToActivator(activator, caller)
+	if  not activator:IsPlayer()
 		or not activator:Alive()
 		or activator:Team() ~= TEAM_HUMAN
 		or self.Removing
-		or activator:KeyDown(GAMEMODE.UtilityKey)
+		or (activator:KeyDown(GAMEMODE.UtilityKey) and not self.Forced)
 		or self.NoPickupsTime and CurTime() < self.NoPickupsTime and self.NoPickupsOwner ~= activator then return end
 
 	local weptype = self:GetWeaponType()
 	if not weptype then return end
 
-	if activator:HasWeapon(weptype) and not GAMEMODE.MaxWeaponPickups then
+	if activator:HasWeapon(weptype) and (self.Forced or not GAMEMODE.MaxWeaponPickups) then
 		local wep = activator:GetWeapon(weptype)
 		if wep:IsValid() then
 			local primary = wep:ValidPrimaryAmmo()
@@ -74,7 +83,7 @@ function ENT:Use(activator, caller)
 
 			local stored = weapons.GetStored(weptype)
 			if stored and stored.AmmoIfHas then
-				self:RemoveNextFrame()
+				if not self.NeverRemove then self:RemoveNextFrame() end
 			end
 
 			return
@@ -89,11 +98,11 @@ function ENT:Use(activator, caller)
 				wep:SetClip2(self:GetClip2())
 			end
 
-			if self.PlacedInMap then
+			if self.PlacedInMap and not self.IgnorePickupCount then
 				activator.WeaponPickups = (activator.WeaponPickups or 0) + 1
 			end
 
-			self:RemoveNextFrame()
+			if not self.NeverRemove then self:RemoveNextFrame() end
 		end
 	else
 		activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_decide_to_leave_some"))
@@ -104,10 +113,38 @@ function ENT:KeyValue(key, value)
 	key = string.lower(key)
 	if key == "weapontype" then
 		self:SetWeaponType(value)
+	elseif key == "ignorepickupcount" then
+		self.IgnorePickupCount = tonumber(value) == 1
+	elseif key == "neverremove" then
+		self.NeverRemove = tonumber(value) == 1
+	elseif key == "ignoreuse" then
+		self.IgnoreUse = tonumber(value) == 1
+	end
+end
+
+function ENT:AcceptInput(name, activator, caller, arg)
+	name = string.lower(name)
+	if name == "givetoactivator" then
+		self.Forced = true
+		self:GiveToActivator(activator,caller)
+		return true
+	elseif name == "setneverremove" then
+		self.NeverRemove = tonumber(arg) == 1
+		return true
+	elseif name == "setignorepickupcount" then
+		self.IgnorePickupCount = tonumber(arg) == 1
+		return true
+	elseif name == "setignoreuse" then
+		self.IgnoreUse = tonumber(value) == 1
+		return true
+	elseif name == "setweapontype" then
+		self:SetWeaponType(arg)
+		return true
 	end
 end
 
 function ENT:OnTakeDamage(dmginfo)
+	if self.NeverRemove then return end
 	self:TakePhysicsDamage(dmginfo)
 
 	self.m_Health = self.m_Health - dmginfo:GetDamage()

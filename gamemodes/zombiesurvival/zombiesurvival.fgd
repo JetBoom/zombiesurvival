@@ -478,7 +478,22 @@
 @PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Parentname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
 [
 	// Keys
-	weapontype(string) : "weapon_type" : "weapon_zs_m4" : "Weapon type this entity becomes"
+	weapontype(string)                  : "Weapon Type" : "weapon_zs_m4" : "Weapon type this entity becomes"
+	neverremove(choices)  		        : "Never Remove" : 0 : "Never remove when used or damage, for repeated uses." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	ignorepickupcount(choices)          : "Ignore Pickup Counter" : 0 : "Set to ignore a maxpickupcounter, if any." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+		
+	// Inputs
+	input givetoactivator(void)         : "Forces the weapon onto the activator."
+	input setneverremove(integer)       : "Set to make infinite uses."
+	input setignorepickupcount(integer) : "Set to ignore any max pickup counter."
 ]
 
 @PointClass base(Targetname, Parentname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."
