@@ -17,7 +17,7 @@ function ENT:SetProp(ent)
 	if not IsValid(ent) then return end
 
 	for _, e in pairs(ents.FindByClass(self:GetClass())) do
-		if e ~= self and e:GetProp() == ent then return end
+		if e ~= self and e and e:IsValid() and e:GetProp() == ent then return end
 	end
 
 	local teamid = self:GetTeam()
