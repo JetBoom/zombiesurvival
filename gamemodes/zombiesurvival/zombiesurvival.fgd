@@ -473,12 +473,6 @@
 		"thumper"               : "Turrets"
 	]
 	amount(integer)  : "Amount" : 0 : "Amount of ammo that collecting this item gives"
-]
-
-@PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Parentname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
-[
-	// Keys
-	weapontype(string)                  : "Weapon Type" : "weapon_zs_m4" : "Weapon type this entity becomes"
 	neverremove(choices)  		        : "Never Remove" : 0 : "Never remove when used or damage, for repeated uses." =
 		[
 			0 : "No"
@@ -489,11 +483,52 @@
 			0 : "No"
 			1 : "Yes"
 		]
+	ignoreuse(choices)          		: "Ignore Use" : 0 : "Set to disable being able to pickup via use key" =
+		[
+			0 : "No"
+			1 : "Yes"
+		]	
+	
+	// Inputs
+	input givetoactivator(void)         : "Forces the ammo onto the activator."
+	input setneverremove(integer)       : "Set to make infinite uses."
+	input setignorepickupcount(integer) : "Set to ignore any max pickup counter."
+	input setignoreuse(integer)         : "Set to disable being able to pickup via use key"
+	input setammotype(string)         	: "Set to change the ammo type of this entity."
+]
+
+@PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Parentname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
+[
+	// Keys
+	weapontype(string)                  : "Weapon Type" : "weapon_zs_m4" : "Weapon type this entity becomes"
+	empty(choices)          		    : "Empty" : 0 : "Set to empty the weapon of any default ammo" =
+		[
+			0 : "No"
+			1 : "Yes"
+		]	
+	neverremove(choices)  		        : "Never Remove" : 0 : "Never remove when used or damage, for repeated uses." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	ignorepickupcount(choices)          : "Ignore Pickup Counter" : 0 : "Set to ignore a maxpickupcounter, if any." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	ignoreuse(choices)          		: "Ignore Use" : 0 : "Set to disable being able to pickup via use key" =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
 		
 	// Inputs
 	input givetoactivator(void)         : "Forces the weapon onto the activator."
 	input setneverremove(integer)       : "Set to make infinite uses."
 	input setignorepickupcount(integer) : "Set to ignore any max pickup counter."
+	input setignoreuse(integer)         : "Set to disable being able to pickup via use key"
+	input setweapontype(string)         : "Set to change the weapon type of this entity."
+	input setempty(string)        		: "Set to empty the weapon of any default ammo."
 ]
 
 @PointClass base(Targetname, Parentname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."

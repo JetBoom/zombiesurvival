@@ -12,6 +12,7 @@ function ENT:Initialize()
 	self.Forced = self.Forced or false
 	self.NeverRemove = self.NeverRemove or false
 	self.IgnoreUse = self.IgnoreUse or false
+	self.Empty = self.Empty or false
 	
 	local weptab = weapons.GetStored(self:GetWeaponType())
 	if weptab and not weptab.BoxPhysicsMax then
@@ -91,7 +92,7 @@ function ENT:GiveToActivator(activator, caller)
 	end
 
 	if not self.PlacedInMap or not GAMEMODE.MaxWeaponPickups or (activator.WeaponPickups or 0) < GAMEMODE.MaxWeaponPickups or team.NumPlayers(TEAM_HUMAN) <= 1 then
-		local wep = self.PlacedInMap and activator:Give(weptype) or activator:GiveEmptyWeapon(weptype)
+		local wep = (self.PlacedInMap and not self.Empty) and activator:Give(weptype) or activator:GiveEmptyWeapon(weptype)
 		if wep and wep:IsValid() and wep:GetOwner():IsValid() then
 			if self:GetShouldRemoveAmmo() then
 				wep:SetClip1(self:GetClip1())
@@ -119,6 +120,8 @@ function ENT:KeyValue(key, value)
 		self.NeverRemove = tonumber(value) == 1
 	elseif key == "ignoreuse" then
 		self.IgnoreUse = tonumber(value) == 1
+	elseif key == "empty" then
+		self.Empty = tonumber(value) == 1
 	end
 end
 
@@ -135,11 +138,13 @@ function ENT:AcceptInput(name, activator, caller, arg)
 		self.IgnorePickupCount = tonumber(arg) == 1
 		return true
 	elseif name == "setignoreuse" then
-		self.IgnoreUse = tonumber(value) == 1
+		self.IgnoreUse = tonumber(arg) == 1
 		return true
 	elseif name == "setweapontype" then
 		self:SetWeaponType(arg)
 		return true
+	elseif name == "setempty" then
+		self.Empty = tonumber(arg) == 1
 	end
 end
 

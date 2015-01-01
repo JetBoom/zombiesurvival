@@ -109,7 +109,7 @@ function ENT:AcceptInput(name, activator, caller, arg)
 		self.IgnorePickupCount = tonumber(arg) == 1
 		return true
 	elseif name == "setignoreuse" then
-		self.IgnoreUse = tonumber(value) == 1
+		self.IgnoreUse = tonumber(arg) == 1
 		return true
 	elseif name == "setammotype" then
 		self:SetAmmoType(arg)
