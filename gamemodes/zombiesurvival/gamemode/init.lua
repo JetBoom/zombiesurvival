@@ -1606,6 +1606,10 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.DamageDealt[TEAM_UNDEAD] = 0
 	pl.DamageDealt[TEAM_HUMAN] = 0
 
+	pl.LifeBarricadeDamage = 0
+	pl.LifeHumanDamage = 0
+	pl.LifeBrainsEaten = 0
+
 	pl.m_PointQueue = 0
 	pl.m_LastDamageDealt = 0
 
