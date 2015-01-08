@@ -635,6 +635,7 @@
 		"private" : "Activator Only"
 		"all"     : "All"
 	]
+	displaytime(integer)                : "Display Time (centre message only)" : 8 : "How long the input message displays for, does not have an effect on HUD messages."
 	
 	// Inputs
 	input message(string)               : "What to display. Supports the markup library."
@@ -642,6 +643,7 @@
 	input setzombiehudmessage(string)   : "Set a message to display in the zombie wave hud."
 	input clearhumanhudmessage(void)    : "Clear the message to display in the human wave hud."
 	input clearzombiehudmessage(void)   : "Clear the message to display in the zombie wave hud."
+	input setdisplaytime(integer)       : "Change how long the input message displays for."
 ]
 
 @PointClass base(Targetname) = logic_pantsmode : "ZS: When activated, this will set the special Pants Mode on."

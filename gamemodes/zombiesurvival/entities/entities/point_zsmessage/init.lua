@@ -2,6 +2,7 @@ ENT.Type = "point"
 
 function ENT:Initialize()
 	self.SendTo = self.SendTo or -1
+	self.DisplayTime = self.DisplayTime or GAMEMODE.NotifyFadeTime
 end
 
 function ENT:Think()
@@ -16,18 +17,18 @@ function ENT:AcceptInput(name, caller, activator, args)
 		args = string.gsub(args, "</.->", "")
 
 		if self.SendTo == 0 then
-			GAMEMODE:CenterNotifyAll(args)
+			GAMEMODE:CenterNotifyAll(args,{CustomTime = self.DisplayTime})
 		elseif self.SendTo == -1 then
 			for _, pl in pairs(player.GetAll()) do
 				if pl == activator or pl == caller then
-					pl:CenterNotify(args)
+					pl:CenterNotify(args,{CustomTime = self.DisplayTime})
 					break
 				end
 			end
 		else
 			for _, pl in pairs(player.GetAll()) do
 				if pl:Team() == self.SendTo then
-					pl:CenterNotify(args)
+					pl:CenterNotify(args,{CustomTime = self.DisplayTime})
 				end
 			end
 		end
@@ -41,6 +42,8 @@ function ENT:AcceptInput(name, caller, activator, args)
 		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
 	elseif name == "clearhumanhudmessage" or name == "clearsurvivorhudmessage" then
 		SetGlobalString("hudoverride"..TEAM_HUMAN, "")
+	elseif name == "setdisplaytime" then
+		self.DisplayTime = tonumber(args)
 	end
 end
 
@@ -57,5 +60,7 @@ function ENT:KeyValue(key, value)
 		else
 			self.SendTo = 0
 		end
+	elseif key == "displaytime" then
+		self.DisplayTime = tonumber(value)
 	end
 end
