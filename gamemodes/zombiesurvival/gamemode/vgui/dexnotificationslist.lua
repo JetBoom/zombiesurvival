@@ -160,12 +160,23 @@ function PANEL:AddNotification(...)
 	
 	notif:Dock(TOP)
 
+	local args = {...}
+	
+	local FadeTime = GAMEMODE.NotifyFadeTime
+	
+	for k, v in pairs(args) do
+		if type(v) == "table" and v.CustomTime and type(v.CustomTime == "number") then 
+			FadeTime = v.CustomTime 
+			break 
+		end
+	end
+	
 	notif:SetAlpha(1)
 	notif:AlphaTo(255, 0.5)
-	notif:AlphaTo(1, 1, GAMEMODE.NotifyFadeTime - 1)
-
-	notif.DieTime = CurTime() + GAMEMODE.NotifyFadeTime
-
+	notif:AlphaTo(1, 1, FadeTime - 1)
+	
+	notif.DieTime = CurTime() + FadeTime 
+	
 	return notif
 end
 
