@@ -391,7 +391,7 @@ function meta:RemoveNail(nail, dontremoveentity, removedby)
 	local cons = nail:GetNailConstraint()
 	local othernails = 0
 	for _, othernail in pairs(ents.FindByClass("prop_nail")) do
-		if othernail ~= nail and othernail:GetNailConstraint():IsValid() and othernail:GetNailConstraint() == cons then
+		if othernail ~= nail and not nail.m_IsRemoving and othernail:GetNailConstraint():IsValid() and othernail:GetNailConstraint() == cons then
 			othernails = othernails + 1
 		end
 	end
