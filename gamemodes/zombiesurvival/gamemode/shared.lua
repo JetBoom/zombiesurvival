@@ -428,7 +428,7 @@ function GM:PlayerCanPurchase(pl)
 end
 
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-	return listener:Team() == talker:Team()
+	return listener:IsValid() and talker:IsValid() and listener:Team() == talker:Team()
 	--[[if self:GetEndRound() then return true, false end
 
 	if listener:Team() == talker:Team() then
