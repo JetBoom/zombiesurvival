@@ -63,6 +63,7 @@ function ENT:GiveToActivator(activator, caller)
 				end
 
 				if not hasweapon and not self.Forced then
+					self:Input("OnPickupFailed", activator)
 					activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "nothing_for_this_ammo"))
 					return
 				end
@@ -73,11 +74,14 @@ function ENT:GiveToActivator(activator, caller)
 			if self.PlacedInMap and not self.IgnorePickupCount then
 				activator.AmmoPickups = (activator.AmmoPickups or 0) + 1
 			end
-
+			self:Input("OnPickupPassed", activator, caller)
 			if not self.NeverRemove then self:RemoveNextFrame() end
 		else
+			self:Input("OnPickupFailed", activator)
 			activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_decide_to_leave_some"))
 		end
+	else
+		self:Input("OnPickupFailed", activator)
 	end
 end
 
@@ -93,6 +97,8 @@ function ENT:KeyValue(key, value)
 		self.NeverRemove = tonumber(value) == 1
 	elseif key == "ignoreuse" then
 		self.IgnoreUse = tonumber(value) == 1
+	elseif string.sub(key, 1, 2) == "on" then
+		self:AddOnOutput(key, value)
 	end
 end
 
@@ -113,6 +119,8 @@ function ENT:AcceptInput(name, activator, caller, arg)
 		return true
 	elseif name == "setammotype" then
 		self:SetAmmoType(arg)
+	elseif string.sub(name, 1, 2) == "on" then
+		self:FireOutput(name, activator, caller, args)
 	end
 end
 

@@ -495,6 +495,10 @@
 	input setignorepickupcount(integer) : "Set to ignore any max pickup counter."
 	input setignoreuse(integer)         : "Set to disable being able to pickup via use key"
 	input setammotype(string)         	: "Set to change the ammo type of this entity."
+	
+	// Outputs
+	output OnPickupPassed(void)			: "Called when the ammo is given to the player."
+	output OnPickupFailed(void)			: "Called when the ammo is not given to the player"
 ]
 
 @PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Parentname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
@@ -529,6 +533,10 @@
 	input setignoreuse(integer)         : "Set to disable being able to pickup via use key"
 	input setweapontype(string)         : "Set to change the weapon type of this entity."
 	input setempty(string)        		: "Set to empty the weapon of any default ammo."
+	
+	// Outputs
+	output OnPickupPassed(void)			: "Called when the weapon is given to the player."
+	output OnPickupFailed(void)			: "Called when the weapon is not given to the player"
 ]
 
 @PointClass base(Targetname, Parentname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."
