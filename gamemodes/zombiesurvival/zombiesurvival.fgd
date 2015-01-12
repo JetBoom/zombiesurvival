@@ -767,7 +767,7 @@
 "Ammo Type: SMG.\n"+
 "This is a stationary turret that is placed similarly to aegis boards. Once placed, they will seek zombies and fire when one crosses its laser sight, focusing on the head. However, turrets can be extremely vulnerable to zombies as its firing power isn't good enough to take down zombies on its own and doesn't have much health. " []
 
-@PointClass base(Weapon) studio("models/items/item_item_crate.mdl") = weapon_zs_acrate : 
+@PointClass base(Weapon) studio("models/items/item_item_crate.mdl") = weapon_zs_arsenalcrate : 
 "The Arsenal Crate is a major part of the humans' survival. At wave break, this allows humans to purchase other weapons at 20% off. When a player purchases an item from this, the owner gets paid 10% commission price. Arsenal Crates can be destroyed by zombie attacks. " []
 
 @PointClass base(Weapon) studio("models/props_combine/combine_mine01.mdl") = weapon_zs_messagebeacon : 
