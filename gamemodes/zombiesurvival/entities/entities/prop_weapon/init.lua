@@ -68,10 +68,17 @@ function ENT:GiveToActivator(activator, caller)
 		or activator:Team() ~= TEAM_HUMAN
 		or self.Removing
 		or (activator:KeyDown(GAMEMODE.UtilityKey) and not self.Forced)
-		or self.NoPickupsTime and CurTime() < self.NoPickupsTime and self.NoPickupsOwner ~= activator then return end
+		or self.NoPickupsTime and CurTime() < self.NoPickupsTime and self.NoPickupsOwner ~= activator then 
+		
+		self:Input("OnPickupFailed", activator)
+		return 
+	end
 
 	local weptype = self:GetWeaponType()
-	if not weptype then return end
+	if not weptype then 
+		self:Input("OnPickupFailed", activator)
+		return 
+	end
 
 	if activator:HasWeapon(weptype) and (self.Forced or not GAMEMODE.MaxWeaponPickups) then
 		local wep = activator:GetWeapon(weptype)
@@ -84,9 +91,9 @@ function ENT:GiveToActivator(activator, caller)
 
 			local stored = weapons.GetStored(weptype)
 			if stored and stored.AmmoIfHas then
+				self:Input("OnPickupPassed", activator)
 				if not self.NeverRemove then self:RemoveNextFrame() end
 			end
-
 			return
 		end
 	end
@@ -102,10 +109,13 @@ function ENT:GiveToActivator(activator, caller)
 			if self.PlacedInMap and not self.IgnorePickupCount then
 				activator.WeaponPickups = (activator.WeaponPickups or 0) + 1
 			end
-
+			self:Input("OnPickupPassed", activator)
 			if not self.NeverRemove then self:RemoveNextFrame() end
+		else
+			self:Input("OnPickupFailed", activator)
 		end
 	else
+		self:Input("OnPickupFailed", activator)
 		activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_decide_to_leave_some"))
 	end
 end
@@ -122,6 +132,8 @@ function ENT:KeyValue(key, value)
 		self.IgnoreUse = tonumber(value) == 1
 	elseif key == "empty" then
 		self.Empty = tonumber(value) == 1
+	elseif string.sub(key, 1, 2) == "on" then
+		self:AddOnOutput(key, value)
 	end
 end
 
@@ -145,6 +157,8 @@ function ENT:AcceptInput(name, activator, caller, arg)
 		return true
 	elseif name == "setempty" then
 		self.Empty = tonumber(arg) == 1
+	elseif string.sub(name, 1, 2) == "on" then
+		self:FireOutput(name, activator, caller, args)
 	end
 end
 
