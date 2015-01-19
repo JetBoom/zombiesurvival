@@ -1,6 +1,6 @@
 JBGM LICENSE
 
-VERSION Xx420xX2, 5 January 2014
+VERSION Xx420xX3, 19 January 2015
 
 Copyright © 2013 William Moodhe
 
@@ -37,8 +37,8 @@ TERMS AND CONDITIONS
 2. You may freely copy, distribute, create derivitive works and distribute derivitive works of the Content as long as you obey the License and the License is not Modified.
 [Feel free to make edits.]
 
-3. You will not Modify the Content in such a way that it will, directly or indirectly, generate revenue without explicit, written permission from the Author.
-[For example: making it so you can pay to have extra health, points, speed, etc.]
+3. You will not Modify the Content in such a way that it will, directly or indirectly, generate revenue without explicit, written permission from the Author. CLARIFICATION: This clause does not include cosmetic features such as hats, PointShop, etc. as long as it is not possible to purchase gameplay advantages.
+[For example: it is not allowed to make it so you can pay to have extra health, points, speed, etc. It is allowed to have revenue-generating addons that offer only cosmetics or features that do not change the gameplay.]
 
 4. You will not deny access to the Author to anything in such a way that it would not allow the Author to see if the Gamemode was Modified.
 [For example: banning my Steam groups from your server.]
