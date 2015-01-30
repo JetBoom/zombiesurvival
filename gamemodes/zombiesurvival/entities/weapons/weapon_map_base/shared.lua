@@ -40,7 +40,11 @@ end
 
 function SWEP:Deploy()
 	if SERVER then
-		self.Owner:SelectWeapon("weapon_zs_fists")
+		if GAMEMODE.ZombieEscape then
+			self.Owner:SelectWeapon("weapon_zs_zeknife")
+		else
+			self.Owner:SelectWeapon("weapon_zs_fists")
+		end
 	end
 	return true
 end
