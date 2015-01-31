@@ -87,14 +87,14 @@ function meta:FireOutput(outpt, activator, caller, args)
 	local intab = self[outpt]
 	if intab then
 		for key, tab in pairs(intab) do
+			local param = ((tab.args == "") and args) or tab.args
 			for __, subent in pairs(self:FindByNameHammer(tab.entityname, activator, caller)) do
 				local delay = tonumber(tab.delay)
 				if delay == nil or delay <= 0 then
-					subent:Input(tab.input, activator, caller, tab.args)
+					subent:Input(tab.input, activator, caller, param)
 				else
 					local inp = tab.input
-					local args = tab.args
-					timer.Simple(delay, function() if subent:IsValid() then subent:Input(inp, activator, caller, args) end end)
+					timer.Simple(delay, function() if subent:IsValid() then subent:Input(inp, activator, caller, param) end end)
 				end
 			end
 		end
