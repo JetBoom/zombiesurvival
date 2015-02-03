@@ -838,11 +838,12 @@ function GM:SpawnBossZombie(bossplayer, silent)
 				livingbosses = livingbosses + 1
 				if livingbosses >= 3 then return end
 			else
-				table.insert(zombies, ent)
+				if ent:GetInfo("zs_nobosspick") == "0" then 
+					table.insert(zombies, ent)
+				end
 			end
 		end
 		table.sort(zombies, BossZombieSort)
-
 		bossplayer = zombies[1]
 	end
 
