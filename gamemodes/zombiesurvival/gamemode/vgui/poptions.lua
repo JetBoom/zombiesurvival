@@ -129,6 +129,12 @@ function MakepOptions()
 	check:SetConVar("zs_alwaysvolunteer")
 	check:SizeToContents()
 	list:AddItem(check)
+	
+	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Prevent being picked as a boss zombie")
+	check:SetConVar("zs_nobosspick")
+	check:SizeToContents()
+	list:AddItem(check)
 
 	local check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Automatic suicide when changing classes")
