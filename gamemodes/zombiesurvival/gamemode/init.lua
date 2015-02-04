@@ -379,6 +379,7 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_centernotify")
 	util.AddNetworkString("zs_topnotify")
 	util.AddNetworkString("zs_zvols")
+	util.AddNetworkString("zs_nextboss")
 	util.AddNetworkString("zs_classunlock")
 
 	util.AddNetworkString("zs_playerredeemed")
@@ -829,22 +830,10 @@ local function BossZombieSort(a, b)
 
 	return ascore > bscore
 end
+
 function GM:SpawnBossZombie(bossplayer, silent)
 	if not bossplayer then
-		local livingbosses = 0
-		local zombies = {}
-		for _, ent in pairs(team.GetPlayers(TEAM_UNDEAD)) do
-			if ent:GetZombieClassTable().Boss and ent:Alive() then
-				livingbosses = livingbosses + 1
-				if livingbosses >= 3 then return end
-			else
-				if ent:GetInfo("zs_nobosspick") == "0" then 
-					table.insert(zombies, ent)
-				end
-			end
-		end
-		table.sort(zombies, BossZombieSort)
-		bossplayer = zombies[1]
+		bossplayer = self:CalculateNextBoss()
 	end
 
 	if not bossplayer then return end
@@ -899,9 +888,13 @@ function GM:Think()
 			if self:GetWaveStart() <= time then
 				gamemode.Call("SetWaveActive", true)
 			elseif self.BossZombies and not self.PantsMode and not self:IsClassicMode() and not self.ZombieEscape
-			and self.LastBossZombieSpawned ~= wave and wave > 0 and self:GetWaveStart() - 10 <= time and not self.RoundEnded
+			and self.LastBossZombieSpawned ~= wave and wave > 0 and not self.RoundEnded
 			and (self.BossZombiePlayersRequired <= 0 or #player.GetAll() >= self.BossZombiePlayersRequired) then
-				self:SpawnBossZombie()
+				if self:GetWaveStart() - 10 <= time then
+					self:SpawnBossZombie()
+				else
+					self:CalculateNextBoss()
+				end
 			end
 		end
 	end
@@ -988,6 +981,29 @@ function GM:CalculateZombieVolunteers()
 		self.ZombieVolunteers = volunteers
 		self:SendZombieVolunteers()
 	end
+end
+
+function GM:CalculateNextBoss()
+	local livingbosses = 0
+	local zombies = {}
+	for _, ent in pairs(team.GetPlayers(TEAM_UNDEAD)) do
+		if ent:GetZombieClassTable().Boss and ent:Alive() then
+			livingbosses = livingbosses + 1
+			if livingbosses >= 3 then return end
+			else
+				if ent:GetInfo("zs_nobosspick") == "0" then 
+					table.insert(zombies, ent)
+				end
+			end
+		end
+		table.sort(zombies, BossZombieSort)
+		local newboss = zombies[1]
+		if not newboss or newboss ~= GAMEMODE.NextBossZombie then
+			net.Start("zs_nextboss")
+			net.WriteEntity(newboss)
+			net.Broadcast()
+		end
+		return newboss
 end
 
 function GM:LastBite(victim, attacker)
