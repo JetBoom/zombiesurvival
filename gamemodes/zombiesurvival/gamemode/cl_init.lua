@@ -776,8 +776,14 @@ function GM:ZombieHUD()
 	if obsmode ~= OBS_MODE_NONE then
 		self:ZombieObserverHUD(obsmode)
 	elseif not self:GetWaveActive() and not MySelf:Alive() then
-		draw_SimpleTextBlur(translate.Get("waiting_for_next_wave"), "ZSHUDFont", ScrW() * 0.5, ScrH() * 0.3, COLOR_DARKRED, TEXT_ALIGN_CENTER)
-
+	local th = draw_GetFontHeight("ZSHUDFont")
+	local x = ScrW() * 0.5
+	local y = ScrH() * 0.3
+		draw_SimpleTextBlur(translate.Get("waiting_for_next_wave"), "ZSHUDFont", x, y, COLOR_DARKRED, TEXT_ALIGN_CENTER)
+		local pl = GAMEMODE.NextBossZombie
+		if pl and pl:IsValid() then
+			draw_SimpleTextBlur(translate.Format("x_will_be_next_boss_zombie", pl:Name()), "ZSHUDFont", x, y+th, pl == MySelf and COLOR_RED or COLOR_GREY, TEXT_ALIGN_CENTER)
+		end
 		if MySelf:GetZombieClassTable().NeverAlive then
 			for _, ent in pairs(ents.FindByClass("prop_thrownbaby")) do
 				if ent:GetSettled() then
@@ -1630,6 +1636,10 @@ end)
 
 net.Receive("zs_legdamage", function(length)
 	LocalPlayer().LegDamage = net.ReadFloat()
+end)
+
+net.Receive("zs_nextboss", function(length)
+	GAMEMODE.NextBossZombie = net.ReadEntity()
 end)
 
 net.Receive("zs_zvols", function(length)
