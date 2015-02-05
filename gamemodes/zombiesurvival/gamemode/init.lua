@@ -990,20 +990,22 @@ function GM:CalculateNextBoss()
 		if ent:GetZombieClassTable().Boss and ent:Alive() then
 			livingbosses = livingbosses + 1
 			if livingbosses >= 3 then return end
-			else
-				if ent:GetInfo("zs_nobosspick") == "0" then 
-					table.insert(zombies, ent)
-				end
+		else
+			if ent:GetInfo("zs_nobosspick") == "0" then 
+				table.insert(zombies, ent)
 			end
 		end
-		table.sort(zombies, BossZombieSort)
-		local newboss = zombies[1]
-		if not newboss or newboss ~= GAMEMODE.NextBossZombie then
-			net.Start("zs_nextboss")
-			net.WriteEntity(newboss)
-			net.Broadcast()
-		end
-		return newboss
+	end
+	table.sort(zombies, BossZombieSort)
+	local newboss = zombies[1]
+	if newboss and newboss:IsValid() then
+		local newbossclass = GAMEMODE.ZombieClasses[newboss:GetBossZombieIndex()].Name
+		net.Start("zs_nextboss")
+		net.WriteEntity(newboss)
+		net.WriteString(newbossclass)
+		net.Broadcast()
+	end
+	return newboss
 end
 
 function GM:LastBite(victim, attacker)
