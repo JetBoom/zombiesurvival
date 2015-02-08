@@ -1383,10 +1383,17 @@ function GM:_PrePlayerDraw(pl)
 
 	if self.m_ZombieVision and MySelf:Team() == TEAM_UNDEAD and pl:Team() == TEAM_HUMAN and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
 		undozombievision = true
+		local color = Color(255, 255, 255, 255)
+		local healthfrac = math.max(pl:Health(), 0) / pl:GetMaxHealth()
+		local lowhealthcolor = GAMEMODE.AuraColorEmpty
+		local fullhealthcolor = GAMEMODE.AuraColorFull
+		
+		color.r = math.Approach(lowhealthcolor.r, fullhealthcolor.r, math.abs(lowhealthcolor.r - fullhealthcolor.r) * healthfrac)
+		color.g = math.Approach(lowhealthcolor.g, fullhealthcolor.g, math.abs(lowhealthcolor.g - fullhealthcolor.g) * healthfrac)
+		color.b = math.Approach(lowhealthcolor.b, fullhealthcolor.b, math.abs(lowhealthcolor.b - fullhealthcolor.b) * healthfrac)
 
-		local green = math.Clamp(pl:Health() / pl:GetMaxHealth(), 0, 1)
 		render.ModelMaterialOverride(matWhite)
-		render.SetColorModulation(1 - green, green, 0)
+		render.SetColorModulation(color.r/255, color.g/255, color.b/255)
 		render.SuppressEngineLighting(true)
 		cam.IgnoreZ(true)
 	end
