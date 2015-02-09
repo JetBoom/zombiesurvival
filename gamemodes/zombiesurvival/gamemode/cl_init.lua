@@ -476,7 +476,7 @@ function GM:PostRender()
 			dlight.Brightness = 0.5
 			dlight.Size = 2048
 			dlight.Decay = 900
-			dlight.DieTime = CurTime() + 1
+			dlight.DieTime = CurTime() + 2
 		end
 	end
 end
@@ -1361,15 +1361,15 @@ function GM:_PrePlayerDraw(pl)
 	if pl.status_overridemodel and pl.status_overridemodel:IsValid() and self:ShouldDrawLocalPlayer(MySelf) then -- We need to do this otherwise the player's real model shows up for some reason.
 		undomodelblend = true
 		render.SetBlend(0)
-	elseif MySelf:Team() == TEAM_HUMAN and pl ~= MySelf and pl:Team() == TEAM_HUMAN and not self.MedicalAura then
+	elseif MySelf:Team() == pl:Team() and pl ~= MySelf and not self.MedicalAura then
 		local radius = self.TransparencyRadius
 		if radius > 0 then
 			local eyepos = EyePos()
 			local dist = pl:NearestPoint(eyepos):Distance(eyepos)
 			if dist < radius then
-				local blend = math.max((dist / radius) ^ 1.4, 0.04)
+				local blend = math.max((dist / radius) ^ 1.4, MySelf:Team() == TEAM_HUMAN and 0.04 or 0.1)
 				render.SetBlend(blend)
-				if blend < 0.4 then
+				if MySelf:Team() == TEAM_HUMAN and blend < 0.4 then
 					render.ModelMaterialOverride(matWhite)
 					render.SetColorModulation(0.2, 0.2, 0.2)
 					shadowman = true
