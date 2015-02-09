@@ -998,13 +998,14 @@ function GM:CalculateNextBoss()
 	end
 	table.sort(zombies, BossZombieSort)
 	local newboss = zombies[1]
-	if newboss and newboss:IsValid() then
-		local newbossclass = GAMEMODE.ZombieClasses[newboss:GetBossZombieIndex()].Name
-		net.Start("zs_nextboss")
-		net.WriteEntity(newboss)
-		net.WriteString(newbossclass)
-		net.Broadcast()
-	end
+	local newbossclass = ""
+	
+	if newboss and newboss:IsValid() then newbossclass = GAMEMODE.ZombieClasses[newboss:GetBossZombieIndex()].Name end
+	net.Start("zs_nextboss")
+	net.WriteEntity(newboss)
+	net.WriteString(newbossclass)
+	net.Broadcast()
+	
 	return newboss
 end
 
