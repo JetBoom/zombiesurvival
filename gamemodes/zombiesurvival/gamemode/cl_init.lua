@@ -469,14 +469,14 @@ function GM:PostRender()
 
 		local dlight = DynamicLight(MySelf:EntIndex())
 		if dlight then
-			dlight.Pos = tr.HitPos + tr.HitNormal * 2
+			dlight.Pos = MySelf:GetShootPos()
 			dlight.r = 10
 			dlight.g = 255
 			dlight.b = 80
-			dlight.Brightness = 3
-			dlight.Size = 300
+			dlight.Brightness = 0.5
+			dlight.Size = 2048
 			dlight.Decay = 900
-			dlight.DieTime = CurTime() + 1
+			dlight.DieTime = CurTime() + 2
 		end
 	end
 end
@@ -1361,15 +1361,15 @@ function GM:_PrePlayerDraw(pl)
 	if pl.status_overridemodel and pl.status_overridemodel:IsValid() and self:ShouldDrawLocalPlayer(MySelf) then -- We need to do this otherwise the player's real model shows up for some reason.
 		undomodelblend = true
 		render.SetBlend(0)
-	elseif MySelf:Team() == TEAM_HUMAN and pl ~= MySelf and pl:Team() == TEAM_HUMAN and not self.MedicalAura then
+	elseif MySelf:Team() == pl:Team() and pl ~= MySelf and not self.MedicalAura then
 		local radius = self.TransparencyRadius
 		if radius > 0 then
 			local eyepos = EyePos()
 			local dist = pl:NearestPoint(eyepos):Distance(eyepos)
 			if dist < radius then
-				local blend = math.max((dist / radius) ^ 1.4, 0.04)
+				local blend = math.max((dist / radius) ^ 1.4, MySelf:Team() == TEAM_HUMAN and 0.04 or 0.1)
 				render.SetBlend(blend)
-				if blend < 0.4 then
+				if MySelf:Team() == TEAM_HUMAN and blend < 0.4 then
 					render.ModelMaterialOverride(matWhite)
 					render.SetColorModulation(0.2, 0.2, 0.2)
 					shadowman = true
@@ -1383,10 +1383,17 @@ function GM:_PrePlayerDraw(pl)
 
 	if self.m_ZombieVision and MySelf:Team() == TEAM_UNDEAD and pl:Team() == TEAM_HUMAN and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
 		undozombievision = true
+		local color = Color(255, 255, 255, 255)
+		local healthfrac = math.max(pl:Health(), 0) / pl:GetMaxHealth()
+		local lowhealthcolor = GAMEMODE.AuraColorEmpty
+		local fullhealthcolor = GAMEMODE.AuraColorFull
+		
+		color.r = math.Approach(lowhealthcolor.r, fullhealthcolor.r, math.abs(lowhealthcolor.r - fullhealthcolor.r) * healthfrac)
+		color.g = math.Approach(lowhealthcolor.g, fullhealthcolor.g, math.abs(lowhealthcolor.g - fullhealthcolor.g) * healthfrac)
+		color.b = math.Approach(lowhealthcolor.b, fullhealthcolor.b, math.abs(lowhealthcolor.b - fullhealthcolor.b) * healthfrac)
 
-		local green = math.Clamp(pl:Health() / pl:GetMaxHealth(), 0, 1)
 		render.ModelMaterialOverride(matWhite)
-		render.SetColorModulation(1 - green, green, 0)
+		render.SetColorModulation(color.r/255, color.g/255, color.b/255)
 		render.SuppressEngineLighting(true)
 		cam.IgnoreZ(true)
 	end
