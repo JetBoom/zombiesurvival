@@ -38,7 +38,7 @@ function ENT:PhysicsCollide(data, phys)
 end
 
 function ENT:StartTouch(ent)
-	if self.DieTime ~= 0 and ent:IsValid() and ent:IsPlayer() then
+	if self.DieTime ~= 0 and ent:IsValid() and ent:IsPlayer() and ent:Alive() then
 		local owner = self:GetOwner()
 		if not owner:IsValid() then owner = self end
 

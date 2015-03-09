@@ -6,7 +6,7 @@ function ENT:Think()
 	local owner = self:GetOwner()
 	if not owner:IsValid() or not owner:Alive() then return end
 
-	if owner:Team() == TEAM_UNDEAD then self:Remove() return end
+	if owner:Team() ~= TEAM_HUMAN then self:Remove() return end
 
 	if self:IsUnderwater() then
 		if owner:WaterLevel() < 3 and not (owner.NoAirBrush and owner.NoAirBrush:IsValid()) then

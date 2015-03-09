@@ -1,3 +1,27 @@
+function player.GetAllActive()
+	local t = {}
+
+	for _, pl in pairs(player.GetAll()) do
+		if not pl:IsSpectator() then
+			t[#t + 1] = pl
+		end
+	end
+
+	return t
+end
+
+function player.GetAllSpectators()
+	local t = {}
+
+	for _, pl in pairs(player.GetAll()) do
+		if pl:IsSpectator() then
+			t[#t + 1] = pl
+		end
+	end
+
+	return t
+end
+
 function FindStartingItem(id)
 	if not id then return end
 

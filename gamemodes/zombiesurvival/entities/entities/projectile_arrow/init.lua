@@ -4,13 +4,16 @@ AddCSLuaFile("shared.lua")
 include('shared.lua')
 
 function ENT:Initialize()
-	self.DieTime = CurTime() + 15
-
+	self.Touched = {}
+	self.OriginalAngles = self:GetAngles()
+	
+	self:Fire("kill", "", 15)
+	
 	self:SetModel("models/Items/CrossbowRounds.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 	self:SetTrigger(true)
-
+	
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
 		phys:SetMass(4)
@@ -18,25 +21,18 @@ function ENT:Initialize()
 		phys:EnableDrag(false)
 		phys:Wake()
 	end
-	self.Touched = {}
-	self.OriginalAngles = self:GetAngles()
-
+	
 	self:EmitSound("weapons/crossbow/bolt_fly4.wav")
-end
-
-function ENT:Think()
-	if self.DieTime <= CurTime() then
-		self:Remove()
-	end
 end
 
 function ENT:PhysicsCollide(data, phys)
 	if self.Done then return end
 	self.Done = true
 
+	self:Fire("kill", "", 8)
+
 	phys:EnableMotion(false)
 	self:EmitSound("physics/metal/sawblade_stick"..math.random(3)..".wav")
-	self.DieTime = CurTime() + 8
 
 	self:SetPos(data.HitPos)
 	self:SetAngles(data.HitNormal:Angle())
@@ -51,18 +47,15 @@ function ENT:PhysicsCollide(data, phys)
 end
 
 function ENT:StartTouch(ent)
-	if not self.Done and not self.Touched[tostring(ent)] and ent:IsValid() then
-		local owner = self:GetOwner()
-		if not owner:IsValid() then owner = self end
+	if self.Done or self.Touched[ent] or not ent:IsValid() then return end
 
-		if ent ~= owner and not (ent:IsPlayer() and ent:Team() == self.Team) then
-			ent:TakeDamage(100, owner, self)
-			ent:EmitSound("weapons/crossbow/hitbod"..math.random(1,2)..".wav")
-			self.Touched[tostring(ent)] = true
-		end
-	end
-end
+	local owner = self:GetOwner()
+	if not owner:IsValid() then owner = self end
 
-function ENT:UpdateTransmitState()
-	return TRANSMIT_PVS
+	if ent == owner or ent:IsPlayer() and (ent:Team() == self.Team or not ent:Alive()) then return end
+
+	self.Touched[ent] = true
+
+	ent:TakeDamage(100, owner, self)
+	ent:EmitSound("weapons/crossbow/hitbod"..math.random(2)..".wav")
 end

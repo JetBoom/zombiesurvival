@@ -53,13 +53,15 @@ function GM:HUDDrawTargetID(teamid)
 	trace.filter[1] = MySelf
 	trace.filter[2] = MySelf:GetObserverTarget()
 
+	local isspectator = MySelf:IsSpectator()
+
 	local entity = util.TraceHull(trace).Entity
-	if entity:IsValid() and entity:IsPlayer() and entity:Team() == teamid then
+	if entity:IsValid() and entity:IsPlayer() and (entity:Team() == teamid or isspectator) then
 		entitylist[entity] = CurTime()
 	end
 
 	for ent, time in pairs(entitylist) do
-		if ent:IsValid() and not (ent:IsPlayer() and ent:Team() ~= teamid) and CurTime() < time + 2 then
+		if ent:IsValid() and ent:IsPlayer() and (ent:Team() == teamid or isspectator) and CurTime() < time + 2 then
 			self:DrawTargetID(ent, 1 - math.Clamp((CurTime() - time) / 2, 0, 1))
 		else
 			entitylist[ent] = nil

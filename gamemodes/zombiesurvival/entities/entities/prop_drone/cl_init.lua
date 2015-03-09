@@ -66,7 +66,7 @@ function ENT:DrawTranslucent()
 	local lp = LocalPlayer()
 	local owner = self:GetOwner()
 
-	if lp:IsValid() and lp:Team() ~= TEAM_UNDEAD and owner:IsValid() and owner:IsPlayer() then
+	if lp:IsValid() and lp:Team() == TEAM_HUMAN and owner:IsValid() and owner:IsPlayer() then
 		local ang = EyeAngles()
 		ang.pitch = 0
 		local right = ang:Right()

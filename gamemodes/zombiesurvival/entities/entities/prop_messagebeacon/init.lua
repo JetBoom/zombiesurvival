@@ -49,7 +49,7 @@ function ENT:OnTakeDamage(dmginfo)
 	if not self.Destroyed then
 		local attacker = dmginfo:GetAttacker()
 		if not (attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
-			if attacker.LifeBarricadeDamage ~= nil and self:HumanNearby() then
+			if attacker:Team() == TEAM_UNDEAD and self:HumanNearby() then
 				attacker:AddLifeBarricadeDamage(dmginfo:GetDamage())
 			end
 

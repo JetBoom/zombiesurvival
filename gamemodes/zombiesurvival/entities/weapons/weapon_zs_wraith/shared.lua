@@ -93,7 +93,7 @@ function SWEP:DoAlert()
 	local mouthpos = owner:EyePos() + owner:GetUp() * -3
 	local screampos = mouthpos + owner:GetAimVector() * 16
 	for _, ent in pairs(ents.FindInSphere(screampos, 92)) do
-		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= owner:Team() then
+		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN then
 			local entearpos = ent:EyePos()
 			local dist = screampos:Distance(entearpos)
 			if dist <= 92 and TrueVisible(entearpos, screampos) then

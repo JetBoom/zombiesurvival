@@ -67,7 +67,7 @@ function ENT:DrawTranslucent()
 			local deployer = self:GetOwner()
 			if deployer:IsValid() then
 				displayowner = deployer:Name()
-				if deployer:Team() == TEAM_UNDEAD or not deployer:Alive() then
+				if deployer:Team() ~= TEAM_HUMAN or not deployer:Alive() then
 					displayowner = "(DEAD) "..displayowner
 					redname = true
 				end

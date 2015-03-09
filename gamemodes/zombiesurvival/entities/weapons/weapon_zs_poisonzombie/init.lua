@@ -51,12 +51,12 @@ end
 
 function SWEP:SecondaryAttack()
 	if CurTime() < self:GetNextPrimaryFire() or CurTime() < self:GetNextSecondaryFire() then return end
-	local owner = self.Owner
-	if owner:Team() ~= TEAM_UNDEAD then owner:Kill() return end
 
-	self.Owner:DoAnimationEvent(ACT_RANGE_ATTACK2)
-	self.Owner:EmitSound("NPC_PoisonZombie.Throw")
-	self.Owner:SetSpeed(1)
+	local owner = self.Owner
+
+	owner:DoAnimationEvent(ACT_RANGE_ATTACK2)
+	owner:EmitSound("NPC_PoisonZombie.Throw")
+	owner:SetSpeed(1)
 	self:SetNextSecondaryFire(CurTime() + 4)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 

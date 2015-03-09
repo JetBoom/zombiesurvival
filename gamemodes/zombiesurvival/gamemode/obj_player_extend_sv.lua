@@ -876,10 +876,10 @@ end
 
 function meta:GetLastAttacker()
 	local ent = self.LastAttacker
-	if ent and ent:IsValid() and ent:Team() ~= self:Team() and CurTime() <= self.LastAttacked + 10 then
+	if ent and ent:IsValid() and CurTime() <= self.LastAttacked + 10 then
 		return ent
 	end
-	self:SetLastAttacker()
+	--self:SetLastAttacker()
 end
 
 function meta:SetLastAttacker(ent)

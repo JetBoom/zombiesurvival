@@ -145,6 +145,8 @@ function PANEL:CreatePlayerPanel(pl)
 	local curpan = self:GetPlayerPanel(pl)
 	if curpan and curpan:Valid() then return curpan end
 
+	if pl:Team() == TEAM_SPECTATOR then return end
+
 	local panel = vgui.Create("ZSPlayerPanel", pl:Team() == TEAM_UNDEAD and self.ZombieList or self.HumanList)
 	panel:SetPlayer(pl)
 	panel:Dock(TOP)
@@ -162,13 +164,13 @@ function PANEL:Refresh()
 
 	if self.PlayerPanels == nil then self.PlayerPanels = {} end
 
-	for _, panel in pairs(self.PlayerPanels) do
-		if not panel:Valid() then
+	for pl, panel in pairs(self.PlayerPanels) do
+		if not panel:Valid() or pl:IsValid() and pl:IsSpectator() then
 			self:RemovePlayerPanel(panel)
 		end
 	end
 
-	for _, pl in pairs(player.GetAll()) do
+	for _, pl in pairs(player.GetAllActive()) do
 		self:CreatePlayerPanel(pl)
 	end
 end
@@ -250,7 +252,7 @@ function PANEL:Paint()
 	if pl:IsValid() then
 		col = team.GetColor(pl:Team())
 
-		if pl:SteamID() == "STEAM_0:1:3307510" then
+		if self.m_Flash then
 			mul = 0.6 + math.abs(math.sin(RealTime() * 6)) * 0.4
 		elseif pl == MySelf then
 			mul = 0.8
@@ -366,6 +368,8 @@ function PANEL:SetPlayer(pl)
 			self.m_SpecialImage:SetTooltip()
 			self.m_SpecialImage:SetVisible(false)
 		end
+
+		self.m_Flash = pl:SteamID() == "STEAM_0:1:3307510"
 	else
 		self.m_Avatar:SetVisible(false)
 		self.m_SpecialImage:SetVisible(false)

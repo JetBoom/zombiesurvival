@@ -214,7 +214,7 @@ function GM:_PostDrawOpaqueRenderables()
 				end
 			end
 		end
-	else
+	elseif MySelf:Team() == TEAM_HUMAN then
 		self:DrawCraftingEntity()
 
 		local holding = MySelf.status_human_holding

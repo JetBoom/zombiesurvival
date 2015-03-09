@@ -465,7 +465,7 @@ function GM:PostRender()
 	if self.m_ZombieVision and MySelf:IsValid() and MySelf:Team() == TEAM_UNDEAD then
 		local eyepos = EyePos()
 		local eyedir = EyeAngles():Forward()
-		local tr = util.TraceLine({start = eyepos, endpos = eyepos + eyedir * 128, mask = MASK_SOLID_BRUSHONLY})
+		--local tr = util.TraceLine({start = eyepos, endpos = eyepos + eyedir * 128, mask = MASK_SOLID_BRUSHONLY})
 
 		local dlight = DynamicLight(MySelf:EntIndex())
 		if dlight then
@@ -701,7 +701,7 @@ function GM:_HUDPaint()
 
 	if myteam == TEAM_UNDEAD then
 		self:ZombieHUD()
-	else
+	elseif myteam == TEAM_HUMAN then
 		self:HumanHUD(screenscale)
 	end
 
@@ -776,9 +776,9 @@ function GM:ZombieHUD()
 	if obsmode ~= OBS_MODE_NONE then
 		self:ZombieObserverHUD(obsmode)
 	elseif not self:GetWaveActive() and not MySelf:Alive() then
-	local th = draw_GetFontHeight("ZSHUDFont")
-	local x = ScrW() * 0.5
-	local y = ScrH() * 0.3
+		local th = draw_GetFontHeight("ZSHUDFont")
+		local x = ScrW() * 0.5
+		local y = ScrH() * 0.3
 		draw_SimpleTextBlur(translate.Get("waiting_for_next_wave"), "ZSHUDFont", x, y, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 		local pl = GAMEMODE.NextBossZombie
 		local bossname = GAMEMODE.NextBossZombieClass
@@ -1082,7 +1082,7 @@ function GM:_HUDPaintBackground()
 	surface_DrawTexturedRectRotated(bordersize / 2, h / 2, bordersize, h, 180)
 	surface_DrawTexturedRect(w - bordersize, 0, bordersize, h)]]
 
-	if self.FilmGrainEnabled and MySelf:Team() == TEAM_HUMAN then
+	if self.FilmGrainEnabled and MySelf:Team() ~= TEAM_UNDEAD then
 		surface_SetMaterial(matFilmGrain)
 		surface_SetDrawColor(0, 0, 0, (0.25 + 0.75 * self:CachedFearPower()) * self.FilmGrainOpacity)
 		surface_DrawTexturedRectUV(0, 0, ScrW(), ScrH(), 2, 2, 0, 0)
@@ -1275,7 +1275,8 @@ function GM:_CreateMove(cmd)
 		BHopTime = CurTime() + 0.065
 	end
 
-	if MySelf:Team() == TEAM_HUMAN then
+	local myteam = MySelf:Team()
+	if myteam == TEAM_HUMAN then
 		if MySelf:Alive() then
 			local lockon = self.HumanMenuLockOn
 			if lockon then
@@ -1305,7 +1306,7 @@ function GM:_CreateMove(cmd)
 				end
 			end
 		end
-	else
+	elseif myteam == TEAM_UNDEAD then
 		local buttons = cmd:GetButtons()
 		if bit.band(buttons, IN_ZOOM) ~= 0 then
 			cmd:SetButtons(buttons - IN_ZOOM)
@@ -1361,20 +1362,23 @@ function GM:_PrePlayerDraw(pl)
 	if pl.status_overridemodel and pl.status_overridemodel:IsValid() and self:ShouldDrawLocalPlayer(MySelf) then -- We need to do this otherwise the player's real model shows up for some reason.
 		undomodelblend = true
 		render.SetBlend(0)
-	elseif MySelf:Team() == pl:Team() and pl ~= MySelf and not self.MedicalAura then
-		local radius = self.TransparencyRadius
-		if radius > 0 then
-			local eyepos = EyePos()
-			local dist = pl:NearestPoint(eyepos):Distance(eyepos)
-			if dist < radius then
-				local blend = math.max((dist / radius) ^ 1.4, MySelf:Team() == TEAM_HUMAN and 0.04 or 0.1)
-				render.SetBlend(blend)
-				if MySelf:Team() == TEAM_HUMAN and blend < 0.4 then
-					render.ModelMaterialOverride(matWhite)
-					render.SetColorModulation(0.2, 0.2, 0.2)
-					shadowman = true
+	else
+		local myteam = MySelf:Team()
+		if myteam == pl:Team() and pl ~= MySelf and not self.MedicalAura then
+			local radius = self.TransparencyRadius
+			if radius > 0 then
+				local eyepos = EyePos()
+				local dist = pl:NearestPoint(eyepos):Distance(eyepos)
+				if dist < radius then
+					local blend = math.max((dist / radius) ^ 1.4, myteam == TEAM_HUMAN and 0.04 or 0.1)
+					render.SetBlend(blend)
+					if myteam == TEAM_HUMAN and blend < 0.4 then
+						render.ModelMaterialOverride(matWhite)
+						render.SetColorModulation(0.2, 0.2, 0.2)
+						shadowman = true
+					end
+					undomodelblend = true
 				end
-				undomodelblend = true
 			end
 		end
 	end

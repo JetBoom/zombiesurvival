@@ -62,7 +62,7 @@ hook.Add("PlayerSpawn", "zombieescape", function(pl)
 	timer.Simple(0, function()
 		if not pl:IsValid() then return end
 
-		if GAMEMODE:GetWave() == 0 and not GAMEMODE:GetWaveActive() and (pl:Team() == TEAM_UNDEAD or CurTime() < GAMEMODE:GetWaveStart() - GAMEMODE.ZE_FreezeTime) then
+		if GAMEMODE:GetWave() == 0 and not GAMEMODE:GetWaveActive() and (pl:Team() == TEAM_UNDEAD or pl:Team() == TEAM_HUMAN and CurTime() < GAMEMODE:GetWaveStart() - GAMEMODE.ZE_FreezeTime) then
 			pl.ZEFreeze = true
 			pl:Freeze(true)
 			pl:GodEnable()

@@ -48,7 +48,6 @@ function SWEP:SecondaryAttack()
 	if CurTime() < self:GetNextPrimaryFire() or CurTime() < self:GetNextSecondaryFire() then return end
 
 	local owner = self.Owner
-	if owner:Team() ~= TEAM_UNDEAD then owner:Kill() return end
 
 	self:SetSwingAnimTime(CurTime() + 1)
 	self.Owner:DoAnimationEvent(ACT_RANGE_ATTACK2)

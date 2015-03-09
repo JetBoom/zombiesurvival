@@ -19,6 +19,9 @@ ENT.CanPackUp = true
 ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
 
+local NextCache = 0
+local CachedFilter = {}
+
 function ENT:GetLocalAnglesToTarget(target)
 	return self:WorldToLocalAngles(self:GetAnglesToTarget(target))
 end
@@ -79,14 +82,13 @@ function ENT:GetScanFilter()
 end
 
 -- Getting all of some team is straining every frame when there's 5 or so turrets. I could probably use CONTENTS_TEAM* if I knew what they did.
-ENT.NextCache = 0
 function ENT:GetCachedScanFilter()
-	if CurTime() < self.NextCache and self.CachedFilter then return self.CachedFilter end
+	if CurTime() < NextCache and CachedFilter then return CachedFilter end
 
-	self.CachedFilter = self:GetScanFilter()
-	self.NextCache = CurTime() + 1
+	CachedFilter = self:GetScanFilter()
+	NextCache = CurTime() + 1
 
-	return self.CachedFilter
+	return CachedFilter
 end
 
 local tabSearch = {mask = MASK_SHOT}

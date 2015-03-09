@@ -121,7 +121,7 @@ function GM:ProfilerPlayerValid(pl)
 
 	-- Are they inside something?
 	local pos = plpos + Vector(0, 0, 1)
-	if util.TraceHull({start = pos, endpos = pos + playerheight, mins = playermins, maxs = playermaxs, mask = MASK_SOLID, filter = team.GetPlayers(pl:Team())}).Hit then
+	if util.TraceHull({start = pos, endpos = pos + playerheight, mins = playermins, maxs = playermaxs, mask = MASK_SOLID, filter = team.GetPlayers(TEAM_HUMAN)}).Hit then
 		--print('inside')
 		return false
 	end
