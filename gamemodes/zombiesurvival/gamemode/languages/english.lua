@@ -139,6 +139,7 @@ LANGUAGE.too_close_to_a_spawn						= "Too close to a zombie spawn!"
 --LANGUAGE.nest_already_being_built					= "This nest is already being built by someone else!"
 LANGUAGE.x_has_built_this_nest_and_is_still_around	= "%s has built this nest and is still around, so you can't demolish it."
 LANGUAGE.no_other_nests								= "You can't destroy a nest if only one remains."
+LANGUAGE.no_free_channel							= "Radio interference from too many already being placed!"
 
 -- Sigils point objectives
 LANGUAGE.sigil_destroyed							= "The Undead have destroyed a Sigil!"

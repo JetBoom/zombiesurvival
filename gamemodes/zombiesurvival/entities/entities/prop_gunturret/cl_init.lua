@@ -36,6 +36,12 @@ function ENT:SetObjectHealth(health)
 	self:SetDTFloat(3, health)
 end
 
+local TEXT_ALIGN_CENTER = TEXT_ALIGN_CENTER
+local draw_SimpleText = draw.SimpleText
+local surface_SetDrawColor = surface.SetDrawColor
+local surface_DrawRect = surface.DrawRect
+local cam_Start3D2D = cam.Start3D2D
+local cam_End3D2D = cam.End3D2D
 local smokegravity = Vector(0, 0, 200)
 local aScreen = Angle(0, 270, 60)
 local vScreen = Vector(0, -2, 45)
@@ -78,38 +84,41 @@ function ENT:Draw()
 	local owner = self:GetObjectOwner()
 	local ammo = self:GetAmmo()
 	local flash = math.sin(CurTime() * 15) > 0
-
 	local wid, hei = 128, 92
-	cam.Start3D2D(self:LocalToWorld(vScreen), self:LocalToWorldAngles(aScreen), 0.075)
+	local x = wid / 2
 
-		surface.SetDrawColor(0, 0, 0, 160)
-		surface.DrawRect(0, 0, wid, hei)
+	cam_Start3D2D(self:LocalToWorld(vScreen), self:LocalToWorldAngles(aScreen), 0.075)
 
-		surface.SetDrawColor(200, 200, 200, 160)
-		surface.DrawRect(0, 0, 8, 16)
-		surface.DrawRect(wid - 8, 0, 8, 16)
-		surface.DrawRect(8, 0, wid - 16, 8)
+		surface_SetDrawColor(0, 0, 0, 160)
+		surface_DrawRect(0, 0, wid, hei)
 
-		surface.DrawRect(0, hei - 16, 8, 16)
-		surface.DrawRect(wid - 8, hei - 16, 8, 16)
-		surface.DrawRect(8, hei - 8, wid - 16, 8)
+		surface_SetDrawColor(200, 200, 200, 160)
+		surface_DrawRect(0, 0, 8, 16)
+		surface_DrawRect(wid - 8, 0, 8, 16)
+		surface_DrawRect(8, 0, wid - 16, 8)
+
+		surface_DrawRect(0, hei - 16, 8, 16)
+		surface_DrawRect(wid - 8, hei - 16, 8, 16)
+		surface_DrawRect(8, hei - 8, wid - 16, 8)
 
 		if owner:IsValid() and owner:IsPlayer() then
-			draw.SimpleText(owner:ClippedName(), "DefaultFont", wid * 0.5, 10, owner == MySelf and COLOR_BLUE or COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+			draw_SimpleText(owner:ClippedName(), "DefaultFont", x, 10, owner == MySelf and COLOR_BLUE or COLOR_WHITE, TEXT_ALIGN_CENTER)
 		end
-		draw.SimpleText(translate.Format("integrity_x", math.ceil(healthpercent * 100)), "DefaultFontBold", wid * 0.5, hei * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw_SimpleText(translate.Format("integrity_x", math.ceil(healthpercent * 100)), "DefaultFontBold", x, 25, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 		if flash and self:GetManualControl() then
-			draw.SimpleText(translate.Get("manual_control"), "DefaultFont", wid * 0.5, hei * 0.325, COLOR_YELLOW, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw_SimpleText(translate.Get("manual_control"), "DefaultFont", x, 40, COLOR_YELLOW, TEXT_ALIGN_CENTER)
 		end
 		
 		if ammo > 0 then
-			draw.SimpleText("["..ammo.." / "..self.MaxAmmo.."]", "DefaultFontBold", wid * 0.5, hei - 10, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw_SimpleText("["..ammo.." / "..self.MaxAmmo.."]", "DefaultFontBold", x, 55, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		elseif flash then
-			draw.SimpleText(translate.Get("empty"), "DefaultFontBold", wid * 0.5, hei - 10, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw_SimpleText(translate.Get("empty"), "DefaultFontBold", x, 55, COLOR_RED, TEXT_ALIGN_CENTER)
 		end
 
-	cam.End3D2D()
+		draw_SimpleText("CH. "..self:GetChannel().." / "..GAMEMODE.MaxChannels[self:GetClass()], "DefaultFontSmall", x, 70, COLOR_WHITE, TEXT_ALIGN_CENTER)
+
+	cam_End3D2D()
 end
 
 local matBeam = Material("effects/laser1")

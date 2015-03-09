@@ -207,12 +207,22 @@ function meta:DrawCrosshairCross()
 		baserot = math.NormalizeAngle(baserot + vel:GetNormalized():Dot(EyeAngles():Right()) * math.min(10, len / 200))
 	end
 
+	--[[if baserot ~= 0 then
+		render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+		render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+	end]]
+
 	local ang = Angle(0, 0, baserot)
 	for i=0, 359, 360 / 4 do
 		ang.roll = baserot + i
 		local p = ang:Up() * midarea
 		DrawLine(math.Round(x + p.y), math.Round(y + p.z), ang.roll)
 	end
+
+	--[[if baserot ~= 0 then
+		render.PopFilterMag()
+		render.PopFilterMin()
+	end]]
 	--[[local x = ScrW() * 0.5
 	local y = ScrH() * 0.5
 

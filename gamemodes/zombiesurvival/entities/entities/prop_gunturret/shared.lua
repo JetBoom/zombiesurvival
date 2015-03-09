@@ -187,6 +187,14 @@ function ENT:GetMaxObjectHealth()
 	return self:GetDTInt(1)
 end
 
+function ENT:GetChannel()
+	return self:GetDTInt(2)
+end
+
+function ENT:SetChannel(channel)
+	self:SetDTInt(2, channel)
+end
+
 function ENT:GetTarget()
 	return self:GetDTEntity(0)
 end
