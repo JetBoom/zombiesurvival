@@ -85,10 +85,12 @@ local function ItemPanelThink(self)
 			if newstate then
 				self:AlphaTo(255, 0.75, 0)
 				self.m_NameLabel:SetTextColor(COLOR_WHITE)
+				self.m_NameLabel:InvalidateLayout()
 				self.m_BuyButton:SetImage("icon16/accept.png")
 			else
 				self:AlphaTo(90, 0.75, 0)
 				self.m_NameLabel:SetTextColor(COLOR_RED)
+				self.m_NameLabel:InvalidateLayout()
 				self.m_BuyButton:SetImage("icon16/exclamation.png")
 			end
 

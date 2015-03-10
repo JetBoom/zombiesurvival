@@ -54,10 +54,13 @@ local function CartDoClick(self, silent, force)
 	pWorth.WorthLab:SetText("Worth: ".. WorthRemaining)
 	if WorthRemaining <= 0 then
 		pWorth.WorthLab:SetTextColor(COLOR_RED)
+		pWorth.WorthLab:InvalidateLayout()
 	elseif WorthRemaining <= GAMEMODE.StartingWorth * 0.25 then
 		pWorth.WorthLab:SetTextColor(COLOR_YELLOW)
+		pWorth.WorthLab:InvalidateLayout()
 	else
 		pWorth.WorthLab:SetTextColor(COLOR_LIMEGREEN)
+		pWorth.WorthLab:InvalidateLayout()
 	end
 	pWorth.WorthLab:SizeToContents()
 end
@@ -497,10 +500,13 @@ function PANEL:DoClick(silent, force)
 	pWorth.WorthLab:SetText("Worth: ".. WorthRemaining)
 	if WorthRemaining <= 0 then
 		pWorth.WorthLab:SetTextColor(COLOR_RED)
+		pWorth.WorthLab:InvalidateLayout()
 	elseif WorthRemaining <= GAMEMODE.StartingWorth * 0.25 then
 		pWorth.WorthLab:SetTextColor(COLOR_YELLOW)
+		pWorth.WorthLab:InvalidateLayout()
 	else
 		pWorth.WorthLab:SetTextColor(COLOR_LIMEGREEN)
+		pWorth.WorthLab:InvalidateLayout()
 	end
 	pWorth.WorthLab:SizeToContents()
 end
