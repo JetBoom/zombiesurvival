@@ -85,7 +85,8 @@ function meta:ChangeTeam(teamid)
 	if oldteam ~= teamid then
 		gamemode.Call("OnPlayerChangedTeam", self, oldteam, teamid)
 	end
-
+	self:DoNoodleArmBones()
+	self:DoMuscularBones()
 	self:CollisionRulesChanged()
 end
 
