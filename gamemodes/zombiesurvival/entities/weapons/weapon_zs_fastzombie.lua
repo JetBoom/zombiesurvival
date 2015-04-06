@@ -17,7 +17,7 @@ SWEP.MeleeSize = 1.5
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.Primary.Delay = 0.32
 
-SWEP.PounceDamage = 10
+SWEP.PounceDamage = 1 --SWEP.PounceDamage = 10
 SWEP.PounceDamageType = DMG_IMPACT
 SWEP.PounceReach = 26
 SWEP.PounceSize = 12
@@ -107,7 +107,7 @@ function SWEP:Think()
 					local ent = trace.Entity
 					if ent and ent:IsValid() then
 						hit = true
-						self:MeleeHit(ent, trace, damage, 10)
+						self:MeleeHit(ent, trace, damage, ent:IsPlayer() and 1 or 10)
 					end
 				end
 			end
@@ -343,18 +343,18 @@ function SWEP:Move(mv)
 		local vel = Vector(0, 0, 4)
 
 		if owner:KeyDown(IN_FORWARD) then
-			vel = vel + dir * 160
+			vel = vel + dir * 250 --160
 		end
 		if owner:KeyDown(IN_BACK) then
-			vel = vel + dir * -160
+			vel = vel + dir * -250 ---160
 		end
 
 		if vel.z == 4 then
 			if owner:KeyDown(IN_MOVERIGHT) then
-				vel = vel + angs:Right() * 60
+				vel = vel + angs:Right() * 100 --60
 			end
 			if owner:KeyDown(IN_MOVELEFT) then
-				vel = vel + angs:Right() * -60
+				vel = vel + angs:Right() * -100 ---60
 			end
 		end
 
@@ -362,8 +362,10 @@ function SWEP:Move(mv)
 
 		return true
 	elseif self:GetSwinging() then
-		mv:SetMaxSpeed(math.min(mv:GetMaxSpeed(), 60))
-		mv:SetMaxClientSpeed(math.min(mv:GetMaxClientSpeed(), 60))
+		--[[mv:SetMaxSpeed(math.min(mv:GetMaxSpeed(), 60))
+		mv:SetMaxClientSpeed(math.min(mv:GetMaxClientSpeed(), 60))]]
+		mv:SetMaxSpeed(mv:GetMaxSpeed() * 0.9)
+		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * 0.9)
 	end
 end
 

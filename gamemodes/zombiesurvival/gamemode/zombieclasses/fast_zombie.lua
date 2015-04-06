@@ -10,7 +10,7 @@ CLASS.Revives = true
 CLASS.Infliction = 0.5 -- We auto-unlock this class if 50% of humans are dead regardless of what wave it is.
 
 CLASS.Health = 125
-CLASS.Speed = 260
+CLASS.Speed = 250
 CLASS.SWEP = "weapon_zs_fastzombie"
 
 CLASS.Points = 4
@@ -21,7 +21,7 @@ CLASS.ViewOffset = Vector(0, 0, 50)
 CLASS.ViewOffsetDucked = Vector(0, 0, 24)
 
 CLASS.PainSounds = {"NPC_FastZombie.Pain"}
-CLASS.DeathSounds = {"NPC_FastZombie.Die"}
+CLASS.DeathSounds = {"npc/fast_zombie/leap1.wav"} --{"NPC_FastZombie.Die"}
 
 CLASS.VoicePitch = 0.75
 
@@ -97,6 +97,8 @@ function CLASS:CalcMainActivity(pl, velocity)
 		pl.CalcIdeal = ACT_ZOMBIE_LEAPING
 	elseif speed <= 0.5 and wep:IsRoaring() then
 		pl.CalcSeqOverride = pl:LookupSequence("menu_zombie_01")
+	elseif speed > 16 and wep:GetSwinging() then
+		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE
 	else
 		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE_FAST
 	end
