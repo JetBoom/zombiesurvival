@@ -1,11 +1,24 @@
+local sandbox_env = {Vector = Vector, Angle = Angle}
+
 function Deserialize(sIn)
-	SRL = nil
+	local out = {}
 
-	if #sIn == 0 then return {} end
+	if #sIn == 0 or string.sub(sIn, -1) ~= "}" then return out end
 
-	if string.sub(sIn, 1, 4) ~= "SRL=" then sIn = "SRL="..sIn end RunString(sIn)
+	if string.sub(sIn, 1, 4) ~= "SRL=" then sIn = "SRL="..sIn end
 
-	return SRL
+	if string.sub(sIn, 5, 5) ~= "{" then return out end
+
+	sIn = sIn.." return SRL"
+	local func = CompileString(sIn, "deserialize", false)
+	if type(func) == "string" then
+		print("Deserialization error: "..func)
+	else
+		setfenv(func, sandbox_env)
+		out = func() or out
+	end
+
+	return out
 end
 
 local allowedtypes = {}
