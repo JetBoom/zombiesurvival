@@ -42,7 +42,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	if self:IsSwinging() or CurTime() <= self:GetNextSecondaryAttack() then return end
+	if self:IsSwinging() or CurTime() <= self:GetNextSecondaryAttack() or IsValid(self.Owner.FeignDeath) then return end
 
 	self:SetThrowTime(CurTime() + self.ThrowDelay)
 	self.Owner:DoReloadEvent() -- Handled in the class file. Fires the throwing anim.
@@ -54,23 +54,25 @@ function SWEP:CheckThrow()
 	if self:GetThrowing() and CurTime() >= self:GetThrowTime() then
 		self:SetThrowTime(0)
 
-		self.Owner:EmitSound("weapons/slam/throw.wav", 70, math.random(78, 82))
+		local owner = self.Owner
+
+		owner:EmitSound("weapons/slam/throw.wav", 70, math.random(78, 82))
 
 		if SERVER then
 			local ent = ents.Create("prop_thrownbaby")
 			if ent:IsValid() then
-				ent:SetPos(self.Owner:GetShootPos())
+				ent:SetPos(owner:GetShootPos())
 				ent:SetAngles(AngleRand())
-				ent:SetOwner(self.Owner)
+				ent:SetOwner(owner)
 				ent:Spawn()
 
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() then
 					phys:Wake()
-					phys:SetVelocityInstantaneous(self.Owner:GetAimVector() * 500)
+					phys:SetVelocityInstantaneous(owner:GetAimVector() * 500)
 					phys:AddAngleVelocity(VectorRand() * math.Rand(200, 300))
 
-					ent:SetPhysicsAttacker(self.Owner)
+					ent:SetPhysicsAttacker(owner)
 				end
 			end
 		end

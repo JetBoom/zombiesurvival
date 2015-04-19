@@ -3,6 +3,7 @@
 GM.ProfilerNodes = {}
 GM.ProfilerFolder = "zsprofiler"
 GM.ProfilerFolderPreMade = "profiler_premade"
+GM.ProfilerVersion = 0
 GM.MaxProfilerNodes = 128
 
 hook.Add("Initialize", "ZSProfiler", function()
@@ -39,7 +40,7 @@ end
 function GM:SaveProfiler()
 	if not self:ProfilerEnabled() or self.ProfilerIsPreMade then return end
 
-	file.Write(self:GetProfilerFile(), Serialize(self.ProfilerNodes))
+	file.Write(self:GetProfilerFile(), Serialize({Nodes = self.ProfilerNodes, Version = self.ProfilerVersion}))
 end
 
 function GM:LoadProfiler()
@@ -47,7 +48,12 @@ function GM:LoadProfiler()
 
 	local filename = self:GetProfilerFile()
 	if file.Exists(filename, "DATA") then
-		self.ProfilerNodes = Deserialize(file.Read(filename, "DATA"))
+		local data = Deserialize(file.Read(filename, "DATA"))
+		if not data.Version and self.ProfilerVersion == 0 then -- old, versionless format
+			self.ProfilerNodes = data
+		elseif data.Nodes and data.Version >= self.ProfilerVersion then
+			self.ProfilerNodes = data.Nodes
+		end
 	end
 end
 
