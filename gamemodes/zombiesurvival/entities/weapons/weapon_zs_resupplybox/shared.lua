@@ -9,10 +9,10 @@ SWEP.Primary.Ammo = "helicoptergun"
 SWEP.Primary.Delay = 1
 SWEP.Primary.Automatic = true
 
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.ClipSize = 1
+SWEP.Secondary.DefaultClip = 1
 SWEP.Secondary.Automatic = false
-SWEP.Secondary.Ammo = "none"
+SWEP.Secondary.Ammo = "dummy"
 
 SWEP.WalkSpeed = SPEED_NORMAL
 SWEP.FullWalkSpeed = SPEED_SLOWEST

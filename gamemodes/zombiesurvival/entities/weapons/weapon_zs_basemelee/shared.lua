@@ -18,10 +18,10 @@ SWEP.MeleeRange = 65
 SWEP.MeleeSize = 1.5
 SWEP.MeleeKnockBack = 0
 
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.ClipSize = 1
+SWEP.Secondary.DefaultClip = 1
+SWEP.Secondary.Ammo = "dummy"
 SWEP.Secondary.Automatic = true
-SWEP.Secondary.Ammo = "none"
 
 SWEP.WalkSpeed = SPEED_FAST
 

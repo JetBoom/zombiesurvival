@@ -109,6 +109,8 @@ function GM:AddCustomAmmo()
 	game.AddAmmoType({name = "manhack"})
 	game.AddAmmoType({name = "manhack_saw"})
 	game.AddAmmoType({name = "drone"})
+
+	game.AddAmmoType({name = "dummy"})
 end
 
 function GM:CanRemoveOthersNail(pl, nailowner, ent)

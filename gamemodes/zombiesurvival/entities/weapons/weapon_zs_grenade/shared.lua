@@ -10,10 +10,9 @@ SWEP.Primary.Ammo = "grenade"
 SWEP.Primary.Delay = 1.25
 SWEP.Primary.DefaultClip = 1
 
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
-SWEP.Secondary.Automatic = false
-SWEP.Secondary.Ammo = "none"
+SWEP.Secondary.ClipSize = 1
+SWEP.Secondary.DefaultClip = 1
+SWEP.Secondary.Ammo = "dummy"
 
 SWEP.WalkSpeed = SPEED_FAST
 

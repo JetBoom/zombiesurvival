@@ -29,9 +29,9 @@ SWEP.Primary.Ammo = "Battery"
 SWEP.Secondary.Delay = 20
 SWEP.Secondary.Heal = 10
 
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
-SWEP.Secondary.Ammo = "none"
+SWEP.Secondary.ClipSize = 1
+SWEP.Secondary.DefaultClip = 1
+SWEP.Secondary.Ammo = "dummy"
 
 SWEP.WalkSpeed = SPEED_NORMAL
 

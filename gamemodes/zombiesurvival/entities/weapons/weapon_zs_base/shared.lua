@@ -16,10 +16,10 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
 SWEP.RequiredClip = 1
 
-SWEP.Secondary.ClipSize = -1
-SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.ClipSize = 1
+SWEP.Secondary.DefaultClip = 1
 SWEP.Secondary.Automatic = false
-SWEP.Secondary.Ammo = "none"
+SWEP.Secondary.Ammo = "dummy"
 
 SWEP.WalkSpeed = SPEED_NORMAL
 
