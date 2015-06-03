@@ -326,3 +326,8 @@ if CLIENT then
 		meta.SetPhysicsAttacker = function() end
 	end
 end
+
+local OldSequenceDuration = meta.SequenceDuration
+function meta:SequenceDuration(seqid)
+	return OldSequenceDuration(self, seqid) or 0
+end
