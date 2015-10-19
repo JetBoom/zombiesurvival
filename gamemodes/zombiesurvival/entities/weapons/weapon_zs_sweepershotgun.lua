@@ -100,8 +100,16 @@ function SWEP:CanPrimaryAttack()
 		self:SetNextPrimaryFire(CurTime() + 0.25)
 		return false
 	end
-
-	return true
+	
+	--Start sweeper rapid fire glitching fix.
+	if self:GetNextPrimaryFire() + 0.25 > CurTime() then
+		--return false to prevent fireing
+		return false
+	else
+		--return true to allow fireing
+		return true
+	end
+	--End sweeper rapid fire glitching fix.
 end
 
 function SWEP:SecondaryAttack()
