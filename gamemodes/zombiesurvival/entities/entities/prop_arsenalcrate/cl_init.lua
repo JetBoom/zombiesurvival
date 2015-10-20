@@ -38,10 +38,10 @@ function ENT:Draw()
 
 		draw.SimpleText(translate.Get("arsenal_crate"), "ZS3D2DFont2", 0, 0, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		
-		if MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN then
+		--if MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN then
 		local percentage = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
 		self:DrawHealthBar(percentage)
-		end
+		--end
 		
 		if MySelf:Team() == TEAM_HUMAN and GAMEMODE:PlayerCanPurchase(MySelf) then
 			colFlash.a = math.abs(math.sin(CurTime() * 5)) * 255
