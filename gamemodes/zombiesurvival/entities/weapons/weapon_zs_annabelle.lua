@@ -142,7 +142,7 @@ function SWEP:CanPrimaryAttack()
 		self:SetNextPrimaryFire(CurTime() + 0.25)
 		return false
 	end
-	--Start blaster rapid fire glitching fix.
+	--Start annabelle rapid fire glitching fix.
 	if self:GetNextPrimaryFire() + 0.25 > CurTime() then
 		--return false to prevent fireing
 		return false
@@ -150,7 +150,7 @@ function SWEP:CanPrimaryAttack()
 		--return true to allow fireing
 		return true
 	end
-	--End blaster rapid fire glitching fix.
+	--End annabelle rapid fire glitching fix.
 end
 
 local function DoRicochet(attacker, hitpos, hitnormal, normal, damage)
