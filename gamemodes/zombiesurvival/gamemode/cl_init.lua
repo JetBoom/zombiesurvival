@@ -799,6 +799,22 @@ function GM:ZombieHUD()
 			end
 		end
 	end
+	
+	--Display to living zombies who will be next boss.
+	local pl = GAMEMODE.NextBossZombie
+	if pl and MySelf:Alive() and pl:IsValid() then
+		local bossname = GAMEMODE.NextBossZombieClass
+		local th = draw_GetFontHeight("ZSHUDFont")
+		local x = ScrW() * 0.5
+		local y = ScrH() * 0
+		if pl == MySelf then 
+			draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_RED, TEXT_ALIGN_CENTER)
+		else 
+			draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		end
+	end
+	--End display to living zombies who will be next boss.
+
 end
 
 function GM:RequestedDefaultCart()
