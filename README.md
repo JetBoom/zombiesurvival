@@ -31,6 +31,9 @@ Added name and health bar to Spotlamp.
 During intermission display to living zombies who will be next boss.
 
 
+Removed :
+
+Removed the draw written inside Resupply box that says "ur a faget".
 
 
 For more features see my external hook's.
