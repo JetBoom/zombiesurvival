@@ -132,6 +132,13 @@ function SWEP:CanPrimaryAttack()
 		self:SetNextPrimaryFire(CurTime() + 0.25)
 		return false
 	end
-
-	return self:GetNextPrimaryFire() <= CurTime()
+	--Start boomstick rapid fire glitching fix.
+	if self:GetNextPrimaryFire() + 0.25 > CurTime() then
+		--return false to prevent fireing
+		return false
+	else
+		--return true to allow fireing
+		return self:GetNextPrimaryFire() <= CurTime()
+	end
+	--End boomstick rapid fire glitching fix.
 end
