@@ -55,10 +55,10 @@ function ENT:RenderInfo(pos, ang, owner)
 
 		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, 0, NextUse <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		
-		if MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN then
+		--if MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN then
 		local percentage = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
 		self:DrawHealthBar(percentage)
-		end
+		--end
 		
 		if owner:IsValid() and owner:IsPlayer() then
 			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 40, owner == MySelf and COLOR_BLUE or COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
@@ -80,7 +80,7 @@ function ENT:Draw()
 
 	cam.Start3D2D(self:LocalToWorld(vOffsetEE), ang, 0.01)
 
-		draw.SimpleText("ur a faget", "ZS3D2DFont2", 0, 0, color_white, TEXT_ALIGN_CENTER)
+		--draw.SimpleText("ur a faget", "ZS3D2DFont2", 0, 0, color_white, TEXT_ALIGN_CENTER)
 
 	cam.End3D2D()
 end
