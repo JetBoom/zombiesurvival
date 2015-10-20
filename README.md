@@ -9,6 +9,8 @@ This is the latest version of Zombie Survival that was released of Jteboom's Git
 
 #Fixes and added Features :
 
+Fixes :
+
 Blaster shotgun fire rate glitching.
 
 Sweeper shotgun fire rate glitching.
@@ -16,3 +18,5 @@ Sweeper shotgun fire rate glitching.
 Annabelle rifle fire rate glitching.
 
 Tiny slug rifle fire rate glitching.
+
+Additions :
