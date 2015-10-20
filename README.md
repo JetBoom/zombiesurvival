@@ -25,4 +25,4 @@ Added health bar to Arsenal Crate.
 
 Added health bar to Resupply Box.
 
-Added health name and health bar to Spotlamp.
+Added name and health bar to Spotlamp.
