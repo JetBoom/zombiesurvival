@@ -13,6 +13,8 @@ Fixes :
 
 Blaster shotgun fire rate glitching.
 
+Boomstick fire rate glitching.
+
 Sweeper shotgun fire rate glitching.
 
 Annabelle rifle fire rate glitching.
