@@ -801,6 +801,8 @@ function GM:ZombieHUD()
 	end
 	
 	--Display to living zombies who will be next boss.
+	--Make sure it is a intermission.
+	if GetGlobalBool("waveactive") == false then
 	local pl = GAMEMODE.NextBossZombie
 	if pl and MySelf:Alive() and pl:IsValid() then
 		local bossname = GAMEMODE.NextBossZombieClass
@@ -812,6 +814,7 @@ function GM:ZombieHUD()
 		else 
 			draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
 		end
+	end
 	end
 	--End display to living zombies who will be next boss.
 
