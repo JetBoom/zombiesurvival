@@ -54,7 +54,7 @@ function ENT:DrawTranslucent()
 		render.DrawSprite(LightPos, Size*0.4, Size*0.4, Color(255, 255, 255, Alpha), Visibile * ViewDot)
 	end
 	
-	if MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN then
+	if MySelf:IsValid() then --and MySelf:Team() == TEAM_HUMAN then
 		local percentage = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
 		local ang = self:GetAngles()
 		ang:RotateAroundAxis(ang:Up(), 270)
