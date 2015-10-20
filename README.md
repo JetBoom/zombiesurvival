@@ -19,6 +19,8 @@ Sweeper shotgun fire rate glitching.
 
 Annabelle rifle fire rate glitching.
 
-Tiny slug rifle fire rate glitching.
-
 Additions :
+
+Added health bar to Arsenal Crate.
+
+Added health bar to Resupply box.
