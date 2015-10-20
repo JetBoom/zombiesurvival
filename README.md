@@ -28,6 +28,8 @@ Added health bar to Resupply Box.
 
 Added name and health bar to Spotlamp.
 
+Display to living zombies who will be next boss.
+
 
 
 
