@@ -6,4 +6,5 @@ Version number as stated inside Jetboom's LICENSE file : "VERSION Xx420xX3, 19 J
 
 This is the latest version of Zombie Survival that was released of Jteboom's GitHUB, There are no other changes that will be different than the ones listed below.
 
-Fixes and added Features :
+
+#Fixes and added Features :
