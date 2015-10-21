@@ -471,10 +471,10 @@ function GM:PostRender()
 		local dlight = DynamicLight(MySelf:EntIndex())
 		if dlight then
 			dlight.Pos = MySelf:GetShootPos()
-			dlight.r = 10
-			dlight.g = 255
-			dlight.b = 80
-			dlight.Brightness = 0.5
+			dlight.r = 255 
+			dlight.g = 218
+			dlight.b = 74
+			dlight.Brightness = 0
 			dlight.Size = 2048
 			dlight.Decay = 900
 			dlight.DieTime = CurTime() + 2
