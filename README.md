@@ -21,6 +21,8 @@ Annabelle rifle fire rate glitching.
 
 Fixed building of Flesh Creeper nests.
 
+Fixed Zombie Vision.
+
 
 Additions :
 
