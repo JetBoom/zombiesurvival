@@ -73,7 +73,7 @@ function SWEP:BuildingThink()
 	ang.roll = 0
 	local forward = ang:Forward()
 	local right = ang:Right()
-	local endpos = pos + forward * 32
+	local endpos = pos + forward * 52
 
 	local tr = util.TraceLine({start = pos, endpos = endpos, filter = player.GetAll(), mask = MASK_PLAYERSOLID})
 	local trent = tr.Entity
