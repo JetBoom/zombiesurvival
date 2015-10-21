@@ -19,6 +19,8 @@ Sweeper shotgun fire rate glitching.
 
 Annabelle rifle fire rate glitching.
 
+Fixed building of Flesh Creeper nests.
+
 
 Additions :
 
