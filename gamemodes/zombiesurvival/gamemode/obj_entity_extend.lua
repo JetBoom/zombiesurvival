@@ -39,7 +39,11 @@ function meta:ClipHullMeleeTrace(distance, size, filter, start)
 		return cliphullpretrace
 	end
 
-	return self:MeleeTrace(distance, size, filter, start)
+	self:LagCompensation(true)
+	local t = self:MeleeTrace(distance, size, filter, start)
+	self:LagCompensation(false)
+
+	return t
 end
 
 -- Extremely shitty workaround for util trace functions not using clip hulls
