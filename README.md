@@ -34,6 +34,8 @@ Added name and health bar to Spotlamp.
 
 During intermission display to living zombies who will be next boss.
 
+Added JetBoom's HitBox fix. https://github.com/C0nw0nk/zombiesurvival/pull/1/files
+
 
 Removed :
 
