@@ -33,8 +33,13 @@ function meta:ClipHullTraceHull(distance, size, start, dir)
 	return self:TraceHull(distance, mask, size, filter, start)
 end
 
-function meta:ClipHullMeleeTrace(distance, size, start)
-	return self:ClipHullTraceHull(distance, size, start)
+function meta:ClipHullMeleeTrace(distance, size, filter, start)
+	local cliphullpretrace = self:ClipHullTraceHull(distance, size, start)
+	if cliphullpretrace and LASTHITCLIPHULL then
+		return cliphullpretrace
+	end
+
+	return self:MeleeTrace(distance, size, filter, start)
 end
 
 -- Extremely shitty workaround for util trace functions not using clip hulls
