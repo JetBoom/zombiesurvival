@@ -73,7 +73,7 @@ function SWEP:BuildingThink()
 	ang.roll = 0
 	local forward = ang:Forward()
 	local right = ang:Right()
-	local endpos = pos + forward * 52
+	local endpos = pos + forward * 32
 
 	local tr = util.TraceLine({start = pos, endpos = endpos, filter = player.GetAll(), mask = MASK_PLAYERSOLID})
 	local trent = tr.Entity
@@ -99,7 +99,7 @@ function SWEP:BuildingThink()
 		return
 	end
 
-	tr = util.TraceLine({start = endpos, endpos = endpos + Vector(0, 0, -48), mask = MASK_PLAYERSOLID})
+	tr = util.TraceLine({start = endpos, endpos = endpos + Vector(0, 0, -48), filter = team.GetPlayers(TEAM_UNDEAD), mask = MASK_PLAYERSOLID})
 	local hitnormal = tr.HitNormal
 	local z = hitnormal.z
 	if not tr.HitWorld or tr.HitSky or z < 0.75 then
@@ -112,7 +112,7 @@ function SWEP:BuildingThink()
 	for x = -20, 20, 20 do
 		for y = -20, 20, 20 do
 			local start = endpos + x * right + y * forward
-			tr = util.TraceLine({start = start, endpos = start + Vector(0, 0, -48), mask = MASK_PLAYERSOLID})
+			tr = util.TraceLine({start = start, endpos = start + Vector(0, 0, -48), filter = team.GetPlayers(TEAM_UNDEAD), mask = MASK_PLAYERSOLID})
 			if not tr.HitWorld or tr.HitSky or math.abs(tr.HitNormal.z - z) >= 0.2 then
 				self:SendMessage("not_enough_room_for_a_nest")
 				return
