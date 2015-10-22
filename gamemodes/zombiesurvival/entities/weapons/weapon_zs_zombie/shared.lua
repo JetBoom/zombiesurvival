@@ -109,10 +109,10 @@ end
 function SWEP:Swung()
 	local owner = self.Owner
 
-	owner:LagCompensation(true)
+	--owner:LagCompensation(true)
 
 	local hit = false
-	local traces = owner:PenetratingMeleeTrace(self.MeleeReach, self.MeleeSize, self.PreHit)
+	local traces = owner:PenetratingClipHullMeleeTrace(self.MeleeReach, self.MeleeSize, self.PreHit)
 	self.PreHit = nil
 
 	local damage = self:GetDamage(self:GetTracesNumPlayers(traces))
@@ -140,7 +140,7 @@ function SWEP:Swung()
 		end
 	end
 
-	owner:LagCompensation(false)
+	--owner:LagCompensation(false)
 
 	if self.FrozenWhileSwinging then
 		owner:ResetSpeed()
