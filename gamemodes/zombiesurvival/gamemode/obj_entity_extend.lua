@@ -1,6 +1,65 @@
 local meta = FindMetaTable("Entity")
 if not meta then return end
 
+local LASTHITCLIPHULL = false
+local ClipHullBulletsResult
+local ClipHullBulletsReturn = {effects = false, damage = false}
+local ClipHullBullets = {
+	Damage = 0,
+	Force = 0,
+	Tracer = 0,
+	Callback = function(from, tr, dmginfo)
+		ClipHullBulletsResult = tr
+		return ClipHullBulletsReturn
+	end
+}
+function meta:ClipHullTraceHull(distance, size, start, dir)
+	start = start or self:GetShootPos()
+	dir = dir or self:GetAimVector()
+
+	ClipHullBullets.Src = start
+	ClipHullBullets.Dir = dir
+	ClipHullBullets.HullSize = size
+	ClipHullBulletsResult = nil
+	self:FireBullets(ClipHullBullets)
+
+	LASTHITCLIPHULL = false
+
+	if ClipHullBulletsResult and ClipHullBulletsResult.HitNonWorld and ClipHullBulletsResult.Entity:IsValid() and ClipHullBulletsResult.Entity:IsPlayer() and ClipHullBulletsResult.HitPos:Distance(start) <= distance then
+		LASTHITCLIPHULL = true
+		return ClipHullBulletsResult
+	end
+
+	return self:TraceHull(distance, mask, size, filter, start)
+end
+
+function meta:ClipHullMeleeTrace(distance, size, filter, start)
+	local cliphullpretrace = self:ClipHullTraceHull(distance, size, start)
+	if cliphullpretrace and LASTHITCLIPHULL then
+		return cliphullpretrace
+	end
+
+	self:LagCompensation(true)
+	local t = self:MeleeTrace(distance, size, filter, start)
+	self:LagCompensation(false)
+
+	return t
+end
+
+-- Extremely shitty workaround for util trace functions not using clip hulls
+function meta:PenetratingClipHullMeleeTrace(distance, size, prehit, start, dir)
+	local t
+	local cliphullpretrace = self:ClipHullTraceHull(distance, size, start, dir)
+	self:LagCompensation(true)
+	t = self:PenetratingMeleeTrace(distance, size, prehit, start, dir)
+	if cliphullpretrace and LASTHITCLIPHULL and cliphullpretrace.Entity ~= prehit then
+		table.insert(t, 1, cliphullpretrace)
+	end
+	self:LagCompensation(false)
+
+	return t
+end
+
 function meta:ApplyPlayerProperties(ply)
 	self.GetPlayerColor = function() return ply:GetPlayerColor() end
 	self:SetBodygroup( ply:GetBodygroup(1), 1 )
