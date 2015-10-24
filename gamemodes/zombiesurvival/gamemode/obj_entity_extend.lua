@@ -52,7 +52,7 @@ function meta:PenetratingClipHullMeleeTrace(distance, size, prehit, start, dir)
 	local cliphullpretrace = self:ClipHullTraceHull(distance, size, start, dir)
 	self:LagCompensation(true)
 	t = self:PenetratingMeleeTrace(distance, size, prehit, start, dir)
-	if cliphullpretrace and LASTHITCLIPHULL and cliphullpretrace.Entity ~= prehit then
+	if cliphullpretrace and LASTHITCLIPHULL and cliphullpretrace.Entity ~= prehit and not (t[1] and t[1].Entity:IsValid() and t[1].Entity == cliphullpretrace.Entity) then
 		table.insert(t, 1, cliphullpretrace)
 	end
 	self:LagCompensation(false)
