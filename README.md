@@ -23,7 +23,7 @@ Fixed building of Flesh Creeper nests.
 
 Fixed Zombie Vision.
 
-Fixed humans not being able to phase out of props they are stuck in.
+Fixed humans not being able to phase out of props they are stuck in or ontop of.
 
 
 Additions :
