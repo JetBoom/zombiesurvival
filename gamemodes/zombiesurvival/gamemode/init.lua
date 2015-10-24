@@ -2807,7 +2807,7 @@ function GM:KeyPress(pl, key)
 			end
 		end
 	elseif key == IN_ZOOM then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() and pl:IsOnGround() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
+		if pl:Team() == TEAM_HUMAN and pl:Alive() and pl:IsOnGround() or pl:GetPhysicsObject():IsPenetrating() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
 			pl:SetBarricadeGhosting(true)
 		end
 	end
