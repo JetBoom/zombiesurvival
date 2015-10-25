@@ -26,7 +26,7 @@ SWEP.ReloadDelay = 0.4
 SWEP.Primary.Sound = Sound("Weapon_M3.Single")
 SWEP.Primary.Damage = 28
 SWEP.Primary.NumShots = 6
-SWEP.Primary.Delay = 1
+SWEP.Primary.Delay = 0.5
 
 SWEP.Primary.ClipSize = 6
 SWEP.Primary.Automatic = false
@@ -102,7 +102,7 @@ function SWEP:CanPrimaryAttack()
 	end
 	
 	--Start sweeper rapid fire glitching fix.
-	if self:GetNextPrimaryFire() + 0.25 > CurTime() then
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
 		--return false to prevent fireing
 		return false
 	else
