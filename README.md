@@ -19,6 +19,28 @@ Sweeper shotgun fire rate glitching.
 
 Annabelle rifle fire rate glitching.
 
+Battle Axe pistol fire rate.
+
+Deagle pistol fire rate.
+
+Eraser pistol fire rate.
+
+Glock pistol fire rate.
+
+Magnum fire rate.
+
+Medic Gun fire rate.
+
+Owens pistol fire rate.
+
+Peashooter pistol fire rate.
+
+Redeemers fire rate.
+
+Waraxe pistol fire rate.
+
+Pulse pistol (z9000) fire rate.
+
 Fixed building of Flesh Creeper nests.
 
 Fixed Zombie Vision.
