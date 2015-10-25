@@ -26,7 +26,7 @@ SWEP.CSMuzzleFlashes = false
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Damage = 90
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 1
+SWEP.Primary.Delay = 0.5
 SWEP.ReloadDelay = 0.4
 
 SWEP.Primary.ClipSize = 4
@@ -143,7 +143,7 @@ function SWEP:CanPrimaryAttack()
 		return false
 	end
 	--Start annabelle rapid fire glitching fix.
-	if self:GetNextPrimaryFire() + 0.25 > CurTime() then
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
 		--return false to prevent fireing
 		return false
 	else
