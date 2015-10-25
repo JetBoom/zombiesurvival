@@ -35,3 +35,18 @@ SWEP.IronSightsPos = Vector(-5.9, 12, 2.3)
 
 SWEP.ConeMax = 0.05
 SWEP.ConeMin = 0.015
+
+function SWEP:CanPrimaryAttack()
+	if self:Clip1() <= 0 then
+		self:EmitSound("Weapon_Pistol.Empty")
+		return false
+	end
+	
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent firing
+		return false
+	else
+		--return true to allow firing
+		return true
+	end
+end
