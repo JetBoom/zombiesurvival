@@ -60,7 +60,7 @@ function ENT:DrawTranslucent()
 		ang:RotateAroundAxis(ang:Up(), 270)
 		ang:RotateAroundAxis(ang:Right(), 180)
 		ang:RotateAroundAxis(ang:Forward(), 180)
-		local vPos = self:GetPos()
+		local vPos = Vector(self:GetPos().x,self:GetPos().y,self:GetPos().z + 10)
 		local vOffset = self:GetForward() * self:OBBMaxs().x
 		local name
 		local owner = self:GetObjectOwner()
