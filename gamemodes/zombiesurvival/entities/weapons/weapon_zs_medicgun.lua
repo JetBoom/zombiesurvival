@@ -37,7 +37,7 @@ SWEP.CSMuzzleFlashes = false
 
 SWEP.ReloadSound = Sound("Weapon_Pistol.Reload")
 
-SWEP.Primary.Delay = 0.25
+SWEP.Primary.Delay = 0.15
 
 SWEP.Primary.ClipSize = 25
 SWEP.Primary.DefaultClip = 150
