@@ -24,7 +24,7 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("Weapon_Glock.Single")
 SWEP.Primary.Damage = 17
 SWEP.Primary.NumShots = 3
-SWEP.Primary.Delay = 0.3
+SWEP.Primary.Delay = 0.18
 
 SWEP.Primary.ClipSize = 7
 SWEP.Primary.Automatic = false
