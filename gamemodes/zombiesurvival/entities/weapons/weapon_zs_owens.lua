@@ -27,7 +27,7 @@ SWEP.ReloadSound = Sound("Weapon_Pistol.Reload")
 SWEP.Primary.Sound = Sound("Weapon_Pistol.NPC_Single")
 SWEP.Primary.Damage = 12
 SWEP.Primary.NumShots = 2
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Delay = 0.09
 
 SWEP.Primary.ClipSize = 12
 SWEP.Primary.Automatic = false
