@@ -26,7 +26,7 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("weapons/ar2/npc_ar2_altfire.wav")
 SWEP.Primary.Damage = 21
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.1
+SWEP.Primary.Delay = 0.08
 
 SWEP.Primary.ClipSize = 12
 SWEP.Primary.Automatic = false
