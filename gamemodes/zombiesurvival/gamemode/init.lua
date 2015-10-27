@@ -1571,6 +1571,7 @@ end
 
 function GM:PlayerInitialSpawn(pl)
 	gamemode.Call("PlayerInitialSpawnRound", pl)
+	pl:PrintMessage(HUD_PRINTCONSOLE, "C0nw0nk's GitHub Fork (github.com/C0nw0nk/zombiesurvival)")
 end
 
 function GM:PlayerInitialSpawnRound(pl)
