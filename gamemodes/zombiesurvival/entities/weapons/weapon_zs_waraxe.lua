@@ -22,7 +22,7 @@ end
 
 SWEP.Primary.Damage = 14
 SWEP.Primary.NumShots = 2
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Delay = 0.09
 
 SWEP.Primary.ClipSize = 14
 SWEP.Primary.Automatic = false
