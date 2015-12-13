@@ -269,6 +269,9 @@
 @PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_redeemed    : "ZS: Redeemed players can spawn here. Use of this is optional."
 [
 ]
+@PointClass base(Targetname, Angles) studio("models/props_wasteland/rockcliff01c.mdl") = info_sigilnode    : "ZS: Manual Placement of Sigils ONLY when dynamic placement isn't enough."
+[
+]
 
 @PointClass base(Targetname) = logic_beats  : "ZS: Allows you to turn beats (the ambient music) on or off."
 [
@@ -298,7 +301,7 @@
 	input disable(void) : "Disable dynamic spawning."
 ]
 
-@PointClass base(Origin) iconsprite("particles/smokey") sphere( radius ) = zombiegasses  : "ZS: Manually place a point for the zombies' noxious gases."
+@PointClass base(Targetname,Origin) iconsprite("particles/smokey") sphere( radius ) = zombiegasses  : "ZS: Manually place a point for the zombies' noxious gases."
 [
 	// Keys
 	radius(integer) : "Radius" : 250 : "Radius that this can damage humans/heal zombies."
