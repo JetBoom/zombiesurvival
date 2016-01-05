@@ -134,7 +134,7 @@ function ENT:OnPackedUp(pl)
     	if pl:HasWeapon(self.WeaponClass) then
        		pl:GiveAmmo(1, self.AmmoType)
     	else
-	   pl:Give(self.WeaponClass)
+		pl:Give(self.WeaponClass)
 	end
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
