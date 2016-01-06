@@ -830,12 +830,16 @@ function meta:GiveWeaponByType(weapon, plyr, ammo)
 	if wep:IsValid() then
 		local primary = wep:ValidPrimaryAmmo()
 		if primary and 0 < wep:Clip1() then
-			self:GiveAmmo(wep:Clip1(), primary, true)
-			wep:SetClip1(0)
+            		if wep.AmmoIfHas ~= true then
+				self:GiveAmmo(wep:Clip1(), primary, true)
+    			end
+    			wep:SetClip1(0)
 		end
 		local secondary = wep:ValidSecondaryAmmo()
 		if secondary and 0 < wep:Clip2() then
-			self:GiveAmmo(wep:Clip2(), secondary, true)
+            		if wep.AmmoIfHas ~= true then
+			    self:GiveAmmo(wep:Clip2(), secondary, true)
+            		end
 			wep:SetClip2(0)
 		end
 
