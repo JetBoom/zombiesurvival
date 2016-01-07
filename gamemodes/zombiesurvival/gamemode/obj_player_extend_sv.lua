@@ -850,14 +850,18 @@ function meta:GiveWeaponByType(weapon, plyr, ammo)
 			if wep2.Primary then
 				local primary = wep2:ValidPrimaryAmmo()
 				if primary then
-					wep2:SetClip1(0)
+					if wep.AmmoIfHas ~= true then
+						wep2:SetClip1(0)
+					end
 					plyr:RemoveAmmo(math.max(0, wep2.Primary.DefaultClip - wep2.Primary.ClipSize), primary)
 				end
 			end
 			if wep2.Secondary then
 				local secondary = wep2:ValidSecondaryAmmo()
 				if secondary then
-					wep2:SetClip2(0)
+					if wep.AmmoIfHas ~= true then
+						wep2:SetClip2(0)
+					end
 					plyr:RemoveAmmo(math.max(0, wep2.Secondary.DefaultClip - wep2.Secondary.ClipSize), secondary)
 				end
 			end
