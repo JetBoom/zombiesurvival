@@ -40,6 +40,7 @@
 		"zombie"             : "Zombie"
 		"classic Zombie"     : "Classic Zombie"
 		"fresh dead"         : "Fresh Dead"
+		"shadow lurker"      : "Shadow Lurker"
 		"zombie legs"        : "Zombie Legs"
 		"zombie torso"       : "Zombie Torso"
 		"flesh creeper"      : "Flesh Creeper"
@@ -53,6 +54,8 @@
 		"fast zombie legs"   : "Fast Zombie Legs"
 		"poison zombie"      : "Poison Zombie"
 		"chem zombie"        : "Chem Zombie"
+		"ass kicker"         : "Ass Kicker"
+		"doom crab"          : "Doom Crab"
 		"nightmare"          : "Nightmare"
 		"puke pus"           : "Puke Pus"
 		"the tickle monster" : "The Tickle Monster"
@@ -69,6 +72,7 @@
 		"zombie"             : "Zombie"
 		"classic Zombie"     : "Classic Zombie"
 		"fresh dead"         : "Fresh Dead"
+		"shadow lurker"      : "Shadow Lurker"
 		"zombie legs"        : "Zombie Legs"
 		"zombie torso"       : "Zombie Torso"
 		"flesh creeper"      : "Flesh Creeper"
@@ -82,6 +86,8 @@
 		"fast zombie legs"   : "Fast Zombie Legs"
 		"poison zombie"      : "Poison Zombie"
 		"chem zombie"        : "Chem Zombie"
+		"ass kicker"         : "Ass Kicker"
+		"doom crab"          : "Doom Crab"
 		"nightmare"          : "Nightmare"
 		"puke pus"           : "Puke Pus"
 		"the tickle monster" : "The Tickle Monster"
@@ -98,6 +104,7 @@
 		"zombie"             : "Zombie"
 		"classic Zombie"     : "Classic Zombie"
 		"fresh dead"         : "Fresh Dead"
+		"shadow lurker"      : "Shadow Lurker"
 		"zombie legs"        : "Zombie Legs"
 		"zombie torso"       : "Zombie Torso"
 		"flesh creeper"      : "Flesh Creeper"
@@ -111,6 +118,8 @@
 		"fast zombie legs"   : "Fast Zombie Legs"
 		"poison zombie"      : "Poison Zombie"
 		"chem zombie"        : "Chem Zombie"
+		"ass kicker"         : "Ass Kicker"
+		"doom crab"          : "Doom Crab"
 		"nightmare"          : "Nightmare"
 		"puke pus"           : "Puke Pus"
 		"the tickle monster" : "The Tickle Monster"
@@ -127,6 +136,7 @@
 		"zombie"             : "Zombie"
 		"classic Zombie"     : "Classic Zombie"
 		"fresh dead"         : "Fresh Dead"
+		"shadow lurker"      : "Shadow Lurker"
 		"zombie legs"        : "Zombie Legs"
 		"zombie torso"       : "Zombie Torso"
 		"flesh creeper"      : "Flesh Creeper"
@@ -140,6 +150,8 @@
 		"fast zombie legs"   : "Fast Zombie Legs"
 		"poison zombie"      : "Poison Zombie"
 		"chem zombie"        : "Chem Zombie"
+		"ass kicker"         : "Ass Kicker"
+		"doom crab"          : "Doom Crab"
 		"nightmare"          : "Nightmare"
 		"puke pus"           : "Puke Pus"
 		"the tickle monster" : "The Tickle Monster"
@@ -157,6 +169,7 @@
 		"zombie"             : "Zombie"
 		"classic Zombie"     : "Classic Zombie"
 		"fresh dead"         : "Fresh Dead"
+		"shadow lurker"      : "Shadow Lurker"
 		"zombie legs"        : "Zombie Legs"
 		"zombie torso"       : "Zombie Torso"
 		"flesh creeper"      : "Flesh Creeper"
@@ -170,6 +183,8 @@
 		"fast zombie legs"   : "Fast Zombie Legs"
 		"poison zombie"      : "Poison Zombie"
 		"chem zombie"        : "Chem Zombie"
+		"ass kicker"         : "Ass Kicker"
+		"doom crab"          : "Doom Crab"
 		"nightmare"          : "Nightmare"
 		"puke pus"           : "Puke Pus"
 		"the tickle monster" : "The Tickle Monster"
@@ -928,6 +943,32 @@
 @PointClass base(Weapon) studio("models/weapons/w_snip_awp.mdl") = weapon_zs_hunter : 
 "Ammo Type: Rifle.\n"+
 "A hunting rifle that deals high amount of damage at the cost of slow reload speed. " []
+
+@PointClass base(Weapon) studio("models/weapons/w_357.mdl") = weapon_zs_longarm : 
+"Ammo Type: Pistol.\n"+
+"This gun's bullets deal extremely large amounts of damage. " []
+
+@PointClass base(Weapon) studio("models/weapons/w_shotgun.mdl") = weapon_zs_oberon : 
+"Ammo Type: Pulse.\n"+
+"Slows Targets and Knocks them back. " []
+
+@PointClass base(Weapon) studio("models/weapons/w_Pistol.mdl") = weapon_zs_artemis : 
+"Ammo Type: Bolts.\n"+
+"A pair of minature crossbows. Fires quick successions of explosive bolts. " []
+
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl") = weapon_zs_molotov : 
+"A highly flammable concoction, use at your own risk. " []
+
+@PointClass base(Weapon) studio("models/weapons/w_crossbow.mdl") = weapon_zs_spinfusor: 
+"Ammo Type: Pulse.\n"+
+"Launches highly explosive pulse projectiles. " []
+
+@PointClass base(Weapon) studio("models/weapons/w_smg1.mdl") = weapon_zs_hurricane : 
+"Ammo Type: Pulse.\n"+
+"The fire-rate increases as the magazine empties itself. " []
+
+@PointClass base(Weapon) studio("models/combine_scanner.mdl") = weapon_zs_drone : 
+"A deployable, remotely controlled device. Ideal for scouting, retrieval and targeted attacks. " []
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Gamemode - Crafting Weapons ////////////////////////////////////////////////////
