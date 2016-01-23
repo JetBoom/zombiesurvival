@@ -284,7 +284,7 @@
 @PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_redeemed    : "ZS: Redeemed players can spawn here. Use of this is optional."
 [
 ]
-@PointClass base(Targetname, Angles) studio("models/props_wasteland/medbridge_post01.mdl) = info_sigilnode  : "ZS: Manual Placement of Sigils ONLY when dynamic placement isn't enough."
+@PointClass base(Targetname, Angles) studio("models/props_wasteland/medbridge_post01.mdl") = info_sigilnode  : "ZS: Manual Placement of Sigils ONLY when dynamic placement isn't enough."
 [
 ]
 
