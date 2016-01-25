@@ -67,6 +67,10 @@ function meta:ApplyPlayerProperties(ply)
 	self:SetSkin( ply:GetSkin() or 1 )
 end
 
+function meta:RestartGesture(act)
+	-- was previously deprecated. will update later, this is to stop errors.
+end
+
 function meta:GetVolume()
 	local mins, maxs = self:OBBMins(), self:OBBMaxs()
 	return (maxs.x - mins.x) + (maxs.y - mins.y) + (maxs.z - mins.z)
