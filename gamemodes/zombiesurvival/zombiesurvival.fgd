@@ -932,7 +932,7 @@
 "Ammo Type: Pulse.\n"+
 "The Adonis is a 225 point assault rifle that combines high bullet power with the accuracy of the inferno. It comes with a low clip size and a very low firing rate however." []
 
-@PointClass base(Weapon) studio("models/weapons/v_pist_fiveseven.mdl") = weapon_zs_eraser : 
+@PointClass base(Weapon) studio("models/weapons/w_pist_fiveseven.mdl") = weapon_zs_eraser : 
 "Ammo Type: Pistol.\n"+
 "The Eraser gets more powerful with each bullet gone from a single clip." []
 
