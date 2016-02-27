@@ -10,7 +10,7 @@ local function ContentsPaint(self)
 		colHealth.r = (1 - healthperc) * 180
 		colHealth.g = healthperc * 180
 
-		draw.SimpleTextBlurry(health, "ZSHUDFont", 8, self:GetTall() - 8, colHealth, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		draw.SimpleTextBlurry(health, "ZSHUDFont", 8, self:GetTall() - 8, colHealth, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 end
 
