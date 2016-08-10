@@ -84,7 +84,7 @@ function PANEL:SetNotification(...)
 					defaultfont = nil
 				else
 					local th = draw.GetFontHeight(v.font)
-					if tw then
+					if th then
 						defaultfont = v.font
 					end
 				end
