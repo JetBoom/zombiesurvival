@@ -88,8 +88,12 @@ function ENT:AltUse(activator, tr)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_resupplybox")
-	pl:GiveAmmo(1, "helicoptergun")
+	
+   	if pl:HasWeapon("weapon_zs_resupplybox") then
+		pl:GiveAmmo(1, "helicoptergun")
+	else
+		pl:Give("weapon_zs_resupplybox")
+	end
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
 
