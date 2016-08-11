@@ -600,12 +600,12 @@
 			0 : "No"
 			1 : "Yes"
 		]
-	endcamera(choices)            : "Enable Custom Camera?" : 0 : "Enables or disables an end round camera." =
+	endcamera(choices)            : "Enable Camera?" : 1 : "Enables or disables an end round camera." =
 		[
 			0 : "No"
 			1 : "Yes"
 		]	
-	endcamerapos(vector)          : "Custom Camera Vector" : "" : "Sets the position of the end round camera."
+	endcamerapos(vector)          : "Custom Camera Vector" : "" : "Sets a custom position of the end round camera."
 	winmusic(sound)               : "Win Music" : "default" : "The music that plays when the human team have won the round. 'default' for normal function"
 	losemusic(sound)              : "Lose Music" : "default" : "The music that plays when the human team have lost the round. 'default' for normal function"
 	
