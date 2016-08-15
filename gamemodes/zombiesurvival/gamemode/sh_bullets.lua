@@ -35,18 +35,10 @@ function util.ImpactTrace( ply, tr, iDamageType, pCustomImpactName, effect )
 	    effect:SetEntIndex( tr.Entity:EntIndex() )
 	end
 
-	if SERVER then
-		SuppressHostEvents( ply )
-	end
-
 	if pCustomImpactName then
 		util.Effect( pCustomImpactName, effect )
 	else
 		util.Effect( "Impact", effect )
-	end
-
-	if SERVER then
-		SuppressHostEvents( NULL )
 	end
 end
 
@@ -216,15 +208,7 @@ function playerMeta:MakeTracer( vecStart, vecEnd, tracerName, tracerCount )
 	data:SetRadius( 0.1 )
 	-- data:SetEntity( 0.1 )
 
-	if SERVER then
-		SuppressHostEvents( self )
-	end
-
 	util.Effect( tracerName or "Tracer", data )
-
-	if SERVER then
-		SuppressHostEvents( NULL )
-	end
 
 end
 
@@ -232,6 +216,11 @@ local phys_pushscale = GetConVar( "phys_pushscale" )
 local waterContents = bit.bor( CONTENTS_WATER, CONTENTS_SLIME )
 
 function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
+
+	if SERVER and suppressHostEvents then
+		SuppressHostEvents( self )
+	end
+
 	local vecSrc = bulletInfo.Src or vector_origin
 	local shootAngles = bulletInfo.Dir or vector_origin
 	local vecSpread = bulletInfo.Spread or vector_origin
@@ -377,7 +366,7 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 				hook.Run( "ScaleNPCDamage", tr.Entity, tr.HitGroup, dmginfo )
 			end
 
-			tr.Entity:DispatchTraceAttack(dmginfo, tr.StartPos, tr. HitPos, vecDir)
+			tr.Entity:DispatchTraceAttack(dmginfo, tr.StartPos, tr.HitPos, vecDir)
 
 			-- TODO: TraceAttackToTriggers
 		end
@@ -450,6 +439,10 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 		if isfunction(bulletInfo.Callback) then
 			bulletInfo.Callback(self, tr, dmginfo)
 		end
+	end
+
+	if SERVER and suppressHostEvents then
+		SuppressHostEvents( NULL )
 	end
 
 end
