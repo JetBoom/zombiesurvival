@@ -367,6 +367,12 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 			vecForce = vecForce * (bulletInfo.Force or 1)
 			dmginfo:SetDamageForce(vecForce)
 
+			if tr.Entity:IsPlayer() then
+				hook.Run( "ScalePlayerDamage", tr.Entity, tr.HitGroup, dmginfo )
+			elseif tr.Entity:IsNPC() then
+				hook.Run( "ScaleNPCDamage", tr.Entity, tr.HitGroup, dmginfo )
+			end
+
 			tr.Entity:DispatchTraceAttack(dmginfo, tr.StartPos, tr. HitPos, vecDir)
 
 			-- TODO: TraceAttackToTriggers
