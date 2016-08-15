@@ -886,7 +886,7 @@ meta.OldFireBullets = FindMetaTable("Player").FireBullets
 function meta:FireBullets(bulletInfo, suppressHostEvents)
 	math.randomseed( CurTime() )
 	
-	for i = 1, bulletInfo.Num do
+	for i = 1, bulletInfo.Num or 1 do
 		self:FireCSSBullet(bulletInfo, suppressHostEvents)
 	end
 end
