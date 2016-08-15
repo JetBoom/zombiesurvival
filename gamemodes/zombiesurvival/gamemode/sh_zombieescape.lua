@@ -130,11 +130,6 @@ hook.Add( "ShouldCollide", "CSSShouldCollide", function ( ent1, ent2 )
 		return true
 	end
 
-	-- No team collisions
-	if ent1:IsPlayer() and ent2:IsPlayer() then
-		return false
-	end
-
 end )
 
 hook.Add( "OnEntityCreated", "CSSCustomCollisions", function( ent )
