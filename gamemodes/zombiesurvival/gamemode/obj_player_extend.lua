@@ -881,3 +881,29 @@ end
 function meta:GetRight()
 	return self:SyncAngles():Right()
 end
+
+meta.OldFireBullets = FindMetaTable("Player").FireBullets
+function meta:FireBullets(bulletInfo, suppressHostEvents)
+	if not GAMEMODE.ZombieEscape then
+		self:OldFireBullets(bulletInfo, suppressHostEvents)
+		return
+	end
+
+	if not IsFirstTimePredicted() then return end
+
+	math.randomseed( CurTime() )
+
+	-- Fire bullets, calculate impacts & effects	
+	if SERVER and not self:IsListenServerHost() then
+		self:LagCompensation( true )
+	end
+	
+	for i = 1, bulletInfo.Num do
+		self:FireCSSBullet(bulletInfo)
+	end
+
+	if SERVER and not self:IsListenServerHost() then
+		self:LagCompensation( false )
+	end
+
+end

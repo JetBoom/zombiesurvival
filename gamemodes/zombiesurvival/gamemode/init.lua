@@ -26,6 +26,7 @@ AddCSLuaFile("sh_zombieclasses.lua")
 AddCSLuaFile("sh_animations.lua")
 AddCSLuaFile("sh_sigils.lua")
 AddCSLuaFile("sh_channel.lua")
+AddCSLuaFile("sh_bullets.lua")
 
 AddCSLuaFile("cl_draw.lua")
 AddCSLuaFile("cl_util.lua")
