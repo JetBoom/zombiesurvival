@@ -882,7 +882,7 @@ function meta:GetRight()
 	return self:SyncAngles():Right()
 end
 
-meta.OldFireBullets = FindMetaTable("Player").FireBullets
+meta.OldFireBullets = FindMetaTable("Entity").FireBullets
 function meta:FireBullets(bulletInfo, suppressHostEvents)
 	if not GAMEMODE.ZombieEscape then
 		self:OldFireBullets(bulletInfo, suppressHostEvents)
