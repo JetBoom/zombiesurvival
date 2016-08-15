@@ -200,7 +200,11 @@ function playerMeta:MakeTracer( vecStart, vecEnd, tracerName, tracerCount )
 		if IsValid(vm) then
 			local attachId = vm:LookupAttachment("1") -- css weapon are stupid
 			local attach = vm:GetAttachment( attachId )
-			vecStart = attach.Pos
+			if attach then
+				vecStart = attach.Pos
+			else
+				vecStart = vm:GetPos()
+			end
 		end
 
 	end
