@@ -184,10 +184,10 @@ local function TraceToExit( trace )
 	return false
 end
 
-function playerMeta:MakeTracer( vecStart, vecEnd, tracerName )
+function playerMeta:MakeTracer( vecStart, vecEnd, tracerName, tracerCount )
 
 	-- Only show every 4 bullets
-	if self.BulletCount and self.BulletCount < 4 then
+	if self.BulletCount and self.BulletCount < (tracerCount or 4) then
 		self.BulletCount = self.BulletCount + 1
 		return
 	else
@@ -349,13 +349,13 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 				end
 			end
 
-			self:MakeTracer( tr.StartPos, tr.HitPos, bulletInfo.TracerName )
+			self:MakeTracer( tr.StartPos, tr.HitPos, bulletInfo.TracerName, bulletInfo.Tracer or 1 )
 
 		end
 
 		if SERVER then
 			local dmginfo = DamageInfo()
-			dmginfo:SetAttacker(self)
+			dmginfo:SetAttacker(bulletInfo.Attacker or self)
 			dmginfo:SetInflictor(weap)
 			dmginfo:SetDamage(fCurrentDamage)
 			dmginfo:SetDamageType(iDamageType)
@@ -364,7 +364,7 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 			local vecForce = vecDir:GetNormal()
 			-- vecForce = vecForce * 1 -- Ammo Damage Force
 			vecForce = vecForce * phys_pushscale:GetFloat()
-			-- vecForce = vecForce * 1 -- scale
+			vecForce = vecForce * (bulletInfo.Force or 1)
 			dmginfo:SetDamageForce(vecForce)
 
 			tr.Entity:DispatchTraceAttack(dmginfo, tr.StartPos, tr. HitPos, vecDir)
