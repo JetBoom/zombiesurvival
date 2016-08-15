@@ -92,15 +92,33 @@ hook.Add("Initialize", "RegisterDummyEntities", function()
 	end
 end)
 
+-- HACK: func_physbox_multiplayer entities' collision groups seem to differ 
+-- from CS:S. Some weapon pickups are surrounded by them and should be using
+-- COLLISION_GROUP_DEBRIS. This fixes that when a player attempts to pickup
+-- a weapon.
+local function PhysboxWeaponPickupFix(weap)
+	for _, ent in pairs(ents.FindInSphere(weap:GetPos(), 30)) do
+		if IsValid(ent) and ent:GetClass() == "func_physbox_multiplayer" then
+			ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+		end
+	end
+end
+
 hook.Add( "PlayerCanPickupWeapon", "RestrictMapWeapons", function( ply, wep )
 
 	local weps = ply:GetWeapons()
 		
 	--Only allow one special weapon per player
 	for k, v in pairs(weps) do
-		if table.HasValue( CSSWEAPONS, v:GetClass() ) or v:GetClass()=="weapon_map_base" then return false end
+		if table.HasValue( CSSWEAPONS, v:GetClass() ) or v:GetClass()=="weapon_map_base" then
+			return false
+		end
 	end
-		
+	
+	if SERVER and wep.Base == "weapon_map_base" then
+		PhysboxWeaponPickupFix(wep)
+	end
+
 	return true
 end)
 
