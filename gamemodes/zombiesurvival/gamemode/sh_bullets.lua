@@ -64,6 +64,7 @@ function util.Tracer( vecStart, vecEnd, iEntIndex, iAttachment, flVelocity, pCus
 end
 
 local BulletTypeParameters = {
+	-- CS
 	ammo_50AE = {
 		fPenetrationPower 		= 30,
 		flPenetrationDistance 	= 1000,
@@ -104,6 +105,29 @@ local BulletTypeParameters = {
 		fPenetrationPower 		= 30,
 		flPenetrationDistance 	= 2000,
 	},
+
+	-- GMod
+	ar2 = {
+		fPenetrationPower 		= 20,
+		flPenetrationDistance 	= 800,
+	},
+	SniperRound = {
+		fPenetrationPower 		= 39,
+		flPenetrationDistance 	= 5000,
+	},
+	["357"] = {
+		fPenetrationPower 		= 25,
+		flPenetrationDistance 	= 800,
+	},
+	pistol = {
+		fPenetrationPower 		= 21,
+		flPenetrationDistance 	= 800,
+	},
+	smg1 = {
+		fPenetrationPower 		= 30,
+		flPenetrationDistance 	= 2000,
+	},
+
 	default = {
 		fPenetrationPower 		= 0,
 		flPenetrationDistance 	= 0,
@@ -210,6 +234,14 @@ function playerMeta:MakeTracer( vecStart, vecEnd, tracerName, tracerCount )
 
 	util.Effect( tracerName or "Tracer", data )
 
+end
+
+local r_drawtracers_firstperson = CreateConVar( "r_drawtracers_firstperson", 0, 0, "" )
+local debugTracerBounds = Vector(2,2,2)
+
+local function DrawDebugTracer( tr )
+	debugoverlay.Box(tr.HitPos, -debugTracerBounds, debugTracerBounds, 10, COLOR_RED)
+	debugoverlay.Line(tr.StartPos, tr.HitPos, 10, COLOR_RED, false)
 end
 
 local phys_pushscale = GetConVar( "phys_pushscale" )
@@ -369,6 +401,10 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 			tr.Entity:DispatchTraceAttack(dmginfo, tr.StartPos, tr.HitPos, vecDir)
 
 			-- TODO: TraceAttackToTriggers
+		end
+
+		if CLIENT or self:IsListenServerHost() and r_drawtracers_firstperson:GetBool() then
+			DrawDebugTracer(tr)
 		end
 
 		if iPenetration == 0 and !hitGrate then
