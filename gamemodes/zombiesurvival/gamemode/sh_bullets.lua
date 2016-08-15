@@ -1,11 +1,11 @@
--- Code taken from Breakpoint servers CS:S gamemode
+-- Code references:
+-- GM Zombie Escape gamemode
+-- https://github.com/samuelmaddock/zombie-escape
+-- Breakpoint servers CS:S gamemode
 -- https://bitbucket.org/blackops7799/breakpoint/src/bb3393586a30b99e399feca8e0d6d9e5a6fda2fc/gamemodes/css/gamemode/sh_bullets.lua
 
 local playerMeta = FindMetaTable("Player")
 if not playerMeta then return end
-
-local cTakeDamageInfoMeta = FindMetaTable("CTakeDamageInfo")
-if not cTakeDamageInfoMeta then return end
 
 function util.ImpactTrace( ply, tr, iDamageType, pCustomImpactName, effect )
 	if tr.HitSky then
@@ -245,12 +245,12 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 	local fCurrentDamage = iDamage
 	local flCurrentDistance = 0.0
 
-	local vecDirShooting = shootAngles
+	local vecDirShooting = shootAngles:Angle():Forward()
 	local vecRight = shootAngles:Angle():Right()
 	local vecUp = shootAngles:Angle():Up()
 
 	local weap = self:GetActiveWeapon()
-	if !IsValid(weap) then return end
+	if not IsValid(weap) then return end
 
 	local iBulletType = bulletInfo.AmmoType or ""
 
@@ -263,7 +263,7 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 		x * vecSpread * vecRight +
 		y * vecSpread * vecUp
 
-	vecDir = vecDir:GetNormal()
+	vecDir = vecDir:GetNormalized()
 
 	local bFirstHit = true
 
