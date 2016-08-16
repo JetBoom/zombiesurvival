@@ -236,7 +236,7 @@ function playerMeta:MakeTracer( vecStart, vecEnd, tracerName, tracerCount )
 
 end
 
-local r_drawtracers_firstperson = CreateConVar( "r_drawtracers_firstperson", 0, 0, "" )
+local r_drawtracers_firstperson = CreateConVar( "r_drawtracers_firstperson", 0, FCVAR_CHEAT, "" )
 local debugTracerBounds = Vector(2,2,2)
 
 local function DrawDebugTracer( tr )
@@ -270,9 +270,11 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 	local fCurrentDamage = iDamage
 	local flCurrentDistance = 0.0
 
-	local vecDirShooting = shootAngles:Angle():Forward()
-	local vecRight = shootAngles:Angle():Right()
-	local vecUp = shootAngles:Angle():Up()
+	shootAngles = shootAngles:Angle()
+
+	local vecDirShooting = shootAngles:Forward()
+	local vecRight = shootAngles:Right()
+	local vecUp = shootAngles:Up()
 
 	local weap = self:GetActiveWeapon()
 	if not IsValid(weap) then return end

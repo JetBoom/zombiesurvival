@@ -240,7 +240,7 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 		Num = numbul,
 		Src = owner:GetShootPos(),
 		Dir = owner:GetAimVector(),
-		Spread = Vector(cone, cone, 0),
+		Spread = Vector(cone, cone, cone),
 		Tracer = 1,
 		TracerName = self.TracerName,
 		AmmoType = self.Primary.Ammo,
