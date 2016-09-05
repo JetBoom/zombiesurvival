@@ -59,29 +59,26 @@ function ENT:AcceptInput( name, activator, caller, data )
 	Msg("\tCaller: " .. tostring(caller) .. (caller:IsValid() and "("..caller:GetName()..")" or "") .. "\n")
 	Msg("\tData: " .. tostring(data) .. "\n")]]
 
-	local inputdata = {
-		name = name,
-		pActivator = activator,
-		pCaller = caller,
-		value = data
-	}
-
 	name = string.lower(name)
 
 	local inputActionFunc = self.InputDispatch[name]
-	local returnValue
 
 	if isfunction(inputActionFunc) then
-		returnValue = inputActionFunc(self, inputdata)
+		local inputdata = {
+			name = name,
+			pActivator = activator,
+			pCaller = caller,
+			value = data
+		}
+
+		inputActionFunc(self, inputdata)
+
+		self:PostAcceptInput(name, activator, caller, data)
+
+		return true
 	end
 
-	self:PostAcceptInput(name, activator, caller, data)
-
-	if returnValue then
-		return tobool(returnValue)
-	end
-
-	return true
+	return false
 end
 
 function ENT:PostAcceptInput(name, activator, caller, data)
