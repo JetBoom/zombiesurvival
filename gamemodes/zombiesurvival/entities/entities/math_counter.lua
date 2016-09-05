@@ -5,7 +5,6 @@ ENT.InputDispatch = {}
 ENT.EventQueue = {}
 
 function ENT:Initialize()
-	-- Any better way I should be doing this?
 	if !self.m_OutValue then self.m_OutValue = 0 end
 	if !self.m_flMin then self.m_flMin = 0 end
 	if !self.m_flMax then self.m_flMax = 0 end
@@ -91,24 +90,17 @@ function ENT:PostAcceptInput(name, activator, caller, data)
 		self.m_InitialValue = self.m_OutValue
 	end
 	
-	-- Update boss values, but don't send clamped min value
 	if !self.m_LastValue || self.m_LastValue != self.m_OutValue then
 		hook.Call("MathCounterUpdate", GAMEMODE, self, activator)
 	end
 	
 	if self.m_bHitMin then
 		hook.Call("MathCounterHitMin", GAMEMODE, self, activator)
+	elseif self.m_bHitMax then
+		hook.Call("MathCounterHitMax", GAMEMODE, self, activator)
 	end
 
 	self.m_LastValue = self.m_OutValue
-	
-	/*if !self.m_InitialValue || self.m_InitialValue < self:GetOutValue() then -- starting health
-		self.m_InitialValue = self:GetOutValue()
-		hook.Call("MathCounterUpdate", GAMEMODE, self, activator)
-	elseif self.m_LastValue < self:GetOutValue() then -- health was added
-		self.m_InitialValue = self:GetOutValue()
-		hook.Call("MathCounterUpdate", GAMEMODE, self, activator)
-	end*/
 end
 
 function ENT:InputSetHitMax(inputdata)
@@ -187,7 +179,7 @@ function ENT:InputSetValueNoFire(inputdata)
 		flNewValue = math.Clamp(flNewValue, self.m_flMin, self.m_flMax)
 	end
 
-	self:UpdateOutValue( inputdata.pActivator, flNewValue, true )
+	self.m_OutValue = flNewValue
 end
 
 function ENT:InputSubtract(inputdata)
@@ -212,7 +204,7 @@ function ENT:InputDisable(inputdata)
 	self.m_bDisabled = true
 end
 
-function ENT:UpdateOutValue(pActivator, fNewValue, bNoOutput)
+function ENT:UpdateOutValue(pActivator, fNewValue)
 	if !fNewValue then
 		ErrorNoHalt("Math Counter " .. self:GetName() .. " received new out value which was nil (activator="..tostring(pActivator)..").\n")
 		debug.Trace()
@@ -243,15 +235,12 @@ function ENT:UpdateOutValue(pActivator, fNewValue, bNoOutput)
 		fNewValue = math.Clamp(fNewValue, self.m_flMin, self.m_flMax)
 	end
 
-	self:SetOutValue(fNewValue, pActivator, bNoOutput)
+	self:SetOutValue(fNewValue, pActivator)
 end
 
-function ENT:SetOutValue(fNewValue, pActivator, bNoOutput)
+function ENT:SetOutValue(fNewValue, pActivator)
 	self.m_OutValue = fNewValue
-
-	if !bNoOutput then
-		self:QueueTriggerOutput("OutValue", pActivator, self.m_OutValue)
-	end
+	self:QueueTriggerOutput("OutValue", pActivator, self.m_OutValue)
 end
 
 function ENT:GetOutValue()
