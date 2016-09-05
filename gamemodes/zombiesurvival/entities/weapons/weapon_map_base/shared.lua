@@ -24,6 +24,8 @@ SWEP.WorldModel	= ""
 SWEP.WalkSpeed = SPEED_NORMAL
 
 function SWEP:Initialize()
+	self:AddSolidFlags(FSOLID_TRIGGER) -- Nothing collides with these but it gets touches
+	self:UseTriggerBounds(true, 30)
 end
 
 function SWEP:SetWeaponHoldType()

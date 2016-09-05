@@ -235,7 +235,20 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 	owner:DoAttackEvent()
 
 	self:StartBulletKnockback()
-	owner:FireBullets({Num = numbul, Src = owner:GetShootPos(), Dir = owner:GetAimVector(), Spread = Vector(cone, cone, 0), Tracer = 1, TracerName = self.TracerName, Force = dmg * 0.1, Damage = dmg, Callback = self.BulletCallback})
+
+	owner:FireBullets({
+		Num = numbul,
+		Src = owner:GetShootPos(),
+		Dir = owner:GetAimVector(),
+		Spread = Vector(cone, cone, cone),
+		Tracer = 1,
+		TracerName = self.TracerName,
+		AmmoType = self.Primary.Ammo,
+		Force = dmg * 0.1,
+		Damage = dmg,
+		Callback = self.BulletCallback
+	})
+
 	self:DoBulletKnockback(self.Primary.KnockbackScale * 0.05)
 	self:EndBulletKnockback()
 end
