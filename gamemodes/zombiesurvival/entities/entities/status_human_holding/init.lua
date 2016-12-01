@@ -191,8 +191,11 @@ function ENT:Think()
 				self.ObjectAngles = object:GetAngles()
 			end
 		elseif owner:KeyDown(IN_WALK) then
-			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Up(), owner.InputMouseX or 0)
-			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Right(), owner.InputMouseY or 0)
+			local MouseX = math.Clamp(owner.InputMouseX or 0, -2.5, 2.5)
+			local MouseY = math.Clamp(owner.InputMouseY or 0, -2.5, 2.5)
+			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Up(), MouseX)
+			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Right(), MouseY)
+			object:SetAngles(self.ObjectAngles)
 		end
 
 		ShadowParams.pos = self.ObjectPosition
