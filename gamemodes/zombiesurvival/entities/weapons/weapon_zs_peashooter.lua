@@ -25,7 +25,7 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("Weapon_P228.Single")
 SWEP.Primary.Damage = 16
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.1
+SWEP.Primary.Delay = 0.08
 
 SWEP.Primary.ClipSize = 18
 SWEP.Primary.Automatic = false
@@ -36,3 +36,18 @@ SWEP.ConeMax = 0.08
 SWEP.ConeMin = 0.015
 
 SWEP.IronSightsPos = Vector(-6, -1, 2.25)
+
+function SWEP:CanPrimaryAttack()
+	if self:Clip1() <= 0 then
+		self:EmitSound("Weapon_Pistol.Empty")
+		return false
+	end
+	
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent firing
+		return false
+	else
+		--return true to allow firing
+		return true
+	end
+end

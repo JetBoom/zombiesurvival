@@ -12,6 +12,8 @@ GM.Credits = {
 	{"Zombie Panic: Source", "http://www.zombiepanic.org/", "Melee weapon sounds"},
 	{"Samuel", "samuel_games@hotmail.com", "Board Kit model"},
 	{"Typhon", "lukas-tinel@hotmail.com", "HUD textures"},
+	
+	{"C0nw0nk", "(github.com/C0nw0nk/zombiesurvival)", "GitHub Fork"},
 
 	{"Mr. Darkness", "", "Russian translation"},
 	{"honsal", "", "Korean translation"},

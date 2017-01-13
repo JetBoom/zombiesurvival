@@ -26,7 +26,7 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("weapons/ar2/npc_ar2_altfire.wav")
 SWEP.Primary.Damage = 21
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.1
+SWEP.Primary.Delay = 0.08
 
 SWEP.Primary.ClipSize = 12
 SWEP.Primary.Automatic = false
@@ -50,4 +50,19 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 	end
 
 	self.BaseClass.ShootBullets(self, dmg, numbul, cone)
+end
+
+function SWEP:CanPrimaryAttack()
+	if self:Clip1() <= 0 then
+		self:EmitSound("Weapon_Pistol.Empty")
+		return false
+	end
+	
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent firing
+		return false
+	else
+		--return true to allow firing
+		return true
+	end
 end

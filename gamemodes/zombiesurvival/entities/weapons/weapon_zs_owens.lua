@@ -27,7 +27,7 @@ SWEP.ReloadSound = Sound("Weapon_Pistol.Reload")
 SWEP.Primary.Sound = Sound("Weapon_Pistol.NPC_Single")
 SWEP.Primary.Damage = 12
 SWEP.Primary.NumShots = 2
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Delay = 0.09
 
 SWEP.Primary.ClipSize = 12
 SWEP.Primary.Automatic = false
@@ -39,3 +39,18 @@ SWEP.ConeMin = 0.04
 
 SWEP.IronSightsPos = Vector(-5.95, 3, 2.75)
 SWEP.IronSightsAng = Vector(-0.15, -1, 2)
+
+function SWEP:CanPrimaryAttack()
+	if self:Clip1() <= 0 then
+		self:EmitSound("Weapon_Pistol.Empty")
+		return false
+	end
+	
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent firing
+		return false
+	else
+		--return true to allow firing
+		return true
+	end
+end

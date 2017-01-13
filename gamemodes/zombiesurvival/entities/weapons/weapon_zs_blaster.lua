@@ -25,7 +25,7 @@ SWEP.ReloadDelay = 0.4
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Damage = 12
 SWEP.Primary.NumShots = 7
-SWEP.Primary.Delay = 0.8
+SWEP.Primary.Delay = 0.5
 
 SWEP.Primary.ClipSize = 5
 SWEP.Primary.Automatic = false
@@ -102,7 +102,15 @@ function SWEP:CanPrimaryAttack()
 		return false
 	end
 
-	return true
+	--Start blaster rapid fire glitching fix.
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent fireing
+		return false
+	else
+		--return true to allow fireing
+		return true
+	end
+	--End blaster rapid fire glitching fix.
 end
 
 function SWEP:SecondaryAttack()

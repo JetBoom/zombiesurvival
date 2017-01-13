@@ -24,7 +24,7 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("Weapon_ELITE.Single")
 SWEP.Primary.Damage = 22
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.15
+SWEP.Primary.Delay = 0.08
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
@@ -39,4 +39,19 @@ end
 
 function SWEP:SendWeaponAnimation()
 	self:SendWeaponAnim(self:Clip1() % 2 == 0 and ACT_VM_PRIMARYATTACK or ACT_VM_SECONDARYATTACK)
+end
+
+function SWEP:CanPrimaryAttack()
+	if self:Clip1() <= 0 then
+		self:EmitSound("Weapon_Pistol.Empty")
+		return false
+	end
+	
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent firing
+		return false
+	else
+		--return true to allow firing
+		return true
+	end
 end

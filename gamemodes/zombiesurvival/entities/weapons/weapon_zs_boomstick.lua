@@ -29,7 +29,7 @@ SWEP.Primary.Sound = Sound("weapons/shotgun/shotgun_dbl_fire.wav")
 SWEP.Primary.Recoil = 12.5
 SWEP.Primary.Damage = 36
 SWEP.Primary.NumShots = 6
-SWEP.Primary.Delay = 1.5
+SWEP.Primary.Delay = 0.5
 
 SWEP.Primary.ClipSize = 4
 SWEP.Primary.Automatic = false
@@ -132,6 +132,13 @@ function SWEP:CanPrimaryAttack()
 		self:SetNextPrimaryFire(CurTime() + 0.25)
 		return false
 	end
-
-	return self:GetNextPrimaryFire() <= CurTime()
+	--Start boomstick rapid fire glitching fix.
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent fireing
+		return false
+	else
+		--return true to allow fireing
+		return self:GetNextPrimaryFire() <= CurTime()
+	end
+	--End boomstick rapid fire glitching fix.
 end

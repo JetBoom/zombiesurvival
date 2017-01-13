@@ -28,7 +28,7 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("Weapon_Deagle.Single")
 SWEP.Primary.Damage = 47
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.32
+SWEP.Primary.Delay = 0.15
 SWEP.Primary.KnockbackScale = 2
 
 SWEP.Primary.ClipSize = 7
@@ -38,3 +38,18 @@ GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
 SWEP.ConeMax = 0.1
 SWEP.ConeMin = 0.04
+
+function SWEP:CanPrimaryAttack()
+	if self:Clip1() <= 0 then
+		self:EmitSound("Weapon_Pistol.Empty")
+		return false
+	end
+	
+	if self:GetNextPrimaryFire() + self.Primary.Delay > CurTime() then
+		--return false to prevent firing
+		return false
+	else
+		--return true to allow firing
+		return true
+	end
+end

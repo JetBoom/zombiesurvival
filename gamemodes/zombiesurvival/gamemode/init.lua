@@ -1571,6 +1571,7 @@ end
 
 function GM:PlayerInitialSpawn(pl)
 	gamemode.Call("PlayerInitialSpawnRound", pl)
+	pl:PrintMessage(HUD_PRINTCONSOLE, "C0nw0nk's GitHub Fork (github.com/C0nw0nk/zombiesurvival)")
 end
 
 function GM:PlayerInitialSpawnRound(pl)
@@ -2807,7 +2808,7 @@ function GM:KeyPress(pl, key)
 			end
 		end
 	elseif key == IN_ZOOM then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() and pl:IsOnGround() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
+		if pl:Team() == TEAM_HUMAN and pl:Alive() and pl:IsOnGround() or pl:GetVelocity():Length() <= 50 and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
 			pl:SetBarricadeGhosting(true)
 		end
 	end

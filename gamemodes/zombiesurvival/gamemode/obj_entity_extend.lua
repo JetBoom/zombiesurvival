@@ -35,7 +35,7 @@ end
 
 function meta:ClipHullMeleeTrace(distance, size, filter, start)
 	local cliphullpretrace = self:ClipHullTraceHull(distance, size, start)
-	if cliphullpretrace and LASTHITCLIPHULL then
+	if cliphullpretrace and LASTHITCLIPHULL and cliphullpretrace.Entity ~= prehit then
 		return cliphullpretrace
 	end
 
