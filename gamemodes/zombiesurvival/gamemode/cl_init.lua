@@ -784,9 +784,9 @@ function GM:ZombieHUD()
 		local pl = GAMEMODE.NextBossZombie
 		local bossname = GAMEMODE.NextBossZombieClass
 		if pl and pl:IsValid() then
-			if pl == MySelf then 
+			if pl == MySelf then
 				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_RED, TEXT_ALIGN_CENTER)
-			else 
+			else
 				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			end
 		end
@@ -1090,7 +1090,7 @@ function GM:_HUDPaintBackground()
 	end
 
 	local wep = MySelf:GetActiveWeapon()
-	if wep:IsValid() and wep.DrawHUDBackground then
+	if wep:IsValid() and wep.HasScope then
 		wep:DrawHUDBackground()
 	end
 end
@@ -1392,7 +1392,7 @@ function GM:_PrePlayerDraw(pl)
 		local healthfrac = math.max(pl:Health(), 0) / pl:GetMaxHealth()
 		local lowhealthcolor = GAMEMODE.AuraColorEmpty
 		local fullhealthcolor = GAMEMODE.AuraColorFull
-		
+
 		color.r = math.Approach(lowhealthcolor.r, fullhealthcolor.r, math.abs(lowhealthcolor.r - fullhealthcolor.r) * healthfrac)
 		color.g = math.Approach(lowhealthcolor.g, fullhealthcolor.g, math.abs(lowhealthcolor.g - fullhealthcolor.g) * healthfrac)
 		color.b = math.Approach(lowhealthcolor.b, fullhealthcolor.b, math.abs(lowhealthcolor.b - fullhealthcolor.b) * healthfrac)
@@ -1481,7 +1481,7 @@ local function EndRoundCalcView(pl, origin, angles, fov, znear, zfar)
 		end
 		if endposition then
 			local delta = math.Clamp((CurTime() - GAMEMODE.EndTime) * 2, 0, 1)
- 
+
 			local start = endposition * delta + origin * (1 - delta)
 			local tr = util.TraceHull({start = start, endpos = start + delta * 64 * Angle(0, CurTime() * 30, 0):Forward(), mins = Vector(-2, -2, -2), maxs = Vector(2, 2, 2), filter = player.GetAll(), mask = MASK_SOLID})
 			return {origin = tr.HitPos + tr.HitNormal, angles = (start - tr.HitPos):Angle()}
