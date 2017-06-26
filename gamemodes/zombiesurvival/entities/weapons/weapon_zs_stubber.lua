@@ -39,9 +39,14 @@ SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SHOTGUN
 SWEP.ConeMax = 0.075
 SWEP.ConeMin = 0
 
-SWEP.IronSightsPos = Vector(5.015, -8, 2.52)
+SWEP.IronSightsPos = Vector(-6.65, -18, 3.0)
 SWEP.IronSightsAng = Vector(0, 0, 0)
 SWEP.HasScope = true
+
+SWEP.UnscopedPos = SWEP.IronSightsPos
+SWEP.ScopedPos = Vector(-6.65, -18, -5)
+SWEP.UnscopedFOV = SWEP.ViewModelFOV
+SWEP.ScopedFOV = 100
 
 SWEP.WalkSpeed = SPEED_SLOW
 
