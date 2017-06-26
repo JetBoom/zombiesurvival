@@ -273,7 +273,7 @@ function SWEP:DrawWorldModel()
 end
 
 function SWEP:DrawHUDBackground()
-	if self:IsScoped() then
+	if self.IsScoped ~= nil and self:IsScoped() then
 		local scrw, scrh = ScrW(), ScrH()
 		local size = math.min(scrw, scrh)
 		surface.SetMaterial(matScope)

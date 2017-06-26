@@ -547,9 +547,25 @@ function GM:_Think()
 
 	if myteam == TEAM_HUMAN then
 		local wep = MySelf:GetActiveWeapon()
-		if wep:IsValid() and wep.GetIronsights and wep:GetIronsights() then
-			self.FOVLerp = math.Approach(self.FOVLerp, wep.IronsightsMultiplier or 0.6, FrameTime() * 4)
+
+		if wep:IsValid() and wep.GetIronsights then
+			if wep:GetIronsights() and (not wep.HasScope or wep.HasScope == false) then
+				--Ironsights active but no scope: slow transition
+				self.FOVLerp = math.Approach(self.FOVLerp, wep.IronsightsMultiplier or 0.6, FrameTime() * 4)
+			elseif wep:GetIronsights() and wep.HasScope and wep.HasScope == true then
+				--Ironsights active and scope: change FOV instantly when scope is active
+				if wep:IsScoped() then
+					self.FOVLerp = wep.IronsightsMultiplier
+				end
+			elseif not wep:GetIronsights() and wep.HasScope and wep.HasScope == true then
+				--Ironsights not active and scope: Change fov as soon as scope is not active
+				self.FOVLerp = 1
+			else
+				--Ironsights not active and not scope: slowly transition back to 1
+				self.FOVLerp = math.Approach(self.FOVLerp, 1, FrameTime() * 5)
+			end
 		elseif self.FOVLerp ~= 1 then
+			--Otherwise slowly transition back to 1
 			self.FOVLerp = math.Approach(self.FOVLerp, 1, FrameTime() * 5)
 		end
 
@@ -1081,7 +1097,7 @@ function GM:_HUDPaintBackground()
 	surface_DrawTexturedRect(0, h - bordersize, w, bordersize)
 	surface_SetTexture(texGradientRight)
 	surface_DrawTexturedRectRotated(bordersize / 2, h / 2, bordersize, h, 180)
-	surface_DrawTexturedRect(w - bordersize, 0, bordersize, h)]]
+	surface_DrawTexturedRect(w - bordersize, 0, bordersize, h)--]]
 
 	if self.FilmGrainEnabled and MySelf:Team() ~= TEAM_UNDEAD then
 		surface_SetMaterial(matFilmGrain)
@@ -1089,10 +1105,11 @@ function GM:_HUDPaintBackground()
 		surface_DrawTexturedRectUV(0, 0, ScrW(), ScrH(), 2, 2, 0, 0)
 	end
 
-	local wep = MySelf:GetActiveWeapon()
-	if wep:IsValid() and wep.HasScope then
-		wep:DrawHUDBackground()
-	end
+	-- local wep = MySelf:GetActiveWeapon()
+	-- if wep:IsValid() and wep.HasScope and wep.HasScope == true then
+	-- 	wep:DrawHUDBackground()
+	-- end
+	-- DrawHUDBackground is called every frame, pretty certain this code is redundant
 end
 
 local function GiveWeapon()
