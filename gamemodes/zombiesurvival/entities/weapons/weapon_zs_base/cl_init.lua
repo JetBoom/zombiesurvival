@@ -15,6 +15,8 @@ SWEP.HUD3DScale = 0.01
 SWEP.HUD3DBone = "base"
 SWEP.HUD3DAng = Angle(180, 0, 0)
 
+local matScope = Material("zombiesurvival/scope")
+
 function SWEP:Deploy()
 	return true
 end
@@ -149,7 +151,7 @@ function SWEP:GetIronsightsDeltaMultiplier()
 	local bIron = self:GetIronsights()
 	local fIronTime = self.fIronTime or 0
 
-	if not bIron and fIronTime < CurTime() - 0.25 then 
+	if not bIron and fIronTime < CurTime() - 0.25 then
 		return 0
 	end
 
@@ -171,10 +173,10 @@ function SWEP:CalcViewModelView(vm, oldpos, oldang, pos, ang)
 		self.bLastIron = bIron
 		self.fIronTime = CurTime()
 
-		if bIron then 
+		if bIron then
 			self.SwayScale = 0.3
 			self.BobScale = 0.1
-		else 
+		else
 			self.SwayScale = 2.0
 			self.BobScale = 1.5
 		end
@@ -268,4 +270,25 @@ function SWEP:DrawWorldModel()
 	if owner:IsValid() and owner.ShadowMan then return end
 
 	self:Anim_DrawWorldModel()
+end
+
+function SWEP:DrawHUDBackground()
+	if self:IsScoped() then
+		local scrw, scrh = ScrW(), ScrH()
+		local size = math.min(scrw, scrh)
+		surface.SetMaterial(matScope)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.DrawTexturedRect((scrw - size) * 0.5, (scrh - size) * 0.5, size, size)
+		surface.SetDrawColor(0, 0, 0, 255)
+		if scrw > size then
+			local extra = (scrw - size) * 0.5
+			surface.DrawRect(0, 0, extra, scrh)
+			surface.DrawRect(scrw - extra, 0, extra, scrh)
+		end
+		if scrh > size then
+			local extra = (scrh - size) * 0.5
+			surface.DrawRect(0, 0, scrw, extra)
+			surface.DrawRect(0, scrh - extra, scrw, extra)
+		end
+	end
 end
