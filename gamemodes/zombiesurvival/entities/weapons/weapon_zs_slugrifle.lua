@@ -16,14 +16,15 @@ if CLIENT then
 
 	SWEP.VElements = {
 		["base"] = { type = "Model", model = "models/props_phx/construct/metal_plate_curve360x2.mdl", bone = "v_weapon.xm1014_Parent", rel = "", pos = Vector(0, -6, -9), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.094), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base+"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "v_weapon.xm1014_Parent", rel = "base", pos = Vector(0, 0, 8.5), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 45), surpresslightning = false, material = "models/screenspace", skin = 0, bodygroup = {} },
-		["base++"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "v_weapon.xm1014_Parent", rel = "base", pos = Vector(0, 0, 2), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 45), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["base2"] = { type = "Model", model = "models/props/de_nuke/IndustrialLight01.mdl", bone = "v_weapon.xm1014_Parent", rel = "base", pos = Vector(0, 0, 7.6), angle = Angle(0, 0, 180), size = Vector(0.045, 0.045, 0.045), color = Color(255, 255, 255, 255), surpresslightning = false, material = "models/weapons/v_models/snip_awp/v_awp_scope", skin = 0, bodygroup = {} }
+		--Using a light prop from CS:S as the scope because it's the right shape and the AWP scope texture fits on it perfectly, a less detailed or custom model would be a better fix.
 	}
 
 	SWEP.WElements = {
 		["base"] = { type = "Model", model = "models/props_phx/construct/metal_plate_curve360x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(13, 1, -7), angle = Angle(80, 0, 0), size = Vector(0.014, 0.014, 0.094), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base+"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "base", pos = Vector(0, 0, 8.5), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 45), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base++"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "base", pos = Vector(0, 0, 2), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 45), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["base2"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "base", pos = Vector(0, 0, 8.7), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.014), color = Color(0, 0, 0, 255), surpresslightning = false, material = "phoenix_storms/mrref2", skin = 0, bodygroup = {} },
+		["base3"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "base", pos = Vector(0, 0, 0.5), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.014), color = Color(0, 0, 0, 255), surpresslightning = false, material = "phoenix_storms/mrref2", skin = 0, bodygroup = {} }
+		--Base 2 and 3 are two black circles to cover each end of the scope. Material used is just a solid color.
 	}
 end
 
@@ -52,8 +53,14 @@ SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SHOTGUN
 SWEP.ConeMax = 0.12
 SWEP.ConeMin = 0.005
 
-SWEP.IronSightsPos = Vector() --Vector(-7.3, 9, 2.3)
+SWEP.IronSightsPos = Vector(-6.65, -14, 2.5)
 SWEP.IronSightsAng = Vector(0, -1, 0)
+SWEP.HasScope = true
+
+SWEP.UnscopedPos = SWEP.IronSightsPos
+SWEP.ScopedPos = Vector(-6.65, -14, -2)
+SWEP.UnscopedFOV = SWEP.ViewModelFOV
+SWEP.ScopedFOV = 100
 
 SWEP.WalkSpeed = SPEED_SLOWER
 
@@ -70,28 +77,6 @@ if CLIENT then
 		end
 
 		return self.BaseClass.GetViewModelPosition(self, pos, ang)
-	end
-
-	local matScope = Material("zombiesurvival/scope")
-	function SWEP:DrawHUDBackground()
-		if self:IsScoped() then
-			local scrw, scrh = ScrW(), ScrH()
-			local size = math.min(scrw, scrh)
-			surface.SetMaterial(matScope)
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.DrawTexturedRect((scrw - size) * 0.5, (scrh - size) * 0.5, size, size)
-			surface.SetDrawColor(0, 0, 0, 255)
-			if scrw > size then
-				local extra = (scrw - size) * 0.5
-				surface.DrawRect(0, 0, extra, scrh)
-				surface.DrawRect(scrw - extra, 0, extra, scrh)
-			end
-			if scrh > size then
-				local extra = (scrh - size) * 0.5
-				surface.DrawRect(0, 0, scrw, extra)
-				surface.DrawRect(0, scrh - extra, scrw, extra)
-			end
-		end
 	end
 end
 

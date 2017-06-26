@@ -52,8 +52,14 @@ SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SHOTGUN
 SWEP.ConeMax = 0.115
 SWEP.ConeMin = 0
 
-SWEP.IronSightsPos = Vector(5.015, -8, 2.52)
+SWEP.IronSightsPos = Vector(-7.5, -12.5, 2.4)
 SWEP.IronSightsAng = Vector(0, 0, 0)
+SWEP.HasScope = true
+
+SWEP.UnscopedPos = SWEP.IronSightsPos
+SWEP.ScopedPos = Vector(-7.5, -10, -5)
+SWEP.UnscopedFOV = SWEP.ViewModelFOV
+SWEP.ScopedFOV = 100
 
 SWEP.WalkSpeed = SPEED_SLOWER
 
@@ -89,27 +95,5 @@ if CLIENT then
 		end
 
 		return self.BaseClass.GetViewModelPosition(self, pos, ang)
-	end
-
-	local matScope = Material("zombiesurvival/scope")
-	function SWEP:DrawHUDBackground()
-		if self:IsScoped() then
-			local scrw, scrh = ScrW(), ScrH()
-			local size = math.min(scrw, scrh)
-			surface.SetMaterial(matScope)
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.DrawTexturedRect((scrw - size) * 0.5, (scrh - size) * 0.5, size, size)
-			surface.SetDrawColor(0, 0, 0, 255)
-			if scrw > size then
-				local extra = (scrw - size) * 0.5
-				surface.DrawRect(0, 0, extra, scrh)
-				surface.DrawRect(scrw - extra, 0, extra, scrh)
-			end
-			if scrh > size then
-				local extra = (scrh - size) * 0.5
-				surface.DrawRect(0, 0, scrw, extra)
-				surface.DrawRect(0, scrh - extra, scrw, extra)
-			end
-		end
 	end
 end

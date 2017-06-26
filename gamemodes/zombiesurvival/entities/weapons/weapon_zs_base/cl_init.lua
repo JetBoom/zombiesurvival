@@ -15,6 +15,8 @@ SWEP.HUD3DScale = 0.01
 SWEP.HUD3DBone = "base"
 SWEP.HUD3DAng = Angle(180, 0, 0)
 
+local matScope = Material("zombiesurvival/scope")
+
 function SWEP:Deploy()
 	return true
 end
@@ -149,7 +151,7 @@ function SWEP:GetIronsightsDeltaMultiplier()
 	local bIron = self:GetIronsights()
 	local fIronTime = self.fIronTime or 0
 
-	if not bIron and fIronTime < CurTime() - 0.25 then 
+	if not bIron and fIronTime < CurTime() - 0.25 then
 		return 0
 	end
 
@@ -171,10 +173,10 @@ function SWEP:CalcViewModelView(vm, oldpos, oldang, pos, ang)
 		self.bLastIron = bIron
 		self.fIronTime = CurTime()
 
-		if bIron then 
+		if bIron then
 			self.SwayScale = 0.3
 			self.BobScale = 0.1
-		else 
+		else
 			self.SwayScale = 2.0
 			self.BobScale = 1.5
 		end
@@ -268,4 +270,49 @@ function SWEP:DrawWorldModel()
 	if owner:IsValid() and owner.ShadowMan then return end
 
 	self:Anim_DrawWorldModel()
+end
+
+--This function updates the viewmodel postion and fov when the scope is active.
+--The normal ironsightspos is used to position the scope in the center of the screen
+--when scoping in. However, this leads to the gun muzzle being too close to the center
+--of the screen and so bullets appear to from the center of the scope rather than from the gun barrel.
+--The ScopedPos is just the ironsightsPos but moved downwards so bullets are fired from lower down.
+--
+--Due to a current bug viewmodels flip upside down at high fovs, meaning when scoping by changing the
+--player's fov the viewmodel flips and bullets appear to be fired from above. This method also
+--sets the viewmodel fov to a high value meaning it flips again, cancelling out the effect.
+function SWEP:UpdateViewmodelPosition()
+	if self:IsScoped() then
+		self.IronSightsPos = self.ScopedPos
+		self.ViewModelFOV = self.ScopedFOV
+		self.Owner:DrawViewModel(false)
+	else
+		self.IronSightsPos = self.UnscopedPos
+		self.ViewModelFOV = self.UnscopedFOV
+		self.Owner:DrawViewModel(true)
+	end
+end
+
+function SWEP:DrawHUDBackground()
+	if self.IsScoped ~= nil then
+		if self:IsScoped() then
+			local scrw, scrh = ScrW(), ScrH()
+			local size = math.min(scrw, scrh)
+			surface.SetMaterial(matScope)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect((scrw - size) * 0.5, (scrh - size) * 0.5, size, size)
+			surface.SetDrawColor(0, 0, 0, 255)
+			if scrw > size then
+				local extra = (scrw - size) * 0.5
+				surface.DrawRect(0, 0, extra, scrh)
+				surface.DrawRect(scrw - extra, 0, extra, scrh)
+			end
+			if scrh > size then
+				local extra = (scrh - size) * 0.5
+				surface.DrawRect(0, 0, scrw, extra)
+				surface.DrawRect(0, scrh - extra, scrw, extra)
+			end
+		end
+		self:UpdateViewmodelPosition()
+	end
 end
