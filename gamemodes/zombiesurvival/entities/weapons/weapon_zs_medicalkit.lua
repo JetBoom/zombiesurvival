@@ -122,7 +122,7 @@ function SWEP:Deploy()
 end
 
 function SWEP:Holster()
-	if CLIENT then
+	if CLIENT and self.Owner == LocalPlayer() then
 		hook.Remove("PostPlayerDraw", "PostPlayerDrawMedical")
 		GAMEMODE.MedicalAura = false
 	end
