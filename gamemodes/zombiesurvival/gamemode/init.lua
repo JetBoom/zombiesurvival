@@ -82,7 +82,7 @@ include("sv_sigils.lua")
 
 include("sv_zombieescape.lua")
 
-include("downloads.lua")
+include("sv_downloads.lua")
 
 
 if file.Exists(GM.FolderName.."/gamemode/maps/"..game.GetMap()..".lua", "LUA") then
