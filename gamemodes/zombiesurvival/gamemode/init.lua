@@ -83,6 +83,7 @@ include("sv_sigils.lua")
 include("sv_zombieescape.lua")
 
 include("sv_downloads.lua")
+include("sv_redeem.lua")
 
 
 if file.Exists(GM.FolderName.."/gamemode/maps/"..game.GetMap()..".lua", "LUA") then
@@ -1536,35 +1537,7 @@ function GM:GetDynamicSpawning()
 	return self.DynamicSpawning
 end
 
-function GM:PlayerRedeemed(pl, silent, noequip)
-	pl:RemoveStatus("overridemodel", false, true)
 
-	pl:ChangeTeam(TEAM_HUMAN)
-	if not noequip then pl.m_PreRedeem = true end
-	pl:UnSpectateAndSpawn()
-	pl.m_PreRedeem = nil
-	pl:DoHulls()
-
-	local frags = pl:Frags()
-	if frags < 0 then
-		pl:SetFrags(frags * 5)
-	else
-		pl:SetFrags(0)
-	end
-	pl:SetDeaths(0)
-
-	pl.DeathClass = nil
-	pl:SetZombieClass(self.DefaultZombieClass)
-
-	pl.SpawnedTime = CurTime()
-
-	if not silent then
-		net.Start("zs_playerredeemed")
-			net.WriteEntity(pl)
-			net.WriteString(pl:Name())
-		net.Broadcast()
-	end
-end
 
 function GM:PlayerDisconnected(pl)
 	pl.Disconnecting = true
