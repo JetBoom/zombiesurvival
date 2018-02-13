@@ -325,6 +325,7 @@ function GM:SetupSpawnPoints()
 
 	team.SetSpawnPoint(TEAM_UNDEAD, ztab)
 	team.SetSpawnPoint(TEAM_HUMAN, htab)
+	team.SetSpawnPoint(TEAM_REDEEMER, htab)
 	team.SetSpawnPoint(TEAM_SPECTATOR, htab)
 
 	self.RedeemSpawnPoints = ents.FindByClass("info_player_redeemed")
