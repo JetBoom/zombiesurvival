@@ -69,6 +69,8 @@ AddCSLuaFile("vgui/pendboard.lua")
 AddCSLuaFile("vgui/pworth.lua")
 AddCSLuaFile("vgui/ppointshop.lua")
 AddCSLuaFile("vgui/zshealtharea.lua")
+AddCSLuaFile("vgui/changeteam.lua")
+
 
 include("shared.lua")
 include("sv_options.lua")
@@ -233,6 +235,7 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_pls_kill_pl")
 	util.AddNetworkString("zs_pl_kill_self")
 	util.AddNetworkString("zs_death")
+	util.AddNetworkString("zs_redeemmenu")
 end
 
 function GM:IsClassicMode()
