@@ -143,7 +143,7 @@ function GM:CreateGibs(pos, headoffset)
 end
 
 function GM:TryHumanPickup(pl, entity)
-	if self.ZombieEscape or pl.NoObjectPickup or not pl:Alive() or pl:Team() ~= TEAM_HUMAN then return end
+	if self.ZombieEscape or pl.NoObjectPickup or not pl:Alive() or pl:Team() == TEAM_UNDEAD then return end
 
 	if entity:IsValid() and not entity.m_NoPickup then
 		local entclass = string.sub(entity:GetClass(), 1, 12)
@@ -2555,7 +2555,7 @@ function GM:PlayerHurt(victim, attacker, healthremaining, damage)
 		victim:PlayPainSound()
 	end
 
-	if victim:Team() == TEAM_HUMAN then
+	if victim:Team() ~= TEAM_UNDEAD then
 		victim.BonusDamageCheck = CurTime()
 
 		if healthremaining < 75 and 1 <= healthremaining then
@@ -2569,6 +2569,7 @@ function GM:PlayerHurt(victim, attacker, healthremaining, damage)
 
 			local myteam = attacker:Team()
 			local otherteam = victim:Team()
+			if myteam == TEAM_REDEEMER then return end
 			if myteam ~= otherteam then
 				damage = math.min(damage, victim.m_PreHurtHealth)
 				victim.m_PreHurtHealth = healthremaining
@@ -2610,7 +2611,7 @@ end
 
 function GM:KeyPress(pl, key)
 	if key == IN_USE then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() then
+		if pl:Team() ~= TEAM_UNDEAD and pl:Alive() then
 			if pl:IsCarrying() then
 				pl.status_human_holding:RemoveNextFrame()
 			else
@@ -2619,14 +2620,14 @@ function GM:KeyPress(pl, key)
 		end
 	elseif key == IN_SPEED then
 		if pl:Alive() then
-			if pl:Team() == TEAM_HUMAN then
+			if pl:Team() ~= TEAM_UNDEAD then
 				pl:DispatchAltUse()
 			elseif pl:Team() == TEAM_UNDEAD then
 				pl:CallZombieFunction("AltUse")
 			end
 		end
 	elseif key == IN_ZOOM then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() and pl:IsOnGround() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
+		if pl:Team() ~= TEAM_UNDEAD and pl:Alive() and pl:IsOnGround() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
 			pl:SetBarricadeGhosting(true)
 		end
 	end
@@ -2682,7 +2683,7 @@ function GM:PlayerUse(pl, ent)
 		ent.m_AntiDoorSpam = CurTime() + 0.85
 	elseif entclass == "item_healthcharger" then
 		if pl:Team() == TEAM_UNDEAD then return false end
-	elseif pl:Team() == TEAM_HUMAN and not pl:IsCarrying() and pl:KeyPressed(IN_USE) then
+	elseif pl:Team() ~= TEAM_UNDEAD and not pl:IsCarrying() and pl:KeyPressed(IN_USE) then
 		self:TryHumanPickup(pl, ent)
 	end
 
