@@ -443,7 +443,7 @@ function meta:ShouldNotCollide(ent)
 			return self:Team() == ent:Team() or self.NoCollideAll or ent.NoCollideAll
 		end
 
-		return self:GetBarricadeGhosting() and ent:IsBarricadeProp() or self:Team() == TEAM_HUMAN and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD)
+		return self:GetBarricadeGhosting() and ent:IsBarricadeProp() or self:Team() ~= TEAM_UNDEAD and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD)
 	end
 
 	return false
@@ -552,7 +552,7 @@ function meta:PenetratingMeleeTrace(distance, size, prehit, start, dir)
 end
 
 function meta:ActiveBarricadeGhosting(override)
-	if self:Team() ~= TEAM_HUMAN and not override or not self:GetBarricadeGhosting() then return false end
+	if self:Team() == TEAM_HUMAN and self:Team() == TEAM_REDEEMER and not override or not self:GetBarricadeGhosting() then return false end
 
 	for _, ent in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
 		if ent and ent:IsValid() and self:ShouldBarricadeGhostWith(ent) then return true end

@@ -547,7 +547,7 @@ function GM:_Think()
 
 	self:PlayBeats(myteam, self:CachedFearPower())
 
-	if myteam == TEAM_HUMAN then
+	if myteam ~= TEAM_UNDEAD then
 		local wep = MySelf:GetActiveWeapon()
 		if wep:IsValid() and wep.GetIronsights and wep:GetIronsights() then
 			self.FOVLerp = math.Approach(self.FOVLerp, wep.IronsightsMultiplier or 0.6, FrameTime() * 4)

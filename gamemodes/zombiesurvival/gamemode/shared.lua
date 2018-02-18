@@ -64,9 +64,9 @@ GM.EndRound = false
 GM.StartingWorth = 100
 GM.ZombieVolunteers = {}
 
-team.SetUp(TEAM_ZOMBIE, "The Undead", Color(0, 255, 0, 255))
+team.SetUp(TEAM_ZOMBIE, "The Undead", Color(255, 0, 0, 255))
 team.SetUp(TEAM_SURVIVORS, "Survivors", Color(0, 160, 255, 255))
-team.SetUp(TEAM_REDEEMERS, "Bandits", Color(255, 165, 0, 255))
+team.SetUp(TEAM_REDEEMERS, "Redeemers", Color(255, 154, 0, 255))
 
 
 local validmodels = player_manager.AllValidModels()
@@ -366,7 +366,7 @@ function GM:ShouldCollide(enta, entb)
 end
 
 function GM:Move(pl, move)
-	if pl:Team() == TEAM_HUMAN then
+	if pl:Team() ~= TEAM_UNDEAD then
 		if pl:GetBarricadeGhosting() then
 			move:SetMaxSpeed(36)
 			move:SetMaxClientSpeed(36)

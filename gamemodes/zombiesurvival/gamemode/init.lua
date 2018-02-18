@@ -734,11 +734,20 @@ function GM:Think()
 		if pl:GetBarricadeGhosting() then
 			pl:BarricadeGhostingThink()
 		end
+	end
+		local humans1 = team.GetPlayers(TEAM_REDEEMER)
+	for _, pl in pairs(humans1) do
+		if pl:Team() == TEAM_REDEEMER then
+			if pl:GetBarricadeGhosting() then
+				pl:BarricadeGhostingThink()
+			end
 
 		if pl.m_PointQueue >= 1 and time >= pl.m_LastDamageDealt + 3 then
 			pl:PointCashOut((pl.m_LastDamageDealtPosition or pl:GetPos()) + Vector(0, 0, 32), FM_NONE)
 		end
 	end
+end	
+
 
 	if wave == 0 then
 		self:CalculateZombieVolunteers()
