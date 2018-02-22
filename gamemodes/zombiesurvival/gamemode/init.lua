@@ -265,7 +265,7 @@ function GM:ShowHelp(pl)
 end
 
 function GM:ShowTeam(pl)
-	if pl:Team() == TEAM_HUMAN and not self.ZombieEscape then
+	if pl:Team() ~= TEAM_UNDEAD and not self.ZombieEscape then
 		pl:SendLua(self:GetWave() > 0 and "GAMEMODE:OpenPointsShop()" or "MakepWorth()")
 	end
 end
@@ -1394,7 +1394,7 @@ local function groupsort(a, b)
 	return #a > #b
 end
 function GM:AttemptHumanDynamicSpawn(pl)
-	if pl:IsValid() and pl:IsPlayer() and pl:Alive() and pl:Team() == TEAM_HUMAN and self.DynamicSpawning then
+	if pl:IsValid() and pl:IsPlayer() and pl:Alive() and pl:Team() ~= TEAM_UNDEAD and self.DynamicSpawning then
 		local groups = self:GetTeamRallyGroups(TEAM_HUMAN)
 		table.sort(groups, groupsort)
 		for i=1, #groups do
@@ -1559,7 +1559,7 @@ function GM:PlayerDisconnected(pl)
 
 	self.PreviouslyDied[uid] = CurTime()
 
-	if pl:Team() == TEAM_HUMAN then
+	if pl:Team() ~= TEAM_UNDEAD then
 		pl:DropAll()
 	elseif pl:Team() == TEAM_UNDEAD then
 		self.StoredUndeadFrags[uid] = pl:Frags()
@@ -1634,7 +1634,7 @@ function GM:OnNailRemoved(nail, ent1, ent2, remover)
 
 	if remover and remover:IsValid() and remover:IsPlayer() then
 		local deployer = nail:GetDeployer()
-		if deployer:IsValid() and deployer ~= remover and deployer:Team() == TEAM_HUMAN then
+		if deployer:IsValid() and deployer ~= remover and deployer:Team() ~= TEAM_UNDEAD then
 			PrintTranslatedMessage(HUD_PRINTCONSOLE, "nail_removed_by", remover:Name(), deployer:Name())
 		end
 	end
@@ -2031,7 +2031,7 @@ function GM:PlayerDeathThink(pl)
 end
 
 function GM:ShouldAntiGrief(ent, attacker, dmginfo, health)
-	return ent.m_AntiGrief and self.GriefMinimumHealth <= health and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and not dmginfo:IsExplosionDamage()
+	return ent.m_AntiGrief and self.GriefMinimumHealth <= health and attacker:IsPlayer() and attacker:Team() ~= TEAM_UNDEAD and not dmginfo:IsExplosionDamage()
 end
 
 function GM:PropBreak(attacker, ent)
@@ -2057,7 +2057,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 		dmginfo:SetDamage(dmginfo:GetDamage() * 3)
 	end
 
-	if ent.GetObjectHealth and not (attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
+	if ent.GetObjectHealth and not (attacker:IsPlayer() and attacker:Team() ~= TEAM_UNDEAD) then
 		ent.m_LastDamaged = CurTime()
 	end
 
@@ -2087,7 +2087,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 				ent.LastExplosionTime = CurTime()
 			end
 		elseif inflictor:IsPlayer() and string.sub(ent:GetClass(), 1, 12) == "prop_physics" then -- Physics object damaged by player.
-			if inflictor:Team() == TEAM_HUMAN then
+			if inflictor:Team() ~= TEAM_UNDEAD then
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() and phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) and inflictor:GetCarry() ~= ent or ent._LastDropped and CurTime() < ent._LastDropped + 3 and ent._LastDroppedBy ~= inflictor then -- Human player damaged a physics object while it was being carried or recently carried. They weren't the carrier.
 					dmginfo:SetDamage(0)
@@ -2112,7 +2112,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	if ent:IsPlayer() then
 		dispatchdamagedisplay = true
 	elseif ent.PropHealth then -- A prop that was invulnerable and converted to vulnerable.
-		if self.NoPropDamageFromHumanMelee and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and inflictor.IsMelee then
+		if self.NoPropDamageFromHumanMelee and attacker:IsPlayer() and attacker:Team() ~= TEAM_UNDEAD and inflictor.IsMelee then
 			dmginfo:SetDamage(0)
 			return
 		end
@@ -2760,7 +2760,7 @@ function GM:HumanKilledZombie(pl, attacker, inflictor, dmginfo, headshot, suicid
 
 	local totaldamage = 0
 	for otherpl, dmg in pairs(pl.DamagedBy) do
-		if otherpl:IsValid() and otherpl:Team() == TEAM_HUMAN then
+		if otherpl:IsValid() and otherpl:Team() ~= TEAM_UNDEAD then
 			totaldamage = totaldamage + dmg
 		end
 	end
@@ -2769,7 +2769,7 @@ function GM:HumanKilledZombie(pl, attacker, inflictor, dmginfo, headshot, suicid
 	local halftotaldamage = totaldamage / 2
 	local mostdamager
 	for otherpl, dmg in pairs(pl.DamagedBy) do
-		if otherpl ~= attacker and otherpl:IsValid() and otherpl:Team() == TEAM_HUMAN and dmg > mostassistdamage and dmg >= halftotaldamage then
+		if otherpl ~= attacker and otherpl:IsValid() and otherpl:Team() ~= TEAM_UNDEAD and dmg > mostassistdamage and dmg >= halftotaldamage then
 			mostassistdamage = dmg
 			mostdamager = otherpl
 		end
@@ -2911,7 +2911,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 				end
 			end
 
-			if not revive and attacker:Team() == TEAM_HUMAN then
+			if not revive and attacker:Team() ~= TEAM_UNDEAD then
 				assistpl = gamemode.Call("HumanKilledZombie", pl, attacker, inflictor, dmginfo, headshot, suicide)
 			end
 		end
@@ -3051,7 +3051,7 @@ end
 concommand.Add("zsdropweapon", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) or CurTime() < (sender.NextWeaponDrop or 0) or GAMEMODE.ZombieEscape then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) or CurTime() < (sender.NextWeaponDrop or 0) or GAMEMODE.ZombieEscape then return end
 	sender.NextWeaponDrop = CurTime() + 0.15
 
 	local currentwep = sender:GetActiveWeapon()
@@ -3069,7 +3069,7 @@ end)
 concommand.Add("zsemptyclip", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) then return end
 
 	sender.NextEmptyClip = sender.NextEmptyClip or 0
 	if sender.NextEmptyClip <= CurTime() then
@@ -3094,7 +3094,7 @@ end)
 concommand.Add("zsgiveammo", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not sender:IsValid() or not sender:Alive() or sender:Team() ~= TEAM_HUMAN then return end
+	if not sender:IsValid() or not sender:Alive() or sender:Team() == TEAM_UNDEAD then return end
 
 	local ammotype = arguments[1]
 	if not ammotype or #ammotype == 0 or not GAMEMODE.AmmoCache[ammotype] then return end
@@ -3116,7 +3116,7 @@ concommand.Add("zsgiveammo", function(sender, command, arguments)
 		ent = sender:MeleeTrace(48, 2).Entity
 	end
 
-	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN and ent:Alive() then
+	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() then
 		local desiredgive = math.min(count, GAMEMODE.AmmoCache[ammotype])
 		if desiredgive >= 1 then
 			sender:RemoveAmmo(desiredgive, ammotype)
@@ -3140,7 +3140,7 @@ end)
 concommand.Add("zsgiveweapon", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) or GAMEMODE.ZombieEscape then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) or GAMEMODE.ZombieEscape then return end
 
 	local currentwep = sender:GetActiveWeapon()
 	if currentwep and currentwep:IsValid() then
@@ -3154,7 +3154,7 @@ concommand.Add("zsgiveweapon", function(sender, command, arguments)
 			ent = sender:MeleeTrace(48, 2).Entity
 		end
 
-		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN and ent:Alive() then
+		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() then
 			if not ent:HasWeapon(currentwep:GetClass()) then
 				sender:GiveWeaponByType(currentwep, ent, false)
 			else
@@ -3171,7 +3171,7 @@ end)
 concommand.Add("zsgiveweaponclip", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) then return end
 	
 	local currentwep = sender:GetActiveWeapon()
 	if currentwep and currentwep:IsValid() then
@@ -3185,7 +3185,7 @@ concommand.Add("zsgiveweaponclip", function(sender, command, arguments)
 			ent = sender:MeleeTrace(48, 2).Entity
 		end
 
-		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN and ent:Alive() then
+		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() then
 			if not ent:HasWeapon(currentwep:GetClass()) then
 				sender:GiveWeaponByType(currentwep, ent, true)
 			else
