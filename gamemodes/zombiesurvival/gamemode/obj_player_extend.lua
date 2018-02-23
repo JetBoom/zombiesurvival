@@ -326,7 +326,7 @@ function meta:SetSpeed(speed)
 end
 
 function meta:SetHumanSpeed(speed)
-	if self:Team() == TEAM_HUMAN then self:SetSpeed(speed) end
+	if self:Team() ~= TEAM_UNDEAD then self:SetSpeed(speed) end
 end
 
 function meta:ResetSpeed(noset, health)
@@ -483,7 +483,7 @@ end
 meta.OldSetHealth = FindMetaTable("Entity").SetHealth
 function meta:SetHealth(health)
 	self:OldSetHealth(health)
-	if self:Team() == TEAM_HUMAN and 1 <= health then
+	if self:Team() ~= TEAM_UNDEAD and 1 <= health then
 		self:ResetSpeed(nil, health)
 	end
 end
