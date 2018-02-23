@@ -3672,7 +3672,7 @@ function GM:PlayerSwitchFlashlight(pl, newstate)
 		return false
 	end
 
-	return pl:Team() == TEAM_HUMAN
+	return pl:Team() ~= TEAM_UNDEAD
 end
 
 function GM:PlayerStepSoundTime(pl, iType, bWalking)

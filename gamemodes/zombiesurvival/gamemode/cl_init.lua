@@ -224,7 +224,7 @@ function GM:HUDWeaponPickedUp(wep)
 end
 
 function GM:_HUDWeaponPickedUp(wep)
-	if MySelf:Team() == TEAM_HUMAN and not wep.NoPickupNotification then
+	if MySelf:Team() ~= TEAM_UNDEAD and not wep.NoPickupNotification then
 		self:Rewarded(wep:GetClass())
 	end
 end
@@ -334,7 +334,7 @@ end
 local matAura = Material("models/debug/debugwhite")
 local skip = false
 function GM.PostPlayerDrawMedical(pl)
-	if not skip and pl:Team() == TEAM_HUMAN and pl ~= LocalPlayer() then
+	if not skip and pl:Team() ~= TEAM_UNDEAD and pl ~= LocalPlayer() then
 		local eyepos = EyePos()
 		local dist = pl:NearestPoint(eyepos):Distance(eyepos)
 		if dist < MedicalAuraDistance then
@@ -424,7 +424,7 @@ function GM:DrawFearMeter(power, screenscale)
 	local rot = math.Clamp((0.5 - currentpower) + math.sin(RealTime() * 10) * 0.01, -0.5, 0.5) * 300
 	surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * wid * -0.0001), h - hei * 0.5 - math.abs(rot) * hei * 0.00015, wid, hei, rot)
 
-	if MySelf:Team() == TEAM_UNDEAD then
+	if MySelf:Team() ~= TEAM_UNDEAD then
 		if self:GetDynamicSpawning() and self:ShouldUseAlternateDynamicSpawn() then
 			local obs = MySelf:GetObserverTarget()
 			spawngreen = math.Approach(spawngreen, self:DynamicSpawnIsValid(obs and obs:IsValid() and obs:IsPlayer() and obs:Team() == TEAM_UNDEAD and obs or MySelf) and 1 or 0, FrameTime() * 4)
@@ -465,7 +465,7 @@ function GM:IsBabyMode()
 end
 
 function GM:PostRender()
-	if self.m_ZombieVision and MySelf:IsValid() and MySelf:Team() == TEAM_UNDEAD then
+	if self.m_ZombieVision and MySelf:IsValid() and MySelf:Team() ~= TEAM_HUMAN then
 		local eyepos = EyePos()
 		local eyedir = EyeAngles():Forward()
 		--local tr = util.TraceLine({start = eyepos, endpos = eyepos + eyedir * 128, mask = MASK_SOLID_BRUSHONLY})
@@ -1041,9 +1041,20 @@ function GM:LastHuman(pl)
 	self.TheLastHuman = pl
 
 	if not LASTHUMAN then
-		LASTHUMAN = true
+	
+	hook.Add( "PreDrawHalos", "ZS.PreDrawHalos.AddHalos", function()
+	if self.TheLastHuman then
+		if not IsValid(self.TheLastHuman) or LocalPlayer() == self.TheLastHuman or self.TheLastHuman:Team() == TEAM_UNDEAD then return end
+		
+		halo.Add({self.TheLastHuman},team.GetColor(self.TheLastHuman:Team()),1,1,2,true,true);
+		
+		end
+	end )
+	
+	LASTHUMAN = true
+	
 		timer.Simple(0.5, function() GAMEMODE:LastHumanMessage() end)
-	end
+	end	
 end
 
 function GM:LastHumanMessage()
@@ -1279,7 +1290,7 @@ function GM:_CreateMove(cmd)
 	end
 
 	local myteam = MySelf:Team()
-	if myteam == TEAM_HUMAN then
+	if myteam ~= TEAM_UNDEAD then
 		if MySelf:Alive() then
 			local lockon = self.HumanMenuLockOn
 			if lockon then
@@ -1373,9 +1384,9 @@ function GM:_PrePlayerDraw(pl)
 				local eyepos = EyePos()
 				local dist = pl:NearestPoint(eyepos):Distance(eyepos)
 				if dist < radius then
-					local blend = math.max((dist / radius) ^ 1.4, myteam == TEAM_HUMAN and 0.04 or 0.1)
+					local blend = math.max((dist / radius) ^ 1.4, myteam ~= TEAM_UNDEAD and 0.04 or 0.1)
 					render.SetBlend(blend)
-					if myteam == TEAM_HUMAN and blend < 0.4 then
+					if myteam ~= TEAM_UNDEAD and blend < 0.4 then
 						render.ModelMaterialOverride(matWhite)
 						render.SetColorModulation(0.2, 0.2, 0.2)
 						shadowman = true
@@ -1388,7 +1399,7 @@ function GM:_PrePlayerDraw(pl)
 
 	pl.ShadowMan = shadowman
 
-	if self.m_ZombieVision and MySelf:Team() == TEAM_UNDEAD and pl:Team() == TEAM_HUMAN and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
+	if (MySelf:KeyDown(IN_SPEED) and MySelf:Team() ~= TEAM_UNDEAD and pl:Team() ~= TEAM_UNDEAD and pl ~= MySelf) or self.m_ZombieVision and MySelf:Team() ~= TEAM_HUMAN and pl:Team() ~= TEAM_UNDEAD and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
 		undozombievision = true
 		local color = Color(255, 255, 255, 255)
 		local healthfrac = math.max(pl:Health(), 0) / pl:GetMaxHealth()
@@ -1559,12 +1570,12 @@ end
 
 function GM:KeyPress(pl, key)
 	if key == self.MenuKey then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() and not pl:IsHolding() then
+		if pl:Team() ~= TEAM_UNDEAD and pl:Alive() and not pl:IsHolding() then
 			gamemode.Call("HumanMenu")
 		end
 	elseif key == IN_SPEED then
 		if pl:Alive() then
-			if pl:Team() == TEAM_HUMAN then
+			if pl:Team() ~= TEAM_UNDEAD then
 				pl:DispatchAltUse()
 			elseif pl:Team() == TEAM_UNDEAD then
 				pl:CallZombieFunction("AltUse")
