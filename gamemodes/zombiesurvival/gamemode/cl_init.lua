@@ -1173,7 +1173,7 @@ function GM:PlayerBindPress(pl, bind, wasin)
 end
 
 function GM:_ShouldDrawLocalPlayer(pl)
-	return pl:Team() == TEAM_UNDEAD and (self.ZombieThirdPerson or pl:CallZombieFunction("ShouldDrawLocalPlayer")) or pl:IsPlayingTaunt()
+	return pl:Team() ~= TEAM_SPECTATOR and (self.ZombieThirdPerson or pl:CallZombieFunction("ShouldDrawLocalPlayer")) or pl:IsPlayingTaunt()
 end
 
 local roll = 0

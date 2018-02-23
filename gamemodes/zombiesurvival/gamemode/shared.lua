@@ -198,7 +198,7 @@ function GM:SetDynamicSpawning(onoff)
 end
 
 function GM:ValidMenuLockOnTarget(pl, ent)
-	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN and ent:Alive() then
+	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() then
 		local startpos = pl:EyePos()
 		local endpos = ent:NearestPoint(startpos)
 		if startpos:Distance(endpos) <= 48 and TrueVisible(startpos, endpos) then
@@ -429,7 +429,7 @@ function GM:PlayerCanBeHealed(pl)
 end
 
 function GM:PlayerCanPurchase(pl)
-	return pl:Team() == TEAM_HUMAN and self:GetWave() > 0 and pl:Alive() and pl:NearArsenalCrate()
+	return pl:Team() ~= TEAM_UNDEAD and self:GetWave() > 0 and pl:Alive() and pl:NearArsenalCrate()
 end
 
 local TEAM_SPECTATOR = TEAM_SPECTATOR

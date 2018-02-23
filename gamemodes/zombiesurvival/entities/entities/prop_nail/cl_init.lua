@@ -34,7 +34,7 @@ local matOutlineWhite = Material("white_outline")
 local ScaleOutline = 1.4
 local colNail = Color(0, 0, 5, 220)
 function ENT:DrawTranslucent()
-	local drawowner = MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN and (GAMEMODE.AlwaysShowNails or MySelf:KeyDown(IN_SPEED) or MySelf:TraceLine(256, MASK_SHOT).HitPos:Distance(self:GetPos()) <= 16)
+	local drawowner = MySelf:IsValid() and MySelf:Team() ~= TEAM_UNDEAD and (GAMEMODE.AlwaysShowNails or MySelf:KeyDown(IN_SPEED) or MySelf:TraceLine(256, MASK_SHOT).HitPos:Distance(self:GetPos()) <= 16)
 
 	if drawowner then
 		render.SuppressEngineLighting(true)
@@ -67,7 +67,7 @@ function ENT:DrawTranslucent()
 			local deployer = self:GetOwner()
 			if deployer:IsValid() then
 				displayowner = deployer:Name()
-				if deployer:Team() ~= TEAM_HUMAN or not deployer:Alive() then
+				if deployer:Team() == TEAM_UNDEAD or not deployer:Alive() then
 					displayowner = "(DEAD) "..displayowner
 					redname = true
 				end
