@@ -242,6 +242,10 @@ function GM:IsClassicMode()
 	return self.ClassicMode
 end
 
+function GM:IsRedeemMode()
+	return self.RedeemMode
+end
+
 function GM:IsBabyMode()
 	return self.BabyMode
 end

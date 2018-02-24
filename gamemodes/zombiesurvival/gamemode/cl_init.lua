@@ -460,6 +460,10 @@ function GM:IsClassicMode()
 	return GetGlobalBool("classicmode", false)
 end
 
+function GM:IsRedeemMode()
+	return GetGlobalBool("redeemmode", false)
+end
+
 function GM:IsBabyMode()
 	return GetGlobalBool("babymode", false)
 end
