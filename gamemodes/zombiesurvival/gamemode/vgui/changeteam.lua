@@ -4,7 +4,7 @@ function MakepRedeemMenu(silent)
  
   --local MainMenu
 
-timer.Simple(3, function() surface.PlaySound("vo/npc/Barney/ba_hurryup.wav") end)
+-- timer.Simple(3, function() surface.PlaySound("vo/npc/Barney/ba_hurryup.wav") end)
 
 
 	MainMenu = vgui.Create("DEXRoundedPanel")
@@ -30,7 +30,7 @@ timer.Simple(3, function() surface.PlaySound("vo/npc/Barney/ba_hurryup.wav") end
 	credittext:Dock(FILL)
 
 	myImage = vgui.Create("DImage", myParent)
-myImage:SetImage( "zombiesurvival/bandit.png" )
+-- myImage:SetImage( "zombiesurvival/bandit.png" )
 myImage:Center()
 myImage:SetTall(40)
 myImage:SizeToContents()
@@ -61,7 +61,7 @@ myImage:DockPadding(0, 0, 0, 0)
     button.DoClick = function()
     MainMenu:Remove()
 	myImage:Remove()
-	timer.Simple(20, function() surface.PlaySound("buttons/button10.wav") MainMenu:Remove() myImage:Remove() end)
+	-- timer.Simple(20, function() surface.PlaySound("buttons/button10.wav") MainMenu:Remove() myImage:Remove() end)
         end
 	MainMenu:MakePopup()
 end

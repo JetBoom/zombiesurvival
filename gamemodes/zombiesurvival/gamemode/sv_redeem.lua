@@ -20,8 +20,8 @@ pl:SendLua("MakepRedeemMenu()")
     pl:Give("weapon_zs_arsenalcrate")
 	pl:SetModel( "models/player/skeleton.mdl" )
     --pl:SetWalkSpeed( 300 )
-	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/beats/placeholder/redeem.mp3", 100, 100, 1) end )
-	timer.Simple( 0.8, function() pl:EmitSound("zombiesurvival/beats/placeholder/swag.ogg", 100, 100, 1) end )
+	--timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/beats/placeholder/redeem.mp3", 100, 100, 1) end )
+	--timer.Simple( 0.8, function() pl:EmitSound("zombiesurvival/beats/placeholder/swag.ogg", 100, 100, 1) end )
     pl.m_PreRedeem = nil
 
 	local frags = pl:Frags()
