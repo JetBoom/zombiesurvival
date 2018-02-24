@@ -65,7 +65,7 @@ end
 function ENT:GiveToActivator(activator, caller)
 	if  not activator:IsPlayer()
 		or not activator:Alive()
-		or activator:Team() ~= TEAM_HUMAN
+		or activator:Team() == TEAM_UNDEAD
 		or self.Removing
 		or (activator:KeyDown(GAMEMODE.UtilityKey) and not self.Forced)
 		or self.NoPickupsTime and CurTime() < self.NoPickupsTime and self.NoPickupsOwner ~= activator then 

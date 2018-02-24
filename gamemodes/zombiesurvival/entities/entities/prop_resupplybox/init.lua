@@ -108,7 +108,7 @@ end
 
 local NextUse = {}
 function ENT:Use(activator, caller)
-	if activator:Team() ~= TEAM_HUMAN or not activator:Alive() or GAMEMODE:GetWave() <= 0 then return end
+	if activator:Team() == TEAM_UNDEAD or not activator:Alive() or GAMEMODE:GetWave() <= 0 then return end
 
 	if not self:GetObjectOwner():IsValid() then
 		self:SetObjectOwner(activator)
