@@ -1206,6 +1206,7 @@ function GM:RestartGame()
 		pl:DoHulls()
 		pl:SetZombieClass(self.DefaultZombieClass)
 		pl.DeathClass = nil
+		timer.Destroy("AddPoints_" .. pl:SteamID()) -- Destroy Redeemer points.
 	end
 
 	self:SetWave(0)
@@ -1565,6 +1566,7 @@ function GM:PlayerDisconnected(pl)
 
 	if pl:Team() ~= TEAM_UNDEAD then
 		pl:DropAll()
+		timer.Destroy("AddPoints_" .. pl:SteamID()) -- Destroy Redeemer points.
 	elseif pl:Team() == TEAM_UNDEAD then
 		self.StoredUndeadFrags[uid] = pl:Frags()
 	end
