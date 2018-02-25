@@ -48,7 +48,7 @@ function ENT:Touch(ent)
 end
 
 function ENT:StartTouch(ent)
-	if self.On and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_HUMAN and not ent.NoAirBrush then
+	if self.On and ent:IsPlayer() and ent:Alive() and ent:Team() ~= TEAM_UNDEAD and not ent.NoAirBrush then
 		self:Enter(ent)
 	end
 end

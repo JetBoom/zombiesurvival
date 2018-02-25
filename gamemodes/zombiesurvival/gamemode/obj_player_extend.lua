@@ -18,7 +18,7 @@ function meta:Dismember(dismembermenttype)
 end
 
 function meta:HasWon()
-	if self:Team() == TEAM_HUMAN and self:GetObserverMode() == OBS_MODE_ROAMING then
+	if self:Team() ~= TEAM_UNDEAD and self:GetObserverMode() == OBS_MODE_ROAMING then
 		if SERVER then
 			local target = self:GetObserverTarget()
 			return target and target:IsValid() and target:GetClass() == "prop_obj_exit"

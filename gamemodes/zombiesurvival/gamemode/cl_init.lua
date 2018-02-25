@@ -709,7 +709,7 @@ function GM:_HUDPaint()
 
 	if myteam == TEAM_UNDEAD then
 		self:ZombieHUD()
-	elseif myteam == TEAM_HUMAN then
+	elseif myteam ~= TEAM_UNDEAD then
 		self:HumanHUD(screenscale)
 	end
 
