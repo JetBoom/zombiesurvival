@@ -120,7 +120,7 @@ end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/poisonheadcrab"
+CLASS.Icon = "zombiesurvival/killicons/acidcrab_hd"
 
 function CLASS:CreateMove(pl, cmd)
 	local wep = pl:GetActiveWeapon()

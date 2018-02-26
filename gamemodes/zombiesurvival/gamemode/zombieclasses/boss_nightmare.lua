@@ -86,7 +86,7 @@ end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/nightmare"
+CLASS.Icon = "zombiesurvival/killicons/nightmare_hd_2"
 
 local function CreateBoneOffsets(pl)
 	pl.m_NightmareBoneOffsetsNext = CurTime() + math.Rand(0.02, 0.1)

@@ -137,7 +137,7 @@ end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/zombie"
+CLASS.Icon = "zombiesurvival/killicons/freshdead_hd"
 
 function CLASS:PrePlayerDraw(pl)
 	render.SetColorModulation(0.5, 0.9, 0.5)

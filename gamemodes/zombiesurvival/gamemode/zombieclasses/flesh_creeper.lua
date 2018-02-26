@@ -182,7 +182,7 @@ end
 
 if not CLIENT then return end
 
---CLASS.Icon = "zombiesurvival/killicons/flesh_creeper"
+CLASS.Icon = "zombiesurvival/killicons/flesh_creeper_hd"
 
 local matFlesh = Material("models/flesh")
 function CLASS:PrePlayerDraw(pl)
