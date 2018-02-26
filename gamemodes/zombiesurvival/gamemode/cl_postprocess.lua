@@ -132,7 +132,8 @@ function GM:_RenderScreenspaceEffects()
 
 	fear = math_Approach(fear, self:CachedFearPower(), FrameTime())
 
-	if not self.PostProcessingEnabled then return end
+	if not self.PostProcessingEnabled and MySelf:Team() == TEAM_SPECTATOR then return end
+
 
 	if self.DrawPainFlash and self.HurtEffect > 0 then
 		DrawSharpen(1, math_min(6, self.HurtEffect * 3))
