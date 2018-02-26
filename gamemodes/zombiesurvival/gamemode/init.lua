@@ -2847,7 +2847,7 @@ function GM:PostZombieKilledHuman(pl, attacker, inflictor, dmginfo, headshot, su
 end
 
 local function DelayedChangeToZombie(pl)
-	if pl:IsValid() then
+	if pl:IsValid() and pl:Team() ~= TEAM_SPECTATOR then
 		if pl.ChangeTeamFrags then
 			pl:SetFrags(pl.ChangeTeamFrags)
 			pl.ChangeTeamFrags = 0
