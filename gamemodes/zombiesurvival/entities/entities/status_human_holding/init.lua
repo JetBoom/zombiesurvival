@@ -72,7 +72,7 @@ function ENT:OnRemove()
 
 		owner:DrawWorldModel(true)
 
-		if owner:Alive() and owner:Team() ~= TEAM_UNDEAD then
+		if owner:Alive() and owner:Team() == TEAM_HUMAN then
 			local wep = owner:GetActiveWeapon()
 			if wep:IsValid() then
 				wep:SendWeaponAnim(ACT_VM_DRAW)
@@ -131,7 +131,7 @@ function ENT:Think()
 
 	local object = self:GetObject()
 	local owner = self:GetOwner()
-	if not object:IsValid() or object:IsNailed() or not owner:IsValid() or not owner:Alive() or not owner:Team() ~= TEAM_UNDEAD then
+	if not object:IsValid() or object:IsNailed() or not owner:IsValid() or not owner:Alive() or not owner:Team() == TEAM_HUMAN then
 		self:Remove()
 		return
 	end

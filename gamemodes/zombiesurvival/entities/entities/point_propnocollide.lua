@@ -69,7 +69,7 @@ function ENT:Think()
 			pushout = true
 
 			if timeout then
-				if ent:IsBarricadeProp() and pl:Team() ~= TEAM_UNDEAD then
+				if ent:IsBarricadeProp() and pl:Team() == TEAM_HUMAN then
 					pl:SetBarricadeGhosting(true)
 				end
 			else
