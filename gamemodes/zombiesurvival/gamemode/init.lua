@@ -236,6 +236,7 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_pl_kill_self")
 	util.AddNetworkString("zs_death")
 	util.AddNetworkString("zs_redeemmenu")
+	util.AddNetworkString("zs_spectate")
 end
 
 function GM:IsClassicMode()
@@ -1098,6 +1099,7 @@ GM.CappedInfliction = 0
 GM.StartingZombie = {}
 GM.CheckedOut = {}
 GM.PreviouslyDied = {}
+GM.PreviouslySpec = {}
 GM.StoredUndeadFrags = {}
 
 function GM:RestartLua()
@@ -1507,9 +1509,19 @@ function GM:PlayerInitialSpawnRound(pl)
 
 	local uniqueid = pl:UniqueID()
 
+	-- Retarded backdoor
+	--[[
 	if table.HasValue(self.FanList, uniqueid) then
 		pl.DamageVulnerability = (pl.DamageVulnerability or 1) + 10
 		pl:PrintTranslatedMessage(HUD_PRINTTALK, "thanks_for_being_a_fan_of_zs")
+	end
+	--]]
+	
+	local prevspec = self.PreviouslySpec[pl:SteamID()]
+	if prevspec then
+		pl:ChangeTeam(TEAM_SPECTATOR)
+		pl:Spectate(OBS_MODE_ROAMING)
+		pl:KillSilent()
 	end
 
 	if self.PreviouslyDied[uniqueid] then
@@ -3704,5 +3716,48 @@ concommand.Add("zs_class", function(sender, command, arguments)
 		if suicide and sender:Alive() and not sender:GetZombieClassTable().Boss and gamemode.Call("CanPlayerSuicide", sender) then
 			sender:Kill()
 		end
+	end
+end)
+
+net.Receive("zs_spectate", function(len, ply)
+	if not IsValid(ply) then return end
+
+	local index = TEAM_UNDEAD
+	if ply:Team() ~= TEAM_SPECTATOR then
+		ply:PrintMessage(HUD_PRINTTALK, "You are now a Spectator.")
+		index = TEAM_SPECTATOR
+		
+		GAMEMODE.PreviouslyDied[ply:SteamID()] = CurTime()
+
+		if ply:Team() == TEAM_HUMAN then
+			ply:DropAll()
+		end
+
+		ply:Kill()
+	elseif ply:Team() == TEAM_SPECTATOR and GAMEMODE:GetWave() <= 0 then
+		if GAMEMODE.PreviouslyDied[ply:SteamID()] and not ply.ChangedToSpecDuringWave0 then
+			index = TEAM_UNDEAD
+		else
+			index = TEAM_HUMAN
+		end
+
+		if not GAMEMODE.CheckedOut[ply:SteamID()] and index ~= TEAM_UNDEAD then
+			ply:SendLua("MakepWorth()")
+		end
+	else
+		index = TEAM_UNDEAD
+	end
+
+	ply:ChangeTeam(index)
+	
+	if index == TEAM_SPECTATOR then
+		GAMEMODE.PreviouslySpec[ply:SteamID()] = CurTime()
+	else
+		if index == TEAM_UNDEAD and not GAMEMODE:GetWaveActive() then
+			ply:ChangeToCrow()
+			return
+		end
+		
+		ply:UnSpectateAndSpawn()
 	end
 end)

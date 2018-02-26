@@ -1669,6 +1669,11 @@ cvars.AddChangeCallback("zs_damagefloaters", function(cvar, oldvalue, newvalue)
 	DamageFloaters = newvalue ~= "0"
 end)
 
+concommand.Add("spectate", function()
+	net.Start("zs_spectate")
+	net.SendToServer()
+end)
+
 net.Receive("zs_legdamage", function(length)
 	LocalPlayer().LegDamage = net.ReadFloat()
 end)
