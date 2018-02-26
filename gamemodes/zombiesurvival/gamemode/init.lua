@@ -802,7 +802,7 @@ end
 -- We calculate the volunteers. If the list changed then broadcast the new list.
 function GM:CalculateZombieVolunteers()
 	local volunteers = {}
-	local allplayers = player.GetAll()
+	local allplayers = team.GetPlayers(TEAM_HUMAN)
 	self:SortZombieSpawnDistances(allplayers)
 	for i = 1, self:GetDesiredStartingZombies() do
 		volunteers[i] = allplayers[i]

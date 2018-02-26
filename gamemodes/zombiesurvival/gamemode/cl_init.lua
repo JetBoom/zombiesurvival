@@ -1404,7 +1404,7 @@ function GM:_PrePlayerDraw(pl)
 
 	pl.ShadowMan = shadowman
 
-	if (MySelf:KeyDown(IN_SPEED) and MySelf:Team() ~= TEAM_UNDEAD and pl:Team() ~= TEAM_UNDEAD and pl ~= MySelf) or self.m_ZombieVision and MySelf:Team() ~= TEAM_HUMAN and pl:Team() ~= TEAM_UNDEAD and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
+	if (MySelf:KeyDown(IN_SPEED) and MySelf:Team() ~= TEAM_UNDEAD and MySelf:Alive() and pl:Team() ~= TEAM_UNDEAD and pl ~= MySelf) or self.m_ZombieVision and MySelf:Team() ~= TEAM_HUMAN and pl:Team() ~= TEAM_UNDEAD and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
 		undozombievision = true
 		local color = Color(255, 255, 255, 255)
 		local healthfrac = math.max(pl:Health(), 0) / pl:GetMaxHealth()
