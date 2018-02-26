@@ -9,12 +9,13 @@ if not silent then
 	end
 
 	pl:RemoveStatus("overridemodel", false, true)
-pl:SendLua("MakepRedeemMenu()")
+	pl:SendLua("MakepRedeemMenu()")
 	pl:ChangeTeam(TEAM_REDEEMER)
 	pl:SetPoints(150)
 	pl:DoHulls()
 	if not noequip then pl.m_PreRedeem = true end
 	pl:UnSpectateAndSpawn()
+	pl:Give("weapon_zs_fists")
 	pl:Give("weapon_zs_redeemers")
     pl:Give("weapon_zs_hammer")
     pl:Give("weapon_zs_arsenalcrate")
@@ -56,24 +57,19 @@ pl:SendLua("MakepRedeemMenu()")
 		pl:SetFrags(0)
 	end
 	pl:SetDeaths(0)
-
 	pl.DeathClass = nil
 	pl:SetZombieClass(self.DefaultZombieClass)
     pl:SetPoints(0)
 	pl.SpawnedTime = CurTime()
 	timer.Destroy("AddPoints_" .. pl:SteamID()) end
-
-
-end
+	end
 
 function GM:PlayerRespawn(pl, silent, noequip)
 
 	pl:RemoveStatus("overridemodel", false, true)
-
 	pl:ChangeTeam(TEAM_HUMAN)
 	pl:DoHulls()
 	pl:UnSpectateAndSpawn()
-	
 	pl:Give("weapon_zs_redeemers_dual")
 	pl:Give("weapon_zs_swissarmyknife")
 
@@ -84,13 +80,12 @@ function GM:PlayerRespawn(pl, silent, noequip)
 		pl:SetFrags(0)
 	end
 	pl:SetDeaths(0)
-
 	pl.DeathClass = nil
 	pl:SetZombieClass(self.DefaultZombieClass)
     pl:SetPoints(0)
 	pl.SpawnedTime = CurTime()
 	timer.Destroy("AddPoints_" .. pl:SteamID())
-end
+	end
 
 hook.Add("PostPlayerDeath", "PostPlayerDeath.Redeemer", function(ply)
     if ply:Team() == TEAM_REDEEMER or ply:Team() == TEAM_HUMAN then
@@ -99,19 +94,12 @@ hook.Add("PostPlayerDeath", "PostPlayerDeath.Redeemer", function(ply)
         ply:SetDeaths(0)
         GAMEMODE.StartingZombie[ply:UniqueID()] = true
         GAMEMODE.PreviouslyDied[ply:UniqueID()] = CurTime()
-ply:SetZombieClassName(Zombie)
-timer.Destroy("AddPoints_" .. ply:SteamID())
+	ply:SetZombieClassName(Zombie)
+	timer.Destroy("AddPoints_" .. ply:SteamID())
     end
 end)
 
 concommand.Add("zs_bandit", function(sender, command, arguments)
-    if sender:Team() ~= TEAM_REDEEMER then return end
-
-
-    --if gamemode.Call("PlayerRespawn", sender) then
-    
-        sender:ChangeTeam(TEAM_HUMAN)
-        
-    --end
-    
+    if sender:Team() ~= TEAM_REDEEMER then return end    
+    sender:ChangeTeam(TEAM_HUMAN)    
 end)
