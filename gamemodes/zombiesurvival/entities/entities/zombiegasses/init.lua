@@ -53,7 +53,3 @@ function ENT:AcceptInput(name, activator, caller, arg)
 
 	return true
 end
-
-function ENT:UpdateTransmitState()
-	return GAMEMODE:GetWave() == 0 and TRANSMIT_ALWAYS or TRANSMIT_PVS
-end
