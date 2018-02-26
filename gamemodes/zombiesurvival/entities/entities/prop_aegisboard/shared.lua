@@ -38,5 +38,5 @@ end
 
 function ENT:CanBePackedBy(pl)
 	local owner = self:GetObjectOwner()
-	return not owner:IsValid() or owner == pl or owner:Team() ~= TEAM_HUMAN or gamemode.Call("PlayerIsAdmin", pl)
+	return not owner:IsValid() or owner == pl or owner:Team() == TEAM_UNDEAD or gamemode.Call("PlayerIsAdmin", pl)
 end

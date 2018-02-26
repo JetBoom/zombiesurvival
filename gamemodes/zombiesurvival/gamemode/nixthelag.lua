@@ -37,9 +37,6 @@ hook.Add("Initialize", "NixTheLag", function()
 
 		-- Useless since we disabled widgets above.
 		hook.Remove("PostDrawEffects", "RenderWidgets")
-
-		-- Could screw with people's point shops but whatever.
-		hook.Remove("PostDrawEffects", "RenderHalos")
 	end
 end)
 

@@ -56,7 +56,7 @@ LANGUAGE.final_wave_sub                                                         
 LANGUAGE.wave_x_has_begun                                                       = "La vague %d a débuté!"
 LANGUAGE.x_unlocked                                                                     = "%s débloqué!"
 LANGUAGE.wave_x_is_over                                                         = "La vague %d est passée!"
-LANGUAGE.wave_x_is_over_sub                                                     = "Le nombre de zombies est en baisse ainsi qu'une réduction des prix de %d%%."
+LANGUAGE.wave_x_is_over_sub                                                     = "Le nombre de zombies est en baisse avec une réduction des prix de %d%%."
 LANGUAGE.you_are_x                                                                      = "Vous êtes %s!"
 LANGUAGE.x_has_risen_as_y                                                       = "%s s'est réveillé en tant que %s!!"
 LANGUAGE.x_has_risen                                                            = "%s s'est révéillé!"
@@ -66,10 +66,10 @@ LANGUAGE.you_are_already_a_x                                            = "Vous 
 LANGUAGE.you_will_spawn_as_a_x                                          = "Vous réapparaîtrez en tant qu'un %s."
 LANGUAGE.crafting_successful                                            = "Artisanat réussi!"
 LANGUAGE.x_crafted_y                                                            = "%s a fabriqué %s."
-LANGUAGE.escape_from_the_zombies                                        = "Échappez les zombies!"
+LANGUAGE.escape_from_the_zombies                                        = "Échappez aux zombies!"
 LANGUAGE.too_close_to_another_nail                                      = "Trop près d'un autre clou."
 LANGUAGE.object_too_damaged_to_be_used                          = "Cet objet est bien trop endommagé pour toute utilisation."
-LANGUAGE.thanks_for_being_a_fan_of_zs                           = "Merci d'être un fan de Zombie Survival!"
+LANGUAGE.thanks_for_being_a_fan_of_zs                           = "Merci d'être un fan du Zombie Survival!"
 LANGUAGE.cant_remove_nails_of_superior_player           = "Vous ne pouvez pas enlever le clou d'un joueur jouant mieux que vous."
 LANGUAGE.x_turned_on_noclip                                                     = "%s a activé le passe-murailles."
 LANGUAGE.x_turned_off_noclip                                            = "%s a désactivé le passe-murailles."
@@ -91,18 +91,18 @@ LANGUAGE.waiting_for_players                                            = "En at
 LANGUAGE.requires_x_people                                                      = "Requiert %d joueurs"
 LANGUAGE.packing_others_object                                          = "Emballage d'un objet appartenant à un autre joueur"
 LANGUAGE.packing                                                                        = "Emballage"
-LANGUAGE.ze_humans_are_frozen_until_x                           = "Les Humains sont gelés pendant %d secondes avant le début de la partie."
+LANGUAGE.ze_humans_are_frozen_until_x                           = "Les Humains seront dégelés %d secondes avant le début de la partie."
 LANGUAGE.loading                                                                        = "Chargement.."
 LANGUAGE.next_round_in_x                                                        = "Prochaine partie dans: %s"
 LANGUAGE.warning                                                                        = "Attention!"
 LANGUAGE.ok_and_no_reminder                                                     = "OK et ne plus afficher ce message"
-LANGUAGE.classic_mode_warning                                           = "Ce serveur héberge Zombie Survival en 'Mode Classique'\nLe Mode Classique est une option qui change entièrement la façon de jouer. Les modifications apportées sont:\n* Pas de classes de zombie. Tout le monde utilise le zombie standard.\n* Pas d'outils d'aide à la barricade tels que les tourelles ou les clous\n* Plus de vagues à moins longue durée\n\nCe n'est pas le Zombie Survival original!\n\n-- Les serveurs ayant le Mode Classique activé afficheront MODE CLASSIQUE en bas à gauche de l'écran --"
+LANGUAGE.classic_mode_warning                                           = "Ce serveur héberge Zombie Survival en 'Mode Classique'\nLe Mode Classique est une option qui change entièrement la façon de jouer. Les modifications apportées sont:\n* Pas de classes de zombie. Tout le monde utilise le zombie standard.\n* Pas d'outils d'aide à la barricade tels que les tourelles ou les clous\n* Plus de vagues à durée moins longue \n\nCe n'est pas le Zombie Survival original!\n\n-- Les serveurs ayant le Mode Classique activé afficheront MODE CLASSIQUE en bas à gauche de l'écran --"
 LANGUAGE.classic_mode                                                           = "MODE CLASSIQUE"
 LANGUAGE.resist_x                                                                       = "Résistance: %d%%"
 LANGUAGE.right_click_to_hammer_nail                                     = "Clic-droit pour clouer."
 LANGUAGE.nails_x                                                                        = "Clous: %d"
 LANGUAGE.resupply_box                                                           = "Caisse de réapprovisionnement"
-LANGUAGE.purchase_now                                                           = "Faites des achats!"
+LANGUAGE.purchase_now                                                           = "Faites vos achats!"
 LANGUAGE.integrity_x                                                            = "Intégrité: %d%%"
 LANGUAGE.empty                                                                          = "VIDE"
 LANGUAGE.manual_control                                                         = "CONTRÔLE MANUEL"
@@ -186,7 +186,7 @@ LANGUAGE.description_crow                                                       
 LANGUAGE.description_wilowisp                                           = "Parfois appelé l'Esprit des morts."
 LANGUAGE.description_zombie_torso                                       = "Rien à voir par ici, circulez."
 LANGUAGE.description_zombie_legs                                        = "Rien à voir par ici, circulez."
-LANGUAGE.description_wraith                                                     = "Un zombie ou une apparition?\nOn n'en sait peu sur lui à part le fait qu'il puisse se mettre invisible et découper les humains."
+LANGUAGE.description_wraith                                                     = "Un zombie ou une apparition?\nOn en sait peu sur lui à part le fait qu'il puisse se mettre invisible et découper les humains."
 LANGUAGE.description_flesh_beast                                        = "*en cours*"
 LANGUAGE.description_fast_zombie_legs                           = "Rien à voir par ici, circulez."
 LANGUAGE.description_chem_zombie                                        = "Le corps de ce zombie est extrêment instable.\nIl n'a rien en particulier sauf l'espoir d'exploser près d'un humain."
@@ -216,16 +216,16 @@ LANGUAGE.help_cat_survival                                                      
 LANGUAGE.help_cat_barricading                                           = "Barricades"
 LANGUAGE.help_cat_upgrades                                                      = "Amélirations"
 LANGUAGE.help_cat_being_a_zombie                                        = "Être un zombie"
-LANGUAGE.help_cont_introduction                                         = [[<p>    Bienvenue à Zombie Survival, le simulateur de survie (contre des zombies). ZS vous permet de combattre des invasions de zombies, créer des barricades, et même faire partie de la horde zombie.</p>
+LANGUAGE.help_cont_introduction                                         = [[<p>    Bienvenue sur le Zombie Survival, le simulateur de survie (contre des zombies). Le ZS vous permet de combattre des invasions de zombies, créer des barricades, et même faire partie de la horde zombie.</p>
  
-<p>Il y a deux équipes: les humains et les zombies. Les humains gagnent s'ils survivent toutes les vagues. Certains niveaux ont des objectifs spéciaux à compléter, ces derniers pouvant être facultatifs ou nécessaires.
+<p>Il y a deux équipes: les humains et les zombies. Les humains gagnent s'ils survivent à toutes les vagues. Certains niveaux ont des objectifs spéciaux à compléter, ces derniers pouvant être facultatifs ou nécessaires.
 Si un humain est tué, il devient un zombie, ce qui rend la tâche plus difficile pour les humains restants.</p>
  
 <p>Le but des zombies est de dévorer tous les humains, les transformant en zombies, causant la perte de tout les joueurs.
 Alternativement, un zombie peut dévorer quatre humains pour se racheter. Cela leur donne une seconde chance de survie.
 Le seul moyen de gagner, c'est de survivre toutes les vagues en tant qu'humain. Les zombies ne peuvent que perdre; ils peuvent en revanche entraîner la perte des autres joueurs!</p>
  
-<p>Un certain nombre de joueurs est calculé pour choisir les zombies initiaux. Ce nombre est affiché au centre de votre écran avant le début de la partie.</p>
+<p>Un certain nombre de joueurs est calculé pour choisir les zombies initiaux. Ce nombre est affiché au centre de votre écran avant au début de la partie.</p>
  
 <p><b>Utilisez les boutons ci-dessus pour avoir de l'aide plus spécifique.</b></p>
  

@@ -132,7 +132,8 @@ function GM:_RenderScreenspaceEffects()
 
 	fear = math_Approach(fear, self:CachedFearPower(), FrameTime())
 
-	if not self.PostProcessingEnabled then return end
+	if not self.PostProcessingEnabled and MySelf:Team() == TEAM_SPECTATOR then return end
+
 
 	if self.DrawPainFlash and self.HurtEffect > 0 then
 		DrawSharpen(1, math_min(6, self.HurtEffect * 3))
@@ -149,7 +150,7 @@ function GM:_RenderScreenspaceEffects()
 	end]]
 
 	if self.ColorModEnabled then
-		if not MySelf:Alive() and MySelf:GetObserverMode() ~= OBS_MODE_CHASE then
+		if MySelf:Team() ~= TEAM_SPECTATOR and not MySelf:Alive() and MySelf:GetObserverMode() ~= OBS_MODE_CHASE then
 			if not MySelf:HasWon() then
 				tColorModDead["$pp_colour_colour"] = (1 - math_min(1, CurTime() - self.LastTimeAlive)) * 0.5
 				DrawColorModify(tColorModDead)
@@ -214,7 +215,7 @@ function GM:_PostDrawOpaqueRenderables()
 				end
 			end
 		end
-	elseif MySelf:Team() == TEAM_HUMAN then
+	elseif MySelf:Team() ~= TEAM_UNDEAD then
 		self:DrawCraftingEntity()
 
 		local holding = MySelf.status_human_holding

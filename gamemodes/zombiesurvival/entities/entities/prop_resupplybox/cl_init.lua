@@ -10,6 +10,20 @@ function ENT:SetObjectHealth(health)
 	self:SetDTFloat(0, health)
 end
 
+function ENT:DrawHealthBar(percentage)
+	local y = -100
+	local maxbarwidth = 560
+	local barheight = 30
+	local barwidth = maxbarwidth * percentage
+	local startx = maxbarwidth * -0.5
+
+	surface.SetDrawColor(0, 0, 0, 220)
+	surface.DrawRect(startx, y, maxbarwidth, barheight)
+	surface.SetDrawColor((1 - percentage) * 255, percentage * 255, 0, 220)
+	surface.DrawRect(startx + 4, y + 4, barwidth - 8, barheight - 8)
+	surface.DrawOutlinedRect(startx, y, maxbarwidth, barheight)
+end
+
 local NextUse = 0
 local vOffset = Vector(16, 0, 0)
 local vOffset2 = Vector(-16, 0, 0)
@@ -39,8 +53,11 @@ function ENT:RenderInfo(pos, ang, owner)
 
 		draw.RoundedBox(32, -92, -50, 184, 100, color_black_alpha90)
 
-		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, 0, NextUse <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, 0, NextUse <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
 
+		local percentage = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
+		self:DrawHealthBar(percentage)
+		
 		if owner:IsValid() and owner:IsPlayer() then
 			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 40, owner == MySelf and COLOR_BLUE or COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
 		end

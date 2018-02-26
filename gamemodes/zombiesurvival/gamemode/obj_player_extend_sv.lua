@@ -560,7 +560,7 @@ function meta:SetMaxHealth(num)
 end
 
 function meta:PointCashOut(ent, fmtype)
-	if self.m_PointQueue >= 1 and self:Team() == TEAM_HUMAN then
+	if self.m_PointQueue >= 1 and self:Team() ~= TEAM_UNDEAD then
 		local points = math.floor(self.m_PointQueue)
 		self.m_PointQueue = self.m_PointQueue - points
 

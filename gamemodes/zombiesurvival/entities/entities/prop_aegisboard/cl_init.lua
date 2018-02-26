@@ -21,7 +21,7 @@ function ENT:DrawHealthBar(percentage)
 end
 
 function ENT:Draw()
-	if MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN then
+	if MySelf:IsValid() and MySelf:Team() ~= TEAM_UNDEAD then
 		local percentage = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
 		local ang = self:GetAngles()
 		ang:RotateAroundAxis(ang:Up(), 270)
@@ -31,7 +31,7 @@ function ENT:Draw()
 		local vOffset = self:GetForward() * self:OBBMaxs().x
 		local name
 		local owner = self:GetObjectOwner()
-		if owner:IsValid() and owner:IsPlayer() and owner:Team() == TEAM_HUMAN then
+		if owner:IsValid() and owner:IsPlayer() and owner:Team() ~= TEAM_UNDEAD then
 			name = owner:Name()
 		end
 

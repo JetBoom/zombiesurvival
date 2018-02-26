@@ -8,6 +8,21 @@ function ENT:SetObjectHealth(health)
 	self:SetDTFloat(0, health)
 end
 
+function ENT:DrawHealthBar(percentage)
+	local y = -60
+	local maxbarwidth = 560
+	local barheight = 30
+	local barwidth = maxbarwidth * percentage
+	local startx = maxbarwidth * -0.5
+
+	surface.SetDrawColor(0, 0, 0, 220)
+	surface.DrawRect(startx, y, maxbarwidth, barheight)
+	surface.SetDrawColor((1 - percentage) * 255, percentage * 255, 0, 220)
+	surface.DrawRect(startx + 4, y + 4, barwidth - 8, barheight - 8)
+	surface.DrawOutlinedRect(startx, y, maxbarwidth, barheight)
+end
+
+
 local colFlash = Color(30, 255, 30)
 function ENT:Draw()
 	self:DrawModel()
@@ -24,9 +39,12 @@ function ENT:Draw()
 
 		draw.SimpleText(translate.Get("arsenal_crate"), "ZS3D2DFont2", 0, 0, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-		if MySelf:Team() == TEAM_HUMAN and GAMEMODE:PlayerCanPurchase(MySelf) then
+		local percentage = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
+		self:DrawHealthBar(percentage)
+		
+		if MySelf:Team() ~= TEAM_UNDEAD and GAMEMODE:PlayerCanPurchase(MySelf) then
 			colFlash.a = math.abs(math.sin(CurTime() * 5)) * 255
-			draw.SimpleText(translate.Get("purchase_now"), "ZS3D2DFont2Small", 0, -64, colFlash, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText(translate.Get("purchase_now"), "ZS3D2DFont2Small", 0, -64, colFlash, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
 		end
 
 		if owner:IsValid() and owner:IsPlayer() then

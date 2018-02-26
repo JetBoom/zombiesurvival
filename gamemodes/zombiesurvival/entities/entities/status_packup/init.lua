@@ -22,7 +22,7 @@ function ENT:Think()
 	if pack:IsValid() and owner:TraceLine(64, MASK_SOLID, owner:GetMeleeFilter()).Entity == pack then
 		if not self:GetNotOwner() and pack.GetObjectOwner then
 			local packowner = pack:GetObjectOwner()
-			if packowner:IsValid() and packowner:Team() == TEAM_HUMAN and packowner ~= packer and not gamemode.Call("PlayerIsAdmin", packer) then
+			if packowner:IsValid() and packowner:Team() ~= TEAM_UNDEAD and packowner ~= packer and not gamemode.Call("PlayerIsAdmin", packer) then
 				self:SetNotOwner(true)
 			end
 		end
@@ -43,7 +43,7 @@ function ENT:Think()
 
 				if pack.GetObjectOwner then
 					local objowner = pack:GetObjectOwner()
-					if objowner:IsValid() and objowner:Team() == TEAM_HUMAN and objowner:IsValid() then
+					if objowner:IsValid() and objowner:Team() ~= TEAM_UNDEAD and objowner:IsValid() then
 						owner = objowner
 					end
 				end
