@@ -3751,6 +3751,7 @@ net.Receive("zs_spectate", function(len, ply)
 	ply:ChangeTeam(index)
 	
 	if index == TEAM_SPECTATOR then
+		ply:Spectate(OBS_MODE_ROAMING)
 		GAMEMODE.PreviouslySpec[ply:SteamID()] = CurTime()
 	else
 		if index == TEAM_UNDEAD and not GAMEMODE:GetWaveActive() then

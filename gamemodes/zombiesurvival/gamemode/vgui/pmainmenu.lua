@@ -142,7 +142,7 @@ function GM:ShowHelp()
 		local text = self:GetText()
 		if MySelf:Team() == TEAM_SPECTATOR and text == "Spectate" then
 			self:SetText("Un-Spectate")
-		elseif text == "Un-Spectate" then
+		elseif MySelf:Team() ~= TEAM_SPECTATOR and text == "Un-Spectate" then
 			self:SetText("Spectate")
 		end
 	end
