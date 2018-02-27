@@ -1,5 +1,5 @@
 -- Translated by Mr. Darkness (http://www.noxiousnet.com/forums/index.php?action=profile;u=6296)
--- Updated by xKito (http://steamcommunity.com/id/xkito123/)
+-- Updated by xKito (https://steamcommunity.com/profiles/76561198158864042)
 
 translate.AddLanguage("ru", "Russian")
 
@@ -28,6 +28,7 @@ LANGUAGE.press_lmb_to_spawn_on_them					= "Нажмите ЛКМ, чтобы п�
 LANGUAGE.press_lmb_to_spawn							= "Нажмите ЛКМ чтобы появиться"
 LANGUAGE.press_jump_to_free_roam					= "Нажмите ПРЫЖОК для свободного полёта"
 LANGUAGE.press_reload_to_spawn_at_normal_point		= "Нажмите ПЕРЕЗАРЯДКА чтобы появится на нормальном спавне"
+LANGUAGE.press_walk_to_spawn_as_x					= "Нажмите МЕДЛЕННЫЙ ШАГ чтобы появится как %s"
 LANGUAGE.observing_x								= "Вы смотрите на %s (%d)"
 LANGUAGE.waiting_for_next_wave						= "Ожидание начала следующей волны..."
 LANGUAGE.impossible									= "Это невозможно."
@@ -348,3 +349,7 @@ LANGUAGE.help_cont_being_a_zombie					= [[<p>Советы:
 ]]
 
 -- Place any custom stuff below here...
+
+LANGUAGE.redeemer_credit							= "Zombie Survival - created by William \"JetBoom\" Moodhe.             Zombie Survival: Bandits by MrCraigTunstall"
+LANGUAGE.redeemer_save								= "СТАТЬ ЧЕЛОВЕКОМ И СПАСТИ ЧЕЛОВЕЧЕСТВО"
+LANGUAGE.redeemer_kill								= "ОСТАТЬСЯ В КАЧЕСТВЕ БАНДИТА И ПОМОЧЬ ИЛИ УБИТЬ ЛЮДЕЙ"
