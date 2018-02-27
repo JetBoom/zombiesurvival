@@ -196,7 +196,7 @@ function MakepWorth()
 	local maxworth = GAMEMODE.StartingWorth
 	WorthRemaining = maxworth
 
-	local wid, hei = math.min(ScrW(), 720), ScrH() * 0.7
+	local wid, hei = math.min(ScrW(), 1024), ScrH() * 0.75
 
 	local frame = vgui.Create("DFrame")
 	pWorth = frame
@@ -204,10 +204,27 @@ function MakepWorth()
 	frame:SetDeleteOnClose(true)
 	frame:SetKeyboardInputEnabled(false)
 	frame:SetTitle(" ")
+	frame:SetDraggable(true)
+	if frame.btnClose and frame.btnClose:Valid() then frame.btnClose:SetVisible(true) frame.btnClose:SetTooltip("Press F2 to re-open the Worth Menu.") end
+	if frame.btnMinim and frame.btnMinim:Valid() then frame.btnMinim:SetVisible(false) end
+	if frame.btnMaxim and frame.btnMaxim:Valid() then frame.btnMaxim:SetVisible(false) end
+
+	
+	local headertext = vgui.Create("DLabel", frame)
+	headertext:SetText( "Select Your Survival Loadout" )
+	headertext:SetFont( "ZS3D2DFont" )
+	headertext:SetTextColor( COLOR_DARKRED )
+	headertext:CenterHorizontal()
+	headertext:SizeToContents() 
+	headertext:SetPos(wid * 0.5 - headertext:GetWide() * 0.5, 10)
+
 
 	local propertysheet = vgui.Create("DPropertySheet", frame)
-	propertysheet:StretchToParent(4, 24, 4, 50)
-	propertysheet.Paint = function() end
+	propertysheet:StretchToParent(12, 85, 12, 60) --yolo
+	propertysheet.Paint = function()
+
+		draw.RoundedBox(8, 0, 0, w, h, Color(25, 25, 25, 255))
+	end
 
 	local list = vgui.Create("DPanelList", propertysheet)
 	propertysheet:AddSheet("Favorites", list, "icon16/heart.png", false, false)
@@ -216,9 +233,6 @@ function MakepWorth()
 	list:SetSpacing(2)
 	list:SetPadding(2)
 
-	local savebutton = EasyButton(nil, "Save the current cart", 0, 10)
-	savebutton.DoClick = SaveDoClick
-	list:AddItem(savebutton)
 
 	local panfont = "ZSHUDFontSmall"
 	local panhei = 40
@@ -298,8 +312,8 @@ function MakepWorth()
 		propertysheet:AddSheet(catname, list, GAMEMODE.ItemCategoryIcons[catid], false, false)
 		list:EnableVerticalScrollbar(true)
 		list:SetWide(propertysheet:GetWide() - 16)
-		list:SetSpacing(2)
-		list:SetPadding(2)
+		list:SetSpacing(5)
+		list:SetPadding(0)
 
 		for i, tab in ipairs(GAMEMODE.Items) do
 			if tab.Category == catid and tab.WorthShop then
@@ -312,31 +326,70 @@ function MakepWorth()
 	end
 
 	local worthlab = EasyLabel(frame, "Worth: "..tostring(WorthRemaining), "ZSHUDFontSmall", COLOR_LIMEGREEN)
-	worthlab:SetPos(8, frame:GetTall() - worthlab:GetTall() - 8)
+	worthlab:SetPos(8, frame:GetTall() - worthlab:GetTall() - 50)
+	worthlab:AlignRight(20)
+	worthlab:AlignTop(88)
 	frame.WorthLab = worthlab
 
 	local checkout = vgui.Create("DButton", frame)
 	checkout:SetFont("ZSHUDFontSmall")
 	checkout:SetText("Checkout")
+	checkout:SetColor(COLOR_WHITE)
 	checkout:SizeToContents()
-	checkout:SetSize(130, 30)
-	checkout:AlignBottom(8)
+	checkout:SetSize(140, 40)
+	checkout:AlignBottom(10)
 	checkout:CenterHorizontal()
 	checkout.DoClick = CheckoutDoClick
+	checkout:SetTooltip("Self-Explanatory.")
 
-	local randombutton = vgui.Create("DButton", frame)
-	randombutton:SetText("Random")
-	randombutton:SetSize(64, 16)
-	randombutton:AlignBottom(8)
-	randombutton:AlignRight(8)
-	randombutton.DoClick = RandDoClick
-
+	local savebutton = vgui.Create("DButton", frame)
+	savebutton:SetText("Save Loadout")
+	savebutton:SetSize(130, 30)
+	savebutton:AlignBottom(10)
+	savebutton:MoveLeftOf(checkout, 15)
+	savebutton.DoClick = SaveDoClick
+	savebutton:SetTooltip("Use this to save your current cart(s) for easy checkout later!")
+	
 	local clearbutton = vgui.Create("DButton", frame)
-	clearbutton:SetText("Clear")
-	clearbutton:SetSize(64, 16)
-	clearbutton:AlignRight(8)
-	clearbutton:MoveAbove(randombutton, 8)
+	clearbutton:SetText("Clear Loadout")
+	clearbutton:SetSize(130, 30)
+	clearbutton:AlignBottom(10)
+	clearbutton:MoveLeftOf(savebutton, 15)
 	clearbutton.DoClick = ClearCartDoClick
+	clearbutton:SetTooltip("Clears all items out of your cart!")
+	
+	local randombutton = vgui.Create("DButton", frame)
+	randombutton:SetText("Random Loadout")
+	randombutton:SetSize(130, 30)
+	randombutton:AlignBottom(10)
+	randombutton:MoveLeftOf(clearbutton, 15)
+	randombutton.DoClick = RandDoClick
+	randombutton:SetTooltip("Using this will randomly give you a set of items instead of normal checkout.\n Also use this to close the worth menu.")
+	
+	local craftbutton = vgui.Create("DButton", frame)
+	craftbutton:SetText("GitHub")
+	craftbutton:SetSize(130, 30)
+	craftbutton:AlignBottom(10)
+	craftbutton:MoveRightOf(checkout, 15)
+	craftbutton.DoClick = function() gui.OpenURL("https://github.com/MrCraigTunstall/zombiesurvival") end
+	craftbutton:SetTooltip("This will take you to the modified Zombie Survival GitHub page.")
+	
+	local forumbutton = vgui.Create("DButton", frame)
+	forumbutton:SetText("Forums")
+	forumbutton:SetSize(130, 30)
+	forumbutton:AlignBottom(10)
+	forumbutton:MoveRightOf(craftbutton, 15)
+	forumbutton.DoClick = function() gui.OpenURL("https://voidresonance.com/") end
+	forumbutton:SetTooltip("This will take you to voidresonance.com.")
+	
+	local groupbutton = vgui.Create("DButton", frame)
+	groupbutton:SetText("Steam Group")
+	groupbutton:SetSize(130, 30)
+	groupbutton:AlignBottom(10)
+	groupbutton:MoveRightOf(forumbutton, 15)
+	groupbutton.DoClick = function() gui.OpenURL("http://steamcommunity.com/groups/voidresonance") end
+	groupbutton:SetTooltip("This will take you to our Void Resonance's Steam group!")
+	
 
 	if #GAMEMODE.SavedCarts == 0 then
 		propertysheet:SetActiveTab(propertysheet.Items[math.min(2, #propertysheet.Items)].Tab)
@@ -386,14 +439,15 @@ PANEL = {}
 
 function PANEL:Init()
 	self:SetText("")
-
+	
 	self:DockPadding(4, 4, 4, 4)
-	self:SetTall(48)
+	self:SetTall(64)
 
 	local mdlframe = vgui.Create("DEXRoundedPanel", self)
-	mdlframe:SetWide(self:GetTall() - 8)
+	mdlframe:SetWide(self:GetTall())
 	mdlframe:Dock(LEFT)
 	mdlframe:DockMargin(0, 0, 20, 0)
+	mdlframe:DockPadding(4, 4, 4, 4)
 
 	self.ModelPanel = vgui.Create("DModelPanel", mdlframe)
 	self.ModelPanel:Dock(FILL)
@@ -401,14 +455,18 @@ function PANEL:Init()
 	self.ModelPanel:DockMargin(0, 0, 0, 0)
 
 	self.NameLabel = EasyLabel(self, "", "ZSHUDFontSmall")
-	self.NameLabel:SetContentAlignment(4)
+	self.NameLabel:SetTextColor(COLOR_WHITE)
+	self.NameLabel:SetContentAlignment(5)
 	self.NameLabel:Dock(FILL)
+	self.NameLabel:DockMargin(0, 0, 0, 0)
+	
 
 	self.PriceLabel = EasyLabel(self, "", "ZSHUDFontTiny")
 	self.PriceLabel:SetWide(80)
 	self.PriceLabel:SetContentAlignment(6)
 	self.PriceLabel:Dock(RIGHT)
 	self.PriceLabel:DockMargin(8, 0, 4, 0)
+	--self.PriceLabel:SetFont("ZSHUDFontSmall")
 
 	self.ItemCounter = vgui.Create("ItemAmountCounter", self)
 
@@ -421,7 +479,6 @@ function PANEL:SetWorthID(id)
 	local tab = FindStartingItem(id)
 
 	if not tab then
-		self.ModelPanel:SetVisible(false)
 		self.ItemCounter:SetVisible(false)
 		self.NameLabel:SetText("")
 		return
@@ -431,11 +488,9 @@ function PANEL:SetWorthID(id)
 	if mdl then
 		self.ModelPanel:SetModel(mdl)
 		local mins, maxs = self.ModelPanel.Entity:GetRenderBounds()
-		self.ModelPanel:SetCamPos(mins:Distance(maxs) * Vector(0.75, 0.75, 0.5))
+		self.ModelPanel:SetCamPos(mins:Distance(maxs) * Vector(0.50, 0.75, 0.6))
 		self.ModelPanel:SetLookAt((mins + maxs) / 2)
 		self.ModelPanel:SetVisible(true)
-	else
-		self.ModelPanel:SetVisible(false)
 	end
 
 	if tab.SWEP or tab.Countables then
@@ -465,13 +520,12 @@ end
 function PANEL:Paint(w, h)
 	local outline
 	if self.Hovered then
-		outline = self.On and COLOR_GREEN or COLOR_GRAY
+		outline = self.On and COLOR_RED or Color(190, 190, 190, 180)
 	else
-		outline = self.On and COLOR_DARKGREEN or COLOR_DARKGRAY
+		outline = self.On and COLOR_DARKRED or Color(40, 40, 40, 180)
 	end
 
 	draw.RoundedBox(8, 0, 0, w, h, outline)
-	draw.RoundedBox(4, 4, 4, w - 8, h - 8, color_black)
 end
 
 function PANEL:DoClick(silent, force)
@@ -499,7 +553,6 @@ function PANEL:DoClick(silent, force)
 
 	pWorth.WorthLab:SetText("Worth: ".. WorthRemaining)
 	if WorthRemaining <= 0 then
-		pWorth.WorthLab:SetTextColor(COLOR_RED)
 		pWorth.WorthLab:InvalidateLayout()
 	elseif WorthRemaining <= GAMEMODE.StartingWorth * 0.25 then
 		pWorth.WorthLab:SetTextColor(COLOR_YELLOW)
@@ -510,5 +563,4 @@ function PANEL:DoClick(silent, force)
 	end
 	pWorth.WorthLab:SizeToContents()
 end
-
 vgui.Register("ZSWorthButton", PANEL, "DButton")
