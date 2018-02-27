@@ -350,6 +350,8 @@ LANGUAGE.help_cont_being_a_zombie					= [[<p>Советы:
 
 -- Place any custom stuff below here...
 
+-- Redeem Menu
+
 LANGUAGE.redeemer_credit							= "Zombie Survival - created by William \"JetBoom\" Moodhe.             Zombie Survival: Bandits by MrCraigTunstall"
 LANGUAGE.redeemer_save								= "СТАТЬ ЧЕЛОВЕКОМ И СПАСТИ ЧЕЛОВЕЧЕСТВО"
 LANGUAGE.redeemer_kill								= "ОСТАТЬСЯ В КАЧЕСТВЕ БАНДИТА И ПОМОЧЬ ИЛИ УБИТЬ ЛЮДЕЙ"
