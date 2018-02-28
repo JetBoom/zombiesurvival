@@ -212,7 +212,7 @@ function MakepWorth()
 	
 	local headertext = vgui.Create("DLabel", frame)
 	headertext:SetText( "Select Your Survival Loadout" )
-	headertext:SetFont( "ZS3D2DFont" )
+	headertext:SetFont( "ZS3D2DFontSmall" )
 	headertext:SetTextColor( COLOR_DARKRED )
 	headertext:CenterHorizontal()
 	headertext:SizeToContents() 
