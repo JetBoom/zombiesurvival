@@ -3755,7 +3755,6 @@ net.Receive("zs_spectate", function(len, ply)
 		GAMEMODE.PreviouslySpec[ply:SteamID()] = CurTime()
 	else
 		if index == TEAM_UNDEAD and not GAMEMODE:GetWaveActive() then
-			ply:ChangeToCrow()
 			return
 		end
 		
