@@ -235,5 +235,5 @@ if SERVER then
 end
 
 if CLIENT then
-	CLASS.Icon = "zombiesurvival/killicons/zombie"
+	CLASS.Icon = "zombiesurvival/killicons/zombie_hd"
 end

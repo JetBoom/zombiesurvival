@@ -83,7 +83,7 @@ function ENT:OnTakeDamage(dmginfo)
 end
 
 function ENT:Use(activator, caller)
-	local ishuman = activator:Team() == TEAM_HUMAN and activator:Alive()
+	local ishuman = activator:Team() ~= TEAM_UNDEAD and activator:Alive()
 
 	if not self.NoTakeOwnership and not self:GetObjectOwner():IsValid() and ishuman then
 		self:SetObjectOwner(activator)
