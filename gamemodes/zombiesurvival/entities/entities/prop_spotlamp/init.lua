@@ -92,8 +92,11 @@ function ENT:AltUse(activator, tr)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_spotlamp")
-	pl:GiveAmmo(1, "spotlamp")
+    	if pl:HasWeapon("weapon_zs_spotlamp") then
+		pl:GiveAmmo(1, "spotlamp")
+	else
+		pl:Give("weapon_zs_spotlamp")
+	end 
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
 

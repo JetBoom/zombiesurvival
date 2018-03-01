@@ -74,8 +74,12 @@ function ENT:AltUse(activator, tr)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_messagebeacon")
-	pl:GiveAmmo(1, "striderminigun")
+    	if pl:HasWeapon("weapon_zs_messagebeacon") then
+		pl:GiveAmmo(1, "striderminigun")
+	else
+		pl:Give("weapon_zs_messagebeacon")
+	end   
+	
 
 	pl:PushPackedItem(self:GetClass(), self.m_Health)
 

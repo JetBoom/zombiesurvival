@@ -149,11 +149,14 @@ GM:AddStartingItem("medgun", "Medic Gun", nil, ITEMCAT_TOOLS, 25, "weapon_zs_med
 GM:AddStartingItem("150mkit", "150 Medical Kit power", "150 extra power for the Medical Kit.", ITEMCAT_TOOLS, 15, nil, function(pl) pl:GiveAmmo(150, "Battery", true) end, "models/healthvial.mdl")
 GM:AddStartingItem("arscrate", "Arsenal Crate", nil, ITEMCAT_TOOLS, 15, "weapon_zs_arsenalcrate").Countables = "prop_arsenalcrate"
 GM:AddStartingItem("resupplybox", "Resupply Box", nil, ITEMCAT_TOOLS, 30, "weapon_zs_resupplybox").Countables = "prop_resupplybox"
-local item = GM:AddStartingItem("infturret", "Infrared Gun Turret", nil, ITEMCAT_TOOLS, 65, nil, function(pl)
+local item = GM:AddStartingItem("infturret", "Infrared Gun Turret", "This automated turret requires constant upkeep to be useful.\nPress PRIMARY ATTACK to deploy the turret.\nPress SECONDARY ATTACK and RELOAD to rotate the turret.\nPress USE on a deployed turret to give it some of your SMG ammunition.\nPress USE on a deployed turret with no owner (blue light) to reclaim it.",
+	ITEMCAT_TOOLS, 65, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 	pl:GiveAmmo(250, "smg1")
-end)
+end, "models/combine_turrets/floor_turret.mdl")
+item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
+item.NoClassicMode = true
 item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
 item.NoClassicMode = true
 local item = GM:AddStartingItem("manhack", "Manhack", nil, ITEMCAT_TOOLS, 20, "weapon_zs_manhack")
@@ -241,11 +244,13 @@ GM:AddPointShopItem("crphmr", "Carpenter's Hammer", nil, ITEMCAT_TOOLS, 20, "wea
 GM:AddPointShopItem("wrench", "Mechanic's Wrench", nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate", "Arsenal Crate", nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", "Resupply Box", nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
-local item = GM:AddPointShopItem("infturret", "Infrared Gun Turret", nil, ITEMCAT_TOOLS, 60, nil, function(pl)
+local item = GM:AddPointShopItem("infturret", "Infrared Gun Turret", "This automated turret requires constant upkeep to be useful.\nPress PRIMARY ATTACK to deploy the turret.\nPress SECONDARY ATTACK and RELOAD to rotate the turret.\nPress USE on a deployed turret to give it some of your SMG ammunition.\nPress USE on a deployed turret with no owner (blue light) to reclaim it.",
+	ITEMCAT_TOOLS, 65, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 	pl:GiveAmmo(250, "smg1")
-end)
+end, "models/combine_turrets/floor_turret.mdl")
+item.NoClassicMode = true
 item.NoClassicMode = true
 GM:AddPointShopItem("manhack", "Manhack", nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
 GM:AddPointShopItem("barricadekit", "'Aegis' Barricade Kit", nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
