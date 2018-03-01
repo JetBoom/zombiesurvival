@@ -137,16 +137,17 @@ function GM:ShowHelp()
 	but:DockPadding(0, 12, 0, 12)
 	but:Dock(TOP)
 	but.Think = function(self)
-		self.BaseClass.Think(self)
+	self.BaseClass.Think(self)
 		
-		local text = self:GetText()
-		if MySelf:Team() == TEAM_SPECTATOR and text == "Spectate" then
-			self:SetText("Un-Spectate")
+	local text = self:GetText()
+	if MySelf:Team() == TEAM_SPECTATOR and text == "Spectate" then
+		self:SetText("Un-Spectate")
 		elseif MySelf:Team() ~= TEAM_SPECTATOR and text == "Un-Spectate" then
-			self:SetText("Spectate")
+		self:SetText("Spectate")
 		end
 	end
-	but.DoClick = function() RunConsoleCommand("spectate") end
+	but.DoClick = function() RunConsoleCommand("spectate")
+	menu:Remove() end
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
