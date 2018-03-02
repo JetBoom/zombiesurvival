@@ -188,6 +188,8 @@ end
 
 if not CLIENT then return end
 
+CLASS.Icon = "zombiesurvival/killicons/zombiebaby_hd_4"
+
 function CLASS:ShouldDrawLocalPlayer()
 	return true
 end

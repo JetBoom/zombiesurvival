@@ -130,6 +130,8 @@ function GM:AddResources()
 	resource.AddFile( "materials/zombiesurvival/killicons/zombie_hd.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/zombine_hd.vmt" )
 	resource.AddFile( "materials/zombiesurvival/killicons/zombine_hd.vtf" )
+	resource.AddFile( "materials/zombiesurvival/killicons/zombiebaby_hd_4.vmt" )
+	resource.AddFile( "materials/zombiesurvival/killicons/zombiebaby_hd_4.vtf" )
 
 	resource.AddFile("models/weapons/v_aegiskit.mdl")
 
@@ -175,10 +177,10 @@ function GM:AddResources()
 
 	resource.AddFile("models/vinrax/player/doll_player.mdl")
 
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-01.ogg")
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-02.ogg")
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-03.ogg")
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-04.ogg")
+	resource.AddFile("sound/weapons/melee/golf_club/golf_hit-01.ogg")
+	resource.AddFile("sound/weapons/melee/golf_club/golf_hit-02.ogg")
+	resource.AddFile("sound/weapons/melee/golf_club/golf_hit-03.ogg")
+	resource.AddFile("sound/weapons/melee/golf_club/golf_hit-04.ogg")
 	resource.AddFile("sound/weapons/melee/crowbar/crowbar_hit-1.ogg")
 	resource.AddFile("sound/weapons/melee/crowbar/crowbar_hit-2.ogg")
 	resource.AddFile("sound/weapons/melee/crowbar/crowbar_hit-3.ogg")
