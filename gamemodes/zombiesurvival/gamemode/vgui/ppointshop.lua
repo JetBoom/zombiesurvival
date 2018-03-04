@@ -48,7 +48,8 @@ local ammonames = {
 	["smg1"] = "smgammo",
 	["ar2"] = "assaultrifleammo",
 	["357"] = "rifleammo",
-	["XBowBolt"] = "crossbowammo"
+	["XBowBolt"] = "crossbowammo",
+	["pulse"] = "pulseammo"
 }
 
 local warnedaboutammo = CreateClientConVar("_zs_warnedaboutammo", "0", true, false)
