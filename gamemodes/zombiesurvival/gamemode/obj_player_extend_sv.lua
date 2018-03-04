@@ -306,7 +306,11 @@ local function RemoveSkyCade(groundent, timername)
 
 	for _, pl in pairs(player.GetAll()) do
 		if pl:Alive() and pl:GetGroundEntity() == groundent then
+		if groundent:GetBarricadeRepairs() ~= 0 then
+			groundent:SetBarricadeRepairs(math.max(groundent:GetBarricadeRepairs() - 10, 0))
+			else
 			groundent:TakeDamage(3, groundent, groundent)
+			end			
 			pl:ViewPunch(Angle(math.Rand(-25, 25), math.Rand(-25, 25), math.Rand(-25, 25)))
 			if math.random(9) == 1 then
 				groundent:EmitSound("npc/strider/creak"..math.random(4)..".wav", 65, math.random(95, 105))
