@@ -169,7 +169,7 @@ GM:AddStartingItem("spotlamp", "Spot Lamp", nil, ITEMCAT_TOOLS, 5, "weapon_zs_sp
 GM:AddStartingItem("msgbeacon", "Message Beacon", nil, ITEMCAT_TOOLS, 1, "weapon_zs_messagebeacon").Countables = "prop_messagebeacon"
 GM:AddStartingItem("ffemitter", "Force Field Emitter", nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
 
-GM:AddStartingItem("stone", "Stone", nil, ITEMCAT_OTHER, 1, "weapon_zs_stone")
+GM:AddStartingItem("stone", "Stone", nil, ITEMCAT_OTHER, 0, "weapon_zs_stone")
 GM:AddStartingItem("oxtank", "Oxygen Tank", "Grants significantly more underwater breathing time to the user.", ITEMCAT_OTHER, 1, "weapon_zs_oxygentank")
 
 GM:AddStartingItem("10hp", "Fit", "Increases survivability by increasing maximum health by a small amount.", ITEMCAT_TRAITS, 10, nil, function(pl) pl:SetMaxHealth(pl:GetMaxHealth() + 10) pl:SetHealth(pl:Health() + 10) end, "models/healthvial.mdl")
@@ -212,18 +212,23 @@ GM:AddPointShopItem("hunter", "'Hunter' Rifle", nil, ITEMCAT_GUNS, 70, "weapon_z
 GM:AddPointShopItem("reaper", "'Reaper' UMP", nil, ITEMCAT_GUNS, 80, "weapon_zs_reaper")
 GM:AddPointShopItem("ender", "'Ender' Automatic Shotgun", nil, ITEMCAT_GUNS, 85, "weapon_zs_ender")
 GM:AddPointShopItem("akbar", "'Akbar' Assault Rifle", nil, ITEMCAT_GUNS, 85, "weapon_zs_akbar")
+GM:AddPointShopItem("galil", "'Riddler' Galil Assault Rifle", nil, ITEMCAT_GUNS, 90, "weapon_zs_galil")
 
 GM:AddPointShopItem("silencer", "'Silencer' SMG", nil, ITEMCAT_GUNS, 100, "weapon_zs_silencer")
 GM:AddPointShopItem("stalker", "'Stalker' Assault Rifle", nil, ITEMCAT_GUNS, 120, "weapon_zs_m4")
 GM:AddPointShopItem("inferno", "'Inferno' Assault Rifle", nil, ITEMCAT_GUNS, 125, "weapon_zs_inferno")
 GM:AddPointShopItem("annabelle", "'Annabelle' Rifle", nil, ITEMCAT_GUNS, 100, "weapon_zs_annabelle")
+GM:AddPointShopItem("g3sg1", "'Infiltrator' G3sg1 Rifle", nil, ITEMCAT_GUNS, 110, "weapon_zs_g3sg1")
 
 GM:AddPointShopItem("crossbow", "'Impaler' Crossbow", nil, ITEMCAT_GUNS, 140, "weapon_zs_crossbow")
 
+GM:AddPointShopItem("sg552", "'Eliminator' SG552 Assault Rifle", nil, ITEMCAT_GUNS, 150, "weapon_zs_sg552")
 GM:AddPointShopItem("sweeper", "'Sweeper' Shotgun", nil, ITEMCAT_GUNS, 170, "weapon_zs_sweepershotgun")
 GM:AddPointShopItem("slugrifle", "'Tiny' Slug Rifle", nil, ITEMCAT_GUNS, 200, "weapon_zs_slugrifle")
 GM:AddPointShopItem("pulserifle", "'Adonis' Pulse Rifle", nil, ITEMCAT_GUNS, 230, "weapon_zs_pulserifle")
-GM:AddPointShopItem("boomstick", "Boom Stick", nil, ITEMCAT_GUNS, 230, "weapon_zs_boomstick")
+GM:AddPointShopItem("m249", "'Punisher' M249 Machine Gun", nil, ITEMCAT_GUNS, 230, "weapon_zs_m249")
+GM:AddPointShopItem("sg550", "'Killer' SG550 Sniper Rifle", nil, ITEMCAT_GUNS, 240, "weapon_zs_sg550")
+GM:AddPointShopItem("boomstick", "Boom Stick", nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick")
 
 GM:AddPointShopItem("pistolammo", "pistol ammo box", nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
 GM:AddPointShopItem("shotgunammo", "shotgun ammo box", nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
