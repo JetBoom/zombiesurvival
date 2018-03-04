@@ -94,7 +94,26 @@ local function ItemPanelThink(self)
 				self.m_NameLabel:InvalidateLayout()
 				self.m_BuyButton:SetImage("icon16/exclamation.png")
 			end
+		local active = GAMEMODE:GetWaveActive()
+		if(active ~= self.m_LastWaveActive) then
+			self.m_LastWaveActive = active
+			if active then
+				self.m_SalePriceLabel:SetVisible(false)
+				self.m_PriceStrikethroughLabel:SetVisible(false)
+			else
+				self.m_SalePriceLabel:SetAlpha(255)
+				self.m_PriceStrikethroughLabel:SetAlpha(255)
+				self.m_SalePriceLabel:SetVisible(true)
+				self.m_PriceStrikethroughLabel:SetVisible(true)
+			end
+		end
 
+		local timeleft = math.max(0, GAMEMODE:GetWaveStart() - CurTime())
+		if timeleft < 10 then
+			local glow = math.sin(RealTime() * 8) * 200 + 255
+			self.m_SalePriceLabel:SetAlpha(glow)
+			self.m_PriceStrikethroughLabel:SetAlpha(glow)
+		end
 			self.m_BuyButton:SizeToContents()
 		end
 	end
@@ -242,7 +261,27 @@ function GM:OpenPointsShop()
 
 					local pricelab = EasyLabel(itempan, tostring(tab.Worth).." Points", "ZSHUDFontTiny")
 					pricelab:SetPos(itempan:GetWide() - 20 - pricelab:GetWide(), 4)
+					pricelab:SetColor(COLOR_GRAY)
 					itempan.m_PriceLabel = pricelab
+					
+					local saleprice = EasyLabel(itempan, tostring(math.ceil(tab.Worth * GAMEMODE.ArsenalCrateMultiplier)), "ZSHUDFontTiny")
+					saleprice:SetPos(itempan:GetWide() - 24 - pricelab:GetWide() - saleprice:GetWide(), 4)
+					saleprice:SetColor(COLOR_YELLOW)
+					saleprice:SetVisible(false)
+					itempan.m_SalePriceLabel = saleprice
+
+					local strikethrough = ""
+
+					--Generate strikethough string containg as many "-" as length of price
+					for i=1, string.len(tab.Worth) do
+						strikethrough = strikethrough .. "-"
+					end
+
+					local pricestrikethrough = EasyLabel(itempan, strikethrough, "ZSHUDFontTiny")
+					pricestrikethrough:SetPos(itempan:GetWide() - 20 - pricelab:GetWide(), 4)
+					pricestrikethrough:SetColor(COLOR_YELLOW)
+					pricestrikethrough:SetVisible(false)
+					itempan.m_PriceStrikethroughLabel = pricestrikethrough
 
 					local button = vgui.Create("DImageButton", itempan)
 					button:SetImage("icon16/lorry_add.png")
