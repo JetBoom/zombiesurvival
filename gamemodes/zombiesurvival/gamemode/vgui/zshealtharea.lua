@@ -171,10 +171,14 @@ function PANEL:Think()
 			ent:SetPoseParameter("move_x", lp:GetPoseParameter("move_x") * 2 - 1)
 			ent:SetPoseParameter("move_y", lp:GetPoseParameter("move_y") * 2 - 1)
 			ent:SetCycle(lp:GetCycle())
-
-			local modellow, modelhigh = LowestAndHighest(ent)
-			self.ModelLow = math.Approach(self.ModelLow, modellow, FrameTime() * 256)
-			self.ModelHigh = math.Approach(self.ModelHigh, modelhigh, FrameTime() * 256)
+            		local ct = CurTime()
+            		if not self.cachemodelnext then self.cachemodelnext = 0 end
+            		if ct > self.cachemodelnext then
+        			self.CModelLow, self.CModelHigh = LowestAndHighest(ent)
+                		self.cachemodelnext = ct + 0.25
+            		end
+			self.ModelLow  = math.Approach(self.ModelLow, self.CModelLow, FrameTime() * 128) --256
+			self.ModelHigh = math.Approach(self.ModelHigh, self.CModelHigh, FrameTime() * 128) --256
 			self.ModelHigh = math.max(self.ModelLow + 1, self.ModelHigh)
 		end
 	end
