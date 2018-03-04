@@ -235,6 +235,7 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_pls_kill_pl")
 	util.AddNetworkString("zs_pl_kill_self")
 	util.AddNetworkString("zs_death")
+	util.AddNetworkString("unlockClass")
 	util.AddNetworkString("zs_redeemmenu")
 	util.AddNetworkString("zs_spectate")
 end
@@ -909,6 +910,9 @@ function GM:CalculateInfliction(victim, attacker)
 						for _, pl in pairs(player.GetAll()) do
 							pl:CenterNotify(COLOR_RED, translate.ClientFormat(pl, "infliction_reached", v.Infliction * 100))
 							pl:CenterNotify(translate.ClientFormat(pl, "x_unlocked", translate.ClientGet(pl, v.TranslationName)))
+							net.Start("unlockClass")
+							net.WriteString(v.Name)
+							net.Send(pl)
 						end
 					end
 				end
@@ -1560,6 +1564,13 @@ function GM:PlayerInitialSpawnRound(pl)
 	if pl:Team() == TEAM_UNDEAD and self.StoredUndeadFrags[uniqueid] then
 		pl:SetFrags(self.StoredUndeadFrags[uniqueid])
 		self.StoredUndeadFrags[uniqueid] = nil
+	end
+	for k, v in ipairs(self.ZombieClasses) do
+		if v.Infliction and v.Unlocked == true then
+			net.Start("unlockClass")
+			net.WriteString(v.Name)
+			net.Send(pl)
+		end
 	end
 end
 
