@@ -20,6 +20,7 @@ function meta:ClipHullTraceHull(distance, size, start, dir)
 	ClipHullBullets.Src = start
 	ClipHullBullets.Dir = dir
 	ClipHullBullets.HullSize = size
+	ClipHullBullets.Distance = distance
 	ClipHullBulletsResult = nil
 	self:FireBullets(ClipHullBullets)
 
