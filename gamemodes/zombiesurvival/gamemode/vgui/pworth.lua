@@ -35,7 +35,7 @@ local function CartDoClick(self, silent, force)
 		if not silent then
 			surface.PlaySound("buttons/button18.wav")
 		end
-		self:SetTooltip("Add to cart")
+		self:SetTooltip("Add to cart") -- not used and not needed to translate
 		WorthRemaining = WorthRemaining + tab.Worth
 	else
 		if WorthRemaining < tab.Worth and not force then
@@ -47,11 +47,11 @@ local function CartDoClick(self, silent, force)
 		if not silent then
 			surface.PlaySound("buttons/button17.wav")
 		end
-		self:SetTooltip("Remove from cart")
+		self:SetTooltip("Remove from cart") -- not used and not needed to translate
 		WorthRemaining = WorthRemaining - tab.Worth
 	end
 
-	pWorth.WorthLab:SetText("Worth: ".. WorthRemaining)
+	pWorth.WorthLab:SetText("Worth: ".. WorthRemaining) -- not used and not needed to translate
 	if WorthRemaining <= 0 then
 		pWorth.WorthLab:SetTextColor(COLOR_RED)
 		pWorth.WorthLab:InvalidateLayout()
@@ -211,7 +211,7 @@ function MakepWorth()
 
 	
 	local headertext = vgui.Create("DLabel", frame)
-	headertext:SetText( "Select Your Survival Loadout" )
+	headertext:SetText(translate.Get("worth_title"))
 	headertext:SetFont( "ZS3D2DFontSmall" )
 	headertext:SetTextColor( COLOR_DARKRED )
 	headertext:CenterHorizontal()
@@ -227,7 +227,7 @@ function MakepWorth()
 	end
 
 	local list = vgui.Create("DPanelList", propertysheet)
-	propertysheet:AddSheet("Favorites", list, "icon16/heart.png", false, false)
+	propertysheet:AddSheet(translate.Get("worth_favtab"), list, "icon16/heart.png", false, false)
 	list:EnableVerticalScrollbar(true)
 	list:SetWide(propertysheet:GetWide() - 16)
 	list:SetSpacing(2)
@@ -253,7 +253,7 @@ function MakepWorth()
 			defimage:SetImage("icon16/heart.png")
 			defimage:SizeToContents()
 			defimage:SetMouseInputEnabled(true)
-			defimage:SetTooltip("This is your default cart.\nIf you join the game late then you'll spawn with this cart.")
+			defimage:SetTooltip(translate.Get("worth_favtooltip"))
 			defimage:SetPos(x, cartpan:GetTall() * 0.5 - defimage:GetTall() * 0.5)
 			x = x + defimage:GetWide() + 4
 		end
@@ -325,7 +325,7 @@ function MakepWorth()
 		end
 	end
 
-	local worthlab = EasyLabel(frame, "Worth: "..tostring(WorthRemaining), "ZSHUDFontSmall", COLOR_LIMEGREEN)
+	local worthlab = EasyLabel(frame, translate.Get("worth_worth")..tostring(WorthRemaining), "ZSHUDFontSmall", COLOR_LIMEGREEN)
 	worthlab:SetPos(8, frame:GetTall() - worthlab:GetTall() - 50)
 	worthlab:AlignRight(20)
 	worthlab:AlignTop(88)

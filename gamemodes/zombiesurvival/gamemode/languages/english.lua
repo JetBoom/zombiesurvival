@@ -362,8 +362,24 @@ LANGUAGE.help_cont_being_a_zombie					= [[<p>Tips for this section:
 
 -- Place any custom stuff below here...
 
+--[[ Anything that has an \n means a new line: Example
+Hello there.\nWelcome to the server will output as:
+
+Hello there. 
+Welcome to the server
+
+So remember that when translating]]--
+
+-- Redeem Menu
+
 LANGUAGE.redeemer_credit							= "Zombie Survival - created by William \"JetBoom\" Moodhe.             Zombie Survival: Bandits by MrCraigTunstall"
 LANGUAGE.redeemer_save								= "CHANGE TO A HUMAN AND SAVE HUMANITY"
 LANGUAGE.redeemer_kill								= "STAY AS A BANDIT AND CHOOSE TO HELP OR KILL THE HUMANS"
 
+-- Worth Menu
+
+LANGUAGE.worth_title								= "Select Your Survival Loadout"
+LANGUAGE.worth_worth								= "Worth: " -- leave a space or the numbers will be next to the text containing no gap!
+LANGUAGE.worth_favtab								= "Favorites"
+LANGUAGE.worth_favtooltip							= "This is your default cart.\nIf you join the game late then you'll spawn with this cart."
 

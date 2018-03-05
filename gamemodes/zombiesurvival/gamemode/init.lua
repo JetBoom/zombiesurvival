@@ -182,6 +182,7 @@ function GM:Initialize()
 	self:SetClassicMode(self:IsClassicMode(), true)
 	self:SetBabyMode(self:IsBabyMode(), true)
 	self:SetRedeemBrains(self.DefaultRedeem)
+	self:NumberOfWaves(self.NumberOfWaves)
 
 	local mapname = string.lower(game.GetMap())
 	if string.find(mapname, "_obj_", 1, true) or string.find(mapname, "objective", 1, true) then

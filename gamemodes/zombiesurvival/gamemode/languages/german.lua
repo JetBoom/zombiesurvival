@@ -217,3 +217,26 @@ LANGUAGE.help_cat_survival							= "Überleben"
 LANGUAGE.help_cat_barricading						= "Verbarrikadieren"
 LANGUAGE.help_cat_upgrades							= "Verbesserungen"
 LANGUAGE.help_cat_being_a_zombie					= "Zombie Dasein"
+
+-- Place any custom stuff below here...
+ 
+--[[ Anything that has an \n means a new line: Example
+Hello there.\nWelcome to the server will output as:
+ 
+Hello there.
+Welcome to the server
+ 
+So remember that when translating]]--
+ 
+-- Redeem Menu
+ 
+LANGUAGE.redeemer_credit                            = "Zombie Survival - erstellt von William \"JetBoom\" Moodhe.             Zombie Survival: Bandits von MrCraigTunstall"
+LANGUAGE.redeemer_save                              = "STEHE ALS MENSCH AUF UND RETTE DIE MENSCHHEIT"
+LANGUAGE.redeemer_kill                              = "BLEIBE BANDIT UND ENTSCHEIDE DICH DEN MENSCHEN ZU HELFEN ODER SIE ZU VERNICHTEN"
+ 
+-- Worth Menu
+ 
+LANGUAGE.worth_title                                = "Wähle deine Überlebensausrüstung"
+LANGUAGE.worth_worth                                = "Worth: " -- leave a space or the numbers will be next to the text containing no gap!
+LANGUAGE.worth_favtab                               = "Favoriten"
+LANGUAGE.worth_favtooltip                           = "Das ist dein standard Einkaufswagen.\nFalls du einem Spiel spät beitrittst, bekommst du diese Ausrüstung."
