@@ -29,7 +29,7 @@ plymeta.ConCommand = function(self, cmd, ...)
 end
 
 net.Receive("SMSpray", function(_, ply)
-	if GetConVarNumber("spraymon_nodelay") > 0 and (GetConVarNumber("spraymon_nodelay") > 1 and ply:IsUserGroup("dungeonmaster") or ply:IsUserGroup("miniboss") or ply:IsUserGroup("owner") or ply:IsUserGroup("tech") or ply:IsUserGroup("fulladmin")) then
+	if GetConVarNumber("spraymon_nodelay") > 0 and (GetConVarNumber("spraymon_nodelay") > 1 and ply:IsUserGroup("owner")) then
 		ply:AllowImmediateDecalPainting()
 	end
 end)

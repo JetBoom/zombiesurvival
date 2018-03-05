@@ -49,8 +49,7 @@ hook.Add("HUDPaint", "SMPrintSprays", function()
 	end
 	if #todraw > 0 then
 		if first then
-			--chat.AddText(Color(136, 136, 136), "You can view and copy SteamID of spray owner by holding ALT while looking at it.")
-			first = false
+		first = false
 		end
 		local y = ScrH() / 2 - #todraw * 12
 		draw.SimpleTextOutlined("Sprayed by:", "SMSpray", 10, y, Color(255, 136, 0), 0, 1, 1, Color(0, 0, 0))
