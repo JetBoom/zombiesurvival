@@ -37,6 +37,7 @@ AddCSLuaFile("cl_deathnotice.lua")
 AddCSLuaFile("cl_floatingscore.lua")
 AddCSLuaFile("cl_dermaskin.lua")
 AddCSLuaFile("cl_hint.lua")
+AddCSLuaFile("cl_extras.lua")
 
 AddCSLuaFile("obj_vector_extend.lua")
 AddCSLuaFile("obj_player_extend.lua")
@@ -86,6 +87,7 @@ include("sv_zombieescape.lua")
 
 include("sv_downloads.lua")
 include("sv_redeem.lua")
+include("sv_extras.lua")
 
 
 if file.Exists(GM.FolderName.."/gamemode/maps/"..game.GetMap()..".lua", "LUA") then

@@ -47,6 +47,7 @@ include("cl_dermaskin.lua")
 include("cl_deathnotice.lua")
 include("cl_floatingscore.lua")
 include("cl_hint.lua")
+include("cl_extras.lua")
 
 include("cl_zombieescape.lua")
 
