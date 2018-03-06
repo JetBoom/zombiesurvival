@@ -40,27 +40,9 @@ if not silent then
     timer.Create("AddPoints_"..pl:SteamID(), 60, 0, function() pl:AddPoints(25) end)
 
     local mapname = string.lower(game.GetMap())
-	if string.find(mapname, "_obj_", 1, true) or string.find(mapname, "objective", 1, true) then
+	if string.find(mapname, "_obj_", 1, true) or string.find(mapname, "objective", 1, true) or string.find(mapname, "ze_", 1, true) then
     pl:RemoveStatus("overridemodel", false, true)
-
 	pl:ChangeTeam(TEAM_HUMAN)
-	pl:DoHulls()
-	pl:UnSpectateAndSpawn()
-	
-	pl:Give("weapon_zs_redeemers_dual")
-	pl:Give("weapon_zs_swissarmyknife")
-
-	local frags = pl:Frags()
-	if frags < 0 then
-		pl:SetFrags(frags * 5)
-	else
-		pl:SetFrags(0)
-	end
-	pl:SetDeaths(0)
-	pl.DeathClass = nil
-	pl:SetZombieClass(self.DefaultZombieClass)
-    pl:SetPoints(0)
-	pl.SpawnedTime = CurTime()
 	timer.Destroy("AddPoints_" .. pl:SteamID()) end
 	end
 
