@@ -379,7 +379,27 @@ LANGUAGE.redeemer_kill								= "STAY AS A BANDIT AND CHOOSE TO HELP OR KILL THE
 -- Worth Menu
 
 LANGUAGE.worth_title								= "Select Your Survival Loadout"
-LANGUAGE.worth_worth								= "Worth: " -- leave a space or the numbers will be next to the text containing no gap!
+LANGUAGE.worth_close								= "Press F2 to re-open the Worth Menu."
+LANGUAGE.worth_worth								= "Worth" 
 LANGUAGE.worth_favtab								= "Favorites"
 LANGUAGE.worth_favtooltip							= "This is your default cart.\nIf you join the game late then you'll spawn with this cart."
+LANGUAGE.worth_favbuy								= "Purchase this saved cart."
+LANGUAGE.worth_favload								= "Load this saved cart."
+LANGUAGE.worth_favremove							= "Remove this cart as your default."
+LANGUAGE.worth_favdelete							= "Delete this saved cart."
+LANGUAGE.worth_favdefault							= "Make this cart your default."
+LANGUAGE.worth_checkout								= "Checkout"
+LANGUAGE.worth_checkouttooltip						= "Self-Explanatory."
+LANGUAGE.worth_random								= "Random Loadout"
+LANGUAGE.worth_randomtooltip						= "Using this will randomly give you a set of items instead of normal checkout.\n Also use this to close the worth menu."
+LANGUAGE.worth_clear								= "Clear Loadout"
+LANGUAGE.worth_cleartooltip							= "Clears all items out of your cart."
+LANGUAGE.worth_saveload								= "Save Loadout"
+LANGUAGE.worth_saveloadtooltip						= "Use this to save your current cart(s) for easy checkout later."
+LANGUAGE.worth_github								= "GitHub"
+LANGUAGE.worth_githubtooltip						= "This will take you to the modified Zombie Survival GitHub page."
+LANGUAGE.worth_forum								= "Forum"
+LANGUAGE.worth_forumtooltip							= "This will take you to voidresonance.com"
+LANGUAGE.worth_steam								= "Steam Group"
+LANGUAGE.worth_steamtooltip							= "This will take you to our Void Resonance's Steam group."
 

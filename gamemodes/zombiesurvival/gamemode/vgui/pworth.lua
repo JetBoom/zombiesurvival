@@ -205,7 +205,7 @@ function MakepWorth()
 	frame:SetKeyboardInputEnabled(false)
 	frame:SetTitle(" ")
 	frame:SetDraggable(true)
-	if frame.btnClose and frame.btnClose:Valid() then frame.btnClose:SetVisible(true) frame.btnClose:SetTooltip("Press F2 to re-open the Worth Menu.") end
+	if frame.btnClose and frame.btnClose:Valid() then frame.btnClose:SetVisible(true) frame.btnClose:SetTooltip(translate.Get("worth_close")) end
 	if frame.btnMinim and frame.btnMinim:Valid() then frame.btnMinim:SetVisible(false) end
 	if frame.btnMaxim and frame.btnMaxim:Valid() then frame.btnMaxim:SetVisible(false) end
 
@@ -266,7 +266,7 @@ function MakepWorth()
 		local checkbutton = vgui.Create("DImageButton", cartpan)
 		checkbutton:SetImage("icon16/accept.png")
 		checkbutton:SizeToContents()
-		checkbutton:SetTooltip("Purchase this saved cart.")
+		checkbutton:SetTooltip(translate.Get("worth_favbuy"))
 		x = x - checkbutton:GetWide() - 8
 		checkbutton:SetPos(x, cartpan:GetTall() * 0.5 - checkbutton:GetTall() * 0.5)
 		checkbutton.ID = i
@@ -275,7 +275,7 @@ function MakepWorth()
 		local loadbutton = vgui.Create("DImageButton", cartpan)
 		loadbutton:SetImage("icon16/folder_go.png")
 		loadbutton:SizeToContents()
-		loadbutton:SetTooltip("Load this saved cart.")
+		loadbutton:SetTooltip(translate.Get("worth_favload"))
 		x = x - loadbutton:GetWide() - 8
 		loadbutton:SetPos(x, cartpan:GetTall() * 0.5 - loadbutton:GetTall() * 0.5)
 		loadbutton.ID = i
@@ -285,9 +285,9 @@ function MakepWorth()
 		defaultbutton:SetImage("icon16/heart.png")
 		defaultbutton:SizeToContents()
 		if cartname == defaultcart then
-			defaultbutton:SetTooltip("Remove this cart as your default.")
+			defaultbutton:SetTooltip(translate.Get("worth_favremove"))
 		else
-			defaultbutton:SetTooltip("Make this cart your default.")
+			defaultbutton:SetTooltip(translate.Get("worth_favdefault"))
 		end
 		x = x - defaultbutton:GetWide() - 8
 		defaultbutton:SetPos(x, cartpan:GetTall() * 0.5 - defaultbutton:GetTall() * 0.5)
@@ -297,7 +297,7 @@ function MakepWorth()
 		local deletebutton = vgui.Create("DImageButton", cartpan)
 		deletebutton:SetImage("icon16/bin.png")
 		deletebutton:SizeToContents()
-		deletebutton:SetTooltip("Delete this saved cart.")
+		deletebutton:SetTooltip(translate.Get("worth_favdelete"))
 		x = x - deletebutton:GetWide() - 8
 		deletebutton:SetPos(x, cartpan:GetTall() * 0.5 - loadbutton:GetTall() * 0.5)
 		deletebutton.ID = i
@@ -325,7 +325,7 @@ function MakepWorth()
 		end
 	end
 
-	local worthlab = EasyLabel(frame, translate.Get("worth_worth")..tostring(WorthRemaining), "ZSHUDFontSmall", COLOR_LIMEGREEN)
+	local worthlab = EasyLabel(frame, translate.Get("worth_worth")..": "..tostring(WorthRemaining), "ZSHUDFontSmall", COLOR_LIMEGREEN)
 	worthlab:SetPos(8, frame:GetTall() - worthlab:GetTall() - 50)
 	worthlab:AlignRight(20)
 	worthlab:AlignTop(88)
@@ -333,62 +333,62 @@ function MakepWorth()
 
 	local checkout = vgui.Create("DButton", frame)
 	checkout:SetFont("ZSHUDFontSmall")
-	checkout:SetText("Checkout")
+	checkout:SetText(translate.Get("worth_checkout"))
 	checkout:SetColor(COLOR_WHITE)
 	checkout:SizeToContents()
 	checkout:SetSize(140, 40)
 	checkout:AlignBottom(10)
 	checkout:CenterHorizontal()
 	checkout.DoClick = CheckoutDoClick
-	checkout:SetTooltip("Self-Explanatory.")
+	checkout:SetTooltip(translate.Get("worth_checkouttooltip"))
 
 	local savebutton = vgui.Create("DButton", frame)
-	savebutton:SetText("Save Loadout")
+	savebutton:SetText(translate.Get("worth_saveload"))
 	savebutton:SetSize(130, 30)
 	savebutton:AlignBottom(10)
 	savebutton:MoveLeftOf(checkout, 15)
 	savebutton.DoClick = SaveDoClick
-	savebutton:SetTooltip("Use this to save your current cart(s) for easy checkout later!")
+	savebutton:SetTooltip(translate.Get("worth_saveloadtooltip"))
 	
 	local clearbutton = vgui.Create("DButton", frame)
-	clearbutton:SetText("Clear Loadout")
+	clearbutton:SetText(translate.Get("worth_clear"))
 	clearbutton:SetSize(130, 30)
 	clearbutton:AlignBottom(10)
 	clearbutton:MoveLeftOf(savebutton, 15)
 	clearbutton.DoClick = ClearCartDoClick
-	clearbutton:SetTooltip("Clears all items out of your cart!")
+	clearbutton:SetTooltip(translate.Get("worth_cleartooltip"))
 	
 	local randombutton = vgui.Create("DButton", frame)
-	randombutton:SetText("Random Loadout")
+	randombutton:SetText(translate.Get("worth_random"))
 	randombutton:SetSize(130, 30)
 	randombutton:AlignBottom(10)
 	randombutton:MoveLeftOf(clearbutton, 15)
 	randombutton.DoClick = RandDoClick
-	randombutton:SetTooltip("Using this will randomly give you a set of items instead of normal checkout.\n Also use this to close the worth menu.")
+	randombutton:SetTooltip(translate.Get("worth_randomtooltip"))
 	
-	local craftbutton = vgui.Create("DButton", frame)
-	craftbutton:SetText("GitHub")
-	craftbutton:SetSize(130, 30)
-	craftbutton:AlignBottom(10)
-	craftbutton:MoveRightOf(checkout, 15)
-	craftbutton.DoClick = function() gui.OpenURL("https://github.com/MrCraigTunstall/zombiesurvival") end
-	craftbutton:SetTooltip("This will take you to the modified Zombie Survival GitHub page.")
+	local githubbutton = vgui.Create("DButton", frame)
+	githubbutton:SetText(translate.Get("worth_github"))
+	githubbutton:SetSize(130, 30)
+	githubbutton:AlignBottom(10)
+	githubbutton:MoveRightOf(checkout, 15)
+	githubbutton.DoClick = function() gui.OpenURL("https://github.com/MrCraigTunstall/zombiesurvival") end
+	githubbutton:SetTooltip(translate.Get("worth_githubtooltip"))
 	
 	local forumbutton = vgui.Create("DButton", frame)
-	forumbutton:SetText("Forums")
+	forumbutton:SetText(translate.Get("worth_forum"))
 	forumbutton:SetSize(130, 30)
 	forumbutton:AlignBottom(10)
-	forumbutton:MoveRightOf(craftbutton, 15)
-	forumbutton.DoClick = function() gui.OpenURL("https://voidresonance.com/") end
-	forumbutton:SetTooltip("This will take you to voidresonance.com.")
+	forumbutton:MoveRightOf(githubbutton, 15)
+	forumbutton.DoClick = function() gui.OpenURL("https://voidresonance.com") end
+	forumbutton:SetTooltip(translate.Get("worth_forumtooltip"))
 	
 	local groupbutton = vgui.Create("DButton", frame)
-	groupbutton:SetText("Steam Group")
+	groupbutton:SetText(translate.Get("worth_steam"))
 	groupbutton:SetSize(130, 30)
 	groupbutton:AlignBottom(10)
 	groupbutton:MoveRightOf(forumbutton, 15)
 	groupbutton.DoClick = function() gui.OpenURL("http://steamcommunity.com/groups/voidresonance") end
-	groupbutton:SetTooltip("This will take you to our Void Resonance's Steam group!")
+	groupbutton:SetTooltip(translate.Get("worth_steamtooltip"))
 	
 
 	if #GAMEMODE.SavedCarts == 0 then
@@ -501,7 +501,7 @@ function PANEL:SetWorthID(id)
 	end
 
 	if tab.Worth then
-		self.PriceLabel:SetText(tostring(tab.Worth).." Worth")
+		self.PriceLabel:SetText(tostring(tab.Worth).." "..translate.Get("worth_worth"))
 	else
 		self.PriceLabel:SetText("")
 	end
@@ -551,7 +551,7 @@ function PANEL:DoClick(silent, force)
 		WorthRemaining = WorthRemaining - tab.Worth
 	end
 
-	pWorth.WorthLab:SetText("Worth: ".. WorthRemaining)
+	pWorth.WorthLab:SetText(translate.Get("worth_worth1").. WorthRemaining)
 	if WorthRemaining <= 0 then
 		pWorth.WorthLab:InvalidateLayout()
 	elseif WorthRemaining <= GAMEMODE.StartingWorth * 0.25 then

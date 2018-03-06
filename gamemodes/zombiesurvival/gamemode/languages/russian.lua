@@ -367,6 +367,6 @@ LANGUAGE.redeemer_kill								= "ОСТАТЬСЯ В КАЧЕСТВЕ БАНДИ
 -- Worth Menu
 
 LANGUAGE.worth_title								= "Выберите Свой Набор Для Выживания"
-LANGUAGE.worth_worth								= "Очков: " -- leave a space or the numbers will be next to the text containing no gap!
+LANGUAGE.worth_worth								= "Очков"
 LANGUAGE.worth_favtab								= "Избранное"
 LANGUAGE.worth_favtooltip							= "Это ваша стандартная корзина.\nЕсли вы присоединитесь к игре поздно, то вы будете играть с этой корзиной."

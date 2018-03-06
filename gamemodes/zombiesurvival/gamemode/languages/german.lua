@@ -237,6 +237,6 @@ LANGUAGE.redeemer_kill                              = "BLEIBE BANDIT UND ENTSCHE
 -- Worth Menu
  
 LANGUAGE.worth_title                                = "Wähle deine Überlebensausrüstung"
-LANGUAGE.worth_worth                                = "Worth: " -- leave a space or the numbers will be next to the text containing no gap!
+LANGUAGE.worth_worth                               	= "Worth"
 LANGUAGE.worth_favtab                               = "Favoriten"
 LANGUAGE.worth_favtooltip                           = "Das ist dein standard Einkaufswagen.\nFalls du einem Spiel spät beitrittst, bekommst du diese Ausrüstung."
