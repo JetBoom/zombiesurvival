@@ -11,7 +11,7 @@ LANGUAGE.x_unlocked									= "%s разблокирован!"
 LANGUAGE.disconnect_killed							= "%s был отсоединен, его убийца %s."
 LANGUAGE.nail_removed_by							= "%s убрал гвоздь, ранее принадлежавший %s."
 LANGUAGE.banned_for_life_warning					= "Ваша жизнь забанена, вы ничего не можете купить!"
-LANGUAGE.need_to_be_near_arsenal_crate				= "Вы должны быть рядом с Arsenal crate чтобы делать покупки!"
+LANGUAGE.need_to_be_near_arsenal_crate				= "Вы должны быть рядом с арсенальным ящиком, чтобы делать покупки!"
 LANGUAGE.cant_purchase_right_now					= "Вы, пока что, ничего не можете купить."
 LANGUAGE.dont_have_enough_points					= "У Вас недостаточно очков."
 LANGUAGE.prepare_yourself							= "Приготовьтесь..."
@@ -25,10 +25,10 @@ LANGUAGE.x_damage_to_humans							= "%d вреда выжившим"
 LANGUAGE.x_brains_eaten								= "%d мозгов съедено"
 LANGUAGE.press_rmb_to_cycle_targets					= "Нажмите ПКМ для того чтобы сменить цель"
 LANGUAGE.press_lmb_to_spawn_on_them					= "Нажмите ЛКМ, чтобы появиться на цели"
-LANGUAGE.press_lmb_to_spawn							= "Нажмите ЛКМ чтобы появиться"
-LANGUAGE.press_jump_to_free_roam					= "Нажмите ПРЫЖОК для свободного полёта"
-LANGUAGE.press_reload_to_spawn_at_normal_point		= "Нажмите ПЕРЕЗАРЯДКА чтобы появится на нормальном спавне"
-LANGUAGE.press_walk_to_spawn_as_x					= "Нажмите МЕДЛЕННЫЙ ШАГ чтобы появится как %s"
+LANGUAGE.press_lmb_to_spawn							= "Нажмите ЛКМ, чтобы появиться"
+LANGUAGE.press_jump_to_free_roam					= "Нажмите ПРЫЖОК, для свободного полёта"
+LANGUAGE.press_reload_to_spawn_at_normal_point		= "Нажмите ПЕРЕЗАРЯДКА, чтобы появится на нормальном спавне"
+LANGUAGE.press_walk_to_spawn_as_x					= "Нажмите МЕДЛЕННЫЙ ШАГ, чтобы появится как %s"
 LANGUAGE.observing_x								= "Вы смотрите на %s (%d)"
 LANGUAGE.waiting_for_next_wave						= "Ожидание начала следующей волны..."
 LANGUAGE.impossible									= "Это невозможно."
@@ -39,7 +39,7 @@ LANGUAGE.cant_do_that_in_classic_mode				= "Вы не можете так сде
 LANGUAGE.cant_use_x_in_classic_mode					= "Вы не можете использовать %s в Classic Mode."
 LANGUAGE.cant_use_x_in_zombie_escape				= "Вы не можете использовать %s в Zombie Escape."
 LANGUAGE.no_class_switch_in_this_mode				= "Данный мод не позволяет вам менять классы."
-LANGUAGE.press_sprint_to_get_up						= "Нажмите кнопку БЕГАТЬ чтобы подняться"
+LANGUAGE.press_sprint_to_get_up						= "Нажмите кнопку БЕГ, чтобы подняться"
 LANGUAGE.zombie_escape								= "Zombie Escape!"
 LANGUAGE.nothing_for_this_ammo						= "У Вас нет ничего, что использует этот тип амуниции."
 LANGUAGE.you_decide_to_leave_some					= "Вы решили оставить некоторое количество для Вашей команды."
@@ -85,7 +85,7 @@ LANGUAGE.wave_ends_in_x								= "Волна заканчивается чере
 LANGUAGE.wave_x_of_y								= "Волна %d из %d"
 LANGUAGE.zombie_invasion_in_x						= "Зараженные наступают через %s"
 LANGUAGE.intermission								= "Пауза"
-LANGUAGE.press_f2_for_the_points_shop				= "Нажмите F2 чтобы открыть Points Shop!"
+LANGUAGE.press_f2_for_the_points_shop				= "Нажмите F2 чтобы открыть Магазин!"
 LANGUAGE.breath										= "Дыхание"
 LANGUAGE.zombie_volunteers							= "Зараженными станут"
 LANGUAGE.x_discount_for_buying_between_waves		= "Скидка в %d%% для покупок в конце каждой волны!"
@@ -109,7 +109,7 @@ LANGUAGE.resupply_box								= "Ящик аммуниции"
 LANGUAGE.purchase_now								= "Покупайте сейчас!"
 LANGUAGE.integrity_x								= "Целостность: %d%%"
 LANGUAGE.empty										= "ПУСТО"
-LANGUAGE.manual_control								= "ИАНУАЛЬНОЕ УПРАВЛЕНИЕ"
+LANGUAGE.manual_control								= "МАНУАЛЬНОЕ УПРАВЛЕНИЕ"
 LANGUAGE.arsenal_crate								= "Арсенальный ящик"
 LANGUAGE.not_enough_room_for_a_nest					= "Здесь недостаточно места для гнезда!"
 LANGUAGE.too_close_to_another_nest					= "Слишком близко к другому гнезду!"
@@ -350,8 +350,23 @@ LANGUAGE.help_cont_being_a_zombie					= [[<p>Советы:
 
 -- Place any custom stuff below here...
 
+--[[ Anything that has an \n means a new line: Example
+Hello there.\nWelcome to the server will output as:
+
+Hello there. 
+Welcome to the server
+
+So remember that when translating]]--
+
 -- Redeem Menu
 
 LANGUAGE.redeemer_credit							= "Zombie Survival - created by William \"JetBoom\" Moodhe.             Zombie Survival: Bandits by MrCraigTunstall"
 LANGUAGE.redeemer_save								= "СТАТЬ ЧЕЛОВЕКОМ И СПАСТИ ЧЕЛОВЕЧЕСТВО"
 LANGUAGE.redeemer_kill								= "ОСТАТЬСЯ В КАЧЕСТВЕ БАНДИТА И ПОМОЧЬ ИЛИ УБИТЬ ЛЮДЕЙ"
+
+-- Worth Menu
+
+LANGUAGE.worth_title								= "Выберите Свой Набор Для Выживания"
+LANGUAGE.worth_worth								= "Очков: " -- leave a space or the numbers will be next to the text containing no gap!
+LANGUAGE.worth_favtab								= "Избранное"
+LANGUAGE.worth_favtooltip							= "Это ваша стандартная корзина.\nЕсли вы присоединитесь к игре поздно, то вы будете играть с этой корзиной."
