@@ -418,3 +418,13 @@ LANGUAGE.humans_win                                 = "Люди выжили... 
 LANGUAGE.zombies_win                                = "Армия нежити становится сильнее."
 LANGUAGE.mentions                                   = "Почетные награды"
 
+-- Weapon Titles
+
+LANGUAGE.title_guns                                 = "Пушки"
+LANGUAGE.title_ammo                                 = "Амуниция"
+LANGUAGE.title_melee                                 = "Оружие ближнего боя"
+LANGUAGE.title_tools                                 = "Инструменты"
+LANGUAGE.title_other                                 = "Другое"
+LANGUAGE.title_traits                                 = "Улучшения"
+LANGUAGE.title_returns                              = "Ухудшения"
+
