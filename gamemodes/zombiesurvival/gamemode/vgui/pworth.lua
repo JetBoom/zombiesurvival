@@ -551,7 +551,7 @@ function PANEL:DoClick(silent, force)
 		WorthRemaining = WorthRemaining - tab.Worth
 	end
 
-	pWorth.WorthLab:SetText(translate.Get("worth_worth1").. WorthRemaining)
+	pWorth.WorthLab:SetText(translate.Get("worth_worth")..": "..WorthRemaining)
 	if WorthRemaining <= 0 then
 		pWorth.WorthLab:InvalidateLayout()
 	elseif WorthRemaining <= GAMEMODE.StartingWorth * 0.25 then
