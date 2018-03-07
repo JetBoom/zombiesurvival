@@ -428,3 +428,13 @@ LANGUAGE.lose                                       = "You have lost."
 LANGUAGE.humans_win                                 = "The humans have survived for now."
 LANGUAGE.zombies_win                                = "The undead army grows stronger."
 LANGUAGE.mentions                                   = "Honorable Mentions"
+
+-- Weapon Titles
+
+LANGUAGE.title_guns                                 = "Guns"
+LANGUAGE.title_ammo                                 = "Ammunition"
+LANGUAGE.title_melee                                 = "Melee Weapons"
+LANGUAGE.title_tools                                 = "Tools"
+LANGUAGE.title_other                                 = "Other"
+LANGUAGE.title_traits                                 = "Traits"
+LANGUAGE.title_returns                              = "Returns"

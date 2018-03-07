@@ -20,13 +20,13 @@ ITEMCAT_TRAITS = 6
 ITEMCAT_RETURNS = 7
 
 GM.ItemCategories = {
-	[ITEMCAT_GUNS] = "Guns",
-	[ITEMCAT_AMMO] = "Ammunition",
-	[ITEMCAT_MELEE] = "Melee Weapons",
-	[ITEMCAT_TOOLS] = "Tools",
-	[ITEMCAT_OTHER] = "Other",
-	[ITEMCAT_TRAITS] = "Traits",
-	[ITEMCAT_RETURNS] = "Returns"
+	[ITEMCAT_GUNS] = ""..translate.Get("title_guns"),
+	[ITEMCAT_AMMO] = ""..translate.Get("title_ammo"),
+	[ITEMCAT_MELEE] = ""..translate.Get("title_melee"),
+	[ITEMCAT_TOOLS] = ""..translate.Get("title_tools"),
+	[ITEMCAT_OTHER] = ""..translate.Get("title_other"),
+	[ITEMCAT_TRAITS] = ""..translate.Get("title_traits"),
+	[ITEMCAT_RETURNS] = ""..translate.Get("title_returns")
 }
 
 --[[
