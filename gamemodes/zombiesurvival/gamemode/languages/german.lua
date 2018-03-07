@@ -219,27 +219,27 @@ LANGUAGE.help_cat_upgrades							= "Verbesserungen"
 LANGUAGE.help_cat_being_a_zombie					= "Zombie Dasein"
 
 -- Place any custom stuff below here...
- 
+
 --[[ Anything that has an \n means a new line: Example
 Hello there.\nWelcome to the server will output as:
- 
+
 Hello there.
 Welcome to the server
- 
+
 So remember that when translating]]--
- 
+
 -- Redeem Menu
- 
-LANGUAGE.redeemer_credit                            = "Zombie Survival - erstellt von William \"JetBoom\" Moodhe.             Zombie Survival: Bandits von MrCraigTunstall"
-LANGUAGE.redeemer_save                              = "STEHE ALS MENSCH AUF UND RETTE DIE MENSCHHEIT"
-LANGUAGE.redeemer_kill                              = "BLEIBE BANDIT UND ENTSCHEIDE DICH DEN MENSCHEN ZU HELFEN ODER SIE ZU VERNICHTEN"
- 
+
+LANGUAGE.redeemer_credit							= "Zombie Survival - erstellt von William \"JetBoom\" Moodhe.             Zombie Survival: Bandits von MrCraigTunstall"
+LANGUAGE.redeemer_save								= "STEHE ALS MENSCH AUF UND RETTE DIE MENSCHHEIT"
+LANGUAGE.redeemer_kill								= "BLEIBE BANDIT UND ENTSCHEIDE DICH DEN MENSCHEN ZU HELFEN ODER SIE ZU VERNICHTEN"
+
 -- Worth Menu
- 
-LANGUAGE.worth_title                                = "Wähle deine Überlebensausrüstung"
+
+LANGUAGE.worth_title								= "Wähle deine Überlebensausrüstung"
 LANGUAGE.worth_close								= "Drücke F2 um das Worth-Menü wieder zu öffnen."
-LANGUAGE.worth_worth                               	= "Worth"
-LANGUAGE.worth_favtab                               = "Favoriten"
+LANGUAGE.worth_worth								= "Worth"
+LANGUAGE.worth_favtab								= "Favoriten"
 LANGUAGE.worth_favtooltip							= "Das ist dein Standardwarenkorb.\nFalls du einem Spiel spät beitrittst, bekommst du diese Ausrüstung."
 LANGUAGE.worth_favbuy								= "Kaufe diesen gespeicherten Warenkorb."
 LANGUAGE.worth_favload								= "Lade diesen gespeicherten Warenkorb."
@@ -258,5 +258,41 @@ LANGUAGE.worth_github								= "GitHub"
 LANGUAGE.worth_githubtooltip						= "Das führt Sie zur GitHub-Seite dieses modifizierten Zombie Survival Spielmodus."
 LANGUAGE.worth_forum								= "Forum"
 LANGUAGE.worth_forumtooltip							= "Das führt Sie zu voidresonance.com"
-LANGUAGE.worth_steam								= "Steam Group"
+LANGUAGE.worth_steam								= "Steam-Gruppe"
 LANGUAGE.worth_steamtooltip							= "Das führt Sie zur Steam-Gruppe von Void Resonance."
+
+-- Pointshop Menu
+
+LANGUAGE.all_sales									= "Alle Käufe sind endgültig"
+LANGUAGE.the_pointshop								= "Der Points Shop"
+LANGUAGE.for_allapocalypse							= "Für all deine Zombie-Apokalypse-Bedürfnisse!"
+LANGUAGE.pts_tospend								= "Punkte, die Sie ausgeben können"
+LANGUAGE.ars_discount								= "Rabatt für den Kauf zwischen den Wellen!"
+LANGUAGE.ars_tooltip								= "Dieser Shop ist mit dem QUIK - Anti-Zombie-Backstab-Gerät ausgerüstet.\nBewegen Sie die Maus außerhalb des Shops, um den Shop schnell zu schließen!"
+LANGUAGE.ars_worth									= "Worth-Menü"
+LANGUAGE.ars_purchase								= "Kaufen"  
+LANGUAGE.ars_purchaseammo							= "Munition kaufen"
+LANGUAGE.ars_pts									= "Punkte"
+
+-- Ressuply Box
+
+LANGUAGE.res_box_ready								= "Bereit"
+LANGUAGE.res_box_seconds							= "s"
+
+-- PendBoard (End Game)
+
+LANGUAGE.win										= "Du hast gewonnen!"
+LANGUAGE.lose										= "Du hast verloren."
+LANGUAGE.humans_win									= "Die Menschen haben bis jetzt überlebt."
+LANGUAGE.zombies_win								= "Die Armee der Untoten wird immer stärker."
+LANGUAGE.mentions									= "Ehrwürdige Erwähnungen"
+
+-- Weapon Titles
+
+LANGUAGE.title_guns									= "Pistolen"
+LANGUAGE.title_ammo									= "Munition"
+LANGUAGE.title_melee								= "Nahkampfwaffen"
+LANGUAGE.title_tools								= "Werkzeuge"
+LANGUAGE.title_other								= "Anderes"
+LANGUAGE.title_traits								= "Traits"
+LANGUAGE.title_returns								= "Returns"
