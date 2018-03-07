@@ -403,3 +403,28 @@ LANGUAGE.worth_forumtooltip							= "This will take you to voidresonance.com"
 LANGUAGE.worth_steam								= "Steam Group"
 LANGUAGE.worth_steamtooltip							= "This will take you to our Void Resonance's Steam group."
 
+-- Pointshop Menu
+
+LANGUAGE.all_sales                                  = "All sales are final"
+LANGUAGE.the_pointshop                              = "The Points Shop"
+LANGUAGE.for_allapocalypse                          = "For all of your zombie apocalypse needs!"
+LANGUAGE.pts_tospend                                = "Points to spend"
+LANGUAGE.ars_discount                               = "discount for buying between waves!"
+LANGUAGE.ars_tooltip                                = "This shop is armed with the QUIK - Anti-zombie backstab device.\nMove your mouse outside of the shop to quickly close it!"
+LANGUAGE.ars_worth                                  = "Worth Menu"
+LANGUAGE.ars_purchase                               = "Purchase"  
+LANGUAGE.ars_purchaseammo                           = "Purchase ammunition"
+LANGUAGE.ars_pts                                    = "Points"
+
+-- Ressuply Box
+
+LANGUAGE.res_box_ready                              = "Ready"
+LANGUAGE.res_box_seconds                            = "s"
+
+-- PendBoard (End Game)
+
+LANGUAGE.win                                        = "You have won!"
+LANGUAGE.lose                                       = "You have lost."
+LANGUAGE.humans_win                                 = "The humans have survived for now."
+LANGUAGE.zombies_win                                = "The undead army grows stronger."
+LANGUAGE.mentions                                   = "Honorable Mentions"
