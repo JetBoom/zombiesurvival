@@ -49,10 +49,10 @@ function PANEL:Init()
 		end
 	end
 
-	local button = EasyButton(self, "Select desired boss class...", 8, 4)
+	local button = EasyButton(self, ""..translate.Get("classes_boss"), 120, 4)
 	self.ClassTypeButton = button
 	button.DoClick = BossTypeDoClick
-
+    self.ClassTypeButton:SetFont("ZSHUDFontSmall") 
 	self:InvalidateLayout()
 end
 
@@ -66,7 +66,7 @@ function PANEL:PerformLayout()
 		classbutton:CenterVertical()
 	end
 
-	self.ClassTypeButton:AlignLeft(4)
+	self.ClassTypeButton:CenterHorizontal()
 	self.ClassTypeButton:AlignTop(4)
 end
 
@@ -109,10 +109,10 @@ function PANEL:Init()
 		end
 	end
 
-	local button = EasyButton(self, "Back to normal class menu...", 8, 4)
+	local button = EasyButton(self, ""..translate.Get("classes_normal"), 120, 4)
 	self.ClassTypeButton = button
 	button.DoClick = ClassTypeDoClick
-
+	self.ClassTypeButton:SetFont("ZSHUDFontSmall") 
 	self:InvalidateLayout()
 end
 

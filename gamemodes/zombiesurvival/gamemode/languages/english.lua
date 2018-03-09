@@ -438,3 +438,8 @@ LANGUAGE.title_tools                                 = "Tools"
 LANGUAGE.title_other                                 = "Other"
 LANGUAGE.title_traits                                 = "Traits"
 LANGUAGE.title_returns                              = "Returns"
+
+-- Classes Menu
+
+LANGUAGE.classes_boss                              = "Select desired boss class..."
+LANGUAGE.classes_normal                            = "Back to normal class menu..."
