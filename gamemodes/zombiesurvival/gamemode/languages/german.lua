@@ -236,7 +236,7 @@ LANGUAGE.redeemer_kill								= "BLEIBE BANDIT UND ENTSCHEIDE DICH DEN MENSCHEN 
 
 -- Worth Menu
 
-LANGUAGE.worth_title								= "Wähle deine Überlebensausrüstung"
+LANGUAGE.worth_title								= "Wähle deine Ausrüstung"
 LANGUAGE.worth_close								= "Drücke F2 um das Worth-Menü wieder zu öffnen."
 LANGUAGE.worth_worth								= "Worth"
 LANGUAGE.worth_favtab								= "Favoriten"
@@ -250,9 +250,9 @@ LANGUAGE.worth_checkout								= "Kaufen"
 LANGUAGE.worth_checkouttooltip						= "Selbsterklärend."
 LANGUAGE.worth_random								= "Zufällige Ausrüstung"
 LANGUAGE.worth_randomtooltip						= "Bei Verwendung erhalten Sie nach dem Zufallsprinzip eine Auswahl an Gegenständen.\nDes Weiteren schließt diese Schaltfläche das Worth-Menü."
-LANGUAGE.worth_clear								= "Zusammenstellung löschen"
+LANGUAGE.worth_clear								= "Warenkorb zurücksetzen"
 LANGUAGE.worth_cleartooltip							= "Entfernt alle Gegenstände aus dem Warenkorb."
-LANGUAGE.worth_saveload								= "Zusammenstellung speichern"
+LANGUAGE.worth_saveload								= "Warenkorb speichern"
 LANGUAGE.worth_saveloadtooltip						= "Speichert die aktuelle Zusammenstellung, um sie später einfach wiederverwenden zu können."
 LANGUAGE.worth_github								= "GitHub"
 LANGUAGE.worth_githubtooltip						= "Das führt Sie zur GitHub-Seite dieses modifizierten Zombie Survival Spielmodus."
@@ -289,10 +289,15 @@ LANGUAGE.mentions									= "Ehrwürdige Erwähnungen"
 
 -- Weapon Titles
 
-LANGUAGE.title_guns									= "Pistolen"
+LANGUAGE.title_guns									= "Schusswaffen"
 LANGUAGE.title_ammo									= "Munition"
 LANGUAGE.title_melee								= "Nahkampfwaffen"
 LANGUAGE.title_tools								= "Werkzeuge"
 LANGUAGE.title_other								= "Anderes"
 LANGUAGE.title_traits								= "Traits"
 LANGUAGE.title_returns								= "Returns"
+
+-- Classes Menu
+
+LANGUAGE.classes_boss								= "Wähle die gewünschte Bossklasse..."
+LANGUAGE.classes_normal								= "Zurück zum normalen Klassenmenü..."
