@@ -301,3 +301,79 @@ LANGUAGE.title_returns								= "Returns"
 
 LANGUAGE.classes_boss								= "Wähle die gewünschte Bossklasse..."
 LANGUAGE.classes_normal								= "Zurück zum normalen Klassenmenü..."
+
+-- Options
+
+LANGUAGE.options_options							= "Optionen"
+LANGUAGE.options_no_floating_score					= "Verstecke 'pointfloaters'"
+LANGUAGE.options_iron_sights_crosshair				= "Zeige Fadenkreuz im Visier."
+LANGUAGE.options_film_mode							= "Filmmodus (Benutzeroberfläche verstecken)"
+LANGUAGE.options_beats								= "Aktiviere Hintergrundmusik"
+LANGUAGE.options_play_music							= "Aktiviere 'last human' Musik"
+LANGUAGE.options_post_processing					= "Aktiviere Postprocessing"
+LANGUAGE.options_film_grain							= "Aktiviere Filmkörnung"
+LANGUAGE.options_color_mod							= "Aktiviere Farbmodifikationen"
+LANGUAGE.options_draw_pain_flash					= "Aktiviere 'pain flashes'"
+LANGUAGE.options_no_crosshair_rotate				= "Keine Fadenkreuzrotation"
+LANGUAGE.options_auras								= "Zeige Gesundheitsauras"
+LANGUAGE.options_damage_floaters					= "Zeige Schadensindikatoren"
+LANGUAGE.options_movement_view_roll					= "Kamera beim Bewegen neigen"
+LANGUAGE.options_always_show_nails					= "Zeige immer den Nagelzustand"
+LANGUAGE.options_no_redeem							= "Deaktiviere automatisches 'redeeming' (Nächste Runde)"
+LANGUAGE.options_always_volunteer					= "Starte immer freiwillig als Zombie"
+LANGUAGE.options_no_boss_pick						= "Deaktiviere als Bosszombie ausgewählt zu werden"
+LANGUAGE.options_suicide_on_change					= "Selbstmord bei Klassenwechsel"
+LANGUAGE.options_music_volume						= "Musiklautstärke"
+LANGUAGE.options_transparency_radius				= "Transparenzradius"
+LANGUAGE.options_film_grain							= "Filmkörnung"
+LANGUAGE.options_crosshair_p						= "Fadenkreuz Primärfarbe"
+LANGUAGE.options_crosshair_s						= "Fadenkreuz Sekundärfarbe"
+LANGUAGE.options_hp_full							= "Gesundheitsaurafarbe - 100%"
+LANGUAGE.options_hp_no								= "Gesundheitsaurafarbe - 0%"
+LANGUAGE.options_beatset_zombie						= "Musikalische Atmosphäre der Zombies"
+LANGUAGE.options_beatset_human						= "Musikalische Atmosphäre der Menschen"
+LANGUAGE.options_weapon_hud_mode					= "Anzeigestil der Waffen"
+
+-- Help menu
+
+LANGUAGE.help_help									= "Hilfe"
+LANGUAGE.help_credits								= "Danksagungen"
+
+-- Scoreboard (teams)
+
+LANGUAGE.team_humans								= "Überlebende"
+LANGUAGE.team_zombie								= "Zombies"
+
+-- ALT menu
+
+LANGUAGE.alt_gw										= "Waffe geben"
+LANGUAGE.alt_gw5									= "Waffe und 5 Clips geben"
+LANGUAGE.alt_dw										= "Waffe wegwerfen"
+LANGUAGE.alt_ec										= "Magazin leeren"
+LANGUAGE.alt_drop									= "Wegwerfen"
+LANGUAGE.alt_give									= "Geben"
+
+-- Ammo names
+
+LANGUAGE.ammo_pistol								= "Pistolenkugeln"
+LANGUAGE.ammo_smg									= "SMG-Munition"
+LANGUAGE.ammo_rifle									= "Gewehrmunition"
+LANGUAGE.ammo_bolts									= "Bolzen"
+LANGUAGE.ammo_buckshots								= "Schrotmunition"
+LANGUAGE.ammo_boards								= "Bretter"
+LANGUAGE.ammo_grenade								= "Granaten"
+LANGUAGE.ammo_turrets								= "Selbstschussanlagen"
+LANGUAGE.ammo_meds									= "Medizinisches Material"
+LANGUAGE.ammo_nail									= "Nägel"
+LANGUAGE.ammo_ars									= "Arsenal Kisten"
+LANGUAGE.ammo_beacons								= "Beacons"
+LANGUAGE.ammo_forcefilds							= "Force Field Emitters"
+LANGUAGE.ammo_spotlamp								= "Scheinwerferlampen"
+LANGUAGE.ammo_stone									= "Steine"
+LANGUAGE.ammo_pulse									= "Pulse Schüsse"
+
+-- Player HUD things
+
+LANGUAGE.pl_poison									= "VERGIFTUNG!"
+LANGUAGE.pl_bleed									= "BLUTUNG!"
+LANGUAGE.pl_ghtc									= "BÖSARTIGE BEHRÜHRUNG!"
