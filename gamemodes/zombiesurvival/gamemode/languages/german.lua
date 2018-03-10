@@ -299,8 +299,8 @@ LANGUAGE.title_returns								= "Returns"
 
 -- Classes Menu
 
-LANGUAGE.classes_boss								= "Wähle die gewünschte Bossklasse..."
-LANGUAGE.classes_normal								= "Zurück zum normalen Klassenmenü..."
+LANGUAGE.normal_selection								= "Zurück zum normalen Klassenmenü..."
+LANGUAGE.boss_selection								= "Wähle die gewünschte Bossklasse..."
 
 -- Options
 
