@@ -1153,16 +1153,16 @@ function GM:HumanMenu()
 		panel:AddItem(b)
 	end
 
-	local b = EasyButton(panel, "Give Weapon", 8, 4)
+	local b = EasyButton(panel, ""..translate.Get("alt_gw"), 8, 4)
 	b.DoClick = GiveWeapon
 	panel:AddItem(b)
-	b = EasyButton(panel, "Give Weapon and 5 clips", 8, 4)
+	b = EasyButton(panel, ""..translate.Get("alt_gw5"), 8, 4)
 	b.DoClick = GiveWeaponClip
 	panel:AddItem(b)
-	b = EasyButton(panel, "Drop weapon", 8, 4)
+	b = EasyButton(panel, ""..translate.Get("alt_dw"), 8, 4)
 	b.DoClick = DropWeapon
 	panel:AddItem(b)
-	b = EasyButton(panel, "Empty clip", 8, 4)
+	b = EasyButton(panel, ""..translate.Get("alt_ec"), 8, 4)
 	b.DoClick = EmptyClip
 	panel:AddItem(b)
 

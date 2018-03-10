@@ -439,7 +439,116 @@ LANGUAGE.title_other                                 = "Other"
 LANGUAGE.title_traits                                 = "Traits"
 LANGUAGE.title_returns                              = "Returns"
 
--- Classes Menu
+-- MainMenu (F1 menu)
 
-LANGUAGE.classes_boss                              = "Select desired boss class..."
-LANGUAGE.classes_normal                            = "Back to normal class menu..."
+LANGUAGE.mm_pm_selection                           = "Player model selection"
+LANGUAGE.mm_pm_color                               = "Player color"
+LANGUAGE.mm_color                                  = "Colors"
+LANGUAGE.mm_w_color                                = "Weapon color"
+LANGUAGE.mm_close                                  = "Close"
+LANGUAGE.mm_credits                                = "Credits"
+LANGUAGE.mm_options                                = "Options"
+LANGUAGE.mm_pc                                     = "Player color"
+LANGUAGE.mm_pm                                     = "Player model"
+LANGUAGE.mm_help                                   = "Help" 
+LANGUAGE.mm_pm_messg                               = "You've changed your desired player model to"
+LANGUAGE.mm_sp                                     = "Spectate"
+LANGUAGE.mm_unsp                                   = "Un-Spectate"
+LANGUAGE.mm_sp2                                    = "Spectate"
+LANGUAGE.mm_sp3                                    = "Spectate"
+LANGUAGE.mm_unsp2                                  = "Un-Spectate"
+
+-- Weapon Database
+
+LANGUAGE.wb_database                               = "Weapon Database"
+LANGUAGE.wb_wspeed                                 = "Movement speed"
+LANGUAGE.wb_mdmg                                   = "Damage"
+LANGUAGE.wb_range                                  = "Range"
+LANGUAGE.wb_msize                                  = "Size"
+LANGUAGE.wb_clipsize                               = "Clip size"
+LANGUAGE.wb_dmg                                    = "Damage"
+LANGUAGE.wb_numshots                               = "Number of shots"
+LANGUAGE.wb_delay                                  = "Rate of fire"
+LANGUAGE.wb_minaccu                                = "Minimum accuracy"
+LANGUAGE.wb_maxaccu                                = "Maximum accuracy"
+
+-- Class Selection
+
+LANGUAGE.normal_selection                           = "Back to normal class menu..."
+LANGUAGE.boss_selection                             = "Select desired boss class..."
+
+-- Options
+
+LANGUAGE.options_options                            = "Options"
+LANGUAGE.options_no_floating_score                  = "Don't show point floaters"
+LANGUAGE.options_iron_sights_crosshair              = "Draw crosshair in ironsights."
+LANGUAGE.options_film_mode                          = "Film Mode (disable most of the HUD)"
+LANGUAGE.options_beats                              = "Enable ambient music"
+LANGUAGE.options_play_music                         = "Enable last human music"
+LANGUAGE.options_post_processing                    = "Enable post processing"
+LANGUAGE.options_film_grain                         = "Enable film grain"
+LANGUAGE.options_color_mod                          = "Enable Color Mod"
+LANGUAGE.options_draw_pain_flash                    = "Enable pain flashes"
+LANGUAGE.options_no_crosshair_rotate                = "No crosshair rotate"
+LANGUAGE.options_auras                              = "Enable human health auras"
+LANGUAGE.options_damage_floaters                    = "Enable damage indicators"
+LANGUAGE.options_movement_view_roll                 = "Enable movement view roll"
+LANGUAGE.options_always_show_nails                  = "Always display nail health"
+LANGUAGE.options_no_redeem                          = "Disable automatic redeeming (next round)"
+LANGUAGE.options_always_volunteer                   = "Always volunteer to start as a zombie"
+LANGUAGE.options_no_boss_pick                       = "Prevent being picked as a boss zombie"
+LANGUAGE.options_suicide_on_change                  = "Automatic suicide when changing classes"
+LANGUAGE.options_music_volume                       = "Music volume"
+LANGUAGE.options_transparency_radius                = "Transparency radius"
+LANGUAGE.options_film_grain                         = "Film grain"
+LANGUAGE.options_crosshair_p                        = "Crosshair primary color"
+LANGUAGE.options_crosshair_s                        = "Crosshair secondary color"
+LANGUAGE.options_hp_full                            = "Health aura color - Full health"
+LANGUAGE.options_hp_no                              = "Health aura color - No health"
+LANGUAGE.options_beatset_zombie                     = "Zombie ambient beat set"
+LANGUAGE.options_beatset_human                      = "Human ambient beat set"
+LANGUAGE.options_weapon_hud_mode                    = "Weapon HUD display style"
+
+-- Help menu
+
+LANGUAGE.help_help                                  = "Help"
+LANGUAGE.help_credits                               = "Credits"
+
+-- Scoreboard (teams)
+
+LANGUAGE.team_humans                                = "Survivors"
+LANGUAGE.team_zombie                                = "Zombies"
+
+-- ALT menu
+
+LANGUAGE.alt_gw                                     = "Give Weapon"
+LANGUAGE.alt_gw5                                    = "Give Weapon and 5 clips"
+LANGUAGE.alt_dw                                     = "Drop weapon"
+LANGUAGE.alt_ec                                     = "Empty clip"
+LANGUAGE.alt_drop                                   = "Drop"
+LANGUAGE.alt_give                                   = "Give"
+
+-- Ammo names
+
+LANGUAGE.ammo_pistol                                = "Pistol"
+LANGUAGE.ammo_smg                                   = "SMG"
+LANGUAGE.ammo_rifle                                 = "Rifle"
+LANGUAGE.ammo_bolts                                 = "Bolts"            
+LANGUAGE.ammo_buckshots                             = "Buckshot"
+LANGUAGE.ammo_boards                                = "Boards"
+LANGUAGE.ammo_grenade                               = "Grenades"
+LANGUAGE.ammo_turrets                               = "Turrets"
+LANGUAGE.ammo_meds                                  = "Medical Supplies"
+LANGUAGE.ammo_nail                                  = "Nails"
+LANGUAGE.ammo_ars                                   = "Arsenal Crates"
+LANGUAGE.ammo_beacons                               = "Beacons"
+LANGUAGE.ammo_forcefilds                            = "Force Field Emitters"
+LANGUAGE.ammo_spotlamp                              = "Spot Lamps"
+LANGUAGE.ammo_stone                                 = "Stones"
+LANGUAGE.ammo_pulse                                 = "Pulse Shots"
+
+-- Player HUD things
+
+LANGUAGE.pl_poison                                  = "POISON!"
+LANGUAGE.pl_bleed                                   = "BLEED!"
+LANGUAGE.pl_ghtc                                    = "GHOUL TOUCH!"

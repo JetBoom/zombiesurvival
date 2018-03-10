@@ -6,18 +6,18 @@ local function WeaponButtonDoClick(self)
 end
 
 local Features = {
-{"WalkSpeed", "Movement speed"},
-{"MeleeDamage", "Damage"},
-{"MeleeRange", "Range"},
-{"MeleeSize", "Size"},
+{"WalkSpeed", translate.Get("wb_wspeed")},
+{"MeleeDamage", translate.Get("wb_mdmg")},
+{"MeleeRange", translate.Get("wb_range")},
+{"MeleeSize", translate.Get("wb_msize")},
 
-{"ClipSize", "Clip size", 0, 50, false, "Primary"},
-{"Damage", "Damage", 2, 100, false, "Primary"},
-{"NumShots", "Number of shots", 1, 12, false, "Primary"},
-{"Delay", "Rate of fire", 0.05, 3, true, "Primary"},
+{"ClipSize", translate.Get("wb_clipsize"), 0, 50, false, "Primary"},
+{"Damage", translate.Get("wb_dmg"), 2, 100, false, "Primary"},
+{"NumShots", translate.Get("wb_numshots"), 1, 12, false, "Primary"},
+{"Delay", translate.Get("wb_delay"), 0.05, 3, true, "Primary"},
 
-{"ConeMax", "Minimum accuracy"},
-{"ConeMin", "Maximum accuracy"}
+{"ConeMax", translate.Get("wb_maxaccu")},
+{"ConeMin", translate.Get("wb_minaccu")}
 }
 
 local function SetWeaponViewerSWEP(self, swep)
@@ -118,7 +118,7 @@ function MakepWeapons(silent)
 
 	local y = 8
 
-	local title = EasyLabel(frame, "Weapon Database", "ZSHUDFont", color_white)
+	local title = EasyLabel(frame, translate.Get("wb_database"), "ZSHUDFont", color_white)
 	title:SetPos(wid * 0.5 - title:GetWide() * 0.5, y)
 	y = y + title:GetTall() + 8
 

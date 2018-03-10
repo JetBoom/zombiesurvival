@@ -88,7 +88,7 @@ function MakepHelp()
 	Window:SetCursor("pointer")
 	pHelp = Window
 
-	local label = EasyLabel(Window, "Help", "ZSHUDFont", color_white)
+	local label = EasyLabel(Window, translate.Get("help_help"), "ZSHUDFont", color_white)
 	label:CenterHorizontal()
 	label:AlignTop(8)
 
@@ -129,7 +129,7 @@ function MakepHelp()
 
 	local button = EasyButton(Window, "Credits", 8, 4)
 	button:SetPos(wide - button:GetWide() - 12, tall - button:GetTall() - 12)
-	button:SetText("Credits")
+	button:SetText(translate.Get("help_credits"))
 	button.DoClick = function(btn) MakepCredits() end
 
 	gamemode.Call("BuildHelpMenu", Window, propertysheet)

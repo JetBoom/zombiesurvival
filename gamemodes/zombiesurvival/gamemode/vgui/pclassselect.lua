@@ -49,10 +49,10 @@ function PANEL:Init()
 		end
 	end
 
-	local button = EasyButton(self, ""..translate.Get("classes_boss"), 120, 10)
+	local button = EasyButton(self, translate.Get("boss_selection"), 120, 10)
 	self.ClassTypeButton = button
 	button.DoClick = BossTypeDoClick
-    self.ClassTypeButton:SetFont("ZSHUDFontSmall") 
+	self.ClassTypeButton:SetFont("ZSHUDFontSmall") 
 	self:InvalidateLayout()
 end
 
@@ -109,10 +109,10 @@ function PANEL:Init()
 		end
 	end
 
-	local button = EasyButton(self, ""..translate.Get("classes_normal"), 120, 10)
+	local button = EasyButton(self, translate.Get("normal_selection"), 8, 4)
 	self.ClassTypeButton = button
 	button.DoClick = ClassTypeDoClick
-	self.ClassTypeButton:SetFont("ZSHUDFontSmall") 
+	self.ClassTypeButton:SetFont("ZSHUDFontSmall")
 	self:InvalidateLayout()
 end
 
