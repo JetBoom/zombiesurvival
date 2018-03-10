@@ -109,7 +109,7 @@ function PANEL:Init()
 		end
 	end
 
-	local button = EasyButton(self, translate.Get("normal_selection"), 8, 4)
+	local button = EasyButton(self, translate.Get("normal_selection"), 120, 10)
 	self.ClassTypeButton = button
 	button.DoClick = ClassTypeDoClick
 	self.ClassTypeButton:SetFont("ZSHUDFontSmall")
