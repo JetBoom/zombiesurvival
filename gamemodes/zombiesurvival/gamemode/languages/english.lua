@@ -435,7 +435,11 @@ LANGUAGE.humans_win                                 = "The humans have survived 
 LANGUAGE.zombies_win                                = "The undead army grows stronger."
 LANGUAGE.mentions                                   = "Honorable Mentions"
 
--- Shop Items (worth menu) 
+-- Shop Items (worth menu)
+
+--[[Some shop items that are part of the 
+arsenal crate get their translations from the Worth Menu as
+it's pointless to translate the same weapon twice]]-- 
 
 LANGUAGE.worth_peashooter                           = "'Peashooter' Handgun"
 LANGUAGE.worth_battleaxe                            = "'Battleaxe' Handgun"
@@ -522,6 +526,25 @@ LANGUAGE.worth_noodlearms                           = "Noodle Arms"
 LANGUAGE.worth_noodlearms2                          = "Disallows picking up of objects in exchange for Worth."
 
 -- Shop Items (arsenal crate) -- W.I.P.
+
+LANGUAGE.ars_zomdrill                               = "'Zombie Drill' Desert Eagle"
+LANGUAGE.ars_zomdrill2                               = "This handgun uses high-powered rounds that have more knockback than others."
+LANGUAGE.ars_glock3                               = "'Crossfire' Glock 3"
+--LANGUAGE.ars_glock31                               = "wip"
+LANGUAGE.ars_magnum                               = "'Ricochet' Magnum"
+--LANGUAGE.ars_magnum1                               = "wip"
+LANGUAGE.ars_eraser                              = "'Eraser' Tactical Pistol"
+--LANGUAGE.ars_eraser1                              = "wip"
+LANGUAGE.ars_uzi                              = "'Sprayer' Uzi 9mm"
+--LANGUAGE.ars_uzi1                              = "wip"
+LANGUAGE.ars_shredder                              = "'Shredder' SMG"
+--LANGUAGE.ars_shredder1                              = "wip"
+LANGUAGE.ars_bulletstorm                              = "'Bullet Storm' SMG"
+--LANGUAGE.ars_bulletstorm1                              = "wip"
+LANGUAGE.ars_hunter                              = "'Hunter' Rifle"
+--LANGUAGE.ars_hunter1                              = "wip"
+
+
 
 -- Honorable Mentions 
 

@@ -199,15 +199,15 @@ GM:AddStartingItem("dbfnopickup", ""..translate.Get("worth_noodlearms"), ""..tra
 -- Points --
 ------------
 
-GM:AddPointShopItem("deagle", "'Zombie Drill' Desert Eagle", nil, ITEMCAT_GUNS, 30, "weapon_zs_deagle")
-GM:AddPointShopItem("glock3", "'Crossfire' Glock 3", nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
-GM:AddPointShopItem("magnum", "'Ricochet' Magnum", nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
-GM:AddPointShopItem("eraser", "'Eraser' Tactical Pistol", nil, ITEMCAT_GUNS, 35, "weapon_zs_eraser")
+GM:AddPointShopItem("deagle", ""..translate.Get("ars_zomdrill"), nil, ITEMCAT_GUNS, 30, "weapon_zs_deagle")
+GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock3"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
+GM:AddPointShopItem("magnum", ""..translate.Get("ars_magnum"), nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
+GM:AddPointShopItem("eraser", ""..translate.Get("ars_eraser"), nil, ITEMCAT_GUNS, 35, "weapon_zs_eraser")
 
-GM:AddPointShopItem("uzi", "'Sprayer' Uzi 9mm", nil, ITEMCAT_GUNS, 70, "weapon_zs_uzi")
-GM:AddPointShopItem("shredder", "'Shredder' SMG", nil, ITEMCAT_GUNS, 70, "weapon_zs_smg")
-GM:AddPointShopItem("bulletstorm", "'Bullet Storm' SMG", nil, ITEMCAT_GUNS, 70, "weapon_zs_bulletstorm")
-GM:AddPointShopItem("hunter", "'Hunter' Rifle", nil, ITEMCAT_GUNS, 70, "weapon_zs_hunter")
+GM:AddPointShopItem("uzi", ""..translate.Get("ars_uzi"), nil, ITEMCAT_GUNS, 70, "weapon_zs_uzi")
+GM:AddPointShopItem("shredder", ""..translate.Get("ars_shredder"), nil, ITEMCAT_GUNS, 70, "weapon_zs_smg")
+GM:AddPointShopItem("bulletstorm", ""..translate.Get("ars_bulletstorm"), nil, ITEMCAT_GUNS, 70, "weapon_zs_bulletstorm")
+GM:AddPointShopItem("hunter", ""..translate.Get("ars_hunter"), nil, ITEMCAT_GUNS, 70, "weapon_zs_hunter")
 
 GM:AddPointShopItem("reaper", "'Reaper' UMP", nil, ITEMCAT_GUNS, 80, "weapon_zs_reaper")
 GM:AddPointShopItem("ender", "'Ender' Automatic Shotgun", nil, ITEMCAT_GUNS, 85, "weapon_zs_ender")
@@ -238,31 +238,30 @@ GM:AddPointShopItem("rifleammo", "rifle ammo box", nil, ITEMCAT_AMMO, 4, nil, fu
 GM:AddPointShopItem("crossbowammo", "crossbow bolt", nil, ITEMCAT_AMMO, 2, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
 GM:AddPointShopItem("pulseammo", "pulse ammo box", nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
 
-GM:AddPointShopItem("axe", "Axe", nil, ITEMCAT_MELEE, 10, "weapon_zs_axe")
-GM:AddPointShopItem("crowbar", "Crowbar", nil, ITEMCAT_MELEE, 15, "weapon_zs_crowbar")
-GM:AddPointShopItem("stunbaton", "Stun Baton", nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
-GM:AddPointShopItem("knife", "Knife", nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
+GM:AddPointShopItem("axe", ""..translate.Get("worth_axe"), nil, ITEMCAT_MELEE, 10, "weapon_zs_axe")
+GM:AddPointShopItem("crowbar", ""..translate.Get("worth_crowbar"), nil, ITEMCAT_MELEE, 15, "weapon_zs_crowbar")
+GM:AddPointShopItem("stunbaton", ""..translate.Get("worth_stun"), nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
+GM:AddPointShopItem("knife", ""..translate.Get("worth_knife"), nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
 GM:AddPointShopItem("shovel", "Shovel", nil, ITEMCAT_MELEE, 20, "weapon_zs_shovel")
 GM:AddPointShopItem("sledgehammer", "Sledge Hammer", nil, ITEMCAT_MELEE, 30, "weapon_zs_sledgehammer")
 
-GM:AddPointShopItem("crphmr", "Carpenter's Hammer", nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
-GM:AddPointShopItem("wrench", "Mechanic's Wrench", nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
-GM:AddPointShopItem("arsenalcrate", "Arsenal Crate", nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
-GM:AddPointShopItem("resupplybox", "Resupply Box", nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
-local item = GM:AddPointShopItem("infturret", "Infrared Gun Turret", "This automated turret requires constant upkeep to be useful.\nPress PRIMARY ATTACK to deploy the turret.\nPress SECONDARY ATTACK and RELOAD to rotate the turret.\nPress USE on a deployed turret to give it some of your SMG ammunition.\nPress USE on a deployed turret with no owner (blue light) to reclaim it.",
+GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
+GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
+GM:AddPointShopItem("arsenalcrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
+GM:AddPointShopItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
+local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
 	ITEMCAT_TOOLS, 65, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 	pl:GiveAmmo(250, "smg1")
 end, "models/combine_turrets/floor_turret.mdl")
 item.NoClassicMode = true
-item.NoClassicMode = true
-GM:AddPointShopItem("manhack", "Manhack", nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
+GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
 GM:AddPointShopItem("barricadekit", "'Aegis' Barricade Kit", nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
 GM:AddPointShopItem("nail", "Nail", "It's just one nail.", ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
-GM:AddPointShopItem("medkit", "Medical Kit", nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
+GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
 GM:AddPointShopItem("50mkit", "50 Medical Kit power", "50 extra power for the Medical Kit.", ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
-GM:AddPointShopItem("ffemitter", "Force Field Emitter", nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
+GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
 
 
 GM:AddPointShopItem("grenade", "Grenade", nil, ITEMCAT_OTHER, 200, "weapon_zs_grenade")
