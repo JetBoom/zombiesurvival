@@ -7,7 +7,7 @@ local pPlayerModel
 local function SwitchPlayerModel(self)
 	surface.PlaySound("buttons/button14.wav")
 	RunConsoleCommand("cl_playermodel", self.m_ModelName)
-	chat.AddText(COLOR_LIMEGREEN, "You've changed your desired player model to "..tostring(self.m_ModelName))
+	chat.AddText(COLOR_LIMEGREEN, translate.Get("mm_pm_messg").." "..tostring(self.m_ModelName))
 
 	pPlayerModel:Close()
 end
@@ -22,7 +22,7 @@ function MakepPlayerModel()
 
 	pPlayerModel = vgui.Create("DFrame")
 	pPlayerModel:SetSkin("Default")
-	pPlayerModel:SetTitle("Player model selection")
+	pPlayerModel:SetTitle(translate.Get("mm_pm_selection"))
 	pPlayerModel:SetSize(wid, hei)
 	pPlayerModel:Center()
 	pPlayerModel:SetDeleteOnClose(true)
@@ -64,11 +64,11 @@ function MakepPlayerColor()
 
 	local y = 8
 
-	local label = EasyLabel(pPlayerColor, "Colors", "ZSHUDFont", color_white)
+	local label = EasyLabel(pPlayerColor, translate.Get("mm_color"), "ZSHUDFont", color_white)
 	label:SetPos((pPlayerColor:GetWide() - label:GetWide()) / 2, y)
 	y = y + label:GetTall() + 8
 
-	local lab = EasyLabel(pPlayerColor, "Player color")
+	local lab = EasyLabel(pPlayerColor, translate.Get("mm_pm_color"))
 	lab:SetPos(8, y)
 	y = y + lab:GetTall()
 
@@ -87,7 +87,7 @@ function MakepPlayerColor()
 	colpicker:SetPos(8, y)
 	y = y + colpicker:GetTall()
 
-	local lab = EasyLabel(pPlayerColor, "Weapon color")
+	local lab = EasyLabel(pPlayerColor, translate.Get("mm_w_color"))
 	lab:SetPos(8, y)
 	y = y + lab:GetTall()
 
@@ -128,10 +128,30 @@ function GM:ShowHelp()
 	header:SetContentAlignment(8)
 	header:DockMargin(0, ScrH() * 0.25, 0, 64)
 	header:Dock(TOP)
+	
+	local but = vgui.Create("DButton", menu)
+	but:SetFont("ZSHUDFontSmaller")
+	but:SetText(translate.Get("mm_sp"))
+	but:SetTall(32)
+	but:DockMargin(0, 0, 0, 12)
+	but:DockPadding(0, 12, 0, 12)
+	but:Dock(TOP)
+	but.Think = function(self)
+	self.BaseClass.Think(self)
+		
+	local text = self:GetText()
+	if MySelf:Team() == TEAM_SPECTATOR and text == (translate.Get("mm_sp")) then
+		self:SetText(translate.Get("mm_unsp"))
+		elseif MySelf:Team() ~= TEAM_SPECTATOR and text == (translate.Get("mm_unsp")) then
+		self:SetText(translate.Get("mm_sp"))
+		end
+	end
+	but.DoClick = function() RunConsoleCommand("spectate")
+	menu:Remove() end
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
-	but:SetText("Help")
+	but:SetText(translate.Get("mm_help"))
 	but:SetTall(32)
 	but:DockMargin(0, 0, 0, 12)
 	but:DockPadding(0, 12, 0, 12)
@@ -140,7 +160,7 @@ function GM:ShowHelp()
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
-	but:SetText("Player Model")
+	but:SetText(translate.Get("mm_pm"))
 	but:SetTall(32)
 	but:DockMargin(0, 0, 0, 12)
 	but:DockPadding(0, 12, 0, 12)
@@ -149,7 +169,7 @@ function GM:ShowHelp()
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
-	but:SetText("Player Color")
+	but:SetText(translate.Get("mm_pc"))
 	but:SetTall(32)
 	but:DockMargin(0, 0, 0, 12)
 	but:DockPadding(0, 12, 0, 12)
@@ -158,7 +178,7 @@ function GM:ShowHelp()
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
-	but:SetText("Options")
+	but:SetText(translate.Get("mm_options"))
 	but:SetTall(32)
 	but:DockMargin(0, 0, 0, 12)
 	but:DockPadding(0, 12, 0, 12)
@@ -167,7 +187,7 @@ function GM:ShowHelp()
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
-	but:SetText("Credits")
+	but:SetText(translate.Get("mm_credits"))
 	but:SetTall(32)
 	but:DockMargin(0, 0, 0, 12)
 	but:DockPadding(0, 12, 0, 12)
@@ -176,7 +196,7 @@ function GM:ShowHelp()
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
-	but:SetText("Close")
+	but:SetText(translate.Get("mm_close"))
 	but:SetTall(32)
 	but:DockMargin(0, 24, 0, 0)
 	but:DockPadding(0, 12, 0, 12)

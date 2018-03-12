@@ -88,8 +88,11 @@ function ENT:AltUse(activator, tr)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_resupplybox")
-	pl:GiveAmmo(1, "helicoptergun")
+  	if pl:HasWeapon("weapon_zs_resupplybox") then
+		pl:GiveAmmo(1, "helicoptergun")
+	else
+		pl:Give("weapon_zs_resupplybox")
+	end
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
 
@@ -108,7 +111,7 @@ end
 
 local NextUse = {}
 function ENT:Use(activator, caller)
-	if activator:Team() ~= TEAM_HUMAN or not activator:Alive() or GAMEMODE:GetWave() <= 0 then return end
+	if activator:Team() == TEAM_UNDEAD or not activator:Alive() or GAMEMODE:GetWave() <= 0 then return end
 
 	if not self:GetObjectOwner():IsValid() then
 		self:SetObjectOwner(activator)

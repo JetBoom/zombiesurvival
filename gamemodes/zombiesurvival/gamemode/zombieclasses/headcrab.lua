@@ -136,7 +136,7 @@ end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/headcrab"
+CLASS.Icon = "zombiesurvival/killicons/headcrab_hd"
 
 function CLASS:PrePlayerDraw(pl)
 	local wep = pl:GetActiveWeapon()

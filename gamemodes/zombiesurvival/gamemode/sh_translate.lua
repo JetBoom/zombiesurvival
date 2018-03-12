@@ -11,16 +11,18 @@ local DefaultLanguage = "en"
 local CurrentLanguage = DefaultLanguage
 
 if CLIENT then
-	-- Need to make a new convar since gmod_language isn't sent to server.
-	CreateClientConVar("gmod_language_rep", "en", false, true)
-
-	timer.Create("checklanguagechange", 1, 0, function()
-		CurrentLanguage = GetConVarString("gmod_language")
-		if CurrentLanguage ~= GetConVarString("gmod_language_rep") then
-			-- Let server know our language changed.
-			RunConsoleCommand("gmod_language_rep", CurrentLanguage)
-		end
-	end)
+    -- Need to make a new convar since gmod_language isn't sent to server.
+    CreateClientConVar("gmod_language_rep", "en", false, true)
+   
+    CurrentLanguage = GetConVarString("gmod_language")
+   
+    timer.Create("checklanguagechange", 1, 0, function()
+        CurrentLanguage = GetConVarString("gmod_language")
+        if CurrentLanguage ~= GetConVarString("gmod_language_rep") then
+            -- Let server know our language changed.
+            RunConsoleCommand("gmod_language_rep", CurrentLanguage)
+        end
+    end)
 end
 
 function translate.GetLanguages()

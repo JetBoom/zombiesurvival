@@ -65,29 +65,34 @@ killicon.AddFont("weapon_crowbar", "zsdeathnotice", "6", color_white)
 killicon.AddFont("headshot", "zsdeathnoticecs", "D", color_white)
 killicon.Add("redeem", "killicon/redeem_v2", color_white)
 
-killicon.Add("weapon_zs_zombie", "zombiesurvival/killicons/zombie", color_white)
-killicon.Add("weapon_zs_freshdead", "zombiesurvival/killicons/zombie", color_white)
-killicon.Add("weapon_zs_classiczombie", "zombiesurvival/killicons/zombie", color_white)
-killicon.Add("weapon_zs_superzombie", "zombiesurvival/killicons/zombie", color_white)
-killicon.Add("weapon_zs_zombietorso", "zombiesurvival/killicons/torso", color_white)
+killicon.Add("weapon_zs_zombie", "zombiesurvival/killicons/zombie_hd", color_white)
+killicon.Add("weapon_zs_freshdead", "zombiesurvival/killicons/freshdead_hd", color_white)
+killicon.Add("weapon_zs_classiczombie", "zombiesurvival/killicons/zombie_hd", color_white)
+killicon.Add("weapon_zs_superzombie", "zombiesurvival/killicons/zombie_hd", color_white)
+killicon.Add("weapon_zs_zombietorso", "zombiesurvival/killicons/crawler_hd", color_white)
 killicon.Add("weapon_zs_zombielegs", "zombiesurvival/killicons/legs", color_white)
 killicon.Add("weapon_zs_fastzombielegs", "zombiesurvival/killicons/legs", color_white)
-killicon.Add("weapon_zs_nightmare", "zombiesurvival/killicons/nightmare", color_white)
-killicon.Add("weapon_zs_pukepus", "zombiesurvival/killicons/pukepus", color_white)
-killicon.Add("weapon_zs_ticklemonster", "zombiesurvival/killicons/tickle", color_white)
+killicon.Add("weapon_zs_fleshcreeper", "zombiesurvival/killicons/flesh_creeper_hd", color_white)
+killicon.Add("weapon_zs_nightmare", "zombiesurvival/killicons/nightmare_hd_2", color_white)
+killicon.Add("weapon_zs_pukepus", "zombiesurvival/killicons/pukepus_hd", color_white)
+killicon.Add("weapon_zs_ticklemonster", "zombiesurvival/killicons/ticklemonster_hd", color_white)
+killicon.Add("weapon_zs_butcherknifez", "zombiesurvival/killicons/butcher_hd", color_white)
+killicon.Add("weapon_zs_gorechild", "zombiesurvival/killicons/zombiebaby_hd_4", color_white)
+killicon.Add("weapon_zs_gigagorechild", "zombiesurvival/killicons/zombiebaby_hd_4", color_white)
 killicon.Add("weapon_zs_crow", "zombiesurvival/killicons/crow", color_white)
-killicon.Add("weapon_zs_fastzombie", "zombiesurvival/killicons/fastzombie", color_white)
-killicon.Add("weapon_zs_poisonzombie", "zombiesurvival/killicons/poisonzombie", color_white)
-killicon.Add("weapon_zs_chemzombie", "zombiesurvival/killicons/chemzombie", color_white)
-killicon.Add("weapon_zs_ghoul", "zombiesurvival/killicons/ghoul", color_white)
-killicon.Add("dummy_chemzombie", "zombiesurvival/killicons/chemzombie", color_white)
-killicon.Add("weapon_zs_wraith", "zombiesurvival/killicons/wraithv2", color_white)
-killicon.Add("weapon_zs_headcrab", "zombiesurvival/killicons/headcrab", color_white)
-killicon.Add("weapon_zs_fastheadcrab", "zombiesurvival/killicons/fastheadcrab", color_white)
-killicon.Add("weapon_zs_poisonheadcrab", "zombiesurvival/killicons/poisonheadcrab", color_white)
+killicon.Add("weapon_zs_fastzombie", "zombiesurvival/killicons/fastzombie_hd", color_white)
+killicon.Add("weapon_zs_bloatedzombie", "zombiesurvival/killicons/bloatedzombie_hd", color_white)
+killicon.Add("weapon_zs_poisonzombie", "zombiesurvival/killicons/poisonzombie_hd", color_white)
+killicon.Add("weapon_zs_chemzombie", "zombiesurvival/killicons/chemzombie_hd", color_white)
+killicon.Add("weapon_zs_ghoul", "zombiesurvival/killicons/ghoul_hd", color_white)
+killicon.Add("dummy_chemzombie", "zombiesurvival/killicons/chemzombie_hd", color_white)
+killicon.Add("weapon_zs_wraith", "zombiesurvival/killicons/wraith_hd", color_white)
+killicon.Add("weapon_zs_headcrab", "zombiesurvival/killicons/headcrab_hd", color_white)
+killicon.Add("weapon_zs_fastheadcrab", "zombiesurvival/killicons/fastcrab_hd", color_white)
+killicon.Add("weapon_zs_poisonheadcrab", "zombiesurvival/killicons/poisoncrab_hd", color_white)
 killicon.Add("projectile_poisonspit", "zombiesurvival/killicons/projectile_poisonspit", color_white)
 killicon.Add("projectile_poisonflesh", "zombiesurvival/killicons/projectile_poisonflesh", color_white)
-killicon.Add("projectile_poisonpuke", "zombiesurvival/killicons/pukepus", color_white)
+killicon.Add("projectile_poisonpuke", "zombiesurvival/killicons/pukepus_hd", color_white)
 killicon.Add("weapon_zs_special_wow", "sprites/glow04_noz", color_white)
 
 killicon.Add("prop_gunturret", "zombiesurvival/killicons/prop_gunturret", color_white)
@@ -225,7 +230,7 @@ net.Receive("zs_pl_kill_self", function(length)
 	local victimteam = net.ReadUInt(16)
 
 	if victim:IsValid() then
-		if victim == MySelf and victimteam == TEAM_HUMAN then
+		if victim == MySelf and victimteam ~= TEAM_UNDEAD then
 			gamemode.Call("LocalPlayerDied")
 		end
 
@@ -262,7 +267,7 @@ net.Receive("zs_death", function(length)
 	local victimteam = net.ReadUInt(16)
 
 	if victim:IsValid() then
-		if victim == MySelf and victimteam == TEAM_HUMAN then
+		if victim == MySelf and victimteam ~= TEAM_UNDEAD then
 			gamemode.Call("LocalPlayerDied")
 		end
 

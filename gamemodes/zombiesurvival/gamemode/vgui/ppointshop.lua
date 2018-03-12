@@ -3,7 +3,7 @@ local function pointslabelThink(self)
 	if self.m_LastPoints ~= points then
 		self.m_LastPoints = points
 
-		self:SetText("Points to spend: "..points)
+		self:SetText(translate.Get("pts_tospend")..": "..points)
 		self:SizeToContents()
 	end
 end
@@ -16,10 +16,10 @@ hook.Add("Think", "PointsShopThink", function()
 			pan.m_LastNearArsenalCrate = newstate
 
 			if newstate then
-				pan.m_DiscountLabel:SetText(GAMEMODE.ArsenalCrateDiscountPercentage.."% discount for buying between waves!")
+				pan.m_DiscountLabel:SetText(GAMEMODE.ArsenalCrateDiscountPercentage.."% "..translate.Get("ars_discount"))
 				pan.m_DiscountLabel:SetTextColor(COLOR_GREEN)
 			else
-				pan.m_DiscountLabel:SetText("All sales are final!")
+				pan.m_DiscountLabel:SetText(translate.Get("all_sales"))
 				pan.m_DiscountLabel:SetTextColor(COLOR_GRAY)
 			end
 
@@ -48,7 +48,8 @@ local ammonames = {
 	["smg1"] = "smgammo",
 	["ar2"] = "assaultrifleammo",
 	["357"] = "rifleammo",
-	["XBowBolt"] = "crossbowammo"
+	["XBowBolt"] = "crossbowammo",
+	["pulse"] = "pulseammo"
 }
 
 local warnedaboutammo = CreateClientConVar("_zs_warnedaboutammo", "0", true, false)
@@ -93,8 +94,30 @@ local function ItemPanelThink(self)
 				self.m_NameLabel:InvalidateLayout()
 				self.m_BuyButton:SetImage("icon16/exclamation.png")
 			end
-
+			
 			self.m_BuyButton:SizeToContents()
+		end
+
+		local active = GAMEMODE:GetWaveActive()
+		if(active ~= self.m_LastWaveActive) then
+			self.m_LastWaveActive = active
+			if active then
+				self.m_SalePriceLabel:SetVisible(false)
+				self.m_PriceStrikethroughLabel:SetVisible(false)
+			else
+				self.m_SalePriceLabel:SetAlpha(255)
+				self.m_PriceStrikethroughLabel:SetAlpha(255)
+				self.m_SalePriceLabel:SetVisible(true)
+				self.m_PriceStrikethroughLabel:SetVisible(true)
+			end
+		end
+
+		--Apply flashing effect when timeleft <10s
+		local timeleft = math.max(0, GAMEMODE:GetWaveStart() - CurTime())
+		if timeleft < 10 then
+			local glow = math.sin(RealTime() * 8) * 200 + 255
+			self.m_SalePriceLabel:SetAlpha(glow)
+			self.m_PriceStrikethroughLabel:SetAlpha(glow)
 		end
 	end
 end
@@ -118,8 +141,8 @@ function GM:OpenPointsShop()
 		return
 	end
 
-	local wid, hei = 480, math.max(ScrH() * 0.5, 400)
-
+	local wid, hei = math.min(ScrW(), 720), ScrH() * 0.7
+	
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(wid, hei)
 	frame:Center()
@@ -136,9 +159,9 @@ function GM:OpenPointsShop()
 	local topspace = vgui.Create("DPanel", frame)
 	topspace:SetWide(wid - 16)
 
-	local title = EasyLabel(topspace, "The Points Shop", "ZSHUDFontSmall", COLOR_WHITE)
+	local title = EasyLabel(topspace,(translate.Get("the_pointshop")), "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
-	local subtitle = EasyLabel(topspace, "For all of your zombie apocalypse needs!", "ZSHUDFontTiny", COLOR_WHITE)
+	local subtitle = EasyLabel(topspace, (translate.Get("for_allapocalypse")), "ZSHUDFontTiny", COLOR_WHITE)
 	subtitle:CenterHorizontal()
 	subtitle:MoveBelow(title, 4)
 
@@ -152,9 +175,9 @@ function GM:OpenPointsShop()
 	tt:SizeToContents()
 	tt:SetPos(8, 8)
 	tt:SetMouseInputEnabled(true)
-	tt:SetTooltip("This shop is armed with the QUIK - Anti-zombie backstab device.\nMove your mouse outside of the shop to quickly close it!")
+	tt:SetTooltip(translate.Get("ars_tooltip"))
 
-	local wsb = EasyButton(topspace, "Worth Menu", 8, 4)
+	local wsb = EasyButton(topspace, translate.Get("ars_worth"), 8, 4)
 	wsb:AlignRight(8)
 	wsb:AlignTop(8)
 	wsb.DoClick = worthmenuDoClick
@@ -239,15 +262,34 @@ function GM:OpenPointsShop()
 					namelab:SetPos(42, itempan:GetTall() * 0.5 - namelab:GetTall() * 0.5)
 					itempan.m_NameLabel = namelab
 
-					local pricelab = EasyLabel(itempan, tostring(tab.Worth).." Points", "ZSHUDFontTiny")
+					local pricelab = EasyLabel(itempan, tostring(tab.Worth).." "..translate.Get("ars_pts"), "ZSHUDFontTiny")
 					pricelab:SetPos(itempan:GetWide() - 20 - pricelab:GetWide(), 4)
+					pricelab:SetColor(COLOR_GRAY)
 					itempan.m_PriceLabel = pricelab
+
+					local saleprice = EasyLabel(itempan, tostring(math.ceil(tab.Worth * GAMEMODE.ArsenalCrateMultiplier)), "ZSHUDFontTiny")
+					saleprice:SetPos(itempan:GetWide() - 24 - pricelab:GetWide() - saleprice:GetWide(), 4)
+					saleprice:SetColor(COLOR_YELLOW)
+					saleprice:SetVisible(false)
+					itempan.m_SalePriceLabel = saleprice
+
+					local strikethrough = ""
+
+					for i=1, string.len(tab.Worth) do
+						strikethrough = strikethrough .. "-"
+					end
+
+					local pricestrikethrough = EasyLabel(itempan, strikethrough, "ZSHUDFontTiny")
+					pricestrikethrough:SetPos(itempan:GetWide() - 20 - pricelab:GetWide(), 4)
+					pricestrikethrough:SetColor(COLOR_YELLOW)
+					pricestrikethrough:SetVisible(false)
+					itempan.m_PriceStrikethroughLabel = pricestrikethrough
 
 					local button = vgui.Create("DImageButton", itempan)
 					button:SetImage("icon16/lorry_add.png")
 					button:SizeToContents()
 					button:SetPos(itempan:GetWide() - 20 - button:GetWide(), itempan:GetTall() - 20)
-					button:SetTooltip("Purchase "..name)
+					button:SetTooltip(translate.Get("ars_purchase").." "..name)
 					button.ID = itempan.ID
 					button.DoClick = PurchaseDoClick
 					itempan.m_BuyButton = button
@@ -260,7 +302,7 @@ function GM:OpenPointsShop()
 							ammobutton:SizeToContents()
 							ammobutton:CopyPos(button)
 							ammobutton:MoveLeftOf(button, 2)
-							ammobutton:SetTooltip("Purchase ammunition")
+							ammobutton:SetTooltip(translate.Get("ars_purchaseammo"))
 							ammobutton.AmmoType = ammonames[ammotype]
 							ammobutton.DoClick = BuyAmmoDoClick
 						end

@@ -250,24 +250,24 @@ function PANEL:Paint()
 	local mul = 0.5
 	local pl = self:GetPlayer()
 	if pl:IsValid() then
-		col = team.GetColor(pl:Team())
+	col = team.GetColor(pl:Team())
 
-		if self.m_Flash then
-			mul = 0.6 + math.abs(math.sin(RealTime() * 6)) * 0.4
-		elseif pl == MySelf then
-			mul = 0.8
-		end
+	if pl:SteamID() == "STEAM_0:1:49624713" or pl:Team() == TEAM_REDEEMER then
+	mul = 0.6 + math.abs(math.sin(RealTime() * 6)) * 0.4
+	elseif pl == MySelf then
+	mul = 0.8
 	end
+end
 
 	if self.Hovered then
-		mul = math.min(1, mul * 1.5)
-	end
+	mul = math.min(1, mul * 1.5)
+end
 
 	colTemp.r = col.r * mul
 	colTemp.g = col.g * mul
 	colTemp.b = col.b * mul
 	draw.RoundedBox(8, 0, 0, self:GetWide(), self:GetTall(), colTemp)
-
+	
 	return true
 end
 

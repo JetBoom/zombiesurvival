@@ -37,6 +37,7 @@ AddCSLuaFile("cl_deathnotice.lua")
 AddCSLuaFile("cl_floatingscore.lua")
 AddCSLuaFile("cl_dermaskin.lua")
 AddCSLuaFile("cl_hint.lua")
+AddCSLuaFile("cl_extras.lua")
 
 AddCSLuaFile("obj_vector_extend.lua")
 AddCSLuaFile("obj_player_extend.lua")
@@ -69,6 +70,8 @@ AddCSLuaFile("vgui/pendboard.lua")
 AddCSLuaFile("vgui/pworth.lua")
 AddCSLuaFile("vgui/ppointshop.lua")
 AddCSLuaFile("vgui/zshealtharea.lua")
+AddCSLuaFile("vgui/changeteam.lua")
+
 
 include("shared.lua")
 include("sv_options.lua")
@@ -81,6 +84,11 @@ include("sv_profiling.lua")
 include("sv_sigils.lua")
 
 include("sv_zombieescape.lua")
+
+include("sv_downloads.lua")
+include("sv_redeem.lua")
+include("sv_extras.lua")
+
 
 if file.Exists(GM.FolderName.."/gamemode/maps/"..game.GetMap()..".lua", "LUA") then
 	include("maps/"..game.GetMap()..".lua")
@@ -137,7 +145,7 @@ function GM:CreateGibs(pos, headoffset)
 end
 
 function GM:TryHumanPickup(pl, entity)
-	if self.ZombieEscape or pl.NoObjectPickup or not pl:Alive() or pl:Team() ~= TEAM_HUMAN then return end
+	if self.ZombieEscape or pl.NoObjectPickup or not pl:Alive() or pl:Team() == TEAM_UNDEAD then return end
 
 	if entity:IsValid() and not entity.m_NoPickup then
 		local entclass = string.sub(entity:GetClass(), 1, 12)
@@ -160,168 +168,7 @@ function GM:TryHumanPickup(pl, entity)
 	end
 end
 
-function GM:AddResources()
-	resource.AddFile("resource/fonts/typenoksidi.ttf")
-	resource.AddFile("resource/fonts/hidden.ttf")
 
-	for _, filename in pairs(file.Find("materials/zombiesurvival/*.vmt", "GAME")) do
-		resource.AddFile("materials/zombiesurvival/"..filename)
-	end
-
-	for _, filename in pairs(file.Find("materials/zombiesurvival/killicons/*.vmt", "GAME")) do
-		resource.AddFile("materials/zombiesurvival/killicons/"..filename)
-	end
-
-	resource.AddFile("materials/zombiesurvival/filmgrain/filmgrain.vmt")
-	resource.AddFile("materials/zombiesurvival/filmgrain/filmgrain.vtf")
-
-	for _, filename in pairs(file.Find("sound/zombiesurvival/*.ogg", "GAME")) do
-		resource.AddFile("sound/zombiesurvival/"..filename)
-	end
-	for _, filename in pairs(file.Find("sound/zombiesurvival/*.wav", "GAME")) do
-		resource.AddFile("sound/zombiesurvival/"..filename)
-	end
-	for _, filename in pairs(file.Find("sound/zombiesurvival/*.mp3", "GAME")) do
-		resource.AddFile("sound/zombiesurvival/"..filename)
-	end
-
-	local _____, dirs = file.Find("sound/zombiesurvival/beats/*", "GAME")
-	for _, dirname in pairs(dirs) do
-		for __, filename in pairs(file.Find("sound/zombiesurvival/beats/"..dirname.."/*.ogg", "GAME")) do
-			resource.AddFile("sound/zombiesurvival/beats/"..dirname.."/"..filename)
-		end
-		for __, filename in pairs(file.Find("sound/zombiesurvival/beats/"..dirname.."/*.wav", "GAME")) do
-			resource.AddFile("sound/zombiesurvival/beats/"..dirname.."/"..filename)
-		end
-		for __, filename in pairs(file.Find("sound/zombiesurvival/beats/"..dirname.."/*.mp3", "GAME")) do
-			resource.AddFile("sound/zombiesurvival/beats/"..dirname.."/"..filename)
-		end
-	end
-
-	resource.AddFile("materials/refract_ring.vmt")
-	resource.AddFile("materials/killicon/redeem_v2.vtf")
-	resource.AddFile("materials/killicon/redeem_v2.vmt")
-	resource.AddFile("materials/killicon/zs_axe.vtf")
-	resource.AddFile("materials/killicon/zs_keyboard.vtf")
-	resource.AddFile("materials/killicon/zs_sledgehammer.vtf")
-	resource.AddFile("materials/killicon/zs_fryingpan.vtf")
-	resource.AddFile("materials/killicon/zs_pot.vtf")
-	resource.AddFile("materials/killicon/zs_plank.vtf")
-	resource.AddFile("materials/killicon/zs_hammer.vtf")
-	resource.AddFile("materials/killicon/zs_shovel.vtf")
-	resource.AddFile("materials/killicon/zs_axe.vmt")
-	resource.AddFile("materials/killicon/zs_keyboard.vmt")
-	resource.AddFile("materials/killicon/zs_sledgehammer.vmt")
-	resource.AddFile("materials/killicon/zs_fryingpan.vmt")
-	resource.AddFile("materials/killicon/zs_pot.vmt")
-	resource.AddFile("materials/killicon/zs_plank.vmt")
-	resource.AddFile("materials/killicon/zs_hammer.vmt")
-	resource.AddFile("materials/killicon/zs_shovel.vmt")
-	resource.AddFile("models/weapons/v_zombiearms.mdl")
-	resource.AddFile("materials/models/weapons/v_zombiearms/zombie_classic_sheet.vmt")
-	resource.AddFile("materials/models/weapons/v_zombiearms/zombie_classic_sheet.vtf")
-	resource.AddFile("materials/models/weapons/v_zombiearms/zombie_classic_sheet_normal.vtf")
-	resource.AddFile("materials/models/weapons/v_zombiearms/ghoulsheet.vmt")
-	resource.AddFile("materials/models/weapons/v_zombiearms/ghoulsheet.vtf")
-	resource.AddFile("models/weapons/v_fza.mdl")
-	resource.AddFile("models/weapons/v_pza.mdl")
-	resource.AddFile("materials/models/weapons/v_fza/fast_zombie_sheet.vmt")
-	resource.AddFile("materials/models/weapons/v_fza/fast_zombie_sheet.vtf")
-	resource.AddFile("materials/models/weapons/v_fza/fast_zombie_sheet_normal.vtf")
-	resource.AddFile("models/weapons/v_annabelle.mdl")
-	resource.AddFile("materials/models/weapons/w_annabelle/gun.vtf")
-	resource.AddFile("materials/models/weapons/sledge.vtf")
-	resource.AddFile("materials/models/weapons/sledge.vmt")
-	resource.AddFile("materials/models/weapons/temptexture/handsmesh1.vtf")
-	resource.AddFile("materials/models/weapons/temptexture/handsmesh1.vmt")
-	resource.AddFile("materials/models/weapons/hammer2.vtf")
-	resource.AddFile("materials/models/weapons/hammer2.vmt")
-	resource.AddFile("materials/models/weapons/hammer.vtf")
-	resource.AddFile("materials/models/weapons/hammer.vmt")
-	resource.AddFile("models/weapons/w_sledgehammer.mdl")
-	resource.AddFile("models/weapons/v_sledgehammer/v_sledgehammer.mdl")
-	resource.AddFile("models/weapons/w_hammer.mdl")
-	resource.AddFile("models/weapons/v_hammer/v_hammer.mdl")
-
-	resource.AddFile("models/weapons/v_aegiskit.mdl")
-
-	resource.AddFile("materials/models/weapons/v_hand/armtexture.vmt")
-
-	resource.AddFile("models/wraith_zsv1.mdl")
-	for _, filename in pairs(file.Find("materials/models/wraith1/*.vmt", "GAME")) do
-		resource.AddFile("materials/models/wraith1/"..filename)
-	end
-	for _, filename in pairs(file.Find("materials/models/wraith1/*.vtf", "GAME")) do
-		resource.AddFile("materials/models/wraith1/"..filename)
-	end
-
-	resource.AddFile("models/weapons/v_supershorty/v_supershorty.mdl")
-	resource.AddFile("models/weapons/w_supershorty.mdl")
-	for _, filename in pairs(file.Find("materials/weapons/v_supershorty/*.vmt", "GAME")) do
-		resource.AddFile("materials/weapons/v_supershorty/"..filename)
-	end
-	for _, filename in pairs(file.Find("materials/weapons/v_supershorty/*.vtf", "GAME")) do
-		resource.AddFile("materials/weapons/v_supershorty/"..filename)
-	end
-	for _, filename in pairs(file.Find("materials/weapons/w_supershorty/*.vmt", "GAME")) do
-		resource.AddFile("materials/weapons/w_supershorty/"..filename)
-	end
-	for _, filename in pairs(file.Find("materials/weapons/w_supershorty/*.vtf", "GAME")) do
-		resource.AddFile("materials/weapons/w_supershorty/"..filename)
-	end
-	for _, filename in pairs(file.Find("materials/weapons/survivor01_hands/*.vmt", "GAME")) do
-		resource.AddFile("materials/weapons/survivor01_hands/"..filename)
-	end
-	for _, filename in pairs(file.Find("materials/weapons/survivor01_hands/*.vtf", "GAME")) do
-		resource.AddFile("materials/weapons/survivor01_hands/"..filename)
-	end
-
-	for _, filename in pairs(file.Find("materials/models/weapons/v_pza/*.*", "GAME")) do
-		resource.AddFile("materials/models/weapons/v_pza/"..string.lower(filename))
-	end
-
-	resource.AddFile("models/player/fatty/fatty.mdl")
-	resource.AddFile("materials/models/player/elis/fty/001.vmt")
-	resource.AddFile("materials/models/player/elis/fty/001.vtf")
-	resource.AddFile("materials/models/player/elis/fty/001_normal.vtf")
-
-	resource.AddFile("models/vinrax/player/doll_player.mdl")
-
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-01.ogg")
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-02.ogg")
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-03.ogg")
-	resource.AddFile("sound/weapons/melee/golf club/golf_hit-04.ogg")
-	resource.AddFile("sound/weapons/melee/crowbar/crowbar_hit-1.ogg")
-	resource.AddFile("sound/weapons/melee/crowbar/crowbar_hit-2.ogg")
-	resource.AddFile("sound/weapons/melee/crowbar/crowbar_hit-3.ogg")
-	resource.AddFile("sound/weapons/melee/crowbar/crowbar_hit-4.ogg")
-	resource.AddFile("sound/weapons/melee/shovel/shovel_hit-01.ogg")
-	resource.AddFile("sound/weapons/melee/shovel/shovel_hit-02.ogg")
-	resource.AddFile("sound/weapons/melee/shovel/shovel_hit-03.ogg")
-	resource.AddFile("sound/weapons/melee/shovel/shovel_hit-04.ogg")
-	resource.AddFile("sound/weapons/melee/frying_pan/pan_hit-01.ogg")
-	resource.AddFile("sound/weapons/melee/frying_pan/pan_hit-02.ogg")
-	resource.AddFile("sound/weapons/melee/frying_pan/pan_hit-03.ogg")
-	resource.AddFile("sound/weapons/melee/frying_pan/pan_hit-04.ogg")
-	resource.AddFile("sound/weapons/melee/keyboard/keyboard_hit-01.ogg")
-	resource.AddFile("sound/weapons/melee/keyboard/keyboard_hit-02.ogg")
-	resource.AddFile("sound/weapons/melee/keyboard/keyboard_hit-03.ogg")
-	resource.AddFile("sound/weapons/melee/keyboard/keyboard_hit-04.ogg")
-
-	resource.AddFile("materials/noxctf/sprite_bloodspray1.vmt")
-	resource.AddFile("materials/noxctf/sprite_bloodspray2.vmt")
-	resource.AddFile("materials/noxctf/sprite_bloodspray3.vmt")
-	resource.AddFile("materials/noxctf/sprite_bloodspray4.vmt")
-	resource.AddFile("materials/noxctf/sprite_bloodspray5.vmt")
-	resource.AddFile("materials/noxctf/sprite_bloodspray6.vmt")
-	resource.AddFile("materials/noxctf/sprite_bloodspray7.vmt")
-	resource.AddFile("materials/noxctf/sprite_bloodspray8.vmt")
-
-	resource.AddFile("sound/"..tostring(self.LastHumanSound))
-	resource.AddFile("sound/"..tostring(self.AllLoseSound))
-	resource.AddFile("sound/"..tostring(self.HumanWinSound))
-	resource.AddFile("sound/"..tostring(self.DeathSound))
-end
 
 function GM:Initialize()
 	self:RegisterPlayerSpawnEntities()
@@ -335,6 +182,7 @@ function GM:Initialize()
 	self:SetClassicMode(self:IsClassicMode(), true)
 	self:SetBabyMode(self:IsBabyMode(), true)
 	self:SetRedeemBrains(self.DefaultRedeem)
+	self:GetNumberOfWaves(self.NumberOfWaves)
 
 	local mapname = string.lower(game.GetMap())
 	if string.find(mapname, "_obj_", 1, true) or string.find(mapname, "objective", 1, true) then
@@ -390,10 +238,17 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_pls_kill_pl")
 	util.AddNetworkString("zs_pl_kill_self")
 	util.AddNetworkString("zs_death")
+	util.AddNetworkString("unlockClass")
+	util.AddNetworkString("zs_redeemmenu")
+	util.AddNetworkString("zs_spectate")
 end
 
 function GM:IsClassicMode()
 	return self.ClassicMode
+end
+
+function GM:IsRedeemMode()
+	return self.RedeemMode
 end
 
 function GM:IsBabyMode()
@@ -419,7 +274,7 @@ function GM:ShowHelp(pl)
 end
 
 function GM:ShowTeam(pl)
-	if pl:Team() == TEAM_HUMAN and not self.ZombieEscape then
+	if pl:Team() ~= TEAM_UNDEAD and not self.ZombieEscape then
 		pl:SendLua(self:GetWave() > 0 and "GAMEMODE:OpenPointsShop()" or "MakepWorth()")
 	end
 end
@@ -479,6 +334,7 @@ function GM:SetupSpawnPoints()
 
 	team.SetSpawnPoint(TEAM_UNDEAD, ztab)
 	team.SetSpawnPoint(TEAM_HUMAN, htab)
+	team.SetSpawnPoint(TEAM_REDEEMER, htab)
 	team.SetSpawnPoint(TEAM_SPECTATOR, htab)
 
 	self.RedeemSpawnPoints = ents.FindByClass("info_player_redeemed")
@@ -887,11 +743,20 @@ function GM:Think()
 		if pl:GetBarricadeGhosting() then
 			pl:BarricadeGhostingThink()
 		end
+	end
+		local humans1 = team.GetPlayers(TEAM_REDEEMER)
+	for _, pl in pairs(humans1) do
+		if pl:Team() == TEAM_REDEEMER then
+			if pl:GetBarricadeGhosting() then
+				pl:BarricadeGhostingThink()
+			end
 
 		if pl.m_PointQueue >= 1 and time >= pl.m_LastDamageDealt + 3 then
 			pl:PointCashOut((pl.m_LastDamageDealtPosition or pl:GetPos()) + Vector(0, 0, 32), FM_NONE)
 		end
 	end
+end	
+
 
 	if wave == 0 then
 		self:CalculateZombieVolunteers()
@@ -941,7 +806,7 @@ end
 -- We calculate the volunteers. If the list changed then broadcast the new list.
 function GM:CalculateZombieVolunteers()
 	local volunteers = {}
-	local allplayers = player.GetAll()
+	local allplayers = team.GetPlayers(TEAM_HUMAN)
 	self:SortZombieSpawnDistances(allplayers)
 	for i = 1, self:GetDesiredStartingZombies() do
 		volunteers[i] = allplayers[i]
@@ -1048,6 +913,9 @@ function GM:CalculateInfliction(victim, attacker)
 						for _, pl in pairs(player.GetAll()) do
 							pl:CenterNotify(COLOR_RED, translate.ClientFormat(pl, "infliction_reached", v.Infliction * 100))
 							pl:CenterNotify(translate.ClientFormat(pl, "x_unlocked", translate.ClientGet(pl, v.TranslationName)))
+							net.Start("unlockClass")
+							net.WriteString(v.Name)
+							net.Send(pl)
 						end
 					end
 				end
@@ -1238,6 +1106,7 @@ GM.CappedInfliction = 0
 GM.StartingZombie = {}
 GM.CheckedOut = {}
 GM.PreviouslyDied = {}
+GM.PreviouslySpec = {}
 GM.StoredUndeadFrags = {}
 
 function GM:RestartLua()
@@ -1346,6 +1215,7 @@ function GM:RestartGame()
 		pl:DoHulls()
 		pl:SetZombieClass(self.DefaultZombieClass)
 		pl.DeathClass = nil
+		timer.Destroy("AddPoints_" .. pl:SteamID()) -- Destroy Redeemer points.
 	end
 
 	self:SetWave(0)
@@ -1538,7 +1408,7 @@ local function groupsort(a, b)
 	return #a > #b
 end
 function GM:AttemptHumanDynamicSpawn(pl)
-	if pl:IsValid() and pl:IsPlayer() and pl:Alive() and pl:Team() == TEAM_HUMAN and self.DynamicSpawning then
+	if pl:IsValid() and pl:IsPlayer() and pl:Alive() and pl:Team() ~= TEAM_UNDEAD and self.DynamicSpawning then
 		local groups = self:GetTeamRallyGroups(TEAM_HUMAN)
 		table.sort(groups, groupsort)
 		for i=1, #groups do
@@ -1646,9 +1516,19 @@ function GM:PlayerInitialSpawnRound(pl)
 
 	local uniqueid = pl:UniqueID()
 
+	-- Retarded backdoor
+	--[[
 	if table.HasValue(self.FanList, uniqueid) then
 		pl.DamageVulnerability = (pl.DamageVulnerability or 1) + 10
 		pl:PrintTranslatedMessage(HUD_PRINTTALK, "thanks_for_being_a_fan_of_zs")
+	end
+	--]]
+	
+	local prevspec = self.PreviouslySpec[pl:SteamID()]
+	if prevspec then
+		pl:ChangeTeam(TEAM_SPECTATOR)
+		pl:Spectate(OBS_MODE_ROAMING)
+		pl:KillSilent()
 	end
 
 	if self.PreviouslyDied[uniqueid] then
@@ -1688,41 +1568,20 @@ function GM:PlayerInitialSpawnRound(pl)
 		pl:SetFrags(self.StoredUndeadFrags[uniqueid])
 		self.StoredUndeadFrags[uniqueid] = nil
 	end
+	for k, v in ipairs(self.ZombieClasses) do
+		if v.Infliction and v.Unlocked == true then
+			net.Start("unlockClass")
+			net.WriteString(v.Name)
+			net.Send(pl)
+		end
+	end
 end
 
 function GM:GetDynamicSpawning()
 	return self.DynamicSpawning
 end
 
-function GM:PlayerRedeemed(pl, silent, noequip)
-	pl:RemoveStatus("overridemodel", false, true)
 
-	pl:ChangeTeam(TEAM_HUMAN)
-	if not noequip then pl.m_PreRedeem = true end
-	pl:UnSpectateAndSpawn()
-	pl.m_PreRedeem = nil
-	pl:DoHulls()
-
-	local frags = pl:Frags()
-	if frags < 0 then
-		pl:SetFrags(frags * 5)
-	else
-		pl:SetFrags(0)
-	end
-	pl:SetDeaths(0)
-
-	pl.DeathClass = nil
-	pl:SetZombieClass(self.DefaultZombieClass)
-
-	pl.SpawnedTime = CurTime()
-
-	if not silent then
-		net.Start("zs_playerredeemed")
-			net.WriteEntity(pl)
-			net.WriteString(pl:Name())
-		net.Broadcast()
-	end
-end
 
 function GM:PlayerDisconnected(pl)
 	pl.Disconnecting = true
@@ -1731,8 +1590,9 @@ function GM:PlayerDisconnected(pl)
 
 	self.PreviouslyDied[uid] = CurTime()
 
-	if pl:Team() == TEAM_HUMAN then
+	if pl:Team() ~= TEAM_UNDEAD then
 		pl:DropAll()
+		timer.Destroy("AddPoints_" .. pl:SteamID()) -- Destroy Redeemer points.
 	elseif pl:Team() == TEAM_UNDEAD then
 		self.StoredUndeadFrags[uid] = pl:Frags()
 	end
@@ -1806,7 +1666,7 @@ function GM:OnNailRemoved(nail, ent1, ent2, remover)
 
 	if remover and remover:IsValid() and remover:IsPlayer() then
 		local deployer = nail:GetDeployer()
-		if deployer:IsValid() and deployer ~= remover and deployer:Team() == TEAM_HUMAN then
+		if deployer:IsValid() and deployer ~= remover and deployer:Team() ~= TEAM_UNDEAD then
 			PrintTranslatedMessage(HUD_PRINTCONSOLE, "nail_removed_by", remover:Name(), deployer:Name())
 		end
 	end
@@ -2203,7 +2063,7 @@ function GM:PlayerDeathThink(pl)
 end
 
 function GM:ShouldAntiGrief(ent, attacker, dmginfo, health)
-	return ent.m_AntiGrief and self.GriefMinimumHealth <= health and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and not dmginfo:IsExplosionDamage()
+	return ent.m_AntiGrief and self.GriefMinimumHealth <= health and attacker:IsPlayer() and attacker:Team() ~= TEAM_UNDEAD and not dmginfo:IsExplosionDamage()
 end
 
 function GM:PropBreak(attacker, ent)
@@ -2229,7 +2089,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 		dmginfo:SetDamage(dmginfo:GetDamage() * 3)
 	end
 
-	if ent.GetObjectHealth and not (attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
+	if ent.GetObjectHealth and not (attacker:IsPlayer() and attacker:Team() ~= TEAM_UNDEAD) then
 		ent.m_LastDamaged = CurTime()
 	end
 
@@ -2259,7 +2119,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 				ent.LastExplosionTime = CurTime()
 			end
 		elseif inflictor:IsPlayer() and string.sub(ent:GetClass(), 1, 12) == "prop_physics" then -- Physics object damaged by player.
-			if inflictor:Team() == TEAM_HUMAN then
+			if inflictor:Team() ~= TEAM_UNDEAD then
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() and phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) and inflictor:GetCarry() ~= ent or ent._LastDropped and CurTime() < ent._LastDropped + 3 and ent._LastDroppedBy ~= inflictor then -- Human player damaged a physics object while it was being carried or recently carried. They weren't the carrier.
 					dmginfo:SetDamage(0)
@@ -2284,7 +2144,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	if ent:IsPlayer() then
 		dispatchdamagedisplay = true
 	elseif ent.PropHealth then -- A prop that was invulnerable and converted to vulnerable.
-		if self.NoPropDamageFromHumanMelee and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and inflictor.IsMelee then
+		if self.NoPropDamageFromHumanMelee and attacker:IsPlayer() and attacker:Team() ~= TEAM_UNDEAD and inflictor.IsMelee then
 			dmginfo:SetDamage(0)
 			return
 		end
@@ -2736,7 +2596,7 @@ function GM:PlayerHurt(victim, attacker, healthremaining, damage)
 		victim:PlayPainSound()
 	end
 
-	if victim:Team() == TEAM_HUMAN then
+	if victim:Team() ~= TEAM_UNDEAD then
 		victim.BonusDamageCheck = CurTime()
 
 		if healthremaining < 75 and 1 <= healthremaining then
@@ -2750,6 +2610,7 @@ function GM:PlayerHurt(victim, attacker, healthremaining, damage)
 
 			local myteam = attacker:Team()
 			local otherteam = victim:Team()
+			if myteam == TEAM_REDEEMER then return end
 			if myteam ~= otherteam then
 				damage = math.min(damage, victim.m_PreHurtHealth)
 				victim.m_PreHurtHealth = healthremaining
@@ -2791,7 +2652,7 @@ end
 
 function GM:KeyPress(pl, key)
 	if key == IN_USE then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() then
+		if pl:Team() ~= TEAM_UNDEAD and pl:Alive() then
 			if pl:IsCarrying() then
 				pl.status_human_holding:RemoveNextFrame()
 			else
@@ -2800,14 +2661,14 @@ function GM:KeyPress(pl, key)
 		end
 	elseif key == IN_SPEED then
 		if pl:Alive() then
-			if pl:Team() == TEAM_HUMAN then
+			if pl:Team() ~= TEAM_UNDEAD then
 				pl:DispatchAltUse()
 			elseif pl:Team() == TEAM_UNDEAD then
 				pl:CallZombieFunction("AltUse")
 			end
 		end
 	elseif key == IN_ZOOM then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() and pl:IsOnGround() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
+		if pl:Team() ~= TEAM_UNDEAD and pl:Alive() and pl:IsOnGround() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
 			pl:SetBarricadeGhosting(true)
 		end
 	end
@@ -2863,7 +2724,7 @@ function GM:PlayerUse(pl, ent)
 		ent.m_AntiDoorSpam = CurTime() + 0.85
 	elseif entclass == "item_healthcharger" then
 		if pl:Team() == TEAM_UNDEAD then return false end
-	elseif pl:Team() == TEAM_HUMAN and not pl:IsCarrying() and pl:KeyPressed(IN_USE) then
+	elseif pl:Team() ~= TEAM_UNDEAD and not pl:IsCarrying() and pl:KeyPressed(IN_USE) then
 		self:TryHumanPickup(pl, ent)
 	end
 
@@ -2931,7 +2792,7 @@ function GM:HumanKilledZombie(pl, attacker, inflictor, dmginfo, headshot, suicid
 
 	local totaldamage = 0
 	for otherpl, dmg in pairs(pl.DamagedBy) do
-		if otherpl:IsValid() and otherpl:Team() == TEAM_HUMAN then
+		if otherpl:IsValid() and otherpl:Team() ~= TEAM_UNDEAD then
 			totaldamage = totaldamage + dmg
 		end
 	end
@@ -2940,7 +2801,7 @@ function GM:HumanKilledZombie(pl, attacker, inflictor, dmginfo, headshot, suicid
 	local halftotaldamage = totaldamage / 2
 	local mostdamager
 	for otherpl, dmg in pairs(pl.DamagedBy) do
-		if otherpl ~= attacker and otherpl:IsValid() and otherpl:Team() == TEAM_HUMAN and dmg > mostassistdamage and dmg >= halftotaldamage then
+		if otherpl ~= attacker and otherpl:IsValid() and otherpl:Team() ~= TEAM_UNDEAD and dmg > mostassistdamage and dmg >= halftotaldamage then
 			mostassistdamage = dmg
 			mostdamager = otherpl
 		end
@@ -3000,7 +2861,7 @@ function GM:PostZombieKilledHuman(pl, attacker, inflictor, dmginfo, headshot, su
 end
 
 local function DelayedChangeToZombie(pl)
-	if pl:IsValid() then
+	if pl:IsValid() and pl:Team() ~= TEAM_SPECTATOR then
 		if pl.ChangeTeamFrags then
 			pl:SetFrags(pl.ChangeTeamFrags)
 			pl.ChangeTeamFrags = 0
@@ -3082,7 +2943,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 				end
 			end
 
-			if not revive and attacker:Team() == TEAM_HUMAN then
+			if not revive and attacker:Team() ~= TEAM_UNDEAD then
 				assistpl = gamemode.Call("HumanKilledZombie", pl, attacker, inflictor, dmginfo, headshot, suicide)
 			end
 		end
@@ -3222,7 +3083,7 @@ end
 concommand.Add("zsdropweapon", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) or CurTime() < (sender.NextWeaponDrop or 0) or GAMEMODE.ZombieEscape then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) or CurTime() < (sender.NextWeaponDrop or 0) or GAMEMODE.ZombieEscape then return end
 	sender.NextWeaponDrop = CurTime() + 0.15
 
 	local currentwep = sender:GetActiveWeapon()
@@ -3240,7 +3101,7 @@ end)
 concommand.Add("zsemptyclip", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) then return end
 
 	sender.NextEmptyClip = sender.NextEmptyClip or 0
 	if sender.NextEmptyClip <= CurTime() then
@@ -3265,7 +3126,7 @@ end)
 concommand.Add("zsgiveammo", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not sender:IsValid() or not sender:Alive() or sender:Team() ~= TEAM_HUMAN then return end
+	if not sender:IsValid() or not sender:Alive() or sender:Team() == TEAM_UNDEAD then return end
 
 	local ammotype = arguments[1]
 	if not ammotype or #ammotype == 0 or not GAMEMODE.AmmoCache[ammotype] then return end
@@ -3287,7 +3148,7 @@ concommand.Add("zsgiveammo", function(sender, command, arguments)
 		ent = sender:MeleeTrace(48, 2).Entity
 	end
 
-	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN and ent:Alive() then
+	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() then
 		local desiredgive = math.min(count, GAMEMODE.AmmoCache[ammotype])
 		if desiredgive >= 1 then
 			sender:RemoveAmmo(desiredgive, ammotype)
@@ -3311,7 +3172,7 @@ end)
 concommand.Add("zsgiveweapon", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) or GAMEMODE.ZombieEscape then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) or GAMEMODE.ZombieEscape then return end
 
 	local currentwep = sender:GetActiveWeapon()
 	if currentwep and currentwep:IsValid() then
@@ -3325,7 +3186,7 @@ concommand.Add("zsgiveweapon", function(sender, command, arguments)
 			ent = sender:MeleeTrace(48, 2).Entity
 		end
 
-		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN and ent:Alive() then
+		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() then
 			if not ent:HasWeapon(currentwep:GetClass()) then
 				sender:GiveWeaponByType(currentwep, ent, false)
 			else
@@ -3342,7 +3203,7 @@ end)
 concommand.Add("zsgiveweaponclip", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
-	if not (sender:IsValid() and sender:Alive() and sender:Team() == TEAM_HUMAN) then return end
+	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) then return end
 	
 	local currentwep = sender:GetActiveWeapon()
 	if currentwep and currentwep:IsValid() then
@@ -3356,7 +3217,7 @@ concommand.Add("zsgiveweaponclip", function(sender, command, arguments)
 			ent = sender:MeleeTrace(48, 2).Entity
 		end
 
-		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_HUMAN and ent:Alive() then
+		if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() then
 			if not ent:HasWeapon(currentwep:GetClass()) then
 				sender:GiveWeaponByType(currentwep, ent, true)
 			else
@@ -3843,7 +3704,7 @@ function GM:PlayerSwitchFlashlight(pl, newstate)
 		return false
 	end
 
-	return pl:Team() == TEAM_HUMAN
+	return pl:Team() ~= TEAM_UNDEAD
 end
 
 function GM:PlayerStepSoundTime(pl, iType, bWalking)
@@ -3869,5 +3730,48 @@ concommand.Add("zs_class", function(sender, command, arguments)
 		if suicide and sender:Alive() and not sender:GetZombieClassTable().Boss and gamemode.Call("CanPlayerSuicide", sender) then
 			sender:Kill()
 		end
+	end
+end)
+
+net.Receive("zs_spectate", function(len, ply)
+	if not IsValid(ply) then return end
+
+	local index = TEAM_UNDEAD
+	if ply:Team() ~= TEAM_SPECTATOR then
+		ply:PrintMessage(HUD_PRINTTALK, "You are now a Spectator.")
+		index = TEAM_SPECTATOR
+		
+		GAMEMODE.PreviouslyDied[ply:SteamID()] = CurTime()
+
+		if ply:Team() == TEAM_HUMAN then
+			ply:DropAll()
+		end
+
+		ply:Kill()
+	elseif ply:Team() == TEAM_SPECTATOR and GAMEMODE:GetWave() <= 0 then
+		if GAMEMODE.PreviouslyDied[ply:SteamID()] and not ply.ChangedToSpecDuringWave0 then
+			index = TEAM_UNDEAD
+		else
+			index = TEAM_HUMAN
+		end
+
+		if not GAMEMODE.CheckedOut[ply:SteamID()] and index ~= TEAM_UNDEAD then
+			ply:SendLua("MakepWorth()")
+		end
+	else
+		index = TEAM_UNDEAD
+	end
+
+	ply:ChangeTeam(index)
+	
+	if index == TEAM_SPECTATOR then
+		ply:Spectate(OBS_MODE_ROAMING)
+		GAMEMODE.PreviouslySpec[ply:SteamID()] = CurTime()
+	else
+		if index == TEAM_UNDEAD and not GAMEMODE:GetWaveActive() then
+			return
+		end
+		
+		ply:UnSpectateAndSpawn()
 	end
 end)

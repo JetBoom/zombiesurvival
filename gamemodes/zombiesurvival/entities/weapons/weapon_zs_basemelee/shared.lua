@@ -104,7 +104,7 @@ function SWEP:PlayStartSwingSound()
 end
 
 function SWEP:PlayHitSound()
-	self:EmitSound("weapons/melee/golf club/golf_hit-0"..math.random(4)..".ogg")
+	self:EmitSound("weapons/melee/golf_club/golf_hit-0"..math.random(4)..".ogg")
 end
 
 function SWEP:PlayHitFleshSound()
@@ -317,7 +317,7 @@ function SWEP:SetWeaponHoldType( t )
 	end
 	
 	-- these two aren't defined in ACTs for whatever reason
-	if t == "knife" || t == "melee2" then
+	if t == "knife" or t == "melee2" then
 		self.ActivityTranslate [ ACT_MP_CROUCH_IDLE ] = nil
 	end
 end

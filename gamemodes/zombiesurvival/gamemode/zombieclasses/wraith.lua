@@ -109,7 +109,7 @@ end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/wraithv2"
+CLASS.Icon = "zombiesurvival/killicons/wraith_hd"
 
 function CLASS:PrePlayerDraw(pl)
 	pl:RemoveAllDecals()

@@ -1,4 +1,5 @@
 -- Translated by Raptor (http://www.noxiousnet.com/forums/index.php?action=profile;u=5280)
+-- Updated by Dadido3 (http://steamcommunity.com/profiles/76561198005024048)
 
 translate.AddLanguage("de", "German")
 
@@ -31,15 +32,15 @@ LANGUAGE.impossible									= "Unmöglich."
 LANGUAGE.trying_to_put_nails_in_glass				= "Nägel in Glas zu schlagen ist keine gute Idee."
 LANGUAGE.boss_class_select							= "Du wirst %s sein das nächste Mal wenn du ein Zombieboss bist."
 LANGUAGE.person_has_weapon							= "Die haben schon diese Waffe."
-LANGUAGE.cant_do_that_in_classic_mode				= "Du kannst das nich in Classic Mode machen."
+LANGUAGE.cant_do_that_in_classic_mode				= "Du kannst das nicht in Classic Mode machen."
 LANGUAGE.cant_use_x_in_classic_mode					= "Du kannst %s in Classic Mode nicht verwenden."
 LANGUAGE.cant_use_x_in_zombie_escape				= "Du kannst %s in Zombie Escape nicht verwenden."
-LANGUAGE.no_class_switch_in_this_mode				= "Der jetzige Modus erlaubt dir nicht Klassen zu wechseln."
+LANGUAGE.no_class_switch_in_this_mode				= "Der jetzige Modus erlaubt dir nicht die Klasse zu wechseln."
 LANGUAGE.press_sprint_to_get_up						= "Drück SPRINTEN um hoch zu kommen"
 LANGUAGE.zombie_escape								= "Zombie Escape!"
 LANGUAGE.nothing_for_this_ammo						= "Du hast nichts das diesen Typ von Munition verwendet."
 LANGUAGE.you_decide_to_leave_some					= "Du entscheidest dich welche aus deinem Team zu verlassen."
-LANGUAGE.you_cant_purchase_now						= "Du kannst keine Artikel momentan erwerben."
+LANGUAGE.you_cant_purchase_now						= "Du kannst momentan keine Artikel erwerben."
 LANGUAGE.no_ammo_here								= "Gerade jetzt gibt es keine Munition hier."
 LANGUAGE.you_redeemed								= "Du bist zurückgekehrt!"
 LANGUAGE.kill_the_last_human						= "Töte den letzten Menschen!"
@@ -49,7 +50,7 @@ LANGUAGE.x_zombies_out_to_get_you					= "%d ZOMBIES SIND AUF DEM WEG DICH ZU SCH
 LANGUAGE.x_pants_out_to_get_you						= "%d HOSEN SIND AUF DEM WEG DICH ZU SCHNAPPEN!"
 LANGUAGE.you_have_died								= "Du bist gestorben."
 LANGUAGE.you_were_killed_by_x						= "Du wurdest von %s getötet"
-LANGUAGE.you_were_kicked_by_x						= "Du wurdest in die Schienbeine von %s getreten"
+LANGUAGE.you_were_kicked_by_x						= "Du wurdest von %s in die Schienbeine getreten"
 LANGUAGE.arsenal_upgraded							= "Arsenal verbessert"
 LANGUAGE.final_wave									= "DIE LETZTE WELLE HAT BEGONNEN!"
 LANGUAGE.final_wave_sub								= "ALLE Klassen freigeschaltet und die Chance zurückzukehren ist weg!"
@@ -92,17 +93,17 @@ LANGUAGE.requires_x_people							= "Benötigt %d Leute"
 LANGUAGE.packing_others_object						= "Packt Objekte einer anderen Person"
 LANGUAGE.packing									= "Verpacken"
 LANGUAGE.ze_humans_are_frozen_until_x				= "Menschen sind eingefroren für %d Sekunden bevor die Runde anfängt."
-LANGUAGE.loading									= "Ladet..."
+LANGUAGE.loading									= "Laden..."
 LANGUAGE.next_round_in_x							= "Nächste Runde in: %s"
 LANGUAGE.warning									= "Warnung!"
 LANGUAGE.ok_and_no_reminder							= "OK und zeig diese Nachricht nicht mehr an"
-LANGUAGE.classic_mode_warning						= "Dieser Server läuft auf Zombie Survival in 'Classic Mode'\nClassic Mode ist eine Einstellund, welches das Gameplay stark verändert. Dinge, die anders sind:\n* Keine Auswahl der Zombieklassen. Jeder verwendet die klassische Zombie Klasse\n* Keine Werkzeuge zum Verbarrikadieren, wie Nägel oder automatische Geschütze \n* Mehr, aber schnellere Runden\n\nDas ist nicht das ürsprüngliche Zombie Survival!\n\n-- Server die auf Classic Mode laufen zeigen auch CLASSIC MODE in der unteren, linken Ecke des Bildschirms an --"
+LANGUAGE.classic_mode_warning						= "Dieser Server läuft auf Zombie Survival in 'Classic Mode'\nClassic Mode ist eine Einstellung, welche das Gameplay stark verändert. Dinge, die anders sind:\n* Keine Auswahl der Zombieklassen. Jeder verwendet die klassische Zombie Klasse\n* Keine Werkzeuge zum Verbarrikadieren, wie Nägel oder automatische Geschütze \n* Mehr, aber schnellere Runden\n\nDas ist nicht das ürsprüngliche Zombie Survival!\n\n-- Server die auf Classic Mode laufen zeigen auch CLASSIC MODE in der unteren, linken Ecke des Bildschirms an --"
 LANGUAGE.classic_mode								= "CLASSIC MODE"
 LANGUAGE.resist_x									= "Leiste Widerstand: %d%%"
 LANGUAGE.right_click_to_hammer_nail					= "Rechtsklick um einen Nagel mit einem Hammer reinzuschlagen."
 LANGUAGE.nails_x									= "Nägel: %d"
 LANGUAGE.resupply_box								= "Resupply Box"
-LANGUAGE.purchase_now								= "Erwerbe jetzt!"
+LANGUAGE.purchase_now								= "Kaufe jetzt!"
 LANGUAGE.integrity_x								= "Unversehrtheit: %d%%"
 LANGUAGE.empty										= "LEER"
 LANGUAGE.manual_control								= "MANUELLE KONTROLLE"
@@ -216,3 +217,163 @@ LANGUAGE.help_cat_survival							= "Überleben"
 LANGUAGE.help_cat_barricading						= "Verbarrikadieren"
 LANGUAGE.help_cat_upgrades							= "Verbesserungen"
 LANGUAGE.help_cat_being_a_zombie					= "Zombie Dasein"
+
+-- Place any custom stuff below here...
+
+--[[ Anything that has an \n means a new line: Example
+Hello there.\nWelcome to the server will output as:
+
+Hello there.
+Welcome to the server
+
+So remember that when translating]]--
+
+-- Redeem Menu
+
+LANGUAGE.redeemer_credit							= "Zombie Survival - erstellt von William \"JetBoom\" Moodhe.             Zombie Survival: Bandits von MrCraigTunstall"
+LANGUAGE.redeemer_save								= "STEHE ALS MENSCH AUF UND RETTE DIE MENSCHHEIT"
+LANGUAGE.redeemer_kill								= "BLEIBE BANDIT UND ENTSCHEIDE DICH DEN MENSCHEN ZU HELFEN ODER SIE ZU VERNICHTEN"
+
+-- Worth Menu
+
+LANGUAGE.worth_title								= "Wähle deine Ausrüstung"
+LANGUAGE.worth_close								= "Drücke F2 um das Worth-Menü wieder zu öffnen."
+LANGUAGE.worth_worth								= "Worth"
+LANGUAGE.worth_favtab								= "Favoriten"
+LANGUAGE.worth_favtooltip							= "Das ist dein Standardwarenkorb.\nFalls du einem Spiel spät beitrittst, bekommst du diese Ausrüstung."
+LANGUAGE.worth_favbuy								= "Kaufe diesen gespeicherten Warenkorb."
+LANGUAGE.worth_favload								= "Lade diesen gespeicherten Warenkorb."
+LANGUAGE.worth_favremove							= "Entferne diesen Warenkorb als Standard."
+LANGUAGE.worth_favdelete							= "Entferne diesen Warenkorb."
+LANGUAGE.worth_favdefault							= "Setze diesen Warenkorb als Standard."
+LANGUAGE.worth_checkout								= "Kaufen"
+LANGUAGE.worth_checkouttooltip						= "Selbsterklärend."
+LANGUAGE.worth_random								= "Zufällige Ausrüstung"
+LANGUAGE.worth_randomtooltip						= "Bei Verwendung erhalten Sie nach dem Zufallsprinzip eine Auswahl an Gegenständen.\nDes Weiteren schließt diese Schaltfläche das Worth-Menü."
+LANGUAGE.worth_clear								= "Warenkorb zurücksetzen"
+LANGUAGE.worth_cleartooltip							= "Entfernt alle Gegenstände aus dem Warenkorb."
+LANGUAGE.worth_saveload								= "Warenkorb speichern"
+LANGUAGE.worth_saveloadtooltip						= "Speichert die aktuelle Zusammenstellung, um sie später einfach wiederverwenden zu können."
+LANGUAGE.worth_github								= "GitHub"
+LANGUAGE.worth_githubtooltip						= "Das führt Sie zur GitHub-Seite dieses modifizierten Zombie Survival Spielmodus."
+LANGUAGE.worth_forum								= "Forum"
+LANGUAGE.worth_forumtooltip							= "Das führt Sie zu voidresonance.com"
+LANGUAGE.worth_steam								= "Steam-Gruppe"
+LANGUAGE.worth_steamtooltip							= "Das führt Sie zur Steam-Gruppe von Void Resonance."
+
+-- Pointshop Menu
+
+LANGUAGE.all_sales									= "Alle Käufe sind endgültig"
+LANGUAGE.the_pointshop								= "Der Points Shop"
+LANGUAGE.for_allapocalypse							= "Für all deine Zombie-Apokalypse-Bedürfnisse!"
+LANGUAGE.pts_tospend								= "Punkte, die Sie ausgeben können"
+LANGUAGE.ars_discount								= "Rabatt für den Kauf zwischen den Wellen!"
+LANGUAGE.ars_tooltip								= "Dieser Shop ist mit dem QUIK - Anti-Zombie-Backstab-Gerät ausgerüstet.\nBewegen Sie die Maus außerhalb des Shops, um den Shop schnell zu schließen!"
+LANGUAGE.ars_worth									= "Worth-Menü"
+LANGUAGE.ars_purchase								= "Kaufen"  
+LANGUAGE.ars_purchaseammo							= "Munition kaufen"
+LANGUAGE.ars_pts									= "Punkte"
+
+-- Ressuply Box
+
+LANGUAGE.res_box_ready								= "Bereit"
+LANGUAGE.res_box_seconds							= "s"
+
+-- PendBoard (End Game)
+
+LANGUAGE.win										= "Du hast gewonnen!"
+LANGUAGE.lose										= "Du hast verloren."
+LANGUAGE.humans_win									= "Die Menschen haben bis jetzt überlebt."
+LANGUAGE.zombies_win								= "Die Armee der Untoten wird immer stärker."
+LANGUAGE.mentions									= "Ehrwürdige Erwähnungen"
+
+-- Weapon Titles
+
+LANGUAGE.title_guns									= "Schusswaffen"
+LANGUAGE.title_ammo									= "Munition"
+LANGUAGE.title_melee								= "Nahkampfwaffen"
+LANGUAGE.title_tools								= "Werkzeuge"
+LANGUAGE.title_other								= "Anderes"
+LANGUAGE.title_traits								= "Traits"
+LANGUAGE.title_returns								= "Returns"
+
+-- Classes Menu
+
+LANGUAGE.normal_selection								= "Zurück zum normalen Klassenmenü..."
+LANGUAGE.boss_selection								= "Wähle die gewünschte Bossklasse..."
+
+-- Options
+
+LANGUAGE.options_options							= "Optionen"
+LANGUAGE.options_no_floating_score					= "Verstecke 'pointfloaters'"
+LANGUAGE.options_iron_sights_crosshair				= "Zeige Fadenkreuz im Visier."
+LANGUAGE.options_film_mode							= "Filmmodus (Benutzeroberfläche verstecken)"
+LANGUAGE.options_beats								= "Aktiviere Hintergrundmusik"
+LANGUAGE.options_play_music							= "Aktiviere 'last human' Musik"
+LANGUAGE.options_post_processing					= "Aktiviere Postprocessing"
+LANGUAGE.options_film_grain							= "Aktiviere Filmkörnung"
+LANGUAGE.options_color_mod							= "Aktiviere Farbmodifikationen"
+LANGUAGE.options_draw_pain_flash					= "Aktiviere 'pain flashes'"
+LANGUAGE.options_no_crosshair_rotate				= "Keine Fadenkreuzrotation"
+LANGUAGE.options_auras								= "Zeige Gesundheitsauras"
+LANGUAGE.options_damage_floaters					= "Zeige Schadensindikatoren"
+LANGUAGE.options_movement_view_roll					= "Kamera beim Bewegen neigen"
+LANGUAGE.options_always_show_nails					= "Zeige immer den Nagelzustand"
+LANGUAGE.options_no_redeem							= "Deaktiviere automatisches 'redeeming' (Nächste Runde)"
+LANGUAGE.options_always_volunteer					= "Starte immer freiwillig als Zombie"
+LANGUAGE.options_no_boss_pick						= "Deaktiviere als Bosszombie ausgewählt zu werden"
+LANGUAGE.options_suicide_on_change					= "Selbstmord bei Klassenwechsel"
+LANGUAGE.options_music_volume						= "Musiklautstärke"
+LANGUAGE.options_transparency_radius				= "Transparenzradius"
+LANGUAGE.options_film_grain							= "Filmkörnung"
+LANGUAGE.options_crosshair_p						= "Fadenkreuz Primärfarbe"
+LANGUAGE.options_crosshair_s						= "Fadenkreuz Sekundärfarbe"
+LANGUAGE.options_hp_full							= "Gesundheitsaurafarbe - 100%"
+LANGUAGE.options_hp_no								= "Gesundheitsaurafarbe - 0%"
+LANGUAGE.options_beatset_zombie						= "Musikalische Atmosphäre der Zombies"
+LANGUAGE.options_beatset_human						= "Musikalische Atmosphäre der Menschen"
+LANGUAGE.options_weapon_hud_mode					= "Anzeigestil der Waffen"
+
+-- Help menu
+
+LANGUAGE.help_help									= "Hilfe"
+LANGUAGE.help_credits								= "Danksagungen"
+
+-- Scoreboard (teams)
+
+LANGUAGE.team_humans								= "Überlebende"
+LANGUAGE.team_zombie								= "Zombies"
+
+-- ALT menu
+
+LANGUAGE.alt_gw										= "Waffe geben"
+LANGUAGE.alt_gw5									= "Waffe und 5 Clips geben"
+LANGUAGE.alt_dw										= "Waffe wegwerfen"
+LANGUAGE.alt_ec										= "Magazin leeren"
+LANGUAGE.alt_drop									= "Wegwerfen"
+LANGUAGE.alt_give									= "Geben"
+
+-- Ammo names
+
+LANGUAGE.ammo_pistol								= "Pistolenkugeln"
+LANGUAGE.ammo_smg									= "SMG-Munition"
+LANGUAGE.ammo_rifle									= "Gewehrmunition"
+LANGUAGE.ammo_bolts									= "Bolzen"
+LANGUAGE.ammo_buckshots								= "Schrotmunition"
+LANGUAGE.ammo_boards								= "Bretter"
+LANGUAGE.ammo_grenade								= "Granaten"
+LANGUAGE.ammo_turrets								= "Selbstschussanlagen"
+LANGUAGE.ammo_meds									= "Medizinisches Material"
+LANGUAGE.ammo_nail									= "Nägel"
+LANGUAGE.ammo_ars									= "Arsenal Kisten"
+LANGUAGE.ammo_beacons								= "Beacons"
+LANGUAGE.ammo_forcefilds							= "Force Field Emitters"
+LANGUAGE.ammo_spotlamp								= "Scheinwerferlampen"
+LANGUAGE.ammo_stone									= "Steine"
+LANGUAGE.ammo_pulse									= "Pulse Schüsse"
+
+-- Player HUD things
+
+LANGUAGE.pl_poison									= "VERGIFTUNG!"
+LANGUAGE.pl_bleed									= "BLUTUNG!"
+LANGUAGE.pl_ghtc									= "BÖSARTIGE BEHRÜHRUNG!"

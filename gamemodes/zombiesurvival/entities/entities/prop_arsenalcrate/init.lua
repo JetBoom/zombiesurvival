@@ -83,7 +83,7 @@ function ENT:OnTakeDamage(dmginfo)
 end
 
 function ENT:Use(activator, caller)
-	local ishuman = activator:Team() == TEAM_HUMAN and activator:Alive()
+	local ishuman = activator:Team() ~= TEAM_UNDEAD and activator:Alive()
 
 	if not self.NoTakeOwnership and not self:GetObjectOwner():IsValid() and ishuman then
 		self:SetObjectOwner(activator)
@@ -103,6 +103,12 @@ end
 function ENT:OnPackedUp(pl)
 	pl:GiveEmptyWeapon("weapon_zs_arsenalcrate")
 	pl:GiveAmmo(1, "airboatgun")
+	
+    	if pl:HasWeapon("weapon_zs_arsenalcrate") then        	
+		pl:GiveAmmo(1, "airboatgun")
+    	else
+       	pl:Give("weapon_zs_arsenalcrate")
+    	end
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
 

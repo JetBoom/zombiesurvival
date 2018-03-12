@@ -130,8 +130,11 @@ function ENT:PhysicsCollide(data, phys)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon(self.WeaponClass)
-	pl:GiveAmmo(1, self.AmmoType)
+    	if pl:HasWeapon(self.WeaponClass) then
+       		pl:GiveAmmo(1, self.AmmoType)
+    	else
+			pl:Give(self.WeaponClass)
+	end
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
 

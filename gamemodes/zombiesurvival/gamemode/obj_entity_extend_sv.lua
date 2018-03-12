@@ -206,7 +206,7 @@ function meta:PackUp(pl)
 
 		if self.GetObjectOwner then
 			local owner = self:GetObjectOwner()
-			if owner:IsValid() and owner:Team() == TEAM_HUMAN and owner ~= pl and not gamemode.Call("PlayerIsAdmin", pl) then
+			if owner:IsValid() and owner:Team() ~= TEAM_UNDEAD and owner ~= pl and not gamemode.Call("PlayerIsAdmin", pl) then
 				status:SetNotOwner(true)
 			end
 		end

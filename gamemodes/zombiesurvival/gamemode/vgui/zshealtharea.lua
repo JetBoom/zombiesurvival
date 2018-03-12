@@ -3,7 +3,7 @@ local PANEL = {}
 local colHealth = Color(0, 0, 0, 240)
 local function ContentsPaint(self)
 	local lp = LocalPlayer()
-	if lp:IsValid() then
+	if lp:IsValid() and lp:Alive() then
 		local health = math.max(lp:Health(), 0)
 		local healthperc = math.Clamp(health / lp:GetMaxHealthEx(), 0, 1)
 
@@ -29,7 +29,7 @@ function PANEL:Init()
 	poisonstatus:SetTall(20)
 	poisonstatus:SetAlpha(200)
 	poisonstatus:SetColor(Color(180, 180, 0))
-	poisonstatus:SetMemberName("POISON!")
+	poisonstatus:SetMemberName (translate.Get("pl_poison"))
 	poisonstatus.GetMemberValue = function(me)
 		local lp = LocalPlayer()
 		if lp:IsValid() then
@@ -45,7 +45,7 @@ function PANEL:Init()
 	bleedstatus:SetTall(20)
 	bleedstatus:SetAlpha(200)
 	bleedstatus:SetColor(Color(220, 0, 0))
-	bleedstatus:SetMemberName("BLEED!")
+	bleedstatus:SetMemberName (translate.Get("pl_bleed"))
 	bleedstatus.GetMemberValue = function(me)
 		local lp = LocalPlayer()
 		if lp:IsValid() then
@@ -61,7 +61,7 @@ function PANEL:Init()
 	ghoultouchstatus:SetTall(20)
 	ghoultouchstatus:SetAlpha(200)
 	ghoultouchstatus:SetColor(Color(255, 0, 0))
-	ghoultouchstatus:SetMemberName("GHOUL TOUCH!")
+	ghoultouchstatus:SetMemberName (translate.Get("pl_ghtc"))
 	ghoultouchstatus.GetMemberValue = function(me)
 		local lp = LocalPlayer()
 		if lp:IsValid() then
@@ -133,7 +133,7 @@ end
 
 function PANEL:Think()
 	local lp = LocalPlayer()
-	if lp:IsValid() then
+	if lp:IsValid() and lp:Alive() then
 		self.Health = math.Clamp(lp:Health() / lp:GetMaxHealthEx(), 0, 1)
 		self.BarricadeGhosting = math.Approach(self.BarricadeGhosting, lp:IsBarricadeGhosting() and 1 or 0, FrameTime() * 5)
 
@@ -171,10 +171,14 @@ function PANEL:Think()
 			ent:SetPoseParameter("move_x", lp:GetPoseParameter("move_x") * 2 - 1)
 			ent:SetPoseParameter("move_y", lp:GetPoseParameter("move_y") * 2 - 1)
 			ent:SetCycle(lp:GetCycle())
-
-			local modellow, modelhigh = LowestAndHighest(ent)
-			self.ModelLow = math.Approach(self.ModelLow, modellow, FrameTime() * 256)
-			self.ModelHigh = math.Approach(self.ModelHigh, modelhigh, FrameTime() * 256)
+            		local ct = CurTime()
+            		if not self.cachemodelnext then self.cachemodelnext = 0 end
+            		if ct > self.cachemodelnext then
+        			self.CModelLow, self.CModelHigh = LowestAndHighest(ent)
+                		self.cachemodelnext = ct + 0.25
+            		end
+			self.ModelLow  = math.Approach(self.ModelLow, self.CModelLow, FrameTime() * 128) --256
+			self.ModelHigh = math.Approach(self.ModelHigh, self.CModelHigh, FrameTime() * 128) --256
 			self.ModelHigh = math.max(self.ModelLow + 1, self.ModelHigh)
 		end
 	end
@@ -198,7 +202,7 @@ function PANEL:Paint()
 	if not ent or not ent:IsValid() then return end
 
 	local lp = LocalPlayer()
-	if not lp:IsValid() then return end
+	if not lp:IsValid() and not lp:Alive() then return end
 
 	local x, y = self:LocalToScreen(0, 0)
 	local w, h = self:GetSize()

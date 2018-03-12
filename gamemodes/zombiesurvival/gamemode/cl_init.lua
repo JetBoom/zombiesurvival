@@ -40,11 +40,14 @@ include("vgui/ppointshop.lua")
 include("vgui/dpingmeter.lua")
 include("vgui/dsidemenu.lua")
 include("vgui/zshealtharea.lua")
+include("vgui/changeteam.lua")
+
 
 include("cl_dermaskin.lua")
 include("cl_deathnotice.lua")
 include("cl_floatingscore.lua")
 include("cl_hint.lua")
+include("cl_extras.lua")
 
 include("cl_zombieescape.lua")
 
@@ -102,6 +105,7 @@ local TEXT_ALIGN_TOP = TEXT_ALIGN_TOP
 local TEXT_ALIGN_BOTTOM = TEXT_ALIGN_BOTTOM
 
 local TEAM_HUMAN = TEAM_HUMAN
+local TEAM_REDEEMER = TEAM_REDEEMER
 local TEAM_UNDEAD = TEAM_UNDEAD
 local translate = translate
 
@@ -222,7 +226,7 @@ function GM:HUDWeaponPickedUp(wep)
 end
 
 function GM:_HUDWeaponPickedUp(wep)
-	if MySelf:Team() == TEAM_HUMAN and not wep.NoPickupNotification then
+	if MySelf:Team() ~= TEAM_UNDEAD and not wep.NoPickupNotification then
 		self:Rewarded(wep:GetClass())
 	end
 end
@@ -332,7 +336,7 @@ end
 local matAura = Material("models/debug/debugwhite")
 local skip = false
 function GM.PostPlayerDrawMedical(pl)
-	if not skip and pl:Team() == TEAM_HUMAN and pl ~= LocalPlayer() then
+	if not skip and pl:Team() ~= TEAM_UNDEAD and pl ~= LocalPlayer() then
 		local eyepos = EyePos()
 		local dist = pl:NearestPoint(eyepos):Distance(eyepos)
 		if dist < MedicalAuraDistance then
@@ -422,7 +426,7 @@ function GM:DrawFearMeter(power, screenscale)
 	local rot = math.Clamp((0.5 - currentpower) + math.sin(RealTime() * 10) * 0.01, -0.5, 0.5) * 300
 	surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * wid * -0.0001), h - hei * 0.5 - math.abs(rot) * hei * 0.00015, wid, hei, rot)
 
-	if MySelf:Team() == TEAM_UNDEAD then
+	if MySelf:Team() ~= TEAM_UNDEAD then
 		if self:GetDynamicSpawning() and self:ShouldUseAlternateDynamicSpawn() then
 			local obs = MySelf:GetObserverTarget()
 			spawngreen = math.Approach(spawngreen, self:DynamicSpawnIsValid(obs and obs:IsValid() and obs:IsPlayer() and obs:Team() == TEAM_UNDEAD and obs or MySelf) and 1 or 0, FrameTime() * 4)
@@ -458,12 +462,16 @@ function GM:IsClassicMode()
 	return GetGlobalBool("classicmode", false)
 end
 
+function GM:IsRedeemMode()
+	return GetGlobalBool("redeemmode", false)
+end
+
 function GM:IsBabyMode()
 	return GetGlobalBool("babymode", false)
 end
 
 function GM:PostRender()
-	if self.m_ZombieVision and MySelf:IsValid() and MySelf:Team() == TEAM_UNDEAD then
+	if self.m_ZombieVision and MySelf:IsValid() and MySelf:Team() ~= TEAM_HUMAN then
 		local eyepos = EyePos()
 		local eyedir = EyeAngles():Forward()
 		--local tr = util.TraceLine({start = eyepos, endpos = eyepos + eyedir * 128, mask = MASK_SOLID_BRUSHONLY})
@@ -545,7 +553,7 @@ function GM:_Think()
 
 	self:PlayBeats(myteam, self:CachedFearPower())
 
-	if myteam == TEAM_HUMAN then
+	if myteam ~= TEAM_UNDEAD then
 		local wep = MySelf:GetActiveWeapon()
 		if wep:IsValid() and wep.GetIronsights and wep:GetIronsights() then
 			self.FOVLerp = math.Approach(self.FOVLerp, wep.IronsightsMultiplier or 0.6, FrameTime() * 4)
@@ -702,7 +710,7 @@ function GM:_HUDPaint()
 
 	if myteam == TEAM_UNDEAD then
 		self:ZombieHUD()
-	elseif myteam == TEAM_HUMAN then
+	elseif myteam ~= TEAM_UNDEAD then
 		self:HumanHUD(screenscale)
 	end
 
@@ -1039,9 +1047,20 @@ function GM:LastHuman(pl)
 	self.TheLastHuman = pl
 
 	if not LASTHUMAN then
-		LASTHUMAN = true
+	
+	hook.Add( "PreDrawHalos", "ZS.PreDrawHalos.AddHalos", function()
+	if self.TheLastHuman then
+		if not IsValid(self.TheLastHuman) or LocalPlayer() == self.TheLastHuman or self.TheLastHuman:Team() == TEAM_UNDEAD then return end
+		
+		halo.Add({self.TheLastHuman},team.GetColor(self.TheLastHuman:Team()),1,1,2,true,true);
+		
+		end
+	end )
+	
+	LASTHUMAN = true
+	
 		timer.Simple(0.5, function() GAMEMODE:LastHumanMessage() end)
-	end
+	end	
 end
 
 function GM:LastHumanMessage()
@@ -1134,16 +1153,16 @@ function GM:HumanMenu()
 		panel:AddItem(b)
 	end
 
-	local b = EasyButton(panel, "Give Weapon", 8, 4)
+	local b = EasyButton(panel, ""..translate.Get("alt_gw"), 8, 4)
 	b.DoClick = GiveWeapon
 	panel:AddItem(b)
-	b = EasyButton(panel, "Give Weapon and 5 clips", 8, 4)
+	b = EasyButton(panel, ""..translate.Get("alt_gw5"), 8, 4)
 	b.DoClick = GiveWeaponClip
 	panel:AddItem(b)
-	b = EasyButton(panel, "Drop weapon", 8, 4)
+	b = EasyButton(panel, ""..translate.Get("alt_dw"), 8, 4)
 	b.DoClick = DropWeapon
 	panel:AddItem(b)
-	b = EasyButton(panel, "Empty clip", 8, 4)
+	b = EasyButton(panel, ""..translate.Get("alt_ec"), 8, 4)
 	b.DoClick = EmptyClip
 	panel:AddItem(b)
 
@@ -1160,7 +1179,7 @@ function GM:PlayerBindPress(pl, bind, wasin)
 end
 
 function GM:_ShouldDrawLocalPlayer(pl)
-	return pl:Team() == TEAM_UNDEAD and (self.ZombieThirdPerson or pl:CallZombieFunction("ShouldDrawLocalPlayer")) or pl:IsPlayingTaunt()
+	return pl:Team() ~= TEAM_SPECTATOR and (self.ZombieThirdPerson or pl:CallZombieFunction("ShouldDrawLocalPlayer")) or pl:IsPlayingTaunt()
 end
 
 local roll = 0
@@ -1277,7 +1296,7 @@ function GM:_CreateMove(cmd)
 	end
 
 	local myteam = MySelf:Team()
-	if myteam == TEAM_HUMAN then
+	if myteam ~= TEAM_UNDEAD then
 		if MySelf:Alive() then
 			local lockon = self.HumanMenuLockOn
 			if lockon then
@@ -1371,9 +1390,9 @@ function GM:_PrePlayerDraw(pl)
 				local eyepos = EyePos()
 				local dist = pl:NearestPoint(eyepos):Distance(eyepos)
 				if dist < radius then
-					local blend = math.max((dist / radius) ^ 1.4, myteam == TEAM_HUMAN and 0.04 or 0.1)
+					local blend = math.max((dist / radius) ^ 1.4, myteam ~= TEAM_UNDEAD and 0.04 or 0.1)
 					render.SetBlend(blend)
-					if myteam == TEAM_HUMAN and blend < 0.4 then
+					if myteam ~= TEAM_UNDEAD and blend < 0.4 then
 						render.ModelMaterialOverride(matWhite)
 						render.SetColorModulation(0.2, 0.2, 0.2)
 						shadowman = true
@@ -1386,7 +1405,7 @@ function GM:_PrePlayerDraw(pl)
 
 	pl.ShadowMan = shadowman
 
-	if self.m_ZombieVision and MySelf:Team() == TEAM_UNDEAD and pl:Team() == TEAM_HUMAN and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
+	if (MySelf:KeyDown(IN_SPEED) and MySelf:Team() ~= TEAM_UNDEAD and MySelf:Alive() and pl:Team() ~= TEAM_UNDEAD and pl ~= MySelf) or self.m_ZombieVision and MySelf:Team() ~= TEAM_HUMAN and pl:Team() ~= TEAM_UNDEAD and pl:GetPos():Distance(EyePos()) <= pl:GetAuraRange() then
 		undozombievision = true
 		local color = Color(255, 255, 255, 255)
 		local healthfrac = math.max(pl:Health(), 0) / pl:GetMaxHealth()
@@ -1557,12 +1576,12 @@ end
 
 function GM:KeyPress(pl, key)
 	if key == self.MenuKey then
-		if pl:Team() == TEAM_HUMAN and pl:Alive() and not pl:IsHolding() then
+		if pl:Team() ~= TEAM_UNDEAD and pl:Alive() and not pl:IsHolding() then
 			gamemode.Call("HumanMenu")
 		end
 	elseif key == IN_SPEED then
 		if pl:Alive() then
-			if pl:Team() == TEAM_HUMAN then
+			if pl:Team() ~= TEAM_UNDEAD then
 				pl:DispatchAltUse()
 			elseif pl:Team() == TEAM_UNDEAD then
 				pl:CallZombieFunction("AltUse")
@@ -1649,6 +1668,11 @@ end
 local DamageFloaters = CreateClientConVar("zs_damagefloaters", "1", true, false):GetBool()
 cvars.AddChangeCallback("zs_damagefloaters", function(cvar, oldvalue, newvalue)
 	DamageFloaters = newvalue ~= "0"
+end)
+
+concommand.Add("spectate", function()
+	net.Start("zs_spectate")
+	net.SendToServer()
 end)
 
 net.Receive("zs_legdamage", function(length)

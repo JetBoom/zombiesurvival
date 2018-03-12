@@ -306,7 +306,11 @@ local function RemoveSkyCade(groundent, timername)
 
 	for _, pl in pairs(player.GetAll()) do
 		if pl:Alive() and pl:GetGroundEntity() == groundent then
+		if groundent:GetBarricadeRepairs() ~= 0 then
+			groundent:SetBarricadeRepairs(math.max(groundent:GetBarricadeRepairs() - 10, 0))
+			else
 			groundent:TakeDamage(3, groundent, groundent)
+			end			
 			pl:ViewPunch(Angle(math.Rand(-25, 25), math.Rand(-25, 25), math.Rand(-25, 25)))
 			if math.random(9) == 1 then
 				groundent:EmitSound("npc/strider/creak"..math.random(4)..".wav", 65, math.random(95, 105))
@@ -560,7 +564,7 @@ function meta:SetMaxHealth(num)
 end
 
 function meta:PointCashOut(ent, fmtype)
-	if self.m_PointQueue >= 1 and self:Team() == TEAM_HUMAN then
+	if self.m_PointQueue >= 1 and self:Team() ~= TEAM_UNDEAD then
 		local points = math.floor(self.m_PointQueue)
 		self.m_PointQueue = self.m_PointQueue - points
 
@@ -830,36 +834,45 @@ function meta:GiveWeaponByType(weapon, plyr, ammo)
 	if wep:IsValid() then
 		local primary = wep:ValidPrimaryAmmo()
 		if primary and 0 < wep:Clip1() then
-			self:GiveAmmo(wep:Clip1(), primary, true)
-			wep:SetClip1(0)
+            		if wep.AmmoIfHas ~= true then
+				self:GiveAmmo(wep:Clip1(), primary, true)
+    			end
+    			wep:SetClip1(0)
 		end
 		local secondary = wep:ValidSecondaryAmmo()
 		if secondary and 0 < wep:Clip2() then
-			self:GiveAmmo(wep:Clip2(), secondary, true)
+            		if wep.AmmoIfHas ~= true then
+			    self:GiveAmmo(wep:Clip2(), secondary, true)
+            		end
 			wep:SetClip2(0)
 		end
 
 		self:StripWeapon(weapon:GetClass())
-		
+
 		local wep2 = plyr:Give(weapon:GetClass())
 		if wep2 and wep2:IsValid() then
 			if wep2.Primary then
 				local primary = wep2:ValidPrimaryAmmo()
 				if primary then
-					wep2:SetClip1(0)
+					if wep.AmmoIfHas ~= true then
+						wep2:SetClip1(0)
+					end
 					plyr:RemoveAmmo(math.max(0, wep2.Primary.DefaultClip - wep2.Primary.ClipSize), primary)
 				end
 			end
 			if wep2.Secondary then
 				local secondary = wep2:ValidSecondaryAmmo()
 				if secondary then
-					wep2:SetClip2(0)
+					if wep.AmmoIfHas ~= true then
+						wep2:SetClip2(0)
+					end
 					plyr:RemoveAmmo(math.max(0, wep2.Secondary.DefaultClip - wep2.Secondary.ClipSize), secondary)
 				end
 			end
 		end
 	end
 end
+
 
 function meta:Gib()
 	local pos = self:WorldSpaceCenter()

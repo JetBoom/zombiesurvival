@@ -7,9 +7,9 @@ GM.ItemCategoryIcons = {
 	[ITEMCAT_MELEE] = "icon16/cog.png",
 	[ITEMCAT_TOOLS] = "icon16/wrench.png",
 	[ITEMCAT_OTHER] = "icon16/world.png",
+	[ITEMCAT_TRAITS] = "icon16/user_add.png",
 	[ITEMCAT_RETURNS] = "icon16/user_delete.png"
 }
-
 GM.LifeStatsLifeTime = 5
 
 GM.RewardIcons = {}

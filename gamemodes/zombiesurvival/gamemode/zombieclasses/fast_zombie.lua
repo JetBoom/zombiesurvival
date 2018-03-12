@@ -201,7 +201,7 @@ end
 
 if SERVER then return end
 
-CLASS.Icon = "zombiesurvival/killicons/fastzombie"
+CLASS.Icon = "zombiesurvival/killicons/fastzombie_hd"
 
 function CLASS:CreateMove(pl, cmd)
 	local wep = pl:GetActiveWeapon()

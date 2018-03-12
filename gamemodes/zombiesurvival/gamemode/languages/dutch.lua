@@ -1,4 +1,5 @@
 -- Translated by Shinyshark (http://www.noxiousnet.com/forums/index.php?action=profile;u=8372)
+-- Updated by nielser (http://steamcommunity.com/profiles/76561198035492026)
 
 translate.AddLanguage("nl", "Dutch")
 
@@ -208,3 +209,11 @@ LANGUAGE.controls_wraith							= "> PRIMARY: Klauwen\n> SECONDARY: Schreeuw\n> O
 LANGUAGE.controls_flesh_beast						= "> PRIMARY: Klauwen\n> SECONDARY: Hoofd stoot"
 LANGUAGE.controls_chem_zombie						= "> ALS JE STERFT: Gif Bom"
 LANGUAGE.controls_shade								= "> PRIMARY: Op pakken\n> SECONDARY: Gooien"
+
+-- Place any custom stuff below here...
+
+-- Redeem Menu
+
+LANGUAGE.redeemer_credit                            = "Zombie Survival - gemaakt door William \"JetBoom\" Moodhe.             Zombie Survival: bandits door MrCraigTunstall"
+LANGUAGE.redeemer_save                                = "WORD MENS EN RED DE MENSEN"
+LANGUAGE.redeemer_kill                                = "BLIJF EEN BANDIT EN KIES OM DE MENSEN TE HELPEN OF TE VERMOORDEN"

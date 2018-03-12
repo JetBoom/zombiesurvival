@@ -178,7 +178,7 @@ function ENT:Think()
 			local obbcenter = object:OBBCenter()
 			local objectpos = shootpos + owner:GetAimVector() * 48
 			objectpos = objectpos - obbcenter.z * object:GetUp()
-			objectpos = objectpos - obbcenter.y * object:GetRight()
+			objectpos = objectpos + obbcenter.y * object:GetRight()
 			objectpos = objectpos - obbcenter.x * object:GetForward()
 			self.ObjectPosition = objectpos
 			if not self.ObjectAngles then

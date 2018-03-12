@@ -10,8 +10,6 @@ You MUST use one of the above when using translate.AddLanguage
 RULES FOR TRANSLATORS!!
 * Only translate formally. Do not translate with slang, improper grammar, spelling, etc.
 * Do not translate proper things. For example, do not translate Zombie Survival (the name of the game). Do translate "survive the zombies".
-  For names of weapons, you would translate only the "Handgun" part of 'Peashooter' Handgun (and the quotes if your language doesn't use ' as quotes)
-  For names of classes, you would translate Bloated Zombie to whatever the word for Bloated and Zombie are. But you wouldn't translate Pukepus or Bonemesh.
 * Comment out things that you have not yet translated in your language file.
   It will then fall back to this file instead of potentially using out of date wording in yours.
 ]]
@@ -206,6 +204,9 @@ LANGUAGE.class_butcher								= "The Butcher"
 LANGUAGE.class_flesh_creeper						= "Flesh Creeper"
 LANGUAGE.class_gore_child							= "Gore Child"
 LANGUAGE.class_giga_gore_child						= "Giga Gore Child"
+LANGUAGE.class_reaper								= "Reaper"
+LANGUAGE.class_nugget								= "Nugget"
+LANGUAGE.class_bastardzine							= "Bastardzine"
 
 -- Class descriptions
 LANGUAGE.description_zombie							= "The basic zombie is very durable and has powerful claws.\nIt's hard to keep down, especially if not shot in the head."
@@ -232,6 +233,8 @@ LANGUAGE.description_butcher						= "A crazed, undead butcher. It isn't very tou
 LANGUAGE.description_flesh_creeper					= "Flesh Creepers possess the ability to create nests.\nFrom these nests, other zombified creatures emerge.\nThe way this works is unknown but it is imperitive to destroy any nests or creepers."
 LANGUAGE.description_gore_child						= "Once zombified, an unborn child becomes infected as well.\nPossessing no special abilities, their strength comes from their numbers."
 LANGUAGE.description_giga_gore_child				= "The result of a Gore Child which has been left unchecked for too long.\nA horror to behold, their massive body is the result of zombified stem cells.\nThey also become a host for Gore Children which can always be found in tow with it."
+LANGUAGE.description_reaper							= "Fast as hell an can scare the shit out of humans\n Run your foes down an eat those brains!"
+LANGUAGE.description_bastardzine                    = "Once nuggets began to roam the earth, they found hosts just like their lower headcrab kin.\n This new breed of zombie is a hybrid of mass chaos, crazy fast and deadly."
 
 -- Class control schemes
 LANGUAGE.controls_zombie							= "> PRIMARY: Claws\n> SECONDARY: Scream\n> RELOAD: Moan\n> SPRINT: Feign death\n> ON FATAL HIT IN LEGS: Revive / Transform"
@@ -253,6 +256,7 @@ LANGUAGE.controls_butcher							= "> PRIMARY: Chop"
 LANGUAGE.controls_flesh_creeper						= "> PRIMARY: Head Smash\n> SECONDARY: Nest"
 LANGUAGE.controls_gore_child						= "> PRIMARY: Claws"
 LANGUAGE.controls_giga_gore_child					= "> PRIMARY: Smash\n> SECONDARY: Throw Gore Child"
+LANGUAGE.controls_reaper							= "> PRIMARY: Axe\n> RELOAD: Moan"
 
 -- The help file... Quite big! I wouldn't blame you if you didn't translate this part.
 LANGUAGE.help_cat_introduction						= "Introduction"
@@ -361,3 +365,350 @@ LANGUAGE.help_cont_being_a_zombie					= [[<p>Tips for this section:
 ]]
 
 -- Place any custom stuff below here...
+
+--[[ Anything that has an \n means a new line: Example
+Hello there.\nWelcome to the server will output as:
+
+Hello there. 
+Welcome to the server
+
+So remember that when translating]]--
+
+-- Redeem Menu
+
+LANGUAGE.redeemer_credit							= "Zombie Survival - created by William \"JetBoom\" Moodhe.             Zombie Survival: Bandits by MrCraigTunstall"
+LANGUAGE.redeemer_save								= "CHANGE TO A HUMAN AND SAVE HUMANITY"
+LANGUAGE.redeemer_kill								= "STAY AS A BANDIT AND CHOOSE TO HELP OR KILL THE HUMANS"
+
+-- Worth Menu
+
+LANGUAGE.worth_title								= "Select Your Survival Loadout"
+LANGUAGE.worth_close								= "Press F2 to re-open the Worth Menu."
+LANGUAGE.worth_worth								= "Worth" 
+LANGUAGE.worth_favtab								= "Favorites"
+LANGUAGE.worth_favtooltip							= "This is your default cart.\nIf you join the game late then you'll spawn with this cart."
+LANGUAGE.worth_favbuy								= "Purchase this saved cart."
+LANGUAGE.worth_favload								= "Load this saved cart."
+LANGUAGE.worth_favremove							= "Remove this cart as your default."
+LANGUAGE.worth_favdelete							= "Delete this saved cart."
+LANGUAGE.worth_favdefault							= "Make this cart your default."
+LANGUAGE.worth_checkout								= "Checkout"
+LANGUAGE.worth_checkouttooltip						= "Self-Explanatory."
+LANGUAGE.worth_random								= "Random Loadout"
+LANGUAGE.worth_randomtooltip						= "Using this will randomly give you a set of items instead of normal checkout.\n Also use this to close the worth menu."
+LANGUAGE.worth_clear								= "Clear Loadout"
+LANGUAGE.worth_cleartooltip							= "Clears all items out of your cart."
+LANGUAGE.worth_saveload								= "Save Loadout"
+LANGUAGE.worth_saveloadtooltip						= "Use this to save your current cart(s) for easy checkout later."
+LANGUAGE.worth_github								= "GitHub"
+LANGUAGE.worth_githubtooltip						= "This will take you to the modified Zombie Survival GitHub page."
+LANGUAGE.worth_forum								= "Forum"
+LANGUAGE.worth_forumtooltip							= "This will take you to voidresonance.com"
+LANGUAGE.worth_steam								= "Steam Group"
+LANGUAGE.worth_steamtooltip							= "This will take you to our Void Resonance's Steam group."
+
+-- Pointshop Menu
+
+LANGUAGE.all_sales                                  = "All sales are final"
+LANGUAGE.the_pointshop                              = "The Points Shop"
+LANGUAGE.for_allapocalypse                          = "For all of your zombie apocalypse needs!"
+LANGUAGE.pts_tospend                                = "Points to spend"
+LANGUAGE.ars_discount                               = "discount for buying between waves!"
+LANGUAGE.ars_tooltip                                = "This shop is armed with the QUIK - Anti-zombie backstab device.\nMove your mouse outside of the shop to quickly close it!"
+LANGUAGE.ars_worth                                  = "Worth Menu"
+LANGUAGE.ars_purchase                               = "Purchase"  
+LANGUAGE.ars_purchaseammo                           = "Purchase ammunition"
+LANGUAGE.ars_pts                                    = "Points"
+
+-- Ressuply Box
+
+LANGUAGE.res_box_ready                              = "Ready"
+LANGUAGE.res_box_seconds                            = "s"
+
+-- PendBoard (End Game)
+
+LANGUAGE.win                                        = "You have won!"
+LANGUAGE.lose                                       = "You have lost."
+LANGUAGE.humans_win                                 = "The humans have survived for now."
+LANGUAGE.zombies_win                                = "The undead army grows stronger."
+LANGUAGE.mentions                                   = "Honorable Mentions"
+
+-- Shop Items (worth menu)
+
+--[[Some shop items that are part of the 
+arsenal crate get their translations from the Worth Menu as
+it's pointless to translate the same weapon twice]]-- 
+
+LANGUAGE.worth_peashooter                           = "'Peashooter' Handgun"
+LANGUAGE.worth_battleaxe                            = "'Battleaxe' Handgun"
+LANGUAGE.worth_owens                                = "'Owens' Handgun"
+LANGUAGE.worth_blaster                              = "'Blaster' Shotgun"
+LANGUAGE.worth_tosser                               = "'Tosser' SMG"
+LANGUAGE.worth_stubber                              = "'Stubber' Rifle"
+LANGUAGE.worth_crackler                             = "'Crackler' Assault Rifle"
+LANGUAGE.worth_z9000                                = "'Z9000' Pulse Pistol"
+LANGUAGE.worth_3pistol                              = "3 pistol ammo boxes"
+LANGUAGE.worth_3shotgun                             = "3 shotgun ammo boxes"
+LANGUAGE.worth_3smg                                 = "3 SMG ammo boxes"
+LANGUAGE.worth_3assaultrifle                        = "3 assault rifle ammo boxes"
+LANGUAGE.worth_3rifle                               = "3 rifle ammo boxes"
+LANGUAGE.worth_3pulse                               = "3 pulse ammo boxes"
+LANGUAGE.worth_5pistol                              = "5 pistol ammo boxes"
+LANGUAGE.worth_5shotgun                             = "5 shotgun ammo boxes"
+LANGUAGE.worth_5smg                                 = "5 SMG ammo boxes"
+LANGUAGE.worth_5assaultrifle                        = "5 assault rifle ammo boxes"
+LANGUAGE.worth_5rifle                               = "5 rifle ammo boxes"
+LANGUAGE.worth_5pulse                               = "5 pulse ammo boxes"
+LANGUAGE.worth_axe                                  = "Axe"
+LANGUAGE.worth_crowbar                              = "Crowbar"
+LANGUAGE.worth_stun                                 = "Stun Baton"
+LANGUAGE.worth_knife                                = "Knife"
+LANGUAGE.worth_plank                                = "Plank"
+LANGUAGE.worth_fryingpan                            = "Frying Pan"
+LANGUAGE.worth_cookingpot                           = "Cooking Pot"
+LANGUAGE.worth_leadpipe                             = "Lead Pipe"
+LANGUAGE.worth_meathook                             = "Meat Hook"
+LANGUAGE.worth_medkit                               = "Medical Kit"
+LANGUAGE.worth_medgun                               = "Medic Gun"
+LANGUAGE.worth_150meds                              = "150 Medical Kit power"
+LANGUAGE.worth_150meds2                             = "150 extra power for the Medical Kit."
+LANGUAGE.worth_arsenalcrate                         = "Arsenal Crate"
+LANGUAGE.worth_resupplybox                          = "Resupply Box"
+LANGUAGE.worth_turret                               = "Infrared Gun Turret"
+LANGUAGE.worth_turret2                              = "This automated turret requires constant upkeep to be useful.\nPress PRIMARY ATTACK to deploy the turret.\nPress SECONDARY ATTACK and RELOAD to rotate the turret.\nPress USE on a deployed turret to give it some of your SMG ammunition.\nPress USE on a deployed turret with no owner (blue light) to reclaim it."
+LANGUAGE.worth_manhack                              = "Manhack"
+LANGUAGE.worth_wrench                               = "Mechanic's Wrench"
+LANGUAGE.worth_hammer                               = "Carpenter's Hammer"
+LANGUAGE.worth_6nails                               = "Box of 12 nails"
+LANGUAGE.worth_6nails2                              = "An extra box of nails for all your barricading needs."
+LANGUAGE.worth_junkpack                             = "Junk Pack"
+LANGUAGE.worth_spotlamp                             = "Spot Lamp"
+LANGUAGE.worth_beacon                               = "Message Beacon"
+LANGUAGE.worth_fieldemiter                          = "Force Field Emitter"
+LANGUAGE.worth_stone                                = "Stone"
+LANGUAGE.worth_oxygentank                           = "Oxygen Tank"
+LANGUAGE.worth_oxygentank2                          = "Grants significantly more underwater breathing time to the user."
+LANGUAGE.worth_fit                                  = "Fit"
+LANGUAGE.worth_fit2                                 = "Increases survivability by increasing maximum health by a small amount."
+LANGUAGE.worth_tough                                = "Tough"
+LANGUAGE.worth_tough2                               = "Increases survivability by increasing maximum health."
+LANGUAGE.worth_quick                                = "Quick"
+LANGUAGE.worth_quick2                               = "Gives a slight bonus to running speed."
+LANGUAGE.worth_surged                               = "Surged"
+LANGUAGE.worth_surged2                              = "Gives a noticeable bonus to running speed."
+LANGUAGE.worth_handy                                = "Handy"
+LANGUAGE.worth_handy2                               = "Gives a 25% bonus to all repair rates."
+LANGUAGE.worth_surgeon                              = "Surgeon"
+LANGUAGE.worth_surgeon2                             = "Increases the rate by which you can heal yourself and others with the Medical Kit by 30%. Increases Medic Gun effectiveness by 33%."
+LANGUAGE.worth_resistant                            = "Resistant"
+LANGUAGE.worth_resistant2                           = "You will take half damage from poison."
+LANGUAGE.worth_regen                                = "Regenerative"
+LANGUAGE.worth_regen2                               = "If you drop below 50% health, you will regenerate 1 health every 6 seconds."
+LANGUAGE.worth_muscular                             = "Muscular"
+LANGUAGE.worth_muscular2                            = "You do 20% extra damage with melee weapons and you can carry heavy objects instead of dragging them."
+LANGUAGE.worth_weak                                 = "Weakness"
+LANGUAGE.worth_weak2                                = "Reduces health by 30 in exchange for Worth."
+LANGUAGE.worth_slow                                 = "Slowness"
+LANGUAGE.worth_slow2                                = "Reduces speed by a significant amount in exchange for Worth."
+LANGUAGE.worth_palasy                               = "Palsy"
+LANGUAGE.worth_palasy2                              = "Reduces aiming ability while hurt in exchange for Worth."
+LANGUAGE.worth_hemo                                 = "Hemophilia"
+LANGUAGE.worth_hemo2                                = "Applies bleeding damage when hit in exchange for Worth."
+LANGUAGE.worth_banlive                              = "Banned for Life"
+LANGUAGE.worth_banlive2                             = "Disallows point purchases in exchange for Worth."
+LANGUAGE.worth_clumsy                               = "Clumsy"
+LANGUAGE.worth_clumsy2                              = "Makes you extremely easy to knock down in exchange for Worth."
+LANGUAGE.worth_wideload                             = "Wide Load"
+LANGUAGE.worth_wideload2                            = "Prevents you from ghosting through props in exchange for Worth."
+LANGUAGE.worth_noodlearms                           = "Noodle Arms"
+LANGUAGE.worth_noodlearms2                          = "Disallows picking up of objects in exchange for Worth."
+
+-- Shop Items (arsenal crate) -- W.I.P.
+
+LANGUAGE.ars_zomdrill                               = "'Zombie Drill' Desert Eagle"
+LANGUAGE.ars_zomdrill2                               = "This handgun uses high-powered rounds that have more knockback than others."
+LANGUAGE.ars_glock3                               = "'Crossfire' Glock 3"
+--LANGUAGE.ars_glock31                               = "wip"
+LANGUAGE.ars_magnum                               = "'Ricochet' Magnum"
+--LANGUAGE.ars_magnum1                               = "wip"
+LANGUAGE.ars_eraser                              = "'Eraser' Tactical Pistol"
+--LANGUAGE.ars_eraser1                              = "wip"
+LANGUAGE.ars_uzi                              = "'Sprayer' Uzi 9mm"
+--LANGUAGE.ars_uzi1                              = "wip"
+LANGUAGE.ars_shredder                              = "'Shredder' SMG"
+--LANGUAGE.ars_shredder1                              = "wip"
+LANGUAGE.ars_bulletstorm                              = "'Bullet Storm' SMG"
+--LANGUAGE.ars_bulletstorm1                              = "wip"
+LANGUAGE.ars_hunter                              = "'Hunter' Rifle"
+--LANGUAGE.ars_hunter1                              = "wip"
+
+
+
+-- Honorable Mentions 
+
+LANGUAGE.hm_most_zombies_killed                     = "Most zombies killed"
+LANGUAGE.hm_most_zombies_killed2                    = "by %s, with %d killed zombies."
+LANGUAGE.hm_most_dmg_undead                         = "Most damage to undead"
+LANGUAGE.hm_most_dmg_undead2                        = "goes to %s, with a total of %d damage dealt to the undead."
+LANGUAGE.hm_pacifist                                = "Pacifist"
+LANGUAGE.hm_pacifist2                               = "goes to %s for not killing a single zombie and still surviving!"
+LANGUAGE.hm_most_helpful                            = "Most helpful"
+LANGUAGE.hm_most_helpful2                           = "goes to %s for assisting in the disposal of %d zombies."
+LANGUAGE.hm_last_human                              = "Last Human"
+LANGUAGE.hm_last_human2                             = "goes to %s for being the last person alive."
+LANGUAGE.hm_outlander                               = "Outlander"
+LANGUAGE.hm_outlander2                              = "goes to %s for getting killed %d feet away from a zombie spawn."                       
+LANGUAGE.hm_good_doctor                             = "Good Doctor"
+LANGUAGE.hm_good_doctor2                            = "goes to %s for healing their team for %d points of health."
+LANGUAGE.hm_handy_man                               = "Handy Man"
+LANGUAGE.hm_handy_man2                              = "goes to %s for getting %d barricade assistance points."
+LANGUAGE.hm_scarecrow                               = "Scarecrow"
+LANGUAGE.hm_scarecrow2                              = "goes to %s for killing %d poor crows."
+LANGUAGE.hm_most_brains_eaten                       = "Most brains eaten"
+LANGUAGE.hm_most_brains_eaten2                      = "by %s, with %d brains eaten."
+LANGUAGE.hm_most_dmg_tohumans                       = "Most damage to humans"
+LANGUAGE.hm_most_dmg_tohumans2                      = "goes to %s, with a total of %d damage given to living players."
+LANGUAGE.hm_last_bite                               = "Last Bite"
+LANGUAGE.hm_last_bite2                              = "goes to %s for ending the round."
+LANGUAGE.hm_most_useful                             = "Most useful to opposite team"
+LANGUAGE.hm_most_useful2                            = "goes to %s for giving up a whopping %d kills!"
+LANGUAGE.hm_stupid                                  = "Stupid"
+LANGUAGE.hm_stupid2                                 = "is what %s is for getting killed %d feet away from a zombie spawn."
+LANGUAGE.hm_salesman                                = "Salesman"
+LANGUAGE.hm_salesman2                               = "is what %s is for having %d points worth of items taken from their arsenal crate."
+LANGUAGE.hm_warehouse                               = "Warehouse"
+LANGUAGE.hm_warehouse2                              = "describes %s well since they had their resupply boxes used %d times."
+LANGUAGE.hm_spawn_point                             = "Spawn Point"
+LANGUAGE.hm_spawn_point2                            = "goes to %s for having %d zombies spawn on them."
+LANGUAGE.hm_crow_fighter                            = "Crow Fighter"
+LANGUAGE.hm_crow_fighter2                           = "goes to %s for annihilating %d of his crow brethren."
+LANGUAGE.hm_minor_annoyance                         = "Minor Annoyance"
+LANGUAGE.hm_minor_annoyance2                        = "is what %s is for dealing %d damage to barricades while a crow."
+LANGUAGE.hm_barricade_destroyer                     = "Barricade Destroyer"
+LANGUAGE.hm_barricade_destroyer2                    = "goes to %s for doing %d damage to barricades."
+LANGUAGE.hm_nest_destroyer                          = "Nest Destroyer"
+LANGUAGE.hm_nest_destroyer2                         = "goes to %s for destroying %d nests."
+LANGUAGE.hm_nest_master                             = "Nest Master"
+LANGUAGE.hm_nest_master2                            = "goes to %s for having %d zombies spawn through their nest."
+
+-- Weapon Titles
+
+LANGUAGE.title_guns                                 = "Guns"
+LANGUAGE.title_ammo                                 = "Ammunition"
+LANGUAGE.title_melee                                 = "Melee Weapons"
+LANGUAGE.title_tools                                 = "Tools"
+LANGUAGE.title_other                                 = "Other"
+LANGUAGE.title_traits                                 = "Traits"
+LANGUAGE.title_returns                              = "Returns"
+
+-- MainMenu (F1 menu)
+
+LANGUAGE.mm_pm_selection                           = "Player model selection"
+LANGUAGE.mm_pm_color                               = "Player color"
+LANGUAGE.mm_color                                  = "Colors"
+LANGUAGE.mm_w_color                                = "Weapon color"
+LANGUAGE.mm_close                                  = "Close"
+LANGUAGE.mm_credits                                = "Credits"
+LANGUAGE.mm_options                                = "Options"
+LANGUAGE.mm_pc                                     = "Player color"
+LANGUAGE.mm_pm                                     = "Player model"
+LANGUAGE.mm_help                                   = "Help" 
+LANGUAGE.mm_pm_messg                               = "You've changed your desired player model to"
+LANGUAGE.mm_sp                                     = "Spectate"
+LANGUAGE.mm_unsp                                   = "Un-Spectate"
+
+-- Weapon Database
+
+LANGUAGE.wb_database                               = "Weapon Database"
+LANGUAGE.wb_wspeed                                 = "Movement speed"
+LANGUAGE.wb_mdmg                                   = "Damage"
+LANGUAGE.wb_range                                  = "Range"
+LANGUAGE.wb_msize                                  = "Size"
+LANGUAGE.wb_clipsize                               = "Clip size"
+LANGUAGE.wb_dmg                                    = "Damage"
+LANGUAGE.wb_numshots                               = "Number of shots"
+LANGUAGE.wb_delay                                  = "Rate of fire"
+LANGUAGE.wb_minaccu                                = "Minimum accuracy"
+LANGUAGE.wb_maxaccu                                = "Maximum accuracy"
+
+-- Class Selection
+
+LANGUAGE.normal_selection                           = "Back to normal class menu..."
+LANGUAGE.boss_selection                             = "Select desired boss class..."
+
+-- Options
+
+LANGUAGE.options_options                            = "Options"
+LANGUAGE.options_no_floating_score                  = "Don't show point floaters"
+LANGUAGE.options_iron_sights_crosshair              = "Draw crosshair in ironsights."
+LANGUAGE.options_film_mode                          = "Film Mode (disable most of the HUD)"
+LANGUAGE.options_beats                              = "Enable ambient music"
+LANGUAGE.options_play_music                         = "Enable last human music"
+LANGUAGE.options_post_processing                    = "Enable post processing"
+LANGUAGE.options_film_grain                         = "Enable film grain"
+LANGUAGE.options_color_mod                          = "Enable Color Mod"
+LANGUAGE.options_draw_pain_flash                    = "Enable pain flashes"
+LANGUAGE.options_no_crosshair_rotate                = "No crosshair rotate"
+LANGUAGE.options_auras                              = "Enable human health auras"
+LANGUAGE.options_damage_floaters                    = "Enable damage indicators"
+LANGUAGE.options_movement_view_roll                 = "Enable movement view roll"
+LANGUAGE.options_always_show_nails                  = "Always display nail health"
+LANGUAGE.options_no_redeem                          = "Disable automatic redeeming (next round)"
+LANGUAGE.options_always_volunteer                   = "Always volunteer to start as a zombie"
+LANGUAGE.options_no_boss_pick                       = "Prevent being picked as a boss zombie"
+LANGUAGE.options_suicide_on_change                  = "Automatic suicide when changing classes"
+LANGUAGE.options_music_volume                       = "Music volume"
+LANGUAGE.options_transparency_radius                = "Transparency radius"
+LANGUAGE.options_film_grain                         = "Film grain"
+LANGUAGE.options_crosshair_p                        = "Crosshair primary color"
+LANGUAGE.options_crosshair_s                        = "Crosshair secondary color"
+LANGUAGE.options_hp_full                            = "Health aura color - Full health"
+LANGUAGE.options_hp_no                              = "Health aura color - No health"
+LANGUAGE.options_beatset_zombie                     = "Zombie ambient beat set"
+LANGUAGE.options_beatset_human                      = "Human ambient beat set"
+LANGUAGE.options_weapon_hud_mode                    = "Weapon HUD display style"
+
+-- Help menu
+
+LANGUAGE.help_help                                  = "Help"
+LANGUAGE.help_credits                               = "Credits"
+
+-- Scoreboard (teams)
+
+LANGUAGE.team_humans                                = "Survivors"
+LANGUAGE.team_zombie                                = "Zombies"
+
+-- ALT menu
+
+LANGUAGE.alt_gw                                     = "Give Weapon"
+LANGUAGE.alt_gw5                                    = "Give Weapon and 5 clips"
+LANGUAGE.alt_dw                                     = "Drop weapon"
+LANGUAGE.alt_ec                                     = "Empty clip"
+LANGUAGE.alt_drop                                   = "Drop"
+LANGUAGE.alt_give                                   = "Give"
+
+-- Ammo names
+
+LANGUAGE.ammo_pistol                                = "Pistol"
+LANGUAGE.ammo_smg                                   = "SMG"
+LANGUAGE.ammo_rifle                                 = "Rifle"
+LANGUAGE.ammo_bolts                                 = "Bolts"            
+LANGUAGE.ammo_buckshots                             = "Buckshot"
+LANGUAGE.ammo_boards                                = "Boards"
+LANGUAGE.ammo_grenade                               = "Grenades"
+LANGUAGE.ammo_turrets                               = "Turrets"
+LANGUAGE.ammo_meds                                  = "Medical Supplies"
+LANGUAGE.ammo_nail                                  = "Nails"
+LANGUAGE.ammo_ars                                   = "Arsenal Crates"
+LANGUAGE.ammo_beacons                               = "Beacons"
+LANGUAGE.ammo_forcefilds                            = "Force Field Emitters"
+LANGUAGE.ammo_spotlamp                              = "Spot Lamps"
+LANGUAGE.ammo_stone                                 = "Stones"
+LANGUAGE.ammo_pulse                                 = "Pulse Shots"
+
+-- Player HUD things
+
+LANGUAGE.pl_poison                                  = "POISON!"
+LANGUAGE.pl_bleed                                   = "BLEED!"
+LANGUAGE.pl_ghtc                                    = "GHOUL TOUCH!"
+

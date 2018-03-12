@@ -44,6 +44,9 @@ local Tex_Corner8 = surface_GetTextureID( "gui/corner8" )
 local Tex_Corner16 = surface_GetTextureID( "gui/corner16" )
 local Tex_white = surface_GetTextureID( "vgui/white" )
 
+function GM:MouthMoveAnimation(ply)
+	return
+end
 
 -- Just an FYI that this is around 450 times faster than using surface.GetTextSize when cached.
 local CachedFontHeights = {}

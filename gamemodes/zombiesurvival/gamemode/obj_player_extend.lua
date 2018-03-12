@@ -18,7 +18,7 @@ function meta:Dismember(dismembermenttype)
 end
 
 function meta:HasWon()
-	if self:Team() == TEAM_HUMAN and self:GetObserverMode() == OBS_MODE_ROAMING then
+	if self:Team() ~= TEAM_UNDEAD and self:GetObserverMode() == OBS_MODE_ROAMING then
 		if SERVER then
 			local target = self:GetObserverTarget()
 			return target and target:IsValid() and target:GetClass() == "prop_obj_exit"
@@ -326,7 +326,7 @@ function meta:SetSpeed(speed)
 end
 
 function meta:SetHumanSpeed(speed)
-	if self:Team() == TEAM_HUMAN then self:SetSpeed(speed) end
+	if self:Team() ~= TEAM_UNDEAD then self:SetSpeed(speed) end
 end
 
 function meta:ResetSpeed(noset, health)
@@ -443,7 +443,7 @@ function meta:ShouldNotCollide(ent)
 			return self:Team() == ent:Team() or self.NoCollideAll or ent.NoCollideAll
 		end
 
-		return self:GetBarricadeGhosting() and ent:IsBarricadeProp() or self:Team() == TEAM_HUMAN and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD)
+		return self:GetBarricadeGhosting() and ent:IsBarricadeProp() or self:Team() ~= TEAM_UNDEAD and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD)
 	end
 
 	return false
@@ -483,7 +483,7 @@ end
 meta.OldSetHealth = FindMetaTable("Entity").SetHealth
 function meta:SetHealth(health)
 	self:OldSetHealth(health)
-	if self:Team() == TEAM_HUMAN and 1 <= health then
+	if self:Team() ~= TEAM_UNDEAD and 1 <= health then
 		self:ResetSpeed(nil, health)
 	end
 end
@@ -552,7 +552,7 @@ function meta:PenetratingMeleeTrace(distance, size, prehit, start, dir)
 end
 
 function meta:ActiveBarricadeGhosting(override)
-	if self:Team() ~= TEAM_HUMAN and not override or not self:GetBarricadeGhosting() then return false end
+	if self:Team() == TEAM_HUMAN and self:Team() == TEAM_REDEEMER and not override or not self:GetBarricadeGhosting() then return false end
 
 	for _, ent in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
 		if ent and ent:IsValid() and self:ShouldBarricadeGhostWith(ent) then return true end
