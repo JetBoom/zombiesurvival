@@ -115,11 +115,15 @@ GM.AmmoResupply["pulse"] = GM.AmmoCache["pulse"]
 GM:AddStartingItem("pshtr", ""..translate.Get("worth_peashooter"), nil, ITEMCAT_GUNS, 15, "weapon_zs_peashooter")
 GM:AddStartingItem("btlax", ""..translate.Get("worth_battleaxe"), nil, ITEMCAT_GUNS, 15, "weapon_zs_battleaxe")
 GM:AddStartingItem("owens", ""..translate.Get("worth_owens"), nil, ITEMCAT_GUNS, 15, "weapon_zs_owens")
-GM:AddStartingItem("blstr", ""..translate.Get("worth_blaster"), nil, ITEMCAT_GUNS, 25, "weapon_zs_blaster")
 GM:AddStartingItem("tossr", ""..translate.Get("worth_tosser"), nil, ITEMCAT_GUNS, 20, "weapon_zs_tosser")
+GM:AddStartingItem("z9000", ""..translate.Get("worth_z9000"), nil, ITEMCAT_GUNS, 20, "weapon_zs_z9000")
 GM:AddStartingItem("stbbr", ""..translate.Get("worth_stubber"), nil, ITEMCAT_GUNS, 25, "weapon_zs_stubber")
 GM:AddStartingItem("crklr", ""..translate.Get("worth_crackler"), nil, ITEMCAT_GUNS, 25, "weapon_zs_crackler")
-GM:AddStartingItem("z9000", ""..translate.Get("worth_z9000"), nil, ITEMCAT_GUNS, 20, "weapon_zs_z9000")
+GM:AddStartingItem("blstr", ""..translate.Get("worth_blaster"), nil, ITEMCAT_GUNS, 25, "weapon_zs_blaster")
+
+-----------
+-- W.AMMO --
+-----------
 
 GM:AddStartingItem("2pcp", ""..translate.Get("worth_3pistol"), nil, ITEMCAT_AMMO, 7, nil, function(pl) pl:GiveAmmo((GAMEMODE.AmmoCache["pistol"] or 12) * 3, "pistol", true) end, "models/Items/BoxSRounds.mdl")
 GM:AddStartingItem("2sgcp", ""..translate.Get("worth_3shotgun"), nil, ITEMCAT_AMMO, 7, nil, function(pl) pl:GiveAmmo((GAMEMODE.AmmoCache["buckshot"] or 8) * 3, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
@@ -134,21 +138,37 @@ GM:AddStartingItem("3arcp", ""..translate.Get("worth_5assaultrifle"), nil, ITEMC
 GM:AddStartingItem("3rcp", ""..translate.Get("worth_5rifle"), nil, ITEMCAT_AMMO, 10, nil, function(pl) pl:GiveAmmo((GAMEMODE.AmmoCache["357"] or 6) * 5, "357", true) end, "models/Items/BoxSniperRounds.mdl")
 GM:AddStartingItem("3pls", ""..translate.Get("worth_5pulse"), nil, ITEMCAT_AMMO, 10, nil, function(pl) pl:GiveAmmo((GAMEMODE.AmmoCache["pulse"] or 30) * 5, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
 
-GM:AddStartingItem("zpaxe", ""..translate.Get("worth_axe"), nil, ITEMCAT_MELEE, 10, "weapon_zs_axe")
-GM:AddStartingItem("crwbar", ""..translate.Get("worth_crowbar"), nil, ITEMCAT_MELEE, 15, "weapon_zs_crowbar")
-GM:AddStartingItem("stnbtn", ""..translate.Get("worth_stun"), nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
-GM:AddStartingItem("csknf", ""..translate.Get("worth_knife"), nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
-GM:AddStartingItem("zpplnk", ""..translate.Get("worth_plank"), nil, ITEMCAT_MELEE, 20, "weapon_zs_plank")
+-----------
+-- W.MELEE --
+-----------
+
 GM:AddStartingItem("zpfryp", ""..translate.Get("worth_fryingpan"), nil, ITEMCAT_MELEE, 5, "weapon_zs_fryingpan")
 GM:AddStartingItem("zpcpot", ""..translate.Get("worth_cookingpot"), nil, ITEMCAT_MELEE, 5, "weapon_zs_pot")
-GM:AddStartingItem("pipe", ""..translate.Get("worth_leadpipe"), nil, ITEMCAT_MELEE, 25, "weapon_zs_pipe")
+GM:AddStartingItem("csknf", ""..translate.Get("worth_knife"), nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
+GM:AddStartingItem("zpaxe", ""..translate.Get("worth_axe"), nil, ITEMCAT_MELEE, 10, "weapon_zs_axe")
+GM:AddStartingItem("crwbar", ""..translate.Get("worth_crowbar"), nil, ITEMCAT_MELEE, 15, "weapon_zs_crowbar")
 GM:AddStartingItem("hook", ""..translate.Get("worth_meathook"), nil, ITEMCAT_MELEE, 15, "weapon_zs_hook")
+GM:AddStartingItem("stnbtn", ""..translate.Get("worth_stun"), nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
+GM:AddStartingItem("zpplnk", ""..translate.Get("worth_plank"), nil, ITEMCAT_MELEE, 20, "weapon_zs_plank")
+GM:AddStartingItem("pipe", ""..translate.Get("worth_leadpipe"), nil, ITEMCAT_MELEE, 25, "weapon_zs_pipe")
 
-GM:AddStartingItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_medicalkit")
-GM:AddStartingItem("medgun", ""..translate.Get("worth_medgun"), nil, ITEMCAT_TOOLS, 25, "weapon_zs_medicgun")
-GM:AddStartingItem("150mkit", ""..translate.Get("worth_150meds"), ""..translate.Get("worth_150meds2"), ITEMCAT_TOOLS, 15, nil, function(pl) pl:GiveAmmo(150, "Battery", true) end, "models/healthvial.mdl")
+-----------
+-- W.TOOLS --
+-----------
+GM:AddStartingItem("msgbeacon", ""..translate.Get("worth_beacon"), nil, ITEMCAT_TOOLS, 1, "weapon_zs_messagebeacon").Countables = "prop_messagebeacon"
+GM:AddStartingItem("spotlamp", ""..translate.Get("worth_spotlamp"), nil, ITEMCAT_TOOLS, 5, "weapon_zs_spotlamp").Countables = "prop_spotlamp"
+GM:AddStartingItem("6nails", ""..translate.Get("worth_6nails"), ""..translate.Get("worth_6nails2"), ITEMCAT_TOOLS, 12, nil, function(pl) pl:GiveAmmo(12, "GaussEnergy", true) end, "models/Items/BoxMRounds.mdl")
+GM:AddStartingItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
+GM:AddStartingItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_hammer").NoClassicMode = true
 GM:AddStartingItem("arscrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_arsenalcrate").Countables = "prop_arsenalcrate"
+GM:AddStartingItem("150mkit", ""..translate.Get("worth_150meds"), ""..translate.Get("worth_150meds2"), ITEMCAT_TOOLS, 15, nil, function(pl) pl:GiveAmmo(150, "Battery", true) end, "models/healthvial.mdl")
+GM:AddStartingItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_medicalkit")
+GM:AddStartingItem("junkpack", ""..translate.Get("worth_junkpack"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_boardpack")
+GM:AddStartingItem("medgun", ""..translate.Get("worth_medgun"), nil, ITEMCAT_TOOLS, 25, "weapon_zs_medicgun")
+local item = GM:AddStartingItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_manhack")
+item.Countables = "prop_manhack"
 GM:AddStartingItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_resupplybox").Countables = "prop_resupplybox"
+GM:AddStartingItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
 local item = GM:AddStartingItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
 	ITEMCAT_TOOLS, 65, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
@@ -157,43 +177,45 @@ local item = GM:AddStartingItem("infturret", ""..translate.Get("worth_turret"), 
 end, "models/combine_turrets/floor_turret.mdl")
 item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
 item.NoClassicMode = true
-item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
-item.NoClassicMode = true
-local item = GM:AddStartingItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_manhack")
-item.Countables = "prop_manhack"
-GM:AddStartingItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
-GM:AddStartingItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_hammer").NoClassicMode = true
-GM:AddStartingItem("6nails", ""..translate.Get("worth_6nails"), ""..translate.Get("worth_6nails2"), ITEMCAT_TOOLS, 12, nil, function(pl) pl:GiveAmmo(12, "GaussEnergy", true) end, "models/Items/BoxMRounds.mdl")
-GM:AddStartingItem("junkpack", ""..translate.Get("worth_junkpack"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_boardpack")
-GM:AddStartingItem("spotlamp", ""..translate.Get("worth_spotlamp"), nil, ITEMCAT_TOOLS, 5, "weapon_zs_spotlamp").Countables = "prop_spotlamp"
-GM:AddStartingItem("msgbeacon", ""..translate.Get("worth_beacon"), nil, ITEMCAT_TOOLS, 1, "weapon_zs_messagebeacon").Countables = "prop_messagebeacon"
-GM:AddStartingItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
+
+-----------
+-- W.OTHER --
+-----------
 
 GM:AddStartingItem("stone", ""..translate.Get("worth_stone"), nil, ITEMCAT_OTHER, 0, "weapon_zs_stone")
 GM:AddStartingItem("oxtank", ""..translate.Get("worth_oxygentank"), ""..translate.Get("worth_oxygentank2"), ITEMCAT_OTHER, 1, "weapon_zs_oxygentank")
 
+-----------
+-- W.TRAITS --
+-----------
+
 GM:AddStartingItem("10hp", ""..translate.Get("worth_fit"), ""..translate.Get("worth_fit2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl:SetMaxHealth(pl:GetMaxHealth() + 10) pl:SetHealth(pl:Health() + 10) end, "models/healthvial.mdl")
-GM:AddStartingItem("25hp", ""..translate.Get("worth_tough"), ""..translate.Get("worth_tough2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl:SetMaxHealth(pl:GetMaxHealth() + 25) pl:SetHealth(pl:Health() + 25) end, "models/items/healthkit.mdl")
 local item = GM:AddStartingItem("5spd", ""..translate.Get("worth_quick"), ""..translate.Get("worth_quick2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl.HumanSpeedAdder = (pl.HumanSpeedAdder or 0) + 7 pl:ResetSpeed() end, "models/props_lab/jar01a.mdl")
 item.NoClassicMode = true
 item.NoZombieEscape = true
+GM:AddStartingItem("bfsurgeon", ""..translate.Get("worth_surgeon"), ""..translate.Get("worth_surgeon2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl.HumanHealMultiplier = (pl.HumanHealMultiplier or 1) + 0.3 end, "models/healthvial.mdl")
+GM:AddStartingItem("bfresist", ""..translate.Get("worth_resistant"), ""..translate.Get("worth_resistant2"), ITEMCAT_TRAITS, 15, nil, function(pl) pl.BuffResistant = true end, "models/healthvial.mdl")
+GM:AddStartingItem("25hp", ""..translate.Get("worth_tough"), ""..translate.Get("worth_tough2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl:SetMaxHealth(pl:GetMaxHealth() + 25) pl:SetHealth(pl:Health() + 25) end, "models/items/healthkit.mdl")
 local item = GM:AddStartingItem("10spd", ""..translate.Get("worth_surged"), ""..translate.Get("worth_surged2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.HumanSpeedAdder = (pl.HumanSpeedAdder or 0) + 14 pl:ResetSpeed() end, "models/props_lab/jar01a.mdl")
 item.NoClassicMode = true
 item.NoZombieEscape = true
-GM:AddStartingItem("bfhandy", ""..translate.Get("worth_handy"), ""..translate.Get("worth_handy2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.25 end, "models/props_c17/tools_wrench01a.mdl")
-GM:AddStartingItem("bfsurgeon", ""..translate.Get("worth_surgeon"), ""..translate.Get("worth_surgeon2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl.HumanHealMultiplier = (pl.HumanHealMultiplier or 1) + 0.3 end, "models/healthvial.mdl")
-GM:AddStartingItem("bfresist", ""..translate.Get("worth_resistant"), ""..translate.Get("worth_resistant2"), ITEMCAT_TRAITS, 15, nil, function(pl) pl.BuffResistant = true end, "models/healthvial.mdl")
 GM:AddStartingItem("bfregen", ""..translate.Get("worth_regen"), ""..translate.Get("worth_regen2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.BuffRegenerative = true end, "models/healthvial.mdl")
+GM:AddStartingItem("bfhandy", ""..translate.Get("worth_handy"), ""..translate.Get("worth_handy2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.25 end, "models/props_c17/tools_wrench01a.mdl")
 GM:AddStartingItem("bfmusc", ""..translate.Get("worth_muscular"),""..translate.Get("worth_muscular2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.BuffMuscular = true pl:DoMuscularBones() end, "models/props_wasteland/kitchen_shelf001a.mdl")
 
-GM:AddStartingItem("dbfweak", ""..translate.Get("worth_weak"), ""..translate.Get("worth_weak2"), ITEMCAT_RETURNS, -20, nil, function(pl) pl:SetMaxHealth(math.max(1, pl:GetMaxHealth() - 30)) pl:SetHealth(pl:GetMaxHealth()) pl.IsWeak = true end, "models/gibs/HGIBS.mdl")
-GM:AddStartingItem("dbfslow", ""..translate.Get("worth_slow"), ""..translate.Get("worth_slow2"), ITEMCAT_RETURNS, -30, nil, function(pl) pl.HumanSpeedAdder = (pl.HumanSpeedAdder or 1) - 20 pl:ResetSpeed() pl.IsSlow = true end, "models/gibs/HGIBS.mdl")
+-----------
+-- W.RETURNS --
+-----------
+
+
 GM:AddStartingItem("dbfpalsy", ""..translate.Get("worth_palasy"), ""..translate.Get("worth_palasy2"), ITEMCAT_RETURNS, -10, nil, function(pl) pl:SetPalsy(true) end, "models/gibs/HGIBS.mdl")
-GM:AddStartingItem("dbfhemo", ""..translate.Get("worth_hemo"), ""..translate.Get("worth_hemo2"), ITEMCAT_RETURNS, -15, nil, function(pl) pl:SetHemophilia(true) end, "models/gibs/HGIBS.mdl")
-GM:AddStartingItem("dbfunluc", ""..translate.Get("worth_banlive"), ""..translate.Get("worth_banlive2"), ITEMCAT_RETURNS, -40, nil, function(pl) pl:SetUnlucky(true) end, "models/gibs/HGIBS.mdl")
-GM:AddStartingItem("dbfclumsy", ""..translate.Get("worth_clumsy"), ""..translate.Get("worth_clumsy2"), ITEMCAT_RETURNS, -30, nil, function(pl) pl.Clumsy = true end, "models/gibs/HGIBS.mdl")
-GM:AddStartingItem("dbfnoghosting", ""..translate.Get("worth_wideload"), ""..translate.Get("worth_wideload2"), ITEMCAT_RETURNS, -25, nil, function(pl) pl.NoGhosting = true end, "models/gibs/HGIBS.mdl").NoClassicMode = true
 GM:AddStartingItem("dbfnopickup", ""..translate.Get("worth_noodlearms"), ""..translate.Get("worth_noodlearms2"), ITEMCAT_RETURNS, -15, nil, function(pl) pl.NoObjectPickup = true pl:DoNoodleArmBones() end, "models/gibs/HGIBS.mdl")
+GM:AddStartingItem("dbfhemo", ""..translate.Get("worth_hemo"), ""..translate.Get("worth_hemo2"), ITEMCAT_RETURNS, -15, nil, function(pl) pl:SetHemophilia(true) end, "models/gibs/HGIBS.mdl")
+GM:AddStartingItem("dbfweak", ""..translate.Get("worth_weak"), ""..translate.Get("worth_weak2"), ITEMCAT_RETURNS, -20, nil, function(pl) pl:SetMaxHealth(math.max(1, pl:GetMaxHealth() - 30)) pl:SetHealth(pl:GetMaxHealth()) pl.IsWeak = true end, "models/gibs/HGIBS.mdl")
+GM:AddStartingItem("dbfnoghosting", ""..translate.Get("worth_wideload"), ""..translate.Get("worth_wideload2"), ITEMCAT_RETURNS, -25, nil, function(pl) pl.NoGhosting = true end, "models/gibs/HGIBS.mdl").NoClassicMode = true
+GM:AddStartingItem("dbfslow", ""..translate.Get("worth_slow"), ""..translate.Get("worth_slow2"), ITEMCAT_RETURNS, -30, nil, function(pl) pl.HumanSpeedAdder = (pl.HumanSpeedAdder or 1) - 20 pl:ResetSpeed() pl.IsSlow = true end, "models/gibs/HGIBS.mdl")
+GM:AddStartingItem("dbfclumsy", ""..translate.Get("worth_clumsy"), ""..translate.Get("worth_clumsy2"), ITEMCAT_RETURNS, -30, nil, function(pl) pl.Clumsy = true end, "models/gibs/HGIBS.mdl")
+GM:AddStartingItem("dbfunluc", ""..translate.Get("worth_banlive"), ""..translate.Get("worth_banlive2"), ITEMCAT_RETURNS, -40, nil, function(pl) pl:SetUnlucky(true) end, "models/gibs/HGIBS.mdl")
 
 ------------
 -- Points --
@@ -203,25 +225,20 @@ GM:AddPointShopItem("deagle", ""..translate.Get("ars_deagle"), nil, ITEMCAT_GUNS
 GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
 GM:AddPointShopItem("magnum", ""..translate.Get("ars_magnum"), nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
 GM:AddPointShopItem("eraser", ""..translate.Get("ars_tacticalpistol"), nil, ITEMCAT_GUNS, 35, "weapon_zs_eraser")
-
 GM:AddPointShopItem("uzi", ""..translate.Get("ars_uzi"), nil, ITEMCAT_GUNS, 70, "weapon_zs_uzi")
 GM:AddPointShopItem("shredder", ""..translate.Get("ars_shredder"), nil, ITEMCAT_GUNS, 70, "weapon_zs_smg")
 GM:AddPointShopItem("bulletstorm", ""..translate.Get("ars_bulletstorm"), nil, ITEMCAT_GUNS, 70, "weapon_zs_bulletstorm")
 GM:AddPointShopItem("hunter", ""..translate.Get("ars_hunter"), nil, ITEMCAT_GUNS, 70, "weapon_zs_hunter")
-
 GM:AddPointShopItem("reaper", ""..translate.Get("ars_reaperump"), nil, ITEMCAT_GUNS, 80, "weapon_zs_reaper")
 GM:AddPointShopItem("ender", ""..translate.Get("ars_autoen"), nil, ITEMCAT_GUNS, 85, "weapon_zs_ender")
 GM:AddPointShopItem("akbar", ""..translate.Get("ars_akbar"), nil, ITEMCAT_GUNS, 85, "weapon_zs_akbar")
 GM:AddPointShopItem("galil", ""..translate.Get("ars_galil"), nil, ITEMCAT_GUNS, 90, "weapon_zs_galil")
-
 GM:AddPointShopItem("silencer", ""..translate.Get("ars_silencer"), nil, ITEMCAT_GUNS, 100, "weapon_zs_silencer")
-GM:AddPointShopItem("stalker", ""..translate.Get("ars_stalker"), nil, ITEMCAT_GUNS, 120, "weapon_zs_m4")
-GM:AddPointShopItem("inferno", ""..translate.Get("ars_inferno"), nil, ITEMCAT_GUNS, 125, "weapon_zs_inferno")
 GM:AddPointShopItem("annabelle", ""..translate.Get("ars_annabele"), nil, ITEMCAT_GUNS, 100, "weapon_zs_annabelle")
 GM:AddPointShopItem("g3sg1", ""..translate.Get("ars_infiltrator"), nil, ITEMCAT_GUNS, 110, "weapon_zs_g3sg1")
-
+GM:AddPointShopItem("stalker", ""..translate.Get("ars_stalker"), nil, ITEMCAT_GUNS, 120, "weapon_zs_m4")
+GM:AddPointShopItem("inferno", ""..translate.Get("ars_inferno"), nil, ITEMCAT_GUNS, 125, "weapon_zs_inferno")
 GM:AddPointShopItem("crossbow", ""..translate.Get("ars_crossbow"), nil, ITEMCAT_GUNS, 140, "weapon_zs_crossbow")
-
 GM:AddPointShopItem("sg552", ""..translate.Get("ars_eliminator"), nil, ITEMCAT_GUNS, 150, "weapon_zs_sg552")
 GM:AddPointShopItem("sweeper", ""..translate.Get("ars_sweeper"), nil, ITEMCAT_GUNS, 170, "weapon_zs_sweepershotgun")
 GM:AddPointShopItem("slugrifle", ""..translate.Get("ars_tiny"), nil, ITEMCAT_GUNS, 200, "weapon_zs_slugrifle")
@@ -229,6 +246,10 @@ GM:AddPointShopItem("pulserifle", ""..translate.Get("ars_adonis"), nil, ITEMCAT_
 GM:AddPointShopItem("m249", ""..translate.Get("ars_punisher"), nil, ITEMCAT_GUNS, 230, "weapon_zs_m249")
 GM:AddPointShopItem("sg550", ""..translate.Get("ars_killer"), nil, ITEMCAT_GUNS, 240, "weapon_zs_sg550")
 GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick")
+
+------------
+ -- P.AMMO --
+------------
 
 GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
 GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
@@ -238,15 +259,23 @@ GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMC
 GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 2, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
 GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
 
+------------
+-- P.MELEE --
+------------
+
+GM:AddPointShopItem("knife", ""..translate.Get("worth_knife"), nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
 GM:AddPointShopItem("axe", ""..translate.Get("worth_axe"), nil, ITEMCAT_MELEE, 10, "weapon_zs_axe")
 GM:AddPointShopItem("crowbar", ""..translate.Get("worth_crowbar"), nil, ITEMCAT_MELEE, 15, "weapon_zs_crowbar")
 GM:AddPointShopItem("stunbaton", ""..translate.Get("worth_stun"), nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
-GM:AddPointShopItem("knife", ""..translate.Get("worth_knife"), nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
 GM:AddPointShopItem("shovel", ""..translate.Get("ars_shovel"), nil, ITEMCAT_MELEE, 20, "weapon_zs_shovel")
 GM:AddPointShopItem("sledgehammer", ""..translate.Get("ars_sledge"), nil, ITEMCAT_MELEE, 30, "weapon_zs_sledgehammer")
 
-GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
+------------
+-- P.TOOLS --
+------------
+
 GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
+GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
 local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
@@ -256,14 +285,16 @@ local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"),
 	pl:GiveAmmo(250, "smg1")
 end, "models/combine_turrets/floor_turret.mdl")
 item.NoClassicMode = true
-item.NoClassicMode = true
-GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
-GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
 GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
-GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
 GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
+GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
+GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
 GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
+GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
 
+------------
+-- P.OTHER --
+------------
 
 GM:AddPointShopItem("grenade", ""..translate.Get("ars_grenade"), nil, ITEMCAT_OTHER, 200, "weapon_zs_grenade")
 GM:AddPointShopItem("detpck", ""..translate.Get("ars_detpack"), nil, ITEMCAT_OTHER, 500, "weapon_zs_detpack")
