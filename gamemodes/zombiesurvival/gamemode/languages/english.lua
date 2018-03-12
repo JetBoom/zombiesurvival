@@ -599,6 +599,7 @@ LANGUAGE.grenade_desk                               = "A simple fragmentation gr
 LANGUAGE.detpack_desk                               = "A pack of explosives that can be placed on surfaces and detonated remotely.\nPress PRIMARY ATTACK to deploy.\nPress PRIMARY ATTACK again to detonate.\nPress SPRINT on a deployed detonation pack to disarm and retrieve it."
 LANGUAGE.aegis_desk                                 = "A ready-to-go, all-in-one board deployer.\nIt automatically deploys the board and then firmly attaches it to almost any surface.\nUse PRIMARY FIRE to deploy boards.\nUse SECONADRY FIRE and RELOAD to rotate the board.\nA ghost of the board shows you if placement is valid or not."
 LANGUAGE.spotlmp_desk                               = "This lamp is a watchful eye which illuminates an area.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
+LANGUAGE.medkit_text                                = "Medical Kit"
 
 -- Honorable Mentions 
 
