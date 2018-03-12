@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Knife"
-	SWEP.Description = "Deals double damage to the back."
+	SWEP.Description = translate.Get("knife_desk")
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55

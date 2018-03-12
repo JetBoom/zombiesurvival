@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Savior' Medic Gun"
-	SWEP.Description = "Fires medical darts which can heal at a range. Although less potent than a full medical kit, it can be fired rapidly and used at a range."
+	SWEP.Description = translate.Get("medgun_desk")
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0
 	

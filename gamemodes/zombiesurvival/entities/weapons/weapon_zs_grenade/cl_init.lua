@@ -1,7 +1,7 @@
 include("shared.lua")
 
 SWEP.PrintName = "Grenade"
-SWEP.Description = "A simple fragmentation grenade.\nWhen used in the right conditions, it can obliterate groups of zombies."
+SWEP.Description = translate.Get("grenade_desk")
 
 SWEP.ViewModelFOV = 60
 

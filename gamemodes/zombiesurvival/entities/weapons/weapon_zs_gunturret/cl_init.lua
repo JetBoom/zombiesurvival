@@ -1,7 +1,7 @@
 include("shared.lua")
 
 SWEP.PrintName = "Gun Turret"
-SWEP.Description = "This automated turret requires constant upkeep to be useful.\nPress PRIMARY ATTACK to deploy the turret.\nPress SECONDARY ATTACK and RELOAD to rotate the turret.\nPress USE on a deployed turret to give it some of your SMG ammunition.\nPress USE on a deployed turret with no owner (blue light) to reclaim it."
+SWEP.Description = translate.Get("worth_turret2")
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4
