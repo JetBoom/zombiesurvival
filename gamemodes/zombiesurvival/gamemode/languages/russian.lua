@@ -528,6 +528,9 @@ LANGUAGE.ars_50meds                                 = "50 медицинских
 LANGUAGE.ars_50meds2                                = "50 дополнительных зарядов для аптечки."
 LANGUAGE.ars_grenade                                = "Граната"
 LANGUAGE.ars_detpack                                = "Детонационный Пакет"
+
+-- Item Descriptions
+
 LANGUAGE.z900_desk                                  = "Хотя Z9000 не наносит большого урона, импульсные выстрелы замедляют цели."
 LANGUAGE.knife_desk                                 = "Наносит двойной урон в спину."
 LANGUAGE.crowbar_desk                               = "Мгновенно убивает хедкрабов."

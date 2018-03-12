@@ -568,6 +568,9 @@ LANGUAGE.ars_50meds                                 = "50 Medical Kit power"
 LANGUAGE.ars_50meds2                                = "50 extra power for the Medical Kit."
 LANGUAGE.ars_grenade                                = "Grenade"
 LANGUAGE.ars_detpack                                = "Detonation Pack"
+
+-- Item Descriptions 
+
 LANGUAGE.z900_desk                                  = "Although the Z9000 does not deal that much damage, the pulse shots it fires will slow targets."
 LANGUAGE.knife_desk                                 = "Deals double damage to the back."
 LANGUAGE.crowbar_desk                               = "Instantly kills headcrabs."
