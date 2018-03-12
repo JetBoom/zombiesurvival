@@ -140,10 +140,10 @@ function GM:ShowHelp()
 	self.BaseClass.Think(self)
 		
 	local text = self:GetText()
-	if MySelf:Team() == TEAM_SPECTATOR and text == (translate.Get("mm_sp3")) then
+	if MySelf:Team() == TEAM_SPECTATOR and text == (translate.Get("mm_sp")) then
 		self:SetText(translate.Get("mm_unsp"))
-		elseif MySelf:Team() ~= TEAM_SPECTATOR and text == (translate.Get("mm_unsp2")) then
-		self:SetText(translate.Get("mm_sp2"))
+		elseif MySelf:Team() ~= TEAM_SPECTATOR and text == (translate.Get("mm_unsp")) then
+		self:SetText(translate.Get("mm_sp"))
 		end
 	end
 	but.DoClick = function() RunConsoleCommand("spectate")

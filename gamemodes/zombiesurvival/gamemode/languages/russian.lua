@@ -581,9 +581,6 @@ LANGUAGE.mm_help                                   = "Помощь"
 LANGUAGE.mm_pm_messg                               = "Вы изменили желаемую модель игрока на"
 LANGUAGE.mm_sp                                     = "Наблюдать"
 LANGUAGE.mm_unsp                                   = "Не-Наблюдать"
-LANGUAGE.mm_sp2                                    = "Наблюдать"
-LANGUAGE.mm_sp3                                    = "Наблюдать"
-LANGUAGE.mm_unsp2                                  = "Не-Наблюдать"
 
 -- Weapon Database
 
