@@ -199,51 +199,51 @@ GM:AddStartingItem("dbfnopickup", ""..translate.Get("worth_noodlearms"), ""..tra
 -- Points --
 ------------
 
-GM:AddPointShopItem("deagle", ""..translate.Get("ars_zomdrill"), nil, ITEMCAT_GUNS, 30, "weapon_zs_deagle")
-GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock3"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
+GM:AddPointShopItem("deagle", ""..translate.Get("ars_deagle"), nil, ITEMCAT_GUNS, 30, "weapon_zs_deagle")
+GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
 GM:AddPointShopItem("magnum", ""..translate.Get("ars_magnum"), nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
-GM:AddPointShopItem("eraser", ""..translate.Get("ars_eraser"), nil, ITEMCAT_GUNS, 35, "weapon_zs_eraser")
+GM:AddPointShopItem("eraser", ""..translate.Get("ars_tacticalpistol"), nil, ITEMCAT_GUNS, 35, "weapon_zs_eraser")
 
 GM:AddPointShopItem("uzi", ""..translate.Get("ars_uzi"), nil, ITEMCAT_GUNS, 70, "weapon_zs_uzi")
 GM:AddPointShopItem("shredder", ""..translate.Get("ars_shredder"), nil, ITEMCAT_GUNS, 70, "weapon_zs_smg")
 GM:AddPointShopItem("bulletstorm", ""..translate.Get("ars_bulletstorm"), nil, ITEMCAT_GUNS, 70, "weapon_zs_bulletstorm")
 GM:AddPointShopItem("hunter", ""..translate.Get("ars_hunter"), nil, ITEMCAT_GUNS, 70, "weapon_zs_hunter")
 
-GM:AddPointShopItem("reaper", "'Reaper' UMP", nil, ITEMCAT_GUNS, 80, "weapon_zs_reaper")
-GM:AddPointShopItem("ender", "'Ender' Automatic Shotgun", nil, ITEMCAT_GUNS, 85, "weapon_zs_ender")
-GM:AddPointShopItem("akbar", "'Akbar' Assault Rifle", nil, ITEMCAT_GUNS, 85, "weapon_zs_akbar")
-GM:AddPointShopItem("galil", "'Riddler' Galil Assault Rifle", nil, ITEMCAT_GUNS, 90, "weapon_zs_galil")
+GM:AddPointShopItem("reaper", ""..translate.Get("ars_reaperump"), nil, ITEMCAT_GUNS, 80, "weapon_zs_reaper")
+GM:AddPointShopItem("ender", ""..translate.Get("ars_autoen"), nil, ITEMCAT_GUNS, 85, "weapon_zs_ender")
+GM:AddPointShopItem("akbar", ""..translate.Get("ars_akbar"), nil, ITEMCAT_GUNS, 85, "weapon_zs_akbar")
+GM:AddPointShopItem("galil", ""..translate.Get("ars_galil"), nil, ITEMCAT_GUNS, 90, "weapon_zs_galil")
 
-GM:AddPointShopItem("silencer", "'Silencer' SMG", nil, ITEMCAT_GUNS, 100, "weapon_zs_silencer")
-GM:AddPointShopItem("stalker", "'Stalker' Assault Rifle", nil, ITEMCAT_GUNS, 120, "weapon_zs_m4")
-GM:AddPointShopItem("inferno", "'Inferno' Assault Rifle", nil, ITEMCAT_GUNS, 125, "weapon_zs_inferno")
-GM:AddPointShopItem("annabelle", "'Annabelle' Rifle", nil, ITEMCAT_GUNS, 100, "weapon_zs_annabelle")
-GM:AddPointShopItem("g3sg1", "'Infiltrator' G3sg1 Rifle", nil, ITEMCAT_GUNS, 110, "weapon_zs_g3sg1")
+GM:AddPointShopItem("silencer", ""..translate.Get("ars_silencer"), nil, ITEMCAT_GUNS, 100, "weapon_zs_silencer")
+GM:AddPointShopItem("stalker", ""..translate.Get("ars_stalker"), nil, ITEMCAT_GUNS, 120, "weapon_zs_m4")
+GM:AddPointShopItem("inferno", ""..translate.Get("ars_inferno"), nil, ITEMCAT_GUNS, 125, "weapon_zs_inferno")
+GM:AddPointShopItem("annabelle", ""..translate.Get("ars_annabele"), nil, ITEMCAT_GUNS, 100, "weapon_zs_annabelle")
+GM:AddPointShopItem("g3sg1", ""..translate.Get("ars_infiltrator"), nil, ITEMCAT_GUNS, 110, "weapon_zs_g3sg1")
 
-GM:AddPointShopItem("crossbow", "'Impaler' Crossbow", nil, ITEMCAT_GUNS, 140, "weapon_zs_crossbow")
+GM:AddPointShopItem("crossbow", ""..translate.Get("ars_crossbow"), nil, ITEMCAT_GUNS, 140, "weapon_zs_crossbow")
 
-GM:AddPointShopItem("sg552", "'Eliminator' SG552 Assault Rifle", nil, ITEMCAT_GUNS, 150, "weapon_zs_sg552")
-GM:AddPointShopItem("sweeper", "'Sweeper' Shotgun", nil, ITEMCAT_GUNS, 170, "weapon_zs_sweepershotgun")
-GM:AddPointShopItem("slugrifle", "'Tiny' Slug Rifle", nil, ITEMCAT_GUNS, 200, "weapon_zs_slugrifle")
-GM:AddPointShopItem("pulserifle", "'Adonis' Pulse Rifle", nil, ITEMCAT_GUNS, 230, "weapon_zs_pulserifle")
-GM:AddPointShopItem("m249", "'Punisher' M249 Machine Gun", nil, ITEMCAT_GUNS, 230, "weapon_zs_m249")
-GM:AddPointShopItem("sg550", "'Killer' SG550 Sniper Rifle", nil, ITEMCAT_GUNS, 240, "weapon_zs_sg550")
-GM:AddPointShopItem("boomstick", "Boom Stick", nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick")
+GM:AddPointShopItem("sg552", ""..translate.Get("ars_eliminator"), nil, ITEMCAT_GUNS, 150, "weapon_zs_sg552")
+GM:AddPointShopItem("sweeper", ""..translate.Get("ars_sweeper"), nil, ITEMCAT_GUNS, 170, "weapon_zs_sweepershotgun")
+GM:AddPointShopItem("slugrifle", ""..translate.Get("ars_tiny"), nil, ITEMCAT_GUNS, 200, "weapon_zs_slugrifle")
+GM:AddPointShopItem("pulserifle", ""..translate.Get("ars_adonis"), nil, ITEMCAT_GUNS, 230, "weapon_zs_pulserifle")
+GM:AddPointShopItem("m249", ""..translate.Get("ars_punisher"), nil, ITEMCAT_GUNS, 230, "weapon_zs_m249")
+GM:AddPointShopItem("sg550", ""..translate.Get("ars_killer"), nil, ITEMCAT_GUNS, 240, "weapon_zs_sg550")
+GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick")
 
-GM:AddPointShopItem("pistolammo", "pistol ammo box", nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
-GM:AddPointShopItem("shotgunammo", "shotgun ammo box", nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
-GM:AddPointShopItem("smgammo", "SMG ammo box", nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
-GM:AddPointShopItem("assaultrifleammo", "assault rifle ammo box", nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
-GM:AddPointShopItem("rifleammo", "rifle ammo box", nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
-GM:AddPointShopItem("crossbowammo", "crossbow bolt", nil, ITEMCAT_AMMO, 2, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
-GM:AddPointShopItem("pulseammo", "pulse ammo box", nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
+GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
+GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
+GM:AddPointShopItem("smgammo", ""..translate.Get("ars_smg_ammo"), nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
+GM:AddPointShopItem("assaultrifleammo", ""..translate.Get("ars_assaultrifle_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
+GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
+GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 2, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
+GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
 
 GM:AddPointShopItem("axe", ""..translate.Get("worth_axe"), nil, ITEMCAT_MELEE, 10, "weapon_zs_axe")
 GM:AddPointShopItem("crowbar", ""..translate.Get("worth_crowbar"), nil, ITEMCAT_MELEE, 15, "weapon_zs_crowbar")
 GM:AddPointShopItem("stunbaton", ""..translate.Get("worth_stun"), nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
 GM:AddPointShopItem("knife", ""..translate.Get("worth_knife"), nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
-GM:AddPointShopItem("shovel", "Shovel", nil, ITEMCAT_MELEE, 20, "weapon_zs_shovel")
-GM:AddPointShopItem("sledgehammer", "Sledge Hammer", nil, ITEMCAT_MELEE, 30, "weapon_zs_sledgehammer")
+GM:AddPointShopItem("shovel", ""..translate.Get("ars_shovel"), nil, ITEMCAT_MELEE, 20, "weapon_zs_shovel")
+GM:AddPointShopItem("sledgehammer", ""..translate.Get("ars_sledge"), nil, ITEMCAT_MELEE, 30, "weapon_zs_sledgehammer")
 
 GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
 GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
@@ -256,16 +256,17 @@ local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"),
 	pl:GiveAmmo(250, "smg1")
 end, "models/combine_turrets/floor_turret.mdl")
 item.NoClassicMode = true
+item.NoClassicMode = true
 GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
-GM:AddPointShopItem("barricadekit", "'Aegis' Barricade Kit", nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
-GM:AddPointShopItem("nail", "Nail", "It's just one nail.", ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
+GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
+GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
 GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
-GM:AddPointShopItem("50mkit", "50 Medical Kit power", "50 extra power for the Medical Kit.", ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
+GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
 GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
 
 
-GM:AddPointShopItem("grenade", "Grenade", nil, ITEMCAT_OTHER, 200, "weapon_zs_grenade")
-GM:AddPointShopItem("detpck", "Detonation Pack", nil, ITEMCAT_OTHER, 500, "weapon_zs_detpack")
+GM:AddPointShopItem("grenade", ""..translate.Get("ars_grenade"), nil, ITEMCAT_OTHER, 200, "weapon_zs_grenade")
+GM:AddPointShopItem("detpck", ""..translate.Get("ars_detpack"), nil, ITEMCAT_OTHER, 500, "weapon_zs_detpack")
 
 
 -- These are the honorable mentions that come at the end of the round.

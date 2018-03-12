@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Impaler' Crossbow"
-	SWEP.Description = "This ancient weapon can easily skewer groups of zombies."
+	SWEP.Description = translate.Get("crossbow_desk")
 
 	SWEP.HUD3DBone = "ValveBiped.Crossbow_base"
 	SWEP.HUD3DPos = Vector(1.5, 0.5, 11)

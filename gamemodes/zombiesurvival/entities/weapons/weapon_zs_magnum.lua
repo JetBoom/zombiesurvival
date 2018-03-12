@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Ricochete' Magnum"
-	SWEP.Description = "This gun's bullets will bounce off of walls which will then deal extra damage."
+	SWEP.Description = translate.Get("magnum_desk")
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 

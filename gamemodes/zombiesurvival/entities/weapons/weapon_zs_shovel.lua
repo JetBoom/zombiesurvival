@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Shovel"
-	SWEP.Description = "Instantly kills zombies that are knocked down."
+	SWEP.Description = translate.Get("shovel_desk")
 
 	SWEP.ViewModelFOV = 60
 

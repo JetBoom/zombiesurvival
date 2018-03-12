@@ -1,7 +1,7 @@
 include("shared.lua")
 
 SWEP.PrintName = "'Aegis' Barricade Kit"
-SWEP.Description = "A ready-to-go, all-in-one board deployer.\nIt automatically deploys the board and then firmly attaches it to almost any surface.\nUse PRIMARY FIRE to deploy boards.\nUse SECONADRY FIRE and RELOAD to rotate the board.\nA ghost of the board shows you if placement is valid or not."
+SWEP.Description = translate.Get("aegis_desk")
 SWEP.DrawCrosshair = false
 SWEP.ViewModelFOV = 70
 SWEP.ViewModelFlip = false

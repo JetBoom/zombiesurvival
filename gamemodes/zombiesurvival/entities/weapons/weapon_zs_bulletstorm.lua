@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Bullet Storm' SMG"
-	SWEP.Description = "Hold right click to use the Storm firing mode: fire rate is reduced to 60% but two bullets are fired at once."
+	SWEP.Description = translate.Get("bulletstorm_desk")
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Hunter' Rifle"
-	SWEP.Description = "Fires special large caliber rounds. The reloading time is slow but it packs a powerful punch."
+	SWEP.Description = translate.Get("hunter_desk")
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 

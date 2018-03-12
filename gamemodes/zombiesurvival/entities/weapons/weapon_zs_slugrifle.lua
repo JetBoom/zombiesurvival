@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Tiny' Slug Rifle"
-	SWEP.Description = "This powerful rifle instantly kills any zombie with a head shot."
+	SWEP.Description = translate.Get("tiny_desk")
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 

@@ -1,7 +1,7 @@
 include("shared.lua")
 
 SWEP.PrintName = "Resupply Box"
-SWEP.Description = "Allows survivors to get ammunition for their current weapon. Each person can only use the box once every so often.\nPress PRIMARY ATTACK to deploy the box.\nPress SECONDARY ATTACK and RELOAD to rotate the box."
+SWEP.Description = translate.Get("ars_resupply")
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4

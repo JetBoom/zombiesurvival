@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Boom Stick"
-	SWEP.Description = "This shotgun allows you to load up to four shells in the chamber at once. Hold down reload for faster loading of each shell."
+	SWEP.Description = translate.Get("boom_desk")
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Annabelle' Rifle"
-	SWEP.Description = "This modified hunting rifle's bullets will explode in to smaller bullets upon hitting a hard surface."
+	SWEP.Description = translate.Get("annabele_desk")
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Adonis' Pulse Rifle"
-	SWEP.Description = "Deals massive damage and slows targets."
+	SWEP.Description = translate.Get("adonis_desk")
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 

@@ -1,7 +1,7 @@
 include("shared.lua")
 
 SWEP.PrintName = "Spot Lamp"
-SWEP.Description = "This lamp is a watchful eye which illuminates an area.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
+SWEP.Description = translate.Get("spotlmp_desk")
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Manhack"
-	SWEP.Description = "A deployable, remotely controlled device.\nIdeal for scouting but also can be used for attacking from safety."
+	SWEP.Description = translate.Get("manhack_desk")
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 50

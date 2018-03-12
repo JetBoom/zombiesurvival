@@ -15,7 +15,7 @@ if CLIENT then
 		["base"] = { type = "Model", model = "models/props_c17/tools_wrench01a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(2, 1, 0), angle = Angle(190, 90, 90), size = Vector(1.5, 1.5, 1.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "models/props_c17/metalladder001", skin = 0, bodygroup = {} }
 	}
 
-	SWEP.Description = "This tool can be used to repair deployables as long as they were not damaged recently."
+	SWEP.Description = translate.Get("wrench_desk")
 end
 
 SWEP.Base = "weapon_zs_basemelee"

@@ -1,7 +1,7 @@
 include("shared.lua")
 
 SWEP.PrintName = "Force Field Emitter"
-SWEP.Description = "Blocks bullets and other projectiles but will not stop humans, zombies, or other creatures from passing.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
+SWEP.Description = translate.Get("femiter_desk")
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4

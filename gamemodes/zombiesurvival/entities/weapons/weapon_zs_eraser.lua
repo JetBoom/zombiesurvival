@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Eraser' Tactical Pistol"
-	SWEP.Description = "Damage increases as remaining bullets decrease. The last shot is worth triple damage."
+	SWEP.Description = translate.Get("erazer_desk")
 
 	SWEP.ViewModelFOV = 60
 	SWEP.ViewModelFlip = false
