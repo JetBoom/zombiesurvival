@@ -189,7 +189,7 @@ function SWEP:DrawHUD()
 		surface.DrawOutlinedRect(x, y, wid, hei)
 	end
 
-	draw.SimpleText("Medical Kit", "ZSHUDFontSmall", x, texty, COLOR_GREEN, TEXT_ALIGN_LEFT)
+	draw.SimpleText(translate.Get("medkit_text"), "ZSHUDFontSmall", x, texty, COLOR_GREEN, TEXT_ALIGN_LEFT)
 
 	local charges = self:GetPrimaryAmmoCount()
 	if charges > 0 then

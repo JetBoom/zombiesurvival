@@ -2957,7 +2957,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 		end
 
 		pl:CallZombieFunction("PostOnKilled", attacker, inflictor, suicide, headshot, dmginfo)
-	elseif plteam == TEAM_HUMAN then
+	elseif plteam ~= TEAM_UNDEAD then
 		pl.NextSpawnTime = ct + 4
 
 		pl:PlayDeathSound()

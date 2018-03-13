@@ -1,7 +1,7 @@
 include("shared.lua")
 
-SWEP.PrintName = "Message Beacon"
-SWEP.Description = "This beacon allows you to display messages to all other humans in range.\nPress SECONDARY ATTACK to select different messages.\nPress PRIMARY ATTACK to deploy.\nPress SPRINT on a deployed message beacon that you own to pick it up."
+SWEP.PrintName = ""..translate.Get("worth_beacon")
+SWEP.Description = ""..translate.Get("msgbeacon_desk")
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4
