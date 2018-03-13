@@ -453,6 +453,9 @@ LANGUAGE.ars_50meds									= "50 Medical Kit Verbrauchseinheiten"
 LANGUAGE.ars_50meds2								= "50 extra Verbrauchseinheiten für das Medical Kit."
 LANGUAGE.ars_grenade								= "Granate"
 LANGUAGE.ars_detpack								= "Sprengsatz"
+
+-- Item Descriptions
+
 LANGUAGE.z900_desk									= "Obwohl die Z9000 nicht so viel Schaden anrichtet, verlangsamen die abgefeuerten Pulsschüsse das Ziel."
 LANGUAGE.knife_desk									= "Verursacht doppelten Schaden beim Angriff auf den Rücken."
 LANGUAGE.crowbar_desk								= "Tötet Headcrabs sofort."

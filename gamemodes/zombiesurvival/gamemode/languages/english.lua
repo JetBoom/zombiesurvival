@@ -568,6 +568,9 @@ LANGUAGE.ars_50meds                                 = "50 Medical Kit power"
 LANGUAGE.ars_50meds2                                = "50 extra power for the Medical Kit."
 LANGUAGE.ars_grenade                                = "Grenade"
 LANGUAGE.ars_detpack                                = "Detonation Pack"
+
+-- Item Descriptions 
+
 LANGUAGE.z900_desk                                  = "Although the Z9000 does not deal that much damage, the pulse shots it fires will slow targets."
 LANGUAGE.knife_desk                                 = "Deals double damage to the back."
 LANGUAGE.crowbar_desk                               = "Instantly kills headcrabs."
@@ -599,6 +602,7 @@ LANGUAGE.grenade_desk                               = "A simple fragmentation gr
 LANGUAGE.detpack_desk                               = "A pack of explosives that can be placed on surfaces and detonated remotely.\nPress PRIMARY ATTACK to deploy.\nPress PRIMARY ATTACK again to detonate.\nPress SPRINT on a deployed detonation pack to disarm and retrieve it."
 LANGUAGE.aegis_desk                                 = "A ready-to-go, all-in-one board deployer.\nIt automatically deploys the board and then firmly attaches it to almost any surface.\nUse PRIMARY FIRE to deploy boards.\nUse SECONADRY FIRE and RELOAD to rotate the board.\nA ghost of the board shows you if placement is valid or not."
 LANGUAGE.spotlmp_desk                               = "This lamp is a watchful eye which illuminates an area.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
+LANGUAGE.medkit_text                                = "Medical Kit"
 
 -- Honorable Mentions 
 
