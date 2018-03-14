@@ -1491,24 +1491,33 @@ function GM:HUDPaintBackgroundEndRound()
 	end
 end
 
+local endRoundViewPosStart = nil
+local endRoundViewAngleStart = nil
 local function EndRoundCalcView(pl, origin, angles, fov, znear, zfar)
 	if GAMEMODE.EndTime and CurTime() < GAMEMODE.EndTime + 5 then
-		local endposition = GAMEMODE.LastHumanPosition
+		endRoundViewPosStart = endRoundViewPosStart or origin
+		endRoundViewAngleStart = endRoundViewAngleStart or angles
+		local endRoundViewPosEnd = GAMEMODE.LastHumanPosition
 		local override = GetGlobalVector("endcamerapos", 1)
 		if type(override) ~= "number" then
-			endposition = override
+			endRoundViewPosEnd = override
 		end
-		if endposition then
+		if endRoundViewPosEnd then
 			local delta = math.Clamp((CurTime() - GAMEMODE.EndTime) * 2, 0, 1)
  
-			local start = endposition * delta + origin * (1 - delta)
-			local tr = util.TraceHull({start = start, endpos = start + delta * 64 * Angle(0, CurTime() * 30, 0):Forward(), mins = Vector(-2, -2, -2), maxs = Vector(2, 2, 2), filter = player.GetAll(), mask = MASK_SOLID})
-			return {origin = tr.HitPos + tr.HitNormal, angles = (start - tr.HitPos):Angle()}
+			local camPos = endRoundViewPosEnd * delta + endRoundViewPosStart * (1 - delta)
+			local camVec = Angle(0, CurTime() * 30, 0):Forward() * delta - endRoundViewAngleStart:Forward() * (1 - delta)
+			camVec:Normalize()
+			local tr = util.TraceHull({start = camPos, endpos = camPos + delta * 128 * camVec, mins = Vector(-2, -2, -2), maxs = Vector(2, 2, 2), filter = player.GetAll(), mask = MASK_SOLID})
+			return {origin = tr.HitPos + tr.HitNormal, angles = (camPos - tr.HitPos):Angle()}
 		end
 
 		return
 	end
-
+	
+	endRoundViewPosStart = nil
+	endRoundViewAngleStart = nil
+	
 	hook.Remove("CalcView", "EndRoundCalcView")
 end
 

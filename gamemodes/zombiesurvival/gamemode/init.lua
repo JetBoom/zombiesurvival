@@ -806,7 +806,8 @@ end
 -- We calculate the volunteers. If the list changed then broadcast the new list.
 function GM:CalculateZombieVolunteers()
 	local volunteers = {}
-	local allplayers = team.GetPlayers(TEAM_HUMAN)
+	local allplayers = player.GetAllActive()
+	
 	self:SortZombieSpawnDistances(allplayers)
 	for i = 1, self:GetDesiredStartingZombies() do
 		volunteers[i] = allplayers[i]
@@ -2984,8 +2985,8 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 			pl.SurvivalTime = math.max(ct - pl.SpawnedTime, pl.SurvivalTime or 0)
 			pl.SpawnedTime = nil
 		end
-
-		if team.NumPlayers(TEAM_HUMAN) <= 1 then
+		
+		if team.NumPlayers(TEAM_HUMAN) + team.NumPlayers(TEAM_REDEEMER) <= 1 then
 			self.LastHumanPosition = pl:WorldSpaceCenter()
 
 			net.Start("zs_lasthumanpos")
@@ -3374,7 +3375,7 @@ function GM:PlayerSpawn(pl)
 		pl.SpawnedOnSpawnPoint = nil
 
 		pl:CallZombieFunction("OnSpawned")
-	elseif pl:Team() == TEAM_HUMAN then
+	elseif pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_REDEEMER then
 		pl.m_PointQueue = 0
 		pl.PackedItems = {}
 
