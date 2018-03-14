@@ -6,7 +6,7 @@ if game.SinglePlayer() == true then
 	
 	else 
 	if CLIENT then
-		SWEP.PrintName = "'Eliminator' sg552"
+		SWEP.PrintName = translate.Get("ars_eliminator")
 		SWEP.Slot = 2
 		SWEP.SlotPos = 0
 

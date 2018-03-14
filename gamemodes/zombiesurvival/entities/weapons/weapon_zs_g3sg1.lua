@@ -7,7 +7,7 @@ if game.SinglePlayer() == true then
 	else 
 	
 	if CLIENT then
-		SWEP.PrintName = "'Infiltrator' G3sg1 Rifle"
+		SWEP.PrintName = translate.Get("ars_infiltrator")
 		SWEP.Slot = 3
 		SWEP.SlotPos = 0
 

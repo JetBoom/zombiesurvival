@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Crow"
+SWEP.PrintName = translate.Get("wn_crow")
 SWEP.DrawCrosshair = false
 
 function SWEP:PrimaryAttack()

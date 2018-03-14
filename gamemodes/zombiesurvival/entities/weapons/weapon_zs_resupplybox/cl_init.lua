@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Resupply Box"
+SWEP.PrintName = translate.Get("worth_resupplybox")
 SWEP.Description = translate.Get("ars_resupply")
 SWEP.DrawCrosshair = false
 

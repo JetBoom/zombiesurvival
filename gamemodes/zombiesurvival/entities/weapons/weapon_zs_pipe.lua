@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Lead Pipe"
+	SWEP.PrintName = translate.Get("worth_leadpipe")
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60

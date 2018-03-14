@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Carpenter's Hammer"
+SWEP.PrintName = translate.Get("worth_hammer")
 SWEP.Description = translate.Get("carpenderhm_desk")
 
 SWEP.ViewModelFOV = 75

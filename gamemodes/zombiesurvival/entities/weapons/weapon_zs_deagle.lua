@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Zombie Drill' Desert Eagle"
+	SWEP.PrintName = translate.Get("ars_deagle")
 	SWEP.Description = translate.Get("deagle_desk") --SWEP.Description = "This high-powered handgun has the ability to pierce through multiple zombies. The bullet's power decreases by half which each zombie it hits."
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0

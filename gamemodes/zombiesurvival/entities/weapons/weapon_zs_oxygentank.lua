@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Oxygen Tank"
-	SWEP.Description = "Grants the user much higher air capacity."
+	SWEP.PrintName = translate.Get("worth_oxygentank")
+	SWEP.Description = translate.Get("wn_oxygentankdes")
 
 	SWEP.ViewModelFOV = 60
 

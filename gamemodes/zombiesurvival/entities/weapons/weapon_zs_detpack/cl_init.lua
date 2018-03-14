@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Remote Detonation Pack"
+SWEP.PrintName = translate.Get("wn_detpack")
 SWEP.Description = translate.Get("detpack_desk")
 SWEP.DrawCrosshair = false
 

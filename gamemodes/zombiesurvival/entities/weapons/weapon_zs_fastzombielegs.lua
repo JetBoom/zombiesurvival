@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Fast Zombie Kung Fu"
+	SWEP.PrintName = translate.Get("wn_fastlegs")
 end
 
 SWEP.Base = "weapon_zs_zombie"

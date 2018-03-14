@@ -6,7 +6,7 @@ if game.SinglePlayer() == true then
 	
 	else 
 	if CLIENT then
-		SWEP.PrintName = "'Riddler' Assault Rifle"
+		SWEP.PrintName = translate.Get("ars_galil")
 		SWEP.Slot = 2
 		SWEP.SlotPos = 0
 

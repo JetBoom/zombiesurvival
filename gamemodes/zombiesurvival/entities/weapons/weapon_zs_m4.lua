@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Stalker' M4"
+	SWEP.PrintName = translate.Get("ars_stalker")
 	SWEP.Description = translate.Get("stalker_desk")
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0

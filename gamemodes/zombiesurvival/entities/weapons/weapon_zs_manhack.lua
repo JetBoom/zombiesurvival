@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Manhack"
+	SWEP.PrintName = translate.Get("worth_manhack")
 	SWEP.Description = translate.Get("manhack_desk")
 
 	SWEP.ViewModelFlip = false

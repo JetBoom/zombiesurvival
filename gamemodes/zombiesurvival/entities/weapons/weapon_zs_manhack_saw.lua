@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Manhack - Saw Attachment"
-	SWEP.Description = "A modified manhack with a saw blade attachment.\nDoes significantly more damage and is more durable. Slightly less easy to control."
+	SWEP.PrintName = translate.Get("wn_manhacksaw")
+	SWEP.Description = translate.Get("wn_manhacksawdes")
 end
 
 SWEP.Base = "weapon_zs_manhack"

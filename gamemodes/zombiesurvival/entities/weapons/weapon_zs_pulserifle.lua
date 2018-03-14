@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Adonis' Pulse Rifle"
+	SWEP.PrintName = translate.Get("ars_adonis")
 	SWEP.Description = translate.Get("adonis_desk")
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0

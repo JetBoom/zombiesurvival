@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Gun Turret Controller"
-	SWEP.Description = "Allows the user to manually take control of any turrets they own."
+	SWEP.PrintName = translate.Get("wn_turretcontroll")
+	SWEP.Description = translate.Get("wn_turretcontrolldes")
 
 	SWEP.ViewModelFOV = 50
 

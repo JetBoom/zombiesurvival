@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Force Field Emitter"
+SWEP.PrintName = translate.Get("worth_fieldemiter")
 SWEP.Description = translate.Get("femiter_desk")
 SWEP.DrawCrosshair = false
 

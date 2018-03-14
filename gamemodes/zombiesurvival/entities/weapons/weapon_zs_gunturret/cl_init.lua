@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Gun Turret"
+SWEP.PrintName = translate.Get("wn_turret")
 SWEP.Description = translate.Get("worth_turret2")
 SWEP.DrawCrosshair = false
 

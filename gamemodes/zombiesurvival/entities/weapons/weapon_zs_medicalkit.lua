@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Medical Kit"
+	SWEP.PrintName = translate.Get("worth_medkit")
 	SWEP.Description = translate.Get("medkit_desk")
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0

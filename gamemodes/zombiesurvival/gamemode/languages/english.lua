@@ -569,6 +569,47 @@ LANGUAGE.ars_50meds2                                = "50 extra power for the Me
 LANGUAGE.ars_grenade                                = "Grenade"
 LANGUAGE.ars_detpack                                = "Detonation Pack"
 
+-- Weapon Names 
+
+LANGUAGE.wn_bonemesh                                = "Bone Mesh"
+LANGUAGE.wn_chem                                    = "Chem Zombie"
+LANGUAGE.wn_crow                                    = "Crow"
+LANGUAGE.wn_detpack                                 = "Remote Detonation Pack"
+LANGUAGE.wn_turret                                  = "Gun Turret"
+LANGUAGE.wn_headcrab                                = "Headcrab"
+LANGUAGE.wn_pheadcrab                               = "Poison Headcrab"
+LANGUAGE.wn_poisonzombie                            = "Poison Zombie"
+LANGUAGE.wn_wisp                                    = "Will O' Wisp"
+LANGUAGE.wn_spotlmp                                 = "Spot Lamp"
+LANGUAGE.wn_wraith                                  = "Wraith"
+LANGUAGE.wn_zombie                                  = "Zombie"
+LANGUAGE.wn_bloatedzombie                           = "Bloated Zombie"
+LANGUAGE.wn_buststick                               = "Bust-on-a-stick"
+LANGUAGE.wn_butcherknife                            = "Butcher Knife"
+LANGUAGE.wn_detpackremote                           = "Detonation Pack Remote"
+LANGUAGE.wn_drone                                   = "Drone"
+LANGUAGE.wn_droncontroll                            = "Drone Control"
+LANGUAGE.wn_hammerelectro                           = "Electrohammer"
+LANGUAGE.wn_fheadcrab                               = "Fast Headcrab"
+LANGUAGE.wn_fastlegs                                = "Fast Zombie Kung Fu"
+LANGUAGE.wn_fists                                   = "Fists"
+LANGUAGE.wn_freshcreeper                            = "Flesh Creeper"
+LANGUAGE.wn_ghoul                                   = "Ghoul"
+LANGUAGE.wn_turretcontroll                          = "Gun Turret Controller"
+LANGUAGE.wn_keyboard                                = "Keyboard"
+LANGUAGE.wn_lamp                                    = "Lamp"
+LANGUAGE.wn_manhacksaw                              = "Manhack - Saw Attachment"
+LANGUAGE.wn_manhackcontroll                         = "Manhack Control"
+LANGUAGE.wn_megamasher                              = "Mega Masher"
+LANGUAGE.wn_nightmare                               = "Nightmare"
+LANGUAGE.wn_pot                                     = "Pot"
+LANGUAGE.wn_pukepus                                 = "Puke Pus"
+LANGUAGE.wn_redeemers                               = "'Redeemers' Dual Handguns"
+LANGUAGE.wn_sawhack                                 = "Sawhack"
+LANGUAGE.wn_ticlemonster                            = "The Tickle Monster"
+LANGUAGE.wn_waraxe                                  = "'Waraxe' Handgun"
+LANGUAGE.wn_zombielegs                              = "Zombie Kung Fu"
+
 -- Item Descriptions 
 
 LANGUAGE.z900_desk                                  = "Although the Z9000 does not deal that much damage, the pulse shots it fires will slow targets."
@@ -603,6 +644,15 @@ LANGUAGE.detpack_desk                               = "A pack of explosives that
 LANGUAGE.aegis_desk                                 = "A ready-to-go, all-in-one board deployer.\nIt automatically deploys the board and then firmly attaches it to almost any surface.\nUse PRIMARY FIRE to deploy boards.\nUse SECONADRY FIRE and RELOAD to rotate the board.\nA ghost of the board shows you if placement is valid or not."
 LANGUAGE.spotlmp_desk                               = "This lamp is a watchful eye which illuminates an area.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
 LANGUAGE.medkit_text                                = "Medical Kit"
+LANGUAGE.wn_detpackremotedes                        = "Allows the user to remotely detonate their detonation packs."
+LANGUAGE.wn_dronedes                                = "A deployable, remotely controlled device.\nIdeal for scouting, retrieval, and targeted attacks."
+LANGUAGE.wn_droncontrolldes                         = "Controller for your Drone."
+LANGUAGE.wn_turretcontrolldes                       = "Allows the user to manually take control of any turrets they own."
+LANGUAGE.wn_manhacksawdes                           = "A modified manhack with a saw blade attachment.\nDoes significantly more damage and is more durable. Slightly less easy to control."
+LANGUAGE.wn_manhackcontrolldes                      = "Controller for your Manhack."
+LANGUAGE.wn_manhacksawcontrolldes                   = "Controller for your modified Manhack."
+LANGUAGE.wn_oxygentankdes                           = "Grants the user much higher air capacity."
+LANGUAGE.wn_manhacksawcontroll                      = "A modified manhack with a saw blade attachment.\nDoes significantly more damage and is more durable. Slightly less easy to control."
 
 -- Honorable Mentions 
 
@@ -771,4 +821,19 @@ LANGUAGE.ammo_pulse                                 = "Pulse Shots"
 LANGUAGE.pl_poison                                  = "POISON!"
 LANGUAGE.pl_bleed                                   = "BLEED!"
 LANGUAGE.pl_ghtc                                    = "GHOUL TOUCH!"
+
+-- Floating Score
+
+LANGUAGE.fc_assisted                                = "(assisted)"
+LANGUAGE.fc_assist                                  = "(assist)"
+LANGUAGE.fc_point                                   = "point"
+LANGUAGE.fc_s                                       = "s"
+LANGUAGE.fc_munch                                   = "MUNCH!"
+LANGUAGE.fc_brainget                                = "BRAIN GET!"
+LANGUAGE.fc_joinus                                  = "JOIN US!"
+LANGUAGE.fc_oneofus                                 = "ONE OF US!"
+LANGUAGE.fc_buttmagned                              = "BUTT MANGLED!"
+LANGUAGE.fc_chomp                                   = "CHOMP!"
+
+
 

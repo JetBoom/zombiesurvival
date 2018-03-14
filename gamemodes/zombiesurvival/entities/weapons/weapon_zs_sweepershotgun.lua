@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Sweeper' Shotgun"
+	SWEP.PrintName = translate.Get("ars_sweeper")
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 

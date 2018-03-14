@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Stun Baton"
+	SWEP.PrintName = translate.Get("worth_stun")
 
 	SWEP.ViewModelFOV = 50
 

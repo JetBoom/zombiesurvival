@@ -1,4 +1,4 @@
 include("shared.lua")
 
-SWEP.PrintName = "Will O' Wisp"
+SWEP.PrintName = translate.Get("wn_wisp")
 SWEP.DrawCrosshair = false

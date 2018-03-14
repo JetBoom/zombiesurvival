@@ -31,7 +31,7 @@ function EFFECT:Render()
 	ang:RotateAroundAxis(ang:Forward(), 90)
 	cam.IgnoreZ(true)
 	cam.Start3D2D(self.Pos + math.sin(CurTime() + self.Seed) * 30 * delta * right, ang, (delta * 0.12 + 0.045) / 2)
-		draw.SimpleText(self.Amount.." point"..(self.Amount ~= 1 and "s" or ""), "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_CENTER)
+		draw.SimpleText(self.Amount.."  "..translate.Get("fc_point") ..(self.Amount ~= 1 and " "..translate.Get("fc_s") or ""), "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 	cam.IgnoreZ(false)
 end

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Impaler' Crossbow"
+	SWEP.PrintName = translate.Get("ars_crossbow")
 	SWEP.Description = translate.Get("crossbow_desk")
 
 	SWEP.HUD3DBone = "ValveBiped.Crossbow_base"

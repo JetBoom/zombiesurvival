@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Frying Pan"
+	SWEP.PrintName = translate.Get("worth_fryingpan")
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55

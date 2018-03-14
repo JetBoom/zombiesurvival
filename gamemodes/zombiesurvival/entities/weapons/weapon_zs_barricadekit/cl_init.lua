@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "'Aegis' Barricade Kit"
+SWEP.PrintName = translate.Get("ars_aegis")
 SWEP.Description = translate.Get("aegis_desk")
 SWEP.DrawCrosshair = false
 SWEP.ViewModelFOV = 70

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Keyboard"
+	SWEP.PrintName = translate.Get("wn_keyboard")
 
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false

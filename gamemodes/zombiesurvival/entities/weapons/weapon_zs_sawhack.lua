@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Sawhack"
+	SWEP.PrintName = translate.Get("wn_sawhack")
 
 	SWEP.ViewModelFOV = 60
 

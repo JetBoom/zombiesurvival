@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Headcrab"
+SWEP.PrintName = translate.Get("wn_headcrab")
 SWEP.DrawCrosshair = false
 
 function SWEP:DrawHUD()

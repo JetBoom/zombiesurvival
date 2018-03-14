@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Reaper' UMP"
+	SWEP.PrintName = translate.Get("ars_reaperump")
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 

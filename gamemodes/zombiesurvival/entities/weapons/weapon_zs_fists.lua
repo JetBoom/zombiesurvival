@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Fists"
+SWEP.PrintName = translate.Get("wn_fists")
 
 if GAMEMODE.ZombieEscape then
 	SWEP.WalkSpeed = SPEED_ZOMBIEESCAPE_NORMAL

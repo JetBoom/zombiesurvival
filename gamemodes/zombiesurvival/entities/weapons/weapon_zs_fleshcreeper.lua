@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Flesh Creeper"
+SWEP.PrintName = translate.Get("wn_freshcreeper")
 
 SWEP.MeleeDelay = 0.5
 SWEP.MeleeReach = 52

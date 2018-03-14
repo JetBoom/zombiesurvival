@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Poison Headcrab"
+SWEP.PrintName = translate.Get("wn_pheadcrab")
 SWEP.ViewModelFOV = 70
 SWEP.DrawCrosshair = false
 

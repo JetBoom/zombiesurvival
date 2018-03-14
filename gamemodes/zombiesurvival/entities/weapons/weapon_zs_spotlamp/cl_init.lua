@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Spot Lamp"
+SWEP.PrintName = translate.Get("wn_spotlmp")
 SWEP.Description = translate.Get("spotlmp_desk")
 SWEP.DrawCrosshair = false
 

@@ -4,8 +4,8 @@ if CLIENT then
 	SWEP.ViewModelFOV = 50
 	SWEP.BobScale = 0.5
 	SWEP.SwayScale = 0.5
-	SWEP.PrintName = "Detonation Pack Remote"
-	SWEP.Description = "Allows the user to remotely detonate their detonation packs."
+	SWEP.PrintName = translate.Get("wn_detpackremote")
+	SWEP.Description = translate.Get("wn_detpackremotedes")
 
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0

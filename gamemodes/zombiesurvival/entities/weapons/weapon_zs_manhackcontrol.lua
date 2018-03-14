@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Manhack Control"
-	SWEP.Description = "Controller for your Manhack."
+	SWEP.PrintName = translate.Get("wn_manhackcontroll")
+	SWEP.Description = translate.Get("wn_manhackcontrolldes")
 
 	SWEP.ViewModelFOV = 50
 

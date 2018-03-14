@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Knife"
+	SWEP.PrintName = translate.Get("worth_knife")
 	SWEP.Description = translate.Get("knife_desk")
 
 	SWEP.ViewModelFlip = false

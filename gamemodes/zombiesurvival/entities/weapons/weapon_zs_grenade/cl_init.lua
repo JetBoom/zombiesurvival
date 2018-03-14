@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Grenade"
+SWEP.PrintName = translate.Get("ars_grenade")
 SWEP.Description = translate.Get("grenade_desk")
 
 SWEP.ViewModelFOV = 60

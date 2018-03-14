@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Crowbar"
+	SWEP.PrintName = translate.Get("worth_crowbar")
 	SWEP.Description = translate.Get("crowbar_desk")
 
 	SWEP.ViewModelFOV = 65
