@@ -191,6 +191,7 @@ LANGUAGE.class_headcrab								= "Headcrab"
 LANGUAGE.class_fast_headcrab						= "Fast Headcrab"
 LANGUAGE.class_poison_headcrab						= "Poison Headcrab"
 LANGUAGE.class_the_tickle_monster					= "The Tickle Monster"
+LANGUAGE.class_burster                              = "Burster"
 LANGUAGE.class_nightmare							= "Nightmare"
 LANGUAGE.class_pukepus								= "Pukepus"
 LANGUAGE.class_bonemesh								= "Bonemesh"
@@ -745,6 +746,7 @@ LANGUAGE.wb_maxaccu                                = "Maximum accuracy"
 
 LANGUAGE.normal_selection                           = "Back to normal class menu..."
 LANGUAGE.boss_selection                             = "Select desired boss class..."
+LANGUAGE.classes_and                                = "and"
 
 -- Options
 

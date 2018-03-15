@@ -116,9 +116,9 @@ function string.AndSeparate(list)
 	local length = #list
 	if length <= 0 then return "" end
 	if length == 1 then return list[1] end
-	if length == 2 then return list[1].." and "..list[2] end
+	if length == 2 then return list[1].." "..translate.Get("classes_and").." "..list[2] end
 
-	return table.concat(list, ", ", 1, length - 1)..", and "..list[length]
+	return table.concat(list, ", ", 1, length - 1)..", "..translate.Get("classes_and").." "..list[length]
 end
 
 function util.SkewedDistance(a, b, skew)
