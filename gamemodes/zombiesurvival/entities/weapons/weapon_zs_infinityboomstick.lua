@@ -28,10 +28,10 @@ SWEP.ReloadDelay = 0.4
 SWEP.Primary.Sound = Sound("weapons/shotgun/shotgun_dbl_fire.wav")
 SWEP.Primary.Recoil = 12.5
 SWEP.Primary.Damage = 36
-SWEP.Primary.NumShots = 7
+SWEP.Primary.NumShots = 6
 SWEP.Primary.Delay = 1.5
 
-SWEP.Primary.ClipSize =4
+SWEP.Primary.ClipSize = 4
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "buckshot"
 SWEP.Primary.DefaultClip = 28
@@ -73,7 +73,7 @@ function SWEP:PrimaryAttack()
 		self.Owner:ViewPunch(clip * 0.5 * self.Primary.Recoil * Angle(math.Rand(-0.1, -0.1), math.Rand(-0.1, 0.1), 0))
 
 		self.Owner:SetGroundEntity(NULL)
-		self.Owner:SetVelocity(-50 * clip * self.Owner:GetAimVector())
+		self.Owner:SetVelocity(-80 * clip * self.Owner:GetAimVector())
 
 		self.IdleAnimation = CurTime() + self:SequenceDuration()
 	end
