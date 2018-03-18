@@ -426,7 +426,6 @@ LANGUAGE.ars_pts                                    = "Points"
 -- Ressuply Box
 
 LANGUAGE.res_box_ready                              = "Ready"
-LANGUAGE.res_box_seconds                            = "s"
 
 -- PendBoard (End Game)
 
@@ -569,6 +568,22 @@ LANGUAGE.ars_50meds                                 = "50 Medical Kit power"
 LANGUAGE.ars_50meds2                                = "50 extra power for the Medical Kit."
 LANGUAGE.ars_grenade                                = "Grenade"
 LANGUAGE.ars_detpack                                = "Detonation Pack"
+
+-- Craft Weapons 
+
+LANGUAGE.craft_electricshovel                       = "Electric Shovel"
+LANGUAGE.craft_empower                              = "Empowerment Tool"
+LANGUAGE.craft_empower_desk                         = "While it's useless as a weapon, it seems to have a mystical property while you hold it."
+LANGUAGE.craft_empowercrowbar                       = "Empowered Crowbar"
+LANGUAGE.craft_hammergod                            = "Hammergod"
+LANGUAGE.craft_infinity                             = "'Infinity' Handgun"
+LANGUAGE.craft_glock9                               = "'Crossfire' Glock 9"
+LANGUAGE.medkitgod                                  = "Medkit God"
+LANGUAGE.craft_infboomstick                         = "Infinity Boom Stick"
+LANGUAGE.craft_infdeagle                            = "'Infinity' Desert Eagle"
+LANGUAGE.craft_infm249                              = "'Infinity M249' Machine Gun"
+LANGUAGE.craft_infplank                             = "Infinity Plank"
+LANGUAGE.craft_infinochet                           = "'Infinochet' Handgun"
 
 -- Weapon Names 
 
@@ -836,6 +851,4 @@ LANGUAGE.fc_joinus                                  = "JOIN US!"
 LANGUAGE.fc_oneofus                                 = "ONE OF US!"
 LANGUAGE.fc_buttmagned                              = "BUTT MANGLED!"
 LANGUAGE.fc_chomp                                   = "CHOMP!"
-
-
 

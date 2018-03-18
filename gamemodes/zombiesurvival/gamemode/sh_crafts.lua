@@ -7,6 +7,83 @@ GM.Crafts = {
 		b = {"*physics*", {"models/props_junk/wood_crate001a.mdl", "models/props_junk/wood_crate001a_damaged.mdl", "models/props_junk/wood_crate001a_damagedmax.mdl"}},
 		Result = {"prop_physics", Model("models/props_junk/wood_crate002a.mdl")}
 	},
+    {
+		Name = "a electric shovel",
+		callback = function(enta, entb)
+			return enta:IsPhysicsModel("models/items/car_battery01.mdl") and entb:IsWeaponType("weapon_zs_shovel")
+		end,
+		Result = {"weapon_zs_electricshovel"}
+	},
+    {
+		Name = "a 'infinity' handgun",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_battleaxe") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_infinity"}
+	},
+    {
+		Name = "a 'infinity' boom stick",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_boomstick") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_infinityboomstick"}
+	},
+    {
+		Name = "a 'infinity' desert eagle",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_deagle") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_infinitydeagle"}
+	},
+    {
+		Name = "a 'infinity' M249 machine gun",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_m249") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_infinitym249"}
+	},
+    {
+		Name = "a 'infinity' plank",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_plank") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_infinityplank"}
+	},
+    {
+		Name = "a 'infinochet' handgun",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_magnum") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_infinochet"}
+	},
+    {
+		Name = "a medkit god",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_medicalkit") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_medicgod"}
+	},
+    {
+		Name = "a 'crossfire' glock 9",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_glock3") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_glock9"}
+	},
+    {
+		Name = "a empowered crowbar",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_crowbar") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_empoweredcrowbar"}
+	},
+    {
+		Name = "a hammergod",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_hammer", "weapon_zs_electrohammer") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_hammergod"}
+	},
 	{
 		Name = "a bust-on-a-stick",
 		callback = function(enta, entb)

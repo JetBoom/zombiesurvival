@@ -297,7 +297,9 @@ GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT
 ------------
 
 GM:AddPointShopItem("grenade", ""..translate.Get("ars_grenade"), nil, ITEMCAT_OTHER, 200, "weapon_zs_grenade")
+GM:AddPointShopItem("empower", ""..translate.Get("craft_empower"), nil, ITEMCAT_OTHER, 230, "weapon_zs_empower")
 GM:AddPointShopItem("detpck", ""..translate.Get("ars_detpack"), nil, ITEMCAT_OTHER, 500, "weapon_zs_detpack")
+
 
 
 -- These are the honorable mentions that come at the end of the round.

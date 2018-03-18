@@ -68,7 +68,7 @@ LANGUAGE.cant_use_worth_anymore						= "Вы больше не можете ис
 LANGUAGE.class_not_unlocked_will_be_unlocked_x		= "Этот класс ещё не разблокирован. Он будет разблокирован на следующей волне %d."
 LANGUAGE.you_are_already_a_x						= "Вы уже %s."
 LANGUAGE.you_will_spawn_as_a_x						= "Вы появитесь, как %s."
-LANGUAGE.crafting_successful						= "Слияние прошло удачно!"
+LANGUAGE.crafting_successful						= "Вы скрафтили!"
 LANGUAGE.x_crafted_y								= "%s создал %s."
 LANGUAGE.escape_from_the_zombies					= "Убегайте от зараженных!"
 LANGUAGE.too_close_to_another_nail					= "Слишком близко к другому гвоздю."
@@ -535,6 +535,22 @@ LANGUAGE.ars_50meds                                 = "50 медицинских
 LANGUAGE.ars_50meds2                                = "50 дополнительных зарядов для аптечки."
 LANGUAGE.ars_grenade                                = "Граната"
 LANGUAGE.ars_detpack                                = "Детонационный Пакет"
+
+-- Craft Weapons 
+
+LANGUAGE.craft_electricshovel                       = "Электрическая Лопата"
+LANGUAGE.craft_empower                              = "Инструмент Усиления"
+LANGUAGE.craft_empower_desk                         = "Хотя это бесполезно, как оружие, похоже, у него есть мистическое свойство, пока вы его держите."
+LANGUAGE.craft_empowercrowbar                       = "Усиленный Лом"
+LANGUAGE.craft_hammergod                            = "Богоподобный Молоток Плотника"
+LANGUAGE.craft_infinity                             = "Пистолет 'Бесконечность'"
+LANGUAGE.craft_glock9                               = "Глок 9 'Перекрестный огонь'"
+LANGUAGE.medkitgod                                  = "Аптечка бога"
+LANGUAGE.craft_infboomstick                         = "Бесконечная Громовая Палка"
+LANGUAGE.craft_infdeagle                            = "Пустынный Орел 'Бесконечность'"
+LANGUAGE.craft_infm249                              = "Пулемет M249 'Бесконечность"
+LANGUAGE.craft_infplank                             = "Бесконечная Палка"
+LANGUAGE.craft_infinochet                           = "Пистолет 'Бесконечношет' "
 
 -- Weapon Names 
 
