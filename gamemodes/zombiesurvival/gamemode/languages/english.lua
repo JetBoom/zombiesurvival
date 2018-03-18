@@ -426,6 +426,7 @@ LANGUAGE.ars_pts                                    = "Points"
 -- Ressuply Box
 
 LANGUAGE.res_box_ready                              = "Ready"
+LANGUAGE.res_box_seconds                            = "s"
 
 -- PendBoard (End Game)
 
