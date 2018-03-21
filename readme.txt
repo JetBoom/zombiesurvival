@@ -1,6 +1,35 @@
-THIS IS AN MODIFICATION OF THE ORIGINAL ZOMBIE SURVIVAL BY JETBOOM THAT INCLUDES IT'S VERY OWN REDEEM SYSTEM. 
-I HAD GOTTEN SO MANY REQUESTS OVER THE YEARS TO REBUILD AND BRING BACK SUCH SYSTEM.
-I BRING TO YOU ZOMBIE SURVIVAL : REDEMPTION 
+THIS IS AN EXPERIMENTAL MODIFICATION OF THE ORIGINAL ZOMBIE SURVIVAL BY JETBOOM.
+
+Over the years I kept on getting countless requests to rebuild and bring 
+back to what was known as the "Bandit System". 
+The bandit system is where upon redeeming the client is greeted 
+with the option which they can choose to stay as
+a bandit (which can help or kill humans) or change back into a human.
+
+Current Version - Stable 3 "The Translation System" - https://github.com/MrCraigTunstall/zombiesurvival/releases
+Here is the current list of updates, fixes and additional features:
+
+- Basic Redeem System.
+- Complete Russian & German Language Translation.
+- Added a spectator team with the option in the F1 menu.
+- Altered how dropped deployable Items work.
+- Worth & in-game pointshop are now bigger.
+- re-balance weapon and item pricing.
+- Added HD Texture icons.
+- Added Healthbars on Resupply & Arsenal Crates.
+- Humans and Bandits can use third person.
+- Zombie Class Menu now has the Boss Button centered and is much bigger.
+- Fixed when another server alters the waves logic (even though they certainly shouldn't).
+- Built-in Spray Detector.
+- Discount Prices are shown during wave intermissions.
+- Fixed an point exploit with skycade props.
+- Improved Zombie Class Unlock Infliction Percentage.
+- Melee weapons no longer "water splash".
+- Fixed prop holding position with doors etc.
+- Improved Healthbar FPS.
+- Disabled MouthMoveAnimation.
+- Bandits Flash on the Scoreboard.
+
 
  ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 ZZZ                                  ZZZ
