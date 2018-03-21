@@ -175,6 +175,7 @@ LANGUAGE.class_headcrab								= "Headcrab"
 LANGUAGE.class_fast_headcrab						= "Schnelles Headcrab"
 LANGUAGE.class_poison_headcrab						= "Gift Headcrab"
 LANGUAGE.class_the_tickle_monster					= "The Tickle Monster"
+LANGUAGE.class_burster								= "Burster"
 LANGUAGE.class_nightmare							= "Nightmare"
 LANGUAGE.class_pukepus								= "Pukepus"
 LANGUAGE.class_bonemesh								= "Bonemesh"
@@ -321,7 +322,7 @@ LANGUAGE.pts_tospend								= "Punkte zum Ausgeben"
 LANGUAGE.ars_discount								= "Rabatt für den Kauf zwischen den Wellen!"
 LANGUAGE.ars_tooltip								= "Dieser Shop ist mit dem QUIK - Anti-Zombie-Backstab-Gerät ausgerüstet.\nBewege die Maus außerhalb des Shops, um diesen schnell zu schließen!"
 LANGUAGE.ars_worth									= "Worth-Menü"
-LANGUAGE.ars_purchase								= "Kaufen"  
+LANGUAGE.ars_purchase								= "Kaufen"
 LANGUAGE.ars_purchaseammo							= "Munition kaufen"
 LANGUAGE.ars_pts									= "Punkte"
 
@@ -340,9 +341,9 @@ LANGUAGE.mentions									= "Ehrenvolle Erwähnungen"
 
 -- Shop Items (worth menu)
 
---[[Some shop items that are part of the 
+--[[Some shop items that are part of the
 arsenal crate get their translations from the Worth Menu as
-it's pointless to translate the same weapon twice]]-- 
+it's pointless to translate the same weapon twice]]--
 
 LANGUAGE.worth_peashooter							= "\"Peashooter\" Pistole"
 LANGUAGE.worth_battleaxe							= "\"Battleaxe\" Pistole"
@@ -428,7 +429,7 @@ LANGUAGE.worth_wideload2							= "Verhindert das Ghosting durch Barrikaden im Au
 LANGUAGE.worth_noodlearms							= "Noodle Arms"
 LANGUAGE.worth_noodlearms2							= "Verbietet das Tragen von Objekten im Tausch gegen Worth."
 
--- Shop Items (arsenal crate) 
+-- Shop Items (arsenal crate)
 
 LANGUAGE.ars_deagle									= "\"Zombie Drill\" Desert Eagle"
 LANGUAGE.ars_glock									= "\"Crossfire\" Glock 3"
@@ -472,6 +473,63 @@ LANGUAGE.ars_50meds2								= "50 extra Verbrauchseinheiten für das Medical Kit
 LANGUAGE.ars_grenade								= "Granate"
 LANGUAGE.ars_detpack								= "Sprengsatz"
 
+-- Weapon Names
+
+LANGUAGE.wn_bonemesh								= "Bone Mesh"
+LANGUAGE.wn_chem									= "Chem Zombie"
+LANGUAGE.wn_crow									= "Krähe"
+LANGUAGE.wn_detpack									= "Ferngesteuerter Sprengsatz"
+LANGUAGE.wn_turret									= "Selbstschussanlage"
+LANGUAGE.wn_headcrab								= "Headcrab"
+LANGUAGE.wn_pheadcrab								= "Gift Headcrab"
+LANGUAGE.wn_poisonzombie							= "Gift Zombie"
+LANGUAGE.wn_wisp									= "Will O' Wisp"
+LANGUAGE.wn_spotlmp									= "Scheinwerfer"
+LANGUAGE.wn_wraith									= "Wraith"
+LANGUAGE.wn_zombie									= "Zombie"
+LANGUAGE.wn_bloatedzombie							= "Aufgeblähter Zombie"
+LANGUAGE.wn_buststick								= "Büste-auf-einem-Stab"
+LANGUAGE.wn_butcherknife							= "\"Butcher\" Messer"
+LANGUAGE.wn_detpackremote							= "Sprengsatz Fernzünder"
+LANGUAGE.wn_drone									= "Drohne"
+LANGUAGE.wn_droncontroll							= "Drohnen-Fernsteuerung"
+LANGUAGE.wn_hammerelectro							= "Elektrohammer"
+LANGUAGE.wn_fheadcrab								= "Schnelles Headcrab"
+LANGUAGE.wn_fastlegs								= "Kung Fu des schnellen Zombies"
+LANGUAGE.wn_fists									= "Fäuste"
+LANGUAGE.wn_freshcreeper							= "Flesh Creeper"
+LANGUAGE.wn_ghoul									= "Ghoul"
+LANGUAGE.wn_turretcontroll							= "Selbstschussanlagem-Fernsteuerung"
+LANGUAGE.wn_keyboard								= "Tastatur"
+LANGUAGE.wn_lamp									= "Lampe"
+LANGUAGE.wn_manhacksaw								= "Manhack - Sägenaufsatz"
+LANGUAGE.wn_manhackcontroll							= "Manhack-Fernsteuerung"
+LANGUAGE.wn_megamasher								= "Mega Masher"
+LANGUAGE.wn_nightmare								= "Nightmare"
+LANGUAGE.wn_pot										= "Kochtopf"
+LANGUAGE.wn_pukepus									= "Puke Pus"
+LANGUAGE.wn_redeemers								= "\"Redeemers\" Pistolen-Doppel"
+LANGUAGE.wn_sawhack									= "\"Sawhack\""
+LANGUAGE.wn_ticlemonster							= "The Tickle Monster"
+LANGUAGE.wn_waraxe									= "\"Waraxe\" Pistole"
+LANGUAGE.wn_zombielegs								= "Zombie Kung Fu"
+
+-- Craft Weapons
+
+LANGUAGE.craft_electricshovel						= "Elektrifizierte Schaufel"
+LANGUAGE.craft_empower								= "\"Empowerment\" Werkzeug"
+LANGUAGE.craft_empower_desk						= "Während es als Werkzeug nutzlos ist, so scheint es, beim Halten in den Händen, mystische Eigenschaften zu besitzen."
+LANGUAGE.craft_empowercrowbar						= "\"Empowered\" Brecheisen"
+LANGUAGE.craft_hammergod							= "\"Hammergod\""
+LANGUAGE.craft_infinity							= "\"Infinity\" Pistole"
+LANGUAGE.craft_glock9								= "\"Crossfire\" Glock 9"
+LANGUAGE.medkitgod									= "Göttliches Medical Kit"
+LANGUAGE.craft_infboomstick						= "\"Infinity\" Boom Stick"
+LANGUAGE.craft_infdeagle							= "\"Infinity\" Desert Eagle"
+LANGUAGE.craft_infm249								= "\"Infinity M249\" Maschinengewehr"
+LANGUAGE.craft_infplank							= "\"Infinity\" Planke"
+LANGUAGE.craft_infinochet							= "\"Infinochet\" Pistole"
+
 -- Item Descriptions
 
 LANGUAGE.z900_desk									= "Obwohl die Z9000 nicht so viel Schaden anrichtet, verlangsamen die abgefeuerten Pulsschüsse das Ziel."
@@ -506,8 +564,17 @@ LANGUAGE.detpack_desk								= "Eine Packung Sprengstoff, welche auf Oberfläche
 LANGUAGE.aegis_desk									= "Ein sofort einsatzbereites All-in-one-Gerät um Bretter zu platzieren.\nEs stellt automatisch ein Brett bereit und fixiert dieses dann auf nahezu jedem Untergrund.\nDrücke PRIMÄRANGRIFF, um Bretter zu platzieren.\nHalte SEKUNDÄRANGRIFF oder NACHLADEN zum Rotieren der Bretter.\nEin Phantombild zeigt, ob die Platzierung gültig ist oder nicht."
 LANGUAGE.spotlmp_desk								= "Diese Lampe ist ein wachsames Auge, das einen Bereich beleuchtet.\nDrücke PRIMÄRANGRIFF zum Platzieren.\nHalte SEKUNDÄRANGRIFF oder NACHLADEN zum Rotieren."
 LANGUAGE.medkit_text								= "Medical Kit"
+LANGUAGE.wn_detpackremotedes						= "Ermöglicht dem Benutzer die Fernzündung seiner Sprengsätze."
+LANGUAGE.wn_dronedes								= "Ein einsetzbares, ferngesteuertes Gerät.\nIdeal zum Auskundschaften, Wiederauffinden und für gezielte Angriffe."
+LANGUAGE.wn_droncontrolldes							= "Fernsteuerung für die Drohne."
+LANGUAGE.wn_turretcontrolldes						= "Ermöglicht dem Benutzer die manuelle Kontrolle über alle eigenen Selbstschussanlagen."
+LANGUAGE.wn_manhacksawdes							= "Ein modifizierter Manhack mit einem Sägeblattaufsatz. Er verursacht deutlich mehr Schaden und ist haltbarer, aber dafür etwas schwerer zu kontrollieren."
+LANGUAGE.wn_manhackcontrolldes						= "Fernsteuerung für den Manhack."
+LANGUAGE.wn_manhacksawcontrolldes					= "Fernsteuerung für den modifizierten Manhack."
+LANGUAGE.wn_oxygentankdes							= "Gewährt dem Anwender eine wesentlich höhere Luftkapazität."
+LANGUAGE.wn_manhacksawcontroll						= LANGUAGE.wn_manhacksawdes
 
--- Honorable Mentions 
+-- Honorable Mentions
 
 LANGUAGE.hm_most_zombies_killed						= "Am meisten Zombies getötet"
 LANGUAGE.hm_most_zombies_killed2					= "hat %s, mit %d getöteten Zombies."
@@ -575,7 +642,7 @@ LANGUAGE.mm_credits									= "Credits"
 LANGUAGE.mm_options									= "Optionen"
 LANGUAGE.mm_pc										= "Spielerfarbe"
 LANGUAGE.mm_pm										= "Spielermodell"
-LANGUAGE.mm_help									= "Hilfe" 
+LANGUAGE.mm_help									= "Hilfe"
 LANGUAGE.mm_pm_messg								= "Dein Spielermodell wurde geändert auf"
 LANGUAGE.mm_sp										= "Zuschauen"
 LANGUAGE.mm_unsp									= "Nicht mehr zuschauen"
@@ -598,6 +665,7 @@ LANGUAGE.wb_maxaccu									= "Maximale Genauigkeit"
 
 LANGUAGE.normal_selection							= "Normale Zombieklassen..."
 LANGUAGE.boss_selection								= "Wähle deine Bossklasse..."
+LANGUAGE.classes_and								= "und"
 
 -- Options
 
@@ -674,3 +742,16 @@ LANGUAGE.ammo_pulse									= "Pulse Schüsse"
 LANGUAGE.pl_poison									= "VERGIFTUNG!"
 LANGUAGE.pl_bleed									= "BLUTUNG!"
 LANGUAGE.pl_ghtc									= "BÖSARTIGE BEHRÜHRUNG!"
+
+-- Floating Score
+
+LANGUAGE.fc_assisted								= "(mit Hilfe)"
+LANGUAGE.fc_assist									= "(mitgeholfen)"
+LANGUAGE.fc_point									= "point"
+LANGUAGE.fc_s										= "s"
+LANGUAGE.fc_munch									= "KNABBER!"
+LANGUAGE.fc_brainget								= "HIRN BEKOMMEN!"
+LANGUAGE.fc_joinus									= "SCHLIESS DICH UNS AN!"
+LANGUAGE.fc_oneofus									= "EINER VON UNS!"
+LANGUAGE.fc_buttmagned								= "HINTERN ZERFETZT!"
+LANGUAGE.fc_chomp									= "MAMPF!"
