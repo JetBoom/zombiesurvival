@@ -101,13 +101,11 @@ function ENT:AltUse(activator, tr)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_arsenalcrate")
-	pl:GiveAmmo(1, "airboatgun")
 	
-    	if pl:HasWeapon("weapon_zs_arsenalcrate") then        	
-		pl:GiveAmmo(1, "airboatgun")
+    	if pl:HasWeapon("weapon_zs_arsenalcrate") then
+        	pl:GiveAmmo(1, "airboatgun")
     	else
-       	pl:Give("weapon_zs_arsenalcrate")
+        	pl:Give("weapon_zs_arsenalcrate")
     	end
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
