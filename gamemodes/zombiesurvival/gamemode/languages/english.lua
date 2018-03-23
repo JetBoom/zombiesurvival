@@ -585,6 +585,19 @@ LANGUAGE.craft_infdeagle                            = "'Infinity' Desert Eagle"
 LANGUAGE.craft_infm249                              = "'Infinity M249' Machine Gun"
 LANGUAGE.craft_infplank                             = "Infinity Plank"
 LANGUAGE.craft_infinochet                           = "'Infinochet' Handgun"
+LANGUAGE.craft_deagleredeemers                      = "'Redemption' Desert Eagles"
+LANGUAGE.craft_dualboomstick                        = "Dual Boom Stick"
+LANGUAGE.craft_dualboomstickdesk                    = "These shotguns allow you to load up to four shells in the chamber at once. Hold down reload for faster loading of each shell."
+LANGUAGE.craft_empowershovel                        = "Empowered Shovel"
+LANGUAGE.craft_empowerkongol                        = "Empowered Kongol Axe"
+LANGUAGE.craft_jethammer                            = "Jet Hammer"
+LANGUAGE.craft_jethammerdesk                        = "Powered by powerful jet engines, this hammer still takes time to load up but has extreme damage and knockback output in return."
+LANGUAGE.craft_kongol                               = "Kongol Axe"
+LANGUAGE.craft_multiinferno                         = "'Multi Inferno' AUG"
+LANGUAGE.craft_nukemasher                           = "Nuke Masher"
+LANGUAGE.craft_scar                                 = "'Terminus' SCAR-L"
+LANGUAGE.craft_volcanoarm                           = "'Volcano Arm Handgun'"
+LANGUAGE.craft_volcanoarmdesk                       = "This gun deals extremely large amounts of damage. That's it."
 
 -- Weapon Names 
 
@@ -626,6 +639,8 @@ LANGUAGE.wn_sawhack                                 = "Sawhack"
 LANGUAGE.wn_ticlemonster                            = "The Tickle Monster"
 LANGUAGE.wn_waraxe                                  = "'Waraxe' Handgun"
 LANGUAGE.wn_zombielegs                              = "Zombie Kung Fu"
+LANGUAGE.weapon_python                              = "'Python' Magnum"
+LANGUAGE.weapon_katana                              = "Katana"
 
 -- Item Descriptions 
 
@@ -852,4 +867,8 @@ LANGUAGE.fc_joinus                                  = "JOIN US!"
 LANGUAGE.fc_oneofus                                 = "ONE OF US!"
 LANGUAGE.fc_buttmagned                              = "BUTT MANGLED!"
 LANGUAGE.fc_chomp                                   = "CHOMP!"
+
+-- Credits
+
+LANGUAGE.credits_credits                            = "Zombie Survival Credits"
 

@@ -84,6 +84,83 @@ GM.Crafts = {
 		end,
 		Result = {"weapon_zs_hammergod"}
 	},
+    {
+		Name = "a 'redemption' desert eagles",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_deagle") and entb:IsWeaponType("weapon_zs_redeemers")
+		end,
+		Result = {"weapon_zs_deagleredeemers"}
+	},
+    {
+		Name = "a empowered resupply box",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_resupplybox") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_empowerbox"}
+	},
+    {
+		Name = "a dual boom stick",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_boomstick") and entb:IsWeaponType("weapon_zs_boomstick")
+		end,
+		Result = {"weapon_zs_dualboomstick"}
+	},
+    {
+		Name = "a empowered shovel",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_shovel") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_empoweredshovel"}
+	},
+    {
+		Name = "a empowered kongol axe",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_kongol") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_empoweredkongol"}
+	},
+    {
+		Name = "a jet hammer",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_sledgehammer") and entb:IsPhysicsModel("models/props_c17/trappropeller_engine.mdl")
+		end,
+		Result = {"weapon_zs_jethammer"}
+	},
+    {
+		Name = "a kongol axe",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_axe") and entb:IsWeaponType("weapon_zs_shovel")
+		end,
+		Result = {"weapon_zs_kongol"}
+	},
+    {
+		Name = "a empowered kongol axe",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_kongol") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_empoweredkongol"}
+	},
+    {
+		Name = "a volcano arm handgun",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_infinity") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_volcanoarm"}
+	},
+    {
+		Name = "a multi-inferno aug",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_inferno") and entb:IsWeaponType("weapon_zs_empower")
+		end,
+		Result = {"weapon_zs_multiinferno"}
+	},
+    {
+		Name = "a nuke masher",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_empower") and entb:IsWeaponType("weapon_zs_megamasher")
+		end,
+		Result = {"weapon_zs_nukemasher"}
+	},
 	{
 		Name = "a bust-on-a-stick",
 		callback = function(enta, entb)
