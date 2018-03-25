@@ -221,7 +221,7 @@ net.Receive("zs_pls_kill_pl", function(length)
 		print(attackername.." and "..assistername.." killed "..victimname.." with "..inflictor)
 
 		--gamemode.Call("AddDeathNotice", attackername.." and "..assistername, attackerteam, inflictor, victimname, victimteam, headshot)
-		GAMEMODE:TopNotify(attacker, " and ", assister, " ", {killicon = inflictor, headshot = headshot}, " ", victim)
+		GAMEMODE:TopNotify(attacker, " "..translate.Get("classes_and") , assister, " ", {killicon = inflictor, headshot = headshot}, " ", victim)
 	end
 end)
 

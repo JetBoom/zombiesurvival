@@ -52,7 +52,7 @@ hook.Add("HUDPaint", "SMPrintSprays", function()
 		first = false
 		end
 		local y = ScrH() / 2 - #todraw * 12
-		draw.SimpleTextOutlined("Sprayed by:", "SMSpray", 10, y, Color(255, 136, 0), 0, 1, 1, Color(0, 0, 0))
+		draw.SimpleTextOutlined(translate.Get("spray_sprayedby"), "SMSpray", 10, y, Color(255, 136, 0), 0, 1, 1, Color(0, 0, 0))
 		for k, v in pairs(todraw) do
 			y = y + 24
 			draw.SimpleTextOutlined(sprays[v].name .. (input.IsKeyDown(KEY_LALT) and (": " .. v) or ""), "SMSpray", 10, y, Color(255, 136, 0), 0, 1, 1, Color(0, 0, 0))
@@ -69,7 +69,7 @@ hook.Add("PlayerBindPress", "SMNoSprayDelay", function(_, cmd, down)
 			local trace = LocalPlayer():GetEyeTrace()
 			for k, v in pairs(sprays) do
 				if k ~= LocalPlayer():SteamID() and v.normal == trace.HitNormal and isin(trace.HitPos.x, v.pos11.x, v.pos22.x) and isin(trace.HitPos.y, v.pos11.y, v.pos22.y) and isin(trace.HitPos.z, v.pos11.z, v.pos22.z) then
-					chat.AddText(Color(255, 255, 255), "You can't place your spray here.")
+					chat.AddText(Color(255, 255, 255), translate.Get("spray_spraycant"))
 					return true
 				end
 			end

@@ -190,15 +190,15 @@ GM:AddStartingItem("oxtank", ""..translate.Get("worth_oxygentank"), ""..translat
 -----------
 
 GM:AddStartingItem("10hp", ""..translate.Get("worth_fit"), ""..translate.Get("worth_fit2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl:SetMaxHealth(pl:GetMaxHealth() + 10) pl:SetHealth(pl:Health() + 10) end, "models/healthvial.mdl")
+GM:AddStartingItem("25hp", ""..translate.Get("worth_tough"), ""..translate.Get("worth_tough2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl:SetMaxHealth(pl:GetMaxHealth() + 25) pl:SetHealth(pl:Health() + 25) end, "models/items/healthkit.mdl")
 local item = GM:AddStartingItem("5spd", ""..translate.Get("worth_quick"), ""..translate.Get("worth_quick2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl.HumanSpeedAdder = (pl.HumanSpeedAdder or 0) + 7 pl:ResetSpeed() end, "models/props_lab/jar01a.mdl")
+item.NoClassicMode = true
+item.NoZombieEscape = true
+local item = GM:AddStartingItem("10spd", ""..translate.Get("worth_surged"), ""..translate.Get("worth_surged2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.HumanSpeedAdder = (pl.HumanSpeedAdder or 0) + 14 pl:ResetSpeed() end, "models/props_lab/jar01a.mdl")
 item.NoClassicMode = true
 item.NoZombieEscape = true
 GM:AddStartingItem("bfsurgeon", ""..translate.Get("worth_surgeon"), ""..translate.Get("worth_surgeon2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl.HumanHealMultiplier = (pl.HumanHealMultiplier or 1) + 0.3 end, "models/healthvial.mdl")
 GM:AddStartingItem("bfresist", ""..translate.Get("worth_resistant"), ""..translate.Get("worth_resistant2"), ITEMCAT_TRAITS, 15, nil, function(pl) pl.BuffResistant = true end, "models/healthvial.mdl")
-GM:AddStartingItem("25hp", ""..translate.Get("worth_tough"), ""..translate.Get("worth_tough2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl:SetMaxHealth(pl:GetMaxHealth() + 25) pl:SetHealth(pl:Health() + 25) end, "models/items/healthkit.mdl")
-local item = GM:AddStartingItem("10spd", ""..translate.Get("worth_surged"), ""..translate.Get("worth_surged2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.HumanSpeedAdder = (pl.HumanSpeedAdder or 0) + 14 pl:ResetSpeed() end, "models/props_lab/jar01a.mdl")
-item.NoClassicMode = true
-item.NoZombieEscape = true
 GM:AddStartingItem("bfregen", ""..translate.Get("worth_regen"), ""..translate.Get("worth_regen2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.BuffRegenerative = true end, "models/healthvial.mdl")
 GM:AddStartingItem("bfhandy", ""..translate.Get("worth_handy"), ""..translate.Get("worth_handy2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.25 end, "models/props_c17/tools_wrench01a.mdl")
 GM:AddStartingItem("bfmusc", ""..translate.Get("worth_muscular"),""..translate.Get("worth_muscular2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.BuffMuscular = true pl:DoMuscularBones() end, "models/props_wasteland/kitchen_shelf001a.mdl")

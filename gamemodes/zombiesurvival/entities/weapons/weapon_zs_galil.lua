@@ -42,5 +42,5 @@ if game.SinglePlayer() == true then
 
 	SWEP.WalkSpeed = SPEED_SLOW
 
-	SWEP.IronSightsPos = Vector(-6.6, 20, 3.1)
+	SWEP.IronSightsPos = Vector(-6.3, 20, 2.0)
 end

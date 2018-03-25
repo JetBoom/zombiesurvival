@@ -1,15 +1,15 @@
 -- Weapon sets that humans can start with if they choose RANDOM.
 GM.StartLoadouts = {
-	{"pshtr", "3pcp", "2pcp", "csknf"},
-	{"btlax", "3pcp", "zpaxe", "stone"},
-	{"stbbr", "3rcp", "zpcpot", "stone"},
-	{"tossr", "3smgcp", "2smgcp", "zpplnk", "stone"},
-	{"blstr", "3sgcp", "2sgcp", "csknf"},
-	{"owens", "3pcp", "2pcp", "csknf"},
-	{"zpcpot", "medkit", "150mkit"},
-	{"crklr", "3arcp", "2arcp", "zpplnk", "stone"},
-	{"crphmr", "6nails", "hook"},
-	{"blstr", "pipe"}
+	{"pshtr", "3pcp", "2pcp", "csknf", "resupplybox", "arscrate", "5spd", "stone"},
+	{"btlax", "2pcp", "3pcp", "zpaxe", "stone", "10hp", "25hp", "10spd"},
+	{"stbbr", "2rcp", "3rcp", "zpcpot", "stone", "25hp", "5spd", "10spd"},
+	{"tossr", "2smgcp", "3smgcp", "zpplnk", "stone", "10hp", "25hp", "5spd"},
+	{"blstr", "2sgcp", "3sgcp", "csknf", "5spd", "10spd", "bfregen", "stone"},
+	{"owens", "2pcp", "3pcp", "csknf", "10spd", "25hp", "5spd", "stone"},
+	{"zpcpot", "medkit", "150mkit", "5spd", "10spd", "bfregen", "bfsurgeon", "stone"},
+	{"crklr", "2arcp", "3arcp", "zpplnk", "stone", "5spd", "10spd"},
+	{"crphmr", "6nails", "hook", "bfmusc", "bfhandy", "stone"},
+	{"blstr", "pipe", "2sgcp", "3sgcp", "5spd", "10spd"}
 }
 
 GM.RedeemMode = CreateConVar("zs_redeemmode", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enables the bandit redeem system, 1 to enable, 0 to disable. Enabled by default."):GetBool()
