@@ -39,7 +39,6 @@ include("vgui/pworth.lua")
 include("vgui/ppointshop.lua")
 include("vgui/dpingmeter.lua")
 include("vgui/dsidemenu.lua")
-include("vgui/zshealtharea.lua")
 include("vgui/changeteam.lua")
 
 
@@ -620,6 +619,105 @@ function GM:PlayBeats(teamid, fear)
 	end
 end
 
+local colHealth = Color(0, 130, 0, 240)
+local colPoison = Color(220, 220, 0, 240)
+function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, poisondamage)
+	health = math.max(0, health)
+
+	local screenscale = BetterScreenScale() -- used for screenscaling
+	local wid, hei = 512 * screenscale, 256 * screenscale -- size of HUD element in bottom left
+	if health > 0 then
+		local healthfrac = math.min(1, health / maxhealth)
+		local barx = x + screenscale * 72
+		local bary = y + screenscale * 99
+		local maxbarwidth = screenscale * 405
+		local barwidth = maxbarwidth * healthfrac
+		colHealth.g = 130 * healthfrac
+		colHealth.r = 130 - colHealth.g
+		surface.SetDrawColor(colHealth)
+		surface.DrawRect(barx, bary, barwidth, screenscale * 26)
+		if poisondamage then
+			surface.SetDrawColor(colPoison)
+			local poisonbarwidth = maxbarwidth * (poisondamage / maxhealth)
+			surface.DrawRect(barx + barwidth, bary, math.min(poisonbarwidth, maxbarwidth - barwidth), screenscale * 16)
+		end
+	end
+
+	surface.SetTexture(bartexture)
+	surface.SetDrawColor(150, 150, 150, 240)
+	surface.DrawTexturedRect(x, y, wid, hei)
+
+	draw.SimpleText("Health:", "ZSHUDFontSmall", x + screenscale * 70, y + screenscale * 55, COLOR_GRAY, TEXT_ALIGN_LEFT)
+	draw.SimpleText(health, "ZSHUDFont", x + screenscale * 195, y + screenscale * 55, colHealth, TEXT_ALIGN_LEFT)
+	
+	local w, h = ScrW(), ScrH() -- Get Screen Size of local player
+	
+	--Points
+	if MySelf:Team() ~= TEAM_UNDEAD then
+		draw_SimpleText(translate.Format("points_x", MySelf:GetPoints().." / "..MySelf:Frags().." / "..MySelf:GetPoints().." + "), "ZSHUDFontSmallNS",  x + screenscale * 70, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_LEFT)
+		elseif MySelf:Team() == TEAM_UNDEAD then
+		draw_SimpleText(translate.Format("brains_eaten_x", MySelf:Frags()), "ZSHUDFontSmallNS",  x + screenscale * 70, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_LEFT)
+		else
+	end
+
+	local wavenumber = GAMEMODE:GetWave()
+	
+	if wavenumber > 0 and wavenumber < 7 then --show wave count when wave 1 starts hide the wave count after 6 rounds
+		draw_SimpleText(wavenumber, "ZSHUDFontSmallNS", x + screenscale * 475, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleText("Wave:", "ZSHUDFontSmallNS", x + screenscale * 430, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_CENTER)
+	end
+	
+	--Intermission Checker Because people are thick yolo
+	if wavenumber > 0 and wavenumber < 7 and not GAMEMODE:GetWaveActive() then
+	
+	local col
+	local timeleft = math.max(0, GAMEMODE:GetWaveStart() - CurTime())
+	if timeleft < 10 then
+		local glow = math.sin(RealTime() * 8) * 200 + 255
+			col = Color(255, glow, glow)
+		else
+			col = COLOR_GRAY
+	end
+
+	local wavestart = GAMEMODE:GetWaveStart()
+	if wavestart ~= -1 then
+		local timeleft = math.max(0, wavestart - CurTime())
+	end
+		
+	draw_SimpleText("Wave Intermission:", "ZSHUDFontSmallNS", x + screenscale * 70, y + screenscale * 23, COLOR_YELLOW, TEXT_ALIGN_LEFT)
+	draw_SimpleTextBlurry(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 310, y + screenscale * 23, 10 < timeleft and COLOR_YELLOW or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_LEFT)
+
+	end
+	
+	--Wave Timer
+	if wavenumber > 0 and wavenumber < 7 and GAMEMODE:GetWave() <= 0 then
+		local col
+		local timeleft = math.max(0, GAMEMODE:GetWaveStart() - CurTime())
+		if timeleft < 10 then
+			local glow = math.sin(RealTime() * 8) * 200 + 255
+			col = Color(255, glow, glow)
+		else
+			col = COLOR_GRAY
+		end
+
+	draw_SimpleText(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 483, y + screenscale * 60, col, TEXT_ALIGN_RIGHT)
+	
+	elseif GAMEMODE:GetWaveActive() then
+		local waveend = GAMEMODE:GetWaveEnd()
+		if waveend ~= -1 then
+			local timeleft = math.max(0, waveend - CurTime())
+			draw_SimpleText(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 483, y + screenscale * 60, 10 < timeleft and COLOR_GRAY or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_RIGHT)
+		end
+	else
+		local wavestart = GAMEMODE:GetWaveStart()
+		if wavestart ~= -1 then
+			local timeleft = math.max(0, wavestart - CurTime())
+		end
+	end
+end
+
+
+
 local colPackUp = Color(20, 255, 20, 220)
 local colPackUpNotOwner = Color(255, 240, 10, 220)
 function GM:DrawPackUpBar(x, y, fraction, notowner, screenscale)
@@ -639,9 +737,12 @@ function GM:DrawPackUpBar(x, y, fraction, notowner, screenscale)
 	draw_SimpleText(notowner and CurTime() % 2 < 1 and translate.Format("requires_x_people", 4) or notowner and translate.Get("packing_others_object") or translate.Get("packing"), "ZSHUDFontSmall", x, y - draw_GetFontHeight("ZSHUDFontSmall") - 2, col, TEXT_ALIGN_CENTER)
 end
 
+local texHumanHealthBar = surface.GetTextureID("zombiesurvival/healthbar__human")
 function GM:HumanHUD(screenscale)
 	local curtime = CurTime()
 	local w, h = ScrW(), ScrH()
+	
+	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), MySelf:GetMaxHealth(), texHumanHealthBar, screenscale, MySelf:GetPoisonDamage())
 
 	local packup = MySelf.PackUp
 	if packup and packup:IsValid() then
@@ -650,22 +751,24 @@ function GM:HumanHUD(screenscale)
 
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
-			local txth = draw_GetFontHeight("ZSHUDFontSmall")
-			draw_SimpleTextBlurry(translate.Get("waiting_for_players").." "..util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
-			draw_SimpleTextBlurry(translate.Get("humans_closest_to_spawns_are_zombies"), "ZSHUDFontSmall", w * 0.5, h * 0.25 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		
+			local txth = draw_GetFontHeight("ZS3D2DFont")
+			draw_SimpleTextBlurry("The invasion will begin in...", "ZS3D2DFont", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZS3D2DFont", w * 0.5, h * 0.25 + txth, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 
 			local desiredzombies = self:GetDesiredStartingZombies()
 
-			draw_SimpleTextBlurry(translate.Format("number_of_initial_zombies_this_game", self.WaveOneZombies * 100, desiredzombies), "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
-
-			draw_SimpleTextBlurry(translate.Get("zombie_volunteers"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
-			local y = h * 0.75 + txth * 2
-
-			txth = draw_GetFontHeight("ZSHUDFontTiny")
+			local txth2 = draw_GetFontHeight("ZSHUDFontSmall")
+			draw_SimpleTextBlurry("Stay Away from the Zombie Spawns!", "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("zombie_volunteers"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + txth2, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			
+			local txth3 = draw_GetFontHeight("ZSHUDFontTiny")
+			
+			local y = h * 0.78 + txth3 * 2
 			for i, pl in ipairs(self.ZombieVolunteers) do
 				if pl:IsValid() then
-					draw_SimpleTextBlurry(pl:Name(), "ZSHUDFontTiny", w * 0.5, y, pl == MySelf and COLOR_RED or COLOR_GRAY, TEXT_ALIGN_CENTER)
-					y = y + txth
+					draw_SimpleTextBlurry(pl:Name(), "ZSHUDFontTiny", w * 0.5, y, pl == MySelf and COLOR_RED or pl:IsFriend() and COLOR_LIMEGREEN or COLOR_GRAY, TEXT_ALIGN_CENTER)
+					y = y + txth3
 				end
 			end
 		end
@@ -703,20 +806,16 @@ function GM:_HUDPaint()
 	local myteam = MySelf:Team()
 
 	self:HUDDrawTargetID(myteam, screenscale)
-
-	if self:GetWave() > 0 then
-		self:DrawFearMeter(self:CachedFearPower(), screenscale)
-	end
-
+    if myteam == TEAM_SPECTATOR then return end
 	if myteam == TEAM_UNDEAD then
-		self:ZombieHUD()
-	elseif myteam ~= TEAM_UNDEAD then
-		self:HumanHUD(screenscale)
+		self:ZombieHUD(screenscale * 0.75)
+	else
+		self:HumanHUD(screenscale * 0.75)
 	end
-
 	if GetGlobalBool("classicmode") then
 		draw_SimpleTextBlurry(translate.Get("classic_mode"), "ZSHUDFontSmaller", 4, ScrH() - 4, COLOR_GRAY, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 	end
+
 end
 
 function GM:ZombieObserverHUD(obsmode)
@@ -753,10 +852,37 @@ function GM:ZombieObserverHUD(obsmode)
 	end
 end
 
-local matHumanHeadID = Material("zombiesurvival/humanhead")
-local matZombieHeadID = Material("zombiesurvival/zombiehead")
 local colLifeStats = Color(255, 0, 0, 255)
-function GM:ZombieHUD()
+function GM:ZombieHUD(screenscale)
+	local classtab = self.ZombieClasses[MySelf:GetZombieClass()]
+	local curtime = CurTime()
+	
+	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), classtab.Health, texHumanHealthBar, screenscale)
+	
+	if not self.RoundEnded then
+		if self:GetWave() == 0 and not self:GetWaveActive() then
+		
+			local txth = draw_GetFontHeight("ZS3D2DFont")
+			draw_SimpleTextBlurry(util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZS3D2DFont", w * 0.5, h * 0.25 + txth, COLOR_DARKRED, TEXT_ALIGN_CENTER)
+
+			local desiredzombies = self:GetDesiredStartingZombies()
+
+			local txth2 = draw_GetFontHeight("ZSHUDFontSmall")
+			draw_SimpleTextBlurry("Stay Away from the Zombie Spawns!", "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("zombie_volunteers"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + txth2, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			
+			local txth3 = draw_GetFontHeight("ZSHUDFontTiny")
+			
+			local y = h * 0.78 + txth3 * 2
+			for i, pl in ipairs(self.ZombieVolunteers) do
+				if pl:IsValid() then
+					draw_SimpleTextBlurry(pl:Name(), "ZSHUDFontTiny", w * 0.5, y, pl == MySelf and COLOR_RED or pl:IsFriend() and COLOR_LIMEGREEN or COLOR_GRAY, TEXT_ALIGN_CENTER)
+					y = y + txth3
+				end
+			end
+		end
+	end	
+	
 	if self.LifeStatsEndTime and CurTime() < self.LifeStatsEndTime and (self.LifeStatsBarricadeDamage > 0 or self.LifeStatsHumanDamage > 0 or self.LifeStatsBrainsEaten > 0) then
 		colLifeStats.a = math.Clamp((self.LifeStatsEndTime - CurTime()) / (self.LifeStatsLifeTime * 0.33), 0, 1) * 255
 
@@ -808,6 +934,7 @@ function GM:ZombieHUD()
 		end
 	end
 end
+
 
 function GM:RequestedDefaultCart()
 	local defaultcart = GetConVarString("zs_defaultcart")
@@ -912,6 +1039,7 @@ function GM:CreateFonts()
 	surface.CreateLegacyFont(fontfamily, screenscale * 72, fontweight, fontaa, false, "ZSHUDFontBig", fontshadow, fontoutline)
 	surface.CreateLegacyFont(fontfamily, screenscale * 16, fontweight, fontaa, false, "ZSHUDFontTinyBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * 22, fontweight, fontaa, false, "ZSHUDFontSmallerBlur", false, false, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * 22, fontweight, fontaa, false, "ZSHUDFontSmallNSBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * 28, fontweight, fontaa, false, "ZSHUDFontSmallBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * 42, fontweight, fontaa, false, "ZSHUDFontBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * 72, fontweight, fontaa, false, "ZSHUDFontBigBlur", false, false, 8)
