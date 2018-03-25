@@ -1,5 +1,4 @@
 -- Sometimes persistent ones don't get created.
--- Sometimes persistent ones don't get created.
 local dummy = CreateClientConVar("_zs_dummyconvar", 1, false, false)
 local oldCreateClientConVar = CreateClientConVar
 function CreateClientConVar(...)
@@ -806,6 +805,9 @@ function GM:_HUDPaint()
 	local myteam = MySelf:Team()
 
 	self:HUDDrawTargetID(myteam, screenscale)
+	if self:GetWave() > 0 then
+		self:DrawFearMeter(self:CachedFearPower(), screenscale)
+	end
     if myteam == TEAM_SPECTATOR then return end
 	if myteam == TEAM_UNDEAD then
 		self:ZombieHUD(screenscale * 0.75)
