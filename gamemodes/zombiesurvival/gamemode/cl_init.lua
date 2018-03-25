@@ -618,6 +618,7 @@ function GM:PlayBeats(teamid, fear)
 	end
 end
 
+local OSTintro = 0
 local colHealth = Color(0, 130, 0, 240)
 local colPoison = Color(220, 220, 0, 240)
 function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, poisondamage)
@@ -711,6 +712,14 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 		local wavestart = GAMEMODE:GetWaveStart()
 		if wavestart ~= -1 then
 			local timeleft = math.max(0, wavestart - CurTime())
+				end
+			end
+			
+			--Intro Song
+			if wavenumber >= 1 and OSTintro == 0 and not self.ZombieEscape then
+			if OSTintro == 0 then		
+			MySelf:EmitSound("zombiesurvival/intro.mp3", 50, 100, 0.5)
+			OSTintro = 1 -- So it doesn't repeat the track again.
 		end
 	end
 end
@@ -976,6 +985,7 @@ function GM:RestartRound()
 	self:InitPostEntity()
 
 	self:RevertZombieClasses()
+	timer.Create("RestartOSTintro", 10, 1, function() OSTintro = 0 end)
 end
 
 function GM:_HUDShouldDraw(name)

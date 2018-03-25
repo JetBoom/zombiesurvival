@@ -229,4 +229,5 @@ function GM:AddResources()
 	resource.AddFile("sound/"..tostring(self.AllLoseSound))
 	resource.AddFile("sound/"..tostring(self.HumanWinSound))
 	resource.AddFile("sound/"..tostring(self.DeathSound))
+	resource.AddFile("sound/zombiesurvival/intro.mp3")
 end
