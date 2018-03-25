@@ -11,12 +11,12 @@ Here is the current list of updates, fixes and additional features:
 
 - Basic Redeem System.
 - Complete Russian & German Language Translation.
-- Added a spectator team with the option in the F1 menu.
-- Altered how dropped deployable Items work.
+- Spectator system with the option in the F1 menu.
+- Altered how dropped deployable items work.
 - Worth & in-game pointshop are now bigger.
-- re-balance weapon and item pricing.
-- Added HD Texture icons.
-- Added Healthbars on Resupply & Arsenal Crates.
+- Re-balance weapon and item pricing.
+- HD Texture icons.
+- Healthbars on Resupply & Arsenal Crates.
 - Humans and Bandits can use third person.
 - Zombie Class Menu now has the Boss Button centered and is much bigger.
 - Fixed when another server alters the waves logic (even though they certainly shouldn't).
@@ -29,6 +29,7 @@ Here is the current list of updates, fixes and additional features:
 - Improved Healthbar FPS.
 - Disabled MouthMoveAnimation.
 - Bandits Flash on the Scoreboard.
+- New Beats.
 
 
  ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ

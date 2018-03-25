@@ -1,5 +1,5 @@
-GM.BeatSetHumanDefault = "defaulthuman"
-GM.BeatSetZombieDefault = "defaultzombiev2"
+GM.BeatSetHumanDefault = "zsrhuman"
+GM.BeatSetZombieDefault = "zsrzombie"
 
 GM.ItemCategoryIcons = {
 	[ITEMCAT_GUNS] = "icon16/gun.png",
