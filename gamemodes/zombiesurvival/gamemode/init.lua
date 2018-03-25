@@ -1083,9 +1083,11 @@ end
 
 function GM:PreRestartRound()
 	for _, pl in pairs(player.GetAll()) do
+	if pl:Team() ~= TEAM_SPECTATOR then
 		pl:StripWeapons()
 		pl:Spectate(OBS_MODE_ROAMING)
 		pl:GodDisable()
+		end
 	end
 end
 
@@ -1197,15 +1199,18 @@ function GM:DoRestartGame()
 	gamemode.Call("InitPostEntityMap")
 
 	for _, pl in pairs(player.GetAll()) do
+	if pl:Team() ~= TEAM_SPECTATOR then
 		pl:UnSpectateAndSpawn()
 		pl:GodDisable()
 		gamemode.Call("PlayerInitialSpawnRound", pl)
 		gamemode.Call("PlayerReadyRound", pl)
+		end
 	end
 end
 
 function GM:RestartGame()
 	for _, pl in pairs(player.GetAll()) do
+	if pl:Team() ~= TEAM_SPECTATOR then
 		pl:StripWeapons()
 		pl:StripAmmo()
 		pl:SetFrags(0)
@@ -1217,7 +1222,7 @@ function GM:RestartGame()
 		pl.DeathClass = nil
 		timer.Destroy("AddPoints_" .. pl:SteamID()) -- Destroy Redeemer points.
 	end
-
+end
 	self:SetWave(0)
 	if GAMEMODE.ZombieEscape then
 		self:SetWaveStart(CurTime() + 30)
