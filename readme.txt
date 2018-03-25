@@ -6,7 +6,7 @@ The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
-Current Version - Stable 4 "The Translation System V2" - https://github.com/MrCraigTunstall/zombiesurvival/releases
+Current Version - Stable 5 "Beats System" - https://github.com/MrCraigTunstall/zombiesurvival/releases
 Here is the current list of updates, fixes and additional features:
 
 - Basic Redeem System.
