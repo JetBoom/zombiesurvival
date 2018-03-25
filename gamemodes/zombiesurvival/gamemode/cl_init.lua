@@ -647,7 +647,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 	surface.DrawTexturedRect(x, y, wid, hei)
 
 	draw.SimpleText("Health:", "ZSHUDFontSmall", x + screenscale * 70, y + screenscale * 55, COLOR_GRAY, TEXT_ALIGN_LEFT)
-	draw.SimpleText(health, "ZSHUDFont", x + screenscale * 195, y + screenscale * 55, colHealth, TEXT_ALIGN_LEFT)
+	draw.SimpleText(health, "ZSHUDFont", x + screenscale * 180, y + screenscale * 48, colHealth, TEXT_ALIGN_LEFT)
 	
 	local w, h = ScrW(), ScrH() -- Get Screen Size of local player
 	
@@ -684,7 +684,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 	end
 		
 	draw_SimpleText("Wave Intermission:", "ZSHUDFontSmallNS", x + screenscale * 70, y + screenscale * 23, COLOR_YELLOW, TEXT_ALIGN_LEFT)
-	draw_SimpleTextBlurry(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 310, y + screenscale * 23, 10 < timeleft and COLOR_YELLOW or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_LEFT)
+	draw_SimpleTextBlurry(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 320, y + screenscale * 25, 10 < timeleft and COLOR_YELLOW or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_LEFT)
 
 	end
 	
