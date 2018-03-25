@@ -36,7 +36,7 @@ function GM:DrawTargetID(ent, fade)
 		if holding:IsValid() then
 			local mdl = holding:GetModel()
 			local name = string.match(mdl, ".*/(.+)%.mdl") or "object"
-			draw.SimpleTextBlur(translate.Get("carrying_prop") "["..name.."]", "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlur("Carrying ["..name.."]", "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 		else
 			local wep = ent:GetActiveWeapon()
 			if wep:IsValid() then
