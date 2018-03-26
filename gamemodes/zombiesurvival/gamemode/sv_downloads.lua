@@ -140,6 +140,9 @@ function GM:AddResources()
 	resource.AddFile( "materials/zombiesurvival/killicons/zombiebaby_hd_4.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/bonemesh.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/infernozombie.vtf" )
+	resource.AddFile( "materials/zombiesurvival/healthbar__human.vtf" )
+	resource.AddFile( "materials/zombiesurvival/healthbar__human.vmt" )
+
 
 
 	resource.AddFile("models/weapons/v_aegiskit.mdl")
