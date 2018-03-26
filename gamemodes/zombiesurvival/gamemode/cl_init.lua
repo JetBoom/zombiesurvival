@@ -1200,6 +1200,7 @@ function GM:LastHuman(pl)
 	LASTHUMAN = true
 	
 		timer.Simple(0.5, function() GAMEMODE:LastHumanMessage() end)
+		RunConsoleCommand("stopsound")
 	end	
 end
 
