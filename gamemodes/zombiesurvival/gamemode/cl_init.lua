@@ -814,7 +814,7 @@ function GM:_HUDPaint()
 	local myteam = MySelf:Team()
 
 	self:HUDDrawTargetID(myteam, screenscale)
-	if self:GetWave() > 0 then
+	if self:GetWave() > 0 and myteam ~= TEAM_SPECTATOR then
 		self:DrawFearMeter(self:CachedFearPower(), screenscale)
 	end
     if myteam == TEAM_SPECTATOR then return end
