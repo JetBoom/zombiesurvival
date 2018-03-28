@@ -10,7 +10,7 @@ CLASS.Hidden = true
 CLASS.Boss = true
 
 CLASS.Health = 2000
-CLASS.Speed = 170
+CLASS.Speed = 180
 
 CLASS.Points = 30
 

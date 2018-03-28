@@ -1183,7 +1183,6 @@ end
 
 function GM:LastHuman(pl)
 	if not IsValid(pl) then pl = nil end
-
 	self.TheLastHuman = pl
 
 	if not LASTHUMAN then
@@ -1198,7 +1197,6 @@ function GM:LastHuman(pl)
 	end )
 	
 	LASTHUMAN = true
-	RunConsoleCommand("stopsound")
 		timer.Simple(0.5, function() GAMEMODE:LastHumanMessage() end)
 	end	
 end
