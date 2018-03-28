@@ -1,39 +1,34 @@
-CLASS.Name = "The Butcher"
-CLASS.TranslationName = "class_butcher"
-CLASS.Description = "description_butcher"
-CLASS.Help = "controls_butcher"
+
+-----------------------------------------------------
+CLASS.Name = "Reaper"
+CLASS.TranslationName = "class_reaper"
+CLASS.Description = "description_reaper"
+CLASS.Help = "controls_reaper"
 
 CLASS.Wave = 0
-CLASS.Threshold = 0
-CLASS.Unlocked = true
+
+CLASS.NoFallDamage = true
+CLASS.NoFallSlowdown = true
 CLASS.Hidden = true
 CLASS.Boss = true
 
-CLASS.Health = 750
+CLASS.Health = 650
 CLASS.Speed = 280
 
 CLASS.CanTaunt = true
 
-CLASS.FearPerInstance = 1
+--CLASS.FearPerInstance = 1
 
-CLASS.Points = 30
+CLASS.Points = 35
 
-CLASS.SWEP = "weapon_zs_butcherknifez"
+CLASS.SWEP = "weapon_zs_zaxe"
 
-CLASS.Model = Model("models/player/corpse1.mdl")
+CLASS.Model = Model("models/player/zombie_fast.mdl")
 
-CLASS.VoicePitch = 0.65
+CLASS.VoicePitch = 0.20
 
 CLASS.PainSounds = {"npc/zombie/zombie_pain1.wav", "npc/zombie/zombie_pain2.wav", "npc/zombie/zombie_pain3.wav", "npc/zombie/zombie_pain4.wav", "npc/zombie/zombie_pain5.wav", "npc/zombie/zombie_pain6.wav"}
 CLASS.DeathSounds = {"npc/zombie/zombie_die1.wav", "npc/zombie/zombie_die2.wav", "npc/zombie/zombie_die3.wav"}
-
-local ACT_HL2MP_SWIM_MELEE = ACT_HL2MP_SWIM_MELEE
-local ACT_HL2MP_IDLE_CROUCH_MELEE = ACT_HL2MP_IDLE_CROUCH_MELEE
-local ACT_HL2MP_WALK_CROUCH_MELEE = ACT_HL2MP_WALK_CROUCH_MELEE
-local ACT_HL2MP_IDLE_MELEE = ACT_HL2MP_IDLE_MELEE
-local ACT_HL2MP_RUN_ZOMBIE = ACT_HL2MP_RUN_ZOMBIE
-local ACT_HL2MP_RUN_MELEE = ACT_HL2MP_RUN_MELEE
-local ACT_HL2MP_RUN_ZOMBIE = ACT_HL2MP_RUN_ZOMBIE
 
 local mathrandom = math.random
 local StepLeftSounds = {
@@ -53,6 +48,15 @@ function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilte
 
 	return true
 end
+--[[function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
+	if iFoot == 0 then
+		pl:EmitSound("NPC_FastZombie.GallopLeft")
+	else
+		pl:EmitSound("NPC_FastZombie.GallopRight")
+	end
+
+	return true
+end]]
 
 function CLASS:CalcMainActivity(pl, velocity)
 	if pl:WaterLevel() >= 3 then
@@ -107,37 +111,15 @@ end
 
 if SERVER then
 	function CLASS:OnSpawned(pl)
-		pl:CreateAmbience("butcherambience")
+		pl:CreateAmbience("nightmareambience")
 	end
 
-	local function MakeButcherKnife(pos)
-		local ent = ents.Create("prop_weapon")
-		if ent:IsValid() then
-			ent:SetPos(pos)
-			ent:SetAngles(AngleRand())
-			ent:SetWeaponType("weapon_zs_butcherknife")
-			ent:Spawn()
-
-			local phys = ent:GetPhysicsObject()
-			if phys:IsValid() then
-				phys:Wake()
-				phys:SetVelocityInstantaneous(VectorRand():GetNormalized() * math.Rand(24, 100))
-				phys:AddAngleVelocity(VectorRand() * 200)
-			end
-		end
-	end
-
-	function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo, assister)
-		local pos = pl:LocalToWorld(pl:OBBCenter())
-		timer.Simple(0, function()
-			MakeButcherKnife(pos)
-		end)
-	end
 end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/butcher_hd"
+
+CLASS.Icon = "zombiesurvival/killicons/reaper_zs2"
 
 function CLASS:PrePlayerDraw(pl)
 	render.SetColorModulation(1, 0.5, 0.5)
