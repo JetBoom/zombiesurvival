@@ -647,7 +647,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 	surface.SetDrawColor(150, 150, 150, 240)
 	surface.DrawTexturedRect(x, y, wid, hei)
 
-	draw.SimpleText("Health:", "ZSHUDFontSmall", x + screenscale * 70, y + screenscale * 55, COLOR_GRAY, TEXT_ALIGN_LEFT)
+	draw.SimpleText(translate.Get("health"), "ZSHUDFontSmall", x + screenscale * 70, y + screenscale * 55, COLOR_GRAY, TEXT_ALIGN_LEFT)
 	draw.SimpleText(health, "ZSHUDFont", x + screenscale * 180, y + screenscale * 48, colHealth, TEXT_ALIGN_LEFT)
 	
 	local w, h = ScrW(), ScrH() -- Get Screen Size of local player
@@ -664,7 +664,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 	
 	if wavenumber > 0 and wavenumber < 7 then --show wave count when wave 1 starts hide the wave count after 6 rounds
 		draw_SimpleText(wavenumber, "ZSHUDFontSmallNS", x + screenscale * 475, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_CENTER)
-		draw_SimpleText("Wave:", "ZSHUDFontSmallNS", x + screenscale * 430, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleText(translate.Get("wave"), "ZSHUDFontSmallNS", x + screenscale * 430, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_CENTER)
 	end
 	
 	--Intermission Checker Because people are thick yolo
@@ -684,7 +684,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 		local timeleft = math.max(0, wavestart - CurTime())
 	end
 		
-	draw_SimpleText("Wave Intermission:", "ZSHUDFontSmallNS", x + screenscale * 70, y + screenscale * 23, COLOR_YELLOW, TEXT_ALIGN_LEFT)
+	draw_SimpleText(translate.Get("wave_intermission"), "ZSHUDFontSmallNS", x + screenscale * 70, y + screenscale * 23, COLOR_YELLOW, TEXT_ALIGN_LEFT)
 	draw_SimpleTextBlurry(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 320, y + screenscale * 25, 10 < timeleft and COLOR_YELLOW or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_LEFT)
 
 	end
@@ -761,13 +761,13 @@ function GM:HumanHUD(screenscale)
 		if self:GetWave() == 0 and not self:GetWaveActive() then
 		
 			local txth = draw_GetFontHeight("ZS3D2DFont")
-			draw_SimpleTextBlurry("The invasion will begin in...", "ZS3D2DFont", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("invasion_in"), "ZS3D2DFont", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			draw_SimpleTextBlurry(util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZS3D2DFont", w * 0.5, h * 0.25 + txth, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 
 			local desiredzombies = self:GetDesiredStartingZombies()
 
 			local txth2 = draw_GetFontHeight("ZSHUDFontSmall")
-			draw_SimpleTextBlurry("Stay Away from the Zombie Spawns!", "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("stay_from_zombie_spawns"), "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			draw_SimpleTextBlurry(translate.Get("zombie_volunteers"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + txth2, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			
 			local txth3 = draw_GetFontHeight("ZSHUDFontTiny")
@@ -879,7 +879,7 @@ function GM:ZombieHUD(screenscale)
 			local desiredzombies = self:GetDesiredStartingZombies()
 
 			local txth2 = draw_GetFontHeight("ZSHUDFontSmall")
-			draw_SimpleTextBlurry("Stay Away from the Zombie Spawns!", "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("stay_from_zombie_spawns"), "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			draw_SimpleTextBlurry(translate.Get("zombie_volunteers"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + txth2, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			
 			local txth3 = draw_GetFontHeight("ZSHUDFontTiny")
@@ -1198,9 +1198,8 @@ function GM:LastHuman(pl)
 	end )
 	
 	LASTHUMAN = true
-	
+	RunConsoleCommand("stopsound")
 		timer.Simple(0.5, function() GAMEMODE:LastHumanMessage() end)
-		RunConsoleCommand("stopsound")
 	end	
 end
 

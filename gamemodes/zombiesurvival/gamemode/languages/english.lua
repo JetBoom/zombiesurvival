@@ -409,6 +409,11 @@ LANGUAGE.worth_forum								= "Forum"
 LANGUAGE.worth_forumtooltip							= "This will take you to voidresonance.com"
 LANGUAGE.worth_steam								= "Steam Group"
 LANGUAGE.worth_steamtooltip							= "This will take you to our Void Resonance's Steam group."
+LANGUAGE.worth_savecart                             = "Save cart"
+LANGUAGE.worth_entername                            = "Enter a name for this cart."
+LANGUAGE.worth_name                                 = "Name"
+LANGUAGE.worth_ok                                   = "OK"
+LANGUAGE.worth_cancel                               = "Cancel"
 
 -- Pointshop Menu
 
@@ -435,6 +440,7 @@ LANGUAGE.lose                                       = "You have lost."
 LANGUAGE.humans_win                                 = "The humans have survived for now."
 LANGUAGE.zombies_win                                = "The undead army grows stronger."
 LANGUAGE.mentions                                   = "Honorable Mentions"
+LANGUAGE.end_profile                                = "Click here to view their Steam Community profile."
 
 -- Shop Items (worth menu)
 
@@ -501,8 +507,12 @@ LANGUAGE.worth_surged                               = "Surged"
 LANGUAGE.worth_surged2                              = "Gives a noticeable bonus to running speed."
 LANGUAGE.worth_handy                                = "Handy"
 LANGUAGE.worth_handy2                               = "Gives a 25% bonus to all repair rates."
+LANGUAGE.worth_engi                                 = "Engineer"
+LANGUAGE.worth_engi2                                = "Gives a 50% bonus to all repair rates."
 LANGUAGE.worth_surgeon                              = "Surgeon"
 LANGUAGE.worth_surgeon2                             = "Increases the rate by which you can heal yourself and others with the Medical Kit by 30%. Increases Medic Gun effectiveness by 33%."
+LANGUAGE.worth_medicine                             = "Medicine"
+LANGUAGE.worth_medicine2                            = "Increases the rate by which you can heal yourself and others with the Medical Kit by 50%. Increases Medic Gun effectiveness by 53%."
 LANGUAGE.worth_resistant                            = "Resistant"
 LANGUAGE.worth_resistant2                           = "You will take half damage from poison."
 LANGUAGE.worth_regen                                = "Regenerative"
@@ -639,6 +649,8 @@ LANGUAGE.wn_sawhack                                 = "Sawhack"
 LANGUAGE.wn_ticlemonster                            = "The Tickle Monster"
 LANGUAGE.wn_waraxe                                  = "'Waraxe' Handgun"
 LANGUAGE.wn_zombielegs                              = "Zombie Kung Fu"
+LANGUAGE.weapon_katana                              = "Katana"
+LANGUAGE.weapon_python                              = "'Python' Magnum"                       
 
 -- Item Descriptions 
 
@@ -853,6 +865,11 @@ LANGUAGE.pl_poison                                  = "POISON!"
 LANGUAGE.pl_bleed                                   = "BLEED!"
 LANGUAGE.pl_ghtc                                    = "GHOUL TOUCH!"
 LANGUAGE.carrying_prop                              = "Carrying"
+LANGUAGE.stay_from_zombie_spawns                    = "Stay Away from the Zombie Spawns!"
+LANGUAGE.invasion_in                                = "The invasion will begin in..."
+LANGUAGE.wave_intermission                          = "Wave Intermission:"
+LANGUAGE.wave                                       = "Wave:"
+LANGUAGE.health                                     = "Health:"
 
 -- Floating Score
 

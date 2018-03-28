@@ -3,12 +3,12 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_zombie"
 
 SWEP.MeleeReach = 100
-SWEP.MeleeDamage = 30
+SWEP.MeleeDamage = 60
 SWEP.MeleeForceScale = 2
 SWEP.MeleeSize = 3
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.Primary.Delay = 3
-SWEP.Secondary.Delay = 5
+SWEP.Secondary.Delay = 3
 
 SWEP.ThrowDelay = 1
 

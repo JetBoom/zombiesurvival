@@ -19,14 +19,14 @@ SWEP.WorldModel = "models/weapons/w_medkit.mdl"
 SWEP.ViewModel = "models/weapons/c_medkit.mdl"
 SWEP.UseHands = true
 
-SWEP.Primary.Delay = 5
+SWEP.Primary.Delay = 3
 SWEP.Primary.Heal = 35
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 150
 SWEP.Primary.Ammo = "Battery"
 
-SWEP.Secondary.Delay = 5.5
+SWEP.Secondary.Delay = 3.5
 SWEP.Secondary.Heal = 30
 
 SWEP.Secondary.ClipSize = 1
@@ -62,7 +62,7 @@ function SWEP:PrimaryAttack()
 
 	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == owner:Team() and ent:Alive() and gamemode.Call("PlayerCanBeHealed", ent) then
 		local health, maxhealth = ent:Health(), ent:GetMaxHealth()
-		local multiplier = owner.HumanHealMultiplier or 1
+		local multiplier = owner.HumanHealMultiplier or 1.10
 		local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Primary.Heal * multiplier, maxhealth - health)))
 		local totake = math.ceil(toheal / multiplier)
 		if toheal > 0 then
@@ -89,7 +89,7 @@ function SWEP:SecondaryAttack()
 	if not self:CanPrimaryAttack() or not gamemode.Call("PlayerCanBeHealed", owner) then return end
 
 	local health, maxhealth = owner:Health(), owner:GetMaxHealth()
-	local multiplier = owner.HumanHealMultiplier or 1
+	local multiplier = owner.HumanHealMultiplier or 1.10
 	local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Secondary.Heal * multiplier, maxhealth - health)))
 	local totake = math.ceil(toheal / multiplier)
 	if toheal > 0 then
@@ -155,7 +155,7 @@ function SWEP:CanPrimaryAttack()
 	if self:GetPrimaryAmmoCount() <= 0 then
 		self:EmitSound("items/medshotno1.wav")
 
-		self:SetNextCharge(CurTime() + 0.75)
+		self:SetNextCharge(CurTime() + 0.5)
 		owner.NextMedKitUse = self:GetNextCharge()
 		return false
 	end

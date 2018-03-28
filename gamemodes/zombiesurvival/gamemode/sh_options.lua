@@ -198,9 +198,11 @@ local item = GM:AddStartingItem("10spd", ""..translate.Get("worth_surged"), ""..
 item.NoClassicMode = true
 item.NoZombieEscape = true
 GM:AddStartingItem("bfsurgeon", ""..translate.Get("worth_surgeon"), ""..translate.Get("worth_surgeon2"), ITEMCAT_TRAITS, 10, nil, function(pl) pl.HumanHealMultiplier = (pl.HumanHealMultiplier or 1) + 0.3 end, "models/healthvial.mdl")
+GM:AddStartingItem("bfmedicine", ""..translate.Get("worth_medicine"), ""..translate.Get("worth_medicine2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.HumanHealMultiplier = (pl.HumanHealMultiplier or 1) + 1.0 end, "models/healthvial.mdl")
 GM:AddStartingItem("bfresist", ""..translate.Get("worth_resistant"), ""..translate.Get("worth_resistant2"), ITEMCAT_TRAITS, 15, nil, function(pl) pl.BuffResistant = true end, "models/healthvial.mdl")
 GM:AddStartingItem("bfregen", ""..translate.Get("worth_regen"), ""..translate.Get("worth_regen2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.BuffRegenerative = true end, "models/healthvial.mdl")
 GM:AddStartingItem("bfhandy", ""..translate.Get("worth_handy"), ""..translate.Get("worth_handy2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.25 end, "models/props_c17/tools_wrench01a.mdl")
+GM:AddStartingItem("bfengineer", ""..translate.Get("worth_engi"), ""..translate.Get("worth_engi2"), ITEMCAT_TRAITS, 35, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.50 end, "models/props_c17/tools_wrench01a.mdl")
 GM:AddStartingItem("bfmusc", ""..translate.Get("worth_muscular"),""..translate.Get("worth_muscular2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.BuffMuscular = true pl:DoMuscularBones() end, "models/props_wasteland/kitchen_shelf001a.mdl")
 
 -----------
@@ -225,6 +227,7 @@ GM:AddPointShopItem("deagle", ""..translate.Get("ars_deagle"), nil, ITEMCAT_GUNS
 GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
 GM:AddPointShopItem("magnum", ""..translate.Get("ars_magnum"), nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
 GM:AddPointShopItem("eraser", ""..translate.Get("ars_tacticalpistol"), nil, ITEMCAT_GUNS, 35, "weapon_zs_eraser")
+GM:AddPointShopItem("python", ""..translate.Get("weapon_python"), nil, ITEMCAT_GUNS, 95, "weapon_zs_python")
 GM:AddPointShopItem("uzi", ""..translate.Get("ars_uzi"), nil, ITEMCAT_GUNS, 70, "weapon_zs_uzi")
 GM:AddPointShopItem("shredder", ""..translate.Get("ars_shredder"), nil, ITEMCAT_GUNS, 70, "weapon_zs_smg")
 GM:AddPointShopItem("bulletstorm", ""..translate.Get("ars_bulletstorm"), nil, ITEMCAT_GUNS, 70, "weapon_zs_bulletstorm")
@@ -269,6 +272,7 @@ GM:AddPointShopItem("crowbar", ""..translate.Get("worth_crowbar"), nil, ITEMCAT_
 GM:AddPointShopItem("stunbaton", ""..translate.Get("worth_stun"), nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
 GM:AddPointShopItem("shovel", ""..translate.Get("ars_shovel"), nil, ITEMCAT_MELEE, 20, "weapon_zs_shovel")
 GM:AddPointShopItem("sledgehammer", ""..translate.Get("ars_sledge"), nil, ITEMCAT_MELEE, 30, "weapon_zs_sledgehammer")
+GM:AddPointShopItem("katana", ""..translate.Get("weapon_katana"), nil, ITEMCAT_MELEE, 50, "weapon_zs_katana")
 
 ------------
 -- P.TOOLS --

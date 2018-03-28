@@ -166,10 +166,10 @@ local function SaveCurrentCart(name)
 end
 
 local function SaveDoClick(self)
-	Derma_StringRequest("Save cart", "Enter a name for this cart.", "Name", 
+	Derma_StringRequest(translate.Get("worth_savecart").."", translate.Get("worth_entername").."", translate.Get("worth_name").."", 
 	function(strTextOut) SaveCurrentCart(strTextOut) end,
 	function(strTextOut) end,
-	"OK", "Cancel")
+	translate.Get("worth_ok").."", translate.Get("worth_cancel").."")
 end
 
 local function DeleteDoClick(self)

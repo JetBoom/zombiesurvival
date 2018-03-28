@@ -4,7 +4,16 @@ AddCSLuaFile()
             SWEP.PrintName = translate.Get("weapon_python")
             SWEP.Author     = ""
             SWEP.ViewModelFlip = false
-			SWEP.ViewModelFOV = 60
+	SWEP.Slot = 1
+	SWEP.SlotPos = 0
+
+	SWEP.ViewModelFlip = false
+	SWEP.ViewModelFOV = 60
+
+	SWEP.HUD3DBone = "Python"
+	SWEP.HUD3DPos = Vector(0.85, 0, -2.5)
+	SWEP.HUD3DScale = 0.015
+
 	 
     SWEP.ViewModelBoneMods = {
             ["Bullet4"] = { scale = Vector(0.009, 0.009, 0.009), pos = Vector(0, 0, 0), angle = Angle(0, 0, 0) },
@@ -41,8 +50,6 @@ AddCSLuaFile()
     end
      
 SWEP.Base = "weapon_zs_base"
-SWEP.Slot = 5
-SWEP.SlotPos = 1
 SWEP.Spawnable                  = true
 SWEP.AdminSpawnable             = true
 SWEP.ViewModel                  = Model ( "models/weapons/c_357.mdl" )
