@@ -112,7 +112,7 @@ function SWEP:Swung()
 	owner:LagCompensation(true)
 
 	local hit = false
-	local traces = owner:PenetratingMeleeTrace(self.MeleeReach, self.MeleeSize, self.PreHit)
+	local traces = owner:PenetratingClipHullMeleeTrace(self.MeleeReach, self.MeleeSize, self.PreHit)
 	self.PreHit = nil
 
 	local damage = self:GetDamage(self:GetTracesNumPlayers(traces))
@@ -140,7 +140,7 @@ function SWEP:Swung()
 		end
 	end
 
-	owner:LagCompensation(false)
+	--owner:LagCompensation(false)
 
 	if self.FrozenWhileSwinging then
 		owner:ResetSpeed()
@@ -293,7 +293,7 @@ end
 function SWEP:StopMoaning()
 	if not self:IsMoaning() then return end
 	self:SetMoaning(false)
-	self.Owner:SetWalkSpeed( 140 )
+	self.Owner:SetWalkSpeed(140)
 
 	self:StopMoaningSound()
 end
@@ -302,7 +302,7 @@ function SWEP:StartMoaning()
 	if self:IsMoaning() or IsValid(self.Owner.Revive) or IsValid(self.Owner.FeignDeath) then return end
 	self:SetMoaning(true)
 	
-	self.Owner:SetWalkSpeed( 200 )
+	self.Owner:SetWalkSpeed(200)
 
 	self:SetMoanHealth(self.Owner:Health())
 
