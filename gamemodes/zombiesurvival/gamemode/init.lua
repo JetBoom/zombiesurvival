@@ -70,6 +70,7 @@ AddCSLuaFile("vgui/pendboard.lua")
 AddCSLuaFile("vgui/pworth.lua")
 AddCSLuaFile("vgui/ppointshop.lua")
 AddCSLuaFile("vgui/changeteam.lua")
+AddCSLuaFile("vgui/zshealtharea.lua")
 
 
 include("shared.lua")

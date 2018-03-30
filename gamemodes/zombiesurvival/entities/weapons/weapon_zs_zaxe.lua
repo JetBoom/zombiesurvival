@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Axe"
+	SWEP.PrintName = translate.Get("worth_axe")
 
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
@@ -12,7 +12,7 @@ if CLIENT then
 		["base"] = { type = "Model", model = "models/w_rwbyfix.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(1, 1.100, -4), angle = Angle(65, 76, 95), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 	}
 	SWEP.WElements = {
-		["base"] = { type = "Model", model = "models/w_rwbyfix.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3, 1.399, -4), angle = Angle(0, 0, 90), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["base"] = { type = "Model", model = "models/w_rwbyfix.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3, 1.399, -4), angle = Angle(75, 86, 95), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 	}
 end
 

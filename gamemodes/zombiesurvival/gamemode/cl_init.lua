@@ -39,7 +39,7 @@ include("vgui/ppointshop.lua")
 include("vgui/dpingmeter.lua")
 include("vgui/dsidemenu.lua")
 include("vgui/changeteam.lua")
-
+include("vgui/zshealtharea.lua")
 
 include("cl_dermaskin.lua")
 include("cl_deathnotice.lua")
@@ -685,7 +685,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 	end
 		
 	draw_SimpleText(translate.Get("wave_intermission"), "ZSHUDFontSmallNS", x + screenscale * 70, y + screenscale * 23, COLOR_YELLOW, TEXT_ALIGN_LEFT)
-	draw_SimpleTextBlurry(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 320, y + screenscale * 25, 10 < timeleft and COLOR_YELLOW or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_LEFT)
+	draw_SimpleText(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 320, y + screenscale * 25, 10 < timeleft and COLOR_YELLOW or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_LEFT)
 
 	end
 	
