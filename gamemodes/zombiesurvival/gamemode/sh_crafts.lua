@@ -92,13 +92,6 @@ GM.Crafts = {
 		Result = {"weapon_zs_deagleredeemers"}
 	},
     {
-		Name = "a empowered resupply box",
-		callback = function(enta, entb)
-			return enta:IsWeaponType("weapon_zs_resupplybox") and entb:IsWeaponType("weapon_zs_empower")
-		end,
-		Result = {"weapon_zs_empowerbox"}
-	},
-    {
 		Name = "a dual boom stick",
 		callback = function(enta, entb)
 			return enta:IsWeaponType("weapon_zs_boomstick") and entb:IsWeaponType("weapon_zs_boomstick")

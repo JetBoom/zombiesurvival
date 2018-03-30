@@ -1,5 +1,3 @@
-
------------------------------------------------------
 AddCSLuaFile()
 
 if CLIENT then
@@ -11,17 +9,17 @@ if CLIENT then
 	SWEP.ShowViewModel = false
 	SWEP.ShowWorldModel = false
 	SWEP.VElements = {
-		["base"] = { type = "Model", model = "models/props/cs_militia/axe.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3, 1.299, -4), angle = Angle(0, 0, 90), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["base"] = { type = "Model", model = "models/w_rwbyfix.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(1, 1.100, -4), angle = Angle(65, 76, 95), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 	}
 	SWEP.WElements = {
-		["base"] = { type = "Model", model = "models/props/cs_militia/axe.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3, 1.399, -4), angle = Angle(0, 0, 90), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["base"] = { type = "Model", model = "models/w_rwbyfix.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3, 1.399, -4), angle = Angle(0, 0, 90), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 	}
 end
 
 SWEP.Base = "weapon_zs_basemelee"
 
 SWEP.ViewModel = "models/weapons/c_stunstick.mdl"
-SWEP.WorldModel = "models/props/cs_militia/axe.mdl"
+SWEP.WorldModel = "models/w_rwbyfix.mdl"
 SWEP.UseHands = true
 
 SWEP.HoldType = "melee2"
@@ -29,7 +27,7 @@ SWEP.HoldType = "melee2"
 SWEP.MeleeDamage = 40
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.5
---SWEP.MeleeKnockBack = SWEP.MeleeDamage * 1.5
+SWEP.MeleeKnockBack = SWEP.MeleeDamage * 1.5
 SWEP.Primary.Delay = 1
 
 SWEP.WalkSpeed = SPEED_FAST
