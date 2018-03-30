@@ -198,8 +198,8 @@ LANGUAGE.class_shade								= "Тень"
 LANGUAGE.class_gore_child							= "Кровавая Кукла"
 LANGUAGE.class_giga_gore_child						= "Гига Кровавая Кукла"
 LANGUAGE.class_reaper								= "Жнец"
-LANGUAGE.class_nugget								= "Nugget"
-LANGUAGE.class_bastardzine							= "Bastardzine"
+LANGUAGE.class_nugget								= "Наггет"
+LANGUAGE.class_bastardzine							= "Ублюдзин"
 
 -- Class descriptions
 LANGUAGE.description_zombie							= "Обычный зомби очень стойкий и довольно силен.\nЕго сложно положить, особенно если не стрелять в голову."
@@ -228,7 +228,7 @@ LANGUAGE.description_flesh_creeper					= "Строители обладают с
 LANGUAGE.description_gore_child						= "После зомбирования, нерожденный ребенок также заражается.\nОбладая никакими особыми способностями, их сила исходит из их числа."
 LANGUAGE.description_giga_gore_child				= "Результат Кровавой Куклы, которая была незамеченна слишком долго.\nУжас, во плоти, его массивное тело является результатом зомбированных стволовых клеток.\nОни также будут хозяином для Кровавых Кукол которые можно всегда находить в кудели с им."
 LANGUAGE.description_reaper							= "Быстрый, как ад может напугать людей\n Отправьте людей в ад!"
-LANGUAGE.description_bastardzine                    = "Once nuggets began to roam the earth, they found hosts just like their lower headcrab kin.\n This new breed of zombie is a hybrid of mass chaos, crazy fast and deadly."
+LANGUAGE.description_bastardzine                    = "Как только наггеты начали бродить по земле, они нашли хозяев так же, как их низший собратья хэдкрабы.\n Этот новый вип зомби, гибрид массового хаоса, безумной скорости и смертоносности."
 
 -- Class control schemes
 LANGUAGE.controls_zombie							= "> ПЕРВИЧНЫЙ: Когти\n> ВТОРИЧНЫЙ: Крик\n> ПЕРЕЗАРЯДКА: Плач\n> БЕГ: Притвориться мертвым\n> УБИЙСТВО В НОГИ: Шанс на реанимацию / трансформация"
@@ -614,8 +614,6 @@ LANGUAGE.wn_sawhack                                 = "Кромсатель"
 LANGUAGE.wn_ticlemonster                            = "Щекоточный монстр"
 LANGUAGE.wn_waraxe                                  = "Пистолет 'Топор войны'"
 LANGUAGE.wn_zombielegs                              = "Зомби Кунг-Фу"
-LANGUAGE.weapon_katana                              = "Катана"
-LANGUAGE.weapon_python                              = "Магнум 'Питон'"  
 
 -- Item Descriptions
 
