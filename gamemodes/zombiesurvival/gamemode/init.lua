@@ -26,6 +26,7 @@ AddCSLuaFile("sh_zombieclasses.lua")
 AddCSLuaFile("sh_animations.lua")
 AddCSLuaFile("sh_sigils.lua")
 AddCSLuaFile("sh_channel.lua")
+AddCSLuaFile("sh_bullets.lua")
 
 AddCSLuaFile("cl_draw.lua")
 AddCSLuaFile("cl_util.lua")
@@ -2149,6 +2150,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
 	if ent:IsPlayer() then
 		dispatchdamagedisplay = true
+		elseif self.ZombieEscape then
 	elseif ent.PropHealth then -- A prop that was invulnerable and converted to vulnerable.
 		if self.NoPropDamageFromHumanMelee and attacker:IsPlayer() and attacker:Team() ~= TEAM_UNDEAD and inflictor.IsMelee then
 			dmginfo:SetDamage(0)

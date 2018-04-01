@@ -10,6 +10,32 @@ table.insert(GM.CleanupFilter, "env_global")
 table.insert(GM.CleanupFilter, "info_player_terrorist")
 table.insert(GM.CleanupFilter, "info_player_counterterrorist")
 
+-- Map CS:S player model attachments to their closest GMod equivalent
+local attachmentFallbackMap = {
+	forward = "eyes",
+	grenade0 = "eyes",
+	grenade1 = "eyes",
+	grenade2 = "eyes",
+	pistol = "eyes",
+	primary = "eyes",
+	defusekit = "eyes",
+	eholster = "eyes",
+	rfoot = "eyes",
+	lfoot = "eyes",
+	muzzle_flash = "eyes"
+}
+
+local function fixPlayerAttachment(value)
+	local startIdx, endIdx, attachmentName = value:lower():find("^.-,setparentattachment,(.-),")
+
+	if startIdx and attachmentFallbackMap[attachmentName] then
+		local fixedName = attachmentFallbackMap[attachmentName]
+
+		startIdx = endIdx - attachmentName:len()
+		return value:sub(1, startIdx - 1) .. fixedName .. value:sub(endIdx)
+	end
+end
+
 -- We need to fix these important entities.
 hook.Add("EntityKeyValue", "zombieescape", function(ent, key, value)
 	-- The teamid for Terrorist and Counter Terrorist is different than Zombie and Human in ZS.
@@ -28,6 +54,14 @@ hook.Add("EntityKeyValue", "zombieescape", function(ent, key, value)
 	-- Some maps have brushes that regenerate or set health to dumb values. We don't want them. Although this can break maps I can't think of a way to remove the output instead.
 	if (ent:GetClass() == "trigger_multiple" or ent:GetClass() == "trigger_once") and string.find(string.lower(value), "%!.*%,.+%,health") then
 		ent.ZEDelete = true
+	end
+
+	-- Fix SetParentAttachment using CS:S player model attachment names
+	if (value:lower():find("setparentattachment")) then
+		local fixedOutput = fixPlayerAttachment(value)
+		if fixedOutput then
+			return fixedOutput
+		end
 	end
 end)
 
