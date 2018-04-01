@@ -238,6 +238,7 @@ LANGUAGE.description_gore_child						= "Once zombified, an unborn child becomes 
 LANGUAGE.description_giga_gore_child				= "The result of a Gore Child which has been left unchecked for too long.\nA horror to behold, their massive body is the result of zombified stem cells.\nThey also become a host for Gore Children which can always be found in tow with it."
 LANGUAGE.description_reaper							= "Fast as hell an can scare the shit out of humans\n Run your foes down an eat those brains!"
 LANGUAGE.description_bastardzine                    = "Once nuggets began to roam the earth, they found hosts just like their lower headcrab kin.\n This new breed of zombie is a hybrid of mass chaos, crazy fast and deadly."
+LANGUAGE.description_burster                        = "This infected can explode if he killed."
 
 -- Class control schemes
 LANGUAGE.controls_zombie							= "> PRIMARY: Claws\n> SECONDARY: Scream\n> RELOAD: Moan\n> SPRINT: Feign death\n> ON FATAL HIT IN LEGS: Revive / Transform"
@@ -260,6 +261,7 @@ LANGUAGE.controls_flesh_creeper						= "> PRIMARY: Head Smash\n> SECONDARY: Nest
 LANGUAGE.controls_gore_child						= "> PRIMARY: Claws"
 LANGUAGE.controls_giga_gore_child					= "> PRIMARY: Smash\n> SECONDARY: Throw Gore Child"
 LANGUAGE.controls_reaper							= "> PRIMARY: Axe\n> RELOAD: Moan"
+LANGUAGE.controls_burster                           = "> PRIMARY: Poison Bomb\n> ON DEATH: Poison Bomb"
 
 -- The help file... Quite big! I wouldn't blame you if you didn't translate this part.
 LANGUAGE.help_cat_introduction						= "Introduction"
