@@ -17,8 +17,42 @@ function SWEP:DrawWeaponSelection(...)
 end
 
 function SWEP:DrawHUD()
-	if GetConVarNumber("crosshair") ~= 1 then return end
-	self:DrawCrosshairDot()
+if GetConVarNumber("crosshair") ~= 1 then return end
+if ENDROUND then
+	return
+else	
+	local SCREEN_W = 1920; --For the screen resolution scale. This means that it can be fit exactly on the screen without any issues.
+	local SCREEN_H = 1080;
+	local X_MULTIPLIER = ScrW( )  / 60 ;
+	local Y_MULTIPLIER = ScrH( ) / 80 ;
+
+
+
+	local cW, cH = ScrW() * 0.5, ScrH() * 0.5
+	
+	surface.SetDrawColor( Color ( 188,183,153,30 ) )
+	surface.DrawLine(cW - X_MULTIPLIER, cH - 2, cW + X_MULTIPLIER, cH - 2)
+	
+	surface.SetDrawColor( Color ( 188,183,153,160 ) )
+	surface.DrawLine(cW - X_MULTIPLIER, cH - 1, cW + X_MULTIPLIER, cH - 1)
+	
+	surface.SetDrawColor( Color ( 188,183,153,160 ) )
+	surface.DrawLine(cW - X_MULTIPLIER, cH - 0, cW + X_MULTIPLIER, cH - 0)
+	
+	surface.SetDrawColor( Color ( 188,183,153,30 ) )
+	surface.DrawLine(cW - X_MULTIPLIER, cH + 1, cW + X_MULTIPLIER, cH + 1)
+
+	
+	surface.SetDrawColor( Color ( 188,183,153,50 ) )
+	surface.DrawLine(cW - 1, cH - Y_MULTIPLIER, cW - 1, cH + Y_MULTIPLIER)
+	
+	surface.SetDrawColor( Color ( 188,183,153,130 ) )
+	surface.DrawLine(cW - 0, cH - Y_MULTIPLIER, cW - 0, cH + Y_MULTIPLIER)
+	
+	surface.SetDrawColor( Color ( 188,183,153,50 ) )
+	surface.DrawLine(cW + 1, cH - Y_MULTIPLIER, cW + 1, cH + Y_MULTIPLIER)
+end
+
 end
 
 function SWEP:OnRemove()
