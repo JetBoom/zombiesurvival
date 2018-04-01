@@ -1,13 +1,10 @@
-CLASS.Hidden = true
-CLASS.Disabled = true
-CLASS.Unlocked = true
-
 CLASS.Name = "Chem Zombie"
 CLASS.TranslationName = "class_chem_zombie"
 CLASS.Description = "description_chem_zombie"
 CLASS.Help = "controls_chem_zombie"
-
-CLASS.Wave = 1
+ 
+ 
+CLASS.Wave = 5 / 6
 CLASS.Health = 100
 CLASS.SWEP = "weapon_zs_chemzombie"
 CLASS.Model = Model("models/Zombie/Poison.mdl")

@@ -156,6 +156,9 @@ function GM:AddResources()
 	resource.AddFile( "materials/zombiesurvival/killicons/reaper_zs2.vmt" )
 	resource.AddFile( "materials/zombiesurvival/killicons/bonemesh.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/infernozombie.vtf" )
+	resource.AddFile( "materials/zombiesurvival/killicons/fast_legs.vtf" )
+	resource.AddFile( "materials/zombiesurvival/killicons/fast_legs.vmt" )
+
 	resource.AddFile( "materials/zombiesurvival/healthbar__human.vtf" )
 	resource.AddFile( "materials/zombiesurvival/healthbar__human.vmt" )
 

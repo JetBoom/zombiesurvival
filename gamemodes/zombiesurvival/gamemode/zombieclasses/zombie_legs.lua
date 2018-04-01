@@ -8,7 +8,7 @@ CLASS.NoHead = true
 CLASS.Wave = 0
 CLASS.Threshold = 0
 CLASS.Unlocked = true
-CLASS.Hidden = true
+CLASS.Hidden = false
 
 CLASS.Health = 100
 CLASS.Speed = 170

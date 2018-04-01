@@ -5,7 +5,7 @@ SWEP.PrintName = translate.Get("wn_fists")
 if GAMEMODE.ZombieEscape then
 	SWEP.WalkSpeed = SPEED_ZOMBIEESCAPE_NORMAL
 else
-	SWEP.WalkSpeed = SPEED_NORMAL
+	SWEP.WalkSpeed = SPEED_FAST
 end
 
 SWEP.IsMelee = true
@@ -15,7 +15,7 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_arms_citizen.mdl"
 SWEP.WorldModel	= ""
 
-SWEP.Damage = 5
+SWEP.Damage = 10
 SWEP.UppercutDamageMultiplier = 3
 SWEP.HitDistance = 40
 
@@ -26,6 +26,9 @@ SWEP.AutoSwitchFrom = true
 SWEP.NoMagazine = true
 SWEP.Undroppable = true
 SWEP.NoPickupNotification = true
+
+SWEP.Primary.Automatic = true
+SWEP.Secondary.Automatic = true
 
 SWEP.Primary.Ammo = "none"
 SWEP.Secondary.Ammo = "none"

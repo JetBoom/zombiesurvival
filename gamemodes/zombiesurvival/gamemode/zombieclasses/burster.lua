@@ -1,13 +1,12 @@
-CLASS.Hidden = true
-CLASS.Disabled = true
-CLASS.Unlocked = true
+CLASS.Unlocked = false
+CLASS.Hidden   = true
 
 CLASS.Name = "Burster"
 CLASS.TranslationName = "class_burster"
 CLASS.Description = "description_burster"
 CLASS.Help = "controls_burster"
 
-CLASS.Wave = 5 / 6
+CLASS.Wave = 3
 
 CLASS.Health = 100
 CLASS.Speed = 160

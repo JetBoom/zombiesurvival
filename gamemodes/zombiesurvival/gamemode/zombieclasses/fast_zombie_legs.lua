@@ -5,10 +5,8 @@ CLASS.Description = "description_fast_zombie_legs"
 CLASS.Model = Model("models/player/zombie_fast.mdl")
 CLASS.NoHead = true
 
-CLASS.Wave = 0
+CLASS.Wave = 1 / 2
 CLASS.Threshold = 0
-CLASS.Unlocked = true
-CLASS.Hidden = true
 
 CLASS.Health = 75
 CLASS.Speed = 200
@@ -24,7 +22,8 @@ CLASS.Mass = DEFAULT_MASS * 0.5
 CLASS.CrouchedWalkSpeed = 1
 
 CLASS.CantDuck = true
-CLASS.CanFeignDeath = false
+
+CLASS.CanFeignDeath = true
 
 CLASS.VoicePitch = 0.65
 
@@ -155,7 +154,7 @@ end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/legs"
+CLASS.Icon = "zombiesurvival/killicons/fast_legs"
 
 -- This whole point of this is to stop drawing decals on the upper part of the model. It doesn't actually do anything to the visible model.
 local undo = false
