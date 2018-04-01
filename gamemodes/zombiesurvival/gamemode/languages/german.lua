@@ -29,7 +29,7 @@ LANGUAGE.press_lmb_to_spawn_on_them					= "Drücke LMT um auf ihnen zu spawnen"
 LANGUAGE.press_lmb_to_spawn							= "Drück die LMT um zu spawnen"
 LANGUAGE.press_reload_to_spawn_at_normal_point		= "Drücke NACHLADEN um beim normalen Spawn-Punkt zu spawnen"
 LANGUAGE.press_walk_to_spawn_as_x					= "Drücke LAUFEN um als ein %s zu spawnen"
-LANGUAGE.observing_x								= "%s beobachten (%d)"
+LANGUAGE.observing_x								= "beobachte %s (%d)"
 LANGUAGE.waiting_for_next_wave						= "Es wird auf den Beginn der nächsten Welle gewartet..."
 LANGUAGE.impossible									= "Unmöglich."
 LANGUAGE.trying_to_put_nails_in_glass				= "Nägel in Glas zu schlagen ist keine gute Idee."
@@ -88,7 +88,7 @@ LANGUAGE.intermission								= "Unterbrechung"
 LANGUAGE.press_f2_for_the_points_shop				= "Drücke F2 für den Points-Shop!"
 LANGUAGE.breath										= "Atem"
 LANGUAGE.zombie_volunteers							= "Freiwillige Zombies"
-LANGUAGE.x_will_be_y_soon							= "%s wird bald als % auferstehen!"
+LANGUAGE.x_will_be_y_soon							= "%s wird bald als %s auferstehen!"
 LANGUAGE.you_will_be_x_soon							= "Du wirst bald als %s auferstehen!"
 LANGUAGE.x_discount_for_buying_between_waves		= "%d%% Preisnachlass für das Kaufen zwischen Wellen!"
 LANGUAGE.number_of_initial_zombies_this_game		= "Anzahl der ersten Zombies in diesem Spiel (%d%%): %d"
@@ -312,6 +312,11 @@ LANGUAGE.worth_forum								= "Forum"
 LANGUAGE.worth_forumtooltip							= "Diese Schaltfläche führt nach voidresonance.com"
 LANGUAGE.worth_steam								= "Steam-Gruppe"
 LANGUAGE.worth_steamtooltip							= "Diese Schaltfläche führt zur Steam-Gruppe von Void Resonance."
+LANGUAGE.worth_savecart								= "Warenkorb speichern"
+LANGUAGE.worth_entername							= "Gib einen Namen für diesen Warenkorb ein."
+LANGUAGE.worth_name									= "Name"
+LANGUAGE.worth_ok									= "OK"
+LANGUAGE.worth_cancel								= "Abbrechen"
 
 -- Pointshop Menu
 
@@ -338,6 +343,7 @@ LANGUAGE.lose										= "Du hast verloren."
 LANGUAGE.humans_win									= "Die Menschen haben bis jetzt überlebt."
 LANGUAGE.zombies_win								= "Die Armee der Untoten wird immer stärker."
 LANGUAGE.mentions									= "Ehrenvolle Erwähnungen"
+LANGUAGE.end_profile								= "Klick hier, um das Steam-Community-Profil zu sehen."
 
 -- Shop Items (worth menu)
 
@@ -404,8 +410,12 @@ LANGUAGE.worth_surged								= "Surged"
 LANGUAGE.worth_surged2								= "Gibt der Laufgeschwindigkeit einen spürbaren Bonus."
 LANGUAGE.worth_handy								= "Handy"
 LANGUAGE.worth_handy2								= "Gibt einen 25%igen Bonus auf alle Reparaturraten."
+LANGUAGE.worth_engi									= "Engineer"
+LANGUAGE.worth_engi2								= "Gibt einen 50%igen Bonus auf alle Reparaturraten."
 LANGUAGE.worth_surgeon								= "Surgeon"
 LANGUAGE.worth_surgeon2								= "Erhöht die Rate, mit der du dich selbst und andere mit dem Medical Kit heilen kannst um 30%. Erhöht die Wirksamkeit der Medic Gun um 33%."
+LANGUAGE.worth_medicine								= "Medicine"
++LANGUAGE.worth_medicine2							= "Erhöht die Rate, mit der du dich selbst und andere mit dem Medical Kit heilen kannst um 50%. Erhöht die Wirksamkeit der Medic Gun um 53%."
 LANGUAGE.worth_resistant							= "Resistant"
 LANGUAGE.worth_resistant2							= "Du erleidest den halben Schaden durch Gift."
 LANGUAGE.worth_regen								= "Regenerative"
@@ -513,8 +523,8 @@ LANGUAGE.wn_sawhack									= "\"Sawhack\""
 LANGUAGE.wn_ticlemonster							= "The Tickle Monster"
 LANGUAGE.wn_waraxe									= "\"Waraxe\" Pistole"
 LANGUAGE.wn_zombielegs								= "Zombie Kung Fu"
-LANGUAGE.weapon_python								= "\"Python\" Magnum"
 LANGUAGE.weapon_katana								= "Katana"
+LANGUAGE.weapon_python								= "\"Python\" Magnum"
 
 -- Craft Weapons
 
@@ -757,6 +767,12 @@ LANGUAGE.ammo_pulse									= "Pulse Schüsse"
 LANGUAGE.pl_poison									= "VERGIFTUNG!"
 LANGUAGE.pl_bleed									= "BLUTUNG!"
 LANGUAGE.pl_ghtc									= "BÖSARTIGE BEHRÜHRUNG!"
+LANGUAGE.carrying_prop								= "Trägt"
+LANGUAGE.stay_from_zombie_spawns					= "Bleibe weg von den Zombie-Spawns!"
+LANGUAGE.invasion_in								= "Die Invasion beginnt in..."
+LANGUAGE.wave_intermission							= "Unterbrechung:"
+LANGUAGE.wave										= "Welle:"
+LANGUAGE.health										= "Leben:"
 
 -- Floating Score
 
@@ -774,3 +790,8 @@ LANGUAGE.fc_chomp									= "MAMPF!"
 -- Credits
 
 LANGUAGE.credits_credits							= "Zombie Survival Credits"
+
+-- Spray mon
+
+LANGUAGE.spray_spraycant							= "Du kannst dein Spray hier nicht platzieren."
+LANGUAGE.spray_sprayedby							= "Gesprüht von:"
