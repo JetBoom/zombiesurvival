@@ -23,6 +23,15 @@ GM.Credits = {
 	{"Box, ptown, Dr. Broly", "", "Spanish translation"}
 }
 
+GM.Credits2 = {
+	{"MrCraigTunstall", "http://steamcommunity.com/profiles/76561198059515155", "Project Leader"},
+	{"Dadido3", "http://steamcommunity.com/profiles/76561198005024048", "Assistant Programmer / German Translation"},
+	{"Nyanpasu", "http://steamcommunity.com/profiles/76561198158864042", "Issue Tracker / Russian Translation"},
+	{"ForrestMarkX", "http://steamcommunity.com/profiles/76561197997881512", "Spectate System"},
+
+}
+
+
 include("nixthelag.lua")
 include("buffthefps.lua")
 

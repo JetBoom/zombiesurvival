@@ -763,6 +763,7 @@ LANGUAGE.mm_color                                  = "Colors"
 LANGUAGE.mm_w_color                                = "Weapon color"
 LANGUAGE.mm_close                                  = "Close"
 LANGUAGE.mm_credits                                = "Credits"
+LANGUAGE.mm_credits2                                = "ZS:R Credits"
 LANGUAGE.mm_options                                = "Options"
 LANGUAGE.mm_pc                                     = "Player color"
 LANGUAGE.mm_pm                                     = "Player model"
@@ -828,6 +829,7 @@ LANGUAGE.options_weapon_hud_mode                    = "Weapon HUD display style"
 
 LANGUAGE.help_help                                  = "Help"
 LANGUAGE.help_credits                               = "Credits"
+LANGUAGE.help_credits2                               = "Zombie Survival : Redemption"
 
 -- Scoreboard (teams)
 

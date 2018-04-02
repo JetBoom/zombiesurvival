@@ -65,6 +65,57 @@ function MakepCredits()
 	frame:MakePopup()
 end
 
+function MakepCredits2()
+	PlayMenuOpenSound()
+
+	local wid = math.min(ScrW(), 900)
+
+	local y = 8
+
+	local frame = vgui.Create("DEXRoundedFrame")
+	frame:SetColorAlpha(230)
+	frame:SetWide(wid)
+	frame:SetTitle(" ")
+	frame:SetKeyboardInputEnabled(false)
+	frame.Paint = HelpMenuPaint
+
+	local label = EasyLabel(frame, translate.Get("help_credits2").."".." - "..translate.Get("help_credits"), "ZSHUDFontNS", color_white)
+	label:AlignTop(y)
+	label:CenterHorizontal()
+	y = y + label:GetTall() + 8
+
+	for authorindex, authortab in ipairs(GAMEMODE.Credits2) do
+		local lineleft = EasyLabel(frame, string.Replace(authortab[1], "@", "(at)"), "ZSHUDFontSmallestNS", color_white)
+		local linemid = EasyLabel(frame, "-", "ZSHUDFontSmallestNS", color_white)
+		local lineright = EasyLabel(frame, authortab[3], "ZSHUDFontSmallestNS", color_white)
+		local linesub
+		if authortab[2] then
+			linesub = EasyLabel(frame, authortab[2], "DefaultFont", color_white)
+		end
+
+		lineleft:AlignLeft(8)
+		lineleft:AlignTop(y)
+		lineright:AlignRight(8)
+		lineright:AlignTop(y)
+		linemid:CenterHorizontal()
+		linemid:AlignTop(y)
+
+		y = y + lineleft:GetTall()
+		if linesub then
+			linesub:AlignTop(y)
+			linesub:AlignLeft(8)
+			y = y + linesub:GetTall()
+		end
+		y = y + 10
+	end
+
+	frame:SetTall(y + 8)
+	frame:Center()
+	frame:SetAlpha(0)
+	frame:AlphaTo(255, 0.5, 0)
+	frame:MakePopup()
+end
+
 function MakepHelp()
 	PlayMenuOpenSound()
 
