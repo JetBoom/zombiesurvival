@@ -158,11 +158,9 @@ function GM:AddResources()
 	resource.AddFile( "materials/zombiesurvival/killicons/infernozombie.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/fast_legs.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/fast_legs.vmt" )
-
 	resource.AddFile( "materials/zombiesurvival/healthbar__human.vtf" )
 	resource.AddFile( "materials/zombiesurvival/healthbar__human.vmt" )
-
-
+	resource.AddFile( "materials/zombiesurvival/bandit.png" )
 
 	resource.AddFile("models/weapons/v_aegiskit.mdl")
 
@@ -237,6 +235,8 @@ function GM:AddResources()
 	resource.AddFile("sound/weapons/python/python2.wav")
 	resource.AddFile("sound/weapons/python/reload.wav")
 	resource.AddFile("sound/weapons/zs_scar/scar_fire1.ogg")
+	resource.AddFile("sound/zombiesurvival/redeem.mp3")
+
 	
 	resource.AddFile("materials/noxctf/sprite_bloodspray1.vmt")
 	resource.AddFile("materials/noxctf/sprite_bloodspray2.vmt")

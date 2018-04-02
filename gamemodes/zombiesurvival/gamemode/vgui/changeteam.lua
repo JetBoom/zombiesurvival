@@ -1,11 +1,7 @@
 function MakepRedeemMenu(silent)
  if frame then if ispanel(frame) then frame:Remove() end end
 
- 
-  --local MainMenu
-
 -- timer.Simple(3, function() surface.PlaySound("vo/npc/Barney/ba_hurryup.wav") end)
-
 
 	MainMenu = vgui.Create("DEXRoundedPanel")
 	MainMenu:SetCurve(false)
@@ -30,7 +26,7 @@ function MakepRedeemMenu(silent)
 	credittext:Dock(FILL)
 
 	banditImage = vgui.Create("DImage", myParent)
---  banditImage:SetImage( "zombiesurvival/bandit.png" )
+	banditImage:SetImage( "zombiesurvival/bandit.png" )
 	banditImage:Center()
 	banditImage:SetTall(40)
 	banditImage:SizeToContents()
@@ -61,7 +57,7 @@ function MakepRedeemMenu(silent)
     button.DoClick = function()
     MainMenu:Remove()
 	banditImage:Remove()
-	-- timer.Simple(20, function() surface.PlaySound("buttons/button10.wav") MainMenu:Remove() myImage:Remove() end)
+	timer.Simple(8, function() MainMenu:Remove() banditImage:Remove() end)
         end
 	MainMenu:MakePopup()
 end

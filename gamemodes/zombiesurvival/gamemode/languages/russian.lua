@@ -409,6 +409,37 @@ LANGUAGE.worth_name                                 = "Название"
 LANGUAGE.worth_ok                                   = "ОК"
 LANGUAGE.worth_cancel                               = "Отмена"
 
+-- Pointshop Menu
+
+LANGUAGE.all_sales                                  = "Скидки в конце каждой волны"
+LANGUAGE.the_pointshop                              = "Магазин"
+LANGUAGE.for_allapocalypse                          = "Всё что нужно в зомби апокалипсисе!"
+LANGUAGE.pts_tospend                                = "Очков"
+LANGUAGE.ars_discount                               = "скидка на покупки между волнами!"
+LANGUAGE.ars_tooltip                                = "Этот магазин вооружен QUIK - Anti-zombie backstab device.\nПереместите мышь за пределы магазина, чтобы быстро закрыть его!"
+LANGUAGE.ars_worth                                  = "Стартовый Магазин"
+LANGUAGE.ars_purchase                               = "Купить"
+LANGUAGE.ars_purchaseammo                           = "Купить амуницию"
+LANGUAGE.ars_pts                                    = "Очков"
+
+-- Ressuply Box
+
+LANGUAGE.res_box_ready                              = "Готов"
+LANGUAGE.res_box_seconds                            = "c"
+
+-- Message beacon
+
+LANGUAGE.msgbeacon_text                             = "Выберите сообщение"
+
+-- PendBoard (End Game)
+
+LANGUAGE.win                                        = "Вы победили!"
+LANGUAGE.lose                                       = "Вы проиграли."
+LANGUAGE.humans_win                                 = "Люди выжили... пока что."
+LANGUAGE.zombies_win                                = "Армия нежити становится сильнее."
+LANGUAGE.mentions                                   = "Почетные награды"
+LANGUAGE.end_profile                                = "Нажмите здесь, чтобы просмотреть его профиль в сообщесте Steam."
+
 -- Shop Items (worth menu) 
 
 --[[Some shop items that are part of the 
@@ -710,33 +741,6 @@ LANGUAGE.hm_nest_destroyer2                         = "%s, уничтожил %d
 LANGUAGE.hm_nest_master                             = "Мастер Гнезд"
 LANGUAGE.hm_nest_master2                            = "%s, построил %d гнезд."
 
--- Pointshop Menu
-
-LANGUAGE.all_sales                                  = "Скидки в конце каждой волны"
-LANGUAGE.the_pointshop                              = "Магазин"
-LANGUAGE.for_allapocalypse                          = "Всё что нужно в зомби апокалипсисе!"
-LANGUAGE.pts_tospend                                = "Очков"
-LANGUAGE.ars_discount                               = "скидка на покупки между волнами!"
-LANGUAGE.ars_tooltip                                = "Этот магазин вооружен QUIK - Anti-zombie backstab device.\nПереместите мышь за пределы магазина, чтобы быстро закрыть его!"
-LANGUAGE.ars_worth                                  = "Стартовый Магазин"
-LANGUAGE.ars_purchase                               = "Купить"
-LANGUAGE.ars_purchaseammo                           = "Купить амуницию"
-LANGUAGE.ars_pts                                    = "Очков"
-
--- Ressuply Box
-
-LANGUAGE.res_box_ready                              = "Готов"
-LANGUAGE.res_box_seconds                            = "c"
-
--- PendBoard (End Game)
-
-LANGUAGE.win                                        = "Вы победили!"
-LANGUAGE.lose                                       = "Вы проиграли."
-LANGUAGE.humans_win                                 = "Люди выжили... пока что."
-LANGUAGE.zombies_win                                = "Армия нежити становится сильнее."
-LANGUAGE.mentions                                   = "Почетные награды"
-LANGUAGE.end_profile                                = "Нажмите здесь, чтобы просмотреть его профиль в сообщесте Steam."
-
 -- Weapon Titles
 
 LANGUAGE.title_guns                                 = "Пушки"
@@ -755,6 +759,7 @@ LANGUAGE.mm_color                                  = "Цвета"
 LANGUAGE.mm_w_color                                = "Цвет оружия"
 LANGUAGE.mm_close                                  = "Закрыть"
 LANGUAGE.mm_credits                                = "Авторы"
+LANGUAGE.mm_credits2                               = "Авторы ZS:R"
 LANGUAGE.mm_options                                = "Настройки"
 LANGUAGE.mm_pc                                     = "Цвет игрока"
 LANGUAGE.mm_pm                                     = "Модель игрока"
@@ -819,6 +824,7 @@ LANGUAGE.options_weapon_hud_mode                    = "Вид отображен
 
 LANGUAGE.help_help                                  = "Помощь"
 LANGUAGE.help_credits                               = "Авторы"
+LANGUAGE.help_credits2                              = "Zombie Survival : Redemption"
 
 -- Scoreboard (teams)
 
@@ -837,7 +843,7 @@ LANGUAGE.alt_give                                   = "Дать"
 -- Ammo names
 
 LANGUAGE.ammo_pistol                                = "Пистолет"
-LANGUAGE.ammo_smg                                   = "Пистолет-Пулемет"
+LANGUAGE.ammo_smg                                   = "Пистолет-пулемет"
 LANGUAGE.ammo_rifle                                 = "Винтовка"
 LANGUAGE.ammo_bolts                                 = "Болты"            
 LANGUAGE.ammo_buckshots                             = "Картечь"

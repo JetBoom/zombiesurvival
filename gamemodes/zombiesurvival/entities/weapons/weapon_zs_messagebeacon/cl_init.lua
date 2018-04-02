@@ -47,7 +47,7 @@ function SWEP:SecondaryAttack()
 	Menu = vgui.Create("DFrame")
 	Menu:SetDeleteOnClose(false)
 	Menu:SetSize(200, 100)
-	Menu:SetTitle("Select a message")
+	Menu:SetTitle(translate.Get("msgbeacon_text"))
 	Menu:Center()
 	Menu.Choice = 1
 
@@ -61,7 +61,7 @@ function SWEP:SecondaryAttack()
 	choice:Center()
 	choice.OnSelect = onselect
 
-	local ok = EasyButton(Menu, "OK", 8, 4)
+	local ok = EasyButton(Menu, translate.Get("worth_ok").."", 8, 4)
 	ok:AlignBottom(8)
 	ok:CenterHorizontal()
 	ok.DoClick = okclick

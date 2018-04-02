@@ -4,10 +4,10 @@ SWEP.IsMelee = true
 SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")
 SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
 
-SWEP.MeleeDelay = 0.8
+SWEP.MeleeDelay = 0.74
 SWEP.MeleeReach = 65
 SWEP.MeleeSize = 2
-SWEP.MeleeDamage = 35
+SWEP.MeleeDamage = 30
 SWEP.MeleeForceScale = 1
 SWEP.MeleeDamageType = DMG_SLASH
 
@@ -17,7 +17,7 @@ SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
-SWEP.Primary.Delay = 1.5
+SWEP.Primary.Delay = 1.2
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1

@@ -435,6 +435,10 @@ LANGUAGE.ars_pts                                    = "Points"
 LANGUAGE.res_box_ready                              = "Ready"
 LANGUAGE.res_box_seconds                            = "s"
 
+-- Message beacon
+
+LANGUAGE.msgbeacon_text                             = "Select a message"
+
 -- PendBoard (End Game)
 
 LANGUAGE.win                                        = "You have won!"
