@@ -78,6 +78,7 @@ team.SetUp(TEAM_ZOMBIE, ""..translate.Get("team_zombie"), Color(255, 0, 0, 255))
 team.SetUp(TEAM_SURVIVORS, ""..translate.Get("team_humans"), Color(0, 160, 255, 255))
 team.SetUp(TEAM_REDEEMERS, "Redeemers", Color(255, 154, 0, 255))
 
+CVars = {}
 
 local validmodels = player_manager.AllValidModels()
 validmodels["tf01"] = nil
