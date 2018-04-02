@@ -716,7 +716,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 			end
 			
 			--Intro Song
-			if wavenumber >= 1 and OSTintro == 0 and not self.ZombieEscape then
+			if wavenumber >= 1 and OSTintro == 0 and MySelf:GetInfo("zs_intro") == "1" and not self.ZombieEscape then
 			if OSTintro == 0 then		
 			MySelf:EmitSound("zombiesurvival/intro.mp3", 50, 100, 0.5)
 			OSTintro = 1 -- So it doesn't repeat the track again.

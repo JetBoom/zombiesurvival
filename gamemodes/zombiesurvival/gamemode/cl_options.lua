@@ -34,6 +34,7 @@ end)
 CreateClientConVar("zs_noredeem", "0", true, true)
 CreateClientConVar("zs_alwaysvolunteer", "0", true, true)
 CreateClientConVar("zs_nobosspick", "0", true, true)
+CreateClientConVar("zs_intro", "1", true, true)
 
 GM.SuicideOnChangeClass = CreateClientConVar("zs_suicideonchange", "1", true, false):GetBool()
 cvars.AddChangeCallback("zs_suicideonchange", function(cvar, oldvalue, newvalue)

@@ -812,6 +812,7 @@ LANGUAGE.options_no_redeem                          = "Disable automatic redeemi
 LANGUAGE.options_always_volunteer                   = "Always volunteer to start as a zombie"
 LANGUAGE.options_no_boss_pick                       = "Prevent being picked as a boss zombie"
 LANGUAGE.options_suicide_on_change                  = "Automatic suicide when changing classes"
+LANGUAGE.options_intro_music                  		= "Enable intro music"
 LANGUAGE.options_music_volume                       = "Music volume"
 LANGUAGE.options_transparency_radius                = "Transparency radius"
 LANGUAGE.options_film_grain                         = "Film grain"

@@ -53,6 +53,12 @@ function MakepOptions()
 	list:AddItem(check)
 
 	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText(translate.Get("options_intro_music"))
+	check:SetConVar("zs_intro")
+	check:SizeToContents()
+	list:AddItem(check)
+	
+	local check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText(translate.Get("options_beats"))
 	check:SetConVar("zs_beats")
 	check:SizeToContents()
