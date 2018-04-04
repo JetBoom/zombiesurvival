@@ -756,7 +756,7 @@ function GM:Think()
 			pl:PointCashOut((pl.m_LastDamageDealtPosition or pl:GetPos()) + Vector(0, 0, 32), FM_NONE)
 		end
 	end
-end	
+end
 
 
 	if wave == 0 then
@@ -808,7 +808,7 @@ end
 function GM:CalculateZombieVolunteers()
 	local volunteers = {}
 	local allplayers = player.GetAllActive()
-	
+
 	self:SortZombieSpawnDistances(allplayers)
 	for i = 1, self:GetDesiredStartingZombies() do
 		volunteers[i] = allplayers[i]
@@ -839,7 +839,7 @@ function GM:CalculateNextBoss()
 			livingbosses = livingbosses + 1
 			if livingbosses >= 3 then return end
 		else
-			if ent:GetInfo("zs_nobosspick") == "0" then 
+			if ent:GetInfo("zs_nobosspick") == "0" then
 				table.insert(zombies, ent)
 			end
 		end
@@ -847,13 +847,13 @@ function GM:CalculateNextBoss()
 	table.sort(zombies, BossZombieSort)
 	local newboss = zombies[1]
 	local newbossclass = ""
-	
+
 	if newboss and newboss:IsValid() then newbossclass = GAMEMODE.ZombieClasses[newboss:GetBossZombieIndex()].Name end
 	net.Start("zs_nextboss")
 	net.WriteEntity(newboss)
 	net.WriteString(newbossclass)
 	net.Broadcast()
-	
+
 	return newboss
 end
 
@@ -947,18 +947,18 @@ function GM:LastHuman(pl)
 		for _, ent in pairs(ents.FindByClass("logic_infliction")) do
 			ent:Input("onlasthuman", pl, pl, pl and pl:IsValid() and pl:EntIndex() or -1)
 		end
-		
+
 		if #player.GetAll() <= 20 then
 		pl:Give("weapon_zs_suicidebomb")
 		end
-		
+
 		if #player.GetAll() >= 21 then
 		pl:Give("weapon_zs_boomstick")
 		pl:Give("weapon_zs_suicidebomb")
 		end
 
 		LASTHUMAN = true
-		
+
 	end
 
 	self.TheLastHuman = pl
@@ -1274,10 +1274,12 @@ function GM:InitPostEntityMap(fromze)
 	if self.ObjectiveMap then
 		self:SetDynamicSpawning(false)
 		self.BossZombies = false
+	else
+		gamemode.Call("CreateSigils")
 	end
 
 	--[[if not game.IsDedicated() then
-		gamemode.Call("CreateSigils")
+			gamemode.Call("CreateSigils")
 	end]]
 end
 
@@ -1362,7 +1364,7 @@ function GM:PlayerReadyRound(pl)
 
 	local classid = pl:GetZombieClass()
 	pl:SetZombieClass(classid, true, pl)
-	
+
 	if self.OverrideStartingWorth then
 		pl:SendLua("GAMEMODE.StartingWorth="..tostring(self.StartingWorth))
 	end
@@ -1540,7 +1542,7 @@ function GM:PlayerInitialSpawnRound(pl)
 		pl:PrintTranslatedMessage(HUD_PRINTTALK, "thanks_for_being_a_fan_of_zs")
 	end
 	--]]
-	
+
 	local prevspec = self.PreviouslySpec[pl:SteamID()]
 	if prevspec then
 		pl:ChangeTeam(TEAM_SPECTATOR)
@@ -3002,7 +3004,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 			pl.SurvivalTime = math.max(ct - pl.SpawnedTime, pl.SurvivalTime or 0)
 			pl.SpawnedTime = nil
 		end
-		
+
 		if team.NumPlayers(TEAM_HUMAN) + team.NumPlayers(TEAM_REDEEMER) <= 1 then
 			self.LastHumanPosition = pl:WorldSpaceCenter()
 
@@ -3222,7 +3224,7 @@ concommand.Add("zsgiveweaponclip", function(sender, command, arguments)
 	if GAMEMODE.ZombieEscape then return end
 
 	if not (sender:IsValid() and sender:Alive() and sender:Team() ~= TEAM_UNDEAD) then return end
-	
+
 	local currentwep = sender:GetActiveWeapon()
 	if currentwep and currentwep:IsValid() then
 		local ent
@@ -3431,7 +3433,7 @@ function GM:PlayerSpawn(pl)
 			pl:Give(table.Random(self.ZombieEscapeWeapons))
 		else
 			pl:Give("weapon_zs_fists")
-			
+
 			if self.StartingLoadout then
 				self:GiveStartingLoadout(pl)
 			elseif pl.m_PreRedeem then
@@ -3540,7 +3542,7 @@ function GM:WaveStateChanged(newstate)
 			-- We should spawn a crate in a random spawn point if no one has any.
 			if not self.ZombieEscape and #ents.FindByClass("prop_arsenalcrate") == 0 then
 				local have = false
-				for _, pl in pairs(humans) do	
+				for _, pl in pairs(humans) do
 					if pl:HasWeapon("weapon_zs_arsenalcrate") then
 						have = true
 						break
@@ -3758,7 +3760,7 @@ net.Receive("zs_spectate", function(len, ply)
 	if ply:Team() ~= TEAM_SPECTATOR then
 		ply:PrintMessage(HUD_PRINTTALK, "You are now a Spectator.")
 		index = TEAM_SPECTATOR
-		
+
 		GAMEMODE.PreviouslyDied[ply:SteamID()] = CurTime()
 
 		if ply:Team() == TEAM_HUMAN then
@@ -3781,7 +3783,7 @@ net.Receive("zs_spectate", function(len, ply)
 	end
 
 	ply:ChangeTeam(index)
-	
+
 	if index == TEAM_SPECTATOR then
 		ply:Spectate(OBS_MODE_ROAMING)
 		GAMEMODE.PreviouslySpec[ply:SteamID()] = CurTime()
@@ -3789,7 +3791,7 @@ net.Receive("zs_spectate", function(len, ply)
 		if index == TEAM_UNDEAD and not GAMEMODE:GetWaveActive() then
 			return
 		end
-		
+
 		ply:UnSpectateAndSpawn()
 	end
 end)
