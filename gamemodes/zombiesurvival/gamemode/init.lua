@@ -947,8 +947,18 @@ function GM:LastHuman(pl)
 		for _, ent in pairs(ents.FindByClass("logic_infliction")) do
 			ent:Input("onlasthuman", pl, pl, pl and pl:IsValid() and pl:EntIndex() or -1)
 		end
+		
+		if #player.GetAll() <= 20 then
+		pl:Give("weapon_zs_suicidebomb")
+		end
+		
+		if #player.GetAll() >= 21 then
+		pl:Give("weapon_zs_boomstick")
+		pl:Give("weapon_zs_suicidebomb")
+		end
 
 		LASTHUMAN = true
+		
 	end
 
 	self.TheLastHuman = pl
