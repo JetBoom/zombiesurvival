@@ -6,7 +6,7 @@ The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
-Current Version - Stable 5 "Beats System" - https://github.com/MrCraigTunstall/zombiesurvival/releases
+Current Version - Stable 6 "S̶e̶a̶g̶u̶l̶l̶s̶ Sigils System" - https://github.com/MrCraigTunstall/zombiesurvival/releases
 Here is the current list of updates, fixes and additional features:
 
 - Basic Redeem System.
@@ -30,6 +30,15 @@ Here is the current list of updates, fixes and additional features:
 - Disabled MouthMoveAnimation.
 - Bandits Flash on the Scoreboard.
 - New Beats.
+- Create Sigils when it's not an objective map.
+- Zombie gas now give non-boss zombies health.
+- Added Last Human Weapons.
+- Zombie Escape Fixes & Zombie Escape Beta Healthbars.
+- Added Hidden PvP Zombie Class.
+- Added Second Credits Tab.
+- Improved Class Select menu.
+- More & Updated Translations.
+- Added New Bosses.
 
 
  ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
