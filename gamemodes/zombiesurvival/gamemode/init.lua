@@ -1277,10 +1277,6 @@ function GM:InitPostEntityMap(fromze)
 	else
 		gamemode.Call("CreateSigils")
 	end
-
-	--[[if not game.IsDedicated() then
-			gamemode.Call("CreateSigils")
-	end]]
 end
 
 local function EndRoundPlayerShouldTakeDamage(pl, attacker) return pl:Team() == TEAM_UNDEAD or not attacker:IsPlayer() end
