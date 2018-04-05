@@ -47,7 +47,7 @@ a bandit (which can help or kill humans) or change back into a human.
 
 ## Credits
 
-Created and programmed by William "JetBoom" Moodhe!
+Created and programmed by William "JetBoom" Moodhe.
 
 ### Contact:
 - E-mail | williammoodhe@gmail.com
