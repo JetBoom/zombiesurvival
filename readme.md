@@ -1,13 +1,19 @@
-THIS IS AN EXPERIMENTAL MODIFICATION OF THE ORIGINAL ZOMBIE SURVIVAL BY JETBOOM.
+# Zombie Survival Redemption
 
-Over the years I kept on getting countless requests to rebuild and bring 
-back to what was known as the "Bandit System". 
-The bandit system is where upon redeeming the client is greeted 
+## Info
+
+This is an experimental modification of the original Zombie Survival gamemode for Garry's Mod by JetBoom.
+
+## About
+
+Over the years I kept on getting countless requests to rebuild and bring
+back to what was known as the "Bandit System".
+The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
 Current Version - Stable 6 "S̶e̶a̶g̶u̶l̶l̶s̶ Sigils System" - https://github.com/MrCraigTunstall/zombiesurvival/releases
-Here is the current list of updates, fixes and additional features:
+## Current Features
 
 - Basic Redeem System.
 - Complete Russian & German Language Translation.
@@ -40,14 +46,7 @@ Here is the current list of updates, fixes and additional features:
 - More & Updated Translations.
 - Added New Bosses.
 
-
- ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-ZZZ                                  ZZZ
-ZZZ          ZOMBIE SURVIVAL         ZZZ
-ZZZ THE DEFINITIVE ZOMBIE EXPERIENCE ZZZ
-ZZZ        A GAMEMODE FOR GMOD       ZZZ
-ZZZ                                  ZZZ
- ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+## Credits
 
 Created and programmed by        William "JetBoom" Moodhe
 E-mail:                          williammoodhe@gmail.com
@@ -62,23 +61,14 @@ Ambient beat sounds              Austin "Little Nemo" Killey (austin_odyssey@yah
 Melee weapon models              Zombie Panic: Source (http://www.zombiepanic.org/)
 Board Kit model                  Samuel (samuel_games@hotmail.com)
 
-
- ZZZZZZZZZZZZZZZZZZZZZZZZZ
-ZZ                       ZZ
-ZZ        INSTALL        ZZ
-ZZ                       ZZ
- ZZZZZZZZZZZZZZZZZZZZZZZZZ
+## Installing Zombie Survival
 
 1. Put the zombiesurvival folder in garrysmod/gamemodes with all the other gamemode folders.
 2. In console: gamemode zombiesurvival
 3. Run a zs_ map.
 
 
- ZZZZZZZZZZZZZZZZZZZZZZZZZ
-ZZ                       ZZ
-ZZ    RUNNING SERVERS    ZZ
-ZZ                       ZZ
- ZZZZZZZZZZZZZZZZZZZZZZZZZ
+## Running Zombie Survival on a server
 
 1. Get srcds and configure it for garrysmod (requires steamcmd).
 2. Put the zombiesurvival folder in garrysmod/gamemodes with all the other gamemode folders.
@@ -88,11 +78,6 @@ ZZ                       ZZ
 srcds.exe -port 27015 -console -game garrysmod -secure +ip 24.102.103.104 +hostport 27015 +gamemode zombiesurvival +maxplayers 32 +map zs_oldhouse +hostname "Your ZS Server"
 6. Run it. You now have a server. See other guides on the web for setting up sv_downloadurl.
 
-
- ZZZZZZZZZZZZZZZZZZZZZZZZ
-ZZ                       ZZ
-ZZ      LEGAL JARGON     ZZ
-ZZ                       ZZ
- ZZZZZZZZZZZZZZZZZZZZZZZZZ
+## License
 
 See license file
