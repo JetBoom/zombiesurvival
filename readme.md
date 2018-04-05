@@ -10,8 +10,10 @@ The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
-Current Version - Stable 6 "S̶e̶a̶g̶u̶l̶l̶s̶ Sigils System" - https://github.com/MrCraigTunstall/zombiesurvival/releases
-## Current Features
+## Current Version
+Releases: https://github.com/MrCraigTunstall/zombiesurvival/releases
+
+###### Version 6: Sigil System
 
 - Basic Redeem System.
 - Complete Russian & German Language Translation.
@@ -48,12 +50,12 @@ Current Version - Stable 6 "S̶e̶a̶g̶u̶l̶l̶s̶ Sigils System" - https://gi
 
 Created and programmed by William "JetBoom" Moodhe.
 
-#### Contact:
+### Contact:
 - E-mail | williammoodhe@gmail.com
 - Alternate e-mail | jetboom@noxiousnet.com
 - Web | http://www.noxiousnet.com
 
-#### Additional credits:
+### Additional credits:
 - Zombie view models:
  - 11k | tjd113@gmail.com
 - Zombie kill icons:
