@@ -81,12 +81,12 @@ Created and programmed by William "JetBoom" Moodhe!
 1. Get srcds and configure it for garrysmod (requires steamcmd).
 2. Put the zombiesurvival folder in garrysmod/gamemodes with all the other gamemode folders.
 3. Get some maps! Zombie Survival maps are plentiful on the Internet and the game also supports many other map types: Counter Strike: Source, Zombie Mod, Zombie Horde, Zombie Panic! Source.
-4. Either setup a custom voting script or use mapcycle_zombiesurvival.txt. Make a file called mapcycle_zombiesurvival.txt in base garrysmod folder! Put in names of maps without the .bsp ending. One per line!
-5. Make your auto-start batch file or whatever you use. The line should look like this.
+4. Either setup a custom voting script or use mapcycle_zombiesurvival.txt. Make a file called mapcycle_zombiesurvival.txt in base garrysmod folder! Put in names of maps without the .bsp ending. One per line.
+5. Make your auto-start batch file or whatever you use. The line should look like this:
 ```
 srcds.exe -port 27015 -console -game garrysmod -secure +ip 24.102.103.104 +hostport 27015 +gamemode zombiesurvival +maxplayers 32 +map zs_oldhouse +hostname "Your ZS Server"
 ```
-6. Run it! You now have a server! See other guides on the web for setting up sv_downloadurl!
+6. Run it! You now have a server! See other guides on the web for setting up sv_downloadurl.
 
 ## License
 
