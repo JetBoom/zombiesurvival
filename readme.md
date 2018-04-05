@@ -1,7 +1,5 @@
 # Zombie Survival Redemption
 
-## Info
-
 This is an experimental modification of the original Zombie Survival gamemode for Garry's Mod by JetBoom.
 
 ## About
@@ -48,18 +46,26 @@ Current Version - Stable 6 "S̶e̶a̶g̶u̶l̶l̶s̶ Sigils System" - https://gi
 
 ## Credits
 
-Created and programmed by        William "JetBoom" Moodhe
-E-mail:                          williammoodhe@gmail.com
-Alternate e-mail:                jetboom@noxiousnet.com
-Web:                             http://www.noxiousnet.com
+Created and programmed by William "JetBoom" Moodhe.
 
-Additional credits:
-Zombie view models               11k (tjd113@gmail.com)
-Zombie kill icons                Eisiger (k2deseve@gmail.com)
-Some HUD textures                Typhon (lukas-tinel@hotmail.com)
-Ambient beat sounds              Austin "Little Nemo" Killey (austin_odyssey@yahoo.com)
-Melee weapon models              Zombie Panic: Source (http://www.zombiepanic.org/)
-Board Kit model                  Samuel (samuel_games@hotmail.com)
+#### Contact:
+- E-mail | williammoodhe@gmail.com
+- Alternate e-mail | jetboom@noxiousnet.com
+- Web | http://www.noxiousnet.com
+
+#### Additional credits:
+- Zombie view models:
+ - 11k | tjd113@gmail.com
+- Zombie kill icons:
+ - Eisiger | k2deseve@gmail.com
+- Some HUD textures:
+ - Typhon | lukas-tinel@hotmail.com
+- Ambient beat sounds:
+ - Austin "Little Nemo" Killey | austin_odyssey@yahoo.com
+- Melee weapon models:
+ - Zombie Panic: Source | http://www.zombiepanic.org/
+- Board Kit model:
+ - Samuel | samuel_games@hotmail.com
 
 ## Installing Zombie Survival
 
