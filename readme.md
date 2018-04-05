@@ -2,6 +2,10 @@
 
 This is an experimental modification of the original Zombie Survival gamemode for Garry's Mod by JetBoom.
 
+## Info
+
+Releases: https://github.com/MrCraigTunstall/zombiesurvival/releases
+
 ## About
 
 Over the years I kept on getting countless requests to rebuild and bring
@@ -10,10 +14,9 @@ The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
-## Current Version
-Releases: https://github.com/MrCraigTunstall/zombiesurvival/releases
+## Current Features:
 
-#### Version 6 - Sigil System:
+### Version 6 - Sigil System:
 
 - Basic Redeem System.
 - Complete Russian & German Language Translation.
