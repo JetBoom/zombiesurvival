@@ -2,10 +2,6 @@
 
 This is an experimental modification of the original Zombie Survival gamemode for Garry's Mod by JetBoom.
 
-## Info
-
-Releases: https://github.com/MrCraigTunstall/zombiesurvival/releases
-
 ## About
 
 Over the years I kept on getting countless requests to rebuild and bring
@@ -14,7 +10,7 @@ The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
-## Current Features:
+## Current Features
 
 ### Version 6 - Sigil System:
 
@@ -59,18 +55,19 @@ Created and programmed by William "JetBoom" Moodhe.
 - Web | http://www.noxiousnet.com
 
 ### Additional credits:
+
 - Zombie view models:
- - 11k | tjd113@gmail.com
+  - 11k | tjd113@gmail.com
 - Zombie kill icons:
- - Eisiger | k2deseve@gmail.com
+  - Eisiger | k2deseve@gmail.com
 - Some HUD textures:
- - Typhon | lukas-tinel@hotmail.com
+  - Typhon | lukas-tinel@hotmail.com
 - Ambient beat sounds:
- - Austin "Little Nemo" Killey | austin_odyssey@yahoo.com
+  - Austin "Little Nemo" Killey | austin_odyssey@yahoo.com
 - Melee weapon models:
- - Zombie Panic: Source | http://www.zombiepanic.org/
+  - Zombie Panic: Source | http://www.zombiepanic.org/
 - Board Kit model:
- - Samuel | samuel_games@hotmail.com
+  - Samuel | samuel_games@hotmail.com
 
 ## Installing Zombie Survival
 
