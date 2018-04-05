@@ -1,8 +1,8 @@
 THIS IS AN EXPERIMENTAL MODIFICATION OF THE ORIGINAL ZOMBIE SURVIVAL BY JETBOOM.
 
-Over the years I kept on getting countless requests to rebuild and bring 
-back to what was known as the "Bandit System". 
-The bandit system is where upon redeeming the client is greeted 
+Over the years I kept on getting countless requests to rebuild and bring
+back to what was known as the "Bandit System".
+The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
