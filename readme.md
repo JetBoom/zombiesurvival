@@ -13,7 +13,7 @@ a bandit (which can help or kill humans) or change back into a human.
 ## Current Version
 Releases: https://github.com/MrCraigTunstall/zombiesurvival/releases
 
-###### Version 6: Sigil System
+#### Version 6 - Sigil System:
 
 - Basic Redeem System.
 - Complete Russian & German Language Translation.
