@@ -6,7 +6,7 @@ include("shared.lua")
 function ENT:Initialize()
 	self:DrawShadow(false)
 
-	self:SetModel("models/props_wasteland/medbridge_post01.mdl")
+	self:SetModel("models/d3/other/concrete_obelisc/concrete_obelisc.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
 
