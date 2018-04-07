@@ -26,11 +26,7 @@ function ENT:Think()
 			local sat = perc * 90
 
 			if pos == nil then return end
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 			local emitter = ParticleEmitter(pos)
 			emitter:SetNearClip(16, 24)
 
