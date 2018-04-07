@@ -5,7 +5,7 @@ include("shared.lua")
 --models/props_wasteland/antlionhill.mdl
 function ENT:Initialize()
 	self:DrawShadow(false)
-	
+
 	self:SetModel("models/d3/other/concrete_obelisc/concrete_obelisc.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
@@ -36,6 +36,7 @@ function ENT:Use(activator, caller)
 				caller:SetPos(ent:GetPos())
 				caller:SetBarricadeGhosting(true)
 				break
+			end
 		end
 		i = i + 1
 	end
