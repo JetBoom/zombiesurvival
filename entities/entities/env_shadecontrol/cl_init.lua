@@ -4,7 +4,7 @@ function ENT:Initialize()
 	self:DrawShadow(false)
 	self:SetModelScale(1.03, 0)
 
-	self.AmbientSound = CreateSound(self, ")weapons/physcannon/superphys_hold_loop.wav")
+	self.AmbientSound = CreateSound(self, "weapons/physcannon/superphys_hold_loop.wav")
 	self.AmbientSound:PlayEx(0.5, 60)
 
 	self:GetOwner().ShadeControl = self

@@ -70,9 +70,9 @@ function DrawSigilHint(hint, pos, delta, scale, color)
 	ang:RotateAroundAxis(ang:Up(), 90)
 
 	cam.IgnoreZ(true)
-	cam.Start3D2D(pos, ang, (scale or 1) * math.max(250, eyepos:Distance(pos)) * delta * 0.0005)
+	cam.Start3D2D(pos, ang, (scale or 1) * math.max(250, eyepos:Distance(pos)) * delta * 0.0004)
 
-	draw.SimpleText(hint, "ZS3D2DFont2Small", 0, 64, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+	draw.SimpleText(hint, "ZS3D2DFont", 0, 64, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 
 	surface.SetMaterial(matSigil)
 	surface.SetDrawColor(color)

@@ -239,8 +239,8 @@ function GM:AddResources()
 	resource.AddFile("sound/weapons/python/reload.wav")
 	resource.AddFile("sound/weapons/zs_scar/scar_fire1.ogg")
 	resource.AddFile("sound/zombiesurvival/redeem.mp3")
+	resource.AddFile("sound/zombiesurvival/sigil_loop.wav")
 
-	
 	resource.AddFile("materials/noxctf/sprite_bloodspray1.vmt")
 	resource.AddFile("materials/noxctf/sprite_bloodspray2.vmt")
 	resource.AddFile("materials/noxctf/sprite_bloodspray3.vmt")
@@ -249,7 +249,7 @@ function GM:AddResources()
 	resource.AddFile("materials/noxctf/sprite_bloodspray6.vmt")
 	resource.AddFile("materials/noxctf/sprite_bloodspray7.vmt")
 	resource.AddFile("materials/noxctf/sprite_bloodspray8.vmt")
-	
+
 	resource.AddFile( "materials/d3/models/other/concrete_obelisc/512_diffuse.vtf" )
 	resource.AddFile( "materials/d3/models/other/concrete_obelisc/512_normal.vtf" )
 	resource.AddFile( "materials/d3/models/other/concrete_obelisc/material.vmt" )

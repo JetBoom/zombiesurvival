@@ -28,26 +28,42 @@ function ENT:Use(activator, caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
 
+	local i=0
 	if IsValid(caller) and caller:IsPlayer() then
-		local i=0
 		for _, ent in pairs(sigils) do
-			local nextSigil = util.IncreaseLetter(currentSigil)
-			if nextSigil == ent:GetSigilLetter() then
-				caller:SetPos(ent:GetPos())
+			local sigilIndex = 0
+			local nextSigilIndex = 0
+			if currentSigil == ent:GetSigilLetter() then
+				sigilIndex = _
+				nextSigilIndex = sigilIndex + 1
+			end
+			if sigils[nextSigilIndex] ~= nil then
+				caller:SetPos(sigils[nextSigilIndex]:GetPos())
 				caller:SetBarricadeGhosting(true)
-				break
+				self:EmitSound("friends/message.wav")
+				sigils[nextSigilIndex]:EmitSound("friends/friend_online.wav")
+			else
+				if nextSigilIndex ~= 0 then
+					caller:SetPos(sigils[1]:GetPos())
+					caller:SetBarricadeGhosting(true)
+					self:EmitSound("friends/message.wav")
+					sigils[1]:EmitSound("friends/friend_join.wav")
+				end
 			end
+
+			--local nextSigil = util.IncreaseLetter(currentSigil)
+			--if nextSigil == ent:GetSigilLetter() then
+			--	caller:SetPos(ent:GetPos())
+			--	caller:SetBarricadeGhosting(true)
+			--	ent:EmitSound("friends/friend_online.wav")
+			--	break
+			--end
+			--i = i + 1
 		end
-		i = i + 1
 	end
-	if i == #sigils then
-		for _, ent in pairs(sigils) do
-			if ent:GetSigilLetter() == "A" then
-				caller:SetPos(ent:GetPos())
-				caller:SetBarricadeGhosting()
-			end
-		end
-	end
+	--if i == #sigils then
+	--
+	--end
 end
 
 function ENT:OnTakeDamage(dmginfo)

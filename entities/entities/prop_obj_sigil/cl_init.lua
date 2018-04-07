@@ -13,14 +13,14 @@ function ENT:Initialize()
 
 	self:SetModelScaleVector(Vector(1, 1, 1) * self.ModelScale)
 
-	self.AmbientSound = CreateSound(self, "ambient/atmosphere/tunnel1.wav")
+	self.AmbientSound = CreateSound(self, "zombiesurvival/sigil_loop.wav")
 
 	hook.Add("PostDrawTranslucentRenderables", "DrawSigilHints", DrawSigilHints)
 end
 
 function ENT:Think()
 	if EyePos():Distance(self:GetPos()) <= 700 then
-		self.AmbientSound:PlayEx(0.33, 75 + (self:GetSigilHealth() / self:GetSigilMaxHealth()) * 25)
+		self.AmbientSound:PlayEx(0.6, 75 + (self:GetSigilHealth() / self:GetSigilMaxHealth()) * 25)
 	else
 		self.AmbientSound:Stop()
 	end
@@ -46,15 +46,15 @@ function ENT:DrawTranslucent()
 
 	local curtime = CurTime()
 	local sat = math.abs(math.sin(curtime))
-	local colsat = sat * 0.125 --0.125
+	local colsat = sat * 0.125
 	local eyepos = EyePos()
 	local eyeangles = EyeAngles()
-	local forwardoffset = self:GetForward() * 9
-	local rightoffset = self:GetRight() * 9
+	local forwardoffset = self:GetForward() * 8
+	local rightoffset = self:GetRight() * 8
 	local healthperc = self:GetSigilHealth() / self:GetSigilMaxHealth()
-	local r, g, b = 0.15 + colsat, 0.4 + colsat, 1 --0.15 0.4 1
-	local radius = 180 + math.cos(sat) * 40 --180 40
-	local whiteradius = 122 + math.sin(sat) * 32 --122 32
+	local r, g, b = 0.15 + colsat, 0.4 + colsat, 1
+	local radius = 180 + math.cos(sat) * 40
+	local whiteradius = 122 + math.sin(sat) * 32
 	local up = self:GetUp()
 	local spritepos = self:GetPos() + up
 	local spritepos2 = self:WorldSpaceCenter()
