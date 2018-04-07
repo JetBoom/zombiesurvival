@@ -1,0 +1,7 @@
+"vertexlitgeneric"
+{
+	"$model" 1
+	
+	"$baseTexture" "d3/models/other/concrete_obelisc/512_diffuse"
+	"$bumpmap" "d3/models/other/concrete_obelisc/512_normal"
+}
