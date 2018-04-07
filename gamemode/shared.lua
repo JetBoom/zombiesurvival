@@ -25,6 +25,7 @@ GM.Credits = {
 
 GM.Credits2 = {
 	{"MrCraigTunstall", "http://steamcommunity.com/profiles/76561198059515155", "Project Leader"},
+	{"Flairieve", "http://steamcommunity.com/profiles/76561198055782802", "Programmer / Contributor"},
 	{"Dadido3", "http://steamcommunity.com/profiles/76561198005024048", "Assistant Programmer / German Translation"},
 	{"Nyanpasu", "http://steamcommunity.com/profiles/76561198158864042", "Issue Tracker / Russian Translation"},
 	{"ForrestMarkX", "http://steamcommunity.com/profiles/76561197997881512", "Spectate System"},
@@ -487,8 +488,8 @@ function GM:CanPlaceNail(pl, tr)
 end
 
 function GM:CanRemoveNail(pl, nail)
-	if nail.m_NailUnremovable then 
-		return false 
+	if nail.m_NailUnremovable then
+		return false
 	else
 		return true
 	end

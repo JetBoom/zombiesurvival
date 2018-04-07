@@ -39,6 +39,8 @@ function GM:CreateSigils()
 		nodes[#nodes + 1] = {v = vec}
 	end
 
+	local NextSigilLetter = "A"
+
 	local spawns = team.GetSpawnPoint(TEAM_UNDEAD)
 	for i=1, self.MaxSigils do
 		local id
@@ -75,6 +77,8 @@ function GM:CreateSigils()
 		if ent:IsValid() then
 			ent:SetPos(point)
 			ent:Spawn()
+			ent:SetSigilLetter(NextSigilLetter)
+			NextSigilLetter = util.IncreaseLetter(NextSigilLetter)
 			ent.NodePos = point
 		end
 	end

@@ -121,6 +121,16 @@ function string.AndSeparate(list)
 	return table.concat(list, ", ", 1, length - 1)..", "..translate.Get("classes_and").." "..list[length]
 end
 
+function util.IncreaseLetter(letter)
+	local alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+	local index = alphabet:find(letter)
+	if index then
+		index = (index % #alphabet) + 1
+		return alphabet:sub(index, index)
+	end
+end
+
 function util.SkewedDistance(a, b, skew)
 	if a.z > b.z then
 		return math.sqrt((b.x - a.x) ^ 2 + (b.y - a.y) ^ 2 + ((a.z - b.z) * skew) ^ 2)
@@ -157,7 +167,7 @@ end
 
 function util.FindValidInSphere(pos, radius)
 	local ret = {}
-	
+
 	for _, ent in pairs(util.FindInSphere(pos, radius)) do
 		if ent and ent:IsValid() then
 			ret[#ret + 1] = ent

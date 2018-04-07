@@ -24,6 +24,48 @@ end
 function ENT:Think()
 end
 
+function ENT:Use(activator, caller)
+	local currentSigil = self:GetSigilLetter()
+	local sigils = ents.FindByClass("prop_obj_sigil")
+
+	local i=0
+	if IsValid(caller) and caller:IsPlayer() then
+		for _, ent in pairs(sigils) do
+			local sigilIndex = 0
+			local nextSigilIndex = 0
+			if currentSigil == ent:GetSigilLetter() then
+				sigilIndex = _
+				nextSigilIndex = sigilIndex + 1
+			end
+			if sigils[nextSigilIndex] ~= nil then
+				caller:SetPos(sigils[nextSigilIndex]:GetPos())
+				caller:SetBarricadeGhosting(true)
+				self:EmitSound("friends/message.wav")
+				sigils[nextSigilIndex]:EmitSound("friends/friend_online.wav")
+			else
+				if nextSigilIndex ~= 0 then
+					caller:SetPos(sigils[1]:GetPos())
+					caller:SetBarricadeGhosting(true)
+					self:EmitSound("friends/message.wav")
+					sigils[1]:EmitSound("friends/friend_join.wav")
+				end
+			end
+
+			--local nextSigil = util.IncreaseLetter(currentSigil)
+			--if nextSigil == ent:GetSigilLetter() then
+			--	caller:SetPos(ent:GetPos())
+			--	caller:SetBarricadeGhosting(true)
+			--	ent:EmitSound("friends/friend_online.wav")
+			--	break
+			--end
+			--i = i + 1
+		end
+	end
+	--if i == #sigils then
+	--
+	--end
+end
+
 function ENT:OnTakeDamage(dmginfo)
 	if self:GetSigilHealth() <= 0 then return end
 
@@ -45,7 +87,7 @@ end
 
 function ENT:Destroy()
 	local effectdata = EffectData()
-		effectdata:SetOrigin(self:LocalToWorld(self:OBBCenter()))
+	effectdata:SetOrigin(self:LocalToWorld(self:OBBCenter()))
 	util.Effect("Explosion", effectdata, true, true)
 
 	self:Fire("kill", "", 0.01)
