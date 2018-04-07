@@ -2,7 +2,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
---models/props_wasteland/antlionhill.mdl
+
 function ENT:Initialize()
 	self:DrawShadow(false)
 
@@ -28,7 +28,6 @@ function ENT:Use(activator, caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
 
-	local i=0
 	if IsValid(caller) and caller:IsPlayer() then
 		for _, ent in pairs(sigils) do
 			local sigilIndex = 0
@@ -50,20 +49,8 @@ function ENT:Use(activator, caller)
 					sigils[1]:EmitSound("friends/friend_join.wav")
 				end
 			end
-
-			--local nextSigil = util.IncreaseLetter(currentSigil)
-			--if nextSigil == ent:GetSigilLetter() then
-			--	caller:SetPos(ent:GetPos())
-			--	caller:SetBarricadeGhosting(true)
-			--	ent:EmitSound("friends/friend_online.wav")
-			--	break
-			--end
-			--i = i + 1
 		end
 	end
-	--if i == #sigils then
-	--
-	--end
 end
 
 function ENT:OnTakeDamage(dmginfo)
