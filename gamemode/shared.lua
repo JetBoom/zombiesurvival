@@ -29,7 +29,6 @@ GM.Credits2 = {
 	{"Dadido3", "http://steamcommunity.com/profiles/76561198005024048", "Assistant Programmer / German Translation"},
 	{"Nyanpasu", "http://steamcommunity.com/profiles/76561198158864042", "Issue Tracker / Russian Translation"},
 	{"ForrestMarkX", "http://steamcommunity.com/profiles/76561197997881512", "Spectate System"},
-
 }
 
 
