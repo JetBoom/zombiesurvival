@@ -121,6 +121,7 @@ function string.AndSeparate(list)
 	return table.concat(list, ", ", 1, length - 1)..", "..translate.Get("classes_and").." "..list[length]
 end
 
+<<<<<<< HEAD
 local function IsValidPhysicsObject( physobj )
 
 	return ( TypeID( physobj ) == TYPE_PHYSOBJ ) and physobj:IsValid()
@@ -157,6 +158,8 @@ function util.ResizePhysics( ent, scale )
     return IsValidPhysicsObject( ent:GetPhysicsObject() )
 end
 
+=======
+>>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 function util.IncreaseLetter(letter)
 	local alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 

@@ -19,7 +19,11 @@ function ENT:GetSigilLetter()
 end
 
 function ENT:SetSigilLetter(letter)
+<<<<<<< HEAD
   self:SetNWString("SigilLetter", letter)
+=======
+	self:SetNWString("SigilLetter", letter)
+>>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 end
 
 function ENT:SetSigilHealth(health)

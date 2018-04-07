@@ -33,6 +33,7 @@ end
 function ENT:Use(activator, caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
+<<<<<<< HEAD
 	if IsValid(caller) and caller:IsPlayer() then
 
 											local i=0
@@ -53,6 +54,27 @@ function ENT:Use(activator, caller)
 													end
 												end
 											end
+=======
+
+	if IsValid(caller) and caller:IsPlayer() then
+		local i=0
+		for _, ent in pairs(sigils) do
+			local nextSigil = util.IncreaseLetter(currentSigil)
+			if nextSigil == ent:GetSigilLetter() then
+				caller:SetPos(ent:GetPos())
+				caller:SetBarricadeGhosting(true)
+				break
+		end
+		i = i + 1
+	end
+	if i == #sigils then
+		for _, ent in pairs(sigils) do
+			if ent:GetSigilLetter() == "A" then
+				caller:SetPos(ent:GetPos())
+				caller:SetBarricadeGhosting()
+			end
+		end
+>>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 	end
 end
 

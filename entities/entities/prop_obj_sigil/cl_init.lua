@@ -31,8 +31,11 @@ function ENT:OnRemove()
 end
 
 function ENT:DrawWorldHint()
+<<<<<<< HEAD
 	--DrawWorldHint(math.ceil(self:GetSigilHealth()), self:GetPos(), nil, 0.75)
 	--DrawWorldHint(letter, self:GetPos() + Vector(0, 0, 45), nil, 0.75)
+=======
+>>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 	DrawSigilHint(self:GetSigilLetter(), self:GetPos() + Vector(0, 0, 45), nil, 0.75, self:GetColor())
 end
 
@@ -51,8 +54,13 @@ function ENT:DrawTranslucent()
 	local colsat = sat * 0.125 --0.125
 	local eyepos = EyePos()
 	local eyeangles = EyeAngles()
+<<<<<<< HEAD
 	local forwardoffset = self:GetForward() * 9 --16
 	local rightoffset = self:GetRight() * 9 --16
+=======
+	local forwardoffset = self:GetForward() * 9
+	local rightoffset = self:GetRight() * 9
+>>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 	local healthperc = self:GetSigilHealth() / self:GetSigilMaxHealth()
 	local r, g, b = 0.15 + colsat, 0.4 + colsat, 1 --0.15 0.4 1
 	local radius = 180 + math.cos(sat) * 40 --180 40

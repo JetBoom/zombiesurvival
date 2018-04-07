@@ -58,6 +58,7 @@ function DrawWorldHint(hint, pos, delta, scale)
 	cam.End3D2D()
 	cam.IgnoreZ(false)
 end
+<<<<<<< HEAD
 function DrawSigilHint(hint, pos, delta, scale, color)
 	local eyepos = EyePos()
 	--print(color.r, color.g, color.b, color.a)
@@ -66,6 +67,15 @@ function DrawSigilHint(hint, pos, delta, scale, color)
 
 	--colFG.a = math.min(220, delta * 220)
 
+=======
+
+local matSigil = Material("zombiesurvival/sigil.png")
+function DrawSigilHint(hint, pos, delta, scale, color)
+	local eyepos = EyePos()
+
+	delta = delta or 1
+
+>>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 	local ang = (eyepos - pos):Angle()
 	ang:RotateAroundAxis(ang:Right(), 270)
 	ang:RotateAroundAxis(ang:Up(), 90)
@@ -73,6 +83,7 @@ function DrawSigilHint(hint, pos, delta, scale, color)
 	cam.IgnoreZ(true)
 	cam.Start3D2D(pos, ang, (scale or 1) * math.max(250, eyepos:Distance(pos)) * delta * 0.0005)
 
+<<<<<<< HEAD
 	draw.SimpleText("!", "zshintfont", 0, 0, colFG, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	draw.SimpleText(hint, "ZS3D2DFont2Small", 0, 64, colFG, TEXT_ALIGN_CENTER)
 
@@ -84,6 +95,13 @@ function DrawSigilHint(hint, pos, delta, scale, color)
 		--surface.DrawTexturedRectRotated(0, 0, 128 + pulse, 128 + pulse, 0)
 		surface.DrawTexturedRectRotated(0, 0, 64, 128, 0)
 	--end
+=======
+	draw.SimpleText(hint, "ZS3D2DFont2Small", 0, 64, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+
+	surface.SetMaterial(matSigil)
+	surface.SetDrawColor(color)
+	surface.DrawTexturedRectRotated(0, 0, 64, 128, 0)
+>>>>>>> c1f1b0965650df52d3dc0318c871937b72872edc
 
 	cam.End3D2D()
 	cam.IgnoreZ(false)
