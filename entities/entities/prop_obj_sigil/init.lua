@@ -24,6 +24,31 @@ end
 function ENT:Think()
 end
 
+function ENT:Use(activator, caller)
+	local currentSigil = self:GetSigilLetter()
+	local sigils = ents.FindByClass("prop_obj_sigil")
+
+	if IsValid(caller) and caller:IsPlayer() then
+		local i=0
+		for _, ent in pairs(sigils) do
+			local nextSigil = util.IncreaseLetter(currentSigil)
+			if nextSigil == ent:GetSigilLetter() then
+				caller:SetPos(ent:GetPos())
+				caller:SetBarricadeGhosting(true)
+				break
+		end
+		i = i + 1
+	end
+	if i == #sigils then
+		for _, ent in pairs(sigils) do
+			if ent:GetSigilLetter() == "A" then
+				caller:SetPos(ent:GetPos())
+				caller:SetBarricadeGhosting()
+			end
+		end
+	end
+end
+
 function ENT:OnTakeDamage(dmginfo)
 	if self:GetSigilHealth() <= 0 then return end
 

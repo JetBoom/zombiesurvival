@@ -14,6 +14,14 @@ AccessorFuncDT(ENT, "SigilHealthBase", "Float", 0)
 AccessorFuncDT(ENT, "SigilHealthRegen", "Float", 1)
 AccessorFuncDT(ENT, "SigilLastDamaged", "Float", 2)
 
+function ENT:GetSigilLetter()
+	return self:GetNWString("SigilLetter")
+end
+
+function ENT:SetSigilLetter(letter)
+	self:SetNWString("SigilLetter", letter)
+end
+
 function ENT:SetSigilHealth(health)
 	self:SetSigilHealthBase(health)
 

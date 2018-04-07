@@ -55,6 +55,29 @@ function DrawWorldHint(hint, pos, delta, scale)
 	cam.End3D2D()
 	cam.IgnoreZ(false)
 end
+
+local matSigil = Material("zombiesurvival/sigil.png")
+function DrawSigilHint(hint, pos, delta, scale, color)
+	local eyepos = EyePos()
+
+	delta = delta or 1
+
+	local ang = (eyepos - pos):Angle()
+	ang:RotateAroundAxis(ang:Right(), 270)
+	ang:RotateAroundAxis(ang:Up(), 90)
+
+	cam.IgnoreZ(true)
+	cam.Start3D2D(pos, ang, (scale or 1) * math.max(250, eyepos:Distance(pos)) * delta * 0.0005)
+
+	draw.SimpleText(hint, "ZS3D2DFont2Small", 0, 64, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+
+	surface.SetMaterial(matSigil)
+	surface.SetDrawColor(color)
+	surface.DrawTexturedRectRotated(0, 0, 64, 128, 0)
+
+	cam.End3D2D()
+	cam.IgnoreZ(false)
+end
 local DrawWorldHint = DrawWorldHint
 
 function GM:DrawWorldHints()
