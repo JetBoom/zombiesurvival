@@ -121,6 +121,52 @@ function string.AndSeparate(list)
 	return table.concat(list, ", ", 1, length - 1)..", "..translate.Get("classes_and").." "..list[length]
 end
 
+local function IsValidPhysicsObject( physobj )
+
+	return ( TypeID( physobj ) == TYPE_PHYSOBJ ) and physobj:IsValid()
+
+end
+
+function util.ResizePhysics( ent, scale )
+
+    ent:PhysicsInit( SOLID_VPHYSICS )
+
+    local physobj = ent:GetPhysicsObject()
+
+    if ( not IsValidPhysicsObject( physobj ) ) then return false end
+
+    local physmesh = physobj:GetMeshConvexes()
+		print(table.ToString(physmesh, "Mesh", true))
+
+    if ( not istable( physmesh ) ) or ( #physmesh < 1 ) then return false end
+
+    for convexkey, convex in pairs( physmesh ) do
+
+        for poskey, postab in pairs( convex ) do
+
+          	convex[ poskey ] = postab.pos * scale
+
+        end
+
+    end
+
+    ent:PhysicsInitMultiConvex( physmesh )
+
+    ent:EnableCustomCollisions( true )
+
+    return IsValidPhysicsObject( ent:GetPhysicsObject() )
+end
+
+function util.IncreaseLetter(letter)
+	local alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+	local index = alphabet:find(letter)
+	if index then
+		index = (index % #alphabet) + 1
+		return alphabet:sub(index, index)
+	end
+end
+
 function util.SkewedDistance(a, b, skew)
 	if a.z > b.z then
 		return math.sqrt((b.x - a.x) ^ 2 + (b.y - a.y) ^ 2 + ((a.z - b.z) * skew) ^ 2)
@@ -157,7 +203,7 @@ end
 
 function util.FindValidInSphere(pos, radius)
 	local ret = {}
-	
+
 	for _, ent in pairs(util.FindInSphere(pos, radius)) do
 		if ent and ent:IsValid() then
 			ret[#ret + 1] = ent

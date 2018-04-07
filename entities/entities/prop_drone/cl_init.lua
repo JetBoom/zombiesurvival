@@ -25,6 +25,8 @@ function ENT:Think()
 
 			local sat = perc * 90
 
+			if pos == nil then return end
+			
 			local emitter = ParticleEmitter(pos)
 			emitter:SetNearClip(16, 24)
 
@@ -107,7 +109,7 @@ function ENT:DrawTranslucent()
 		local LightPos = epos + LightNrm * 5
 
 		render.SetMaterial(matLight)
-		local Visibile	= util.PixelVisible( LightPos, 16, self.PixVis )	
+		local Visibile	= util.PixelVisible( LightPos, 16, self.PixVis )
 
 		if not Visibile then return end
 

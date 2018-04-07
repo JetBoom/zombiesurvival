@@ -31,7 +31,9 @@ function ENT:OnRemove()
 end
 
 function ENT:DrawWorldHint()
-	DrawWorldHint(math.ceil(self:GetSigilHealth()), self:GetPos(), nil, 0.75)
+	--DrawWorldHint(math.ceil(self:GetSigilHealth()), self:GetPos(), nil, 0.75)
+	--DrawWorldHint(letter, self:GetPos() + Vector(0, 0, 45), nil, 0.75)
+	DrawSigilHint(self:GetSigilLetter(), self:GetPos() + Vector(0, 0, 45), nil, 0.75, self:GetColor())
 end
 
 ENT.NextEmit = 0
@@ -46,15 +48,15 @@ function ENT:DrawTranslucent()
 
 	local curtime = CurTime()
 	local sat = math.abs(math.sin(curtime))
-	local colsat = sat * 0.125
+	local colsat = sat * 0.125 --0.125
 	local eyepos = EyePos()
 	local eyeangles = EyeAngles()
-	local forwardoffset = self:GetForward() * 16
-	local rightoffset = self:GetRight() * 16
+	local forwardoffset = self:GetForward() * 9 --16
+	local rightoffset = self:GetRight() * 9 --16
 	local healthperc = self:GetSigilHealth() / self:GetSigilMaxHealth()
-	local r, g, b = 0.15 + colsat, 0.4 + colsat, 1
-	local radius = 180 + math.cos(sat) * 40
-	local whiteradius = 122 + math.sin(sat) * 32
+	local r, g, b = 0.15 + colsat, 0.4 + colsat, 1 --0.15 0.4 1
+	local radius = 180 + math.cos(sat) * 40 --180 40
+	local whiteradius = 122 + math.sin(sat) * 32 --122 32
 	local up = self:GetUp()
 	local spritepos = self:GetPos() + up
 	local spritepos2 = self:WorldSpaceCenter()
@@ -79,7 +81,7 @@ function ENT:DrawTranslucent()
 	self:DrawModel()
 
 	render.SetColorModulation(r, g, b)
-	
+
 	render.ModelMaterialOverride(matWhite)
 	render.SetBlend(0.1 * healthperc)
 
