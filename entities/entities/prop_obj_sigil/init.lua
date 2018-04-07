@@ -5,16 +5,10 @@ include("shared.lua")
 --models/props_wasteland/antlionhill.mdl
 function ENT:Initialize()
 	self:DrawShadow(false)
-	self:SetModel("models/props_wasteland/medbridge_post01.mdl")
-	util.ResizePhysics(self, 0.55)
-	--self:SetModelScale(self:GetModelScale(), 0)
-	--self:PhysicsInitBox(Vector(-1, -1, -1), Vector(1, 1, 48))
-	--self:PhysicsInit(SOLID_VPHYSICS)
-	--self:SetSolid(SOLID_BBOX)
+	
+	self:SetModel("models/d3/other/concrete_obelisc/concrete_obelisc.mdl")
+	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
-	self:SetMoveType(MOVETYPE_NONE)
-
-	--self:SetCollisionBounds(Vector(-0, -0, -0), Vector(0, 0, 48))
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
@@ -76,7 +70,7 @@ end
 
 function ENT:Destroy()
 	local effectdata = EffectData()
-		effectdata:SetOrigin(self:LocalToWorld(self:OBBCenter()))
+	effectdata:SetOrigin(self:LocalToWorld(self:OBBCenter()))
 	util.Effect("Explosion", effectdata, true, true)
 
 	self:Fire("kill", "", 0.01)
