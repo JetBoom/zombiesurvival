@@ -161,6 +161,9 @@ function GM:AddResources()
 	resource.AddFile( "materials/zombiesurvival/healthbar__human.vtf" )
 	resource.AddFile( "materials/zombiesurvival/healthbar__human.vmt" )
 	resource.AddFile( "materials/zombiesurvival/bandit.png" )
+	resource.AddFile( "materials/zombiesurvival/sigil.png" )
+	resource.AddFile( "materials/zombiesurvival/sigil_fragment.vtf" )
+	resource.AddFile( "materials/zombiesurvival/sigil_fragment.vmt" )
 
 	resource.AddFile("models/weapons/v_aegiskit.mdl")
 
