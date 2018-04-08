@@ -378,6 +378,40 @@ function GM:InitPostEntity()
 	end
 end
 
+function GM:SpawnRandomProps()
+	local propCount = #ents.FindByClass("prop_physics*")
+	if propCount < 10 then
+			for _, ent in pairs(ents.FindByClass("prop_obj_sigil")) do
+				for i=1, 8 do
+					local range = 50
+
+					local randompos = {
+						Vector(range, 0, 0),
+						Vector(-range, 0, 0),
+						Vector(0, range, 0),
+						Vector(0, -range, 0)
+					}
+
+					local randommodel = {
+						"models/props_junk/wood_crate001a.mdl",
+						"models/props_junk/wood_crate002a.mdl",
+						"models/props_c17/oildrum001.mdl",
+						"models/props_wasteland/kitchen_shelf001a.mdl",
+						"models/props_wasteland/kitchen_shelf002a.mdl",
+					}
+
+					local pos = ent:GetPos() + randompos[math.random(#randompos)]
+
+					local prop = ents.Create("prop_physics")
+					prop:SetModel(randommodel[math.random(#randommodel)])
+
+					prop:SetPos(pos)
+					prop:Spawn()
+				end
+			end
+	end
+end
+
 function GM:SetupProps()
 	for _, ent in pairs(ents.FindByClass("prop_physics*")) do
 		local mdl = ent:GetModel()
@@ -1276,6 +1310,7 @@ function GM:InitPostEntityMap(fromze)
 		self.BossZombies = false
 	else
 		gamemode.Call("CreateSigils")
+		gamemode.Call("SpawnRandomProps")
 	end
 end
 
