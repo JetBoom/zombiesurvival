@@ -29,24 +29,26 @@ function ENT:Use(activator, caller)
 	local sigils = ents.FindByClass("prop_obj_sigil")
 
 	if IsValid(caller) and caller:IsPlayer() then
-		for _, ent in pairs(sigils) do
-			local sigilIndex = 0
-			local nextSigilIndex = 0
-			if currentSigil == ent:GetSigilLetter() then
-				sigilIndex = _
-				nextSigilIndex = sigilIndex + 1
-			end
-			if sigils[nextSigilIndex] ~= nil then
-				caller:SetPos(sigils[nextSigilIndex]:GetPos())
-				caller:SetBarricadeGhosting(true)
-				self:EmitSound("friends/message.wav")
-				sigils[nextSigilIndex]:EmitSound("friends/friend_online.wav")
-			else
-				if nextSigilIndex ~= 0 then
-					caller:SetPos(sigils[1]:GetPos())
+		if caller:Team() ~= TEAM_UNDEAD then
+			for _, ent in pairs(sigils) do
+				local sigilIndex = 0
+				local nextSigilIndex = 0
+				if currentSigil == ent:GetSigilLetter() then
+					sigilIndex = _
+					nextSigilIndex = sigilIndex + 1
+				end
+				if sigils[nextSigilIndex] ~= nil then
+					caller:SetPos(sigils[nextSigilIndex]:GetPos())
 					caller:SetBarricadeGhosting(true)
 					self:EmitSound("friends/message.wav")
-					sigils[1]:EmitSound("friends/friend_join.wav")
+					sigils[nextSigilIndex]:EmitSound("friends/friend_online.wav")
+				else
+					if nextSigilIndex ~= 0 then
+						caller:SetPos(sigils[1]:GetPos())
+						caller:SetBarricadeGhosting(true)
+						self:EmitSound("friends/message.wav")
+						sigils[1]:EmitSound("friends/friend_join.wav")
+					end
 				end
 			end
 		end
