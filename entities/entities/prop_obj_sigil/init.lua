@@ -28,7 +28,7 @@ function ENT:Use(activator, caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
 
-	if IsValid(caller) and caller:IsPlayer() then
+	if IsValid(caller) and caller:IsPlayer() and caller:Team() == TEAM_HUMAN then
 		for _, ent in pairs(sigils) do
 			local sigilIndex = 0
 			local nextSigilIndex = 0
