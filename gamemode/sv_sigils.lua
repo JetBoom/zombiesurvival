@@ -80,10 +80,45 @@ function GM:CreateSigils()
 			ent:SetSigilLetter(NextSigilLetter)
 			NextSigilLetter = util.IncreaseLetter(NextSigilLetter)
 			ent.NodePos = point
+
+			local propCount = #ents.FindByClass("prop_physics*")
+			--TODO: Check for global gamemode variable if map has point_spawnrandomprop
+			if propCount < 10 then
+				SpawnRandomSigilProps(point)
+			end
 		end
 	end
 
 	self:SetUseSigils(#ents.FindByClass("prop_obj_sigil") > 0)
+end
+
+local function SpawnRandomSigilProps(pos)
+	for i=1, 8 do
+		local range = 50
+
+		local randompos = {
+			Vector(range, 0, 0),
+			Vector(-range, 0, 0),
+			Vector(0, range, 0),
+			Vector(0, -range, 0)
+		}
+
+		local randommodel = {
+			"models/props_junk/wood_crate001a.mdl",
+			"models/props_junk/wood_crate002a.mdl",
+			"models/props_c17/oildrum001.mdl",
+			"models/props_wasteland/kitchen_shelf001a.mdl",
+			"models/props_wasteland/kitchen_shelf002a.mdl"
+		}
+
+		local proppos = pos + randompos[math.random(#randompos)]
+
+		local prop = ents.Create("prop_physics")
+		prop:SetModel(randommodel[math.random(#randommodel)])
+
+		prop:SetPos(pos)
+		prop:Spawn()
+	end
 end
 
 function GM:SetUseSigils(use)
