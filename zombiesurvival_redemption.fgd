@@ -1,0 +1,22 @@
+//////////////////////////////////
+//Zombie Survival Redemption FGD//
+//////////////////////////////////
+
+@include "base.fgd"
+@include "halflife2.fgd"
+@include "hl2mp.fgd"
+
+@PointClass base(Targetname) = info_zsr_options : "ZSR: Allows you to configure map options."
+[
+  spawnsigilprops(choices) : "Spawn Sigil Props" : 1 : "Spawns random props around sigils." =
+    [
+      1: "Yes"
+      0: "No"
+    ]
+  sigilamount(integer) : "Sigil Amount" : 3 : "Amount of sigils to be spawned in. Change it to zero to disable sigil spawning."
+]
+
+@PointClass base(Targetname) = point_spawnrandomprop : "ZSR: Spawns in a random prop once the entity is called."
+[
+  input SpawnRandomProp(void) : "Spawns in a random prop."
+]
