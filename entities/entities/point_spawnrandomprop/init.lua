@@ -8,7 +8,6 @@ function ENT:AcceptInput(name, activator, caller, args)
 end
 
 function ENT:SpawnRandomProp()
-  --TODO: Allow the server owner to define what props to use in the mapping entity.
   local randommodel = GAMEMODE.RandomProps
 
   local prop = ents.Create("prop_physics")
