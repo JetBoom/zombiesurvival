@@ -1,3 +1,5 @@
+GM.SpawnSigilProps = true
+
 function GM:OnSigilDestroyed(ent, dmginfo)
 	local numsigils = self:NumSigils()
 	if numsigils > 0 then
@@ -30,6 +32,8 @@ function GM:CreateSigils()
 		self:SetUseSigils(false)
 		return
 	end
+
+	local propCount = #ents.FindByClass("prop_physics*")
 
 	-- Copy
 	local nodes = {}
@@ -81,10 +85,10 @@ function GM:CreateSigils()
 			NextSigilLetter = util.IncreaseLetter(NextSigilLetter)
 			ent.NodePos = point
 
-			local propCount = #ents.FindByClass("prop_physics*")
-			--TODO: Check for global gamemode variable if map has point_spawnrandomprop
-			if propCount < 10 then
-				SpawnRandomSigilProps(point)
+			if propCount < 10 or GAMEMODE.SpawnSigilProps == true then
+				if GAMEMODE.SpawnSigilProps ~= false then
+					gamemode.Call("SpawnRandomSigilProps", point)
+				end
 			end
 		end
 	end
@@ -92,9 +96,9 @@ function GM:CreateSigils()
 	self:SetUseSigils(#ents.FindByClass("prop_obj_sigil") > 0)
 end
 
-local function SpawnRandomSigilProps(pos)
+function GM:SpawnRandomSigilProps(pos)
 	for i=1, 8 do
-		local range = 50
+		local range = 80
 
 		local randompos = {
 			Vector(range, 0, 0),
@@ -107,11 +111,10 @@ local function SpawnRandomSigilProps(pos)
 			"models/props_junk/wood_crate001a.mdl",
 			"models/props_junk/wood_crate002a.mdl",
 			"models/props_c17/oildrum001.mdl",
-			"models/props_wasteland/kitchen_shelf001a.mdl",
 			"models/props_wasteland/kitchen_shelf002a.mdl"
 		}
 
-		local proppos = pos + randompos[math.random(#randompos)]
+		pos = pos + randompos[math.random(#randompos)]
 
 		local prop = ents.Create("prop_physics")
 		prop:SetModel(randommodel[math.random(#randommodel)])
