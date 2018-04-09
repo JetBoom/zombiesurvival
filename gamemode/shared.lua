@@ -24,11 +24,13 @@ GM.Credits = {
 }
 
 GM.Credits2 = {
-	{"MrCraigTunstall", "http://steamcommunity.com/profiles/76561198059515155", "Project Leader"},
-	{"Flairieve", "http://steamcommunity.com/profiles/76561198055782802", "Programmer / Contributor"},
-	{"Dadido3", "http://steamcommunity.com/profiles/76561198005024048", "Assistant Programmer / German Translation"},
-	{"Nyanpasu", "http://steamcommunity.com/profiles/76561198158864042", "Issue Tracker / Russian Translation"},
-	{"ForrestMarkX", "http://steamcommunity.com/profiles/76561197997881512", "Spectate System"},
+	{"MrCraigTunstall", "https://steamcommunity.com/profiles/76561198059515155", "Project Leader"},
+	{"Flairieve", "https://steamcommunity.com/profiles/76561198055782802", "Programmer / Contributor"},
+	{"Dadido3", "https://steamcommunity.com/profiles/76561198005024048", "Assistant Programmer / German Translation"},
+	{"Nyanpasu", "https://steamcommunity.com/profiles/76561198158864042", "Issue Tracker / Russian Translation"},
+	{"ForrestMarkX", "https://steamcommunity.com/profiles/76561197997881512", "Spectate System"},
+	{"Sulfito", "https://steamcommunity.com/profiles/76561198026081830", "Spanish Translation"},
+
 }
 
 
