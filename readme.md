@@ -55,6 +55,8 @@ a bandit (which can help or kill humans) or change back into a human.
   - Nyanpasu | https://steamcommunity.com/profiles/76561198158864042
 - Spectate System:
   - ForrestMarkX | https://steamcommunity.com/profiles/76561197997881512
+- Spanish Translation:
+  - Sulfito | https://steamcommunity.com/profiles/76561198026081830
 
 ## Original Credits
 
