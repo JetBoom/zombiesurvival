@@ -15,11 +15,11 @@ a bandit (which can help or kill humans) or change back into a human.
 ### Version 6 - Sigil System:
 
 - Basic Bandit Redeem System.
-- Complete Russian & German language translation.
+- Complete Russian, German & Spanish language translation.
 - Spectator support with the option in the F1 menu.
 - Altered how dropped deployable items work.
-- Improved worth, in-game pointshop and zombie class menus.
-- Balanced weapon and items.
+- Improved worth, in-game pointshop & zombie class menus.
+- Balanced weapon & items.
 - HD Texture icons.
 - Healthbars on resupply & arsenal crates.
 - Human & bandit third person.
@@ -40,7 +40,7 @@ a bandit (which can help or kill humans) or change back into a human.
 - Hidden PvP zombie class.
 - Second credits tab in the F1 menu.
 - New zombie bosses.
-- Custom Sigil support.
+- Custom Sigil with mapper support.
 
 
 ## Zombie Survival Redemption Credits
