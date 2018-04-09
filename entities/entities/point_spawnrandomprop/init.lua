@@ -8,12 +8,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 end
 
 function ENT:SpawnRandomProp()
-  local randommodel = {
-    "models/props_junk/wood_crate001a.mdl",
-    "models/props_junk/wood_crate002a.mdl",
-    "models/props_c17/oildrum001.mdl",
-    "models/props_wasteland/kitchen_shelf002a.mdl"
-  }
+  local randommodel = GAMEMODE.RandomProps
 
   local prop = ents.Create("prop_physics")
   prop:SetModel(randommodel[math.random(#randommodel)])

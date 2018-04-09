@@ -12,11 +12,17 @@ GM.StartLoadouts = {
 	{"blstr", "pipe", "2sgcp", "3sgcp", "5spd", "10spd"}
 }
 
+GM.RandomProps = {
+	"models/props_junk/wood_crate001a.mdl",
+	"models/props_junk/wood_crate002a.mdl",
+	"models/props_c17/oildrum001.mdl",
+	"models/props_wasteland/kitchen_shelf002a.mdl"
+}
+
 GM.RedeemMode = CreateConVar("zs_redeemmode", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enables the bandit redeem system, 1 to enable, 0 to disable. Enabled by default."):GetBool()
 cvars.AddChangeCallback("zs_redeemmode", function(cvar, oldvalue, newvalue)
 	GAMEMODE:SetRedeemMode(tonumber(newvalue) == 1)
 end)
-
 
 GM.BossZombies = CreateConVar("zs_bosszombies", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Summon a boss zombie in the middle of each wave break."):GetBool()
 cvars.AddChangeCallback("zs_bosszombies", function(cvar, oldvalue, newvalue)

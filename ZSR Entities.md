@@ -1,6 +1,6 @@
 # Zombie Survival Redemption Entities
 
-Zombie Survival Redemption also has it's own set of custom entities for map makers to use!
+Zombie Survival Redemption has it's own set of custom entities for map makers to use!
 
 ## Information
 

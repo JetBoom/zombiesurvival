@@ -403,6 +403,7 @@ function GM:Move(pl, move)
 end
 
 function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
+	if GAMEMODE.ZombieEscape then return true end
 	if inwater then return true end
 
 	local isundead = pl:Team() == TEAM_UNDEAD
