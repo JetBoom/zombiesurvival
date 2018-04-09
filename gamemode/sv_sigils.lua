@@ -107,12 +107,7 @@ function GM:SpawnRandomSigilProps(pos)
 			Vector(0, -range, 0)
 		}
 
-		local randommodel = {
-			"models/props_junk/wood_crate001a.mdl",
-			"models/props_junk/wood_crate002a.mdl",
-			"models/props_c17/oildrum001.mdl",
-			"models/props_wasteland/kitchen_shelf002a.mdl"
-		}
+		local randommodel = GAMEMODE.RandomProps
 
 		pos = pos + randompos[math.random(#randompos)]
 
