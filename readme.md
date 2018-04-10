@@ -22,7 +22,7 @@ These need to be done before any other feature gets added in!
   - [ ] Weapon Stuff!
   - [ ] Sigil Stuff!
   - [ ] Other Stuff!
-- [ ] Move the random prop spawner for sigils to it's own file or just as an addon as it does not belong in that file!
+- [ ] Move the random prop spawner code for sigils (as in the props that are coming out the sigils) to it's own file or just as an addon as it does not belong in that file!
 - [ ] Move the progress bars such as the packup progress bar back into their status files!
 - [ ] Update the sigils!
   - [ ] Replace the timer with CurTime!
