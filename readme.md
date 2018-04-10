@@ -1,6 +1,6 @@
 # Zombie Survival Redemption
 
-This is an experimental modification of the original Zombie Survival gamemode for Garry's Mod by JetBoom!
+This is an experimental modification of the original Zombie Survival gamemode for Garry's Mod by JetBoom.
 
 ## About
 
@@ -14,38 +14,51 @@ a bandit (which can help or kill humans) or change back into a human.
 
 ### Version 6 - Sigil System:
 
-- Basic Redeem System.
-- Complete Russian & German Language Translation.
-- Spectator system with the option in the F1 menu.
+- Basic Bandit Redeem System.
+- Complete Russian, German & Spanish language translation.
+- Spectator support with the option in the F1 menu.
 - Altered how dropped deployable items work.
-- Worth & in-game pointshop are now bigger.
-- Re-balance weapon and item pricing.
+- Improved worth, in-game pointshop & zombie class menus.
+- Balanced weapon & items.
 - HD Texture icons.
-- Healthbars on Resupply & Arsenal Crates.
-- Humans and Bandits can use third person.
-- Zombie Class Menu now has the Boss Button centered and is much bigger.
+- Healthbars on resupply & arsenal crates.
+- Human & bandit third person.
 - Fixed when another server alters the waves logic.
-- Built-in Spray Detector.
-- Discount Prices are shown during wave intermissions.
+- Built-in spray detector.
+- Discount prices in pointshop menu during wave intermissions.
 - Fixed an point exploit with skycade props.
-- Improved Zombie Class Unlock Infliction Percentage.
-- Melee weapons no longer "water splash".
+- Improved zombie class unlock infliction percentage.
+- No Melee weapon "water splash".
 - Fixed prop holding position with doors.
-- Improved Healthbar FPS.
+- Improved healthbar FPS.
 - Disabled MouthMoveAnimation.
-- Bandits Flash on the Scoreboard.
+- Bandits flash on the scoreboard.
 - New Beats.
-- Create Sigils when it's not an objective map.
-- Zombie gas now give non-boss zombies health.
-- Added Last Human Weapons.
-- Zombie Escape Fixes & Zombie Escape Beta Healthbars.
-- Added Hidden PvP Zombie Class.
-- Added Second Credits Tab.
-- Improved Class Select menu.
-- More & Updated Translations.
-- Added New Bosses.
+- Zombie gas give non-boss zombies health.
+- Last Human Weapon support.
+- Zombie Escape fixes & boss entity healthbar support.
+- Hidden PvP zombie class.
+- Second credits tab in the F1 menu.
+- New zombie bosses.
+- Custom Sigil with mapper support.
 
-## Credits
+
+## Zombie Survival Redemption Credits
+
+- Project Leader:
+  - MrCraigTunstall | https://steamcommunity.com/profiles/76561198059515155
+- Programmer / Contributor:
+  - Flairieve | https://steamcommunity.com/profiles/76561198055782802
+- Assistant Programmer / German Translation:
+  - Dadido3 | https://steamcommunity.com/profiles/76561198005024048
+- Issue Tracker / Russian Translation:
+  - Nyanpasu | https://steamcommunity.com/profiles/76561198158864042
+- Spectate System:
+  - ForrestMarkX | https://steamcommunity.com/profiles/76561197997881512
+- Spanish Translation:
+  - Sulfito | https://steamcommunity.com/profiles/76561198026081830
+
+## Original Credits
 
 Created and programmed by William "JetBoom" Moodhe.
 
@@ -84,10 +97,10 @@ Created and programmed by William "JetBoom" Moodhe.
 4. Either setup a custom voting script or use mapcycle_zombiesurvival.txt. Make a file called mapcycle_zombiesurvival.txt in base garrysmod folder! Put in names of maps without the .bsp ending. One per line.
 5. Make your auto-start batch file or whatever you use. The line should look like this:
 ```
-srcds.exe -port 27015 -console -game garrysmod -secure +ip 24.102.103.104 +hostport 27015 +gamemode zombiesurvival +maxplayers 32 +map zs_oldhouse +hostname "Your ZS Server"
+srcds.exe -port 27015 -console -game garrysmod -secure +ip 185.38.148.139 +hostport 27015 +gamemode zombiesurvival +maxplayers 32 +map gm_construct +hostname "Your ZS Server"
 ```
 6. Run it! You now have a server! See other guides on the web for setting up sv_downloadurl.
 
 ## License
 
-See the license file!
+See the license file.
