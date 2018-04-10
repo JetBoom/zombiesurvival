@@ -1,3 +1,5 @@
+--TODO: Move this global variable to sv_sigilpropspawner!
+--TODO: Also rename this variable to GM.SigilSpawnRandomProps!
 GM.SpawnSigilProps = true
 
 function GM:OnSigilDestroyed(ent, dmginfo)
@@ -96,6 +98,7 @@ function GM:CreateSigils()
 	self:SetUseSigils(#ents.FindByClass("prop_obj_sigil") > 0)
 end
 
+--TODO: Move this to sv_sigilpropspawner!
 function GM:SpawnRandomSigilProps(pos)
 	for i=1, 8 do
 		local range = 80
