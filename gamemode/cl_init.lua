@@ -649,9 +649,9 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 
 	draw.SimpleText(translate.Get("health"), "ZSHUDFontSmall", x + screenscale * 70, y + screenscale * 55, COLOR_GRAY, TEXT_ALIGN_LEFT)
 	draw.SimpleText(health, "ZSHUDFont", x + screenscale * 180, y + screenscale * 48, colHealth, TEXT_ALIGN_LEFT)
-	
+
 	local w, h = ScrW(), ScrH() -- Get Screen Size of local player
-	
+
 	--Points
 	if MySelf:Team() ~= TEAM_UNDEAD then
 		draw_SimpleText(translate.Format("points_x", MySelf:GetPoints().." / "..MySelf:Frags().." / "..MySelf:GetPoints().." + "), "ZSHUDFontSmallNS",  x + screenscale * 70, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_LEFT)
@@ -661,15 +661,15 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 	end
 
 	local wavenumber = GAMEMODE:GetWave()
-	
+
 	if wavenumber > 0 and wavenumber < 7 then --show wave count when wave 1 starts hide the wave count after 6 rounds
 		draw_SimpleText(wavenumber, "ZSHUDFontSmallNS", x + screenscale * 475, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_CENTER)
 		draw_SimpleText(translate.Get("wave"), "ZSHUDFontSmallNS", x + screenscale * 430, y + screenscale * 133, COLOR_GRAY, TEXT_ALIGN_CENTER)
 	end
-	
+
 	--Intermission Checker Because people are thick yolo
 	if wavenumber > 0 and wavenumber < 7 and not GAMEMODE:GetWaveActive() then
-	
+
 	local col
 	local timeleft = math.max(0, GAMEMODE:GetWaveStart() - CurTime())
 	if timeleft < 10 then
@@ -683,12 +683,12 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 	if wavestart ~= -1 then
 		local timeleft = math.max(0, wavestart - CurTime())
 	end
-		
+
 	draw_SimpleText(translate.Get("wave_intermission"), "ZSHUDFontSmallNS", x + screenscale * 70, y + screenscale * 23, COLOR_YELLOW, TEXT_ALIGN_LEFT)
 	draw_SimpleText(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 320, y + screenscale * 25, 10 < timeleft and COLOR_YELLOW or Color(255, 0, 0, math.abs(math.sin(RealTime() * 8)) * 180 + 40), TEXT_ALIGN_LEFT)
 
 	end
-	
+
 	--Wave Timer
 	if wavenumber > 0 and wavenumber < 7 and GAMEMODE:GetWave() <= 0 then
 		local col
@@ -701,7 +701,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 		end
 
 	draw_SimpleText(util.ToMinutesSeconds(timeleft), "ZSHUDFontSmallNS", x + screenscale * 483, y + screenscale * 60, col, TEXT_ALIGN_RIGHT)
-	
+
 	elseif GAMEMODE:GetWaveActive() then
 		local waveend = GAMEMODE:GetWaveEnd()
 		if waveend ~= -1 then
@@ -714,10 +714,10 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 			local timeleft = math.max(0, wavestart - CurTime())
 				end
 			end
-			
+
 			--Intro Song
 			if wavenumber >= 1 and OSTintro == 0 and MySelf:GetInfo("zs_intro") == "1" and not self.ZombieEscape then
-			if OSTintro == 0 then		
+			if OSTintro == 0 then
 			MySelf:EmitSound("zombiesurvival/intro.mp3", 50, 100, 0.5)
 			OSTintro = 1 -- So it doesn't repeat the track again.
 		end
@@ -749,7 +749,7 @@ local texHumanHealthBar = surface.GetTextureID("zombiesurvival/healthbar__human"
 function GM:HumanHUD(screenscale)
 	local curtime = CurTime()
 	local w, h = ScrW(), ScrH()
-	
+
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), MySelf:GetMaxHealth(), texHumanHealthBar, screenscale, MySelf:GetPoisonDamage())
 
 	local packup = MySelf.PackUp
@@ -759,7 +759,7 @@ function GM:HumanHUD(screenscale)
 
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
-		
+
 			local txth = draw_GetFontHeight("ZS3D2DFont")
 			draw_SimpleTextBlurry(translate.Get("invasion_in"), "ZS3D2DFont", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			draw_SimpleTextBlurry(util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZS3D2DFont", w * 0.5, h * 0.25 + txth, COLOR_DARKRED, TEXT_ALIGN_CENTER)
@@ -769,9 +769,9 @@ function GM:HumanHUD(screenscale)
 			local txth2 = draw_GetFontHeight("ZSHUDFontSmall")
 			draw_SimpleTextBlurry(translate.Get("stay_from_zombie_spawns"), "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			draw_SimpleTextBlurry(translate.Get("zombie_volunteers"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + txth2, COLOR_GRAY, TEXT_ALIGN_CENTER)
-			
+
 			local txth3 = draw_GetFontHeight("ZSHUDFontTiny")
-			
+
 			local y = h * 0.78 + txth3 * 2
 			for i, pl in ipairs(self.ZombieVolunteers) do
 				if pl:IsValid() then
@@ -867,12 +867,12 @@ local colLifeStats = Color(255, 0, 0, 255)
 function GM:ZombieHUD(screenscale)
 	local classtab = self.ZombieClasses[MySelf:GetZombieClass()]
 	local curtime = CurTime()
-	
+
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), classtab.Health, texHumanHealthBar, screenscale)
-	
+
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
-		
+
 			local txth = draw_GetFontHeight("ZS3D2DFont")
 			draw_SimpleTextBlurry(util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZS3D2DFont", w * 0.5, h * 0.25 + txth, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 
@@ -881,9 +881,9 @@ function GM:ZombieHUD(screenscale)
 			local txth2 = draw_GetFontHeight("ZSHUDFontSmall")
 			draw_SimpleTextBlurry(translate.Get("stay_from_zombie_spawns"), "ZSHUDFontSmall", w * 0.5, h * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			draw_SimpleTextBlurry(translate.Get("zombie_volunteers"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + txth2, COLOR_GRAY, TEXT_ALIGN_CENTER)
-			
+
 			local txth3 = draw_GetFontHeight("ZSHUDFontTiny")
-			
+
 			local y = h * 0.78 + txth3 * 2
 			for i, pl in ipairs(self.ZombieVolunteers) do
 				if pl:IsValid() then
@@ -892,8 +892,8 @@ function GM:ZombieHUD(screenscale)
 				end
 			end
 		end
-	end	
-	
+	end
+
 	if self.LifeStatsEndTime and CurTime() < self.LifeStatsEndTime and (self.LifeStatsBarricadeDamage > 0 or self.LifeStatsHumanDamage > 0 or self.LifeStatsBrainsEaten > 0) then
 		colLifeStats.a = math.Clamp((self.LifeStatsEndTime - CurTime()) / (self.LifeStatsLifeTime * 0.33), 0, 1) * 255
 
@@ -929,9 +929,9 @@ function GM:ZombieHUD(screenscale)
 		local pl = GAMEMODE.NextBossZombie
 		local bossname = GAMEMODE.NextBossZombieClass
 		if pl and pl:IsValid() then
-			if pl == MySelf then 
+			if pl == MySelf then
 				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_RED, TEXT_ALIGN_CENTER)
-			else 
+			else
 				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			end
 		end
@@ -1186,19 +1186,19 @@ function GM:LastHuman(pl)
 	self.TheLastHuman = pl
 
 	if not LASTHUMAN then
-	
+
 	hook.Add( "PreDrawHalos", "ZS.PreDrawHalos.AddHalos", function()
 	if self.TheLastHuman then
 		if not IsValid(self.TheLastHuman) or LocalPlayer() == self.TheLastHuman or self.TheLastHuman:Team() == TEAM_UNDEAD then return end
-		
+
 		halo.Add({self.TheLastHuman},team.GetColor(self.TheLastHuman:Team()),1,1,2,true,true);
-		
+
 		end
 	end )
-	
+
 	LASTHUMAN = true
 		timer.Simple(0.5, function() GAMEMODE:LastHumanMessage() end)
-	end	
+	end
 end
 
 function GM:LastHumanMessage()
@@ -1549,7 +1549,7 @@ function GM:_PrePlayerDraw(pl)
 		local healthfrac = math.max(pl:Health(), 0) / pl:GetMaxHealth()
 		local lowhealthcolor = GAMEMODE.AuraColorEmpty
 		local fullhealthcolor = GAMEMODE.AuraColorFull
-		
+
 		color.r = math.Approach(lowhealthcolor.r, fullhealthcolor.r, math.abs(lowhealthcolor.r - fullhealthcolor.r) * healthfrac)
 		color.g = math.Approach(lowhealthcolor.g, fullhealthcolor.g, math.abs(lowhealthcolor.g - fullhealthcolor.g) * healthfrac)
 		color.b = math.Approach(lowhealthcolor.b, fullhealthcolor.b, math.abs(lowhealthcolor.b - fullhealthcolor.b) * healthfrac)
@@ -1642,7 +1642,7 @@ local function EndRoundCalcView(pl, origin, angles, fov, znear, zfar)
 		end
 		if endRoundViewPosEnd then
 			local delta = math.Clamp((CurTime() - GAMEMODE.EndTime) * 2, 0, 1)
- 
+
 			local camPos = endRoundViewPosEnd * delta + endRoundViewPosStart * (1 - delta)
 			local camVec = Angle(0, CurTime() * 30, 0):Forward() * delta - endRoundViewAngleStart:Forward() * (1 - delta)
 			camVec:Normalize()
@@ -1652,10 +1652,10 @@ local function EndRoundCalcView(pl, origin, angles, fov, znear, zfar)
 
 		return
 	end
-	
+
 	endRoundViewPosStart = nil
 	endRoundViewAngleStart = nil
-	
+
 	hook.Remove("CalcView", "EndRoundCalcView")
 end
 

@@ -25,11 +25,47 @@ function ENT:Think()
 end
 
 function ENT:Use(activator, caller)
+	self:TeleportPlayer(caller)
+end
+
+local function SigilTeleport(caller, currentsigil, index, first)
+	local sigils = ents.FindByClass("prop_obj_sigil")
+	local sigil = sigils[index]
+
+	--This cancels out the timer if the sigil is activated too soon.
+	if timer.Exists("SigilTimer_" ..caller:EntIndex()) then
+		timer.Remove("SigilTimer_" ..caller:EntIndex())
+	end
+
+	--If there is a better method of doing this then please replace this part!
+	--This is just here for now to prevent instant teleporting!
+	--TODO: Make a progress bar which will probably be in status_sigilteleport?
+	--TODO: Also use CurTime() instead!
+
+	local i=1
+	caller:ChatPrint("Teleporting... Please Wait!")
+	timer.Create("SigilTimer_" ..caller:EntIndex(), (1/20), 10, function()
+		if i < 10 then
+			i = i + 1
+		else
+			caller:SetPos(sigil:GetPos())
+  		caller:SetBarricadeGhosting(true)
+  		currentsigil:EmitSound("friends/message.wav")
+  		if first == true then
+  			sigil:EmitSound("friends/friend_join.wav")
+  		else
+  			sigil:EmitSound("friends/friend_online.wav")
+  		end
+		end
+	end)
+end
+function ENT:TeleportPlayer(caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
 
 	if IsValid(caller) and caller:IsPlayer() then
 		if caller:Team() ~= TEAM_UNDEAD then
+			--It is better to use a pair loop rather than trying to find all the sigil letters
 			for _, ent in pairs(sigils) do
 				local sigilIndex = 0
 				local nextSigilIndex = 0
@@ -38,16 +74,10 @@ function ENT:Use(activator, caller)
 					nextSigilIndex = sigilIndex + 1
 				end
 				if sigils[nextSigilIndex] ~= nil then
-					caller:SetPos(sigils[nextSigilIndex]:GetPos())
-					caller:SetBarricadeGhosting(true)
-					self:EmitSound("friends/message.wav")
-					sigils[nextSigilIndex]:EmitSound("friends/friend_online.wav")
+						SigilTeleport(caller, self, nextSigilIndex, false)
 				else
 					if nextSigilIndex ~= 0 then
-						caller:SetPos(sigils[1]:GetPos())
-						caller:SetBarricadeGhosting(true)
-						self:EmitSound("friends/message.wav")
-						sigils[1]:EmitSound("friends/friend_join.wav")
+						SigilTeleport(caller, self, 1, true)
 					end
 				end
 			end
