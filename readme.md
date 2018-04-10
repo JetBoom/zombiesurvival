@@ -10,6 +10,15 @@ The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
+## TODO
+
+These need to be done before any other feature gets added in!
+
+- [ ] Move a lot of the init code into separate files!
+- [ ] Move the progress bars such as the packup progress bar back into their status files!
+- [ ] Make Sigil Teleport use CurTime instead of using the timer library!
+- [ ] Rescale some of the text to fit on certain screens such as the worth menu text and the intermission text!
+
 ## Current Features
 
 ### Version 6 - Sigil System:
