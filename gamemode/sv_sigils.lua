@@ -35,6 +35,7 @@ function GM:CreateSigils()
 		return
 	end
 
+	--TODO: Move this variable to sv_sigilpropspawner!
 	local propCount = #ents.FindByClass("prop_physics*")
 
 	-- Copy
@@ -86,7 +87,7 @@ function GM:CreateSigils()
 			ent:SetSigilLetter(NextSigilLetter)
 			NextSigilLetter = util.IncreaseLetter(NextSigilLetter)
 			ent.NodePos = point
-
+			--TODO: Move this to sv_sigilpropspawner!
 			if propCount < 10 or GAMEMODE.SpawnSigilProps == true then
 				if GAMEMODE.SpawnSigilProps ~= false then
 					gamemode.Call("SpawnRandomSigilProps", point)
