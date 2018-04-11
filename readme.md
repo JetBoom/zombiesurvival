@@ -28,9 +28,8 @@ These need to be done before any other feature gets added in!
   - [ ] Replace the timer with CurTime!
   - [ ] Display a progress bar, also make sure the progress bar is located in status_sigilteleport instead of putting it in the human hud!
   - [ ] Move the random prop spawner code for sigils (as in the props that are coming out the sigils) to it's own file or just as an addon as it does not belong in that file!
-- [ ] Rescale some of the text to fit on certain screens such as the worth menu text and the intermission text!
-  - [ ] Intermission Text!
-  - [ ] Worth Menu Text!
+- [x] Rescale some of the text to fit on certain screens such as the intermission text!
+  - [x] Intermission Text!
 
 ## Current Features
 

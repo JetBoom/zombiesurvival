@@ -725,7 +725,7 @@ function GM:DrawHealthBar(x, y, health, maxhealth, bartexture, screenscale, pois
 end
 
 
-
+--TODO: Put this packup bar inside status_packup!
 local colPackUp = Color(20, 255, 20, 220)
 local colPackUpNotOwner = Color(255, 240, 10, 220)
 function GM:DrawPackUpBar(x, y, fraction, notowner, screenscale)
@@ -752,6 +752,7 @@ function GM:HumanHUD(screenscale)
 
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), MySelf:GetMaxHealth(), texHumanHealthBar, screenscale, MySelf:GetPoisonDamage())
 
+	--TODO: Put this packup bar render inside status_packup!
 	local packup = MySelf.PackUp
 	if packup and packup:IsValid() then
 		self:DrawPackUpBar(w * 0.5, h * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), screenscale)
@@ -759,10 +760,9 @@ function GM:HumanHUD(screenscale)
 
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
-
-			local txth = draw_GetFontHeight("ZS3D2DFont")
-			draw_SimpleTextBlurry(translate.Get("invasion_in"), "ZS3D2DFont", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
-			draw_SimpleTextBlurry(util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZS3D2DFont", w * 0.5, h * 0.25 + txth, COLOR_DARKRED, TEXT_ALIGN_CENTER)
+			local txth = draw_GetFontHeight("ZS3D2DFontSmall")
+			draw_SimpleTextBlurry(translate.Get("invasion_in"), "ZS3D2DFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(util.ToMinutesSeconds(math.max(0, self:GetWaveStart() - curtime)), "ZS3D2DFontSmall", w * 0.5, h * 0.25 + txth, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 
 			local desiredzombies = self:GetDesiredStartingZombies()
 
@@ -781,6 +781,7 @@ function GM:HumanHUD(screenscale)
 			end
 		end
 
+		--TODO: Move this code back into status_drown!
 		local drown = MySelf.status_drown
 		if drown and drown:IsValid() then
 			surface_SetDrawColor(0, 0, 0, 60)
