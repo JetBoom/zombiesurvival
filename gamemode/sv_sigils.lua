@@ -119,7 +119,16 @@ function GM:SpawnRandomSigilProps(pos)
 		local prop = ents.Create("prop_physics")
 		prop:SetModel(randommodel[math.random(#randommodel)])
 
+		prop:IsInWorld()
 		prop:SetPos(pos)
+		prop:SetVelocity(Vector(0, 0, 0))
+		if prop:IsInWorld() == false then
+			while prop:IsInWorld() == false do
+				print("Fixing Props!")
+				pos = pos + randompos[math.random(#randompos)]
+				prop:SetPos(pos)
+			end
+		end
 		prop:Spawn()
 	end
 end
