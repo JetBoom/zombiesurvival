@@ -91,6 +91,7 @@ function GM:CreateSigils()
 			if propCount < 10 or GAMEMODE.SpawnSigilProps == true then
 				if GAMEMODE.SpawnSigilProps ~= false then
 					gamemode.Call("SpawnRandomSigilProps", point)
+					gamemode.Call("SetupProps")
 				end
 			end
 		end
