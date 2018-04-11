@@ -247,7 +247,7 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 		Damage = dmg,
 		Callback = self.BulletCallback
 	})
-	
+
 	self:DoBulletKnockback(self.Primary.KnockbackScale * 0.05)
 	self:EndBulletKnockback()
 end
@@ -276,7 +276,7 @@ function SWEP:SetWeaponHoldType( t )
 
 	t = string.lower( t )
 	local index = ActIndex[ t ]
-	
+
 	if ( index == nil ) then
 		Msg( "SWEP:SetWeaponHoldType - ActIndex[ \""..t.."\" ] isn't set! (defaulting to normal) (from "..self:GetClass()..")\n" )
 		t = "normal"
@@ -297,14 +297,14 @@ function SWEP:SetWeaponHoldType( t )
 	self.ActivityTranslate [ ACT_RANGE_ATTACK1 ] 				= index+8
 	self.ActivityTranslate [ ACT_MP_SWIM_IDLE ] 				= index+8
 	self.ActivityTranslate [ ACT_MP_SWIM ] 						= index+9
-	
+
 	-- "normal" jump animation doesn't exist
 	if t == "normal" then
 		self.ActivityTranslate [ ACT_MP_JUMP ] = ACT_HL2MP_JUMP_SLAM
 	end
-	
+
 	-- these two aren't defined in ACTs for whatever reason
-	if t == "knife" || t == "melee2" then
+	if t == "knife" or t == "melee2" then
 		self.ActivityTranslate [ ACT_MP_CROUCH_IDLE ] = nil
 	end
 end
