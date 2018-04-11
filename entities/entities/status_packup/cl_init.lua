@@ -38,8 +38,6 @@ function DrawPackUpBar(x, y, fraction, notowner, screenscale)
 	local barwidth = maxbarwidth * math.Clamp(fraction, 0, 1)
 	local startx = x - maxbarwidth * 0.5
 
-	print("test")
-
 	surface.SetDrawColor(0, 0, 0, 220)
 	surface.DrawRect(startx, y, maxbarwidth, barheight)
 	surface.SetDrawColor(col)
