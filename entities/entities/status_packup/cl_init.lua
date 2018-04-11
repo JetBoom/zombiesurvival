@@ -18,15 +18,19 @@ function ENT:Think()
 end
 
 function ENT:Draw()
+
+end
+
+hook.Add("HUDPaint", "HUDPaint_Packup", function()
 	local packup = LocalPlayer().PackUp
 	if packup and packup:IsValid() then
-		self:DrawPackUpBar(ScrW() * 0.5, ScrH() * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), BetterScreenScale())
+		DrawPackUpBar(ScrW() * 0.5, ScrH() * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), BetterScreenScale())
 	end
-end
+end)
 
 local colPackUp = Color(20, 255, 20, 220)
 local colPackUpNotOwner = Color(255, 240, 10, 220)
-function ENT:DrawPackUpBar(x, y, fraction, notowner, screenscale)
+function DrawPackUpBar(x, y, fraction, notowner, screenscale)
 	local col = notowner and colPackUpNotOwner or colPackUp
 
 	local maxbarwidth = 270 * screenscale
