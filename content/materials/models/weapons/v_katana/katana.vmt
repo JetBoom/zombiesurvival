@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models\weapons\v_katana\katana"
+    	"$bumpmap" "models\weapons\v_katana\katana_normal"
+    "$model" "1"
+
+}

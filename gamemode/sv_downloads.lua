@@ -1,4 +1,5 @@
 function GM:AddResources()
+	resource.AddWorkshop("1357352304")
 	resource.AddFile("resource/fonts/typenoksidi.ttf")
 	resource.AddFile("resource/fonts/hidden.ttf")
 
@@ -155,6 +156,7 @@ function GM:AddResources()
 	resource.AddFile( "materials/zombiesurvival/killicons/reaper_zs2.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/reaper_zs2.vmt" )
 	resource.AddFile( "materials/zombiesurvival/killicons/bonemesh.vtf" )
+	resource.AddFile( "materials/zombiesurvival/killicons/bonemesh.vmt" )
 	resource.AddFile( "materials/zombiesurvival/killicons/infernozombie.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/fast_legs.vtf" )
 	resource.AddFile( "materials/zombiesurvival/killicons/fast_legs.vmt" )

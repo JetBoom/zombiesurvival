@@ -1,13 +1,10 @@
 --[[
-
 Zombie Survival
 by William "JetBoom" Moodhe
 williammoodhe@gmail.com -or- jetboom@noxiousnet.com
 http://www.noxiousnet.com/
-
 Further credits displayed by pressing F1 in-game.
 This was my first ever gamemode. A lot of stuff is from years ago and some stuff is very recent.
-
 ]]
 
 -- TODO: player introduced to a "main menu" sort of thing. auto joins as spectator. Requires recoding of a lot of logic because right now we assume only two possible teams and no spectator for humans.
@@ -3605,7 +3602,7 @@ function GM:WaveStateChanged(newstate)
 			if self:GetEscapeStage() == ESCAPESTAGE_BOSS then
 				self:SetEscapeStage(ESCAPESTAGE_DEATH)
 
-				PrintMessage(3, "Escape sequence death fog stage")
+				PrintMessage(3, translate.Get("sigil_deathfog"))
 
 				gamemode.Call("SetWaveEnd", -1)
 			elseif self:GetEscapeStage() == ESCAPESTAGE_ESCAPE then
@@ -3614,7 +3611,7 @@ function GM:WaveStateChanged(newstate)
 				-- 2 minutes to get out with everyone spawning as bosses.
 				gamemode.Call("SetWaveEnd", CurTime() + 120)
 
-				PrintMessage(3, "Escape sequence boss stage")
+				PrintMessage(3, translate.Get("sigil_escapeboss"))
 
 				-- Start spawning boss zombies.
 			elseif self:GetEscapeStage() == ESCAPESTAGE_NONE then
@@ -3634,7 +3631,7 @@ function GM:WaveStateChanged(newstate)
 					net.WriteInt(self:GetWave(), 16)
 					net.WriteFloat(CurTime())
 				net.Broadcast()]]
-				PrintMessage(3, "Escape sequence started")
+				PrintMessage(3, translate.Get("sigil_escapestart"))
 
 				-- 2 minutes to escape.
 				gamemode.Call("SetWaveActive", true)
@@ -3754,7 +3751,7 @@ net.Receive("zs_spectate", function(len, ply)
 
 	local index = TEAM_UNDEAD
 	if ply:Team() ~= TEAM_SPECTATOR then
-		ply:PrintMessage(HUD_PRINTTALK, "You are now a Spectator.")
+		ply:PrintMessage(HUD_PRINTTALK, translate.Get("spectator_now"))
 		index = TEAM_SPECTATOR
 
 		GAMEMODE.PreviouslyDied[ply:SteamID()] = CurTime()

@@ -1,5 +1,5 @@
 -- Translated by Mr. Darkness (http://www.noxiousnet.com/forums/index.php?action=profile;u=6296)
--- Updated by xKito (https://steamcommunity.com/profiles/76561198158864042)
+-- Updated for VRS by Nyanpasu (https://steamcommunity.com/profiles/76561198158864042)
 
 translate.AddLanguage("ru", "Russian")
 
@@ -128,17 +128,21 @@ LANGUAGE.you_will_be_x_soon							= "Вы станете %s скоро!"
 
 -- Exit point objectives
 LANGUAGE.exit_destroyed								= "Зараженные уничтожили какой-то выход!"
-LANGUAGE.exit_destroyed_only_one_remain_h			= "Последный остался! Если он будет уничтожен, у Вас не останется шанса на побег!"
+LANGUAGE.exit_destroyed_only_one_remain_h			= "Последный остался! Если он будет уничтожен, у вас не останется шанса на побег!"
 LANGUAGE.exit_destroyed_only_one_remain_z			= "Остается последний!"
 LANGUAGE.exit_destroyed_x_remain					= "%d выходов осталось."
 LANGUAGE.last_exit_destroyed_all_is_lost			= "Зараженные уничтожили последний выход."
-LANGUAGE.last_exit_destroyed_all_is_lost2			= "У Вас не осталось шансов на побег."
+LANGUAGE.last_exit_destroyed_all_is_lost2			= "У вас не осталось шансов на побег."
 LANGUAGE.prop_obj_exit_h							= "Спасайтесь!"
 LANGUAGE.prop_obj_exit_z							= "Остановите их!"
-LANGUAGE.sigil_destroyed							= "Зараженные уничтожили Сигил!"
+LANGUAGE.sigil_destroyed							= "Зараженные уничтожили сигил!"
 LANGUAGE.sigil_destroyed_only_one_remain_h			= "Остался только один! Если он будет разрушен, то нибудет никакой надежды на спасение!"
 LANGUAGE.sigil_destroyed_only_one_remain_z			= "Остался один сигил!"
-LANGUAGE.sigil_destroyed_x_remain					= "%d Сигилов осталось."
+LANGUAGE.sigil_destroyed_x_remain					= "%d сигил(а,ов) осталось."
+LANGUAGE.sigil_escapestart                          = "Цикл спасения начался"
+LANGUAGE.sigil_escapeboss                           = "Цикл спасения - Стадия босса"
+LANGUAGE.sigil_deathfog                             = "Цикл спасения - Туман смерти"
+LANGUAGE.sigil_yousurvived                          = "Вам удалось выжить! Ждем других выживших..."
 
 -- Message beacon messages
 LANGUAGE.message_beacon_1							= "Встречаемся здесь"
@@ -593,7 +597,7 @@ LANGUAGE.craft_infdeagle                            = "Пустынный Оре
 LANGUAGE.craft_infm249                              = "Пулемет M249 'Бесконечность"
 LANGUAGE.craft_infplank                             = "Бесконечная Палка"
 LANGUAGE.craft_infinochet                           = "Пистолет 'Бесконечношет'"
-LANGUAGE.craft_deagleredeemers                      = "Пустынные Орлы 'Спаситель'"
+LANGUAGE.craft_deagleredeemers                      = "Пустынные Орлы 'Спасители'"
 LANGUAGE.craft_dualboomstick                        = "Две громовые палки"
 LANGUAGE.craft_dualboomstickdesk                    = "Эти дробовики позволяют загружать до четырех картечей в обойму одновременно. Удерживайте ПЕРЕЗАРЯДКА, для более быстрой перезарядки каждой картечи."
 LANGUAGE.craft_empowershovel                        = "Усиленная лопата"
@@ -649,6 +653,14 @@ LANGUAGE.wn_waraxe                                  = "Пистолет 'Топ�
 LANGUAGE.wn_zombielegs                              = "Зомби Кунг-Фу"
 LANGUAGE.weapon_katana                              = "Катана"
 LANGUAGE.weapon_python                              = "Магнум 'Питон'"
+LANGUAGE.wn_suicidebmb                              = "Бомба Смертника"
+LANGUAGE.wn_explosivecrowbar                        = "Взрывной Лом"
+LANGUAGE.wn_explosiveredeemers                      = "Взрывные Двойные Пистолеты 'Спасители'"
+
+-- Special Weapons (rape swep, admins only things)
+
+LANGUAGE.wns_rape                                   = "Изнасиловать"
+LANGUAGE.wn_gokufists                               = "Кулаки Гоку"
 
 -- Item Descriptions
 
@@ -739,7 +751,7 @@ LANGUAGE.hm_barricade_destroyer2                    = "%s, нанес %d уро�
 LANGUAGE.hm_nest_destroyer                          = "Разрушитель Гнезд"
 LANGUAGE.hm_nest_destroyer2                         = "%s, уничтожил %d гнезд."
 LANGUAGE.hm_nest_master                             = "Мастер Гнезд"
-LANGUAGE.hm_nest_master2                            = "%s, построил %d гнезд."
+LANGUAGE.hm_nest_master2                            = "У %s, появилось %d зомби через его гнездо."
 
 -- Weapon Titles
 
@@ -767,6 +779,7 @@ LANGUAGE.mm_help                                   = "Помощь"
 LANGUAGE.mm_pm_messg                               = "Вы изменили желаемую модель игрока на"
 LANGUAGE.mm_sp                                     = "Наблюдать"
 LANGUAGE.mm_unsp                                   = "Не-Наблюдать"
+LANGUAGE.spectator_now                             = "Вы теперь Наблюдатель."
 
 -- Weapon Database
 

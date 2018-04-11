@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base				= "weapon_zs_base"
 
-SWEP.PrintName			= "Suicide Bomb"			
+SWEP.PrintName			= translate.Get("wn_suicidebmb")		
 
 SWEP.Slot				= 3
 SWEP.SlotPos			= 4
