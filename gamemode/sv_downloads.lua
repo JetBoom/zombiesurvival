@@ -1,4 +1,5 @@
 function GM:AddResources()
+	resource.AddWorkshop("1357352304")
 	resource.AddFile("resource/fonts/typenoksidi.ttf")
 	resource.AddFile("resource/fonts/hidden.ttf")
 
