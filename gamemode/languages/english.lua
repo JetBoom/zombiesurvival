@@ -150,6 +150,10 @@ LANGUAGE.last_sigil_destroyed_all_is_lost			= "The Undead have destroyed the las
 LANGUAGE.last_sigil_destroyed_all_is_lost2			= "There is no hope of escape."
 LANGUAGE.prop_obj_exit_h							= "Escape!"
 LANGUAGE.prop_obj_exit_z							= "Stop them!"
+LANGUAGE.sigil_escapestart                          = "Escape sequence started"
+LANGUAGE.sigil_escapeboss                           = "Escape sequence boss stage"
+LANGUAGE.sigil_deathfog                             = "Escape sequence death fog stage"
+LANGUAGE.sigil_yousurvived                          = "You've managed to survive! Waiting for other survivors..."
 
 -- Message beacon messages
 LANGUAGE.message_beacon_1							= "Meet up here"
@@ -657,6 +661,14 @@ LANGUAGE.wn_waraxe                                  = "'Waraxe' Handgun"
 LANGUAGE.wn_zombielegs                              = "Zombie Kung Fu"
 LANGUAGE.weapon_katana                              = "Katana"
 LANGUAGE.weapon_python                              = "'Python' Magnum"                       
+LANGUAGE.wn_suicidebmb                              = "Suicide Bomb"
+LANGUAGE.wn_explosivecrowbar                        = "Explosive Crowbar"
+LANGUAGE.wn_explosiveredeemers                      = "Explosive 'Redeemers' Dual Handguns"
+
+-- Special Weapons (rape swep, admins only things)
+
+LANGUAGE.wns_rape                                   = "Rape SWEP"
+LANGUAGE.wn_gokufists                               = "Goku's Fists"
 
 -- Item Descriptions 
 
@@ -775,6 +787,7 @@ LANGUAGE.mm_help                                   = "Help"
 LANGUAGE.mm_pm_messg                               = "You've changed your desired player model to"
 LANGUAGE.mm_sp                                     = "Spectate"
 LANGUAGE.mm_unsp                                   = "Un-Spectate"
+LANGUAGE.spectator_now                             = "You are now a Spectator."
 
 -- Weapon Database
 

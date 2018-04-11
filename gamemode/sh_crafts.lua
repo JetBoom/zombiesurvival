@@ -92,6 +92,13 @@ GM.Crafts = {
 		Result = {"weapon_zs_deagleredeemers"}
 	},
     {
+		Name = "a explosive 'redeemers' dual handguns",
+		callback = function(enta, entb)
+			return enta:IsPhysicsModel("models/props_c17/oildrum001_explosive.mdl") and entb:IsWeaponType("weapon_zs_redeemers")
+		end,
+		Result = {"weapon_zs_explosiveredeemers"}
+	},
+    {
 		Name = "a dual boom stick",
 		callback = function(enta, entb)
 			return enta:IsWeaponType("weapon_zs_boomstick") and entb:IsWeaponType("weapon_zs_boomstick")
@@ -146,6 +153,13 @@ GM.Crafts = {
 			return enta:IsWeaponType("weapon_zs_inferno") and entb:IsWeaponType("weapon_zs_empower")
 		end,
 		Result = {"weapon_zs_multiinferno"}
+	},
+	{
+		Name = "a explosive crowbar",
+		callback = function(enta, entb)
+			return enta:IsPhysicsModel("models/props_c17/oildrum001_explosive.mdl") and entb:IsWeaponType("weapon_zs_crowbar")
+		end,
+		Result = {"weapon_zs_explosivecrowbar"}
 	},
     {
 		Name = "a nuke masher",
