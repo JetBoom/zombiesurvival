@@ -124,7 +124,6 @@ function GM:SpawnRandomSigilProps(pos)
 		prop:SetVelocity(Vector(0, 0, 0))
 		if prop:IsInWorld() == false then
 			while prop:IsInWorld() == false do
-				print("Fixing Props!")
 				pos = pos + randompos[math.random(#randompos)]
 				prop:SetPos(pos)
 			end
