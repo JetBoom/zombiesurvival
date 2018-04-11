@@ -1593,8 +1593,6 @@ function GM:GetDynamicSpawning()
 	return self.DynamicSpawning
 end
 
-
-
 function GM:PlayerDisconnected(pl)
 	pl.Disconnecting = true
 

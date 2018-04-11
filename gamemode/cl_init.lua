@@ -726,24 +726,24 @@ end
 
 
 --TODO: Put this packup bar inside status_packup!
-local colPackUp = Color(20, 255, 20, 220)
-local colPackUpNotOwner = Color(255, 240, 10, 220)
-function GM:DrawPackUpBar(x, y, fraction, notowner, screenscale)
-	local col = notowner and colPackUpNotOwner or colPackUp
-
-	local maxbarwidth = 270 * screenscale
-	local barheight = 11 * screenscale
-	local barwidth = maxbarwidth * math.Clamp(fraction, 0, 1)
-	local startx = x - maxbarwidth * 0.5
-
-	surface_SetDrawColor(0, 0, 0, 220)
-	surface_DrawRect(startx, y, maxbarwidth, barheight)
-	surface_SetDrawColor(col)
-	surface_DrawRect(startx + 3, y + 3, barwidth - 6, barheight - 6)
-	surface_DrawOutlinedRect(startx, y, maxbarwidth, barheight)
-
-	draw_SimpleText(notowner and CurTime() % 2 < 1 and translate.Format("requires_x_people", 4) or notowner and translate.Get("packing_others_object") or translate.Get("packing"), "ZSHUDFontSmall", x, y - draw_GetFontHeight("ZSHUDFontSmall") - 2, col, TEXT_ALIGN_CENTER)
-end
+--local colPackUp = Color(20, 255, 20, 220)
+--local colPackUpNotOwner = Color(255, 240, 10, 220)
+--function GM:DrawPackUpBar(x, y, fraction, notowner, screenscale)
+--	local col = notowner and colPackUpNotOwner or colPackUp
+--
+--	local maxbarwidth = 270 * screenscale
+--	local barheight = 11 * screenscale
+--	local barwidth = maxbarwidth * math.Clamp(fraction, 0, 1)
+--	local startx = x - maxbarwidth * 0.5
+--
+--	surface_SetDrawColor(0, 0, 0, 220)
+--	surface_DrawRect(startx, y, maxbarwidth, barheight)
+--	surface_SetDrawColor(col)
+--	surface_DrawRect(startx + 3, y + 3, barwidth - 6, barheight - 6)
+--	surface_DrawOutlinedRect(startx, y, maxbarwidth, barheight)
+--
+--	draw_SimpleText(notowner and CurTime() % 2 < 1 and translate.Format("requires_x_people", 4) or notowner and translate.Get("packing_others_object") or translate.Get("packing"), "ZSHUDFontSmall", x, y - draw_GetFontHeight("ZSHUDFontSmall") - 2, col, TEXT_ALIGN_CENTER)
+--end
 
 local texHumanHealthBar = surface.GetTextureID("zombiesurvival/healthbar__human")
 function GM:HumanHUD(screenscale)
@@ -753,10 +753,10 @@ function GM:HumanHUD(screenscale)
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), MySelf:GetMaxHealth(), texHumanHealthBar, screenscale, MySelf:GetPoisonDamage())
 
 	--TODO: Put this packup bar render inside status_packup!
-	local packup = MySelf.PackUp
-	if packup and packup:IsValid() then
-		self:DrawPackUpBar(w * 0.5, h * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), screenscale)
-	end
+	--local packup = MySelf.PackUp
+	--if packup and packup:IsValid() then
+	--	self:DrawPackUpBar(w * 0.5, h * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), screenscale)
+	--end
 
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
@@ -782,15 +782,15 @@ function GM:HumanHUD(screenscale)
 		end
 
 		--TODO: Move this code back into status_drown!
-		local drown = MySelf.status_drown
-		if drown and drown:IsValid() then
-			surface_SetDrawColor(0, 0, 0, 60)
-			surface_DrawRect(w * 0.4, h * 0.35, w * 0.2, 12)
-			surface_SetDrawColor(30, 30, 230, 180)
-			surface_DrawOutlinedRect(w * 0.4, h * 0.35, w * 0.2, 12)
-			surface_DrawRect(w * 0.4, h * 0.35, w * 0.2 * (1 - drown:GetDrown()), 12)
-			draw_SimpleTextBlurry(translate.Get("breath").." ", "ZSHUDFontSmall", w * 0.4, h * 0.35 + 6, COLOR_BLUE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-		end
+		--local drown = MySelf.status_drown
+		--if drown and drown:IsValid() then
+		--	surface_SetDrawColor(0, 0, 0, 60)
+		--	surface_DrawRect(w * 0.4, h * 0.35, w * 0.2, 12)
+		--	surface_SetDrawColor(30, 30, 230, 180)
+		--	surface_DrawOutlinedRect(w * 0.4, h * 0.35, w * 0.2, 12)
+		--	surface_DrawRect(w * 0.4, h * 0.35, w * 0.2 * (1 - drown:GetDrown()), 12)
+		--	draw_SimpleTextBlurry(translate.Get("breath").." ", "ZSHUDFontSmall", w * 0.4, h * 0.35 + 6, COLOR_BLUE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		--end
 	end
 
 	if gamemode.Call("PlayerCanPurchase", MySelf) then
