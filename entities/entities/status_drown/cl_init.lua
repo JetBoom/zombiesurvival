@@ -1,7 +1,7 @@
 include("shared.lua")
 
 function ENT:Draw()
-  local drown = self:GetOwner().status_drown
+  local drown = LocalPlayer().status_drown
   if drown and drown:IsValid() then
     surface.SetDrawColor(0, 0, 0, 60)
     surface.DrawRect(ScrW() * 0.4, ScrH() * 0.35, ScrW() * 0.2, 12)

@@ -18,7 +18,7 @@ function ENT:Think()
 end
 
 function ENT:Draw()
-	local packup = self:GetOwner().PackUp
+	local packup = LocalPlayer().PackUp
 	if packup and packup:IsValid() then
 		self:DrawPackUpBar(ScrW() * 0.5, ScrH() * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), BetterScreenScale())
 	end
