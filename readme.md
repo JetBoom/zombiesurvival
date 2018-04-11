@@ -10,6 +10,29 @@ The bandit system is where upon redeeming the client is greeted
 with the option which they can choose to stay as
 a bandit (which can help or kill humans) or change back into a human.
 
+## TODO
+
+These need to be done before any other feature gets added in!
+
+- [ ] Move a lot of the init code into separate files!
+  - [ ] Wave Stuff!
+  - [ ] Player Stuff!
+  - [ ] Human Stuff!
+  - [ ] Zombie Stuff!
+  - [ ] Weapon Stuff!
+  - [ ] Sigil Stuff!
+  - [ ] Other Stuff!
+- [ ] Move the progress bars such as the packup progress bar back into their status files!
+- [ ] Update the sigils!
+  - [ ] Replace the timer with CurTime!
+  - [ ] Display a progress bar, also make sure the progress bar is located in status_sigilteleport instead of putting it in the human hud!
+  - [ ] Move the random prop spawner code for sigils (as in the props that are coming out the sigils) to it's own file or just as an addon as it does not belong in that file!
+- [ ] Carpenter's Hammer Updating!
+  - [ ] Either make prop slightly transparent when it's picked up or increase the distance of the prop that is picked up or just do both!
+  - [ ] Fix the hammer and hands from disappearing randomly when dropping or carrying around the prop!
+- [x] Rescale some of the text to fit on certain screens such as the intermission text!
+  - [x] Intermission Text!
+
 ## Current Features
 
 ### Version 6 - Sigil System:

@@ -1,3 +1,5 @@
+--TODO: Move this global variable to sv_sigilpropspawner!
+--TODO: Also rename this variable to GM.SigilSpawnRandomProps!
 GM.SpawnSigilProps = true
 
 function GM:OnSigilDestroyed(ent, dmginfo)
@@ -33,6 +35,7 @@ function GM:CreateSigils()
 		return
 	end
 
+	--TODO: Move this variable to sv_sigilpropspawner!
 	local propCount = #ents.FindByClass("prop_physics*")
 
 	-- Copy
@@ -84,10 +87,11 @@ function GM:CreateSigils()
 			ent:SetSigilLetter(NextSigilLetter)
 			NextSigilLetter = util.IncreaseLetter(NextSigilLetter)
 			ent.NodePos = point
-
+			--TODO: Move this to sv_sigilpropspawner!
 			if propCount < 10 or GAMEMODE.SpawnSigilProps == true then
 				if GAMEMODE.SpawnSigilProps ~= false then
 					gamemode.Call("SpawnRandomSigilProps", point)
+					gamemode.Call("SetupProps")
 				end
 			end
 		end
@@ -96,6 +100,7 @@ function GM:CreateSigils()
 	self:SetUseSigils(#ents.FindByClass("prop_obj_sigil") > 0)
 end
 
+--TODO: Move this to sv_sigilpropspawner!
 function GM:SpawnRandomSigilProps(pos)
 	for i=1, 8 do
 		local range = 80
@@ -114,7 +119,15 @@ function GM:SpawnRandomSigilProps(pos)
 		local prop = ents.Create("prop_physics")
 		prop:SetModel(randommodel[math.random(#randommodel)])
 
+		prop:IsInWorld()
 		prop:SetPos(pos)
+		prop:SetVelocity(Vector(0, 0, 0))
+		if prop:IsInWorld() == false then
+			while prop:IsInWorld() == false do
+				pos = pos + randompos[math.random(#randompos)]
+				prop:SetPos(pos)
+			end
+		end
 		prop:Spawn()
 	end
 end
