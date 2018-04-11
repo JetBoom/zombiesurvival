@@ -782,15 +782,15 @@ function GM:HumanHUD(screenscale)
 		end
 
 		--TODO: Move this code back into status_drown!
-		local drown = MySelf.status_drown
-		if drown and drown:IsValid() then
-			surface_SetDrawColor(0, 0, 0, 60)
-			surface_DrawRect(w * 0.4, h * 0.35, w * 0.2, 12)
-			surface_SetDrawColor(30, 30, 230, 180)
-			surface_DrawOutlinedRect(w * 0.4, h * 0.35, w * 0.2, 12)
-			surface_DrawRect(w * 0.4, h * 0.35, w * 0.2 * (1 - drown:GetDrown()), 12)
-			draw_SimpleTextBlurry(translate.Get("breath").." ", "ZSHUDFontSmall", w * 0.4, h * 0.35 + 6, COLOR_BLUE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-		end
+		--local drown = MySelf.status_drown
+		--if drown and drown:IsValid() then
+		--	surface_SetDrawColor(0, 0, 0, 60)
+		--	surface_DrawRect(w * 0.4, h * 0.35, w * 0.2, 12)
+		--	surface_SetDrawColor(30, 30, 230, 180)
+		--	surface_DrawOutlinedRect(w * 0.4, h * 0.35, w * 0.2, 12)
+		--	surface_DrawRect(w * 0.4, h * 0.35, w * 0.2 * (1 - drown:GetDrown()), 12)
+		--	draw_SimpleTextBlurry(translate.Get("breath").." ", "ZSHUDFontSmall", w * 0.4, h * 0.35 + 6, COLOR_BLUE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		--end
 	end
 
 	if gamemode.Call("PlayerCanPurchase", MySelf) then
