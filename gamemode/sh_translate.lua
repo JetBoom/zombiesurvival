@@ -13,9 +13,9 @@ local CurrentLanguage = DefaultLanguage
 if CLIENT then
     -- Need to make a new convar since gmod_language isn't sent to server.
     CreateClientConVar("gmod_language_rep", "en", false, true)
-
+   
     CurrentLanguage = GetConVarString("gmod_language")
-
+   
     timer.Create("checklanguagechange", 1, 0, function()
         CurrentLanguage = GetConVarString("gmod_language")
         if CurrentLanguage ~= GetConVarString("gmod_language_rep") then
@@ -86,9 +86,8 @@ end
 
 for i, filename in pairs(file.Find(GM.FolderName.."/gamemode/languages/*.lua", "LUA")) do
 	LANGUAGE = {}
-  print(filename)
-	AddCSLuaFile("../languages/"..filename)
-	include("../languages/"..filename)
+	AddCSLuaFile("languages/"..filename)
+	include("languages/"..filename)
 	for k, v in pairs(LANGUAGE) do
 		translate.AddTranslation(k, v)
 	end
