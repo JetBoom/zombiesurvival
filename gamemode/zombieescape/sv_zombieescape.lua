@@ -1,8 +1,3 @@
-AddCSLuaFile("zombieescape/cl_zombieescape.lua")
-AddCSLuaFile("zombieescape/sh_zombieescape.lua")
-
-include("zombieescape/sh_zombieescape.lua")
-
 if not GM.ZombieEscape then return end
 
 table.insert(GM.CleanupFilter, "func_brush")

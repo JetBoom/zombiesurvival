@@ -68,6 +68,8 @@ AddCSLuaFile("vgui/ppointshop.lua")
 AddCSLuaFile("vgui/changeteam.lua")
 AddCSLuaFile("vgui/zshealtharea.lua")
 
+AddCSLuaFile("zombieescape/cl_zombieescape.lua")
+AddCSLuaFile("zombieescape/sh_zombieescape.lua")
 
 include("shared.lua")
 include("sv_options.lua")

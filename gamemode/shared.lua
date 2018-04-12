@@ -70,6 +70,8 @@ include("meta/obj_weapon_extend.lua")
 
 include("workshopfix.lua")
 
+include("zombieescape/sh_zombieescape.lua")
+
 ----------------------
 
 GM.EndRound = false
