@@ -57,7 +57,7 @@ function SWEP:CheckMoaning()
 end
 
 function SWEP:PrimaryAttack()
-	if not self.Owner:OnGround() || self:GetGrenading() then return end
+	if self:GetGrenading() then return end
 
 	self.BaseClass.PrimaryAttack(self)
 

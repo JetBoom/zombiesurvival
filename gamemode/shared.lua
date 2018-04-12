@@ -62,10 +62,10 @@ include("shared/sh_bullets.lua")
 
 include("misc/noxapi/noxapi.lua")
 
-include("obj_vector_extend.lua")
-include("obj_entity_extend.lua")
-include("obj_player_extend.lua")
-include("obj_weapon_extend.lua")
+include("meta/obj_vector_extend.lua")
+include("meta/obj_entity_extend.lua")
+include("meta/obj_player_extend.lua")
+include("meta/obj_weapon_extend.lua")
 
 include("misc/workshopfix.lua")
 

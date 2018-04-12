@@ -6,13 +6,14 @@ function CreateClientConVar(...)
 end
 
 include("shared.lua")
-include("cl_draw.lua")
-include("cl_util.lua")
-include("cl_options.lua")
-include("obj_player_extend_cl.lua")
-include("cl_scoreboard.lua")
-include("cl_targetid.lua")
-include("cl_postprocess.lua")
+include("client/cl_draw.lua")
+include("client/cl_util.lua")
+include("client/cl_options.lua")
+include("client/cl_scoreboard.lua")
+include("client/cl_targetid.lua")
+include("client/cl_postprocess.lua")
+
+include("meta/obj_player_extend_cl.lua")
 
 include("client/vgui/dgamestate.lua")
 include("client/vgui/dteamcounter.lua")
@@ -39,13 +40,13 @@ include("client/vgui/dsidemenu.lua")
 include("client/vgui/changeteam.lua")
 include("client/vgui/zshealtharea.lua")
 
-include("cl_dermaskin.lua")
-include("cl_deathnotice.lua")
-include("cl_floatingscore.lua")
-include("cl_hint.lua")
-include("cl_extras.lua")
+include("client/cl_dermaskin.lua")
+include("client/cl_deathnotice.lua")
+include("client/cl_floatingscore.lua")
+include("client/cl_hint.lua")
+include("client/cl_extras.lua")
 
-include("cl_zombieescape.lua")
+include("zombieescape/cl_zombieescape.lua")
 
 w, h = ScrW(), ScrH()
 
