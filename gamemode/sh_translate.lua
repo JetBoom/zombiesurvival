@@ -13,9 +13,9 @@ local CurrentLanguage = DefaultLanguage
 if CLIENT then
     -- Need to make a new convar since gmod_language isn't sent to server.
     CreateClientConVar("gmod_language_rep", "en", false, true)
-
+   
     CurrentLanguage = GetConVarString("gmod_language")
-
+   
     timer.Create("checklanguagechange", 1, 0, function()
         CurrentLanguage = GetConVarString("gmod_language")
         if CurrentLanguage ~= GetConVarString("gmod_language_rep") then
@@ -34,7 +34,6 @@ function translate.GetLanguageName(short)
 end
 
 function translate.GetTranslations(short)
-  print(Translations[DefaultLanguage])
 	return Translations[short] or Translations[DefaultLanguage]
 end
 
@@ -51,8 +50,7 @@ function translate.AddTranslation(id, text)
 end
 
 function translate.Get(id)
-  return id
-	--return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
+	return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
 end
 
 function translate.Format(id, ...)
