@@ -1,4 +1,4 @@
-include("sh_zombieescape.lua")
+include("zombieescape/sh_zombieescape.lua")
 
 if not GM.ZombieEscape then return end
 
