@@ -66,7 +66,7 @@ function GM:RegisterZombieClasses()
 
 	local included = {}
 
-	local classes = file.Find(self.FolderName.."/gamemode/zombieclasses/*.lua", "LUA")
+	local classes = file.Find(self.FolderName.."/gamemode/shared/zombieclasses/*.lua", "LUA")
 	table.sort(classes)
 	for i, filename in ipairs(classes) do
 		AddCSLuaFile("zombieclasses/"..filename)
