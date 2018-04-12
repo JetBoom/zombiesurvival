@@ -227,7 +227,6 @@ GM:AddPointShopItem("deagle", ""..translate.Get("ars_deagle"), nil, ITEMCAT_GUNS
 GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
 GM:AddPointShopItem("magnum", ""..translate.Get("ars_magnum"), nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
 GM:AddPointShopItem("eraser", ""..translate.Get("ars_tacticalpistol"), nil, ITEMCAT_GUNS, 35, "weapon_zs_eraser")
-GM:AddPointShopItem("python", ""..translate.Get("weapon_python"), nil, ITEMCAT_GUNS, 95, "weapon_zs_python")
 GM:AddPointShopItem("uzi", ""..translate.Get("ars_uzi"), nil, ITEMCAT_GUNS, 70, "weapon_zs_uzi")
 GM:AddPointShopItem("shredder", ""..translate.Get("ars_shredder"), nil, ITEMCAT_GUNS, 70, "weapon_zs_smg")
 GM:AddPointShopItem("bulletstorm", ""..translate.Get("ars_bulletstorm"), nil, ITEMCAT_GUNS, 70, "weapon_zs_bulletstorm")
@@ -236,6 +235,7 @@ GM:AddPointShopItem("reaper", ""..translate.Get("ars_reaperump"), nil, ITEMCAT_G
 GM:AddPointShopItem("ender", ""..translate.Get("ars_autoen"), nil, ITEMCAT_GUNS, 85, "weapon_zs_ender")
 GM:AddPointShopItem("akbar", ""..translate.Get("ars_akbar"), nil, ITEMCAT_GUNS, 85, "weapon_zs_akbar")
 GM:AddPointShopItem("galil", ""..translate.Get("ars_galil"), nil, ITEMCAT_GUNS, 90, "weapon_zs_galil")
+GM:AddPointShopItem("python", ""..translate.Get("weapon_python"), nil, ITEMCAT_GUNS, 95, "weapon_zs_python")
 GM:AddPointShopItem("silencer", ""..translate.Get("ars_silencer"), nil, ITEMCAT_GUNS, 100, "weapon_zs_silencer")
 GM:AddPointShopItem("annabelle", ""..translate.Get("ars_annabele"), nil, ITEMCAT_GUNS, 100, "weapon_zs_annabelle")
 GM:AddPointShopItem("g3sg1", ""..translate.Get("ars_infiltrator"), nil, ITEMCAT_GUNS, 110, "weapon_zs_g3sg1")
@@ -266,22 +266,35 @@ GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMC
 -- P.MELEE --
 ------------
 
+GM:AddPointShopItem("zpfryp", ""..translate.Get("worth_fryingpan"), nil, ITEMCAT_MELEE, 5, "weapon_zs_fryingpan")
+GM:AddPointShopItem("zpcpot", ""..translate.Get("worth_cookingpot"), nil, ITEMCAT_MELEE, 5, "weapon_zs_pot")
 GM:AddPointShopItem("knife", ""..translate.Get("worth_knife"), nil, ITEMCAT_MELEE, 5, "weapon_zs_swissarmyknife")
 GM:AddPointShopItem("axe", ""..translate.Get("worth_axe"), nil, ITEMCAT_MELEE, 10, "weapon_zs_axe")
+GM:AddPointShopItem("hook", ""..translate.Get("worth_meathook"), nil, ITEMCAT_MELEE, 15, "weapon_zs_hook")
 GM:AddPointShopItem("crowbar", ""..translate.Get("worth_crowbar"), nil, ITEMCAT_MELEE, 15, "weapon_zs_crowbar")
 GM:AddPointShopItem("stunbaton", ""..translate.Get("worth_stun"), nil, ITEMCAT_MELEE, 20, "weapon_zs_stunbaton")
 GM:AddPointShopItem("shovel", ""..translate.Get("ars_shovel"), nil, ITEMCAT_MELEE, 20, "weapon_zs_shovel")
+GM:AddPointShopItem("zpplnk", ""..translate.Get("worth_plank"), nil, ITEMCAT_MELEE, 20, "weapon_zs_plank")
+GM:AddPointShopItem("pipe", ""..translate.Get("worth_leadpipe"), nil, ITEMCAT_MELEE, 25, "weapon_zs_pipe")
 GM:AddPointShopItem("sledgehammer", ""..translate.Get("ars_sledge"), nil, ITEMCAT_MELEE, 30, "weapon_zs_sledgehammer")
 GM:AddPointShopItem("katana", ""..translate.Get("weapon_katana"), nil, ITEMCAT_MELEE, 50, "weapon_zs_katana")
+
+
+
 
 ------------
 -- P.TOOLS --
 ------------
 
+GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
 GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
 GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
+GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
+GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
+GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
+GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
 local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
 	ITEMCAT_TOOLS, 65, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
@@ -289,17 +302,13 @@ local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"),
 	pl:GiveAmmo(250, "smg1")
 end, "models/combine_turrets/floor_turret.mdl")
 item.NoClassicMode = true
-GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
-GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
-GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
-GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
-GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
 GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
 
 ------------
 -- P.OTHER --
 ------------
-
+GM:AddPointShopItem("pstone", ""..translate.Get("worth_stone"), nil, ITEMCAT_OTHER, 3, "weapon_zs_stone")
+GM:AddPointShopItem("poxtank", ""..translate.Get("worth_oxygentank"), ""..translate.Get("worth_oxygentank2"), ITEMCAT_OTHER, 5, "weapon_zs_oxygentank")
 GM:AddPointShopItem("grenade", ""..translate.Get("ars_grenade"), nil, ITEMCAT_OTHER, 200, "weapon_zs_grenade")
 GM:AddPointShopItem("empower", ""..translate.Get("craft_empower"), nil, ITEMCAT_OTHER, 230, "weapon_zs_empower")
 GM:AddPointShopItem("detpck", ""..translate.Get("ars_detpack"), nil, ITEMCAT_OTHER, 500, "weapon_zs_detpack")
