@@ -283,7 +283,6 @@ end
 function meta:CallZombieFunction(funcname, ...)
 	if self:Team() == TEAM_UNDEAD then
 		local tab = self:GetZombieClassTable()
-		if tab == nil then print("nil") return end
 		if tab[funcname] then
 			return tab[funcname](tab, self, ...)
 		end
