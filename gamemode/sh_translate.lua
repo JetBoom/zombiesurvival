@@ -51,8 +51,8 @@ function translate.AddTranslation(id, text)
 end
 
 function translate.Get(id)
-  return id
-	--return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
+  --return id
+	return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
 end
 
 function translate.Format(id, ...)
