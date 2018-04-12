@@ -34,6 +34,7 @@ function translate.GetLanguageName(short)
 end
 
 function translate.GetTranslations(short)
+  print(Translations[DefaultLanguage])
 	return Translations[short] or Translations[DefaultLanguage]
 end
 
@@ -50,7 +51,8 @@ function translate.AddTranslation(id, text)
 end
 
 function translate.Get(id)
-	return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
+  return id
+	--return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
 end
 
 function translate.Format(id, ...)
@@ -86,7 +88,6 @@ end
 
 for i, filename in pairs(file.Find(GM.FolderName.."/gamemode/languages/*.lua", "LUA")) do
 	LANGUAGE = {}
-  print(filename)
 	AddCSLuaFile("../languages/"..filename)
 	include("../languages/"..filename)
 	for k, v in pairs(LANGUAGE) do

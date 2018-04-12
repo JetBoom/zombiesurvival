@@ -7,17 +7,17 @@ GM.ProfilerVersion = 0
 GM.MaxProfilerNodes = 128
 
 hook.Add("Initialize", "ZSProfiler", function()
-	file.CreateDir("../misc/"..GAMEMODE.ProfilerFolder)
-	file.CreateDir("../misc/"..GAMEMODE.ProfilerFolderPreMade)
+	file.CreateDir(GAMEMODE.ProfilerFolder)
+	file.CreateDir(GAMEMODE.ProfilerFolderPreMade)
 end)
 
 local mapname = string.lower(game.GetMap())
-if file.Exists("../misc/"..GM.ProfilerFolderPreMade.."/"..mapname..".txt", "DATA") then
+if file.Exists(GM.ProfilerFolderPreMade.."/"..mapname..".txt", "DATA") then
 	GM.ProfilerIsPreMade = true
-	GM.ProfilerNodes = Deserialize(file.Read("../misc/"..GM.ProfilerFolderPreMade.."/"..mapname..".txt", "DATA"))
+	GM.ProfilerNodes = Deserialize(file.Read(GM.ProfilerFolderPreMade.."/"..mapname..".txt", "DATA"))
 	SRL = nil
-elseif file.Exists(GM.FolderName.."/gamemode/misc/"..GM.ProfilerFolderPreMade.."/"..mapname..".lua", "LUA") then
-	include("../misc/" ..GM.ProfilerFolderPreMade.."/"..mapname..".lua")
+elseif file.Exists(GM.FolderName.."/gamemode/"..GM.ProfilerFolderPreMade.."/"..mapname..".lua", "LUA") then
+	include(GM.ProfilerFolderPreMade.."/"..mapname..".lua")
 	GM.ProfilerIsPreMade = true
 	GM.ProfilerNodes = SRL or GM.ProfilerNodes
 	SRL = nil

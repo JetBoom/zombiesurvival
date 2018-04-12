@@ -283,6 +283,7 @@ end
 function meta:CallZombieFunction(funcname, ...)
 	if self:Team() == TEAM_UNDEAD then
 		local tab = self:GetZombieClassTable()
+		if tab == nil then print("nil") return end
 		if tab[funcname] then
 			return tab[funcname](tab, self, ...)
 		end
@@ -426,12 +427,12 @@ function meta:ShouldBarricadeGhostWith(ent)
 end
 
 function meta:BarricadeGhostingThink()
-	if self:KeyDown(IN_ZOOM) or self:ActiveBarricadeGhosting() then 
-		if self.FirstGhostThink then 
-			self:SetLocalVelocity( Vector( 0, 0, 0 ) ) 
-			self.FirstGhostThink = false 
+	if self:KeyDown(IN_ZOOM) or self:ActiveBarricadeGhosting() then
+		if self.FirstGhostThink then
+			self:SetLocalVelocity( Vector( 0, 0, 0 ) )
+			self.FirstGhostThink = false
 		end
-		return 
+		return
 	end
 	self.FirstGhostThink = true
 	self:SetBarricadeGhosting(false)
@@ -894,7 +895,7 @@ function meta:FireBullets(bulletInfo, suppressHostEvents)
 	local lagCompensation = SERVER and not self:IsListenServerHost()
 
 	math.randomseed( CurTime() )
-	
+
 	if lagCompensation then
 		self:LagCompensation(true)
 	end
@@ -905,5 +906,5 @@ function meta:FireBullets(bulletInfo, suppressHostEvents)
 
 	if lagCompensation then
 		self:LagCompensation(false)
-	end 
+	end
 end
