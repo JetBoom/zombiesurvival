@@ -37,69 +37,6 @@ AddCSLuaFile("shared/sh_bullets.lua")
 ////////// Client Files //////////
 ]]
 
-<<<<<<< HEAD
-AddCSLuaFile("cl_draw.lua")
-AddCSLuaFile("cl_util.lua")
-AddCSLuaFile("cl_options.lua")
-AddCSLuaFile("cl_scoreboard.lua")
-AddCSLuaFile("cl_targetid.lua")
-AddCSLuaFile("cl_postprocess.lua")
-AddCSLuaFile("cl_deathnotice.lua")
-AddCSLuaFile("cl_floatingscore.lua")
-AddCSLuaFile("cl_dermaskin.lua")
-AddCSLuaFile("cl_hint.lua")
-AddCSLuaFile("cl_extras.lua")
-
-AddCSLuaFile("obj_vector_extend.lua")
-AddCSLuaFile("obj_player_extend.lua")
-AddCSLuaFile("obj_player_extend_cl.lua")
-AddCSLuaFile("obj_weapon_extend.lua")
-AddCSLuaFile("obj_entity_extend.lua")
-
-AddCSLuaFile("vgui/dgamestate.lua")
-AddCSLuaFile("vgui/dteamcounter.lua")
-AddCSLuaFile("vgui/dmodelpanelex.lua")
-AddCSLuaFile("vgui/dammocounter.lua")
-AddCSLuaFile("vgui/dpingmeter.lua")
-AddCSLuaFile("vgui/dteamheading.lua")
-AddCSLuaFile("vgui/dsidemenu.lua")
-AddCSLuaFile("vgui/dmodelkillicon.lua")
-
-AddCSLuaFile("vgui/dexroundedpanel.lua")
-AddCSLuaFile("vgui/dexroundedframe.lua")
-AddCSLuaFile("vgui/dexrotatedimage.lua")
-AddCSLuaFile("vgui/dexnotificationslist.lua")
-AddCSLuaFile("vgui/dexchanginglabel.lua")
-
-AddCSLuaFile("vgui/mainmenu.lua")
-AddCSLuaFile("vgui/pmainmenu.lua")
-AddCSLuaFile("vgui/poptions.lua")
-AddCSLuaFile("vgui/phelp.lua")
-AddCSLuaFile("vgui/pclassselect.lua")
-AddCSLuaFile("vgui/pweapons.lua")
-AddCSLuaFile("vgui/pendboard.lua")
-AddCSLuaFile("vgui/pworth.lua")
-AddCSLuaFile("vgui/ppointshop.lua")
-AddCSLuaFile("vgui/changeteam.lua")
-AddCSLuaFile("vgui/zshealtharea.lua")
-
-
-include("shared.lua")
-include("sv_options.lua")
-include("sv_crafts.lua")
-include("obj_entity_extend_sv.lua")
-include("obj_player_extend_sv.lua")
-include("mapeditor.lua")
-include("sv_playerspawnentities.lua")
-include("sv_profiling.lua")
-include("sv_sigils.lua")
-
-include("sv_zombieescape.lua")
-
-include("sv_downloads.lua")
-include("sv_redeem.lua")
-include("sv_extras.lua")
-=======
 AddCSLuaFile("client/cl_draw.lua")
 AddCSLuaFile("client/cl_util.lua")
 AddCSLuaFile("client/cl_options.lua")
@@ -168,7 +105,6 @@ include("zombieescape/sv_zombieescape.lua")
 include("server/sv_downloads.lua")
 include("server/sv_redeem.lua")
 include("server/sv_extras.lua")
->>>>>>> 5cfd35f28ca15b7925c06a934678420ca1df168b
 
 if file.Exists(GM.FolderName.."/gamemode/misc/maps/"..game.GetMap()..".lua", "LUA") then
 	include("misc/maps/"..game.GetMap()..".lua")
