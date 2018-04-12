@@ -88,8 +88,8 @@ end
 
 for i, filename in pairs(file.Find(GM.FolderName.."/gamemode/languages/*.lua", "LUA")) do
 	LANGUAGE = {}
-	AddCSLuaFile("../languages/"..filename)
-	include("../languages/"..filename)
+	AddCSLuaFile("languages/"..filename)
+	include("languages/"..filename)
 	for k, v in pairs(LANGUAGE) do
 		translate.AddTranslation(k, v)
 	end

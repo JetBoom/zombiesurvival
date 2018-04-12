@@ -46,9 +46,9 @@ function GM:GetWaveOneLength()
 	return GetGlobalBool("classicmode") and self.WaveOneLengthClassic or self.WaveOneLength
 end
 
-include("shared/sh_translate.lua")
+include("sh_translate.lua")
 include("shared/sh_colors.lua")
-include("shared/sh_serialization.lua")
+include("sh_serialization.lua")
 
 include("shared/sh_globals.lua")
 include("shared/sh_crafts.lua")

@@ -5,24 +5,24 @@ williammoodhe@gmail.com -or- jetboom@noxiousnet.com
 http://www.noxiousnet.com/
 Further credits displayed by pressing F1 in-game.
 This was my first ever gamemode. A lot of stuff is from years ago and some stuff is very recent.
-]]
+]]--
 
 -- TODO: player introduced to a "main menu" sort of thing. auto joins as spectator. Requires recoding of a lot of logic because right now we assume only two possible teams and no spectator for humans.
 
 --[[
 ////////// Main Files //////////
-]]
+]]--
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 --[[
 ////////// Shared Files //////////
-]]
+]]--
 
-AddCSLuaFile("shared/sh_translate.lua")
+AddCSLuaFile("sh_translate.lua")
 AddCSLuaFile("shared/sh_colors.lua")
-AddCSLuaFile("shared/sh_serialization.lua")
+AddCSLuaFile("sh_serialization.lua")
 AddCSLuaFile("shared/sh_globals.lua")
 AddCSLuaFile("shared/sh_crafts.lua")
 AddCSLuaFile("shared/sh_util.lua")
@@ -35,7 +35,7 @@ AddCSLuaFile("shared/sh_bullets.lua")
 
 --[[
 ////////// Client Files //////////
-]]
+]]--
 
 AddCSLuaFile("client/cl_draw.lua")
 AddCSLuaFile("client/cl_util.lua")
@@ -51,7 +51,7 @@ AddCSLuaFile("client/cl_extras.lua")
 
 --[[
 ////////// VGUI Files //////////
-]]
+]]--
 
 AddCSLuaFile("client/vgui/dgamestate.lua")
 AddCSLuaFile("client/vgui/dteamcounter.lua")
@@ -80,7 +80,7 @@ AddCSLuaFile("client/vgui/zshealtharea.lua")
 
 --[[
 ////////// Meta Files //////////
-]]
+]]--
 
 AddCSLuaFile("meta/obj_vector_extend.lua")
 AddCSLuaFile("meta/obj_player_extend.lua")
@@ -90,7 +90,7 @@ AddCSLuaFile("meta/obj_entity_extend.lua")
 
 --[[
 ////////// Include Files //////////
-]]
+]]--
 
 include("shared.lua")
 include("server/sv_options.lua")
