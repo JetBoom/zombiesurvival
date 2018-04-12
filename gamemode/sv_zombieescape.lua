@@ -1,7 +1,7 @@
-AddCSLuaFile("zombieescape/cl_zombieescape.lua")
-AddCSLuaFile("zombieescape/sh_zombieescape.lua")
+AddCSLuaFile("cl_zombieescape.lua")
+AddCSLuaFile("sh_zombieescape.lua")
 
-include("zombieescape/sh_zombieescape.lua")
+include("sh_zombieescape.lua")
 
 if not GM.ZombieEscape then return end
 
