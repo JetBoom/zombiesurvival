@@ -29,13 +29,12 @@ GM.Credits2 = {
 	{"Dadido3", "https://steamcommunity.com/profiles/76561198005024048", "Assistant Programmer / German Translation"},
 	{"Nyanpasu", "https://steamcommunity.com/profiles/76561198158864042", "Issue Tracker / Russian Translation"},
 	{"ForrestMarkX", "https://steamcommunity.com/profiles/76561197997881512", "Spectate System"},
-	{"Sulfito", "https://steamcommunity.com/profiles/76561198026081830", "Spanish Translation"},
-
+	{"Sulfito", "https://steamcommunity.com/profiles/76561198026081830", "Spanish Translation"}
 }
 
 
-include("nixthelag.lua")
-include("buffthefps.lua")
+include("misc/nixthelag.lua")
+include("misc/buffthefps.lua")
 
 function GM:GetNumberOfWaves()
 	local default = GetGlobalBool("classicmode") and 10 or self.NumberOfWaves
@@ -47,28 +46,28 @@ function GM:GetWaveOneLength()
 	return GetGlobalBool("classicmode") and self.WaveOneLengthClassic or self.WaveOneLength
 end
 
-include("sh_translate.lua")
-include("sh_colors.lua")
-include("sh_serialization.lua")
+include("shared/sh_translate.lua")
+include("shared/sh_colors.lua")
+include("shared/sh_serialization.lua")
 
-include("sh_globals.lua")
-include("sh_crafts.lua")
-include("sh_util.lua")
-include("sh_options.lua")
-include("sh_zombieclasses.lua")
-include("sh_animations.lua")
-include("sh_sigils.lua")
-include("sh_channel.lua")
-include("sh_bullets.lua")
+include("shared/sh_globals.lua")
+include("shared/sh_crafts.lua")
+include("shared/sh_util.lua")
+include("shared/sh_options.lua")
+include("shared/sh_zombieclasses.lua")
+include("shared/sh_animations.lua")
+include("shared/sh_sigils.lua")
+include("shared/sh_channel.lua")
+include("shared/sh_bullets.lua")
 
-include("noxapi/noxapi.lua")
+include("misc/noxapi/noxapi.lua")
 
 include("meta/obj_vector_extend.lua")
 include("meta/obj_entity_extend.lua")
 include("meta/obj_player_extend.lua")
 include("meta/obj_weapon_extend.lua")
 
-include("workshopfix.lua")
+include("misc/workshopfix.lua")
 
 ----------------------
 

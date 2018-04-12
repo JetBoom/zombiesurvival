@@ -23,6 +23,7 @@ These need to be done before any other feature gets added in!
   - [ ] Sigil Stuff!
   - [ ] Other Stuff!
 - [ ] Move the progress bars such as the packup progress bar back into their status files!
+- [ ] Rewrite code in sv_redeem!
 - [ ] Update the sigils!
   - [ ] Replace the timer with CurTime!
   - [ ] Display a progress bar, also make sure the progress bar is located in status_sigilteleport instead of putting it in the human hud!

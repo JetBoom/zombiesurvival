@@ -9,21 +9,33 @@ This was my first ever gamemode. A lot of stuff is from years ago and some stuff
 
 -- TODO: player introduced to a "main menu" sort of thing. auto joins as spectator. Requires recoding of a lot of logic because right now we assume only two possible teams and no spectator for humans.
 
+--[[
+////////// Main Files //////////
+]]
+
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
-AddCSLuaFile("sh_translate.lua")
-AddCSLuaFile("sh_colors.lua")
-AddCSLuaFile("sh_serialization.lua")
-AddCSLuaFile("sh_globals.lua")
-AddCSLuaFile("sh_crafts.lua")
-AddCSLuaFile("sh_util.lua")
-AddCSLuaFile("sh_options.lua")
-AddCSLuaFile("sh_zombieclasses.lua")
-AddCSLuaFile("sh_animations.lua")
-AddCSLuaFile("sh_sigils.lua")
-AddCSLuaFile("sh_channel.lua")
-AddCSLuaFile("sh_bullets.lua")
+--[[
+////////// Shared Files //////////
+]]
+
+AddCSLuaFile("shared/sh_translate.lua")
+AddCSLuaFile("shared/sh_colors.lua")
+AddCSLuaFile("shared/sh_serialization.lua")
+AddCSLuaFile("shared/sh_globals.lua")
+AddCSLuaFile("shared/sh_crafts.lua")
+AddCSLuaFile("shared/sh_util.lua")
+AddCSLuaFile("shared/sh_options.lua")
+AddCSLuaFile("shared/sh_zombieclasses.lua")
+AddCSLuaFile("shared/sh_animations.lua")
+AddCSLuaFile("shared/sh_sigils.lua")
+AddCSLuaFile("shared/sh_channel.lua")
+AddCSLuaFile("shared/sh_bullets.lua")
+
+--[[
+////////// Client Files //////////
+]]
 
 AddCSLuaFile("client/cl_draw.lua")
 AddCSLuaFile("client/cl_util.lua")
@@ -37,57 +49,65 @@ AddCSLuaFile("client/cl_dermaskin.lua")
 AddCSLuaFile("client/cl_hint.lua")
 AddCSLuaFile("client/cl_extras.lua")
 
+--[[
+////////// VGUI Files //////////
+]]
+
+AddCSLuaFile("client/vgui/dgamestate.lua")
+AddCSLuaFile("client/vgui/dteamcounter.lua")
+AddCSLuaFile("client/vgui/dmodelpanelex.lua")
+AddCSLuaFile("client/vgui/dammocounter.lua")
+AddCSLuaFile("client/vgui/dpingmeter.lua")
+AddCSLuaFile("client/vgui/dteamheading.lua")
+AddCSLuaFile("client/vgui/dsidemenu.lua")
+AddCSLuaFile("client/vgui/dmodelkillicon.lua")
+AddCSLuaFile("client/vgui/dexroundedpanel.lua")
+AddCSLuaFile("client/vgui/dexroundedframe.lua")
+AddCSLuaFile("client/vgui/dexrotatedimage.lua")
+AddCSLuaFile("client/vgui/dexnotificationslist.lua")
+AddCSLuaFile("client/vgui/dexchanginglabel.lua")
+AddCSLuaFile("client/vgui/mainmenu.lua")
+AddCSLuaFile("client/vgui/pmainmenu.lua")
+AddCSLuaFile("client/vgui/poptions.lua")
+AddCSLuaFile("client/vgui/phelp.lua")
+AddCSLuaFile("client/vgui/pclassselect.lua")
+AddCSLuaFile("client/vgui/pweapons.lua")
+AddCSLuaFile("client/vgui/pendboard.lua")
+AddCSLuaFile("client/vgui/pworth.lua")
+AddCSLuaFile("client/vgui/ppointshop.lua")
+AddCSLuaFile("client/vgui/changeteam.lua")
+AddCSLuaFile("client/vgui/zshealtharea.lua")
+
+--[[
+////////// Meta Files //////////
+]]
+
 AddCSLuaFile("meta/obj_vector_extend.lua")
 AddCSLuaFile("meta/obj_player_extend.lua")
 AddCSLuaFile("meta/obj_player_extend_cl.lua")
 AddCSLuaFile("meta/obj_weapon_extend.lua")
 AddCSLuaFile("meta/obj_entity_extend.lua")
 
-AddCSLuaFile("vgui/dgamestate.lua")
-AddCSLuaFile("vgui/dteamcounter.lua")
-AddCSLuaFile("vgui/dmodelpanelex.lua")
-AddCSLuaFile("vgui/dammocounter.lua")
-AddCSLuaFile("vgui/dpingmeter.lua")
-AddCSLuaFile("vgui/dteamheading.lua")
-AddCSLuaFile("vgui/dsidemenu.lua")
-AddCSLuaFile("vgui/dmodelkillicon.lua")
-AddCSLuaFile("vgui/dexroundedpanel.lua")
-AddCSLuaFile("vgui/dexroundedframe.lua")
-AddCSLuaFile("vgui/dexrotatedimage.lua")
-AddCSLuaFile("vgui/dexnotificationslist.lua")
-AddCSLuaFile("vgui/dexchanginglabel.lua")
-AddCSLuaFile("vgui/mainmenu.lua")
-AddCSLuaFile("vgui/pmainmenu.lua")
-AddCSLuaFile("vgui/poptions.lua")
-AddCSLuaFile("vgui/phelp.lua")
-AddCSLuaFile("vgui/pclassselect.lua")
-AddCSLuaFile("vgui/pweapons.lua")
-AddCSLuaFile("vgui/pendboard.lua")
-AddCSLuaFile("vgui/pworth.lua")
-AddCSLuaFile("vgui/ppointshop.lua")
-AddCSLuaFile("vgui/changeteam.lua")
-AddCSLuaFile("vgui/zshealtharea.lua")
-
+--[[
+////////// Include Files //////////
+]]
 
 include("shared.lua")
-include("sv_options.lua")
-include("sv_crafts.lua")
+include("server/sv_options.lua")
+include("server/sv_crafts.lua")
 include("meta/obj_entity_extend_sv.lua")
 include("meta/obj_player_extend_sv.lua")
-include("mapeditor.lua")
-include("sv_playerspawnentities.lua")
-include("sv_profiling.lua")
-include("sv_sigils.lua")
+include("misc/mapeditor.lua")
+include("server/sv_playerspawnentities.lua")
+include("server/sv_profiling.lua")
+include("server/sv_sigils.lua")
+include("zombieescape/sv_zombieescape.lua")
+include("server/sv_downloads.lua")
+include("server/sv_redeem.lua")
+include("server/sv_extras.lua")
 
-include("sv_zombieescape.lua")
-
-include("sv_downloads.lua")
-include("sv_redeem.lua")
-include("sv_extras.lua")
-
-
-if file.Exists(GM.FolderName.."/gamemode/maps/"..game.GetMap()..".lua", "LUA") then
-	include("maps/"..game.GetMap()..".lua")
+if file.Exists(GM.FolderName.."/gamemode/misc/maps/"..game.GetMap()..".lua", "LUA") then
+	include("misc/maps/"..game.GetMap()..".lua")
 end
 
 function BroadcastLua(code)
