@@ -22,7 +22,7 @@ These need to be done before any other feature gets added in!
   - [ ] Weapon Stuff!
   - [ ] Sigil Stuff!
   - [ ] Other Stuff!
-- [ ] Move the progress bars such as the packup progress bar back into their status files!
+- [x] Move the progress bars such as the packup progress bar back into their status files!
 - [ ] Rewrite code in sv_redeem!
 - [ ] Update the sigils!
   - [ ] Replace the timer with CurTime!
