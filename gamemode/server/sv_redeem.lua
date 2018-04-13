@@ -39,8 +39,7 @@ if not silent then
 	pl.SpawnedTime = CurTime()
     timer.Create("AddPoints_"..pl:SteamID(), 60, 0, function() pl:AddPoints(25) end)
 
-    local mapname = string.lower(game.GetMap())
-	if string.find(mapname, "_obj_", 1, true) or string.find(mapname, "objective", 1, true) or string.find(mapname, "ze_", 1, true) then
+	if GAMEMODE.ZombieEscape or GAMEMODE.ObjectiveMap then
     pl:RemoveStatus("overridemodel", false, true)
 	pl:ChangeTeam(TEAM_HUMAN)
 	timer.Destroy("AddPoints_" .. pl:SteamID()) end
