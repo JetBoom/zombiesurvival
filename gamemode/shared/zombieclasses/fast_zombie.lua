@@ -170,6 +170,15 @@ function CLASS:DoAnimationEvent(pl, event, data)
 end
 
 if SERVER then
+
+	function CLASS:OnSpawned(pl)
+		local status = pl:GiveStatus("overridemodel")
+		if status and status:IsValid() then
+			status:SetModel("models/zombie/fast_v3.mdl")
+			status:SetBodygroup( 1, 0 )
+		end
+	end
+	
 	function CLASS:ReviveCallback(pl, attacker, dmginfo)
 		if not pl.Revive and not dmginfo:GetInflictor().IsMelee and dmginfo:GetDamageType() ~= DMG_BLAST and dmginfo:GetDamageType() ~= DMG_BURN and (pl:LastHitGroup() == HITGROUP_LEFTLEG or pl:LastHitGroup() == HITGROUP_RIGHTLEG) and math.random(3) == 1 then
 			local classtable = GAMEMODE.ZombieClasses["Fast Zombie Legs"]
