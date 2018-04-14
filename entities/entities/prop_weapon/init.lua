@@ -14,6 +14,7 @@ function ENT:Initialize()
 	self.IgnoreUse = self.IgnoreUse or false
 	self.Empty = self.Empty or false
 	
+	local class = self:GetWeaponType()
 	local sandbox_tab = self.SandBoxTable[class]
 	local weptab = weapons.GetStored(self:GetWeaponType())
 	if weptab and not weptab.BoxPhysicsMax or self.SandBoxTable and sandbox_tab then
