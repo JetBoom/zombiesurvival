@@ -198,6 +198,16 @@ function GM:AddResources()
 
 	resource.AddFile("materials/models/weapons/v_hand/armtexture.vmt")
 
+	
+	resource.AddFile( "models/zombie/fast_v3.ani" )
+	resource.AddFile( "models/zombie/fast_v3.dx80.vtx" )
+	resource.AddFile( "models/zombie/fast_v3.dx90.vtx" )
+	resource.AddFile( "models/zombie/fast_v3.mdl" )
+	resource.AddFile( "models/zombie/fast_v3.phy" )
+	resource.AddFile( "models/zombie/fast_v3.sw.vtx" )
+	resource.AddFile( "sound/models/zombie/fast_v3.vvd" )
+
+	
 	resource.AddFile("models/wraith_zsv1.mdl")
 	for _, filename in pairs(file.Find("materials/models/wraith1/*.vmt", "GAME")) do
 		resource.AddFile("materials/models/wraith1/"..filename)
