@@ -279,6 +279,9 @@ function GM:AddResources()
 	resource.AddFile("sound/weapons/zs_scar/scar_fire1.ogg")
 	resource.AddFile("sound/zombiesurvival/redeem.mp3")
 	resource.AddFile("sound/zombiesurvival/sigil_loop.wav")
+	resource.AddFile("sound/zombiesurvival/round_start.mp3")
+	resource.AddFile("sound/zombiesurvival/round_end.mp3")
+
 
 	resource.AddFile("materials/noxctf/sprite_bloodspray1.vmt")
 	resource.AddFile("materials/noxctf/sprite_bloodspray2.vmt")

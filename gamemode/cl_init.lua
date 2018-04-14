@@ -1925,7 +1925,7 @@ net.Receive("zs_wavestart", function(length)
 		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Format("wave_x_has_begun", wave), {killicon = "default"})
 	end
 
-	surface_PlaySound("ambient/creatures/town_zombie_call1.wav")
+	surface_PlaySound("zombiesurvival/round_start.mp3")
 end)
 
 net.Receive("zs_classunlock", function(length)
@@ -1942,7 +1942,7 @@ net.Receive("zs_waveend", function(length)
 		GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Format("wave_x_is_over", wave))
 		GAMEMODE:CenterNotify(translate.Format("wave_x_is_over_sub", GAMEMODE.ArsenalCrateDiscountPercentage))
 
-		surface_PlaySound("ambient/atmosphere/cave_hit"..math.random(6)..".wav")
+		surface_PlaySound("zombiesurvival/round_end.mp3")
 	end
 end)
 
