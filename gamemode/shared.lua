@@ -25,12 +25,12 @@ GM.Credits = {
 
 GM.Credits2 = {
 	{"MrCraigTunstall", "https://steamcommunity.com/profiles/76561198059515155", "Project Leader"},
+	{"Mka0207", "https://fwkzt.com", "Concept of ZS:R and Zombine Class."}
 	{"Flairieve", "https://steamcommunity.com/profiles/76561198055782802", "Programmer / Contributor"},
 	{"Dadido3", "https://steamcommunity.com/profiles/76561198005024048", "Assistant Programmer / German Translation"},
 	{"Nyanpasu", "https://steamcommunity.com/profiles/76561198158864042", "Issue Tracker / Russian Translation"},
 	{"ForrestMarkX", "https://steamcommunity.com/profiles/76561197997881512", "Spectate System"},
-	{"Sulfito", "https://steamcommunity.com/profiles/76561198026081830", "Spanish Translation"},
-	{"Mka0207", "https://fwkzt.com", "Concept of ZS:R and Zombine Class."}
+	{"Sulfito", "https://steamcommunity.com/profiles/76561198026081830", "Spanish Translation"}
 }
 
 
