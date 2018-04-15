@@ -53,8 +53,10 @@ local function SigilTeleport(caller, currentsigil, index, first)
   		currentsigil:EmitSound("friends/message.wav")
   		if first == true then
   			sigil:EmitSound("friends/friend_join.wav")
+				caller:SendLua("surface.PlaySound('friends/friend_join.wav')")
   		else
   			sigil:EmitSound("friends/friend_online.wav")
+				caller:SendLua("surface.PlaySound('friends/friend_online.wav')")
   		end
 		end
 	end)
