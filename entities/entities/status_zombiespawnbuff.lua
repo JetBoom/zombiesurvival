@@ -18,7 +18,7 @@ end
 function ENT:Move(pl, move)
 	if pl ~= self:GetOwner() then return end
 
-	move:SetMaxSpeed(move:GetMaxSpeed() * 1.25)
+	move:SetMaxSpeed(move:GetMaxSpeed() * 1.45)
 	move:SetMaxClientSpeed(move:GetMaxSpeed())
 end
 

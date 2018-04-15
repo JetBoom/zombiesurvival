@@ -32,6 +32,8 @@ AddCSLuaFile("shared/sh_animations.lua")
 AddCSLuaFile("shared/sh_sigils.lua")
 AddCSLuaFile("shared/sh_channel.lua")
 AddCSLuaFile("shared/sh_bullets.lua")
+AddCSLuaFile("shared/sh_scoreboardtags.lua")
+
 
 --[[
 ////////// Client Files //////////

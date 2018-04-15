@@ -154,6 +154,7 @@ LANGUAGE.sigil_escapestart                          = "Escape sequence started"
 LANGUAGE.sigil_escapeboss                           = "Escape sequence boss stage"
 LANGUAGE.sigil_deathfog                             = "Escape sequence death fog stage"
 LANGUAGE.sigil_yousurvived                          = "You've managed to survive! Waiting for other survivors..."
+LANGUAGE.sigil_teleporting                          = "Teleporting... Please Wait!"
 
 -- Message beacon messages
 LANGUAGE.message_beacon_1							= "Meet up here"
@@ -668,6 +669,7 @@ LANGUAGE.weapon_python                              = "'Python' Magnum"
 LANGUAGE.wn_suicidebmb                              = "Suicide Bomb"
 LANGUAGE.wn_explosivecrowbar                        = "Explosive Crowbar"
 LANGUAGE.wn_explosiveredeemers                      = "Explosive 'Redeemers' Dual Handguns"
+LANGUAGE.wn_claws                                   = "Claws"
 
 -- Special Weapons (rape swep, admins only things)
 

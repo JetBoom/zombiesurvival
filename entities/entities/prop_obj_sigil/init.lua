@@ -42,22 +42,22 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	--TODO: Make a progress bar which will probably be in status_sigilteleport?
 	--TODO: Also use CurTime() instead!
 
-	-- local i=1
-	-- caller:ChatPrint("Teleporting... Please Wait!")
-	-- timer.Create("SigilTimer_" ..caller:EntIndex(), (1/20), 10, function()
-	-- 	if i < 10 then
-	-- 		i = i + 1
-	-- 	else
-	-- 		caller:SetPos(sigil:GetPos())
-  -- 		caller:SetBarricadeGhosting(true)
-  -- 		currentsigil:EmitSound("friends/message.wav")
-  -- 		if first == true then
-  -- 			sigil:EmitSound("friends/friend_join.wav")
-  -- 		else
-  -- 			sigil:EmitSound("friends/friend_online.wav")
-  -- 		end
-	-- 	end
-	-- end)
+	local i=1
+	caller:ChatPrint(translate.Get("sigil_teleporting"))
+	timer.Create("SigilTimer_" ..caller:EntIndex(), (1/20), 10, function()
+		if i < 10 then
+			i = i + 1
+		else
+			caller:SetPos(sigil:GetPos())
+  		caller:SetBarricadeGhosting(true)
+  		currentsigil:EmitSound("friends/message.wav")
+  		if first == true then
+  			sigil:EmitSound("friends/friend_join.wav")
+  		else
+  			sigil:EmitSound("friends/friend_online.wav")
+  		end
+		end
+	end)
 end
 function ENT:TeleportPlayer(caller)
 	local currentSigil = self:GetSigilLetter()
