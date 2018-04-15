@@ -7,7 +7,35 @@ if not silent then
 			net.WriteString(pl:Name())
 		net.Broadcast()
 	end
+	
+	if GAMEMODE.ZombieEscape or GAMEMODE.ObjectiveMap then
+	pl:RemoveStatus("overridemodel", false, true)
+	pl:ChangeTeam(TEAM_HUMAN)
+	pl:SetPoints(0)
+	pl:DoHulls()
+	if not noequip then pl.m_PreRedeem = true end
+	pl:UnSpectateAndSpawn()
+	pl:Give("weapon_zs_fists")
+	pl:Give("weapon_zs_redeemers")
+    pl:Give("weapon_zs_hammer")
+    pl:Give("weapon_zs_arsenalcrate")
+    --pl:SetWalkSpeed( 300 )
+	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
+	--timer.Simple( 0.8, function() pl:EmitSound("zombiesurvival/beats/placeholder/swag.ogg", 100, 100, 1) end )
+    pl.m_PreRedeem = nil
 
+	local frags = pl:Frags()
+	if frags < 0 then
+		pl:SetFrags(frags * 5)
+	else
+		pl:SetFrags(0)
+	end
+	pl:SetDeaths(0)
+	pl.DeathClass = nil
+	pl:SetZombieClass(self.DefaultZombieClass)
+
+	
+	elseif not GAMEMODE.ZombieEscape or not GAMEMODE.ObjectiveMap then
 	pl:RemoveStatus("overridemodel", false, true)
 	pl:SendLua("MakepRedeemMenu()")
 	pl:ChangeTeam(TEAM_REDEEMER)
@@ -38,13 +66,8 @@ if not silent then
 
 	pl.SpawnedTime = CurTime()
     timer.Create("AddPoints_"..pl:SteamID(), 60, 0, function() pl:AddPoints(25) end)
-
-	if GAMEMODE.ZombieEscape or GAMEMODE.ObjectiveMap then
-    pl:RemoveStatus("overridemodel", false, true)
-	pl:ChangeTeam(TEAM_HUMAN)
-	timer.Destroy("AddPoints_" .. pl:SteamID()) end
+		end
 	end
-
 function GM:PlayerRespawn(pl, silent, noequip)
 
 	pl:RemoveStatus("overridemodel", false, true)
