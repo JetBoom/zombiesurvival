@@ -32,32 +32,32 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	local sigils = ents.FindByClass("prop_obj_sigil")
 	local sigil = sigils[index]
 
-	--This cancels out the timer if the sigil is activated too soon.
-	if timer.Exists("SigilTimer_" ..caller:EntIndex()) then
-		timer.Remove("SigilTimer_" ..caller:EntIndex())
-	end
+	-- This cancels out the timer if the sigil is activated too soon.
+	-- if timer.Exists("SigilTimer_" ..caller:EntIndex()) then
+	-- 	timer.Remove("SigilTimer_" ..caller:EntIndex())
+	-- end
 
 	--If there is a better method of doing this then please replace this part!
 	--This is just here for now to prevent instant teleporting!
 	--TODO: Make a progress bar which will probably be in status_sigilteleport?
 	--TODO: Also use CurTime() instead!
 
-	local i=1
-	caller:ChatPrint("Teleporting... Please Wait!")
-	timer.Create("SigilTimer_" ..caller:EntIndex(), (1/20), 10, function()
-		if i < 10 then
-			i = i + 1
-		else
-			caller:SetPos(sigil:GetPos())
-  		caller:SetBarricadeGhosting(true)
-  		currentsigil:EmitSound("friends/message.wav")
-  		if first == true then
-  			sigil:EmitSound("friends/friend_join.wav")
-  		else
-  			sigil:EmitSound("friends/friend_online.wav")
-  		end
-		end
-	end)
+	-- local i=1
+	-- caller:ChatPrint("Teleporting... Please Wait!")
+	-- timer.Create("SigilTimer_" ..caller:EntIndex(), (1/20), 10, function()
+	-- 	if i < 10 then
+	-- 		i = i + 1
+	-- 	else
+	-- 		caller:SetPos(sigil:GetPos())
+  -- 		caller:SetBarricadeGhosting(true)
+  -- 		currentsigil:EmitSound("friends/message.wav")
+  -- 		if first == true then
+  -- 			sigil:EmitSound("friends/friend_join.wav")
+  -- 		else
+  -- 			sigil:EmitSound("friends/friend_online.wav")
+  -- 		end
+	-- 	end
+	-- end)
 end
 function ENT:TeleportPlayer(caller)
 	local currentSigil = self:GetSigilLetter()
