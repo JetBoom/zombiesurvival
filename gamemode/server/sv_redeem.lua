@@ -8,7 +8,11 @@ if not silent then
 		net.Broadcast()
 	end
 	
-	if GAMEMODE.ZombieEscape or GAMEMODE.ObjectiveMap then
+--[[
+////////// Objective Mode //////////
+]]--
+	
+	if GAMEMODE.ObjectiveMap then
 	pl:RemoveStatus("overridemodel", false, true)
 	pl:ChangeTeam(TEAM_HUMAN)
 	pl:SetPoints(0)
@@ -19,7 +23,6 @@ if not silent then
 	pl:Give("weapon_zs_redeemers")
     pl:Give("weapon_zs_hammer")
     pl:Give("weapon_zs_arsenalcrate")
-    --pl:SetWalkSpeed( 300 )
 	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
 	--timer.Simple( 0.8, function() pl:EmitSound("zombiesurvival/beats/placeholder/swag.ogg", 100, 100, 1) end )
     pl.m_PreRedeem = nil
@@ -33,7 +36,36 @@ if not silent then
 	pl:SetDeaths(0)
 	pl.DeathClass = nil
 	pl:SetZombieClass(self.DefaultZombieClass)
+	
+--[[
+////////// Zombie Escape //////////
+]]--
+	
+	elseif GAMEMODE.ZombieEscape then
+	pl:RemoveStatus("overridemodel", false, true)
+	pl:ChangeTeam(TEAM_HUMAN)
+	pl:SetPoints(0)
+	pl:DoHulls()
+	if not noequip then pl.m_PreRedeem = true end
+	pl:UnSpectateAndSpawn()
+	pl:Give("weapon_zs_fists")
+	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
+    pl.m_PreRedeem = nil
 
+	local frags = pl:Frags()
+	if frags < 0 then
+		pl:SetFrags(frags * 5)
+	else
+		pl:SetFrags(0)
+	end
+	pl:SetDeaths(0)
+	pl.DeathClass = nil
+	pl:SetZombieClass(self.DefaultZombieClass)
+	pl.SpawnedTime = CurTime()
+	
+	--[[
+////////// Normal Mode //////////
+]]--
 	
 	elseif not GAMEMODE.ZombieEscape or not GAMEMODE.ObjectiveMap then
 	pl:RemoveStatus("overridemodel", false, true)
@@ -48,7 +80,6 @@ if not silent then
     pl:Give("weapon_zs_hammer")
     pl:Give("weapon_zs_arsenalcrate")
 	pl:SetModel( "models/player/skeleton.mdl" )
-    --pl:SetWalkSpeed( 300 )
 	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
 	--timer.Simple( 0.8, function() pl:EmitSound("zombiesurvival/beats/placeholder/swag.ogg", 100, 100, 1) end )
     pl.m_PreRedeem = nil
@@ -60,21 +91,20 @@ if not silent then
 		pl:SetFrags(0)
 	end
 	pl:SetDeaths(0)
-
 	pl.DeathClass = nil
 	pl:SetZombieClass(self.DefaultZombieClass)
-
 	pl.SpawnedTime = CurTime()
     timer.Create("AddPoints_"..pl:SteamID(), 60, 0, function() pl:AddPoints(25) end)
 		end
 	end
+
 function GM:PlayerRespawn(pl, silent, noequip)
 
 	pl:RemoveStatus("overridemodel", false, true)
 	pl:ChangeTeam(TEAM_HUMAN)
 	pl:DoHulls()
 	pl:UnSpectateAndSpawn()
-	pl:Give("weapon_zs_redeemers_dual")
+	pl:Give("weapon_zs_peashooter")
 	pl:Give("weapon_zs_swissarmyknife")
 
 	local frags = pl:Frags()
