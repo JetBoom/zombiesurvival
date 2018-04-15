@@ -24,6 +24,7 @@ function GM:OnSigilDestroyed(ent, dmginfo)
 	end
 end
 
+--Put this in sv_utils!
 local function SortDistFromLast(a, b)
 	return a.d < b.d
 end

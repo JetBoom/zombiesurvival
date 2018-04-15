@@ -152,12 +152,6 @@ function SWEP:RefreshSigils()
 	end
 end
 
-concommand.Add("zs_sigilplacer", function(sender)
-	if sender:IsValid() and sender:IsSuperAdmin() then
-		sender:Give("weapon_zs_sigilplacer")
-	end
-end)
-
 local ENT = {}
 
 ENT.Type = "anim"
