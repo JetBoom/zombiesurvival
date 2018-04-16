@@ -3776,7 +3776,7 @@ net.Receive("zs_spectate", function(len, ply)
 
 	local index = TEAM_UNDEAD
 	if ply:Team() ~= TEAM_SPECTATOR then
-		ply:PrintMessage(HUD_PRINTTALK, "You are now a Spectator.")
+		ply:PrintMessage(HUD_PRINTTALK, translate.Get("spectator_now"))
 		index = TEAM_SPECTATOR
 		
 		GAMEMODE.PreviouslyDied[ply:SteamID()] = CurTime()
