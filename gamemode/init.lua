@@ -3826,7 +3826,10 @@ net.Receive("zs_spectate", function(len, ply)
 	else
 		index = TEAM_UNDEAD
 	end
-
+	if ply:Team() == TEAM_SPECTATOR and GAMEMODE:GetWave() <= 0 then
+			ply:CenterNotify(COLOR_RED, translate.ClientGet(ply, "spectator_cantchange"))
+			return
+		end
 	ply:ChangeTeam(index)
 	
 	if not gamemode.Call("PlayerIsAdmin", ply) and index == TEAM_SPECTATOR then
