@@ -3819,8 +3819,9 @@ net.Receive("zs_spectate", function(len, ply)
 			index = TEAM_HUMAN
 		end
 
-		if not GAMEMODE.CheckedOut[ply:SteamID()] and not GAMEMODE.ZombieEscape and index ~= TEAM_UNDEAD then
-			ply:SendLua("MakepWorth()")
+		if not GAMEMODE.CheckedOut[ply:SteamID()] and index ~= TEAM_UNDEAD then
+			ply:CenterNotify(COLOR_RED, translate.ClientGet(ply, "spectator_cantchange"))
+			return
 		end
 	else
 		index = TEAM_UNDEAD
