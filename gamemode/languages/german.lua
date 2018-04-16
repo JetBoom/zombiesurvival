@@ -125,6 +125,21 @@ LANGUAGE.x_has_built_this_nest_and_is_still_around	= "%s hat dieses Nest gebaut 
 LANGUAGE.no_other_nests								= "Du kannst das letzte Nest nicht zerstören."
 LANGUAGE.no_free_channel							= "Funkstörungen von zu vielen bereits platzierten!"
 
+-- Sigils point objectives
+LANGUAGE.sigil_destroyed							= "Die Untoten haben einen Sigil zerstört!"
+LANGUAGE.sigil_destroyed_only_one_remain_h			= "Es ist nur noch einer übrig! Wenn er fällt, dann gibt es keine Hoffnung auf Rettung!"
+LANGUAGE.sigil_destroyed_only_one_remain_z			= "Es ist nur noch einer übrig!"
+LANGUAGE.sigil_destroyed_x_remain					= "%d Sigils übrig."
+LANGUAGE.last_sigil_destroyed_all_is_lost			= "Die Untoten haben den letzten Sigil zerstört."
+LANGUAGE.last_sigil_destroyed_all_is_lost2			= "Es gibt keine Hoffnung auf Rettung mehr."
+LANGUAGE.prop_obj_exit_h							= "Flüchtet!"
+LANGUAGE.prop_obj_exit_z							= "Haltet sie auf!"
+LANGUAGE.sigil_escapestart							= "Fluchtsequenz gestartet"
+LANGUAGE.sigil_escapeboss							= "Fluchtsequenz Boss-Phase"
+LANGUAGE.sigil_deathfog								= "Fluchtsequenz Todesnebel-Phase"
+LANGUAGE.sigil_yousurvived							= "Du hast es geschafft zu überleben! Warte auf andere Überlebende..."
+LANGUAGE.sigil_teleporting							= "Teleportieren.... Bitte warten!"
+
 -- Exit point objectives
 LANGUAGE.exit_destroyed								= "Die Untoten haben einen Ausgang zerstört!"
 LANGUAGE.exit_destroyed_only_one_remain_h			= "Nur noch eins steht! Wenn es zerstört wird gibt es keine Hoffnung auf eine Flucht!"
@@ -194,6 +209,7 @@ LANGUAGE.class_giga_gore_child						= "Giga Gore Child"
 LANGUAGE.class_reaper								= "Reaper"
 LANGUAGE.class_nugget								= "Nugget"
 LANGUAGE.class_bastardzine							= "Bastardzine"
+LANGUAGE.class_zombine								= "Zombine"
 
 -- Class descriptions
 LANGUAGE.description_zombie							= "Der normale Zombie ist sehr beständig und hat kraftvolle Klauen.\nEs ist schwer ihn unten zu halten, vor allem wenn er nicht in den Kopf geschossen wird."
@@ -222,6 +238,7 @@ LANGUAGE.description_gore_child						= "Einmal zombifiziert wird auch ein ungebo
 LANGUAGE.description_giga_gore_child				= "Das Ergebnis eines zu lange unbeaufsichtigten Gore-Kindes.\nEin entsetzlicher Anblick, der massive Körper ist das Ergebnis von zombifizierten Stammzellen.\nEs wird auch zum Wirt für Gore-Kinder, welche immer im Gefolge dabei sind."
 LANGUAGE.description_reaper							= "Er ist extrem schnell und kann die Menschen zu Tode erschrecken. Überrenne alle Feinde und friss deren Gehirn!"
 LANGUAGE.description_bastardzine					= "Als die Nuggets anfingen die Erde zu durchstreifen, fanden sie Wirte genau wie ihre unteren Headcrab Artgenossen.\nDiese neue Art von Zombie ist eine Mischung aus Massenchaos, rasender Geschwindigkeit und Tod."
+LANGUAGE.description_zombine						= "Wenn ein Headcrab einen Combine-Soldaten infiziert, entsteht dieser schreckliche Zombie.\nDieser Zombie ist eine Bedrohung für Barrikaden und wird erst in späteren Wellen freigeschaltet."
 
 -- Class control schemes
 LANGUAGE.controls_zombie							= "> HAUPTWAFFE: Klauen\n> SEKUNDÄRWAFFE: Schrei\n> NACHLADEN: Stöhnen\n> SPRINTEN: Tod vortäuschen\n> BEI FATALEM ANGRIFF AUF DIE BEINE: Wiederbeleben / Transformieren"
@@ -244,6 +261,8 @@ LANGUAGE.controls_flesh_creeper						= "> HAUPTWAFFE: Kopfnuss\n> SEKUNDÄRWAFFE
 LANGUAGE.controls_gore_child						= "> HAUPTWAFFE: Klauen"
 LANGUAGE.controls_giga_gore_child					= "> HAUPTWAFFE: Zertrümmern\n> SEKUNDÄRWAFFE: Gore Child werfen"
 LANGUAGE.controls_reaper							= "> HAUPTWAFFE: Axt\n> NACHLADEN: Stöhnen"
+LANGUAGE.controls_burster							= "> HAUPTWAFFE: Giftbombe\n> BEIM TOD: Giftbombe"
+LANGUAGE.controls_zombine							= "> HAUPTWAFFE: Klauen\n> SEKUNDÄRWAFFE: Granate"
 
 -- The help file... Quite big! I wouldn't blame you if you didn't translate this part.
 LANGUAGE.help_cat_introduction						= "Einführung"
@@ -525,6 +544,14 @@ LANGUAGE.wn_waraxe									= "\"Waraxe\" Pistole"
 LANGUAGE.wn_zombielegs								= "Zombie Kung Fu"
 LANGUAGE.weapon_katana								= "Katana"
 LANGUAGE.weapon_python								= "\"Python\" Magnum"
+LANGUAGE.wn_suicidebmb								= "Himmelfahrtsbombe"
+LANGUAGE.wn_explosivecrowbar						= "Explosive Brechstange"
+LANGUAGE.wn_explosiveredeemers						= "Explosive \"Redeemers\" Pistolen-Doppel"
+
+-- Special Weapons (rape swep, admins only things)
+
+LANGUAGE.wns_rape									= "Rape SWEP"
+LANGUAGE.wn_gokufists								= "Goku's Fäuste"
 
 -- Craft Weapons
 
@@ -671,6 +698,9 @@ LANGUAGE.mm_help									= "Hilfe"
 LANGUAGE.mm_pm_messg								= "Dein Spielermodell wurde geändert auf"
 LANGUAGE.mm_sp										= "Zuschauen"
 LANGUAGE.mm_unsp									= "Nicht mehr zuschauen"
+LANGUAGE.spectator_now								= "Du bist jetzt ein Zuschauer."
+LANGUAGE.spectator_cantchange						= "Du kannst den Beobachtungsmodus während Welle 0 nicht ändern."
+LANGUAGE.spectator_canchange_in_x					= "Du kannst den Beobachtungsmodus in %s wechseln"
 
 -- Weapon Database
 
