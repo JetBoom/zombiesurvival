@@ -2,12 +2,6 @@ include("shared.lua")
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
-local function DrawSigilHints()
-	for _, ent in pairs(ents.FindByClass("prop_obj_sigil")) do
-		ent:DrawWorldHint()
-	end
-end
-
 function ENT:Initialize()
 	self:SetRenderBounds(Vector(-128, -128, -128), Vector(128, 128, 200))
 
@@ -17,7 +11,12 @@ function ENT:Initialize()
 
 	--LocalPlayer().SigilTeleport = true
 
-	hook.Add("PostDrawTranslucentRenderables", "DrawSigilHints", DrawSigilHints)
+	hook.Add("PostDrawTranslucentRenderables", "DrawSigilHints", function( bDepth, bSkybox )
+		if ( bSkybox ) then return end
+		for _, ent in pairs(ents.FindByClass("prop_obj_sigil")) do
+			ent:DrawWorldHint()
+		end
+	end)
 end
 
 function ENT:Think()
