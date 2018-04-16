@@ -267,5 +267,18 @@ function SWEP:DrawWorldModel()
 	local owner = self:GetOwner()
 	if owner:IsValid() and owner.ShadowMan then return end
 
-	self:Anim_DrawWorldModel()
+	if self.Owner ~= MySelf then
+		local radius = GAMEMODE.TransparencyRadius ^ 2
+		if radius > 0 then
+			local eyepos = EyePos()
+			local dist = self.Owner:NearestPoint(eyepos):DistToSqr(eyepos)
+			if dist < radius then
+				--Don't Draw it!
+			else
+				self:Anim_DrawWorldModel()
+			end
+		end
+	else
+		self:Anim_DrawWorldModel()
+	end
 end
