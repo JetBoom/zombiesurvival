@@ -267,7 +267,7 @@ end
 	colTemp.g = col.g * mul
 	colTemp.b = col.b * mul
 	draw.RoundedBox(8, 0, 0, self:GetWide(), self:GetTall(), colTemp)
-	
+
 	return true
 end
 
@@ -279,7 +279,7 @@ function PANEL:DoClick()
 end
 
 function PANEL:PerformLayout()
-	self.m_AvatarButton:AlignLeft(16)
+	self.m_AvatarButton:AlignLeft(20)
 	self.m_AvatarButton:CenterVertical()
 
 	self.m_PlayerLabel:SizeToContents()
@@ -290,6 +290,7 @@ function PANEL:PerformLayout()
 	self.m_ScoreLabel:SetPos(self:GetWide() * 0.666 - self.m_ScoreLabel:GetWide() / 2, 0)
 	self.m_ScoreLabel:CenterVertical()
 
+	self.m_SpecialImage:AlignLeft(2)
 	self.m_SpecialImage:CenterVertical()
 
 	self.m_ClassImage:SetSize(self:GetTall(), self:GetTall())
