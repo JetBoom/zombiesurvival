@@ -3767,18 +3767,29 @@ end)
 net.Receive("zs_spectate", function(len, ply)
 	if not IsValid(ply) then return end
 
+	if ply.SpecCoolDown and RealTime() < ply.SpecCoolDown then
+		local timeLeft = ply.SpecCoolDown - RealTime()
+		ply:CenterNotify(COLOR_DARKRED , string.format("You can change from spectator in %s", string.NiceTime(timeLeft)))
+		return
+	end
+
 	local index = TEAM_UNDEAD
 	if ply:Team() ~= TEAM_SPECTATOR then
-		ply:PrintMessage(HUD_PRINTTALK, translate.Get("spectator_now"))
+		ply:PrintMessage(HUD_PRINTTALK, "You are now a Spectator.")
 		index = TEAM_SPECTATOR
-
+		
 		GAMEMODE.PreviouslyDied[ply:SteamID()] = CurTime()
 
 		if ply:Team() == TEAM_HUMAN then
 			ply:DropAll()
 		end
 
-		ply:Kill()
+		if ply:OldAlive() then
+			local zombieclass = ply:GetZombieClassTable()
+			local damagetype = bit.bor( DMG_ENERGYBEAM, DMG_DISSOLVE )
+			if ply:Team() == TEAM_UNDEAD and zombieclass.Revives then damagetype = bit.bor( DMG_ENERGYBEAM, DMG_DISSOLVE, DMG_CRUSH ) end
+			ply:TakeSpecialDamage(ply:Health(), damagetype, ply:GetLastAttacker() or ply, nil)
+		end
 	elseif ply:Team() == TEAM_SPECTATOR and GAMEMODE:GetWave() <= 0 then
 		if GAMEMODE.PreviouslyDied[ply:SteamID()] and not ply.ChangedToSpecDuringWave0 then
 			index = TEAM_UNDEAD
@@ -3794,15 +3805,9 @@ net.Receive("zs_spectate", function(len, ply)
 	end
 
 	ply:ChangeTeam(index)
-
-	if index == TEAM_SPECTATOR then
-		ply:Spectate(OBS_MODE_ROAMING)
-		GAMEMODE.PreviouslySpec[ply:SteamID()] = CurTime()
-	else
-		if index == TEAM_UNDEAD and not GAMEMODE:GetWaveActive() then
-			return
-		end
-
-		ply:UnSpectateAndSpawn()
+	
+	if not gamemode.Call("PlayerIsAdmin", ply) and index == TEAM_SPECTATOR then
+		ply.SpecCoolDown = RealTime() + 300
+		GAMEMODE.PreviouslySpec[ply:SteamID()] = ply.SpecCoolDown
 	end
 end)
