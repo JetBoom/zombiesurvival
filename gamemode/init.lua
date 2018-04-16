@@ -95,16 +95,18 @@ AddCSLuaFile("meta/obj_entity_extend.lua")
 ]]--
 
 include("shared.lua")
-include("misc/mapeditor.lua")
+include("server/sv_options.lua")
+include("server/sv_crafts.lua")
 include("meta/obj_entity_extend_sv.lua")
 include("meta/obj_player_extend_sv.lua")
+include("misc/mapeditor.lua")
 include("server/sv_playerspawnentities.lua")
 include("server/sv_profiling.lua")
 include("server/sv_sigils.lua")
+include("zombieescape/sv_zombieescape.lua")
 include("server/sv_downloads.lua")
 include("server/sv_redeem.lua")
 include("server/sv_extras.lua")
-include("zombieescape/sv_zombieescape.lua")
 
 if file.Exists(GM.FolderName.."/gamemode/misc/maps/"..game.GetMap()..".lua", "LUA") then
 	include("misc/maps/"..game.GetMap()..".lua")
