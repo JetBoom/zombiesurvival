@@ -21,7 +21,7 @@ function GM:IsSpecialPerson(pl, image)
 
 	if pl:IsBot() then
 		img = "icon16/bug.png"
-		tooltip = "Beep Boop\nI'm a bot!"
+		tooltip = "Beep Boop!\nI'm a bot!"
 	elseif pl:IsSuperAdmin() then
 		img = "icon16/shield.png"
 		tooltip = "Super Admin"
