@@ -17,10 +17,12 @@ local specialPeople = {
 }
 
 function GM:IsSpecialPerson(pl, image)
-	if pl:IsBot() then return false end
 	local img, tooltip, size, color
 
-	if pl:IsSuperAdmin() then
+	if pl:IsBot() then
+		img = "icon16/bug.png"
+		tooltip = "Beep Boop\nI'm a bot!"
+	elseif pl:IsSuperAdmin() then
 		img = "icon16/shield.png"
 		tooltip = "Super Admin"
 	elseif pl:IsAdmin() then
@@ -31,10 +33,12 @@ function GM:IsSpecialPerson(pl, image)
 		tooltip = "Nox Supporter"
 	end
 
-	for k,v in pairs(specialPeople) do
-		if v.id == pl:SteamID() or v.id64 == pl:SteamID64() then
-			img = v.img
-			tooltip = v.tooltip
+	if not pl:IsBot() then
+		for k,v in pairs(specialPeople) do
+			if v.id == pl:SteamID() or v.id64 == pl:SteamID64() then
+				img = v.img
+				tooltip = v.tooltip
+			end
 		end
 	end
 
