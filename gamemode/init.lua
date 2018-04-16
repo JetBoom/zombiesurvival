@@ -3791,7 +3791,7 @@ net.Receive("zs_spectate", function(len, ply)
 
 	if ply.SpecCoolDown and RealTime() < ply.SpecCoolDown then
 		local timeLeft = ply.SpecCoolDown - RealTime()
-		ply:CenterNotify(COLOR_DARKRED , string.format("You can change from spectator in %s", string.NiceTime(timeLeft)))
+		ply:CenterNotify(COLOR_DARKRED, string.format("You can change from spectator in %s", string.NiceTime(timeLeft)))
 		return
 	end
 

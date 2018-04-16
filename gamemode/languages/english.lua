@@ -795,6 +795,7 @@ LANGUAGE.mm_sp                                     = "Spectate"
 LANGUAGE.mm_unsp                                   = "Un-Spectate"
 LANGUAGE.spectator_now                             = "You are now a Spectator."
 LANGUAGE.spectator_cantchange                       = "You can't change during wave 0"
+LANGUAGE.spectator_canchange_in_x                   = "You can change from spectator in %s"
 
 
 -- Weapon Database
