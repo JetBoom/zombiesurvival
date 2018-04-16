@@ -2413,6 +2413,27 @@ function GM:OnPlayerChangedTeam(pl, oldteam, newteam)
 		self.CheckedOut[pl:UniqueID()] = true
 	elseif newteam == TEAM_HUMAN then
 		self.PreviouslyDied[pl:UniqueID()] = nil
+	elseif newteam == TEAM_SPECTATOR then
+		if oldteam == TEAM_HUMAN and self:GetWave() == 0 and not self:GetWaveActive() then
+			pl.ChangedToSpecDuringWave0 = true
+			pl.DiedDuringWave0 = false
+		end
+		
+		if pl:OldAlive() then
+			pl:KillSilent()
+		end
+		
+		pl:RemoveAllStatus(false, true)
+		pl.NoCollideAll = true
+		
+		--pl:CreateAmbience("ambience_spec")
+		
+		pl:SetHull(Vector(-0.1, -0.1, 0), Vector(0.1, 0.1, 18.1))
+		pl:SetHullDuck(Vector(-0.1, -0.1, 0), Vector(0.1, 0.1, 18.1))
+		
+		pl:SetFrags(0)
+		pl:StripWeapons()
+		pl:Spectate(OBS_MODE_ROAMING)
 	end
 
 	pl:SetLastAttacker(nil)
