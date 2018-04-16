@@ -71,6 +71,8 @@ These need to be done before any other feature gets added in!
 
 - Project Leader:
   - MrCraigTunstall | https://steamcommunity.com/profiles/76561198059515155
+- Concept of ZS:R and Zombine Class.:
+  - Mka0207 | https://fwkzt.com
 - Programmer / Contributor:
   - Flairieve | https://steamcommunity.com/profiles/76561198055782802
 - Assistant Programmer / German Translation:
@@ -81,7 +83,7 @@ These need to be done before any other feature gets added in!
   - ForrestMarkX | https://steamcommunity.com/profiles/76561197997881512
 - Spanish Translation:
   - Sulfito | https://steamcommunity.com/profiles/76561198026081830
-
+  
 ## Original Credits
 
 Created and programmed by William "JetBoom" Moodhe.

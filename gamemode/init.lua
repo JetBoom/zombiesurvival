@@ -32,6 +32,8 @@ AddCSLuaFile("shared/sh_animations.lua")
 AddCSLuaFile("shared/sh_sigils.lua")
 AddCSLuaFile("shared/sh_channel.lua")
 AddCSLuaFile("shared/sh_bullets.lua")
+AddCSLuaFile("shared/sh_scoreboardtags.lua")
+
 
 --[[
 ////////// Client Files //////////
@@ -183,8 +185,6 @@ function GM:TryHumanPickup(pl, entity)
 		end
 	end
 end
-
-
 
 function GM:Initialize()
 	self:RegisterPlayerSpawnEntities()
@@ -2788,6 +2788,7 @@ function GM:PlayerDeathSound()
 	return true
 end
 
+--Put this in sv_utils!
 local function SortDist(a, b)
 	return a._temp < b._temp
 end
@@ -3796,7 +3797,7 @@ net.Receive("zs_spectate", function(len, ply)
 
 	local index = TEAM_UNDEAD
 	if ply:Team() ~= TEAM_SPECTATOR then
-		ply:PrintMessage(HUD_PRINTTALK, "You are now a Spectator.")
+		ply:PrintMessage(HUD_PRINTTALK, translate.Get("spectator_now"))
 		index = TEAM_SPECTATOR
 		
 		GAMEMODE.PreviouslyDied[ply:SteamID()] = CurTime()
@@ -3818,7 +3819,7 @@ net.Receive("zs_spectate", function(len, ply)
 			index = TEAM_HUMAN
 		end
 
-		if not GAMEMODE.CheckedOut[ply:SteamID()] and index ~= TEAM_UNDEAD then
+		if not GAMEMODE.CheckedOut[ply:SteamID()] and not GAMEMODE.ZombieEscape and index ~= TEAM_UNDEAD then
 			ply:SendLua("MakepWorth()")
 		end
 	else

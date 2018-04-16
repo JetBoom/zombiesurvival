@@ -15,6 +15,8 @@ function ENT:Initialize()
 
 	self.AmbientSound = CreateSound(self, "zombiesurvival/sigil_loop.wav")
 
+	--LocalPlayer().SigilTeleport = true
+
 	hook.Add("PostDrawTranslucentRenderables", "DrawSigilHints", DrawSigilHints)
 end
 

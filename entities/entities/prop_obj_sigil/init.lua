@@ -32,10 +32,10 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	local sigils = ents.FindByClass("prop_obj_sigil")
 	local sigil = sigils[index]
 
-	--This cancels out the timer if the sigil is activated too soon.
-	if timer.Exists("SigilTimer_" ..caller:EntIndex()) then
-		timer.Remove("SigilTimer_" ..caller:EntIndex())
-	end
+	-- This cancels out the timer if the sigil is activated too soon.
+	-- if timer.Exists("SigilTimer_" ..caller:EntIndex()) then
+	-- 	timer.Remove("SigilTimer_" ..caller:EntIndex())
+	-- end
 
 	--If there is a better method of doing this then please replace this part!
 	--This is just here for now to prevent instant teleporting!
@@ -53,8 +53,10 @@ local function SigilTeleport(caller, currentsigil, index, first)
   		currentsigil:EmitSound("friends/message.wav")
   		if first == true then
   			sigil:EmitSound("friends/friend_join.wav")
+				caller:SendLua("surface.PlaySound('friends/friend_join.wav')")
   		else
   			sigil:EmitSound("friends/friend_online.wav")
+				caller:SendLua("surface.PlaySound('friends/friend_online.wav')")
   		end
 		end
 	end)
