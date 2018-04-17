@@ -795,6 +795,7 @@ LANGUAGE.mm_sp                                     = "Spectate"
 LANGUAGE.mm_unsp                                   = "Un-Spectate"
 LANGUAGE.spectator_now                             = "You are now a Spectator."
 LANGUAGE.spectator_cantchange                       = "You can't change during wave 0"
+LANGUAGE.spectator_canchange_in_x                   = "You can change from spectator in %s"
 
 
 -- Weapon Database
@@ -835,6 +836,7 @@ LANGUAGE.options_damage_floaters                    = "Enable damage indicators"
 LANGUAGE.options_movement_view_roll                 = "Enable movement view roll"
 LANGUAGE.options_always_show_nails                  = "Always display nail health"
 LANGUAGE.options_no_redeem                          = "Disable automatic redeeming (next round)"
+LANGUAGE.options_no_bandit                          = "Disable becoming a bandit"
 LANGUAGE.options_always_volunteer                   = "Always volunteer to start as a zombie"
 LANGUAGE.options_no_boss_pick                       = "Prevent being picked as a boss zombie"
 LANGUAGE.options_suicide_on_change                  = "Automatic suicide when changing classes"
