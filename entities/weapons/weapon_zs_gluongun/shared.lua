@@ -1,25 +1,17 @@
 if ( CLIENT ) then
     SWEP.PrintName            = "Gluon Gun"                                                    
-    SWEP.Author            = "FiL0S0V"
-	SWEP.Purpose          = "Annihilate pepole, zombies and others"
-	SWEP.Instructions     = "Left click to seam chaos"
-	SWEP.Category = "Half-Life 2"
     SWEP.Slot            = 3
     SWEP.SlotPos            = 1
     SWEP.ViewModelFOV        = 65
     SWEP.DrawAmmo = false
-	SWEP.IconLetter			= "x"
 	killicon.Add( "weapon_gluongun", "pack/killicon", color_white )
 end
 
-SWEP.Spawnable            = true
-SWEP.AdminSpawnable        = true
 SWEP.UseHands			   = true
 SWEP.ViewModel = "models/weapons/c_egon.mdl"
 SWEP.WorldModel = "models/weapons/w_egon.mdl"
 SWEP.Primary.ClipSize        = -1
 SWEP.Primary.Ammo            = "none"
-SWEP.BounceWeaponIcon = false
 
 SWEP.Secondary.ClipSize        = -1
 SWEP.Secondary.DefaultClip    = -1
@@ -75,7 +67,7 @@ function SWEP:Think()
         local tr = self.Owner:GetEyeTrace()
         if tr.Hit then
             util.ScreenShake( tr.HitPos, 5, 5, .1, 628 )
-            util.BlastDamage(self.Weapon, self.Owner, tr.HitPos, 90, 90 )
+            util.BlastDamage(self.Weapon, self.Owner, tr.HitPos, 10, 10 )
         end
     end
     self:SetNWInt("fier", BEAM_ON)
@@ -104,7 +96,7 @@ end
 end
 
 
-if(CLIENT)then
+if (CLIENT)then
 
 function SWEP:Initialize()
     if self.on == nil then self.on = 0 end

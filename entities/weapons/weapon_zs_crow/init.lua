@@ -54,13 +54,13 @@ function SWEP:Think()
 
 	owner:ResetSpeed()
 
-	if ent:IsValid() then
+	if ent:IsValid() and ent:IsPlayer() then
 		local phys = ent:GetPhysicsObject()
 		--[[if ent:IsPlayer() and (ent:Team() ~= TEAM_UNDEAD or ent:GetZombieClassTable().Name ~= "Crow") then
 			return
 		end]]
 
-		ent:TakeSpecialDamage(5, DMG_SLASH, owner, self)
+		ent:TakeSpecialDamage(2, DMG_SLASH, owner, self)
 	end
 end
 
