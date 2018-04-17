@@ -10,7 +10,7 @@ if not silent then
 	
 --[[
 ////////// Objective Mode, Zombie Escape 
-		   or client disabled becoming a bandit. //////////
+		   or server/client disabled becoming a bandit. //////////
 ]]--
 	
 	if GAMEMODE.ObjectiveMap or GAMEMODE.ZombieEscape 
