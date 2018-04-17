@@ -14,37 +14,39 @@ a bandit (which can help or kill humans) or change back into a human.
 
 These need to be done before any other feature gets added in!
 
-- [ ] Move a lot of the init code into separate files!
-  - [ ] Wave Stuff!
-  - [ ] Player Stuff!
-  - [ ] Human Stuff!
-  - [ ] Zombie Stuff!
-  - [ ] Weapon Stuff!
-  - [ ] Sigil Stuff!
-  - [ ] Other Stuff!
+- [ ] Move a lot of the init code into separate files.
+  - [ ] Wave stuff.
+  - [ ] Player Stuff.
+  - [ ] Human stuff.
+  - [ ] Zombie stuff.
+  - [ ] Weapon stuff.
+  - [ ] Sigil stuff.
+  - [ ] Other stuff.
 - [x] Move the progress bars such as the packup progress bar back into their status files!
-- [ ] Rewrite code in sv_redeem!
-- [ ] Update the sigils!
-  - [ ] Replace the timer with CurTime!
-  - [ ] Display a progress bar, also make sure the progress bar is located in status_sigilteleport instead of putting it in the human hud!
-  - [ ] Move the random prop spawner code for sigils (as in the props that are coming out the sigils) to it's own file or just as an addon as it does not belong in that file!
-- [ ] Carpenter's Hammer Updating!
-  - [ ] Either make prop slightly transparent when it's picked up or increase the distance of the prop that is picked up or just do both!
-  - [ ] Fix the hammer and hands from disappearing randomly when dropping or carrying around the prop!
-- [x] Rescale some of the text to fit on certain screens such as the intermission text!
-  - [x] Intermission Text!
+- [x] Rewrite code in sv_redeem!
+- [ ] Update the sigils.
+  - [ ] Replace the timer with CurTime.
+  - [ ] Display a progress bar, also make sure the progress bar is located in status_sigilteleport instead of putting it in the human hud.
+  - [ ] Move the random prop spawner code for sigils (as in the props that are coming out the sigils) to it's own file or just as an addon as it does not belong in that file.
+- [ ] Carpenter's Hammer Updating.
+  - [ ] Either make prop slightly transparent when it's picked up or increase the distance of the prop that is picked up or just do both.
+  - [ ] Fix the hammer and hands from disappearing randomly when dropping or carrying around the prop.
+- [x] Rescale some of the text to fit on certain screens such as the intermission text.
+  - [x] Intermission Text.
+- [ ] Tab menu in F1 options.
+
 
 ## Current Features
 
 ### Version 6 - Sigil System:
 
-- Basic Bandit Redeem System.
+- Basic Bandit Redeem System With Client ConVar.
 - Complete Russian, German & Spanish language translation.
 - Spectator support with the option in the F1 menu.
 - Altered how dropped deployable items work.
 - Improved worth, in-game pointshop & zombie class menus.
 - Balanced weapon & items.
-- HD Texture icons.
+- HD hexture icons.
 - Healthbars on resupply & arsenal crates.
 - Human & bandit third person.
 - Fixed when another server alters the waves logic.
