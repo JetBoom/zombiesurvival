@@ -2,21 +2,18 @@ local specialPeople = {
 	{
 		id = "STEAM_0:1:3307510",
 		img = "vgui/steam/games/icon_sourcesdk",
-		tooltip = "JetBoom\nCreator of Zombie Survival!",
-		flash = true
+		tooltip = "JetBoom\nCreator of Zombie Survival!"
 	},
 	{
 		id = "STEAM_0:1:49624713",
 		img = "vgui/steam/games/icon_sourcesdk",
-		tooltip = "MrCraigTunstall\nCoder of Zombie Survival Redemption!",
-		flash = true
+		tooltip = "MrCraigTunstall\nCoder of Zombie Survival Redemption!"
 	},
 	{
 		id = "STEAM_0:0:47758537",
 		img = "icons/cat.png",
-		tooltip = "Flairieve\nThat Awesome Cat!",
-		flash = true
-	},
+		tooltip = "Flairieve\nThat Awesome Cat!"
+	}
 }
 
 function GM:IsSpecialPerson(pl, image)
@@ -41,7 +38,7 @@ function GM:IsSpecialPerson(pl, image)
 			if v.id == pl:SteamID() or v.id64 == pl:SteamID64() then
 				img = v.img
 				tooltip = v.tooltip
-				flash = v.flash
+				flash = true
 			end
 		end
 	end
