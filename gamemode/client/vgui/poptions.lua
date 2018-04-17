@@ -129,6 +129,12 @@ function MakepOptions()
 	check:SetConVar("zs_noredeem")
 	check:SizeToContents()
 	list:AddItem(check)
+	
+	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText(translate.Get("options_no_bandit"))
+	check:SetConVar("zs_nobandit")
+	check:SizeToContents()
+	list:AddItem(check)
 
 	local check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText(translate.Get("options_always_volunteer"))

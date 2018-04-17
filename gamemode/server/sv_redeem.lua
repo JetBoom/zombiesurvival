@@ -12,7 +12,7 @@ if not silent then
 ////////// Objective Mode //////////
 ]]--
 	
-	if GAMEMODE.ObjectiveMap then
+	if GAMEMODE.ObjectiveMap or pl:GetInfo("zs_nobandit") ~= "0" then
 	pl:RemoveStatus("overridemodel", false, true)
 	pl:ChangeTeam(TEAM_HUMAN)
 	pl:SetPoints(0)
