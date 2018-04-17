@@ -54,7 +54,12 @@ function SWEP:Think()
 
 	owner:ResetSpeed()
 
-	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_UNDEAD and ent:Alive() and ent:GetZombieClassTable().Name == "Crow" then
+	if ent:IsValid() and ent:IsPlayer() then
+		local phys = ent:GetPhysicsObject()
+		--[[if ent:IsPlayer() and (ent:Team() ~= TEAM_UNDEAD or ent:GetZombieClassTable().Name ~= "Crow") then
+			return
+		end]]
+
 		ent:TakeSpecialDamage(2, DMG_SLASH, owner, self)
 	end
 end
@@ -62,6 +67,8 @@ end
 function SWEP:PrimaryAttack()
 	if CurTime() < self:GetNextPrimaryFire() or not self.Owner:IsOnGround() then return end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+
+	if self.Owner:Team() ~= TEAM_UNDEAD then self.Owner:Kill() return end
 
 	self.Owner:EmitSound("NPC_Crow.Squawk")
 	self.Owner.EatAnim = CurTime() + 2
@@ -74,6 +81,8 @@ end
 function SWEP:SecondaryAttack()
 	if CurTime() < self:GetNextSecondaryFire() then return end
 	self:SetNextSecondaryFire(CurTime() + 1.6)
+
+	if self.Owner:Team() ~= TEAM_UNDEAD then self.Owner:Kill() return end
 
 	self.Owner:EmitSound("NPC_Crow.Alert")
 end

@@ -14,7 +14,7 @@ if not silent then
 ]]--
 	
 	if GAMEMODE.ObjectiveMap or GAMEMODE.ZombieEscape 
-	or not GAMEMODE.RedeemMode or pl:GetInfo("zs_nobandit") ~= "0" then
+	or not GAMEMODE.BanditMode or pl:GetInfo("zs_nobandit") ~= "0" then
 	pl:RemoveStatus("overridemodel", false, true)
 	pl:ChangeTeam(TEAM_HUMAN)
 	pl:SetPoints(0)
