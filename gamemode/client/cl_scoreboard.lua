@@ -250,18 +250,18 @@ function PANEL:Paint()
 	local mul = 0.5
 	local pl = self:GetPlayer()
 	if pl:IsValid() then
-	col = team.GetColor(pl:Team())
+		col = team.GetColor(pl:Team())
 
-	if pl:SteamID() == "STEAM_0:1:49624713" or pl:Team() == TEAM_REDEEMER then
-	mul = 0.6 + math.abs(math.sin(RealTime() * 6)) * 0.4
-	elseif pl == MySelf then
-	mul = 0.8
+		if gamemode.Call("IsSpecialPerson", pl) then
+			mul = 0.6 + math.abs(math.sin(RealTime() * 6)) * 0.4
+		elseif pl == MySelf then
+			mul = 0.8
+		end
 	end
-end
 
 	if self.Hovered then
-	mul = math.min(1, mul * 1.5)
-end
+		mul = math.min(1, mul * 1.5)
+	end
 
 	colTemp.r = col.r * mul
 	colTemp.g = col.g * mul
@@ -369,8 +369,6 @@ function PANEL:SetPlayer(pl)
 			self.m_SpecialImage:SetTooltip()
 			self.m_SpecialImage:SetVisible(false)
 		end
-
-		self.m_Flash = pl:SteamID() == "STEAM_0:1:3307510"
 	else
 		self.m_Avatar:SetVisible(false)
 		self.m_SpecialImage:SetVisible(false)

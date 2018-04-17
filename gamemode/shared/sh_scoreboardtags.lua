@@ -13,11 +13,11 @@ local specialPeople = {
 		id = "STEAM_0:0:47758537",
 		img = "icons/cat.png",
 		tooltip = "Flairieve\nThat Awesome Cat!"
-	},
+	}
 }
 
 function GM:IsSpecialPerson(pl, image)
-	local img, tooltip, size, color
+	local img, tooltip, size, color, flash
 
 	if pl:IsBot() then
 		img = "icon16/bug.png"
@@ -38,8 +38,13 @@ function GM:IsSpecialPerson(pl, image)
 			if v.id == pl:SteamID() or v.id64 == pl:SteamID64() then
 				img = v.img
 				tooltip = v.tooltip
+				flash = true
 			end
 		end
+	end
+
+	if image == nil and flash then
+		return true
 	end
 
 	if img then
