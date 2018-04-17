@@ -13,7 +13,8 @@ if not silent then
 		   or client disabled becoming a bandit. //////////
 ]]--
 	
-	if GAMEMODE.ObjectiveMap or GAMEMODE.ZombieEscape or pl:GetInfo("zs_nobandit") ~= "0" then
+	if GAMEMODE.ObjectiveMap or GAMEMODE.ZombieEscape 
+	or not GAMEMODE.RedeemMode or pl:GetInfo("zs_nobandit") ~= "0" then
 	pl:RemoveStatus("overridemodel", false, true)
 	pl:ChangeTeam(TEAM_HUMAN)
 	pl:SetPoints(0)

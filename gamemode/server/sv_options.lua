@@ -21,7 +21,7 @@ GM.RandomProps = {
 
 GM.RedeemMode = CreateConVar("zs_redeemmode", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enables the bandit redeem system, 1 to enable, 0 to disable. Enabled by default."):GetBool()
 cvars.AddChangeCallback("zs_redeemmode", function(cvar, oldvalue, newvalue)
-	GAMEMODE:SetRedeemMode(tonumber(newvalue) == 1)
+	GAMEMODE.RedeemMode = tonumber(newvalue) == 1
 end)
 
 GM.BossZombies = CreateConVar("zs_bosszombies", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Summon a boss zombie in the middle of each wave break."):GetBool()
