@@ -19,10 +19,10 @@ local specialPeople = {
 function GM:IsSpecialPerson(pl, image)
 	local img, tooltip, size, color, flash
 
-	if pl:IsBot() then
-		img = "icon16/bug.png"
-		tooltip = "Beep Boop!\nI'm a bot!"
-	elseif pl:IsSuperAdmin() then
+	--if pl:IsBot() then
+		--img = "icon16/bug.png"
+		--tooltip = "Beep Boop!\nI'm a bot!"
+	if pl:IsSuperAdmin() then
 		img = "icon16/shield.png"
 		tooltip = "Super Admin"
 	elseif pl:IsAdmin() then
