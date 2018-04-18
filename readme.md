@@ -16,7 +16,7 @@ These need to be done before any other feature gets added in!
 
 - [ ] Move a lot of the init code into separate files.
   - [ ] Wave stuff.
-  - [ ] Player Stuff.
+  - [ ] Player stuff.
   - [ ] Human stuff.
   - [ ] Zombie stuff.
   - [ ] Weapon stuff.
@@ -85,7 +85,7 @@ These need to be done before any other feature gets added in!
   - ForrestMarkX | https://steamcommunity.com/profiles/76561197997881512
 - Spanish Translation:
   - Sulfito | https://steamcommunity.com/profiles/76561198026081830
-  
+
 ## Original Credits
 
 Created and programmed by William "JetBoom" Moodhe.

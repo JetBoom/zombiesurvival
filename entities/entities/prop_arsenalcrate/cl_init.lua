@@ -2,6 +2,13 @@ include("shared.lua")
 
 function ENT:Initialize()
 	self:SetRenderBounds(Vector(-72, -72, -72), Vector(72, 72, 128))
+
+	hook.Add("PostDrawTranslucentRenderables", "DrawArsenalHints", function( bDepth, bSkybox )
+		if ( bSkybox ) then return end
+		for _, ent in pairs(ents.FindByClass("prop_arsenalcrate")) do
+			ent:DrawWorldHint()
+		end
+	end)
 end
 
 function ENT:SetObjectHealth(health)
@@ -41,7 +48,7 @@ function ENT:Draw()
 
 		local percentage = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
 		self:DrawHealthBar(percentage)
-		
+
 		if MySelf:Team() ~= TEAM_UNDEAD and GAMEMODE:PlayerCanPurchase(MySelf) then
 			colFlash.a = math.abs(math.sin(CurTime() * 5)) * 255
 			draw.SimpleText(translate.Get("purchase_now"), "ZS3D2DFont2Small", 0, -64, colFlash, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
@@ -52,4 +59,10 @@ function ENT:Draw()
 		end
 
 	cam.End3D2D()
+end
+
+function ENT:DrawWorldHint()
+	if MySelf:Team() ~= TEAM_UNDEAD then
+		DrawIconHint(translate.Get("arsenal_crate"), "zombiesurvival/arsenalcrate.png", self:GetPos() + Vector(0, 0, self:OBBMaxs().z / 2), nil, 0.75, Color(255, 255, 255, 225))
+	end
 end

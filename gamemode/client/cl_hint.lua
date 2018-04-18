@@ -28,8 +28,6 @@ end)
 local matRing = Material("effects/select_ring")
 local colFG = Color(220, 220, 220, 255)
 
-local matSigil = Material("zombiesurvival/sigil.png")
-
 function DrawWorldHint(hint, pos, delta, scale)
 	local eyepos = EyePos()
 
@@ -77,6 +75,31 @@ function DrawSigilHint(hint, pos, delta, scale, color)
 	surface.SetMaterial(matSigil)
 	surface.SetDrawColor(color)
 	surface.DrawTexturedRectRotated(0, 0, 64, 128, 0)
+
+	cam.End3D2D()
+	cam.IgnoreZ(false)
+end
+
+function DrawIconHint(text, image, pos, delta, scale, color)
+	local eyepos = EyePos()
+
+	if WorldVisible(eyepos, pos) then return end
+
+	image = Material(image)
+	delta = delta or 1
+
+	local ang = (eyepos - pos):Angle()
+	ang:RotateAroundAxis(ang:Right(), 270)
+	ang:RotateAroundAxis(ang:Up(), 90)
+
+	cam.IgnoreZ(true)
+	cam.Start3D2D(pos, ang, (scale or 1) * math.max(250, eyepos:Distance(pos)) * delta * 0.0005)
+
+	draw.SimpleText(text, "ZS3D2DFont2Small", 0, 70, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+
+	surface.SetMaterial(image)
+	surface.SetDrawColor(color)
+	surface.DrawTexturedRectRotated(0, 0, 128, 128, 0)
 
 	cam.End3D2D()
 	cam.IgnoreZ(false)
