@@ -35,7 +35,7 @@ The sigils and the Carpenter's Hammer should be mainly focused on!
 - [x] Rescale some of the text to fit on certain screens such as the intermission text.
   - [x] Intermission Text.
 - [ ] Show Arsenal Crate and Resupply Box on player's back if they have one.
-- [ ] Gradient meter located underneath the fear meter that shows a tick which points to if there is either a lot of humans or a lot of zombies. Humans as blue on the left and zombies as red on the right.
+- [ ] Gradient bar meter located underneath the fear meter that shows a tick which points to if there is either a lot of humans or a lot of zombies. Humans as blue on the left and zombies as red on the right.
 - [ ] Work on mission mode prototype.
 - [ ] Tab menu in F1 options.
 
