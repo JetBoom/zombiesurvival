@@ -62,7 +62,7 @@ function ENT:Draw()
 end
 
 function ENT:DrawWorldHint()
-	if MySelf:Team() ~= TEAM_UNDEAD then
+	if MySelf:IsValid() and MySelf:Alive() and MySelf:Team() ~= TEAM_UNDEAD and MySelf:GetInfo("zs_noarscrate") == "0" then
 		DrawIconHint(translate.Get("arsenal_crate"), "zombiesurvival/arsenalcrate.png", self:GetPos() + Vector(0, 0, self:OBBMaxs().z / 2), nil, 0.75, Color(255, 255, 255, 225))
 	end
 end

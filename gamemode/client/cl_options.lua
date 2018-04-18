@@ -31,6 +31,8 @@ cvars.AddChangeCallback("zs_filmmode", function(cvar, oldvalue, newvalue)
 	GAMEMODE:EvaluateFilmMode()
 end)
 
+CreateClientConVar("zs_noarscrate", "0", true, true)
+CreateClientConVar("zs_noresupply", "0", true, true)
 CreateClientConVar("zs_noredeem", "0", true, true)
 CreateClientConVar("zs_nobandit", "0", true, true)
 CreateClientConVar("zs_alwaysvolunteer", "0", true, true)

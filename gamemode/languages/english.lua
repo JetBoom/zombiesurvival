@@ -821,6 +821,8 @@ LANGUAGE.classes_and                                = "and"
 -- Options
 
 LANGUAGE.options_options                            = "Options"
+LANGUAGE.options_no_ars_crate                  		= "Don't show arsenal crates through walls"
+LANGUAGE.options_no_resupply                  		= "Don't show resupply boxes through walls"
 LANGUAGE.options_no_floating_score                  = "Don't show point floaters"
 LANGUAGE.options_iron_sights_crosshair              = "Draw crosshair in ironsights."
 LANGUAGE.options_film_mode                          = "Film Mode (disable most of the HUD)"
