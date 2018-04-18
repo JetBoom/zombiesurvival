@@ -13,6 +13,7 @@ a bandit (which can help or kill humans) or change back into a human.
 ## TODO
 
 These need to be done before any other feature gets added in!
+The sigils and the Carpenter's Hammer should be mainly focused on!
 
 - [ ] Move a lot of the init code into separate files.
   - [ ] Wave stuff.
@@ -33,6 +34,7 @@ These need to be done before any other feature gets added in!
   - [ ] Fix the hammer and hands from disappearing randomly when dropping or carrying around the prop.
 - [x] Rescale some of the text to fit on certain screens such as the intermission text.
   - [x] Intermission Text.
+- [ ] Show Arsenal Crate and Resupply Box on player's back if they have one.
 - [ ] Tab menu in F1 options.
 
 
