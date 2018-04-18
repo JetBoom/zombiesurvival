@@ -35,6 +35,18 @@ function MakepOptions()
 	gamemode.Call("AddExtraOptions", list, Window)
 
 	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText(translate.Get("options_no_ars_crate"))
+	check:SetConVar("zs_noarscrate")
+	check:SizeToContents()
+	list:AddItem(check)
+	
+	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText(translate.Get("options_no_resupply"))
+	check:SetConVar("zs_noresupply")
+	check:SizeToContents()
+	list:AddItem(check)
+	
+	local check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText(translate.Get("options_no_floating_score"))
 	check:SetConVar("zs_nofloatingscore")
 	check:SizeToContents()
