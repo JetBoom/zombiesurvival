@@ -27,7 +27,7 @@ The sigils and the Carpenter's Hammer should be mainly focused on!
 - [x] Rewrite code in sv_redeem!
 - [ ] Update the sigils.
   - [ ] Replace the timer with CurTime.
-  - [ ] Display a progress bar, also make sure the progress bar is located in status_sigilteleport instead of putting it in the human hud.
+  - [ ] Display a progress bar, also make sure the progress bar is located in either status_sigilteleport or in the sigil client file instead of putting it in the human hud.
   - [ ] Move the random prop spawner code for sigils (as in the props that are coming out the sigils) to it's own file or just as an addon as it does not belong in that file.
 - [ ] Carpenter's Hammer Updating.
   - [ ] Either make prop slightly transparent when it's picked up or increase the distance of the prop that is picked up or just do both.
