@@ -1388,6 +1388,7 @@ function GM:PlayerReadyRound(pl)
 	elseif pl:Team() == TEAM_HUMAN then
 		if self:GetWave() <= 0 and self.StartingWorth > 0 and not self.StartingLoadout and not self.ZombieEscape then
 			pl:SendLua("MakepWorth()")
+			pl:SetPoints(0) -- Just to ensure points are set right during a fresh new game.
 		else
 			gamemode.Call("GiveDefaultOrRandomEquipment", pl)
 		end
