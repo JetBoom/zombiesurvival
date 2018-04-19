@@ -399,7 +399,7 @@ function meta:RemoveNail(nail, dontremoveentity, removedby)
 	-- Only remove the constraint if it's the last nail.
 	if othernails == 0 and cons:IsValid() then
 		cons:Remove()
-		self:SetIsNailed(false)
+		if not self:IsWorld() then self:SetIsNailed(false) end
 	end
 
 	local ent2 = GetNailOwner(nail, self)
@@ -419,8 +419,8 @@ function meta:RemoveNail(nail, dontremoveentity, removedby)
 				break
 			end
 		end
-		if #ent2.Nails <= 0 then
-			ent2:SetIsNailed(false)
+			if #ent2.Nails <= 0 then
+			if not self:IsWorld() then self:SetIsNailed(false) end
 		end
 	end
 
