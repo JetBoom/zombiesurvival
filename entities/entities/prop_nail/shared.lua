@@ -45,6 +45,7 @@ end
 
 function ENT:SetBaseEntity(ent)
 	self:SetDTEntity(0, ent)
+	if not ent:IsWorld() then ent:SetIsNailed(true) end
 end
 
 function ENT:GetBaseEntity()
@@ -69,6 +70,7 @@ function ENT:SetAttachEntity(ent, physbone1, physbone2)
 		end
 	end
 
+	if not ent:IsWorld() then ent:SetIsNailed(true) end
 	cons:DeleteOnRemove(self)
 	self:SetNailConstraint(cons)
 
