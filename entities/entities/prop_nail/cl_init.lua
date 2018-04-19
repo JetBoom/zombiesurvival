@@ -92,7 +92,7 @@ function ENT:DrawTranslucent()
 				surface.SetDrawColor(230, 5, 5, ru == 1 and (150 + math.abs(math.sin(RealTime() * 5)) * 105) or 220)
 				surface.DrawRect(x + 1, y + 1, (wid - 2) * ru, hei - 2)
 
-				draw.SimpleText(math.ceil(repairs), "ZS3D2DFont2Smaller", x + wid, y - 1, repairs <= 0 and COLOR_DARKRED or COLOR_GRAY, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+				draw.SimpleText(math.ceil(repairs), "ZS3D2DFont2Smaller", x + wid, y - 1, repairs <= 0 and COLOR_DARKRED or COLOR_GRAY, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
 			end
 
 			if self:GetMaxNailHealth() > 0 then
