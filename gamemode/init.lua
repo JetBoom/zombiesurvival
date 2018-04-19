@@ -106,6 +106,7 @@ include("server/sv_sigils.lua")
 include("zombieescape/sv_zombieescape.lua")
 include("server/sv_downloads.lua")
 include("server/sv_redeem.lua")
+include("server/sv_catbomb.lua")
 include("server/sv_extras.lua")
 
 if file.Exists(GM.FolderName.."/gamemode/misc/maps/"..game.GetMap()..".lua", "LUA") then
