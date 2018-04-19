@@ -1220,7 +1220,7 @@ function GM:DoRestartGame()
 	self:SetWaveActive(false)
 
 	SetGlobalInt("numwaves", -2)
-
+	self:SetNumberOfWaves(self.NumberOfWaves)
 	timer.Create("CheckBroken", 10, 1, CheckBroken)
 
 	game.CleanUpMap(false, self.CleanupFilter)
@@ -1261,6 +1261,7 @@ end
 	self:SetWaveActive(false)
 
 	SetGlobalInt("numwaves", -2)
+	self:SetNumberOfWaves(self.NumberOfWaves)
 	if GetGlobalString("hudoverride"..TEAM_UNDEAD, "") ~= "" then
 		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
 	end
