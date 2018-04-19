@@ -476,10 +476,10 @@ function GM:PostRender()
 		local dlight = DynamicLight(MySelf:EntIndex())
 		if dlight then
 			dlight.Pos = MySelf:GetShootPos()
-			dlight.r = 10
-			dlight.g = 255
-			dlight.b = 80
-			dlight.Brightness = 0.5
+			dlight.r = 255
+			dlight.g = 218
+			dlight.b = 74
+			dlight.Brightness = 0
 			dlight.Size = 2048
 			dlight.Decay = 900
 			dlight.DieTime = CurTime() + 2
@@ -944,8 +944,22 @@ function GM:ZombieHUD(screenscale)
 			end
 		end
 	end
-end
 
+	if GetGlobalBool("waveactive") == false then
+	local pl = GAMEMODE.NextBossZombie
+	if pl and MySelf:Alive() and pl:IsValid() then
+		local bossname = GAMEMODE.NextBossZombieClass
+		local th = draw_GetFontHeight("ZSHUDFont")
+		local x = ScrW() * 0.5
+		local y = ScrH() * 0
+		if pl == MySelf then 
+			draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_RED, TEXT_ALIGN_CENTER)
+		else 
+			draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			end
+		end
+	end
+end
 
 function GM:RequestedDefaultCart()
 	local defaultcart = GetConVarString("zs_defaultcart")
