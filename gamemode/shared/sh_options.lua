@@ -204,6 +204,7 @@ GM:AddStartingItem("bfregen", ""..translate.Get("worth_regen"), ""..translate.Ge
 GM:AddStartingItem("bfhandy", ""..translate.Get("worth_handy"), ""..translate.Get("worth_handy2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.25 end, "models/props_c17/tools_wrench01a.mdl")
 GM:AddStartingItem("bfengineer", ""..translate.Get("worth_engi"), ""..translate.Get("worth_engi2"), ITEMCAT_TRAITS, 35, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.50 end, "models/props_c17/tools_wrench01a.mdl")
 GM:AddStartingItem("bfmusc", ""..translate.Get("worth_muscular"),""..translate.Get("worth_muscular2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.BuffMuscular = true pl:DoMuscularBones() end, "models/props_wasteland/kitchen_shelf001a.mdl")
+GM:AddStartingItem("bfcarpenter", ""..translate.Get("worth_carpenter"), ""..translate.Get("worth_carpenter2"), ITEMCAT_TRAITS, 35, nil, function(pl) pl.Carpenter = true end, "models/weapons/w_hammer.mdl")
 
 -----------
 -- W.RETURNS --
