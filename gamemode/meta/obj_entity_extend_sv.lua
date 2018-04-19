@@ -419,7 +419,7 @@ function meta:RemoveNail(nail, dontremoveentity, removedby)
 				break
 			end
 		end
-			if #ent2.Nails <= 0 then
+		if #ent2.Nails <= 0 then
 			if not self:IsWorld() then self:SetIsNailed(false) end
 		end
 	end
