@@ -329,6 +329,10 @@ function meta:PoisonDamage(damage, attacker, inflictor, hitpos, noreduction)
 		if self.BuffResistant then
 			damage = damage / 2
 		end
+		
+		if self.Allergic then
+			damage = damage * 2
+		end
 
 		self:ViewPunch(Angle(math.random(-10, 10), math.random(-10, 10), math.random(-20, 20)))
 		self:EmitSound("player/pl_pain"..math.random(5, 7)..".wav")
