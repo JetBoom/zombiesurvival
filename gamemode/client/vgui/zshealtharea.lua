@@ -3,7 +3,7 @@ local PANEL = {}
 local colHealth = Color(0, 0, 0, 240)
 local function ContentsPaint(self)
 	local lp = LocalPlayer()
-	if lp:IsValid() and lp:GetInfo("zs_classichud") == "0" then
+	if lp:IsValid() then
 		local health = math.max(lp:Health(), 0)
 		local healthperc = math.Clamp(health / lp:GetMaxHealthEx(), 0, 1)
 
@@ -133,7 +133,7 @@ end
 
 function PANEL:Think()
 	local lp = LocalPlayer()
-	if lp:IsValid() and lp:GetInfo("zs_classichud") == "0" then
+	if lp:IsValid() then
 		self.Health = math.Clamp(lp:Health() / lp:GetMaxHealthEx(), 0, 1)
 		self.BarricadeGhosting = math.Approach(self.BarricadeGhosting, lp:IsBarricadeGhosting() and 1 or 0, FrameTime() * 5)
 
@@ -202,7 +202,7 @@ function PANEL:Paint()
 	if not ent or not ent:IsValid() then return end
 
 	local lp = LocalPlayer()
-	if not lp:IsValid() or lp:GetInfo("zs_classichud") == "1" then return end
+	if not lp:IsValid() then return end
 
 	local x, y = self:LocalToScreen(0, 0)
 	local w, h = self:GetSize()

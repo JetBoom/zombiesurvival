@@ -235,7 +235,7 @@ function GM:HUDAmmoPickedUp(itemname, amount)
 end
 
 function GM:InitPostEntity()
-	if not self.HealthHUD then
+	if not self.HealthHUD and not GetConVar("zs_classichud"):GetBool() then
 		self.HealthHUD = vgui.Create("ZSHealthArea")
 	end
 
