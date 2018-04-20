@@ -536,6 +536,11 @@ LANGUAGE.worth_muscular                             = "Muscular"
 LANGUAGE.worth_muscular2                            = "You do 20% extra damage with melee weapons and you can carry heavy objects instead of dragging them."
 LANGUAGE.worth_carpenter                             = "Carpenter"
 LANGUAGE.worth_carpenter2                             = "50% Decreased delay in using hammers."
+
+LANGUAGE.worth_cannibal                             = "Cannibalism"
+LANGUAGE.worth_cannibal2                             = "You can now eat gore giblets from zombies an humans to regain health.\n Simply touch the gore gibs to eat them."
+
+
 LANGUAGE.worth_weak                                 = "Weakness"
 LANGUAGE.worth_weak2                                = "Reduces health by 30 in exchange for Worth."
 LANGUAGE.worth_slow                                 = "Slowness"

@@ -1547,6 +1547,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.NoObjectPickup = nil
 	pl.DamageVulnerability = nil
 	pl.Carpenter = nil
+	pl.Cannibal = nil
 
 	local uniqueid = pl:UniqueID()
 
