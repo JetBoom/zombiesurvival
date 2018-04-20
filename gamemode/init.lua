@@ -3796,6 +3796,11 @@ end)
 net.Receive("zs_spectate", function(len, ply)
 	if not IsValid(ply) then return end
 
+	if GAMEMODE.NoSpec then
+		ply:CenterNotify(COLOR_RED, translate.ClientGet(ply, "spectator_cantchange2"))
+		return
+	end
+	
 	if ply.SpecCoolDown and RealTime() < ply.SpecCoolDown then
 		local timeLeft = ply.SpecCoolDown - RealTime()
 		ply:CenterNotify(COLOR_DARKRED, string.format("You can change from spectator in %s", string.NiceTime(timeLeft)))
@@ -3837,6 +3842,7 @@ net.Receive("zs_spectate", function(len, ply)
 			ply:CenterNotify(COLOR_RED, translate.ClientGet(ply, "spectator_cantchange"))
 			return
 		end
+		
 	ply:ChangeTeam(index)
 	
 	if not gamemode.Call("PlayerIsAdmin", ply) and index == TEAM_SPECTATOR then
