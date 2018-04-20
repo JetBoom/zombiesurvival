@@ -3,12 +3,10 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-ENT.DieTime = 0
-
 function ENT:Initialize()
 	self.m_Health = 25
 
-	if self.DieTime == 0 then
+	if not self.DieTime then
 		self.DieTime = CurTime() + GAMEMODE.GibLifeTime
 	end
 
@@ -95,5 +93,4 @@ function ENT:StartTouch(ent)
 		self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
 		util.Blood(self:GetPos(), math.random(2), Vector(0, 0, 1), 100, self:GetDTInt(0), true)
 	end
-end
 end
