@@ -42,8 +42,8 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	--TODO: Make a progress bar which will probably be in status_sigilteleport?
 	--TODO: Also use CurTime() instead!
 
-	local i=1
-	caller:ChatPrint(translate.Get("sigil_teleporting"))
+	--local i=1
+	--caller:ChatPrint(translate.Get("sigil_teleporting"))
 	--timer.Create("SigilTimer_" ..caller:EntIndex(), (1/20), 10, function()
 		--if i < 10 then
 			--i = i + 1

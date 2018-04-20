@@ -452,7 +452,6 @@ function GM:DrawFearMeter(power, screenscale)
         local rad, sigil, health, maxhealth, damageflash, sigx, sigy, healthfrac
  
         local sigils = self:GetSigils()
-        local corruptsigils = 0
         for i=1, self.MaxSigils do
             sigil = sigils[i]
             health = 0
