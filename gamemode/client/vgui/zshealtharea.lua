@@ -1,11 +1,25 @@
 local PANEL = {}
 
+local colHealth = Color(0, 0, 0, 240)
+local function ContentsPaint(self)
+	local lp = LocalPlayer()
+	if lp:IsValid() and lp:GetInfo("zs_classichud") == "0" then
+		local health = math.max(lp:Health(), 0)
+		local healthperc = math.Clamp(health / lp:GetMaxHealthEx(), 0, 1)
+
+		colHealth.r = (1 - healthperc) * 180
+		colHealth.g = healthperc * 180
+
+		draw.SimpleTextBlurry(health, "ZSHUDFont", 8, self:GetTall() - 8, colHealth, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	end
+end
+
 function PANEL:Init()
 	self:DockMargin(0, 0, 0, 0)
 	self:DockPadding(0, 0, 0, 0)
 
 	self.HealthModel = vgui.Create("ZSHealthModelPanel", self)
-	self.HealthModel:Dock(RIGHT)
+	self.HealthModel:Dock(LEFT)
 
 	local contents = vgui.Create("Panel", self)
 	contents:Dock(FILL)
@@ -117,6 +131,58 @@ local function LowestAndHighest(ent)
 	return lowest or 0, highest
 end
 
+function PANEL:Think()
+	local lp = LocalPlayer()
+	if lp:IsValid() and lp:GetInfo("zs_classichud") == "0" then
+		self.Health = math.Clamp(lp:Health() / lp:GetMaxHealthEx(), 0, 1)
+		self.BarricadeGhosting = math.Approach(self.BarricadeGhosting, lp:IsBarricadeGhosting() and 1 or 0, FrameTime() * 5)
+
+		local model = lp:GetModel()
+		local ent = self.Entity
+		if not ent or not ent:IsValid() or model ~= ent:GetModel() then
+			if IsValid(self.OverrideEntity) then
+				self.OverrideEntity:Remove()
+				self.OverrideEntity = nil
+			end
+
+			self:SetModel(model)
+		end
+
+		local overridemodel = lp.status_overridemodel
+		if overridemodel and overridemodel:IsValid() then
+			if IsValid(self.Entity) and not IsValid(self.OverrideEntity) then
+				self.OverrideEntity = ClientsideModel(overridemodel:GetModel(), RENDER_GROUP_OPAQUE_ENTITY)
+				if IsValid(self.OverrideEntity) then
+					self.OverrideEntity:SetPos(self.Entity:GetPos())
+					self.OverrideEntity:SetParent(self.Entity)
+					self.OverrideEntity:AddEffects(bit.bor(EF_BONEMERGE, EF_BONEMERGE_FASTCULL))
+					self.OverrideEntity:SetNoDraw(true)
+				end
+			end
+		elseif self.OverrideEntity and self.OverrideEntity:IsValid() then
+			self.OverrideEntity:Remove()
+			self.OverrideEntity = nil
+		end
+
+		ent = self.Entity
+		if ent and ent:IsValid() then
+			ent:SetSequence(lp:GetSequence())
+
+			ent:SetPoseParameter("move_x", lp:GetPoseParameter("move_x") * 2 - 1)
+			ent:SetPoseParameter("move_y", lp:GetPoseParameter("move_y") * 2 - 1)
+			ent:SetCycle(lp:GetCycle())
+           		local ct = CurTime()
+           		if not self.cachemodelnext then self.cachemodelnext = 0 end
+            		if ct > self.cachemodelnext then
+       			self.CModelLow, self.CModelHigh = LowestAndHighest(ent)
+                		self.cachemodelnext = ct + 0.25
+            		end
+			self.ModelLow  = math.Approach(self.ModelLow, self.CModelLow, FrameTime() * 128) --256
+			self.ModelHigh = math.Approach(self.ModelHigh, self.CModelHigh, FrameTime() * 128) --256
+			self.ModelHigh = math.max(self.ModelLow + 1, self.ModelHigh)
+		end
+	end
+end
 
 function PANEL:OnRemove()
 	if IsValid(self.Entity) then
@@ -127,7 +193,87 @@ function PANEL:OnRemove()
 	end
 end
 
+local matWhite = Material("models/debug/debugwhite")
+local matGlow = Material("sprites/glow04_noz")
+local matShadow = CreateMaterial("zshealthhudshadow", "UnlitGeneric", {["$basetexture"] = "decals/simpleshadow", ["$vertexalpha"] = "1", ["$vertexcolor"] = "1"})
+local colShadow = Color(20, 20, 20, 230)
+function PANEL:Paint()
+	local ent = self.OverrideEntity or self.Entity
+	if not ent or not ent:IsValid() then return end
 
+	local lp = LocalPlayer()
+	if not lp:IsValid() or lp:GetInfo("zs_classichud") == "1" then return end
+
+	local x, y = self:LocalToScreen(0, 0)
+	local w, h = self:GetSize()
+	local health = self.Health
+	local entpos = ent:GetPos()
+	local mins, maxs = lp:OBBMins(), lp:OBBMaxs()
+	maxs.z = maxs.x * 4.5
+	local campos = mins:Distance(maxs) * Vector(0, -0.9, 0.4)
+	local lookat = (mins + maxs) / 2
+	local ang = (lookat - campos):Angle()
+	local modelscale = lp:GetModelScale()
+	if ent:GetModelScale() ~= modelscale then
+		ent:SetModelScale(modelscale, 0)
+	end
+
+	self:LayoutEntity(ent)
+
+	render.ModelMaterialOverride(matWhite)
+	render.SuppressEngineLighting(true)
+	cam.IgnoreZ(true)
+
+	cam.Start3D(campos - ang:Forward() * 16, ang, self.fFOV * 0.75, x, y, w, h, 5, 4096)
+		render.OverrideDepthEnable(true, false)
+		render.SetColorModulation(0, 0, self.BarricadeGhosting)
+		ent:DrawModel()
+		render.OverrideDepthEnable(false)
+	cam.End3D()
+
+	cam.Start3D(campos, ang, self.fFOV, x, y, w, h, 5, 4096)
+
+	render.SetMaterial(matShadow)
+	render.DrawQuadEasy(entpos, Vector(0, 0, 1), 45, 90, colShadow)
+
+	render.SetLightingOrigin(entpos)
+	render.ResetModelLighting(0.2, 0.2, 0.2)
+	render.SetModelLighting(BOX_FRONT, 0.8, 0.8, 0.8)
+	render.SetModelLighting(BOX_TOP, 0.8, 0.8, 0.8)
+
+	if health == 1 then
+		render.SetColorModulation(0, 0.6, 0)
+		ent:DrawModel()
+	elseif health == 0 then
+		render.SetColorModulation(0, 0, 0)
+		ent:DrawModel()
+	else
+		local normal = Vector(0, 0, 1)
+		local pos = entpos + Vector(0, 0, self.ModelLow * (1 - health) + self.ModelHigh * health)
+
+		render.EnableClipping(true)
+
+		render.PushCustomClipPlane(normal, normal:Dot(pos))
+		render.SetColorModulation(health > 0.5 and 0.6 or (0.7 + math.sin(CurTime() * math.pi * 2) * 0.2), 0, 0)
+		ent:DrawModel()
+		render.PopCustomClipPlane()
+
+		normal = normal * -1
+		render.PushCustomClipPlane(normal, normal:Dot(pos))
+		render.SetColorModulation(0, 0.6, 0)
+		ent:DrawModel()
+		render.PopCustomClipPlane()
+
+		render.EnableClipping(false)
+	end
+
+	cam.End3D()
+ 
+	render.ModelMaterialOverride()
+	render.SuppressEngineLighting(false)
+	render.SetColorModulation(1, 1, 1)
+	cam.IgnoreZ(false)
+end
 
 function PANEL:LayoutEntity(ent)
 	self:RunAnimation()

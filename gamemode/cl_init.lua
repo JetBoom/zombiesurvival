@@ -792,13 +792,10 @@ function GM:HumanHUD(screenscale)
 	local curtime = CurTime()
 	local w, h = ScrW(), ScrH()
 
+	if GetConVar("zs_classichud"):GetBool() then
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), MySelf:GetMaxHealth(), texHumanHealthBar, screenscale, MySelf:GetPoisonDamage())
+	end
 
-	--TODO: Put this packup bar render inside status_packup!
-	--local packup = MySelf.PackUp
-	--if packup and packup:IsValid() then
-	--	self:DrawPackUpBar(w * 0.5, h * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), screenscale)
-	--end
 
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
@@ -856,6 +853,12 @@ function GM:_HUDPaint()
 
 	local myteam = MySelf:Team()
 
+	if GetConVar("zs_classichud"):GetBool() then
+		if self.HealthHUD and self.HealthHUD:Valid() and self.HealthHUD:IsVisible() then
+			self.HealthHUD:SetVisible(false)
+		end
+	end
+	
 	self:HUDDrawTargetID(myteam, screenscale)
 	if self:GetWave() > 0 and myteam ~= TEAM_SPECTATOR then
 		self:DrawFearMeter(self:CachedFearPower(), screenscale)
@@ -911,8 +914,10 @@ function GM:ZombieHUD(screenscale)
 	local classtab = self.ZombieClasses[MySelf:GetZombieClass()]
 	local curtime = CurTime()
 
+	if GetConVar("zs_classichud"):GetBool() then
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), classtab.Health, texHumanHealthBar, screenscale)
-
+	end
+	
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
 

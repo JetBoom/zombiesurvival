@@ -35,6 +35,12 @@ function MakepOptions()
 	gamemode.Call("AddExtraOptions", list, Window)
 
 	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText(translate.Get("options_old_hud"))
+	check:SetConVar("zs_classichud")
+	check:SizeToContents()
+	list:AddItem(check)
+	
+	local check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText(translate.Get("options_no_ars_crate"))
 	check:SetConVar("zs_noarscrate")
 	check:SizeToContents()
