@@ -2004,7 +2004,7 @@ concommand.Add("zs_pointsshopsell", function(sender, command, arguments)
     if num then
         itemtab = GAMEMODE.Items[num]
     else
-        for i, tab in ipairs(GAMEMODE.Items) do
+        for i, tab in pairs(GAMEMODE.Items) do
             if tab.Signature == id then
                 itemtab = tab
                 break
@@ -2021,7 +2021,7 @@ concommand.Add("zs_pointsshopsell", function(sender, command, arguments)
             return
         end
         
-        cost = math.floor(tab.Worth/6)
+        cost = math.ceil(itemtab.Worth/6)
     
         sender:StripWeapon(itemtab.SWEP)
         sender:AddPoints(cost)
