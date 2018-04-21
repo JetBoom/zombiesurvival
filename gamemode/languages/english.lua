@@ -930,6 +930,15 @@ LANGUAGE.fc_chomp                                   = "CHOMP!"
 
 LANGUAGE.credits_credits                            = "Zombie Survival Credits"
 
+
+-- Tier System
+
+LANGUAGE.dont_have_weapon_x							= "Can't sell, you do not have a %s"
+LANGUAGE.not_unlocked_yet_unlocked_on_x			= "That weapon is not unlocked yet. It will be unlocked at the start of wave %d."
+LANGUAGE.weapon_tier_x								= "Weapon tier %d unlocked."
+LANGUAGE.sold_x_for_y_points						= "Sold %s for %d points!"
+
+
 -- Spray mon
 
 LANGUAGE.spray_spraycant                            = "You can't place your spray here."

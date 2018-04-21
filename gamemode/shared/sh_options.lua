@@ -38,19 +38,19 @@ Callback is a function called. Model is a display model. If model isn't defined 
 swep, callback, and model can all be nil or empty
 ]]
 GM.Items = {}
-function GM:AddItem(signature, name, desc, category, worth, swep, callback, model, worthshop, pointshop)
-	local tab = {Signature = signature, Name = name, Description = desc, Category = category, Worth = worth or 0, SWEP = swep, Callback = callback, Model = model, WorthShop = worthshop, PointShop = pointshop}
+function GM:AddItem(signature, name, desc, category, worth, swep, callback, model, worthshop, pointshop, wave, unlocked, infliction)
+	local tab = {Signature = signature, Name = name, Description = desc, Category = category, Worth = worth or 0, SWEP = swep, Callback = callback, Model = model, WorthShop = worthshop, PointShop = pointshop, Wave = wave or 0, Unlocked = unlocked, Infliction = infliction}
 	self.Items[#self.Items + 1] = tab
 
 	return tab
 end
 
 function GM:AddStartingItem(signature, name, desc, category, points, worth, callback, model)
-	return self:AddItem(signature, name, desc, category, points, worth, callback, model, true, false)
+	return self:AddItem(signature, name, desc, category, points, worth, callback, model, true, false, 0, true, nil)
 end
 
-function GM:AddPointShopItem(signature, name, desc, category, points, worth, callback, model)
-	return self:AddItem("ps_"..signature, name, desc, category, points, worth, callback, model, false, true)
+function GM:AddPointShopItem(signature, name, desc, category, points, worth, wave, unlocked, infliction, callback, model)
+	return self:AddItem("ps_"..signature, name, desc, category, points, worth, callback, model, false, true, wave, unlocked, infliction)
 end
 
 -- Weapons are registered after the gamemode.
@@ -225,6 +225,7 @@ GM:AddStartingItem("dbfunluc", ""..translate.Get("worth_banlive"), ""..translate
 -- Points --
 ------------
 
+GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick", 6 / 6, false)
 GM:AddPointShopItem("deagle", ""..translate.Get("ars_deagle"), nil, ITEMCAT_GUNS, 30, "weapon_zs_deagle")
 GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
 GM:AddPointShopItem("magnum", ""..translate.Get("ars_magnum"), nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
@@ -256,14 +257,13 @@ GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCA
  -- P.AMMO --
 ------------
 
-GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
-GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
-GM:AddPointShopItem("smgammo", ""..translate.Get("ars_smg_ammo"), nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
-GM:AddPointShopItem("assaultrifleammo", ""..translate.Get("ars_assaultrifle_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
-GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
-GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 2, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
-GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
-
+GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
+GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
+GM:AddPointShopItem("smgammo", ""..translate.Get("ars_smg_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
+GM:AddPointShopItem("assaultrifleammo", ""..translate.Get("ars_assaultrifle_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
+GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
+GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 5, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
+GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
 ------------
 -- P.MELEE --
 ------------

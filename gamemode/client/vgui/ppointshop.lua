@@ -68,6 +68,10 @@ local function PurchaseDoClick(self)
 	RunConsoleCommand("zs_pointsshopbuy", self.ID)
 end
 
+local function SellDoClick(self)		
+	RunConsoleCommand("zs_pointsshopsell", self.ID)		
+end
+
 local function BuyAmmoDoClick(self)
 	RunConsoleCommand("zs_pointsshopbuy", "ps_"..self.AmmoType)
 end
@@ -79,8 +83,8 @@ end
 
 local function ItemPanelThink(self)
 	local itemtab = FindItem(self.ID)
-	if itemtab then
-		local newstate = MySelf:GetPoints() >= math.ceil(itemtab.Worth * (GAMEMODE.m_PointsShop.m_LastNearArsenalCrate and GAMEMODE.ArsenalCrateMultiplier or 1)) and not (itemtab.NoClassicMode and GAMEMODE:IsClassicMode())
+		if itemtab then
+		local newstate = MySelf:GetPoints() >= math.ceil(itemtab.Worth * (GAMEMODE.m_PointsShop.m_LastNearArsenalCrate and GAMEMODE.ArsenalCrateMultiplier or 1)) and not (itemtab.NoClassicMode and GAMEMODE:IsClassicMode()) and gamemode.Call("IsWeaponUnlocked", itemtab)
 		if newstate ~= self.m_LastAbleToBuy then
 			self.m_LastAbleToBuy = newstate
 			if newstate then
@@ -267,6 +271,21 @@ function GM:OpenPointsShop()
 					pricelab:SetColor(COLOR_GRAY)
 					itempan.m_PriceLabel = pricelab
 
+					local sellbutton = vgui.Create("DImageButton", itempan)
+					local points = math.floor(tab.Worth/6)
+					if tab.Category == ITEMCAT_GUNS or tab.Category == ITEMCAT_MELEE then
+						sellbutton:SetImage("icon16/information.png")
+						sellbutton:SizeToContents()
+						sellbutton:SetPos(itempan:GetWide() - 20 - sellbutton:GetWide(), itempan:GetTall() - 20)
+						sellbutton:SetTooltip("Sell "..name.." for "..points.." points")
+						sellbutton.ID = itempan.ID
+						sellbutton.DoClick = SellDoClick
+						itempan.m_SellButton = sellbutton
+					else
+						sellbutton:SetDisabled(true)
+						sellbutton:SetImageVisible(false)
+					end
+					
 					local saleprice = EasyLabel(itempan, tostring(math.ceil(tab.Worth * GAMEMODE.ArsenalCrateMultiplier)), "ZSHUDFontTiny")
 					saleprice:SetPos(itempan:GetWide() - 24 - pricelab:GetWide() - saleprice:GetWide(), 4)
 					saleprice:SetColor(COLOR_YELLOW)
@@ -288,7 +307,12 @@ function GM:OpenPointsShop()
 					local button = vgui.Create("DImageButton", itempan)
 					button:SetImage("icon16/lorry_add.png")
 					button:SizeToContents()
-					button:SetPos(itempan:GetWide() - 20 - button:GetWide(), itempan:GetTall() - 20)
+					if tab.Category == ITEMCAT_GUNS or tab.Category == ITEMCAT_MELEE then
+						button:CopyPos(sellbutton)
+						button:MoveLeftOf(sellbutton, 2)
+					else
+						button:SetPos(itempan:GetWide() - 20 - button:GetWide(), itempan:GetTall() - 20)
+					end
 					button:SetTooltip(translate.Get("ars_purchase").." "..name)
 					button.ID = itempan.ID
 					button.DoClick = PurchaseDoClick

@@ -1987,6 +1987,12 @@ net.Receive("zs_wavestart", function(length)
 		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Format("wave_x_has_begun", wave), {killicon = "default"})
 	end
 
+	if not GAMEMODE.ObjectiveMap then
+	if LocalPlayer():IsValid() and LocalPlayer():Team() ~= TEAM_UNDEAD then
+			GAMEMODE:CenterNotify(COLOR_GREEN, translate.Format("weapon_tier_x", wave))
+		end
+	end
+	
 	surface_PlaySound("zombiesurvival/round_start.mp3")
 end)
 
@@ -2069,6 +2075,11 @@ net.Receive("zs_lasthuman", function(length)
 	local pl = net.ReadEntity()
 
 	gamemode.Call("LastHuman", pl)
+end)
+
+net.Receive("zs_weapontiers", function(length)
+	local tab = GAMEMODE.Items[net.ReadUInt(8)]
+	tab.Unlocked = net.ReadBit()==1
 end)
 
 net.Receive("zs_gamemodecall", function(length)
