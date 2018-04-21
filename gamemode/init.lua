@@ -363,6 +363,9 @@ end
 function GM:PlayerPointsAdded(pl, amount)
 end
 
+function GM:PlayerPointsRemoved(pl, amount)
+end
+
 local weaponmodelstoweapon = {}
 weaponmodelstoweapon["models/props/cs_office/computer_keyboard.mdl"] = "weapon_zs_keyboard"
 weaponmodelstoweapon["models/props_c17/computer01_keyboard.mdl"] = "weapon_zs_keyboard"
@@ -1724,104 +1727,104 @@ end
 
 -- A nail is created between two entities.
 function GM:OnNailCreated(ent1, ent2, nail)
-	if ent1 and ent1:IsValid() and not ent1:IsWorld() then
-		timer.Simple(0, function() evalfreeze(ent1) end)
-	end
-	if ent2 and ent2:IsValid() and not ent2:IsWorld() then
-		timer.Simple(0, function() evalfreeze(ent2) end)
-	end
+    if ent1 and ent1:IsValid() and not ent1:IsWorld() then
+        timer.Simple(0, function() evalfreeze(ent1) end)
+    end
+    if ent2 and ent2:IsValid() and not ent2:IsWorld() then
+        timer.Simple(0, function() evalfreeze(ent2) end)
+    end
 end
 
 function GM:RemoveDuplicateAmmo(pl)
-	local AmmoCounts = {}
-	local WepAmmos = {}
-	for _, wep in pairs(pl:GetWeapons()) do
-		if wep.Primary then
-			local ammotype = wep:ValidPrimaryAmmo()
-			if ammotype and wep.Primary.DefaultClip > 0 then
-				AmmoCounts[ammotype] = (AmmoCounts[ammotype] or 0) + 1
-				WepAmmos[wep] = wep.Primary.DefaultClip - wep.Primary.ClipSize
-			end
-			local ammotype2 = wep:ValidSecondaryAmmo()
-			if ammotype2 and wep.Secondary.DefaultClip > 0 then
-				AmmoCounts[ammotype2] = (AmmoCounts[ammotype2] or 0) + 1
-				WepAmmos[wep] = wep.Secondary.DefaultClip - wep.Secondary.ClipSize
-			end
-		end
-	end
-	for ammotype, count in pairs(AmmoCounts) do
-		if count > 1 then
-			local highest = 0
-			local highestwep
-			for wep, extraammo in pairs(WepAmmos) do
-				if wep.Primary.Ammo == ammotype then
-					highest = math.max(highest, extraammo)
-					highestwep = wep
-				end
-			end
-			if highestwep then
-				for wep, extraammo in pairs(WepAmmos) do
-					if wep ~= highestwep and wep.Primary.Ammo == ammotype then
-						pl:RemoveAmmo(extraammo, ammotype)
-					end
-				end
-			end
-		end
-	end
+    local AmmoCounts = {}
+    local WepAmmos = {}
+    for _, wep in pairs(pl:GetWeapons()) do
+        if wep.Primary then
+            local ammotype = wep:ValidPrimaryAmmo()
+            if ammotype and wep.Primary.DefaultClip > 0 then
+                AmmoCounts[ammotype] = (AmmoCounts[ammotype] or 0) + 1
+                WepAmmos[wep] = wep.Primary.DefaultClip - wep.Primary.ClipSize
+            end
+            local ammotype2 = wep:ValidSecondaryAmmo()
+            if ammotype2 and wep.Secondary.DefaultClip > 0 then
+                AmmoCounts[ammotype2] = (AmmoCounts[ammotype2] or 0) + 1
+                WepAmmos[wep] = wep.Secondary.DefaultClip - wep.Secondary.ClipSize
+            end
+        end
+    end
+    for ammotype, count in pairs(AmmoCounts) do
+        if count > 1 then
+            local highest = 0
+            local highestwep
+            for wep, extraammo in pairs(WepAmmos) do
+                if wep.Primary.Ammo == ammotype then
+                    highest = math.max(highest, extraammo)
+                    highestwep = wep
+                end
+            end
+            if highestwep then
+                for wep, extraammo in pairs(WepAmmos) do
+                    if wep ~= highestwep and wep.Primary.Ammo == ammotype then
+                        pl:RemoveAmmo(extraammo, ammotype)
+                    end
+                end
+            end
+        end
+    end
 end
 
 local function TimedOut(pl)
-	if pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not GAMEMODE.CheckedOut[pl:UniqueID()] then
-		gamemode.Call("GiveRandomEquipment", pl)
-	end
+    if pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not GAMEMODE.CheckedOut[pl:UniqueID()] then
+        gamemode.Call("GiveRandomEquipment", pl)
+    end
 end
 
 function GM:GiveDefaultOrRandomEquipment(pl)
-	if not self.CheckedOut[pl:UniqueID()] and not self.ZombieEscape then
-		if self.StartingLoadout then
-			self:GiveStartingLoadout(pl)
-		else
-			pl:SendLua("GAMEMODE:RequestedDefaultCart()")
-			if self.StartingWorth > 0 then
-				timer.Simple(4, function() TimedOut(pl) end)
-			end
-		end
-	end
+    if not self.CheckedOut[pl:UniqueID()] and not self.ZombieEscape then
+        if self.StartingLoadout then
+            self:GiveStartingLoadout(pl)
+        else
+            pl:SendLua("GAMEMODE:RequestedDefaultCart()")
+            if self.StartingWorth > 0 then
+                timer.Simple(4, function() TimedOut(pl) end)
+            end
+        end
+    end
 end
 
 function GM:GiveStartingLoadout(pl)
-	for item, amount in pairs(self.StartingLoadout) do
-		for i=1, amount do
-			pl:Give(item)
-		end
-	end
+    for item, amount in pairs(self.StartingLoadout) do
+        for i=1, amount do
+            pl:Give(item)
+        end
+    end
 end
 
 function GM:GiveRandomEquipment(pl)
-	if self.CheckedOut[pl:UniqueID()] or self.ZombieEscape then return end
-	self.CheckedOut[pl:UniqueID()] = true
+    if self.CheckedOut[pl:UniqueID()] or self.ZombieEscape then return end
+    self.CheckedOut[pl:UniqueID()] = true
 
-	if self.StartingLoadout then
-		self:GiveStartingLoadout(pl)
-	elseif GAMEMODE.OverrideStartingWorth then
-		pl:Give("weapon_zs_swissarmyknife")
-	elseif #self.StartLoadouts >= 1 then
-		for _, id in pairs(self.StartLoadouts[math.random(#self.StartLoadouts)]) do
-			local tab = FindStartingItem(id)
-			if tab then
-				if tab.Callback then
-					tab.Callback(pl)
-				elseif tab.SWEP then
-					pl:StripWeapon(tab.SWEP)
-					pl:Give(tab.SWEP)
-				end
-			end
-		end
-	end
+    if self.StartingLoadout then
+        self:GiveStartingLoadout(pl)
+    elseif GAMEMODE.OverrideStartingWorth then
+        pl:Give("weapon_zs_swissarmyknife")
+    elseif #self.StartLoadouts >= 1 then
+        for _, id in pairs(self.StartLoadouts[math.random(#self.StartLoadouts)]) do
+            local tab = FindStartingItem(id)
+            if tab then
+                if tab.Callback then
+                    tab.Callback(pl)
+                elseif tab.SWEP then
+                    pl:StripWeapon(tab.SWEP)
+                    pl:Give(tab.SWEP)
+                end
+            end
+        end
+    end
 end
 
 function GM:PlayerCanCheckout(pl)
-	return pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not self.CheckedOut[pl:UniqueID()] and not self.StartingLoadout and not self.ZombieEscape and self.StartingWorth > 0 and self:GetWave() < 2
+    return pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not self.CheckedOut[pl:UniqueID()] and not self.StartingLoadout and not self.ZombieEscape and self.StartingWorth > 0 and self:GetWave() < 2
 end
 
 concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
@@ -2028,9 +2031,9 @@ concommand.Add("zs_pointsshopsell", function(sender, command, arguments)
 end)
 
 concommand.Add("worthrandom", function(sender, command, arguments)
-	if sender:IsValid() and sender:IsConnected() and gamemode.Call("PlayerCanCheckout", sender) then
-		gamemode.Call("GiveRandomEquipment", sender)
-	end
+    if sender:IsValid() and sender:IsConnected() and gamemode.Call("PlayerCanCheckout", sender) then
+        gamemode.Call("GiveRandomEquipment", sender)
+    end
 end)
 
 concommand.Add("worthcheckout", function(sender, command, arguments)

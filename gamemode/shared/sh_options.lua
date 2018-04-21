@@ -225,7 +225,7 @@ GM:AddStartingItem("dbfunluc", ""..translate.Get("worth_banlive"), ""..translate
 -- Points --
 ------------
 
-GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick", 6 / 6, false)
+GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 50, "weapon_zs_boomstick", 6 / 6, false)
 GM:AddPointShopItem("deagle", ""..translate.Get("ars_deagle"), nil, ITEMCAT_GUNS, 30, "weapon_zs_deagle")
 GM:AddPointShopItem("glock3", ""..translate.Get("ars_glock"), nil, ITEMCAT_GUNS, 30, "weapon_zs_glock3")
 GM:AddPointShopItem("magnum", ""..translate.Get("ars_magnum"), nil, ITEMCAT_GUNS, 35, "weapon_zs_magnum")
@@ -251,7 +251,7 @@ GM:AddPointShopItem("slugrifle", ""..translate.Get("ars_tiny"), nil, ITEMCAT_GUN
 GM:AddPointShopItem("pulserifle", ""..translate.Get("ars_adonis"), nil, ITEMCAT_GUNS, 230, "weapon_zs_pulserifle")
 GM:AddPointShopItem("m249", ""..translate.Get("ars_punisher"), nil, ITEMCAT_GUNS, 230, "weapon_zs_m249")
 GM:AddPointShopItem("sg550", ""..translate.Get("ars_killer"), nil, ITEMCAT_GUNS, 240, "weapon_zs_sg550")
-GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick")
+--GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 250, "weapon_zs_boomstick")
 
 ------------
  -- P.AMMO --
