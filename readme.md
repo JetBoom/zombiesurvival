@@ -20,11 +20,14 @@ the link below.
 
 ## Current Features
 
-### Version 6 - Sigil System:
+### Version 7 - Tier System:
 
-- Basic Bandit Redeem System With Client ConVar.
+- Basic bandit redeem system with client & server convar.
+- Custom Sigil with mapper support.
 - Complete Russian, German & Spanish language translation.
-- Spectator support with the option in the F1 menu.
+- Spectator option in F1 menu with server convar.
+- Tier System.
+- Selling System.
 - Altered how dropped deployable items work.
 - Improved worth, in-game pointshop & zombie class menus.
 - Balanced weapon & items.
@@ -48,7 +51,6 @@ the link below.
 - Hidden PvP zombie class.
 - Second credits tab in the F1 menu.
 - New zombie bosses.
-- Custom Sigil with mapper support.
 
 
 ## Zombie Survival Redemption Credits
