@@ -301,7 +301,6 @@ GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get
 GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
 GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
 GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
-
 local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), nil, ITEMCAT_TOOLS, 50, nil, 0, true, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
@@ -309,8 +308,6 @@ local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"),
 end, "models/combine_turrets/floor_turret.mdl")
 item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
 item.NoClassicMode = true
-
-
 GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
 
 ------------
