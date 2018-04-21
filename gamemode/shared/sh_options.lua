@@ -169,14 +169,6 @@ local item = GM:AddStartingItem("manhack", ""..translate.Get("worth_manhack"), n
 item.Countables = "prop_manhack"
 GM:AddStartingItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_resupplybox").Countables = "prop_resupplybox"
 GM:AddStartingItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
-local item = GM:AddStartingItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
-	ITEMCAT_TOOLS, 65, nil, function(pl)
-	pl:GiveEmptyWeapon("weapon_zs_gunturret")
-	pl:GiveAmmo(1, "thumper")
-	pl:GiveAmmo(250, "smg1")
-end, "models/combine_turrets/floor_turret.mdl")
-item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
-item.NoClassicMode = true
 
 -----------
 -- W.OTHER --
@@ -300,22 +292,25 @@ GM:AddPointShopItem("katana", ""..translate.Get("weapon_katana"), nil, ITEMCAT_M
 -- P.TOOLS --
 ------------
 
-GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
+GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 5, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
 GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
 GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
-GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
+GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 30, nil, 0, true, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
 GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
 GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
 GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
-local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
-	ITEMCAT_TOOLS, 65, nil, function(pl)
+
+local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), nil, ITEMCAT_TOOLS, 50, nil, 0, true, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 	pl:GiveAmmo(250, "smg1")
 end, "models/combine_turrets/floor_turret.mdl")
+item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
 item.NoClassicMode = true
+
+
 GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
 
 ------------
