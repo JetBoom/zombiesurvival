@@ -403,6 +403,21 @@ function GM:Move(pl, move)
 	elseif pl:CallZombieFunction("Move", move) then
 		return
 	end
+	
+	if pl:Team() ~= TEAM_UNDEAD then
+		if pl:GetBarricadeGhosting() and pl.GhostCade then
+			move:SetMaxSpeed(100)
+			move:SetMaxClientSpeed(100)
+		elseif move:GetForwardSpeed() < 0 then
+			move:SetMaxSpeed(move:GetMaxSpeed() * 0.5)
+			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.5)
+		elseif move:GetForwardSpeed() == 0 then
+			move:SetMaxSpeed(move:GetMaxSpeed() * 0.85)
+			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.85)
+		end
+	elseif pl:CallZombieFunction("Move", move) then
+		return
+	end
 
 	local legdamage = pl:GetLegDamage()
 	if legdamage > 0 then
@@ -411,6 +426,7 @@ function GM:Move(pl, move)
 		move:SetMaxClientSpeed(move:GetMaxClientSpeed() * scale)
 	end
 end
+
 
 function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 	if GAMEMODE.ZombieEscape then return true end
