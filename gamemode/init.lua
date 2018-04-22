@@ -2022,7 +2022,7 @@ concommand.Add("zs_pointsshopsell", function(sender, command, arguments)
             return
         end
         
-        cost = math.floor(itemtab.Worth/6)
+        cost = math.floor(itemtab.Worth/4)
     
         sender:StripWeapon(itemtab.SWEP)
         sender:AddPoints(cost)
