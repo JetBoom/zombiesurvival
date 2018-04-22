@@ -21,22 +21,25 @@ function ENT:Initialize()
 	self:SetSigilLastDamaged(0)
 end
 
+local tick = 0
 function ENT:Think()
 	if self.TeleportingENT then
-		if self.TeleportingENT.SigilPowerUpDelay ~= nil and self.TeleportingENT.SigilPowerUpDelay <= CurTime() then
+		if CurTime() >= tick then
+			tick = CurTime() + 1
+			if self.TeleportingENT.SigilCoolDown ~= nil then
+				self.TeleportingENT:ChatPrint( "Teleporting in "..string.NiceTime( self.TeleportingENT.SigilCoolDown - CurTime() ) )
+			end
+		end
+		if self.TeleportingENT.SigilCoolDown ~= nil and self.TeleportingENT.SigilCoolDown <= CurTime() then
 			self:TeleportPlayer(self.TeleportingENT)
-			self.TeleportingENT.SigilPowerUpDelay = nil
+			self.TeleportingENT.SigilCoolDown = nil
 		end
 	end
 end
 
 function ENT:Use(activator, caller)
-	if caller.SigilCoolDown <= CurTime() then
-		self.TeleportingID = caller:UniqueID()
-		self.TeleportingENT = caller
-		caller.SigilCoolDown = CurTime() + 5
-		caller.SigilPowerUpDelay = CurTime() + 5
-	end
+	caller.SigilCoolDown = CurTime() + 5
+	self.TeleportingENT = caller
 end
 
 local function SigilTeleport(caller, currentsigil, index, first)
