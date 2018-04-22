@@ -22,45 +22,48 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
+	if self.TeleportingENT then
+		if self.TeleportingENT.SigilPowerUpDelay ~= nil and self.TeleportingENT.SigilPowerUpDelay <= CurTime() then
+			self:TeleportPlayer(self.TeleportingENT)
+			self.TeleportingENT.SigilPowerUpDelay = nil
+		end
+	end
 end
 
 function ENT:Use(activator, caller)
-	self:TeleportPlayer(caller)
+	if caller.SigilCoolDown <= CurTime() then
+		self.TeleportingID = caller:UniqueID()
+		self.TeleportingENT = caller
+		caller.SigilCoolDown = CurTime() + 5
+		caller.SigilPowerUpDelay = CurTime() + 5
+	end
 end
 
 local function SigilTeleport(caller, currentsigil, index, first)
 	local sigils = ents.FindByClass("prop_obj_sigil")
 	local sigil = sigils[index]
-
-	-- This cancels out the timer if the sigil is activated too soon.
-	-- if timer.Exists("SigilTimer_" ..caller:EntIndex()) then
-	-- 	timer.Remove("SigilTimer_" ..caller:EntIndex())
-	-- end
-
+	
 	--If there is a better method of doing this then please replace this part!
 	--This is just here for now to prevent instant teleporting!
 	--TODO: Make a progress bar which will probably be in status_sigilteleport?
-	--TODO: Also use CurTime() instead!
-
-	--local i=1
-	--caller:ChatPrint(translate.Get("sigil_teleporting"))
-	--timer.Create("SigilTimer_" ..caller:EntIndex(), (1/20), 10, function()
-		--if i < 10 then
-			--i = i + 1
-		--else
-			caller:SetPos(sigil:GetPos())
-  		caller:SetBarricadeGhosting(true)
-  		currentsigil:EmitSound("friends/message.wav")
-  		if first == true then
-  			sigil:EmitSound("friends/friend_join.wav")
-				caller:SendLua("surface.PlaySound('friends/friend_join.wav')")
-  		else
-  			sigil:EmitSound("friends/friend_online.wav")
-				caller:SendLua("surface.PlaySound('friends/friend_online.wav')")
-  		end
-	--end
---end)
+	--TODO: Area of teleport, if player isnt close to sigil the time restarts.
+	--DONE: Also use CurTime() instead!
+	
+	caller:ChatPrint(translate.Get("sigil_teleporting"))
+	caller:SetPos(sigil:GetPos())
+	
+	caller:SetBarricadeGhosting(true)
+	currentsigil:EmitSound("friends/message.wav")
+	
+	if first == true then
+		sigil:EmitSound("friends/friend_join.wav")
+			caller:SendLua("surface.PlaySound('friends/friend_join.wav')")
+	else
+		sigil:EmitSound("friends/friend_online.wav")
+		caller:SendLua("surface.PlaySound('friends/friend_online.wav')")
+	end
 end
+
 function ENT:TeleportPlayer(caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
