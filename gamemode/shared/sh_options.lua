@@ -1,3 +1,9 @@
+--[[version 1.1 - tier system.
+You must be running at least version of ZS:R (being Version 7 - Tier System)
+for this file to be working. 
+Also you need version 1.1 of this file for the current ZS:R version
+listed or the client can not buy certain items such as ammo types.]]--
+
 GM.ZombieEscapeWeapons = {
 	"weapon_zs_zedeagle",
 	"weapon_zs_zeakbar",
