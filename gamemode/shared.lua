@@ -406,8 +406,8 @@ function GM:Move(pl, move)
 	
 	if pl:Team() ~= TEAM_UNDEAD then
 		if pl:GetBarricadeGhosting() and pl.GhostCade then
-			move:SetMaxSpeed(100)
-			move:SetMaxClientSpeed(100)
+			move:SetMaxSpeed(80)
+			move:SetMaxClientSpeed(80)
 		elseif move:GetForwardSpeed() < 0 then
 			move:SetMaxSpeed(move:GetMaxSpeed() * 0.5)
 			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.5)

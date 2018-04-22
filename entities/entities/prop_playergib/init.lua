@@ -85,7 +85,7 @@ function ENT:StartTouch(ent)
 		self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
 		util.Blood(self:GetPos(), math.random(2), Vector(0, 0, 1), 100, self:GetDTInt(0), true)
 
-	elseif self.DieTime ~= 0 and ent:IsPlayer() and ent:Alive() and ent:Team() ~= TEAM_UNDEAD and ent.Cannibal and ent:Health() <= 125 then		
+	elseif self.DieTime ~= 0 and ent:IsPlayer() and ent:Alive() and ent:Team() ~= TEAM_UNDEAD and ent.Cannibal and ent:Health() <= 60 then		
 		self.DieTime = 0
 
 		ent:SetHealth(ent:Health() + 10)
