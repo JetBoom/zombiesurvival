@@ -396,6 +396,7 @@ local matNeedle = Material("zombiesurvival/fearometerneedle")
 local matEyeGlow = Material("Sprites/light_glow02_add_noz")
 local matSigil = Material("zombiesurvival/sigil.png")
 function GM:DrawFearMeter(power, screenscale)
+if GAMEMODE.ZombieEscape then return end
     if currentpower < power then
         currentpower = math.min(power, currentpower + FrameTime() * (math.tan(currentpower) * 2 + 0.05))
     elseif power < currentpower then

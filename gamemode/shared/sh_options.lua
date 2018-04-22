@@ -387,11 +387,6 @@ function GM:SetupDefaultClip(tab)
 	tab.DefaultClip = math.ceil(tab.ClipSize * self.SurvivalClips * (tab.ClipMultiplier or 1))
 end
 
-GM.MaxSigils = CreateConVar("zs_maxsigils", "3", FCVAR_ARCHIVE + FCVAR_NOTIFY, "How many sigils to spawn. 0 for none."):GetInt()
-cvars.AddChangeCallback("zs_maxsigils", function(cvar, oldvalue, newvalue)
-	GAMEMODE.MaxSigils = math.Clamp(tonumber(newvalue) or 0, 0, 10)
-end)
-
 GM.DefaultRedeem = CreateConVar("zs_redeem", "4", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "The amount of kills a zombie needs to do in order to redeem. Set to 0 to disable."):GetInt()
 cvars.AddChangeCallback("zs_redeem", function(cvar, oldvalue, newvalue)
 	GAMEMODE.DefaultRedeem = math.max(0, tonumber(newvalue) or 0)
@@ -433,6 +428,9 @@ cvars.AddChangeCallback("zs_roundlimit", function(cvar, oldvalue, newvalue)
 end)
 
 -- Static values that don't need convars...
+
+-- Max sigils (don't go over 26 or you'll lose support for any sigil issues).
+GM.MaxSigils = 4
 
 -- Initial length for wave 1.
 GM.WaveOneLength = 220
