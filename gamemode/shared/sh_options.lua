@@ -175,6 +175,14 @@ local item = GM:AddStartingItem("manhack", ""..translate.Get("worth_manhack"), n
 item.Countables = "prop_manhack"
 GM:AddStartingItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_resupplybox").Countables = "prop_resupplybox"
 GM:AddStartingItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
+local item = GM:AddStartingItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
+	ITEMCAT_TOOLS, 65, nil, function(pl)
+	pl:GiveEmptyWeapon("weapon_zs_gunturret")
+	pl:GiveAmmo(1, "thumper")
+	pl:GiveAmmo(250, "smg1")
+end, "models/combine_turrets/floor_turret.mdl")
+item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
+item.NoClassicMode = true
 
 -----------
 -- W.OTHER --
