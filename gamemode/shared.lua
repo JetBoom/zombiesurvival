@@ -43,10 +43,6 @@ function GM:GetNumberOfWaves()
 	return num == -2 and default or num
 end
 
-function GM:SetNumberOfWaves(amount)
-	SetGlobalInt("numwaves", amount)
-end
-
 function GM:GetWaveOneLength()
 	return GetGlobalBool("classicmode") and self.WaveOneLengthClassic or self.WaveOneLength
 end

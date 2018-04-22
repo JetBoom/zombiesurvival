@@ -397,11 +397,6 @@ cvars.AddChangeCallback("zs_waveonezombies", function(cvar, oldvalue, newvalue)
 	GAMEMODE.WaveOneZombies = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
 end)
 
-GM.NumberOfWaves = CreateConVar("zs_numberofwaves", "6", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Number of waves in a game."):GetInt()
-cvars.AddChangeCallback("zs_numberofwaves", function(cvar, oldvalue, newvalue)
-	GAMEMODE.NumberOfWaves = tonumber(newvalue) or 1
-end)
-
 -- Game feeling too easy? Just change these values!
 GM.ZombieSpeedMultiplier = math.ceil(100 * CreateConVar("zs_zombiespeedmultiplier", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Zombie running speed will be scaled by this value."):GetFloat()) * 0.01
 cvars.AddChangeCallback("zs_zombiespeedmultiplier", function(cvar, oldvalue, newvalue)
@@ -431,6 +426,9 @@ end)
 
 -- Max sigils (don't go over 26 or you'll lose support for any sigil issues).
 GM.MaxSigils = 4
+
+-- Max number of waves per game.
+GM.NumberOfWaves = 6
 
 -- Initial length for wave 1.
 GM.WaveOneLength = 220
