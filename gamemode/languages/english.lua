@@ -534,6 +534,14 @@ LANGUAGE.worth_regen                                = "Regenerative"
 LANGUAGE.worth_regen2                               = "If you drop below 50% health, you will regenerate 1 health every 6 seconds."
 LANGUAGE.worth_muscular                             = "Muscular"
 LANGUAGE.worth_muscular2                            = "You do 20% extra damage with melee weapons and you can carry heavy objects instead of dragging them."
+LANGUAGE.worth_carpenter                             = "Carpenter"
+LANGUAGE.worth_carpenter2                             = "50% Decreased delay in using hammers."
+LANGUAGE.worth_cannibal                             = "Cannibalism"
+LANGUAGE.worth_cannibal2                             = "You can now eat gore giblets from zombies an humans to regain health.\n Simply touch the gore gibs to eat them."
+LANGUAGE.worth_ghostmode                             = "Ghost Mode"
+LANGUAGE.worth_ghostmode2                             = "You can ghost through props much faster"
+LANGUAGE.worth_allergic                             = "Allergic"
+LANGUAGE.worth_allergic2                             = "Poison does twice as much damage in exchange for Worth."
 LANGUAGE.worth_weak                                 = "Weakness"
 LANGUAGE.worth_weak2                                = "Reduces health by 30 in exchange for Worth."
 LANGUAGE.worth_slow                                 = "Slowness"
@@ -794,6 +802,10 @@ LANGUAGE.mm_pm_messg                               = "You've changed your desire
 LANGUAGE.mm_sp                                     = "Spectate"
 LANGUAGE.mm_unsp                                   = "Un-Spectate"
 LANGUAGE.spectator_now                             = "You are now a Spectator."
+LANGUAGE.spectator_cantchange                       = "You can't change during wave 0"
+LANGUAGE.spectator_cantchange2                       = "This server has disabled spectator mode"
+LANGUAGE.spectator_canchange_in_x                   = "You can change from spectator in %s"
+
 
 -- Weapon Database
 
@@ -818,6 +830,9 @@ LANGUAGE.classes_and                                = "and"
 -- Options
 
 LANGUAGE.options_options                            = "Options"
+LANGUAGE.options_no_ars_crate                  		= "Don't show arsenal crates through walls"
+LANGUAGE.options_old_hud                  			= "Enable Health Bar HUD (requires re-joining)"
+LANGUAGE.options_no_resupply                  		= "Don't show resupply boxes through walls"
 LANGUAGE.options_no_floating_score                  = "Don't show point floaters"
 LANGUAGE.options_iron_sights_crosshair              = "Draw crosshair in ironsights."
 LANGUAGE.options_film_mode                          = "Film Mode (disable most of the HUD)"
@@ -833,6 +848,7 @@ LANGUAGE.options_damage_floaters                    = "Enable damage indicators"
 LANGUAGE.options_movement_view_roll                 = "Enable movement view roll"
 LANGUAGE.options_always_show_nails                  = "Always display nail health"
 LANGUAGE.options_no_redeem                          = "Disable automatic redeeming (next round)"
+LANGUAGE.options_no_bandit                          = "Disable becoming a bandit"
 LANGUAGE.options_always_volunteer                   = "Always volunteer to start as a zombie"
 LANGUAGE.options_no_boss_pick                       = "Prevent being picked as a boss zombie"
 LANGUAGE.options_suicide_on_change                  = "Automatic suicide when changing classes"
@@ -915,6 +931,15 @@ LANGUAGE.fc_chomp                                   = "CHOMP!"
 -- Credits
 
 LANGUAGE.credits_credits                            = "Zombie Survival Credits"
+
+
+-- Tier System
+
+LANGUAGE.dont_have_weapon_x							= "Can't sell, you do not have a %s"
+LANGUAGE.not_unlocked_yet_unlocked_on_x			= "That weapon is not unlocked yet. It will be unlocked at the start of wave %d."
+LANGUAGE.weapon_tier_x								= "Weapon tier %d unlocked."
+LANGUAGE.sold_x_for_y_points						= "Sold %s for %d points!"
+
 
 -- Spray mon
 

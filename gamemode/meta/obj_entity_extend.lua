@@ -184,16 +184,12 @@ function meta:CollisionRulesChanged()
 	self.m_OldCollisionGroup = nil
 end
 
-function meta:IsNailed()
-	if self:IsValid() then -- In case we're the world.
-		for _, nail in pairs(ents.FindByClass("prop_nail")) do
-			if nail:IsValid() and (nail.GetAttachEntity and nail:GetAttachEntity() == self or nail.GetBaseEntity and nail:GetBaseEntity() == self) then
-				return true
-			end
-		end
-	end
+function meta:GetIsNailed()
+	return self:GetNWBool("IsNailed", false)
+end
 
-	return false
+function meta:IsNailed()
+	return self:GetIsNailed()
 end
 
 function meta:GetAlpha()
@@ -332,6 +328,10 @@ function meta:PoisonDamage(damage, attacker, inflictor, hitpos, noreduction)
 
 		if self.BuffResistant then
 			damage = damage / 2
+		end
+		
+		if self.Allergic then
+			damage = damage * 2
 		end
 
 		self:ViewPunch(Angle(math.random(-10, 10), math.random(-10, 10), math.random(-20, 20)))

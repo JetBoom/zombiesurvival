@@ -88,6 +88,24 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	end
 end
 
+function SWEP:PrimaryAttack()
+	if not self:CanPrimaryAttack() then return end
+	
+	local owner = self.Owner
+	
+	if owner.Carpenter then
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay - 0.50)
+	else
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	end
+
+	if self.SwingTime == 0 then
+		self:MeleeSwing()
+	else
+		self:StartSwinging()
+	end
+end
+
 function SWEP:SecondaryAttack()
 	if self:GetPrimaryAmmoCount() <= 0 or CurTime() < self:GetNextPrimaryFire() or self.Owner:GetBarricadeGhosting() then return end
 

@@ -1,3 +1,9 @@
+--[[version 1.1 - tier system.
+You must be running at least version of ZS:R (being Version 7 - Tier System)
+for this file to be working. 
+Also you need version 1.1 of this file for the current ZS:R version
+listed or the client can not buy certain items such as ammo types.]]--
+
 GM.ZombieEscapeWeapons = {
 	"weapon_zs_zedeagle",
 	"weapon_zs_zeakbar",
@@ -38,19 +44,19 @@ Callback is a function called. Model is a display model. If model isn't defined 
 swep, callback, and model can all be nil or empty
 ]]
 GM.Items = {}
-function GM:AddItem(signature, name, desc, category, worth, swep, callback, model, worthshop, pointshop)
-	local tab = {Signature = signature, Name = name, Description = desc, Category = category, Worth = worth or 0, SWEP = swep, Callback = callback, Model = model, WorthShop = worthshop, PointShop = pointshop}
+function GM:AddItem(signature, name, desc, category, worth, swep, callback, model, worthshop, pointshop, wave, unlocked, infliction)
+	local tab = {Signature = signature, Name = name, Description = desc, Category = category, Worth = worth or 0, SWEP = swep, Callback = callback, Model = model, WorthShop = worthshop, PointShop = pointshop, Wave = wave or 0, Unlocked = unlocked, Infliction = infliction}
 	self.Items[#self.Items + 1] = tab
 
 	return tab
 end
 
 function GM:AddStartingItem(signature, name, desc, category, points, worth, callback, model)
-	return self:AddItem(signature, name, desc, category, points, worth, callback, model, true, false)
+	return self:AddItem(signature, name, desc, category, points, worth, callback, model, true, false, 0, true, nil)
 end
 
-function GM:AddPointShopItem(signature, name, desc, category, points, worth, callback, model)
-	return self:AddItem("ps_"..signature, name, desc, category, points, worth, callback, model, false, true)
+function GM:AddPointShopItem(signature, name, desc, category, points, worth, wave, unlocked, infliction, callback, model)
+	return self:AddItem("ps_"..signature, name, desc, category, points, worth, callback, model, false, true, wave, unlocked, infliction)
 end
 
 -- Weapons are registered after the gamemode.
@@ -169,14 +175,6 @@ local item = GM:AddStartingItem("manhack", ""..translate.Get("worth_manhack"), n
 item.Countables = "prop_manhack"
 GM:AddStartingItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_resupplybox").Countables = "prop_resupplybox"
 GM:AddStartingItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
-local item = GM:AddStartingItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
-	ITEMCAT_TOOLS, 65, nil, function(pl)
-	pl:GiveEmptyWeapon("weapon_zs_gunturret")
-	pl:GiveAmmo(1, "thumper")
-	pl:GiveAmmo(250, "smg1")
-end, "models/combine_turrets/floor_turret.mdl")
-item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
-item.NoClassicMode = true
 
 -----------
 -- W.OTHER --
@@ -204,12 +202,15 @@ GM:AddStartingItem("bfregen", ""..translate.Get("worth_regen"), ""..translate.Ge
 GM:AddStartingItem("bfhandy", ""..translate.Get("worth_handy"), ""..translate.Get("worth_handy2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.25 end, "models/props_c17/tools_wrench01a.mdl")
 GM:AddStartingItem("bfengineer", ""..translate.Get("worth_engi"), ""..translate.Get("worth_engi2"), ITEMCAT_TRAITS, 35, nil, function(pl) pl.HumanRepairMultiplier = (pl.HumanRepairMultiplier or 1) + 0.50 end, "models/props_c17/tools_wrench01a.mdl")
 GM:AddStartingItem("bfmusc", ""..translate.Get("worth_muscular"),""..translate.Get("worth_muscular2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.BuffMuscular = true pl:DoMuscularBones() end, "models/props_wasteland/kitchen_shelf001a.mdl")
+GM:AddStartingItem("bfcarpenter", ""..translate.Get("worth_carpenter"), ""..translate.Get("worth_carpenter2"), ITEMCAT_TRAITS, 35, nil, function(pl) pl.Carpenter = true end, "models/weapons/w_hammer.mdl")
+GM:AddStartingItem("bfcannibal", ""..translate.Get("worth_cannibal"), ""..translate.Get("worth_cannibal2"), ITEMCAT_TRAITS, 30, nil, function(pl) pl.Cannibal = true end, "models/gibs/HGIBS.mdl")
+GM:AddStartingItem("bfcannibal", ""..translate.Get("worth_ghostmode"), ""..translate.Get("worth_ghostmode2"), ITEMCAT_TRAITS, 40, nil, function(pl) pl.GhostCade = true end, "models/healthvial.mdl")
 
 -----------
 -- W.RETURNS --
 -----------
 
-
+GM:AddStartingItem("dbfallergic", ""..translate.Get("worth_allergic"), ""..translate.Get("worth_allergic2"), ITEMCAT_RETURNS, -30, nil, function(pl) pl.Allergic = true end, "models/gibs/hgibs_spine.mdl")
 GM:AddStartingItem("dbfpalsy", ""..translate.Get("worth_palasy"), ""..translate.Get("worth_palasy2"), ITEMCAT_RETURNS, -10, nil, function(pl) pl:SetPalsy(true) end, "models/gibs/HGIBS.mdl")
 GM:AddStartingItem("dbfnopickup", ""..translate.Get("worth_noodlearms"), ""..translate.Get("worth_noodlearms2"), ITEMCAT_RETURNS, -15, nil, function(pl) pl.NoObjectPickup = true pl:DoNoodleArmBones() end, "models/gibs/HGIBS.mdl")
 GM:AddStartingItem("dbfhemo", ""..translate.Get("worth_hemo"), ""..translate.Get("worth_hemo2"), ITEMCAT_RETURNS, -15, nil, function(pl) pl:SetHemophilia(true) end, "models/gibs/HGIBS.mdl")
@@ -221,6 +222,19 @@ GM:AddStartingItem("dbfunluc", ""..translate.Get("worth_banlive"), ""..translate
 
 ------------
 -- Points --
+------------
+
+------------
+-- P.EXAMPLE --
+------------
+
+--[[ Below are examples what you can use for the tier system. setting "6 / 6," false at the end locks
+--that item till wave 6. The boomstick below would unlock at wave 6 costing 50 points.]]--
+
+--GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCAT_GUNS, 50, "weapon_zs_boomstick", 6 / 6, false)
+
+------------
+ -- P.GUNS --
 ------------
 
 GM:AddPointShopItem("deagle", ""..translate.Get("ars_deagle"), nil, ITEMCAT_GUNS, 30, "weapon_zs_deagle")
@@ -254,14 +268,13 @@ GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCA
  -- P.AMMO --
 ------------
 
-GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
-GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
-GM:AddPointShopItem("smgammo", ""..translate.Get("ars_smg_ammo"), nil, ITEMCAT_AMMO, 3, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
-GM:AddPointShopItem("assaultrifleammo", ""..translate.Get("ars_assaultrifle_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
-GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
-GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 2, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
-GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 4, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
-
+GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
+GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
+GM:AddPointShopItem("smgammo", ""..translate.Get("ars_smg_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
+GM:AddPointShopItem("assaultrifleammo", ""..translate.Get("ars_assaultrifle_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
+GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
+GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 5, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
+GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
 ------------
 -- P.MELEE --
 ------------
@@ -286,21 +299,21 @@ GM:AddPointShopItem("katana", ""..translate.Get("weapon_katana"), nil, ITEMCAT_M
 -- P.TOOLS --
 ------------
 
-GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
+GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 5, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
 GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
 GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
-GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
+GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 30, nil, 0, true, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
 GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
 GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
 GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
-local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
-	ITEMCAT_TOOLS, 65, nil, function(pl)
+local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), nil, ITEMCAT_TOOLS, 50, nil, 0, true, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 	pl:GiveAmmo(250, "smg1")
 end, "models/combine_turrets/floor_turret.mdl")
+item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
 item.NoClassicMode = true
 GM:AddPointShopItem("barricadekit", ""..translate.Get("ars_aegis"), nil, ITEMCAT_TOOLS, 70, "weapon_zs_barricadekit")
 

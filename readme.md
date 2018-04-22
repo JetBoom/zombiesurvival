@@ -12,39 +12,26 @@ a bandit (which can help or kill humans) or change back into a human.
 
 ## TODO
 
-These need to be done before any other feature gets added in!
+You can check the current status and what's being worked on from
+the link below.
 
-- [ ] Move a lot of the init code into separate files!
-  - [ ] Wave Stuff!
-  - [ ] Player Stuff!
-  - [ ] Human Stuff!
-  - [ ] Zombie Stuff!
-  - [ ] Weapon Stuff!
-  - [ ] Sigil Stuff!
-  - [ ] Other Stuff!
-- [x] Move the progress bars such as the packup progress bar back into their status files!
-- [ ] Rewrite code in sv_redeem!
-- [ ] Update the sigils!
-  - [ ] Replace the timer with CurTime!
-  - [ ] Display a progress bar, also make sure the progress bar is located in status_sigilteleport instead of putting it in the human hud!
-  - [ ] Move the random prop spawner code for sigils (as in the props that are coming out the sigils) to it's own file or just as an addon as it does not belong in that file!
-- [ ] Carpenter's Hammer Updating!
-  - [ ] Either make prop slightly transparent when it's picked up or increase the distance of the prop that is picked up or just do both!
-  - [ ] Fix the hammer and hands from disappearing randomly when dropping or carrying around the prop!
-- [x] Rescale some of the text to fit on certain screens such as the intermission text!
-  - [x] Intermission Text!
+### https://github.com/MrCraigTunstall/zombiesurvival/projects/1
+
 
 ## Current Features
 
-### Version 6 - Sigil System:
+### Version 7 - Tier System:
 
-- Basic Bandit Redeem System.
+- Basic bandit redeem system with client & server convar.
+- Custom Sigil with mapper support.
 - Complete Russian, German & Spanish language translation.
-- Spectator support with the option in the F1 menu.
+- Spectator option in F1 menu with server convar.
+- Tier System.
+- Selling System.
 - Altered how dropped deployable items work.
 - Improved worth, in-game pointshop & zombie class menus.
 - Balanced weapon & items.
-- HD Texture icons.
+- HD hexture icons.
 - Healthbars on resupply & arsenal crates.
 - Human & bandit third person.
 - Fixed when another server alters the waves logic.
@@ -64,7 +51,6 @@ These need to be done before any other feature gets added in!
 - Hidden PvP zombie class.
 - Second credits tab in the F1 menu.
 - New zombie bosses.
-- Custom Sigil with mapper support.
 
 
 ## Zombie Survival Redemption Credits
@@ -83,7 +69,7 @@ These need to be done before any other feature gets added in!
   - ForrestMarkX | https://steamcommunity.com/profiles/76561197997881512
 - Spanish Translation:
   - Sulfito | https://steamcommunity.com/profiles/76561198026081830
-  
+
 ## Original Credits
 
 Created and programmed by William "JetBoom" Moodhe.

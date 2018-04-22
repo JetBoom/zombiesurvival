@@ -4,6 +4,13 @@ ENT.Dinged = true
 
 function ENT:Initialize()
 	self:SetRenderBounds(Vector(-72, -72, -72), Vector(72, 72, 128))
+
+	hook.Add("PostDrawTranslucentRenderables", "DrawResupplyHints", function( bDepth, bSkybox )
+		if ( bSkybox ) then return end
+		for _, ent in pairs(ents.FindByClass("prop_resupplybox")) do
+			ent:DrawWorldHint()
+		end
+	end)
 end
 
 function ENT:SetObjectHealth(health)
@@ -37,7 +44,7 @@ end
 
 function ENT:DrawBar(x, y, w, h, factor, text)
 	factor = math.Clamp(factor, 0, 1)
-	
+
 	local barwidth = w * factor
 	local startx = x - w / 2
 	local red, green
@@ -46,7 +53,7 @@ function ENT:DrawBar(x, y, w, h, factor, text)
 	else
 		red, green = 255, 0
 	end
-	
+
 	surface.SetDrawColor(0, 0, 0, 220)
 	surface.DrawRect(startx, y, w, h)
 	surface.SetDrawColor(red, green, 0, 220)
@@ -61,20 +68,20 @@ function ENT:RenderInfo(pos, ang, owner)
 		draw.RoundedBox(32, -350, -175, 700, 350, color_black_alpha90)
 
 		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, 0, NextUse <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		
+
 		local healthfactor = self:GetObjectHealth() / self:GetMaxObjectHealth()
 		--local healthfactor = math.sin(CurTime() * 0.5)
 		if healthfactor < 1 then
 			self:DrawBar(0, -120, 600, 40, healthfactor, string.format("%i", healthfactor*100).."%")
 		end
-		
+
 		local factor = 1 - (NextUse - CurTime()) / (NextUse - NextUseStart)
 		if factor >= 1 then
 			self:DrawBar(0, -80, 600, 40, factor, translate.Get"res_box_ready")
 		else
 			self:DrawBar(0, -80, 600, 40, factor, string.format("%i", NextUse - CurTime()).." "..translate.Get"res_box_seconds")
 		end
-		
+
 		if owner:IsValid() and owner:IsPlayer() then
 			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 70, owner == MySelf and COLOR_BLUE or COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
@@ -92,6 +99,12 @@ function ENT:Draw()
 
 	self:RenderInfo(self:LocalToWorld(vOffset), ang, owner)
 	self:RenderInfo(self:LocalToWorld(vOffset2), self:LocalToWorldAngles(aOffset2), owner)
+end
+
+function ENT:DrawWorldHint()
+if MySelf:IsValid() and MySelf:Alive() and MySelf:Team() ~= TEAM_UNDEAD and MySelf:GetInfo("zs_noresupply") == "0" then
+		DrawIconHint(translate.Get("resupply_box"), "zombiesurvival/resupply.png", self:GetPos() + Vector(0, 0, self:OBBMaxs().z / 2), nil, 0.75, Color(255, 255, 255, 225))
+	end
 end
 
 net.Receive("zs_nextresupplyuse", function(length)

@@ -84,7 +84,7 @@ if CLIENT then
 	end
 end
 
-for i, filename in pairs(file.Find(GM.FolderName.."/gamemode/languages/*.lua", "LUA")) do
+for i, filename in pairs(file.Find(GM.FolderName.. "/gamemode/languages/*.lua", "LUA")) do
 	LANGUAGE = {}
 	AddCSLuaFile("languages/"..filename)
 	include("languages/"..filename)

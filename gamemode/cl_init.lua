@@ -235,7 +235,7 @@ function GM:HUDAmmoPickedUp(itemname, amount)
 end
 
 function GM:InitPostEntity()
-	if not self.HealthHUD then
+	if not self.HealthHUD and not GetConVar("zs_classichud"):GetBool() then
 		self.HealthHUD = vgui.Create("ZSHealthArea")
 	end
 
@@ -394,53 +394,96 @@ local spawngreen = 0
 local matFearMeter = Material("zombiesurvival/fearometer")
 local matNeedle = Material("zombiesurvival/fearometerneedle")
 local matEyeGlow = Material("Sprites/light_glow02_add_noz")
+local matSigil = Material("zombiesurvival/sigil.png")
 function GM:DrawFearMeter(power, screenscale)
-	if currentpower < power then
-		currentpower = math.min(power, currentpower + FrameTime() * (math.tan(currentpower) * 2 + 0.05))
-	elseif power < currentpower then
-		currentpower = math.max(power, currentpower - FrameTime() * (math.tan(currentpower) * 2 + 0.05))
-	end
-
-	local w, h = ScrW(), ScrH()
-	local wid, hei = 192 * screenscale, 192 * screenscale
-	local mx, my = w * 0.5 - wid * 0.5, h - hei
-
-	surface_SetMaterial(matFearMeter)
-	surface_SetDrawColor(140, 140, 140, 240)
-	surface_DrawTexturedRect(mx, my, wid, hei)
-	if currentpower >= 0.75 then
-		local pulse = CurTime() % 3 - 1
-		if pulse > 0 then
-			pulse = pulse ^ 2
-			local pulsesize = pulse * screenscale * 28
-			surface_SetDrawColor(140, 140, 140, 120 - pulse * 120)
-			surface_DrawTexturedRect(mx - pulsesize, my - pulsesize, wid + pulsesize * 2, hei + pulsesize * 2)
-		end
-	end
-
-	surface_SetMaterial(matNeedle)
-	surface_SetDrawColor(160, 160, 160, 225)
-	local rot = math.Clamp((0.5 - currentpower) + math.sin(RealTime() * 10) * 0.01, -0.5, 0.5) * 300
-	surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * wid * -0.0001), h - hei * 0.5 - math.abs(rot) * hei * 0.00015, wid, hei, rot)
-
-	if MySelf:Team() ~= TEAM_UNDEAD then
-		if self:GetDynamicSpawning() and self:ShouldUseAlternateDynamicSpawn() then
-			local obs = MySelf:GetObserverTarget()
-			spawngreen = math.Approach(spawngreen, self:DynamicSpawnIsValid(obs and obs:IsValid() and obs:IsPlayer() and obs:Team() == TEAM_UNDEAD and obs or MySelf) and 1 or 0, FrameTime() * 4)
-
-			local sy = my + hei * 0.6953
-			local size = wid * 0.085
-
-			surface_SetMaterial(matEyeGlow)
-			surface_SetDrawColor(220 * (1 - spawngreen), 220 * spawngreen, 0, 240)
-			surface_DrawTexturedRectRotated(mx + wid * 0.459, sy, size, size, 0)
-			surface_DrawTexturedRectRotated(mx + wid * 0.525, sy, size, size, 0)
-		end
-
-		if currentpower > 0 and not self.ZombieEscape then
-			draw_SimpleTextBlurry(translate.Format("resist_x", math.ceil(self:GetDamageResistance(currentpower) * 100)), "ZSDamageResistance", w * 0.5, my + hei * 0.75, Color(currentpower * 200, 200 - currentpower * 200, 0, 255), TEXT_ALIGN_CENTER)
-		end
-	end
+    if currentpower < power then
+        currentpower = math.min(power, currentpower + FrameTime() * (math.tan(currentpower) * 2 + 0.05))
+    elseif power < currentpower then
+        currentpower = math.max(power, currentpower - FrameTime() * (math.tan(currentpower) * 2 + 0.05))
+    end
+ 
+    local w, h = ScrW(), ScrH()
+    local size = 192 * screenscale
+    local half_size = size / 2
+    local mx, my = w / 2 - half_size, h - size
+ 
+    surface_SetMaterial(matFearMeter)
+    surface_SetDrawColor(140, 140, 140, 240)
+    surface_DrawTexturedRect(mx, my, size, size)
+    if currentpower >= 0.75 then
+        local pulse = CurTime() % 3 - 1
+        if pulse > 0 then
+            pulse = pulse ^ 2
+            local pulsesize = pulse * screenscale * 28
+            surface_SetDrawColor(140, 140, 140, 120 - pulse * 120)
+            surface_DrawTexturedRect(mx - pulsesize, my - pulsesize, size + pulsesize * 2, size + pulsesize * 2)
+        end
+    end
+ 
+    surface_SetMaterial(matNeedle)
+    surface_SetDrawColor(160, 160, 160, 225)
+    local rot = math.Clamp((0.5 - currentpower) + math.sin(RealTime() * 10) * 0.01, -0.5, 0.5) * 300
+    surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * size * -0.0001), h - half_size - math.abs(rot) * size * 0.00015, size, size, rot)
+ 
+    if MySelf:Team() == TEAM_UNDEAD then
+        if self:GetDynamicSpawning() and self:ShouldUseAlternateDynamicSpawn() then
+            local obs = MySelf:GetObserverTarget()
+            spawngreen = math.Approach(spawngreen, self:DynamicSpawnIsValid(obs and obs:IsValid() and obs:IsPlayer() and obs:Team() == TEAM_UNDEAD and obs or MySelf) and 1 or 0, FrameTime() * 4)
+ 
+            local sy = my + size * 0.6953
+            local gsize = size * 0.085
+ 
+            surface_SetMaterial(matEyeGlow)
+            surface_SetDrawColor(220 * (1 - spawngreen), 220 * spawngreen, 0, 240)
+            surface_DrawTexturedRectRotated(mx + size * 0.459, sy, gsize, gsize, 0)
+            surface_DrawTexturedRectRotated(mx + size * 0.525, sy, gsize, gsize, 0)
+        end
+ 
+        if currentpower > 0 and not self.ZombieEscape then
+            draw_SimpleTextBlurry(translate.Format("resist_x", math.ceil(self:GetDamageResistance(currentpower) * 100)), "ZSDamageResistance", w * 0.5, my + size * 0.75, Color(currentpower * 200, 200 - currentpower * 200, 0, 255), TEXT_ALIGN_CENTER)
+        end
+    end
+ 
+    if self:GetUseSigils() and self.MaxSigils > 0 then
+        local sigwid, sighei = screenscale * 18, screenscale * 36
+        local extrude = size * 0.25 + sighei / 2
+        local angle_current = -180
+        local angle_step = 180 / (self.MaxSigils - 1)
+        local rad, sigil, health, maxhealth, damageflash, sigx, sigy, healthfrac
+ 
+        local sigils = self:GetSigils()
+        for i=1, self.MaxSigils do
+            sigil = sigils[i]
+            health = 0
+            maxhealth = 0
+            if sigil and sigil:IsValid() then
+                health = sigil:GetSigilHealth()
+                maxhealth = sigil:GetSigilMaxHealth()
+            end
+ 
+            if health >= 0 then
+                rad = math.rad(angle_current)
+                sigx = mx + half_size + math.cos(rad) * extrude
+                sigy = my + half_size + math.sin(rad) * extrude
+ 
+                if sigil and sigil:IsValid() then
+                    damageflash = math.min((CurTime() - sigil:GetSigilLastDamaged()) * 2, 1) * 255
+                else
+                    damageflash = 255
+                end
+                healthfrac = health / maxhealth
+                if corrupt then
+                    surface_SetDrawColor((255 - damageflash) * healthfrac, damageflash * healthfrac, 0, 220)
+                else
+                    surface_SetDrawColor((255 - damageflash) * healthfrac, damageflash * healthfrac, 220, 220)
+                end
+ 
+                surface_SetMaterial(matSigil)
+                surface_DrawTexturedRectRotated(sigx, sigy, sigwid, sighei, angle_current + 90) 
+                angle_current = angle_current + angle_step
+            end
+        end
+    end
 end
 
 function GM:GetDynamicSpawning()
@@ -476,10 +519,10 @@ function GM:PostRender()
 		local dlight = DynamicLight(MySelf:EntIndex())
 		if dlight then
 			dlight.Pos = MySelf:GetShootPos()
-			dlight.r = 10
-			dlight.g = 255
-			dlight.b = 80
-			dlight.Brightness = 0.5
+			dlight.r = 255
+			dlight.g = 218
+			dlight.b = 74
+			dlight.Brightness = 0
 			dlight.Size = 2048
 			dlight.Decay = 900
 			dlight.DieTime = CurTime() + 2
@@ -749,13 +792,10 @@ function GM:HumanHUD(screenscale)
 	local curtime = CurTime()
 	local w, h = ScrW(), ScrH()
 
+	if GetConVar("zs_classichud"):GetBool() then
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), MySelf:GetMaxHealth(), texHumanHealthBar, screenscale, MySelf:GetPoisonDamage())
+	end
 
-	--TODO: Put this packup bar render inside status_packup!
-	--local packup = MySelf.PackUp
-	--if packup and packup:IsValid() then
-	--	self:DrawPackUpBar(w * 0.5, h * 0.55, 1 - packup:GetTimeRemaining() / packup:GetMaxTime(), packup:GetNotOwner(), screenscale)
-	--end
 
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
@@ -813,6 +853,12 @@ function GM:_HUDPaint()
 
 	local myteam = MySelf:Team()
 
+	if GetConVar("zs_classichud"):GetBool() then
+		if self.HealthHUD and self.HealthHUD:Valid() and self.HealthHUD:IsVisible() then
+			self.HealthHUD:SetVisible(false)
+		end
+	end
+	
 	self:HUDDrawTargetID(myteam, screenscale)
 	if self:GetWave() > 0 and myteam ~= TEAM_SPECTATOR then
 		self:DrawFearMeter(self:CachedFearPower(), screenscale)
@@ -868,8 +914,10 @@ function GM:ZombieHUD(screenscale)
 	local classtab = self.ZombieClasses[MySelf:GetZombieClass()]
 	local curtime = CurTime()
 
+	if GetConVar("zs_classichud"):GetBool() then
 	self:DrawHealthBar(screenscale * 24, h - 272 * screenscale, MySelf:Health(), classtab.Health, texHumanHealthBar, screenscale)
-
+	end
+	
 	if not self.RoundEnded then
 		if self:GetWave() == 0 and not self:GetWaveActive() then
 
@@ -944,8 +992,22 @@ function GM:ZombieHUD(screenscale)
 			end
 		end
 	end
-end
 
+	if GetGlobalBool("waveactive") == false then
+	local pl = GAMEMODE.NextBossZombie
+	if pl and MySelf:Alive() and pl:IsValid() then
+		local bossname = GAMEMODE.NextBossZombieClass
+		local th = draw_GetFontHeight("ZSHUDFont")
+		local x = ScrW() * 0.5
+		local y = ScrH() * 0
+		if pl == MySelf then 
+			draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_RED, TEXT_ALIGN_CENTER)
+		else 
+			draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			end
+		end
+	end
+end
 
 function GM:RequestedDefaultCart()
 	local defaultcart = GetConVarString("zs_defaultcart")
@@ -1925,6 +1987,12 @@ net.Receive("zs_wavestart", function(length)
 		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Format("wave_x_has_begun", wave), {killicon = "default"})
 	end
 
+	if not GAMEMODE.ObjectiveMap then
+	if LocalPlayer():IsValid() and LocalPlayer():Team() ~= TEAM_UNDEAD then
+			GAMEMODE:CenterNotify(COLOR_GREEN, translate.Format("weapon_tier_x", wave))
+		end
+	end
+	
 	surface_PlaySound("zombiesurvival/round_start.mp3")
 end)
 
@@ -2007,6 +2075,11 @@ net.Receive("zs_lasthuman", function(length)
 	local pl = net.ReadEntity()
 
 	gamemode.Call("LastHuman", pl)
+end)
+
+net.Receive("zs_weapontiers", function(length)
+	local tab = GAMEMODE.Items[net.ReadUInt(8)]
+	tab.Unlocked = net.ReadBit()==1
 end)
 
 net.Receive("zs_gamemodecall", function(length)

@@ -1,0 +1,15 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models/weapons/c_egon/v_egon_screen_wave"
+        "$translucent" 1
+
+        "Proxies"
+        {
+            "TextureScroll"
+            {
+                "textureScrollVar" "$basetexturetransform"
+                "textureScrollRate" -0.1
+                "textureScrollAngle" 90
+            }
+        }
+}

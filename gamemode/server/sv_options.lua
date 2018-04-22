@@ -19,9 +19,14 @@ GM.RandomProps = {
 	"models/props_wasteland/kitchen_shelf002a.mdl"
 }
 
-GM.RedeemMode = CreateConVar("zs_redeemmode", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enables the bandit redeem system, 1 to enable, 0 to disable. Enabled by default."):GetBool()
-cvars.AddChangeCallback("zs_redeemmode", function(cvar, oldvalue, newvalue)
-	GAMEMODE:SetRedeemMode(tonumber(newvalue) == 1)
+GM.BanditMode = CreateConVar("zs_banditmode", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enables the bandit redeem system, 1 to enable, 0 to disable. Enabled by default."):GetBool()
+cvars.AddChangeCallback("zs_banditmode", function(cvar, oldvalue, newvalue)
+	GAMEMODE.BanditMode = tonumber(newvalue) == 1
+end)
+
+GM.NoSpec = CreateConVar("zs_nospec", "0", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Disables the spectator system, 1 to disable, 0 to enable. Enabled by default."):GetBool()
+cvars.AddChangeCallback("zs_nospec", function(cvar, oldvalue, newvalue)
+	GAMEMODE.NoSpec = tonumber(newvalue) == 1
 end)
 
 GM.BossZombies = CreateConVar("zs_bosszombies", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Summon a boss zombie in the middle of each wave break."):GetBool()

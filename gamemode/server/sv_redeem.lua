@@ -9,20 +9,18 @@ if not silent then
 	end
 	
 --[[
-////////// Objective Mode //////////
+////////// Objective Mode, Zombie Escape 
+		   or server/client disabled becoming a bandit. //////////
 ]]--
 	
-	if GAMEMODE.ObjectiveMap then
+	if GAMEMODE.ObjectiveMap or GAMEMODE.ZombieEscape 
+	or not GAMEMODE.BanditMode or pl:GetInfo("zs_nobandit") ~= "0" then
 	pl:RemoveStatus("overridemodel", false, true)
 	pl:ChangeTeam(TEAM_HUMAN)
 	pl:SetPoints(0)
 	pl:DoHulls()
 	if not noequip then pl.m_PreRedeem = true end
 	pl:UnSpectateAndSpawn()
-	pl:Give("weapon_zs_fists")
-	pl:Give("weapon_zs_redeemers")
-    pl:Give("weapon_zs_hammer")
-    pl:Give("weapon_zs_arsenalcrate")
 	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
 	--timer.Simple( 0.8, function() pl:EmitSound("zombiesurvival/beats/placeholder/swag.ogg", 100, 100, 1) end )
     pl.m_PreRedeem = nil
@@ -36,34 +34,16 @@ if not silent then
 	pl:SetDeaths(0)
 	pl.DeathClass = nil
 	pl:SetZombieClass(self.DefaultZombieClass)
+	if GAMEMODE.ZombieEscape then
+	pl:Give("weapon_zs_fists") -- DONT add anything here but Zombie Escape weapons and/or items!
+	else
+	pl:Give("weapon_zs_fists") -- Here you're fine to add or remove whatever you want.
+	pl:Give("weapon_zs_redeemers")
+    pl:Give("weapon_zs_hammer")
+    pl:Give("weapon_zs_arsenalcrate")
+end
 	
 --[[
-////////// Zombie Escape //////////
-]]--
-	
-	elseif GAMEMODE.ZombieEscape then
-	pl:RemoveStatus("overridemodel", false, true)
-	pl:ChangeTeam(TEAM_HUMAN)
-	pl:SetPoints(0)
-	pl:DoHulls()
-	if not noequip then pl.m_PreRedeem = true end
-	pl:UnSpectateAndSpawn()
-	pl:Give("weapon_zs_fists")
-	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
-    pl.m_PreRedeem = nil
-
-	local frags = pl:Frags()
-	if frags < 0 then
-		pl:SetFrags(frags * 5)
-	else
-		pl:SetFrags(0)
-	end
-	pl:SetDeaths(0)
-	pl.DeathClass = nil
-	pl:SetZombieClass(self.DefaultZombieClass)
-	pl.SpawnedTime = CurTime()
-	
-	--[[
 ////////// Normal Mode //////////
 ]]--
 	
@@ -137,3 +117,30 @@ concommand.Add("zs_bandit", function(sender, command, arguments)
     if sender:Team() ~= TEAM_REDEEMER then return end    
     sender:ChangeTeam(TEAM_HUMAN)    
 end)
+
+
+--[[
+////////// Zombie Escape (Unused Code) //////////
+]]--
+	
+	--[[elseif GAMEMODE.ZombieEscape then
+	pl:RemoveStatus("overridemodel", false, true)
+	pl:ChangeTeam(TEAM_HUMAN)
+	pl:SetPoints(0)
+	pl:DoHulls()
+	if not noequip then pl.m_PreRedeem = true end
+	pl:UnSpectateAndSpawn()
+	pl:Give("weapon_zs_fists")
+	timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
+    pl.m_PreRedeem = nil
+
+	local frags = pl:Frags()
+	if frags < 0 then
+		pl:SetFrags(frags * 5)
+	else
+		pl:SetFrags(0)
+	end
+	pl:SetDeaths(0)
+	pl.DeathClass = nil
+	pl:SetZombieClass(self.DefaultZombieClass)
+	pl.SpawnedTime = CurTime()]]--

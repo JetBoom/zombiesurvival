@@ -132,6 +132,9 @@ function SWEP:CanPrimaryAttack()
 		self:SetNextPrimaryFire(CurTime() + 0.25)
 		return false
 	end
-
-	return self:GetNextPrimaryFire() <= CurTime()
+	if self:GetNextPrimaryFire() + 0.25 > CurTime() then
+		return false
+	else
+		return self:GetNextPrimaryFire() <= CurTime()
+	end
 end

@@ -106,6 +106,7 @@ include("server/sv_sigils.lua")
 include("zombieescape/sv_zombieescape.lua")
 include("server/sv_downloads.lua")
 include("server/sv_redeem.lua")
+include("server/sv_catbomb.lua")
 include("server/sv_extras.lua")
 
 if file.Exists(GM.FolderName.."/gamemode/misc/maps/"..game.GetMap()..".lua", "LUA") then
@@ -198,7 +199,7 @@ function GM:Initialize()
 	self:SetClassicMode(self:IsClassicMode(), true)
 	self:SetBabyMode(self:IsBabyMode(), true)
 	self:SetRedeemBrains(self.DefaultRedeem)
-	self:GetNumberOfWaves(self.NumberOfWaves)
+	self:SetNumberOfWaves(self.NumberOfWaves)
 
 	local mapname = string.lower(game.GetMap())
 	if string.find(mapname, "_obj_", 1, true) or string.find(mapname, "objective", 1, true) then
@@ -256,7 +257,9 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_death")
 	util.AddNetworkString("unlockClass")
 	util.AddNetworkString("zs_redeemmenu")
+	util.AddNetworkString("zs_weapontiers")
 	util.AddNetworkString("zs_spectate")
+	util.AddNetworkString("zs_weaponlocks")
 end
 
 function GM:IsClassicMode()
@@ -358,6 +361,9 @@ function GM:SetupSpawnPoints()
 end
 
 function GM:PlayerPointsAdded(pl, amount)
+end
+
+function GM:PlayerPointsRemoved(pl, amount)
 end
 
 local weaponmodelstoweapon = {}
@@ -924,29 +930,42 @@ function GM:CalculateInfliction(victim, attacker)
 		for k, v in ipairs(self.ZombieClasses) do
 			if v.Infliction and infliction >= v.Infliction and not self:IsClassUnlocked(v.Name) then
 				v.Unlocked = true
-
-				if not self.PantsMode and not self:IsClassicMode() and not self:IsBabyMode() and not self.ZombieEscape then
-					if not v.Locked then
-						for _, pl in pairs(player.GetAll()) do
-							pl:CenterNotify(COLOR_RED, translate.ClientFormat(pl, "infliction_reached", v.Infliction * 100))
-							pl:CenterNotify(translate.ClientFormat(pl, "x_unlocked", translate.ClientGet(pl, v.TranslationName)))
-							net.Start("unlockClass")
-							net.WriteString(v.Name)
-							net.Send(pl)
-						end
+			end
+        end
+    end
+	
+	for k, v in ipairs(self.Items) do
+		if v.Infliction and infliction >= v.Infliction and not self:IsWeaponUnlocked(v) then
+			inflictionwepnotify = true
+			weapontier = math.floor(v.Wave * self:GetNumberOfWaves())
+			
+			v.Unlocked = true
+					
+			net.Start("zs_weapontiers")
+				net.WriteUInt(k, 8)
+				net.WriteBit(v.Unlocked)
+			net.Broadcast()
+					
+			if inflictionwepnotify and weapontier ~= self.m_LastTierTold then
+				self.m_LastTierTold = weapontier
+				if weapontier > 0 then
+					for _, pl in pairs(player.GetAll()) do
+						if pl:Team()==TEAM_HUMAN then pl:CenterNotify(COLOR_GREEN, translate.ClientFormat(pl, "weapon_tier_x", weapontier)) end
 					end
 				end
+			elseif inflictionwepnotify then 
+				inflictionwepnotify = false
 			end
 		end
 	end
 
-	for _, ent in pairs(ents.FindByClass("logic_infliction")) do
-		if ent.Infliction <= infliction then
-			ent:Input("oninflictionreached", NULL, NULL, infliction)
-		end
-	end
+    for _, ent in pairs(ents.FindByClass("logic_infliction")) do
+        if ent.Infliction <= infliction then
+            ent:Input("oninflictionreached", NULL, NULL, infliction)
+        end
+    end
 
-	return infliction
+    return infliction
 end
 timer.Create("CalculateInfliction", 2, 0, function() gamemode.Call("CalculateInfliction") end)
 
@@ -1219,7 +1238,7 @@ function GM:DoRestartGame()
 	self:SetWaveActive(false)
 
 	SetGlobalInt("numwaves", -2)
-
+	self:SetNumberOfWaves(self.NumberOfWaves)
 	timer.Create("CheckBroken", 10, 1, CheckBroken)
 
 	game.CleanUpMap(false, self.CleanupFilter)
@@ -1260,6 +1279,7 @@ end
 	self:SetWaveActive(false)
 
 	SetGlobalInt("numwaves", -2)
+	self:SetNumberOfWaves(self.NumberOfWaves)
 	if GetGlobalString("hudoverride"..TEAM_UNDEAD, "") ~= "" then
 		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
 	end
@@ -1386,6 +1406,7 @@ function GM:PlayerReadyRound(pl)
 	elseif pl:Team() == TEAM_HUMAN then
 		if self:GetWave() <= 0 and self.StartingWorth > 0 and not self.StartingLoadout and not self.ZombieEscape then
 			pl:SendLua("MakepWorth()")
+			pl:SetPoints(0) -- Just to ensure points are set right during a fresh new game.
 		else
 			gamemode.Call("GiveDefaultOrRandomEquipment", pl)
 		end
@@ -1543,6 +1564,11 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.NoGhosting = nil
 	pl.NoObjectPickup = nil
 	pl.DamageVulnerability = nil
+	pl.Carpenter = nil
+	pl.Cannibal = nil
+	pl.Allergic = nil
+	pl.GhostCade = nil
+
 
 	local uniqueid = pl:UniqueID()
 
@@ -1702,300 +1728,360 @@ end
 
 -- A nail is created between two entities.
 function GM:OnNailCreated(ent1, ent2, nail)
-	if ent1 and ent1:IsValid() and not ent1:IsWorld() then
-		timer.Simple(0, function() evalfreeze(ent1) end)
-	end
-	if ent2 and ent2:IsValid() and not ent2:IsWorld() then
-		timer.Simple(0, function() evalfreeze(ent2) end)
-	end
+    if ent1 and ent1:IsValid() and not ent1:IsWorld() then
+        timer.Simple(0, function() evalfreeze(ent1) end)
+    end
+    if ent2 and ent2:IsValid() and not ent2:IsWorld() then
+        timer.Simple(0, function() evalfreeze(ent2) end)
+    end
 end
 
 function GM:RemoveDuplicateAmmo(pl)
-	local AmmoCounts = {}
-	local WepAmmos = {}
-	for _, wep in pairs(pl:GetWeapons()) do
-		if wep.Primary then
-			local ammotype = wep:ValidPrimaryAmmo()
-			if ammotype and wep.Primary.DefaultClip > 0 then
-				AmmoCounts[ammotype] = (AmmoCounts[ammotype] or 0) + 1
-				WepAmmos[wep] = wep.Primary.DefaultClip - wep.Primary.ClipSize
-			end
-			local ammotype2 = wep:ValidSecondaryAmmo()
-			if ammotype2 and wep.Secondary.DefaultClip > 0 then
-				AmmoCounts[ammotype2] = (AmmoCounts[ammotype2] or 0) + 1
-				WepAmmos[wep] = wep.Secondary.DefaultClip - wep.Secondary.ClipSize
-			end
-		end
-	end
-	for ammotype, count in pairs(AmmoCounts) do
-		if count > 1 then
-			local highest = 0
-			local highestwep
-			for wep, extraammo in pairs(WepAmmos) do
-				if wep.Primary.Ammo == ammotype then
-					highest = math.max(highest, extraammo)
-					highestwep = wep
-				end
-			end
-			if highestwep then
-				for wep, extraammo in pairs(WepAmmos) do
-					if wep ~= highestwep and wep.Primary.Ammo == ammotype then
-						pl:RemoveAmmo(extraammo, ammotype)
-					end
-				end
-			end
-		end
-	end
+    local AmmoCounts = {}
+    local WepAmmos = {}
+    for _, wep in pairs(pl:GetWeapons()) do
+        if wep.Primary then
+            local ammotype = wep:ValidPrimaryAmmo()
+            if ammotype and wep.Primary.DefaultClip > 0 then
+                AmmoCounts[ammotype] = (AmmoCounts[ammotype] or 0) + 1
+                WepAmmos[wep] = wep.Primary.DefaultClip - wep.Primary.ClipSize
+            end
+            local ammotype2 = wep:ValidSecondaryAmmo()
+            if ammotype2 and wep.Secondary.DefaultClip > 0 then
+                AmmoCounts[ammotype2] = (AmmoCounts[ammotype2] or 0) + 1
+                WepAmmos[wep] = wep.Secondary.DefaultClip - wep.Secondary.ClipSize
+            end
+        end
+    end
+    for ammotype, count in pairs(AmmoCounts) do
+        if count > 1 then
+            local highest = 0
+            local highestwep
+            for wep, extraammo in pairs(WepAmmos) do
+                if wep.Primary.Ammo == ammotype then
+                    highest = math.max(highest, extraammo)
+                    highestwep = wep
+                end
+            end
+            if highestwep then
+                for wep, extraammo in pairs(WepAmmos) do
+                    if wep ~= highestwep and wep.Primary.Ammo == ammotype then
+                        pl:RemoveAmmo(extraammo, ammotype)
+                    end
+                end
+            end
+        end
+    end
 end
 
 local function TimedOut(pl)
-	if pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not GAMEMODE.CheckedOut[pl:UniqueID()] then
-		gamemode.Call("GiveRandomEquipment", pl)
-	end
+    if pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not GAMEMODE.CheckedOut[pl:UniqueID()] then
+        gamemode.Call("GiveRandomEquipment", pl)
+    end
 end
 
 function GM:GiveDefaultOrRandomEquipment(pl)
-	if not self.CheckedOut[pl:UniqueID()] and not self.ZombieEscape then
-		if self.StartingLoadout then
-			self:GiveStartingLoadout(pl)
-		else
-			pl:SendLua("GAMEMODE:RequestedDefaultCart()")
-			if self.StartingWorth > 0 then
-				timer.Simple(4, function() TimedOut(pl) end)
-			end
-		end
-	end
+    if not self.CheckedOut[pl:UniqueID()] and not self.ZombieEscape then
+        if self.StartingLoadout then
+            self:GiveStartingLoadout(pl)
+        else
+            pl:SendLua("GAMEMODE:RequestedDefaultCart()")
+            if self.StartingWorth > 0 then
+                timer.Simple(4, function() TimedOut(pl) end)
+            end
+        end
+    end
 end
 
 function GM:GiveStartingLoadout(pl)
-	for item, amount in pairs(self.StartingLoadout) do
-		for i=1, amount do
-			pl:Give(item)
-		end
-	end
+    for item, amount in pairs(self.StartingLoadout) do
+        for i=1, amount do
+            pl:Give(item)
+        end
+    end
 end
 
 function GM:GiveRandomEquipment(pl)
-	if self.CheckedOut[pl:UniqueID()] or self.ZombieEscape then return end
-	self.CheckedOut[pl:UniqueID()] = true
+    if self.CheckedOut[pl:UniqueID()] or self.ZombieEscape then return end
+    self.CheckedOut[pl:UniqueID()] = true
 
-	if self.StartingLoadout then
-		self:GiveStartingLoadout(pl)
-	elseif GAMEMODE.OverrideStartingWorth then
-		pl:Give("weapon_zs_swissarmyknife")
-	elseif #self.StartLoadouts >= 1 then
-		for _, id in pairs(self.StartLoadouts[math.random(#self.StartLoadouts)]) do
-			local tab = FindStartingItem(id)
-			if tab then
-				if tab.Callback then
-					tab.Callback(pl)
-				elseif tab.SWEP then
-					pl:StripWeapon(tab.SWEP)
-					pl:Give(tab.SWEP)
-				end
-			end
-		end
-	end
+    if self.StartingLoadout then
+        self:GiveStartingLoadout(pl)
+    elseif GAMEMODE.OverrideStartingWorth then
+        pl:Give("weapon_zs_swissarmyknife")
+    elseif #self.StartLoadouts >= 1 then
+        for _, id in pairs(self.StartLoadouts[math.random(#self.StartLoadouts)]) do
+            local tab = FindStartingItem(id)
+            if tab then
+                if tab.Callback then
+                    tab.Callback(pl)
+                elseif tab.SWEP then
+                    pl:StripWeapon(tab.SWEP)
+                    pl:Give(tab.SWEP)
+                end
+            end
+        end
+    end
 end
 
 function GM:PlayerCanCheckout(pl)
-	return pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not self.CheckedOut[pl:UniqueID()] and not self.StartingLoadout and not self.ZombieEscape and self.StartingWorth > 0 and self:GetWave() < 2
+    return pl:IsValid() and pl:Team() == TEAM_HUMAN and pl:Alive() and not self.CheckedOut[pl:UniqueID()] and not self.StartingLoadout and not self.ZombieEscape and self.StartingWorth > 0 and self:GetWave() < 2
 end
 
 concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
-	if not (sender:IsValid() and sender:IsConnected()) or #arguments == 0 then return end
+    if not (sender:IsValid() and sender:IsConnected()) or #arguments == 0 then return end
 
-	if sender:GetUnlucky() then
-		sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "banned_for_life_warning"))
-		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
-		return
-	end
+    if sender:GetUnlucky() then
+        sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "banned_for_life_warning"))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
 
-	if not sender:NearArsenalCrate() then
-		sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "need_to_be_near_arsenal_crate"))
-		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
-		return
-	end
+    if not sender:NearArsenalCrate() then
+        sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "need_to_be_near_arsenal_crate"))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
 
-	if not gamemode.Call("PlayerCanPurchase", sender) then
-		sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "cant_purchase_right_now"))
-		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
-		return
-	end
+    if not gamemode.Call("PlayerCanPurchase", sender) then
+        sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "cant_purchase_right_now"))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
 
-	local itemtab
-	local id = arguments[1]
-	local num = tonumber(id)
-	if num then
-		itemtab = GAMEMODE.Items[num]
-	else
-		for i, tab in pairs(GAMEMODE.Items) do
-			if tab.Signature == id then
-				itemtab = tab
-				break
-			end
-		end
-	end
+    local itemtab
+    local id = arguments[1]
+    local num = tonumber(id)
+    if num then
+        itemtab = GAMEMODE.Items[num]
+    else
+        for i, tab in pairs(GAMEMODE.Items) do
+            if tab.Signature == id then
+                itemtab = tab
+                break
+            end
+        end
+    end
 
-	if not itemtab or not itemtab.PointShop then return end
+    if not itemtab or not itemtab.PointShop then return end
 
-	local points = sender:GetPoints()
-	local cost = itemtab.Worth
-	if not GAMEMODE:GetWaveActive() then
-		cost = cost * GAMEMODE.ArsenalCrateMultiplier
-	end
+    local points = sender:GetPoints()
+    local cost = itemtab.Worth
+    if not GAMEMODE:GetWaveActive() then
+        cost = cost * GAMEMODE.ArsenalCrateMultiplier
+    end
 
-	if GAMEMODE:IsClassicMode() and itemtab.NoClassicMode then
-		sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "cant_use_x_in_classic", itemtab.Name))
-		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
-		return
-	end
+    if GAMEMODE:IsClassicMode() and itemtab.NoClassicMode then
+        sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "cant_use_x_in_classic", itemtab.Name))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
 
-	if GAMEMODE.ZombieEscape and itemtab.NoZombieEscape then
-		sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "cant_use_x_in_zombie_escape", itemtab.Name))
-		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
-		return
-	end
-
-	cost = math.ceil(cost)
-
-	if points < cost then
-		sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "dont_have_enough_points"))
-		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
-		return
-	end
-
-	if itemtab.Callback then
-		itemtab.Callback(sender)
-	elseif itemtab.SWEP then
-		if sender:HasWeapon(itemtab.SWEP) then
-			local stored = weapons.GetStored(itemtab.SWEP)
-			if stored and stored.AmmoIfHas then
-				sender:GiveAmmo(stored.Primary.DefaultClip, stored.Primary.Ammo)
-			else
-				local wep = ents.Create("prop_weapon")
-				if wep:IsValid() then
-					wep:SetPos(sender:GetShootPos())
-					wep:SetAngles(sender:GetAngles())
-					wep:SetWeaponType(itemtab.SWEP)
-					wep:SetShouldRemoveAmmo(true)
-					wep:Spawn()
-				end
-			end
+    if GAMEMODE.ZombieEscape and itemtab.NoZombieEscape then
+        sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "cant_use_x_in_zombie_escape", itemtab.Name))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
+    
+	if not GAMEMODE:IsWeaponUnlocked(itemtab) then
+		if GAMEMODE.ObjectiveMap then
+			sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "not_unlocked_yet_unlocked_on_x", 2))
+			sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+		elseif itemtab.Wave then
+			sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "not_unlocked_yet_unlocked_on_x", math.floor(itemtab.Wave * GAMEMODE:GetNumberOfWaves())))
+			sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
 		else
-			local wep = sender:Give(itemtab.SWEP)
-			if wep and wep:IsValid() and wep.EmptyWhenPurchased and wep:GetOwner():IsValid() then
-				if wep.Primary then
-					local primary = wep:ValidPrimaryAmmo()
-					if primary then
-						sender:RemoveAmmo(math.max(0, wep.Primary.DefaultClip - wep.Primary.ClipSize), primary)
-					end
-				end
-				if wep.Secondary then
-					local secondary = wep:ValidSecondaryAmmo()
-					if secondary then
-						sender:RemoveAmmo(math.max(0, wep.Secondary.DefaultClip - wep.Secondary.ClipSize), secondary)
-					end
-				end
-			end
+			sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "not_unlocked_yet_unlocked_on_x", 0))
+			sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")				
 		end
-	else
 		return
-	end
+    end
 
-	sender:TakePoints(cost)
-	sender:PrintTranslatedMessage(HUD_PRINTTALK, "purchased_x_for_y_points", itemtab.Name, cost)
-	sender:SendLua("surface.PlaySound(\"ambient/levels/labs/coinslot1.wav\")")
+    cost = math.ceil(cost)
 
-	local nearest = sender:NearestArsenalCrateOwnedByOther()
-	if nearest then
-		local owner = nearest:GetObjectOwner()
-		if owner:IsValid() then
-			local nonfloorcommission = cost * 0.07
-			local commission = math.floor(nonfloorcommission)
-			if commission > 0 then
-				owner.PointsCommission = owner.PointsCommission + cost
+    if points < cost then
+        sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "dont_have_enough_points"))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
 
-				owner:AddPoints(commission)
+    if itemtab.Callback then
+        itemtab.Callback(sender)
+    elseif itemtab.SWEP then
+        if sender:HasWeapon(itemtab.SWEP) then
+            local stored = weapons.GetStored(itemtab.SWEP)
+            if stored and stored.AmmoIfHas then
+                sender:GiveAmmo(stored.Primary.DefaultClip, stored.Primary.Ammo)
+            else
+                local wep = ents.Create("prop_weapon")
+                if wep:IsValid() then
+                    wep:SetPos(sender:GetShootPos())
+                    wep:SetAngles(sender:GetAngles())
+                    wep:SetWeaponType(itemtab.SWEP)
+                    wep:SetShouldRemoveAmmo(true)
+                    wep:Spawn()
+                end
+            end
+        else
+            local wep = sender:Give(itemtab.SWEP)
+            if wep and wep:IsValid() and wep.EmptyWhenPurchased and wep:GetOwner():IsValid() then
+                if wep.Primary then
+                    local primary = wep:ValidPrimaryAmmo()
+                    if primary then
+                        sender:RemoveAmmo(math.max(0, wep.Primary.DefaultClip - wep.Primary.ClipSize), primary)
+                    end
+                end
+                if wep.Secondary then
+                    local secondary = wep:ValidSecondaryAmmo()
+                    if secondary then
+                        sender:RemoveAmmo(math.max(0, wep.Secondary.DefaultClip - wep.Secondary.ClipSize), secondary)
+                    end
+                end
+            end
+        end
+    else
+        return
+    end
 
-				net.Start("zs_commission")
-					net.WriteEntity(nearest)
-					net.WriteEntity(sender)
-					net.WriteUInt(commission, 16)
-				net.Send(owner)
-			end
+    sender:TakePoints(cost)
+    sender:PrintTranslatedMessage(HUD_PRINTTALK, "purchased_x_for_y_points", itemtab.Name, cost)
+    sender:SendLua("surface.PlaySound(\"ambient/levels/labs/coinslot1.wav\")")
 
-			local leftover = nonfloorcommission - commission
-			if leftover > 0 then
-				owner.CarryOverCommision = owner.CarryOverCommision + leftover
-				if owner.CarryOverCommision >= 1 then
-					local carried = math.floor(owner.CarryOverCommision)
-					owner.CarryOverCommision = owner.CarryOverCommision - carried
-					owner:AddPoints(carried)
+    local nearest = sender:NearestArsenalCrateOwnedByOther()
+    if nearest then
+        local owner = nearest:GetObjectOwner()
+        if owner:IsValid() then
+            local nonfloorcommission = cost * 0.07
+            local commission = math.floor(nonfloorcommission)
+            if commission > 0 then
+                owner.PointsCommission = owner.PointsCommission + cost
 
-					net.Start("zs_commission")
-						net.WriteEntity(nearest)
-						net.WriteEntity(sender)
-						net.WriteUInt(carried, 16)
-					net.Send(owner)
-				end
-			end
-		end
-	end
+                owner:AddPoints(commission)
+
+                net.Start("zs_commission")
+                    net.WriteEntity(nearest)
+                    net.WriteEntity(sender)
+                    net.WriteUInt(commission, 16)
+                net.Send(owner)
+            end
+
+            local leftover = nonfloorcommission - commission
+            if leftover > 0 then
+                owner.CarryOverCommision = owner.CarryOverCommision + leftover
+                if owner.CarryOverCommision >= 1 then
+                    local carried = math.floor(owner.CarryOverCommision)
+                    owner.CarryOverCommision = owner.CarryOverCommision - carried
+                    owner:AddPoints(carried)
+
+                    net.Start("zs_commission")
+                        net.WriteEntity(nearest)
+                        net.WriteEntity(sender)
+                        net.WriteUInt(carried, 16)
+                    net.Send(owner)
+                end
+            end
+        end
+    end
+end)
+
+concommand.Add("zs_pointsshopsell", function(sender, command, arguments)
+    if not (sender:IsValid() and sender:IsConnected()) or #arguments == 0 then return end
+
+    if sender:GetUnlucky() then
+        sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "banned_for_life_warning"))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
+
+    if not sender:NearArsenalCrate() then
+        sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "need_to_be_near_arsenal_crate"))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
+
+    local itemtab
+    local id = arguments[1]
+    local num = tonumber(id)
+    if num then
+        itemtab = GAMEMODE.Items[num]
+    else
+        for i, tab in pairs(GAMEMODE.Items) do
+            if tab.Signature == id then
+                itemtab = tab
+                break
+            end
+        end
+    end
+
+    if not itemtab then return end
+
+    if itemtab.SWEP then
+        if not sender:HasWeapon(itemtab.SWEP) then
+            sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "dont_have_weapon_x", itemtab.Name))
+            sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+            return
+        end
+        
+        cost = math.floor(itemtab.Worth/6)
+    
+        sender:StripWeapon(itemtab.SWEP)
+        sender:AddPoints(cost)
+        sender:PrintTranslatedMessage(HUD_PRINTTALK, "sold_x_for_y_points", itemtab.Name, cost)
+        sender:SendLua("surface.PlaySound(\"ambient/levels/labs/coinslot1.wav\")")
+    end
 end)
 
 concommand.Add("worthrandom", function(sender, command, arguments)
-	if sender:IsValid() and sender:IsConnected() and gamemode.Call("PlayerCanCheckout", sender) then
-		gamemode.Call("GiveRandomEquipment", sender)
-	end
+    if sender:IsValid() and sender:IsConnected() and gamemode.Call("PlayerCanCheckout", sender) then
+        gamemode.Call("GiveRandomEquipment", sender)
+    end
 end)
 
 concommand.Add("worthcheckout", function(sender, command, arguments)
-	if not (sender:IsValid() and sender:IsConnected()) or #arguments == 0 then return end
+    if not (sender:IsValid() and sender:IsConnected()) or #arguments == 0 then return end
 
-	if not gamemode.Call("PlayerCanCheckout", sender) then
-		sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "cant_use_worth_anymore"))
-		return
-	end
+    if not gamemode.Call("PlayerCanCheckout", sender) then
+        sender:CenterNotify(COLOR_RED, translate.ClientGet(sender, "cant_use_worth_anymore"))
+        return
+    end
 
-	local cost = 0
-	local hasalready = {}
+    local cost = 0
+    local hasalready = {}
 
-	for _, id in pairs(arguments) do
-		local tab = FindStartingItem(id)
-		if tab and not hasalready[id] then
-			cost = cost + tab.Worth
-			hasalready[id] = true
-		end
-	end
+    for _, id in pairs(arguments) do
+        local tab = FindStartingItem(id)
+        if tab and not hasalready[id] then
+            cost = cost + tab.Worth
+            hasalready[id] = true
+        end
+    end
 
-	if cost > GAMEMODE.StartingWorth then return end
+    if cost > GAMEMODE.StartingWorth then return end
 
-	local hasalready = {}
+    local hasalready = {}
 
-	for _, id in pairs(arguments) do
-		local tab = FindStartingItem(id)
-		if tab and not hasalready[id] then
-			if tab.NoClassicMode and GAMEMODE:IsClassicMode() then
-				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", tab.Name))
-			elseif tab.Callback then
-				tab.Callback(sender)
-				hasalready[id] = true
-			elseif tab.SWEP then
-				sender:StripWeapon(tab.SWEP) -- "Fixes" players giving each other empty weapons to make it so they get no ammo from the Worth menu purchase.
-				sender:Give(tab.SWEP)
-				hasalready[id] = true
-			end
-		end
-	end
+    for _, id in pairs(arguments) do
+        local tab = FindStartingItem(id)
+        if tab and not hasalready[id] then
+            if tab.NoClassicMode and GAMEMODE:IsClassicMode() then
+                sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", tab.Name))
+            elseif tab.Callback then
+                tab.Callback(sender)
+                hasalready[id] = true
+            elseif tab.SWEP then
+                sender:StripWeapon(tab.SWEP) -- "Fixes" players giving each other empty weapons to make it so they get no ammo from the Worth menu purchase.
+                sender:Give(tab.SWEP)
+                hasalready[id] = true
+            end
+        end
+    end
 
-	if table.Count(hasalready) > 0 then
-		GAMEMODE.CheckedOut[sender:UniqueID()] = true
-	end
+    if table.Count(hasalready) > 0 then
+        GAMEMODE.CheckedOut[sender:UniqueID()] = true
+    end
 
-	gamemode.Call("RemoveDuplicateAmmo", sender)
+    gamemode.Call("RemoveDuplicateAmmo", sender)
 end)
-
 function GM:PlayerDeathThink(pl)
 	if self.RoundEnded or pl.Revive or self:GetWave() == 0 then return end
 
@@ -2718,7 +2804,7 @@ function GM:KeyPress(pl, key)
 			end
 		end
 	elseif key == IN_ZOOM then
-		if pl:Team() ~= TEAM_UNDEAD and pl:Alive() and pl:IsOnGround() and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
+		if pl:Team() == TEAM_HUMAN and pl:Alive() and pl:IsOnGround() or pl:GetVelocity():Length() <= 50 and not self.ZombieEscape then --and pl:GetGroundEntity():IsWorld() then
 			pl:SetBarricadeGhosting(true)
 		end
 	end
@@ -3789,9 +3875,14 @@ end)
 net.Receive("zs_spectate", function(len, ply)
 	if not IsValid(ply) then return end
 
+	if GAMEMODE.NoSpec then
+		ply:CenterNotify(COLOR_RED, translate.ClientGet(ply, "spectator_cantchange2"))
+		return
+	end
+	
 	if ply.SpecCoolDown and RealTime() < ply.SpecCoolDown then
 		local timeLeft = ply.SpecCoolDown - RealTime()
-		ply:CenterNotify(COLOR_DARKRED , string.format("You can change from spectator in %s", string.NiceTime(timeLeft)))
+		ply:CenterNotify(COLOR_DARKRED, string.format("You can change from spectator in %s", string.NiceTime(timeLeft)))
 		return
 	end
 
@@ -3819,13 +3910,18 @@ net.Receive("zs_spectate", function(len, ply)
 			index = TEAM_HUMAN
 		end
 
-		if not GAMEMODE.CheckedOut[ply:SteamID()] and not GAMEMODE.ZombieEscape and index ~= TEAM_UNDEAD then
-			ply:SendLua("MakepWorth()")
+		if not GAMEMODE.CheckedOut[ply:SteamID()] and index ~= TEAM_UNDEAD then
+			ply:CenterNotify(COLOR_RED, translate.ClientGet(ply, "spectator_cantchange"))
+			return
 		end
 	else
 		index = TEAM_UNDEAD
 	end
-
+	if ply:Team() == TEAM_SPECTATOR and GAMEMODE:GetWave() <= 0 then
+			ply:CenterNotify(COLOR_RED, translate.ClientGet(ply, "spectator_cantchange"))
+			return
+		end
+		
 	ply:ChangeTeam(index)
 	
 	if not gamemode.Call("PlayerIsAdmin", ply) and index == TEAM_SPECTATOR then

@@ -1,0 +1,75 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/weapons/c_egon/v_egon_screen.vtf"
+	"$selfillum" 1
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[ .9 .9 .9 ]"
+	
+
+	"$jumpchance" 0.025
+	"$jumpchancethreshold" 0.99
+	"$nojump" 0.0
+	"$jumpdistance" 0.25
+	"$translate1" "[0.0 0.0]"
+	"$translate2" "[0.0 0.0]"
+	"$scale2" "[0 0]"
+
+	"Proxies"
+	{
+		// The picture jumps when the random number $jumpchance is greater
+		// than $jumpchancethreshold.
+		"GaussianNoise"
+		{
+			"mean" 0.5
+			"halfWidth" 0.2
+			"minVal" 0.0
+			"maxVal" 1.0
+			"resultVar" "$jumpchance"
+		}
+		// If it jumps, the distance it jumps is also random
+		"GaussianNoise"
+		{
+			"mean" 0
+			"halfWidth" 0.05
+			"minVal" -0.1
+			"maxVal" 0.25
+			"resultVar" "$jumpdistance"
+		}
+		"LessOrEqual"
+		{
+			"srcVar1" "$jumpchance"
+			"srcVar2" "$jumpchancethreshold"
+			"lessEqualVar" "$nojump"
+			"greaterVar" "$jumpdistance"
+			"resultVar" "$translate1[1]"
+		}
+		"TextureTransform"
+		{
+			"translateVar" "$translate1"
+			"resultVar" "$basetexturetransform"
+		}
+
+		// Meanwhile, the screen noise is always changing locationrandomly,
+		// which makes it look like animated static.
+		"UniformNoise"
+		{
+			"minVal" 0.5
+			"maxVal" 2.0
+			"resultVar" "$translate2[0]"
+		}
+		"UniformNoise"
+		{
+			"minVal" 0.5
+			"maxVal" 2.0
+			"resultVar" "$translate2[1]"
+		}
+		"TextureTransform"
+		{
+			"translateVar" "$translate2"
+			"scaleVar" "$scale2"
+			"resultVar" "$texture2transform"
+		}
+
+	}
+		
+}

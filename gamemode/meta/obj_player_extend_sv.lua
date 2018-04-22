@@ -582,6 +582,7 @@ end
 
 function meta:TakePoints(points)
 	self:SetPoints(self:GetPoints() - points)
+	gamemode.Call("PlayerPointsRemoved", self, points)
 end
 
 function meta:UpdateAllZombieClasses()

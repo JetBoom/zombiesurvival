@@ -1,0 +1,34 @@
+"VertexLitGeneric"
+{
+	"$SHADERNAME" "model_standard"
+
+	"$basetexture" "models/weapons/c_egon/v_egon"
+	"$bumpmap" "models/weapons/c_egon/v_egon_normals"
+
+	//metal
+	"$normalmapalphaenvmapmask" "1"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.2 0.3 0.3]"
+	"$envmapfalloff" "1"
+
+	"$phong" "1"
+	"$phongboost" "1.2"
+	"$phongexponent" 20
+	"$phongalbedotint" "1"
+	"$phongfresnelranges"	"[.08 5 1]"
+
+	"$rimlight" "1"							// To enable rim lighting (requires phong)
+	"$rimlightexponent" "15"             	// Exponent for phong component of rim lighting
+	"$rimlightboost" "0.225"	               	// Boost for ambient cube component of rim lighting
+
+//	$detail "effects/models/model_blood_red.vtf"
+	$detailscale 5
+	$detailblendfactor 0.0
+	$detailblendmode 0
+	Proxies
+	{
+		ModelDetailFx
+		{
+		}
+	}
+}
