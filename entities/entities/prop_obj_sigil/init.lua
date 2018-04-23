@@ -45,13 +45,7 @@ end
 local function SigilTeleport(caller, currentsigil, index, first)
 	local sigils = ents.FindByClass("prop_obj_sigil")
 	local sigil = sigils[index]
-	print(index)
-	--If there is a better method of doing this then please replace this part!
-	--This is just here for now to prevent instant teleporting!
-	--TODO: Make a progress bar which will probably be in status_sigilteleport?
-	--TODO: Area of teleport, if player isnt close to sigil the time restarts.
-	--DONE: Also use CurTime() instead!
-	
+
 	caller:ChatPrint(translate.Get("sigil_teleporting"))
 	caller:SetPos(sigil:GetPos())
 	
