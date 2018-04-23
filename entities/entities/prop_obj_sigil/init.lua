@@ -23,16 +23,18 @@ end
 
 local tick = 0
 function ENT:Think()
-	if self.TeleportingENT then
-		if CurTime() >= tick then
-			tick = CurTime() + 1
-			if self.TeleportingENT.SigilCoolDown ~= nil then
-				self.TeleportingENT:ChatPrint( "Teleporting in "..string.NiceTime( self.TeleportingENT.SigilCoolDown - CurTime() ) )
+	for _, pl in pairs( player.GetAll() ) do
+		if self.TeleportingENT then
+			if CurTime() >= tick then
+				tick = CurTime() + 1
+				if pl.SigilCoolDown ~= nil then
+					self.TeleportingENT:ChatPrint( "Teleporting in "..string.NiceTime( pl.SigilCoolDown - CurTime() ) )
+				end
 			end
-		end
-		if self.TeleportingENT.SigilCoolDown ~= nil and self.TeleportingENT.SigilCoolDown <= CurTime() then
-			self:TeleportPlayer(self.TeleportingENT)
-			self.TeleportingENT.SigilCoolDown = nil
+			if pl.SigilCoolDown ~= nil and pl.SigilCoolDown <= CurTime() then
+				self:TeleportPlayer(pl)
+				pl.SigilCoolDown = nil
+			end
 		end
 	end
 end
@@ -67,18 +69,19 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	end
 end
 
-local index = 0
 function ENT:TeleportPlayer(caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
 	local cap = 0
 	
 	if IsValid(caller) and caller:IsPlayer() then
+		if caller.index == nil then caller.index = 0 end
+		
 		if caller:Team() ~= TEAM_UNDEAD then
 			cap = #sigils + 1
-			index = math.Clamp( index + 1, 0, cap )
-			if index == cap then index = 1 end
-			SigilTeleport(caller, self, index, true)
+			caller.index = math.Clamp( caller.index + 1, 0, cap )
+			if caller.index == cap then caller.index = 1 end
+			SigilTeleport(caller, self, caller.index, true)
 		end
 	end
 end
