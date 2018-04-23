@@ -480,7 +480,7 @@ function GM:DrawFearMeter(power, screenscale)
 				
 				surface_SetMaterial(matSigil)
 				surface_DrawTexturedRect(sigilX, sigilY, sigilWidth, sigilHeight)
-				draw.SimpleText(sigil:GetSigilLetter(), "ZS3D2DFontSmall", sigilX + sigilWidth/2, sigilY + sigilHeight, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+				draw.SimpleText(sigil:GetSigilLetter(), "DermaLarge", sigilX + sigilWidth/2, sigilY + sigilHeight, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 			end
 		end
 	end
