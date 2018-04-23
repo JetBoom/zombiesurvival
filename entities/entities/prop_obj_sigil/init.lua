@@ -53,7 +53,11 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	--DONE: Also use CurTime() instead!
 	
 	caller:ChatPrint(translate.Get("sigil_teleporting"))
+	if caller.SavedSigil and sigil == caller.SavedSigil then 
+		sigil = math.Clamp( sigil[index] + 1, 1, #sigils )
+	end
 	caller:SetPos(sigil:GetPos())
+	caller.SavedSigil = sigil
 	
 	caller:SetBarricadeGhosting(true)
 	currentsigil:EmitSound("friends/message.wav")
