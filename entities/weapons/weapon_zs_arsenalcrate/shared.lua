@@ -57,3 +57,40 @@ end
 function SWEP:Holster()
 	return true
 end
+
+if CLIENT then return end
+
+function SWEP:Deploy()
+	self.BaseClass.Deploy(self)
+
+	self:SpawnArsenal()
+end
+
+function SWEP:SpawnArsenal()
+	local owner = self.Owner
+	if not owner:IsValid() then return end
+
+	for _, ent in pairs(ents.FindByClass("status_arsenalcrate")) do
+		if ent:GetOwner() == owner then return end
+	end
+
+	local ent = ents.Create("status_arsenalcrate")
+	if ent:IsValid() then
+		ent:SetPos(owner:EyePos())
+		ent:SetParent(owner)
+		ent:SetOwner(owner)
+		ent:Spawn()
+	end
+end
+
+function SWEP:Initialize()
+
+	--self.BaseClass.Initialize(self)
+
+	timer.Simple(0, function()
+		if IsValid(self) then
+			self:SpawnArsenal()
+		end
+	end)
+	
+end

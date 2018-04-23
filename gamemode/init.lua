@@ -199,7 +199,6 @@ function GM:Initialize()
 	self:SetClassicMode(self:IsClassicMode(), true)
 	self:SetBabyMode(self:IsBabyMode(), true)
 	self:SetRedeemBrains(self.DefaultRedeem)
-	self:SetNumberOfWaves(self.NumberOfWaves)
 
 	local mapname = string.lower(game.GetMap())
 	if string.find(mapname, "_obj_", 1, true) or string.find(mapname, "objective", 1, true) then
@@ -1238,7 +1237,6 @@ function GM:DoRestartGame()
 	self:SetWaveActive(false)
 
 	SetGlobalInt("numwaves", -2)
-	self:SetNumberOfWaves(self.NumberOfWaves)
 	timer.Create("CheckBroken", 10, 1, CheckBroken)
 
 	game.CleanUpMap(false, self.CleanupFilter)
@@ -1279,7 +1277,6 @@ end
 	self:SetWaveActive(false)
 
 	SetGlobalInt("numwaves", -2)
-	self:SetNumberOfWaves(self.NumberOfWaves)
 	if GetGlobalString("hudoverride"..TEAM_UNDEAD, "") ~= "" then
 		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
 	end
@@ -2022,7 +2019,7 @@ concommand.Add("zs_pointsshopsell", function(sender, command, arguments)
             return
         end
         
-        cost = math.floor(itemtab.Worth/6)
+        cost = math.floor(itemtab.Worth/4)
     
         sender:StripWeapon(itemtab.SWEP)
         sender:AddPoints(cost)

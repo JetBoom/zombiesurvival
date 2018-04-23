@@ -175,6 +175,14 @@ local item = GM:AddStartingItem("manhack", ""..translate.Get("worth_manhack"), n
 item.Countables = "prop_manhack"
 GM:AddStartingItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_resupplybox").Countables = "prop_resupplybox"
 GM:AddStartingItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
+local item = GM:AddStartingItem("infturret", ""..translate.Get("worth_turret"), ""..translate.Get("worth_turret2"),
+	ITEMCAT_TOOLS, 65, nil, function(pl)
+	pl:GiveEmptyWeapon("weapon_zs_gunturret")
+	pl:GiveAmmo(1, "thumper")
+	pl:GiveAmmo(250, "smg1")
+end, "models/combine_turrets/floor_turret.mdl")
+item.Countables = {"weapon_zs_gunturret", "prop_gunturret"}
+item.NoClassicMode = true
 
 -----------
 -- W.OTHER --
@@ -268,13 +276,13 @@ GM:AddPointShopItem("boomstick", ""..translate.Get("ars_boomstick"), nil, ITEMCA
  -- P.AMMO --
 ------------
 
-GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
-GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
-GM:AddPointShopItem("smgammo", ""..translate.Get("ars_smg_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
-GM:AddPointShopItem("assaultrifleammo", ""..translate.Get("ars_assaultrifle_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
-GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
-GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 5, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
-GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 7, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
+GM:AddPointShopItem("pistolammo", ""..translate.Get("ars_pistol_ammo"), nil, ITEMCAT_AMMO, 3, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pistol"] or 12, "pistol", true) end, "models/Items/BoxSRounds.mdl")
+GM:AddPointShopItem("shotgunammo", ""..translate.Get("ars_shotgun_ammo"), nil, ITEMCAT_AMMO, 4, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["buckshot"] or 8, "buckshot", true) end, "models/Items/BoxBuckshot.mdl")
+GM:AddPointShopItem("smgammo", ""..translate.Get("ars_smg_ammo"), nil, ITEMCAT_AMMO, 3, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["smg1"] or 30, "smg1", true) end, "models/Items/BoxMRounds.mdl")
+GM:AddPointShopItem("assaultrifleammo", ""..translate.Get("ars_assaultrifle_ammo"), nil, ITEMCAT_AMMO, 5, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["ar2"] or 30, "ar2", true) end, "models/Items/357ammobox.mdl")
+GM:AddPointShopItem("rifleammo", ""..translate.Get("ars_rifle_ammo"), nil, ITEMCAT_AMMO, 4, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["357"] or 6, "357", true) end, "models/Items/BoxSniperRounds.mdl")
+GM:AddPointShopItem("crossbowammo", ""..translate.Get("ars_bolt"), nil, ITEMCAT_AMMO, 2, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "XBowBolt", true) end, "models/Items/CrossbowRounds.mdl")
+GM:AddPointShopItem("pulseammo", ""..translate.Get("ars_pulse_ammo"), nil, ITEMCAT_AMMO, 4, nil, 0, true, nil, function(pl) pl:GiveAmmo(GAMEMODE.AmmoCache["pulse"] or 30, "pulse", true) end, "models/Items/combine_rifle_ammo01.mdl")
 ------------
 -- P.MELEE --
 ------------
@@ -299,16 +307,16 @@ GM:AddPointShopItem("katana", ""..translate.Get("weapon_katana"), nil, ITEMCAT_M
 -- P.TOOLS --
 ------------
 
-GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 5, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
+GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
 GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
 GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
-GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 30, nil, 0, true, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
+GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, 0, true, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
 GM:AddPointShopItem("manhack", ""..translate.Get("worth_manhack"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_manhack")
 GM:AddPointShopItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_medicalkit")
 GM:AddPointShopItem("ffemitter", ""..translate.Get("worth_fieldemiter"), nil, ITEMCAT_TOOLS, 50, "weapon_zs_ffemitter").Countables = "prop_ffemitter"
-local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), nil, ITEMCAT_TOOLS, 50, nil, 0, true, nil, function(pl)
+local item = GM:AddPointShopItem("infturret", ""..translate.Get("worth_turret"), nil, ITEMCAT_TOOLS, 65, nil, 0, true, nil, function(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 	pl:GiveAmmo(250, "smg1")
@@ -379,11 +387,6 @@ function GM:SetupDefaultClip(tab)
 	tab.DefaultClip = math.ceil(tab.ClipSize * self.SurvivalClips * (tab.ClipMultiplier or 1))
 end
 
-GM.MaxSigils = CreateConVar("zs_maxsigils", "3", FCVAR_ARCHIVE + FCVAR_NOTIFY, "How many sigils to spawn. 0 for none."):GetInt()
-cvars.AddChangeCallback("zs_maxsigils", function(cvar, oldvalue, newvalue)
-	GAMEMODE.MaxSigils = math.Clamp(tonumber(newvalue) or 0, 0, 10)
-end)
-
 GM.DefaultRedeem = CreateConVar("zs_redeem", "4", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "The amount of kills a zombie needs to do in order to redeem. Set to 0 to disable."):GetInt()
 cvars.AddChangeCallback("zs_redeem", function(cvar, oldvalue, newvalue)
 	GAMEMODE.DefaultRedeem = math.max(0, tonumber(newvalue) or 0)
@@ -392,11 +395,6 @@ end)
 GM.WaveOneZombies = math.ceil(100 * CreateConVar("zs_waveonezombies", "0.1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "The percentage of players that will start as zombies when the game begins."):GetFloat()) * 0.01
 cvars.AddChangeCallback("zs_waveonezombies", function(cvar, oldvalue, newvalue)
 	GAMEMODE.WaveOneZombies = math.ceil(100 * (tonumber(newvalue) or 1)) * 0.01
-end)
-
-GM.NumberOfWaves = CreateConVar("zs_numberofwaves", "6", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Number of waves in a game."):GetInt()
-cvars.AddChangeCallback("zs_numberofwaves", function(cvar, oldvalue, newvalue)
-	GAMEMODE.NumberOfWaves = tonumber(newvalue) or 1
 end)
 
 -- Game feeling too easy? Just change these values!
@@ -425,6 +423,12 @@ cvars.AddChangeCallback("zs_roundlimit", function(cvar, oldvalue, newvalue)
 end)
 
 -- Static values that don't need convars...
+
+-- Max sigils (don't go over 26 or you'll lose support for any sigil issues).
+GM.MaxSigils = 4
+
+-- Max number of waves per game.
+GM.NumberOfWaves = 6
 
 -- Initial length for wave 1.
 GM.WaveOneLength = 220

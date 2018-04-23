@@ -396,14 +396,14 @@ local matNeedle = Material("zombiesurvival/fearometerneedle")
 local matEyeGlow = Material("Sprites/light_glow02_add_noz")
 local matSigil = Material("zombiesurvival/sigil.png")
 function GM:DrawFearMeter(power, screenscale)
+if GAMEMODE.ZombieEscape then return end
     if currentpower < power then
         currentpower = math.min(power, currentpower + FrameTime() * (math.tan(currentpower) * 2 + 0.05))
     elseif power < currentpower then
         currentpower = math.max(power, currentpower - FrameTime() * (math.tan(currentpower) * 2 + 0.05))
     end
  
-    local w, h = ScrW(), ScrH()
-    local size = 192 * screenscale
+    local size = 92 * screenscale
     local half_size = size / 2
     local mx, my = w / 2 - half_size, h - size
  
@@ -445,13 +445,14 @@ function GM:DrawFearMeter(power, screenscale)
     end
  
     if self:GetUseSigils() and self.MaxSigils > 0 then
-        local sigwid, sighei = screenscale * 18, screenscale * 36
-        local extrude = size * 0.25 + sighei / 2
-        local angle_current = -180
-        local angle_step = 180 / (self.MaxSigils - 1)
-        local rad, sigil, health, maxhealth, damageflash, sigx, sigy, healthfrac
- 
-        local sigils = self:GetSigils()
+		local sizeMult = 1.25
+		local sigwid, sighei = screenscale * (18 * sizeMult), screenscale * (36 * sizeMult)
+		local cushionBetween = screenscale * 25
+		local rad, sigil, health, maxhealth, corrupt, damageflash, sigx, sigy, healthfrac
+		local sigils = self:GetSigils()
+		local numSigils = #sigils
+		local evenBreak = ((numSigils % 2) == 0)
+		local middleSigil = math.floor(numSigils / 2) + 1
         for i=1, self.MaxSigils do
             sigil = sigils[i]
             health = 0
@@ -461,10 +462,31 @@ function GM:DrawFearMeter(power, screenscale)
                 maxhealth = sigil:GetSigilMaxHealth()
             end
  
-            if health >= 0 then
-                rad = math.rad(angle_current)
-                sigx = mx + half_size + math.cos(rad) * extrude
-                sigy = my + half_size + math.sin(rad) * extrude
+ 			if (health >= 0) then
+				sigx = mx - (sigwid * 0.5)
+				if (numSigils > 1) then
+					if evenBreak then
+						local middleSigilSize = (sigwid / 2) + (cushionBetween / 2)
+						if (i < middleSigil) then
+							sigx = sigx - ((middleSigil - i) * (sigwid + cushionBetween)) + middleSigilSize
+						else
+							sigx = sigx + ((i - middleSigil + 1) * (sigwid + cushionBetween)) - middleSigilSize
+						end
+						sigy = my + (sighei * 0.5)
+					else
+						if (not (middleSigil and (i == middleSigil))) then
+							if (i < middleSigil) then
+								sigx = sigx - ((middleSigil - i) * (sigwid + cushionBetween))
+							else
+								sigx = sigx + ((i - middleSigil) * (sigwid + cushionBetween))
+							end
+						end
+						sigy = my + (sighei * 0.5)
+					end
+				else
+					sigx = sigx
+					sigy = my + (sighei * 0.5)
+				end
  
                 if sigil and sigil:IsValid() then
                     damageflash = math.min((CurTime() - sigil:GetSigilLastDamaged()) * 2, 1) * 255
@@ -479,9 +501,8 @@ function GM:DrawFearMeter(power, screenscale)
                 end
  
                 surface_SetMaterial(matSigil)
-                surface_DrawTexturedRectRotated(sigx, sigy, sigwid, sighei, angle_current + 90) 
-                angle_current = angle_current + angle_step
-            end
+				surface_DrawTexturedRect(sigx, sigy, sigwid, sighei)            
+			end
         end
     end
 end
@@ -861,7 +882,7 @@ function GM:_HUDPaint()
 	
 	self:HUDDrawTargetID(myteam, screenscale)
 	if self:GetWave() > 0 and myteam ~= TEAM_SPECTATOR then
-		self:DrawFearMeter(self:CachedFearPower(), screenscale)
+		self:DrawFearMeter(self:CachedFearPower(), screenscale * 0.75)
 	end
     if myteam == TEAM_SPECTATOR then return end
 	if myteam == TEAM_UNDEAD then

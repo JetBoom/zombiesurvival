@@ -272,7 +272,7 @@ function GM:OpenPointsShop()
 					itempan.m_PriceLabel = pricelab
 
 					local sellbutton = vgui.Create("DImageButton", itempan)
-					local points = math.floor(tab.Worth/6)
+					local points = math.floor(tab.Worth/4)
 					if tab.Category == ITEMCAT_GUNS or tab.Category == ITEMCAT_MELEE then
 						sellbutton:SetImage("icon16/information.png")
 						sellbutton:SizeToContents()
