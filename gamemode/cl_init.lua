@@ -396,115 +396,94 @@ local matNeedle = Material("zombiesurvival/fearometerneedle")
 local matEyeGlow = Material("Sprites/light_glow02_add_noz")
 local matSigil = Material("zombiesurvival/sigil.png")
 function GM:DrawFearMeter(power, screenscale)
-if GAMEMODE.ZombieEscape then return end
-    if currentpower < power then
-        currentpower = math.min(power, currentpower + FrameTime() * (math.tan(currentpower) * 2 + 0.05))
-    elseif power < currentpower then
-        currentpower = math.max(power, currentpower - FrameTime() * (math.tan(currentpower) * 2 + 0.05))
-    end
- 
-    local size = 92 * screenscale
-    local half_size = size / 2
-    local mx, my = w / 2 - half_size, h - size
- 
-    surface_SetMaterial(matFearMeter)
-    surface_SetDrawColor(140, 140, 140, 240)
-    surface_DrawTexturedRect(mx, my, size, size)
-    if currentpower >= 0.75 then
-        local pulse = CurTime() % 3 - 1
-        if pulse > 0 then
-            pulse = pulse ^ 2
-            local pulsesize = pulse * screenscale * 28
-            surface_SetDrawColor(140, 140, 140, 120 - pulse * 120)
-            surface_DrawTexturedRect(mx - pulsesize, my - pulsesize, size + pulsesize * 2, size + pulsesize * 2)
-        end
-    end
- 
-    surface_SetMaterial(matNeedle)
-    surface_SetDrawColor(160, 160, 160, 225)
-    local rot = math.Clamp((0.5 - currentpower) + math.sin(RealTime() * 10) * 0.01, -0.5, 0.5) * 300
-    surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * size * -0.0001), h - half_size - math.abs(rot) * size * 0.00015, size, size, rot)
- 
-    if MySelf:Team() == TEAM_UNDEAD then
-        if self:GetDynamicSpawning() and self:ShouldUseAlternateDynamicSpawn() then
-            local obs = MySelf:GetObserverTarget()
-            spawngreen = math.Approach(spawngreen, self:DynamicSpawnIsValid(obs and obs:IsValid() and obs:IsPlayer() and obs:Team() == TEAM_UNDEAD and obs or MySelf) and 1 or 0, FrameTime() * 4)
- 
-            local sy = my + size * 0.6953
-            local gsize = size * 0.085
- 
-            surface_SetMaterial(matEyeGlow)
-            surface_SetDrawColor(220 * (1 - spawngreen), 220 * spawngreen, 0, 240)
-            surface_DrawTexturedRectRotated(mx + size * 0.459, sy, gsize, gsize, 0)
-            surface_DrawTexturedRectRotated(mx + size * 0.525, sy, gsize, gsize, 0)
-        end
- 
-        if currentpower > 0 and not self.ZombieEscape then
-            draw_SimpleTextBlurry(translate.Format("resist_x", math.ceil(self:GetDamageResistance(currentpower) * 100)), "ZSDamageResistance", w * 0.5, my + size * 0.75, Color(currentpower * 200, 200 - currentpower * 200, 0, 255), TEXT_ALIGN_CENTER)
-        end
-    end
- 
-    if self:GetUseSigils() and self.MaxSigils > 0 then
-		local sizeMult = 1.25
-		local sigwid, sighei = screenscale * (18 * sizeMult), screenscale * (36 * sizeMult)
-		local cushionBetween = screenscale * 25
-		local rad, sigil, health, maxhealth, corrupt, damageflash, sigx, sigy, healthfrac
+	if GAMEMODE.ZombieEscape then return end
+	if currentpower < power then
+		currentpower = math.min(power, currentpower + FrameTime() * (math.tan(currentpower) * 2 + 0.05))
+	elseif power < currentpower then
+		currentpower = math.max(power, currentpower - FrameTime() * (math.tan(currentpower) * 2 + 0.05))
+	end
+	
+	local sigilSizeMult = 1.25
+	local sigilWidth, sigilHeight = screenscale * (18 * sigilSizeMult), screenscale * (36 * sigilSizeMult)
+	local sigilOffsetX = sigilWidth + screenscale * 18
+	local sigilOffsetY = -52
+	
+	local size = 192 * screenscale
+	local half_size = size / 2
+	local mx, my = w / 2 - half_size, h - size - sigilHeight - 32
+	
+	surface_SetMaterial(matFearMeter)
+	surface_SetDrawColor(140, 140, 140, 240)
+	surface_DrawTexturedRect(mx, my, size, size)
+	if currentpower >= 0.75 then
+		local pulse = CurTime() % 3 - 1
+		if pulse > 0 then
+			pulse = pulse ^ 2
+			local pulsesize = pulse * screenscale * 28
+			surface_SetDrawColor(140, 140, 140, 120 - pulse * 120)
+			surface_DrawTexturedRect(mx - pulsesize, my - pulsesize, size + pulsesize * 2, size + pulsesize * 2)
+		end
+	end
+	
+	surface_SetMaterial(matNeedle)
+	surface_SetDrawColor(160, 160, 160, 225)
+	local rot = math.Clamp((0.5 - currentpower) + math.sin(RealTime() * 10) * 0.01, -0.5, 0.5) * 300
+	surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * size * -0.0001), h - half_size - math.abs(rot) * size * 0.00015 - sigilHeight - 32, size, size, rot)
+	
+	if MySelf:Team() == TEAM_UNDEAD then
+		if self:GetDynamicSpawning() and self:ShouldUseAlternateDynamicSpawn() then
+			local obs = MySelf:GetObserverTarget()
+			spawngreen = math.Approach(spawngreen, self:DynamicSpawnIsValid(obs and obs:IsValid() and obs:IsPlayer() and obs:Team() == TEAM_UNDEAD and obs or MySelf) and 1 or 0, FrameTime() * 4)
+			
+			local sy = my + size * 0.6953
+			local gsize = size * 0.085
+			
+			surface_SetMaterial(matEyeGlow)
+			surface_SetDrawColor(220 * (1 - spawngreen), 220 * spawngreen, 0, 240)
+			surface_DrawTexturedRectRotated(mx + size * 0.459, sy, gsize, gsize, 0)
+			surface_DrawTexturedRectRotated(mx + size * 0.525, sy, gsize, gsize, 0)
+		end
+		
+		if currentpower > 0 and not self.ZombieEscape then
+			draw_SimpleTextBlurry(translate.Format("resist_x", math.ceil(self:GetDamageResistance(currentpower) * 100)), "ZSDamageResistance", w * 0.5, my + size * 0.75, Color(currentpower * 200, 200 - currentpower * 200, 0, 255), TEXT_ALIGN_CENTER)
+		end
+	end
+	
+	if self:GetUseSigils() and self.MaxSigils > 0 then
+		local health, maxhealth, corrupt, damageflash, sigilX, sigilY, healthfrac
 		local sigils = self:GetSigils()
 		local numSigils = #sigils
-		local evenBreak = ((numSigils % 2) == 0)
-		local middleSigil = math.floor(numSigils / 2) + 1
-        for i=1, self.MaxSigils do
-            sigil = sigils[i]
-            health = 0
-            maxhealth = 0
-            if sigil and sigil:IsValid() then
-                health = sigil:GetSigilHealth()
-                maxhealth = sigil:GetSigilMaxHealth()
-            end
- 
- 			if (health >= 0) then
-				sigx = mx - (sigwid * 0.5)
-				if (numSigils > 1) then
-					if evenBreak then
-						local middleSigilSize = (sigwid / 2) + (cushionBetween / 2)
-						if (i < middleSigil) then
-							sigx = sigx - ((middleSigil - i) * (sigwid + cushionBetween)) + middleSigilSize
-						else
-							sigx = sigx + ((i - middleSigil + 1) * (sigwid + cushionBetween)) - middleSigilSize
-						end
-						sigy = my + (sighei * 0.5)
-					else
-						if (not (middleSigil and (i == middleSigil))) then
-							if (i < middleSigil) then
-								sigx = sigx - ((middleSigil - i) * (sigwid + cushionBetween))
-							else
-								sigx = sigx + ((i - middleSigil) * (sigwid + cushionBetween))
-							end
-						end
-						sigy = my + (sighei * 0.5)
-					end
-				else
-					sigx = sigx
-					sigy = my + (sighei * 0.5)
-				end
- 
-                if sigil and sigil:IsValid() then
-                    damageflash = math.min((CurTime() - sigil:GetSigilLastDamaged()) * 2, 1) * 255
-                else
-                    damageflash = 255
-                end
-                healthfrac = health / maxhealth
-                if corrupt then
-                    surface_SetDrawColor((255 - damageflash) * healthfrac, damageflash * healthfrac, 0, 220)
-                else
-                    surface_SetDrawColor((255 - damageflash) * healthfrac, damageflash * healthfrac, 220, 220)
-                end
- 
-                surface_SetMaterial(matSigil)
-				surface_DrawTexturedRect(sigx, sigy, sigwid, sighei)            
+		for k, sigil in ipairs(sigils) do
+			health = 0
+			maxhealth = 0
+			if sigil and sigil:IsValid() then
+				health = sigil:GetSigilHealth()
+				maxhealth = sigil:GetSigilMaxHealth()
 			end
-        end
-    end
+			
+			if health >= 0 then
+				
+				sigilX = w/2 - (sigilWidth + sigilOffsetX * (numSigils - 1)) / 2 + (k-1) * sigilOffsetX
+				sigilY = h - sigilHeight + sigilOffsetY
+				
+				if sigil and sigil:IsValid() then
+					damageflash = math.min((CurTime() - sigil:GetSigilLastDamaged()) * 2, 1) * 255
+				else
+					damageflash = 255
+				end
+				healthfrac = health / maxhealth
+				if corrupt then
+					surface_SetDrawColor((255 - damageflash) * healthfrac, damageflash * healthfrac, 0, 220)
+				else
+					surface_SetDrawColor((255 - damageflash) * healthfrac, damageflash * healthfrac, 220, 220)
+				end
+				
+				surface_SetMaterial(matSigil)
+				surface_DrawTexturedRect(sigilX, sigilY, sigilWidth, sigilHeight)
+				draw.SimpleText(sigil:GetSigilLetter(), "DermaLarge", sigilX + sigilWidth/2, sigilY + sigilHeight, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+			end
+		end
+	end
 end
 
 function GM:GetDynamicSpawning()
@@ -840,17 +819,6 @@ function GM:HumanHUD(screenscale)
 				end
 			end
 		end
-
-		--TODO: Move this code back into status_drown!
-		--local drown = MySelf.status_drown
-		--if drown and drown:IsValid() then
-		--	surface_SetDrawColor(0, 0, 0, 60)
-		--	surface_DrawRect(w * 0.4, h * 0.35, w * 0.2, 12)
-		--	surface_SetDrawColor(30, 30, 230, 180)
-		--	surface_DrawOutlinedRect(w * 0.4, h * 0.35, w * 0.2, 12)
-		--	surface_DrawRect(w * 0.4, h * 0.35, w * 0.2 * (1 - drown:GetDrown()), 12)
-		--	draw_SimpleTextBlurry(translate.Get("breath").." ", "ZSHUDFontSmall", w * 0.4, h * 0.35 + 6, COLOR_BLUE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-		--end
 	end
 
 	if gamemode.Call("PlayerCanPurchase", MySelf) then
@@ -882,9 +850,9 @@ function GM:_HUDPaint()
 	
 	self:HUDDrawTargetID(myteam, screenscale)
 	if self:GetWave() > 0 and myteam ~= TEAM_SPECTATOR then
-		self:DrawFearMeter(self:CachedFearPower(), screenscale * 0.75)
+		self:DrawFearMeter(self:CachedFearPower(), screenscale * 1)
 	end
-    if myteam == TEAM_SPECTATOR then return end
+	if myteam == TEAM_SPECTATOR then return end
 	if myteam == TEAM_UNDEAD then
 		self:ZombieHUD(screenscale * 0.75)
 	else
