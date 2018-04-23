@@ -26,7 +26,8 @@ function ENT:Draw()
 	if owner == LocalPlayer() then return end
 	
 	if owner ~= MySelf then
-		local radius = GAMEMODE.TransparencyRadius ^ 2
+		// you should prolly make an optional convar to player held item blending.
+		local radius = 10 ^ 2
 		if radius > 0 then
 			local eyepos = EyePos()
 			local dist = owner:NearestPoint(eyepos):DistToSqr(eyepos)
