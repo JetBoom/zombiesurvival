@@ -45,7 +45,7 @@ end
 local function SigilTeleport(caller, currentsigil, index, first)
 	local sigils = ents.FindByClass("prop_obj_sigil")
 	local sigil = sigils[index]
-	
+	print(index)
 	--If there is a better method of doing this then please replace this part!
 	--This is just here for now to prevent instant teleporting!
 	--TODO: Make a progress bar which will probably be in status_sigilteleport?
@@ -53,46 +53,32 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	--DONE: Also use CurTime() instead!
 	
 	caller:ChatPrint(translate.Get("sigil_teleporting"))
-	if caller.SavedSigil and sigil == caller.SavedSigil then 
-		sigil = math.Clamp( sigil[index] + 1, 1, #sigils )
-	end
 	caller:SetPos(sigil:GetPos())
-	caller.SavedSigil = sigil
 	
 	caller:SetBarricadeGhosting(true)
 	currentsigil:EmitSound("friends/message.wav")
 	
 	if first == true then
 		sigil:EmitSound("friends/friend_join.wav")
-			caller:SendLua("surface.PlaySound('friends/friend_join.wav')")
+		caller:SendLua("surface.PlaySound('friends/friend_join.wav')")
 	else
 		sigil:EmitSound("friends/friend_online.wav")
 		caller:SendLua("surface.PlaySound('friends/friend_online.wav')")
 	end
 end
 
+local index = 0
 function ENT:TeleportPlayer(caller)
 	local currentSigil = self:GetSigilLetter()
 	local sigils = ents.FindByClass("prop_obj_sigil")
-
+	local cap = 0
+	
 	if IsValid(caller) and caller:IsPlayer() then
 		if caller:Team() ~= TEAM_UNDEAD then
-			--It is better to use a pair loop rather than trying to find all the sigil letters
-			for _, ent in pairs(sigils) do
-				local sigilIndex = 0
-				local nextSigilIndex = 0
-				if currentSigil == ent:GetSigilLetter() then
-					sigilIndex = _
-					nextSigilIndex = sigilIndex + 1
-				end
-				if sigils[nextSigilIndex] ~= nil then
-						SigilTeleport(caller, self, nextSigilIndex, false)
-				else
-					if nextSigilIndex ~= 0 then
-						SigilTeleport(caller, self, 1, true)
-					end
-				end
-			end
+			cap = #sigils + 1
+			index = math.Clamp( index + 1, 0, cap )
+			if index == cap then index = 1 end
+			SigilTeleport(caller, self, index, true)
 		end
 	end
 end
