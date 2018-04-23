@@ -23,6 +23,18 @@ function ENT:Draw()
 	
 	self:SetAngles(boneang)
 	
-	--if owner == LocalPlayer() then return end
-	self:DrawModel()
+	if owner == LocalPlayer() then return end
+	
+	if owner ~= MySelf then
+		local radius = GAMEMODE.TransparencyRadius ^ 2
+		if radius > 0 then
+			local eyepos = EyePos()
+			local dist = owner:NearestPoint(eyepos):DistToSqr(eyepos)
+			if dist < radius then
+				--Don't Draw it!
+			else
+				self:DrawModel()
+			end
+		end
+	end
 end

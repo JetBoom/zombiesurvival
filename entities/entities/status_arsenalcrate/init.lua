@@ -8,11 +8,10 @@ function ENT:Initialize()
 	self:SetModelScale(0.5, 0)
 
 	self:SetModel("models/Items/item_item_crate.mdl")
+	self:PhysicsInit(SOLID_BBOX)
+	self:SetSolid(SOLID_BBOX)
+	self:SetMoveType(MOVETYPE_NONE)
 	
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetUseType(SIMPLE_USE)
-	self:SetCustomCollisionCheck(true)
-	self:CollisionRulesChanged()
 end
 
 function ENT:Think()
