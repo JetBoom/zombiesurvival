@@ -165,7 +165,7 @@ GM:AddStartingItem("msgbeacon", ""..translate.Get("worth_beacon"), nil, ITEMCAT_
 GM:AddStartingItem("spotlamp", ""..translate.Get("worth_spotlamp"), nil, ITEMCAT_TOOLS, 5, "weapon_zs_spotlamp").Countables = "prop_spotlamp"
 GM:AddStartingItem("6nails", ""..translate.Get("worth_6nails"), ""..translate.Get("worth_6nails2"), ITEMCAT_TOOLS, 12, nil, function(pl) pl:GiveAmmo(12, "GaussEnergy", true) end, "models/Items/BoxMRounds.mdl")
 GM:AddStartingItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
-GM:AddStartingItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_hammer").NoClassicMode = true
+GM:AddStartingItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_hammer").NoClassicMode = true NoodleArm = true
 GM:AddStartingItem("arscrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_arsenalcrate").Countables = "prop_arsenalcrate"
 GM:AddStartingItem("150mkit", ""..translate.Get("worth_150meds"), ""..translate.Get("worth_150meds2"), ITEMCAT_TOOLS, 15, nil, function(pl) pl:GiveAmmo(150, "Battery", true) end, "models/healthvial.mdl")
 GM:AddStartingItem("medkit", ""..translate.Get("worth_medkit"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_medicalkit")
@@ -309,7 +309,7 @@ GM:AddPointShopItem("katana", ""..translate.Get("weapon_katana"), nil, ITEMCAT_M
 
 GM:AddPointShopItem("nail", ""..translate.Get("ars_nail"), ""..translate.Get("ars_nail2"), ITEMCAT_TOOLS, 1, nil, 0, true, nil, function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end, "models/crossbow_bolt.mdl").NoClassicMode = true
 GM:AddPointShopItem("wrench", ""..translate.Get("worth_wrench"), nil, ITEMCAT_TOOLS, 15, "weapon_zs_wrench").NoClassicMode = true
-GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true
+GM:AddPointShopItem("crphmr", ""..translate.Get("worth_hammer"), nil, ITEMCAT_TOOLS, 20, "weapon_zs_hammer").NoClassicMode = true NoodleArm = true
 GM:AddPointShopItem("arsenalcrate", ""..translate.Get("worth_arsenalcrate"), nil, ITEMCAT_TOOLS, 30, "weapon_zs_arsenalcrate")
 GM:AddPointShopItem("resupplybox", ""..translate.Get("worth_resupplybox"), nil, ITEMCAT_TOOLS, 35, "weapon_zs_resupplybox")
 GM:AddPointShopItem("50mkit", ""..translate.Get("ars_50meds"), ""..translate.Get("ars_50meds2"), ITEMCAT_TOOLS, 25, nil, 0, true, nil, function(pl) pl:GiveAmmo(50, "Battery", true) end, "models/healthvial.mdl")
