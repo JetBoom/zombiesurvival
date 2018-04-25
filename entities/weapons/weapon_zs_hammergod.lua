@@ -22,11 +22,10 @@ SWEP.Base = "weapon_zs_hammer"
 
 SWEP.MeleeDamage = 10
 SWEP.HealStrength = 5
-SWEP.Primary.Delay = 0.03 SWEP.ViewModel = "models/weapons/v_hammer/v_hammer.mdl"
+SWEP.Primary.Delay = 0.03
+
+SWEP.ViewModel = "models/weapons/v_hammer/c_hammer.mdl"
 SWEP.WorldModel = "models/weapons/w_hammer.mdl"
-
-
 
 SWEP.MeleeRange = 90
-
 SWEP.SwingTime = 0.5

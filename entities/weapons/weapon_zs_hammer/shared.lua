@@ -4,7 +4,7 @@ SWEP.Base = "weapon_zs_basemelee"
 
 SWEP.DamageType = DMG_CLUB
 
-SWEP.ViewModel = "models/weapons/v_hammer/v_hammer.mdl"
+SWEP.ViewModel = "models/weapons/v_hammer/c_hammer.mdl"
 SWEP.WorldModel = "models/weapons/w_hammer.mdl"
 
 SWEP.Primary.ClipSize = 1
@@ -22,6 +22,7 @@ SWEP.MeleeRange = 50
 SWEP.MeleeSize = 0.875
 
 SWEP.UseMelee1 = true
+SWEP.UseHands = true
 
 SWEP.NoPropThrowing = true
 
