@@ -434,6 +434,9 @@ GM.NumberOfWaves = 6
 -- Time resupply takes to recharge.
 GM.ResupplyTime = 60
 
+-- Time resupply takes to recharge with trait.
+GM.ResupplyTimeTrait = 45
+
 -- Initial length for wave 1.
 GM.WaveOneLength = 220
 
