@@ -123,24 +123,17 @@ function meta:NearArsenalCrate()
 			return true
 		end
 	end
+	
+	for _, ent in pairs(ents.FindByClass("status_arsenalcrate")) do
+		local nearest = ent:NearestPoint(pos)
+		if ent:GetOwner() ~= self and pos:Distance(nearest) <= 80 and (WorldVisible(pos, nearest) or self:TraceLine(80).Entity == ent) then
+			return true
+		end
+	end
 
 	return false
 end
 meta.IsNearArsenalCrate = meta.NearArsenalCrate
-
-function meta:NearPortableArsenalCrate()
-    local pos = self:EyePos()
-
-    for _, ent in pairs(ents.FindByClass("status_arsenalcrate")) do
-        local nearest = ent:NearestPoint(pos)
-        if ent:GetObjectOwner() ~= self and pos:Distance(nearest) <= 80 and (WorldVisible(pos, nearest) or self:TraceLine(80).Entity == ent) then
-            return true
-        end
-    end
-
-    return false
-end
-meta.IsNearPortableArsenalCrate = meta.NearPortableArsenalCrate
 
 function meta:NearestArsenalCrateOwnedByOther()
 	local pos = self:EyePos()
