@@ -1,6 +1,26 @@
 local meta = FindMetaTable("Player")
 if not meta then return end
 
+function meta:RadiusCheck(ent2, client_distance)
+	if self:Team() == ent2:Team() and ent2 ~= self then
+		local radius = client_distance ^ 2
+		if radius > 0 then
+			local eyepos = EyePos()
+			local dist = ent2:NearestPoint(eyepos):DistToSqr(eyepos)
+			if dist < radius then
+				--Don't Draw it!
+				self.HideModel = true
+			else
+				self.HideModel = false
+			end
+		end
+	else
+		self.HideModel = false
+	end
+	
+	return self.HideModel
+end
+
 function meta:FloatingScore(victim, effectname, frags, flags)
 	if MySelf == self then
 		gamemode.Call("FloatingScore", victim, effectname, frags, flags)
