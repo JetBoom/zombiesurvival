@@ -139,7 +139,7 @@ function ENT:Use(activator, caller)
 		end
 	end
 
-	NextUse[myuid] = CurTime() + 60
+	NextUse[myuid] = CurTime() + (activator.FastResupply and GAMEMODE.ResupplyTime/1.5 or GAMEMODE.ResupplyTime)
 
 	net.Start("zs_nextresupplyuse")
 		net.WriteFloat(NextUse[myuid])

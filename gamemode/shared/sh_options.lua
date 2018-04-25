@@ -212,7 +212,8 @@ GM:AddStartingItem("bfengineer", ""..translate.Get("worth_engi"), ""..translate.
 GM:AddStartingItem("bfmusc", ""..translate.Get("worth_muscular"),""..translate.Get("worth_muscular2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.BuffMuscular = true pl:DoMuscularBones() end, "models/props_wasteland/kitchen_shelf001a.mdl")
 GM:AddStartingItem("bfcarpenter", ""..translate.Get("worth_carpenter"), ""..translate.Get("worth_carpenter2"), ITEMCAT_TRAITS, 35, nil, function(pl) pl.Carpenter = true end, "models/weapons/w_hammer.mdl")
 GM:AddStartingItem("bfcannibal", ""..translate.Get("worth_cannibal"), ""..translate.Get("worth_cannibal2"), ITEMCAT_TRAITS, 30, nil, function(pl) pl.Cannibal = true end, "models/gibs/HGIBS.mdl")
-GM:AddStartingItem("bfcannibal", ""..translate.Get("worth_ghostmode"), ""..translate.Get("worth_ghostmode2"), ITEMCAT_TRAITS, 40, nil, function(pl) pl.GhostCade = true end, "models/healthvial.mdl")
+GM:AddStartingItem("bfcannibal", ""..translate.Get("worth_ghostmode"), ""..translate.Get("worth_ghostmode2"), ITEMCAT_TRAITS, 15, nil, function(pl) pl.GhostCade = true end, "models/healthvial.mdl")
+GM:AddStartingItem("bffastresupply", ""..translate.Get("worth_fastresupply"), ""..translate.Get("worth_fastresupply2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.FastResupply = true end, "models/healthvial.mdl")
 
 -----------
 -- W.RETURNS --
@@ -429,6 +430,9 @@ GM.MaxSigils = 4
 
 -- Max number of waves per game.
 GM.NumberOfWaves = 6
+
+-- Time resupply takes to recharge.
+GM.ResupplyTime = 60
 
 -- Initial length for wave 1.
 GM.WaveOneLength = 220
