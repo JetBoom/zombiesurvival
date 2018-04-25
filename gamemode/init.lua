@@ -1879,6 +1879,12 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
         sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
         return
     end
+	
+	if itemtab.NoodleArm then
+        sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "cant_use_x_noodlearm", itemtab.Name))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
     
 	if not GAMEMODE:IsWeaponUnlocked(itemtab) then
 		if GAMEMODE.ObjectiveMap then
@@ -2062,7 +2068,9 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
         if tab and not hasalready[id] then
             if tab.NoClassicMode and GAMEMODE:IsClassicMode() then
                 sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", tab.Name))
-            elseif tab.Callback then
+            elseif tab.NoodleArm then
+                sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_noodlearm", tab.Name))
+			elseif tab.Callback then
                 tab.Callback(sender)
                 hasalready[id] = true
             elseif tab.SWEP then
