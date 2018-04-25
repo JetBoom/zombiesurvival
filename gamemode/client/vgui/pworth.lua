@@ -508,7 +508,7 @@ function PANEL:SetWorthID(id)
 
 	self:SetTooltip(tab.Description)
 
-	if tab.NoClassicMode and GAMEMODE:IsClassicMode() or tab.NoZombieEscape and GAMEMODE.ZombieEscape then
+	if tab.NoClassicMode and GAMEMODE:IsClassicMode() or tab.NoZombieEscape and GAMEMODE.ZombieEscape or tab.NoodleArm then
 		self:SetAlpha(120)
 	else
 		self:SetAlpha(255)

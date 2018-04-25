@@ -1879,6 +1879,12 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
         sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
         return
     end
+	
+	if itemtab.NoodleArm then
+        sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "cant_use_x_noodlearm", itemtab.Name))
+        sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+        return
+    end
     
 	if not GAMEMODE:IsWeaponUnlocked(itemtab) then
 		if GAMEMODE.ObjectiveMap then
@@ -2062,7 +2068,9 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
         if tab and not hasalready[id] then
             if tab.NoClassicMode and GAMEMODE:IsClassicMode() then
                 sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", tab.Name))
-            elseif tab.Callback then
+            elseif tab.NoodleArm then
+                sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_noodlearm", tab.Name))
+			elseif tab.Callback then
                 tab.Callback(sender)
                 hasalready[id] = true
             elseif tab.SWEP then
@@ -3460,7 +3468,7 @@ function GM:PlayerSpawn(pl)
 		if classtab.Model then
 			pl:SetModel(classtab.Model)
 		elseif classtab.UsePlayerModel then
-			local desiredname = pl:GetInfo("cl_playermodel")
+			local desiredname = player_manager.TranslateToPlayerModelName( pl:GetModel() )
 			if #desiredname == 0 then
 				pl:SelectRandomPlayerModel()
 			else
@@ -3468,7 +3476,7 @@ function GM:PlayerSpawn(pl)
 			end
 		elseif classtab.UsePreviousModel then
 			local curmodel = string.lower(pl:GetModel())
-			if table.HasValue(self.RestrictedModels, curmodel) or string.sub(curmodel, 1, 14) ~= "models/player/" then
+			if table.HasValue(self.RestrictedModels, curmodel) then
 				pl:SelectRandomPlayerModel()
 			end
 		elseif classtab.UseRandomModel then
@@ -3517,7 +3525,7 @@ function GM:PlayerSpawn(pl)
 		local desiredname = pl:GetInfo("cl_playermodel")
 		local modelname = player_manager.TranslatePlayerModel(#desiredname == 0 and self.RandomPlayerModels[math.random(#self.RandomPlayerModels)] or desiredname)
 		local lowermodelname = string.lower(modelname)
-		if table.HasValue(self.RestrictedModels, lowermodelname) then
+		if self.RestrictedModels[lowermodelname] then
 			modelname = "models/player/alyx.mdl"
 			lowermodelname = modelname
 		end
