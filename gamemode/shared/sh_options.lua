@@ -375,25 +375,6 @@ GM.RestrictedModels = {
 	"models/player/skeleton.mdl"
 }
 
--- Override default sigil count for some maps (Omit version suffix at the end, to match all versions)
-function GM:GetSigilsPerMap(mapName) for k, v in pairs(self.SigilsPerMap) do if string.find(mapName, "^"..k) then return v end end return nil end
-GM.SigilsPerMap = {
-	gm_construct = 5,
-	zs_abandoned_mall = 4,
-	zs_abandonedmallhd = 4,
-	zs_mallofthedead = 4,
-	zs_ravine = 4,
-	zs_zedders_mall = 4,
-	zs_amsterville = 4,
-	zs_pathogen = 4,
-	zs_christmas_town = 4,
-	zs_krusty_krab_large = 4,
-	zs_lambdacore = 4,
-	zs_snowy_castle = 4,
-	zs_stanley_parable = 4,
-	zs_asylum = 4
-}
-
 -- If a person has no player model then use one of these (auto-generated).
 GM.RandomPlayerModels = {}
 for name, mdl in pairs(player_manager.AllValidModels()) do
@@ -444,8 +425,8 @@ end)
 
 -- Static values that don't need convars...
 
--- Max sigils (don't go over 26 or you'll lose support for any sigil issues).
-GM.MaxSigils = GM:GetSigilsPerMap(game.GetMap()) or 3
+-- Handled in shared/sigilmaps.lua.
+GM.MaxSigils = GM:GetSigilsPerMap(game.GetMap()) or GM.SigilFallBack
 
 -- Max number of waves per game.
 GM.NumberOfWaves = 6
