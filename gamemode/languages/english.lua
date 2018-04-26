@@ -543,6 +543,9 @@ LANGUAGE.worth_ghostmode                             = "Ghost Mode"
 LANGUAGE.worth_ghostmode2                             = "You can ghost through props much faster."
 LANGUAGE.worth_fastresupply                             = "Resupplyer"
 LANGUAGE.worth_fastresupply2                             = "Resupply boxes recharge much faster."
+LANGUAGE.worth_crateshare                            = "Crate Share"
+LANGUAGE.worth_crateshare2                            = "Allows to buy from crates on another client's back."
+LANGUAGE.worth_crateshare3                            = "You're missing the Crate Share trait!"
 LANGUAGE.worth_allergic                             = "Allergic"
 LANGUAGE.worth_allergic2                             = "Poison does twice as much damage in exchange for Worth."
 LANGUAGE.worth_weak                                 = "Weakness"
@@ -943,7 +946,6 @@ LANGUAGE.dont_have_weapon_x							= "Can't sell, you do not have a %s"
 LANGUAGE.not_unlocked_yet_unlocked_on_x			= "That weapon is not unlocked yet. It will be unlocked at the start of wave %d."
 LANGUAGE.weapon_tier_x								= "Weapon tier %d unlocked."
 LANGUAGE.sold_x_for_y_points						= "Sold %s for %d points!"
-
 
 -- Spray mon
 
