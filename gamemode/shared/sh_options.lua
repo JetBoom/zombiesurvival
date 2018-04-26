@@ -214,7 +214,7 @@ GM:AddStartingItem("bfcarpenter", ""..translate.Get("worth_carpenter"), ""..tran
 GM:AddStartingItem("bfcannibal", ""..translate.Get("worth_cannibal"), ""..translate.Get("worth_cannibal2"), ITEMCAT_TRAITS, 30, nil, function(pl) pl.Cannibal = true end, "models/gibs/HGIBS.mdl")
 GM:AddStartingItem("bfghostmode", ""..translate.Get("worth_ghostmode"), ""..translate.Get("worth_ghostmode2"), ITEMCAT_TRAITS, 15, nil, function(pl) pl.GhostCade = true end, "models/healthvial.mdl")
 GM:AddStartingItem("bffastresupply", ""..translate.Get("worth_fastresupply"), ""..translate.Get("worth_fastresupply2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.FastResupply = true end, "models/healthvial.mdl")
-GM:AddStartingItem("bfcrateshare", ""..translate.Get("worth_crateshare"), ""..translate.Get("worth_crateshare"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.CrateShare = true end, "models/healthvial.mdl")
+GM:AddStartingItem("bfcrateshare", ""..translate.Get("worth_crateshare"), ""..translate.Get("worth_crateshare2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.CrateShare = true end, "models/healthvial.mdl")
 -----------
 -- W.RETURNS --
 -----------
