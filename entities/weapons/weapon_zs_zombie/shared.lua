@@ -5,7 +5,7 @@ SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")
 SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
 
 SWEP.MeleeDelay = 0.74
-SWEP.MeleeReach = 65
+SWEP.MeleeReach = 48
 SWEP.MeleeSize = 2
 SWEP.MeleeDamage = 30
 SWEP.MeleeForceScale = 1
