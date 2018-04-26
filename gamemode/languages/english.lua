@@ -866,6 +866,7 @@ LANGUAGE.options_hp_no                              = "Health aura color - No he
 LANGUAGE.options_beatset_zombie                     = "Zombie ambient beat set"
 LANGUAGE.options_beatset_human                      = "Human ambient beat set"
 LANGUAGE.options_weapon_hud_mode                    = "Weapon HUD display style"
+LANGUAGE.options_thirdpersoned                    	= "Third person view point"
 
 -- Help menu
 

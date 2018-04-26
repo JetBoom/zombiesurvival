@@ -153,7 +153,7 @@ end
 if not CLIENT then return end
 
 function meta:DrawCrosshair()
-	if GetConVarNumber("crosshair") ~= 1 then return end
+	if GetConVarNumber("zs_crosshair") ~= 0 then return end
 
 	self:DrawCrosshairCross()
 	self:DrawCrosshairDot()
@@ -171,6 +171,7 @@ local function DrawDot(x, y)
 	surface.SetDrawColor(0, 0, 0, 220)
 	surface.DrawOutlinedRect(x - 2, y - 2, 4, 4)
 end
+
 local matGrad = Material("VGUI/gradient-r")
 local function DrawLine(x, y, rot)
 	rot = 270 - rot
@@ -180,11 +181,17 @@ local function DrawLine(x, y, rot)
 	surface.SetDrawColor(GAMEMODE.CrosshairColor)
 	surface.DrawTexturedRectRotated(x, y, 12, 2, rot)
 end
+
 local baserot = 0
 function meta:DrawCrosshairCross()
-	local x = ScrW() * 0.5
-	local y = ScrH() * 0.5
-
+	local thirdperson = self.useThirdPerson or GAMEMODE.PlayerThirdPerson
+	local pos = Vector(ScrW() * 0.5, ScrH() * 0.5)
+	
+	if thirdperson then
+		local MtoH = util.TraceLine({start = LocalPlayer():GetShootPos(), endpos = LocalPlayer():GetShootPos() + (LocalPlayer():GetAimVector() * 9999),filter = LocalPlayer()})
+		pos = MtoH.HitPos:ToScreen()
+	end
+	
 	local ironsights = self.GetIronsights and self:GetIronsights()
 
 	local owner = self.Owner
@@ -206,65 +213,71 @@ function meta:DrawCrosshairCross()
 	else
 		baserot = math.NormalizeAngle(baserot + vel:GetNormalized():Dot(EyeAngles():Right()) * math.min(10, len / 200))
 	end
-
-	--[[if baserot ~= 0 then
-		render.PushFilterMag(TEXFILTER.ANISOTROPIC)
-		render.PushFilterMin(TEXFILTER.ANISOTROPIC)
-	end]]
+	
+	baserot = 0
 
 	local ang = Angle(0, 0, baserot)
 	for i=0, 359, 360 / 4 do
 		ang.roll = baserot + i
 		local p = ang:Up() * midarea
-		DrawLine(math.Round(x + p.y), math.Round(y + p.z), ang.roll)
+		DrawLine(math.Round(pos.x + p.y), math.Round(pos.y + p.z), ang.roll)
 	end
 
-	--[[if baserot ~= 0 then
-		render.PopFilterMag()
-		render.PopFilterMin()
-	end]]
-	--[[local x = ScrW() * 0.5
-	local y = ScrH() * 0.5
-
-	local ironsights = self.GetIronsights and self:GetIronsights()
-
-	local owner = self.Owner
-
-	local cone = self:GetCone()
-
-	if cone <= 0 or ironsights and not ironsightscrosshair then return end
-
-	cone = ScrH() / 76.8 * cone
-
-	CrossHairScale = math.Approach(CrossHairScale, cone, FrameTime() * math.max(5, math.abs(CrossHairScale - cone) * 0.02))
-
-	local midarea = 40 * CrossHairScale
-
-	local vel = LocalPlayer():GetVelocity()
-	local len = vel:Length()
-	if GAMEMODE.NoCrosshairRotate then
-		baserot = 0
-	else
-		baserot = math.NormalizeAngle(baserot + vel:GetNormalized():Dot(EyeAngles():Right()) * math.min(10, len / 200))
-	end
-
-	local ang = Angle(0, 0, baserot)
-	for i=0, 359, 60 do
-		ang.roll = baserot + i
-		local p = ang:Up() * midarea
-		DrawDot(x + p.y, y + p.z)
-	end]]
 end
 
+local pl
 function meta:DrawCrosshairDot()
-	local x = ScrW() * 0.5
-	local y = ScrH() * 0.5
-
+	pl = LocalPlayer()
+	local classtab = pl:GetZombieClassTable()
+	local thirdperson = self.useThirdPerson or GAMEMODE.PlayerThirdPerson or pl:CallZombieFunction("ShouldDrawLocalPlayer")
+	local pos = Vector(ScrW() * 0.5, ScrH() * 0.5)
+	if thirdperson then
+		local MtoH = util.TraceLine({start = LocalPlayer():GetShootPos(), endpos = LocalPlayer():GetShootPos() + (LocalPlayer():GetAimVector() * 9999),filter = LocalPlayer()})
+		pos = MtoH.HitPos:ToScreen()
+	end
+	
 	surface.SetDrawColor(GAMEMODE.CrosshairColor2)
-	surface.DrawRect(x - 2, y - 2, 4, 4)
+	--surface.SetDrawColor( team.GetColor( pl:Team() ) or GAMEMODE.CrosshairColor2 )
+	surface.DrawRect(pos.x - 2, pos.y - 2, 4, 4)
 	surface.SetDrawColor(0, 0, 0, 220)
-	surface.DrawOutlinedRect(x - 2, y - 2, 4, 4)
+	surface.DrawOutlinedRect(pos.x - 2, pos.y - 2, 4, 4)
 end
+
+local dt
+local pl, wep
+function meta:DrawHitMarkerDots()
+
+	if GetConVarNumber("zs_hitmarkers") ~= 0 then return end
+
+	dt = FrameTime()
+
+	x, y = ScrW() / 2, ScrH() / 2
+
+	local scale = (10 * self.ConeMax)* (2 - math.Clamp( ( CurTime() ) * 5, 0.0, 1.0 ))
+
+	pl = LocalPlayer()
+	
+	if IsValid(pl) then
+		wep = pl:GetActiveWeapon()
+		if IsValid(wep) and wep.Markers then
+		   for k,v in pairs( wep.Markers )do
+		      if v.alpha < 5 then
+		         table.remove( wep.Markers )
+		         continue
+		      end
+		      local pos = v.pos:ToScreen()
+
+		      surface.SetDrawColor( Color(0, 160, 255, v.alpha ) )
+		      surface.DrawLine(pos.x-2,pos.y-2,pos.x-5,pos.y-5)
+		      surface.DrawLine(pos.x+2,pos.y+2,pos.x+5,pos.y+5)
+		      surface.DrawLine(pos.x-2,pos.y+2,pos.x-5,pos.y+5)
+		      surface.DrawLine(pos.x+2,pos.y-2,pos.x+5,pos.y-5)
+		      v.alpha = v.alpha-FrameTime()*240;
+		   end
+		end
+	end
+	
+end	
 
 function meta:BaseDrawWeaponSelection(x, y, wide, tall, alpha)
 	--if killicon.Get(self:GetClass()) then

@@ -215,6 +215,19 @@ function MakepOptions()
 	end
 	dropdown:SetText(GAMEMODE.BeatSetZombie == GAMEMODE.BeatSetZombieDefault and "default" or GAMEMODE.BeatSetZombie)
 	list:AddItem(dropdown)
+	
+	list:AddItem(EasyLabel(Window, translate.Get"options_thirdpersoned"), "DefaultFontSmall", color_white)
+	local dropdown = vgui.Create("DComboBox", Window)
+	dropdown:SetMouseInputEnabled(true)
+	dropdown:AddChoice("Right")
+	dropdown:AddChoice("Center")
+	dropdown:AddChoice("Left")
+	dropdown.OnSelect = function(me, index, value, data)
+		RunConsoleCommand("zs_thirdperson_mode", value == "Right" and 1 or value == "Center" and 2 or value == "Left" and 3)
+	end
+	dropdown:SetText(GAMEMODE.ThirdPersoned == 1 and "Right" or GAMEMODE.ThirdPersoned == 2 and "Center" or GAMEMODE.ThirdPersoned == 3 and "Left")
+	list:AddItem(dropdown)
+	
 
 	local slider = vgui.Create("DNumSlider", Window)
 	slider:SetDecimals(0)
