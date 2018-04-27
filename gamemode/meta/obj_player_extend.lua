@@ -869,12 +869,25 @@ function meta:GetThirdPersonCameraPos(origin, angles)
 	local x1 = 30
 	local y1 = 90
 	local z1 = 5
+
+	local x2 = 2
+	local y2 = y1
+	local z2 = 20
+
+	local x3 = -30
+	local y3 = y1
+	local z3 = z1
 	
 	if GAMEMODE.ThirdPersoned == 1 then
-		tr = util.TraceHull({start = origin, endpos = origin + (angles:Up()*z1) + (angles:Right()*x1) + angles:Forward() * -math.max(y1, self:Team() == TEAM_UNDEAD and self:GetZombieClassTable().CameraDistance or self:BoundingRadius()), mask = MASK_SOLID_BRUSHONLY, filter = allplayers, mins = ViewHullMins, maxs = ViewHullMaxs})	
+		tr = util.TraceHull({start = origin, endpos = origin + (angles:Up()*z1) + (angles:Right()*x1) + angles:Forward() * -math.max(y1, self:Team() == TEAM_UNDEAD and self:GetZombieClassTable().CameraDistance or self:BoundingRadius()), mask = MASK_SOLID_BRUSHONLY, filter = allplayers, mins = ViewHullMins, maxs = ViewHullMaxs})
+	elseif GAMEMODE.ThirdPersoned == 2 then
+		tr = util.TraceHull({start = origin, endpos = origin + (angles:Up()*z2) + (angles:Right()*x2) + angles:Forward() * -math.max(y2, self:Team() == TEAM_UNDEAD and self:GetZombieClassTable().CameraDistance or self:BoundingRadius()), mask = MASK_SOLID_BRUSHONLY, filter = allplayers, mins = ViewHullMins, maxs = ViewHullMaxs})
+	elseif GAMEMODE.ThirdPersoned == 3 then
+		tr = util.TraceHull({start = origin, endpos = origin + (angles:Up()*z3) + (angles:Right()*x3) + angles:Forward() * -math.max(y3, self:Team() == TEAM_UNDEAD and self:GetZombieClassTable().CameraDistance or self:BoundingRadius()), mask = MASK_SOLID_BRUSHONLY, filter = allplayers, mins = ViewHullMins, maxs = ViewHullMaxs})
+	end
+	
 	return tr.HitPos + tr.HitNormal * 3
 end
-
 -- Override these because they're different in 1st person and on the server.
 function meta:SyncAngles()
 	local ang = self:EyeAngles()
