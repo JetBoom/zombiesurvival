@@ -860,6 +860,7 @@ function meta:PlayPainSound()
 	end
 end
 
+-- updated by mka0207
 local ViewHullMins = Vector(-8, -8, -8)
 local ViewHullMaxs = Vector(8, 8, 8)
 function meta:GetThirdPersonCameraPos(origin, angles)
