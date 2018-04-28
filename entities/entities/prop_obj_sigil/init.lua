@@ -48,7 +48,7 @@ local function SigilTeleport(caller, currentsigil, index, first)
 	local sigils = ents.FindByClass("prop_obj_sigil")
 	local sigil = sigils[index]
 
-	caller:ChatPrint(translate.Get("sigil_teleporting"))
+	caller:ChatPrint(translate.ClientGet(caller, "sigil_teleporting"))
 	caller:SetPos(sigil:GetPos())
 	
 	caller:SetBarricadeGhosting(true)

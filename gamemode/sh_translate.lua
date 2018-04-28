@@ -49,25 +49,35 @@ function translate.AddTranslation(id, text)
 	Translations[AddingLanguage][id] = text
 end
 
-function translate.Get(id)
+local function translateGet(id)
 	return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
 end
 
-function translate.Format(id, ...)
-	return string.format(translate.Get(id), ...)
+local function translateFormat(id, ...)
+	return string.format(translateGet(id), ...)
 end
 
 if SERVER then
+	function translate.Get(id)
+		CurrentLanguage = DefaultLanguage
+		return translateGet(id)
+	end
+	
 	function translate.ClientGet(pl, ...)
 		CurrentLanguage = pl:GetInfo("gmod_language_rep")
-		return translate.Get(...)
+		return translateGet(...)
 	end
-
+	
+	function translate.Format(id, ...)
+		CurrentLanguage = DefaultLanguage
+		return translateFormat(id, ...)
+	end
+	
 	function translate.ClientFormat(pl, ...)
 		CurrentLanguage = pl:GetInfo("gmod_language_rep")
-		return translate.Format(...)
+		return translateFormat(...)
 	end
-
+	
 	function PrintTranslatedMessage(printtype, str, ...)
 		for _, pl in pairs(player.GetAll()) do
 			pl:PrintMessage(printtype, translate.ClientFormat(pl, str, ...))
@@ -76,11 +86,20 @@ if SERVER then
 end
 
 if CLIENT then
-	function translate.ClientGet(_, ...)
-		return translate.Get(...)
+	function translate.Get(id)
+		return translateGet(id)
 	end
+	
+	function translate.ClientGet(_, ...)
+		return translateGet(...)
+	end
+	
+	function translate.Format(id, ...)
+		return translateFormat(id, ...)
+	end
+	
 	function translate.ClientFormat(_, ...)
-		return translate.Format(...)
+		return translateFormat(...)
 	end
 end
 

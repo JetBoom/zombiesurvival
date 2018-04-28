@@ -344,7 +344,7 @@ LANGUAGE.ars_pts									= "Punkte"
 -- Ressuply Box
 
 LANGUAGE.res_box_ready								= "Bereit"
-LANGUAGE.res_box_seconds							= "s"
+LANGUAGE.res_box_seconds							= "%i s"
 
 -- Message beacon
 

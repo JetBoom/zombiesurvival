@@ -79,7 +79,7 @@ function ENT:Touch(ent)
 
 		ent:SetPos(pos)
 
-		ent:PrintMessage(3, translate.Get("sigil_yousurvived"))
+		ent:PrintMessage(3, translate.ClientGet(ent, "sigil_yousurvived"))
 	end
 end
 
