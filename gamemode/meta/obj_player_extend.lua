@@ -147,6 +147,20 @@ function meta:NearestArsenalCrateOwnedByOther()
 	end
 end
 
+function meta:NearSigil()
+	local pos = self:EyePos()
+
+	for _, ent in pairs(ents.FindByClass("prop_obj_sigil")) do
+		local nearest = ent:NearestPoint(pos)
+		if pos:Distance(nearest) <= 90 and (WorldVisible(pos, nearest) or self:TraceLine(90).Entity == ent) then
+			return true
+		end
+	end
+
+	return false
+end
+meta.IsNearSigil = meta.NearSigil
+
 function meta:SetZombieClassName(classname)
 	if GAMEMODE.ZombieClasses[classname] then
 		self:SetZombieClass(GAMEMODE.ZombieClasses[classname].Index)
