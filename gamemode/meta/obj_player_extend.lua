@@ -860,6 +860,7 @@ function meta:PlayPainSound()
 	end
 end
 
+-- updated by mka0207
 local ViewHullMins = Vector(-8, -8, -8)
 local ViewHullMaxs = Vector(8, 8, 8)
 function meta:GetThirdPersonCameraPos(origin, angles)
@@ -888,7 +889,6 @@ function meta:GetThirdPersonCameraPos(origin, angles)
 	
 	return tr.HitPos + tr.HitNormal * 3
 end
-
 -- Override these because they're different in 1st person and on the server.
 function meta:SyncAngles()
 	local ang = self:EyeAngles()

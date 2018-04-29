@@ -35,3 +35,11 @@ end
 function GM:GetEscapeStage()
 	return GetGlobalInt("esstg", ESCAPESTAGE_NONE)
 end
+
+function GM:SigilsSpawned()
+    if #ents.FindByClass( "prop_obj_sigil" ) >= 1 then
+        return true
+    end
+
+    return false
+end

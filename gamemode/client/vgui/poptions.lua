@@ -215,6 +215,7 @@ function MakepOptions()
 	end
 	dropdown:SetText(GAMEMODE.BeatSetZombie == GAMEMODE.BeatSetZombieDefault and "default" or GAMEMODE.BeatSetZombie)
 	list:AddItem(dropdown)
+		
 
 	local slider = vgui.Create("DNumSlider", Window)
 	slider:SetDecimals(0)

@@ -4,10 +4,10 @@ if CLIENT then
 	SWEP.PrintName = translate.Get("craft_hammergod")
 
 	SWEP.VElements = {
-		["base2"] = { type = "Model", model = "models/props_lab/teleportring.mdl", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(0, 0, 0), angle = Angle(0, 180, 0), size = Vector(0.08, 0.08, 0.08), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base"] = { type = "Model", model = "models/props_lab/powerbox02d.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(6.4, 3.975, -9.412), angle = Angle(5.961, 270, 16.764), size = Vector(0.25, 0.25, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["ss"] = { type = "Sprite", sprite = "sprites/grav_flare", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(-1.338, 2.894, 0.125), size = { x = 5, y = 5 }, color = Color(255, 255, 255, 255), nocull = true, additive = true, vertexalpha = true, vertexcolor = true, ignorez = false},
-		["base2+"] = { type = "Model", model = "models/props_lab/teleportring.mdl", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(-0.975, -0.263, 0.232), angle = Angle(0, 270, 90), size = Vector(0.15, 0.15, 0.15), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["base2"] = { type = "Model", model = "models/props_lab/teleportring.mdl", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(0, -1, 0), angle = Angle(0, 180, 0), size = Vector(0.08, 0.08, 0.08), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+		["base"] = { type = "Model", model = "models/props_lab/powerbox02d.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(0.9, 4.965, -8.412), angle = Angle(5.961, 270, 16.764), size = Vector(0.25, 0.25, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+		["ss"] = { type = "Sprite", sprite = "sprites/grav_flare", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(-1.360, 2.894, 0.1), size = { x = 5, y = 5 }, color = Color(255, 255, 255, 255), nocull = true, additive = true, vertexalpha = true, vertexcolor = true, ignorez = false},
+		["base2+"] = { type = "Model", model = "models/props_lab/teleportring.mdl", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(-0.9, 0.5, -0.0), angle = Angle(10, 265, 97), size = Vector(0.15, 0.15, 0.15), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 	}
 
 	SWEP.WElements = {
@@ -22,11 +22,10 @@ SWEP.Base = "weapon_zs_hammer"
 
 SWEP.MeleeDamage = 10
 SWEP.HealStrength = 5
-SWEP.Primary.Delay = 0.03 SWEP.ViewModel = "models/weapons/v_hammer/v_hammer.mdl"
+SWEP.Primary.Delay = 0.03
+
+SWEP.ViewModel = "models/weapons/v_hammer/c_hammer.mdl"
 SWEP.WorldModel = "models/weapons/w_hammer.mdl"
-
-
 
 SWEP.MeleeRange = 90
-
 SWEP.SwingTime = 0.5

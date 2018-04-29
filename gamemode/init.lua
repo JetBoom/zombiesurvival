@@ -33,6 +33,7 @@ AddCSLuaFile("shared/sh_sigils.lua")
 AddCSLuaFile("shared/sh_channel.lua")
 AddCSLuaFile("shared/sh_bullets.lua")
 AddCSLuaFile("shared/sh_scoreboardtags.lua")
+AddCSLuaFile("shared/sigilmaps.lua")
 
 
 --[[
@@ -1565,6 +1566,9 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.Cannibal = nil
 	pl.Allergic = nil
 	pl.GhostCade = nil
+	pl.FastResupply = nil
+	pl.CrateShare = nil
+
 
 
 	local uniqueid = pl:UniqueID()

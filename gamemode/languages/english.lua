@@ -540,7 +540,12 @@ LANGUAGE.worth_carpenter2                             = "50% Decreased delay in 
 LANGUAGE.worth_cannibal                             = "Cannibalism"
 LANGUAGE.worth_cannibal2                             = "You can now eat gore giblets from zombies an humans to regain health.\n Simply touch the gore gibs to eat them."
 LANGUAGE.worth_ghostmode                             = "Ghost Mode"
-LANGUAGE.worth_ghostmode2                             = "You can ghost through props much faster"
+LANGUAGE.worth_ghostmode2                             = "You can ghost through props much faster."
+LANGUAGE.worth_fastresupply                             = "Resupplyer"
+LANGUAGE.worth_fastresupply2                             = "Resupply boxes recharge much faster."
+LANGUAGE.worth_crateshare                            = "Crate Share"
+LANGUAGE.worth_crateshare2                            = "Allows to buy from crates on another client's back."
+LANGUAGE.worth_crateshare3                            = "You're missing the Crate Share trait!"
 LANGUAGE.worth_allergic                             = "Allergic"
 LANGUAGE.worth_allergic2                             = "Poison does twice as much damage in exchange for Worth."
 LANGUAGE.worth_weak                                 = "Weakness"
@@ -864,6 +869,7 @@ LANGUAGE.options_hp_no                              = "Health aura color - No he
 LANGUAGE.options_beatset_zombie                     = "Zombie ambient beat set"
 LANGUAGE.options_beatset_human                      = "Human ambient beat set"
 LANGUAGE.options_weapon_hud_mode                    = "Weapon HUD display style"
+LANGUAGE.options_thirdpersoned                    	= "Third person view point"
 
 -- Help menu
 
@@ -940,7 +946,6 @@ LANGUAGE.dont_have_weapon_x							= "Can't sell, you do not have a %s"
 LANGUAGE.not_unlocked_yet_unlocked_on_x			= "That weapon is not unlocked yet. It will be unlocked at the start of wave %d."
 LANGUAGE.weapon_tier_x								= "Weapon tier %d unlocked."
 LANGUAGE.sold_x_for_y_points						= "Sold %s for %d points!"
-
 
 -- Spray mon
 

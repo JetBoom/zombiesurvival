@@ -151,7 +151,16 @@ end
 -- I had to make this since the default function checks visibility vs. the entitiy's center and not the nearest position.
 function util.BlastDamageEx(inflictor, attacker, epicenter, radius, damage, damagetype)
 	local filter = inflictor
-	for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
+	local entities = ents.FindInSphere(epicenter, radius)
+	-- Move attacker to the end to prevent teamkilling
+	for k, v in ipairs(entities) do
+		if v == attacker then
+			table.insert(entities, table.remove(entities, k))
+			break
+		end
+	end
+	
+	for _, ent in pairs(entities) do
 		if ent and ent:IsValid() then
 			local nearest = ent:NearestPoint(epicenter)
 			if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then

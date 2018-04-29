@@ -405,12 +405,16 @@ function GM:DrawFearMeter(power, screenscale)
 	
 	local sigilSizeMult = 1.25
 	local sigilWidth, sigilHeight = screenscale * (18 * sigilSizeMult), screenscale * (36 * sigilSizeMult)
+	local sigilFearSpacing = 32 * screenscale
 	local sigilOffsetX = sigilWidth + screenscale * 18
-	local sigilOffsetY = -52
+	local sigilOffsetY = -52 * screenscale
+	if not self:GetUseSigils() or not (self.MaxSigils > 0) or not (#self:GetSigils() > 0) then
+		sigilHeight, sigilFearSpacing = 0, 0
+	end
 	
 	local size = 192 * screenscale
 	local half_size = size / 2
-	local mx, my = w / 2 - half_size, h - size - sigilHeight - 32
+	local mx, my = w / 2 - half_size, h - size - sigilHeight - sigilFearSpacing
 	
 	surface_SetMaterial(matFearMeter)
 	surface_SetDrawColor(140, 140, 140, 240)
@@ -428,7 +432,7 @@ function GM:DrawFearMeter(power, screenscale)
 	surface_SetMaterial(matNeedle)
 	surface_SetDrawColor(160, 160, 160, 225)
 	local rot = math.Clamp((0.5 - currentpower) + math.sin(RealTime() * 10) * 0.01, -0.5, 0.5) * 300
-	surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * size * -0.0001), h - half_size - math.abs(rot) * size * 0.00015 - sigilHeight - 32, size, size, rot)
+	surface_DrawTexturedRectRotated(w * 0.5 - math.max(0, rot * size * -0.0001), h - half_size - math.abs(rot) * size * 0.00015 - sigilHeight - sigilFearSpacing, size, size, rot)
 	
 	if MySelf:Team() == TEAM_UNDEAD then
 		if self:GetDynamicSpawning() and self:ShouldUseAlternateDynamicSpawn() then
@@ -480,7 +484,7 @@ function GM:DrawFearMeter(power, screenscale)
 				
 				surface_SetMaterial(matSigil)
 				surface_DrawTexturedRect(sigilX, sigilY, sigilWidth, sigilHeight)
-				draw.SimpleText(sigil:GetSigilLetter(), "DermaLarge", sigilX + sigilWidth/2, sigilY + sigilHeight, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+				draw.SimpleText(sigil:GetSigilLetter(), "ZS3D2DFontSmallest", sigilX + sigilWidth/2, sigilY + sigilHeight, Vector(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -1074,6 +1078,8 @@ function GM:CreateFonts()
 	surface.CreateLegacyFont("csd", 42, 500, true, false, "healthsign", false, true)
 	surface.CreateLegacyFont("tahoma", 96, 1000, true, false, "zshintfont", false, true)
 
+	surface.CreateLegacyFont(fontfamily3d, 32, fontweight3D, false, false,  "ZS3D2DFontSmallest", false, true)
+	surface.CreateLegacyFont(fontfamily3d, 40, fontweight3D, false, false,  "ZS3D2DFontSmaller", false, true)
 	surface.CreateLegacyFont(fontfamily3d, 48, fontweight3D, false, false,  "ZS3D2DFontSmall", false, true)
 	surface.CreateLegacyFont(fontfamily3d, 72, fontweight3D, false, false, "ZS3D2DFont", false, true)
 	surface.CreateLegacyFont(fontfamily3d, 128, fontweight3D, false, false, "ZS3D2DFontBig", false, true)
