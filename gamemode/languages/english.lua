@@ -783,7 +783,11 @@ LANGUAGE.hm_nest_master2                            = "goes to %s for having %d 
 
 -- Weapon Titles
 
-LANGUAGE.title_guns                                 = "Guns"
+LANGUAGE.title_guns                                 = "Hand Guns"
+LANGUAGE.title_shotguns                             = "Shotguns"
+LANGUAGE.title_smg                                 = "SMG"
+LANGUAGE.title_assault                               = "Assault"
+LANGUAGE.title_rifles                                 = "Rifles"
 LANGUAGE.title_ammo                                 = "Ammunition"
 LANGUAGE.title_melee                                 = "Melee Weapons"
 LANGUAGE.title_tools                                 = "Tools"
