@@ -2,7 +2,11 @@ GM.BeatSetHumanDefault = "zsrhuman"
 GM.BeatSetZombieDefault = "zsrzombie"
 
 GM.ItemCategoryIcons = {
-	[ITEMCAT_GUNS] = "icon16/gun.png",
+	[ITEMCAT_HANDGUNS] = "icon16/gun.png",
+	[ITEMCAT_SHOTGUNS] = "icon16/gun.png",
+	[ITEMCAT_SMG] = "icon16/gun.png",
+	[ITEMCAT_ASSAULTS] = "icon16/gun.png",
+	[ITEMCAT_RIFLES] = "icon16/gun.png",
 	[ITEMCAT_AMMO] = "icon16/box.png",
 	[ITEMCAT_MELEE] = "icon16/cog.png",
 	[ITEMCAT_TOOLS] = "icon16/wrench.png",
