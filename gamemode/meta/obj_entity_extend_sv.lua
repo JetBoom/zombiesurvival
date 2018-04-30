@@ -213,6 +213,19 @@ function meta:PackUp(pl)
 	end
 end
 
+function meta:SigilTeleport(pl)
+	if pl:Team() ~= TEAM_SURVIVOR or not pl:Alive() or pl:GetBarricadeGhosting() then return end
+	
+	local cur = pl:GetStatus("sigil_teleport")
+	if cur and cur:IsValid() then return end
+
+	local status = pl:GiveStatus("sigil_teleport")
+	if status:IsValid() then
+		status:SetCurrentSigil(self)
+		status:SetEndTime(CurTime() + (self.TeleportTime or 5))
+	end
+end
+
 function meta:GetPropsInContraption()
 	local allcons = constraint.GetAllConstrainedEntities(self)
 	if not allcons or #allcons == 0 then

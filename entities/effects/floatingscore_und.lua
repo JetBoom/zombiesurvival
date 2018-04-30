@@ -1,10 +1,11 @@
-local messages = {translate.Get("fc_munch"),
-translate.Get("fc_brainget"),
-"+1!",
-translate.Get("fc_joinus"),
-translate.Get("fc_oneofus"),
-translate.Get("fc_buttmagned"),
-translate.Get("fc_chomp")
+local messages = {
+	translate.Get("fc_munch"),
+	translate.Get("fc_brainget"),
+	"+1!",
+	translate.Get("fc_joinus"),
+	translate.Get("fc_oneofus"),
+	translate.Get("fc_buttmagned"),
+	translate.Get("fc_chomp")
 }
 
 EFFECT.LifeTime = 3

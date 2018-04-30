@@ -77,9 +77,9 @@ function ENT:RenderInfo(pos, ang, owner)
 
 		local factor = 1 - (NextUse - CurTime()) / (NextUse - NextUseStart)
 		if factor >= 1 then
-			self:DrawBar(0, -80, 600, 40, factor, translate.Get"res_box_ready")
+			self:DrawBar(0, -80, 600, 40, factor, translate.Get("res_box_ready"))
 		else
-			self:DrawBar(0, -80, 600, 40, factor, string.format("%i", NextUse - CurTime()).." "..translate.Get"res_box_seconds")
+			self:DrawBar(0, -80, 600, 40, factor, translate.Format("res_box_seconds", NextUse - CurTime()))
 		end
 
 		if owner:IsValid() and owner:IsPlayer() then

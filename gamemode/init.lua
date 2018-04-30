@@ -3737,7 +3737,7 @@ function GM:WaveStateChanged(newstate)
 			if self:GetEscapeStage() == ESCAPESTAGE_BOSS then
 				self:SetEscapeStage(ESCAPESTAGE_DEATH)
 
-				PrintMessage(3, translate.Get("sigil_deathfog"))
+				PrintTranslatedMessage(3, "sigil_deathfog")
 
 				gamemode.Call("SetWaveEnd", -1)
 			elseif self:GetEscapeStage() == ESCAPESTAGE_ESCAPE then
@@ -3746,7 +3746,7 @@ function GM:WaveStateChanged(newstate)
 				-- 2 minutes to get out with everyone spawning as bosses.
 				gamemode.Call("SetWaveEnd", CurTime() + 120)
 
-				PrintMessage(3, translate.Get("sigil_escapeboss"))
+				PrintTranslatedMessage(3, "sigil_escapeboss")
 
 				-- Start spawning boss zombies.
 			elseif self:GetEscapeStage() == ESCAPESTAGE_NONE then
@@ -3766,7 +3766,7 @@ function GM:WaveStateChanged(newstate)
 					net.WriteInt(self:GetWave(), 16)
 					net.WriteFloat(CurTime())
 				net.Broadcast()]]
-				PrintMessage(3, translate.Get("sigil_escapestart"))
+				PrintTranslatedMessage(3, "sigil_escapestart")
 
 				-- 2 minutes to escape.
 				gamemode.Call("SetWaveActive", true)

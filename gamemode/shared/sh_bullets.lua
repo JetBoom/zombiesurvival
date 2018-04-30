@@ -294,7 +294,7 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 
 	local bFirstHit = true
 
-	local lastPlayerHit
+	local bulletFilter = team.GetPlayers(self:Team())
 
 	while fCurrentDamage > 0 do
 		local vecEnd = vecSrc + vecDir * flDistance
@@ -302,13 +302,13 @@ function playerMeta:FireCSSBullet( bulletInfo, suppressHostEvents )
 		local tr = util.TraceLine({
 			start = vecSrc,
 			endpos = vecEnd,
-			filter = { self, lastPlayerHit },
+			filter = bulletFilter,
 			mask = bit.bor(CONTENTS_HITBOX,MASK_SOLID,CONTENTS_DEBRIS)
 		})
 
 		-- ClipTraceToPlayers?
 
-		lastPlayerHit = tr.Entity
+		table.insert(bulletFilter, tr.Entity)
 
 		if tr.Fraction == 1.0 then
 			break -- we didn't hit anything, stop tracing shoot

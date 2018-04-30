@@ -433,7 +433,7 @@ LANGUAGE.ars_pts                                    = "Очков"
 -- Ressuply Box
 
 LANGUAGE.res_box_ready                              = "Готов"
-LANGUAGE.res_box_seconds                            = "c"
+LANGUAGE.res_box_seconds                            = "%i c"
 
 -- Message beacon
 

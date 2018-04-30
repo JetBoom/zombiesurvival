@@ -138,7 +138,7 @@ LANGUAGE.sigil_escapestart							= "Fluchtsequenz gestartet"
 LANGUAGE.sigil_escapeboss							= "Fluchtsequenz Boss-Phase"
 LANGUAGE.sigil_deathfog								= "Fluchtsequenz Todesnebel-Phase"
 LANGUAGE.sigil_yousurvived							= "Du hast überlebt! Warte auf andere Überlebende..."
-LANGUAGE.sigil_teleporting							= "Teleportieren.... Bitte warten!"
+LANGUAGE.sigil_teleporting							= "Teleportiere nach %q"
 
 -- Message beacon messages
 LANGUAGE.message_beacon_1							= "Trefft euch hier"
@@ -344,7 +344,7 @@ LANGUAGE.ars_pts									= "Punkte"
 -- Ressuply Box
 
 LANGUAGE.res_box_ready								= "Bereit"
-LANGUAGE.res_box_seconds							= "s"
+LANGUAGE.res_box_seconds							= "%i s"
 
 -- Message beacon
 
