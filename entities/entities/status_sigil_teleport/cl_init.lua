@@ -22,7 +22,7 @@ function ENT:Draw()
 
 end
 
-local colTeleport = Color(20, 20, 255, 220)
+local colTeleport = Color(255, 255, 255)
 local function drawBar(x, y, fraction, screenscale, destName)
 	
 	local maxbarwidth = 270 * screenscale
