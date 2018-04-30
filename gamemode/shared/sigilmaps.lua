@@ -19,5 +19,6 @@ GM.SigilsPerMap = {
 	zs_lambdacore = 4,
 	zs_snowy_castle = 4,
 	zs_stanley_parable = 4,
-	zs_asylum = 4
+	zs_asylum = 4,
+	zs_gauntlet_reborn = 0 -- leave as 0 due to built-in sigils.
 }
