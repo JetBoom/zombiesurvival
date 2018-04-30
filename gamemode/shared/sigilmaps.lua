@@ -4,9 +4,9 @@ function GM:GetSigilsPerMap(mapName) for k, v in pairs(self.SigilsPerMap) do if 
 -- Default sigil fallback in case there is no map in the sigil table (don't go over 26 or you'll lose support for any sigil issues).
 GM.SigilFallBack = 3
 
--- Edit below with the map name and how many sigils to spawn.
+-- Edit below with the map name and how many sigils to spawn (the map needs at least the number of sigil placements or they won't spawn!)
 GM.SigilsPerMap = {
-	gm_construct = 20,
+	gm_construct = 26,
 	zs_abandoned_mall = 4,
 	zs_abandonedmallhd = 4,
 	zs_mallofthedead = 4,
