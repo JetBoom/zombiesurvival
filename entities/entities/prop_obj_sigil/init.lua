@@ -22,64 +22,10 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	for _, pl in pairs( player.GetAll() ) do
-		if pl.SigilCoolDown ~= nil and pl.SigilCoolDown <= CurTime() then
-			if pl:NearSigil() then
-				self:TeleportPlayer(pl)
-				pl.SigilCoolDown = nil
-			end
-		else
-			if !pl:NearSigil() then
-				pl.SigilCoolDown = nil
-			end
-		end
-	end
 end
 
 function ENT:Use(activator, caller)
-	caller.SigilCoolDown = CurTime() + 5
-end
-
-local function SigilTeleport(caller, currentsigil, index, first)
-	local sigils = ents.FindByClass("prop_obj_sigil")
-	local sigil = sigils[index]
-
-	caller:ChatPrint(translate.ClientGet(caller, "sigil_teleporting"))
-	caller:SetPos(sigil:GetPos())
-	
-	caller:SetBarricadeGhosting(true)
-	currentsigil:EmitSound("friends/message.wav")
-	
-	if first == true then
-		sigil:EmitSound("friends/friend_join.wav")
-		caller:SendLua("surface.PlaySound('friends/friend_join.wav')")
-	else
-		sigil:EmitSound("friends/friend_online.wav")
-		caller:SendLua("surface.PlaySound('friends/friend_online.wav')")
-	end
-end
-
-function ENT:TeleportPlayer(caller)
-	local currentSigil = self:GetSigilLetter()
-	local sigils = ents.FindByClass("prop_obj_sigil")
-	
-	if IsValid(caller) and caller:IsPlayer() then
-		if caller.index == nil then caller.index = 0 end
-		
-		if caller:Team() ~= TEAM_UNDEAD then
-			for _, sigil in pairs(sigils) do
-				if sigil:GetSigilLetter() == self:GetSigilLetter() then
-					caller.last_index = _
-				end
-			end
-				
-			caller.index = ( caller.index % #sigils ) + 1
-			if caller.index == caller.last_index then 
-				caller.index = ( caller.index % #sigils ) + 1
-			end
-			SigilTeleport(caller, self, caller.index, true)
-		end
-	end
+	self:SigilTeleport(activator)
 end
 
 function ENT:OnTakeDamage(dmginfo)

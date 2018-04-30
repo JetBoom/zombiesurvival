@@ -9,8 +9,6 @@ function ENT:Initialize()
 
 	self.AmbientSound = CreateSound(self, "zombiesurvival/sigil_loop.wav")
 
-	--LocalPlayer().SigilTeleport = true
-
 	hook.Add("PostDrawTranslucentRenderables", "DrawSigilHints", function( bDepth, bSkybox )
 		if ( bSkybox ) then return end
 		for _, ent in pairs(ents.FindByClass("prop_obj_sigil")) do
