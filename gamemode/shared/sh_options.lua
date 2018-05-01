@@ -30,17 +30,17 @@ ITEMCAT_TRAITS = 10
 ITEMCAT_RETURNS = 11
 
 GM.ItemCategories = {
-	[ITEMCAT_HANDGUNS] = ""..translate.Get("title_guns"),
-	[ITEMCAT_SHOTGUNS] = ""..translate.Get("title_shotguns"),
-	[ITEMCAT_SMG] = ""..translate.Get("title_smg"),
-	[ITEMCAT_ASSAULTS] = ""..translate.Get("title_assault"),
-	[ITEMCAT_RIFLES] = ""..translate.Get("title_rifles"),
-	[ITEMCAT_AMMO] = ""..translate.Get("title_ammo"),
-	[ITEMCAT_MELEE] = ""..translate.Get("title_melee"),
-	[ITEMCAT_TOOLS] = ""..translate.Get("title_tools"),
-	[ITEMCAT_OTHER] = ""..translate.Get("title_other"),
-	[ITEMCAT_TRAITS] = ""..translate.Get("title_traits"),
-	[ITEMCAT_RETURNS] = ""..translate.Get("title_returns")
+	[ITEMCAT_HANDGUNS]	= {Name = ""..translate.Get("title_guns"),		Sellable = true},
+	[ITEMCAT_SHOTGUNS]	= {Name = ""..translate.Get("title_shotguns"),	Sellable = true},
+	[ITEMCAT_SMG]		= {Name = ""..translate.Get("title_smg"),		Sellable = true},
+	[ITEMCAT_ASSAULTS]	= {Name = ""..translate.Get("title_assault"),	Sellable = true},
+	[ITEMCAT_RIFLES]	= {Name = ""..translate.Get("title_rifles"),	Sellable = true},
+	[ITEMCAT_AMMO]		= {Name = ""..translate.Get("title_ammo"),		Sellable = false},
+	[ITEMCAT_MELEE]		= {Name = ""..translate.Get("title_melee"),		Sellable = true},
+	[ITEMCAT_TOOLS]		= {Name = ""..translate.Get("title_tools"),		Sellable = false},
+	[ITEMCAT_OTHER]		= {Name = ""..translate.Get("title_other"),		Sellable = false},
+	[ITEMCAT_TRAITS]	= {Name = ""..translate.Get("title_traits"),	Sellable = false},
+	[ITEMCAT_RETURNS]	= {Name = ""..translate.Get("title_returns"),	Sellable = false}
 }
 
 --[[
@@ -243,6 +243,7 @@ GM:AddStartingItem("bfcarpenter", ""..translate.Get("worth_carpenter"), ""..tran
 GM:AddStartingItem("bfcannibal", ""..translate.Get("worth_cannibal"), ""..translate.Get("worth_cannibal2"), ITEMCAT_TRAITS, 30, nil, function(pl) pl.Cannibal = true end, "models/gibs/HGIBS.mdl")
 GM:AddStartingItem("bfghostmode", ""..translate.Get("worth_ghostmode"), ""..translate.Get("worth_ghostmode2"), ITEMCAT_TRAITS, 15, nil, function(pl) pl.GhostCade = true end, "models/healthvial.mdl")
 GM:AddStartingItem("bffastresupply", ""..translate.Get("worth_fastresupply"), ""..translate.Get("worth_fastresupply2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.FastResupply = true end, "models/healthvial.mdl")
+GM:AddStartingItem("bffastteleport", ""..translate.Get("worth_fastteleport"), ""..translate.Get("worth_fastteleport2"), ITEMCAT_TRAITS, 20, nil, function(pl) pl.FastTeleport = true end, "models/healthvial.mdl")
 GM:AddStartingItem("bfcrateshare", ""..translate.Get("worth_crateshare"), ""..translate.Get("worth_crateshare2"), ITEMCAT_TRAITS, 25, nil, function(pl) pl.CrateShare = true end, "models/healthvial.mdl")
 
 -----------
@@ -488,6 +489,12 @@ GM.ResupplyTime = 60
 
 -- Time resupply takes to recharge with trait.
 GM.ResupplyTimeTrait = 45
+
+-- Time it takes to teleport from one sigil to another.
+GM.SigilTeleportTime = 6
+
+-- Time it takes to teleport from one sigil to another with trait.
+GM.SigilTeleportTimeTrait = 1
 
 -- Initial length for wave 1.
 GM.WaveOneLength = 220

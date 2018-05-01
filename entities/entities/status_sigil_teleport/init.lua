@@ -24,21 +24,12 @@ function ENT:GetAimSigil()
 end
 
 local function GhostProps(pl, newPos)
-	local tempFilter = {pl}
+	local ents = ents.FindInBox(newPos + pl:OBBMins() - Vector(1,1,1), newPos + pl:OBBMaxs() + Vector(1,1,1))
 	
-	while true do
-		local hitEnt = util.TraceEntity({
-			start = newPos,
-			endpos = newPos,
-			filter = tempFilter,
-			mask = MASK_PLAYERSOLID,
-			collisiongroup = COLLISION_GROUP_PLAYER
-		}, pl).Entity
-		if not IsValid(hitEnt) then return end
-		if hitEnt:GetMoveType() == MOVETYPE_VPHYSICS and hitEnt:GetClass() ~= "prop_obj_sigil" and not hitEnt:IsNailed() then
-			hitEnt:GhostAllPlayersInMe(30, true)
+	for k, v in ipairs(ents) do
+		if IsValid(v) and v:GetMoveType() == MOVETYPE_VPHYSICS and v:GetClass() ~= "prop_obj_sigil" and not v:IsNailed() then
+			v:GhostAllPlayersInMe(30, true)
 		end
-		table.insert(tempFilter, hitEnt)
 	end
 end
 
@@ -60,7 +51,7 @@ local function sigilTeleport(status, owner, currentSigil)
 	
 	local sigilPos = sigil:GetPos()
 	
-	owner:EmitSound("friends/friend_online.wav")
+	owner:EmitSound("ambient/machines/teleport1.wav")
 	
 	owner.TeleportTo = sigilPos
 end
@@ -75,7 +66,7 @@ function ENT:Think()
 	if self:GetDestSigil() ~= aimSigil then self:SetDestSigil(aimSigil) end
 	
 	if IsValid(sigil) and IsValid(owner) and owner:Alive() and owner:GetPos():Distance(sigil:GetPos() + Vector(0,0,64)) < (sigil.MaxDistance or 100) and not owner:KeyDown(IN_SPEED) and owner:Team() == TEAM_SURVIVORS then
-		if not self.PlayedPreTelSound and CurTime() >= self:GetEndTime() - 2.2 then
+		if not owner.FastTeleport and not self.PlayedPreTelSound and CurTime() >= self:GetEndTime() - 2.0 then
 			self.PlayedPreTelSound = true
 			owner:EmitSound("ambient/levels/labs/teleport_preblast_suckin1.wav")
 		end

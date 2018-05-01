@@ -215,7 +215,8 @@ function GM:OpenPointsShop()
 
 	local isclassic = GAMEMODE:IsClassicMode()
 
-	for catid, catname in ipairs(GAMEMODE.ItemCategories) do
+	for catid, cat in ipairs(GAMEMODE.ItemCategories) do
+		local catname = cat.Name
 		local hasitems = false
 		for i, tab in ipairs(GAMEMODE.Items) do
 			if tab.Category == catid and tab.PointShop then
@@ -273,7 +274,7 @@ function GM:OpenPointsShop()
 
 					local sellbutton = vgui.Create("DImageButton", itempan)
 					local points = math.floor(tab.Worth/4)
-					if tab.Category == ITEMCAT_GUNS or tab.Category == ITEMCAT_MELEE then
+					if self.ItemCategories[tab.Category].Sellable then
 						sellbutton:SetImage("icon16/information.png")
 						sellbutton:SizeToContents()
 						sellbutton:SetPos(itempan:GetWide() - 20 - sellbutton:GetWide(), itempan:GetTall() - 20)
@@ -307,7 +308,7 @@ function GM:OpenPointsShop()
 					local button = vgui.Create("DImageButton", itempan)
 					button:SetImage("icon16/lorry_add.png")
 					button:SizeToContents()
-					if tab.Category == ITEMCAT_GUNS or tab.Category == ITEMCAT_MELEE then
+					if self.ItemCategories[tab.Category].Sellable then
 						button:CopyPos(sellbutton)
 						button:MoveLeftOf(sellbutton, 2)
 					else

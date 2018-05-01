@@ -306,7 +306,8 @@ function MakepWorth()
 		list:AddItem(cartpan)
 	end
 
-	for catid, catname in ipairs(GAMEMODE.ItemCategories) do
+	for catid, cat in ipairs(GAMEMODE.ItemCategories) do
+		local catname = cat.Name
 		local list = vgui.Create("DPanelList", propertysheet)
 		list:SetPaintBackground(false)
 		propertysheet:AddSheet(catname, list, GAMEMODE.ItemCategoryIcons[catid], false, false)
@@ -325,7 +326,7 @@ function MakepWorth()
 		end
 	end
 
-	local worthlab = EasyLabel(frame, translate.Get("worth_worth")..": "..tostring(WorthRemaining), "ZSHUDFontSmall", COLOR_LIMEGREEN)
+	local worthlab = EasyLabel(frame, translate.Get("worth_worth")..": "..tostring(WorthRemaining), "ZSHUDFontSmallest", COLOR_LIMEGREEN)
 	worthlab:SetPos(8, frame:GetTall() - worthlab:GetTall() - 50)
 	worthlab:AlignRight(20)
 	worthlab:AlignTop(88)
