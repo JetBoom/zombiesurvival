@@ -1,8 +1,0 @@
-"UnlitGeneric"
-{
-	"$basetexture" "pack/killicon"
-	"$translucent" 1
-	"$alpha" 1
-	"$vertexcolor" 1
-	"$vertexalpha" 1
-}

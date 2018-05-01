@@ -1,0 +1,1058 @@
+//////////////////////////////////////////////////////////////////////////////////
+// NoXiousNet Zombie Survival FGD                                               //
+//////////////////////////////////////////////////////////////////////////////////
+
+@include "base.fgd"
+@include "halflife2.fgd"
+@include "hl2mp.fgd"
+
+//////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Brush Entities /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+@SolidClass base(Targetname) = func_noair : "ZS: Anyone inside this brush requires air"
+[
+	// Keys
+	enabled(choices) : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)   : "Enable the entity."
+	input disable(void)  : "Disable the entity."
+	input seton(integer) : "Enable or Disable the entity."
+]
+
+@SolidClass base(Targetname) = func_status : "ZS: Humans inside this brush will be afflicted with statuses"
+[
+	// Keys
+	enabled(choices) : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	status(choices) : "Status Type" : "slow" : "The status to give humans inside the brush." =
+	[
+		"slow" 			: "Slow"
+		"dimvision"     : "Dim Vision"
+		"enfeeble"   	: "Enfeeble"
+		"frost"			: "Frost"
+	]
+	linger(choices) : "Status Linger" : 0 : "Should the status linger after leaving the brush." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	duration(integer) : "Duration" : 5 : "How long the status lasts for."
+
+	// Inputs
+	input enable(void)   : "Enable the entity."
+	input disable(void)  : "Disable the entity."
+	input seton(integer) : "Enable or Disable the entity."
+]
+
+@SolidClass base(Targetname) = trigger_zombieclass : "ZS: You can directly control the changing of classes with this."
+[
+	// Keys
+	enabled(choices)         : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	touchclass(choices)      : "On Touch Class" : "zombie" : "Any living zombie touching the brush will be set to this class name." =
+	[
+		"zombie"             : "Zombie"
+		"classic zombie"     : "Classic Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"fast zombie torso"  : "Fast Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"fresh dead"         : "Fresh Dead"
+		"ghoul"              : "Ghoul"
+		"gore child"         : "Gore Child"
+		"headcrab"           : "Headcrab"
+		"initial dead"       : "Initial Dead"
+		"recent dead"        : "Recent Dead"
+		"super zombie"       : "Super Zombie"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"fast headcrab"      : "Fast Headcrab"
+		"shadow lurker"      : "Shadow Lurker"
+		"shadow walker"      : "Shadow Walker"
+		"skeletal crawler"   : "Skeletal Crawler"
+		"skeletal walker"    : "Skeletal Walker"
+		"wraith"             : "Wraith"
+		"petrified wraith"   : "Petrified Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"vile bloated zombie" : "Vile Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"poison headcrab"    : "Poison Headcrab"
+		"barbed headcrab"    : "Barbed Headcrab"
+		"poison zombie"      : "Poison Zombie"
+		"lacerator"          : "Lacerator"
+		"chem burster"       : "Chem Burster"
+		"chem zombie"        : "Chem Zombie"
+		"shadow corruptor"   : "Shadow Corruptor"
+		"ass kicker"         : "Ass Kicker"
+		"ancient nightmare"  : "Ancient Nightmare"
+		"bonemesh"           : "Bonemesh"
+		"doom crab"          : "Doom Crab"
+		"devourer"           : "Devourer"
+		"frost shade"        : "Frost Shade"
+		"giga gore child"    : "Giga Gore Child"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"red marrow"         : "Red Marrow"
+		"shade"              : "Shade"
+		"the butcher"        : "The Butcher"
+		"the tickle monster" : "The Tickle Monster"
+		"wil o' wisp"        : "Wil O' Wisp"
+	]
+	endtouchclass(choices)   : "On Leaving Class" : "zombie" : "Same as Touching Class but for when leaving the brush." =
+	[
+		"zombie"             : "Zombie"
+		"classic zombie"     : "Classic Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"fast zombie torso"  : "Fast Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"fresh dead"         : "Fresh Dead"
+		"ghoul"              : "Ghoul"
+		"gore child"         : "Gore Child"
+		"headcrab"           : "Headcrab"
+		"initial dead"       : "Initial Dead"
+		"recent dead"        : "Recent Dead"
+		"super zombie"       : "Super Zombie"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"fast headcrab"      : "Fast Headcrab"
+		"shadow lurker"      : "Shadow Lurker"
+		"shadow walker"      : "Shadow Walker"
+		"skeletal crawler"   : "Skeletal Crawler"
+		"skeletal walker"    : "Skeletal Walker"
+		"wraith"             : "Wraith"
+		"petrified wraith"   : "Petrified Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"vile bloated zombie" : "Vile Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"poison headcrab"    : "Poison Headcrab"
+		"barbed headcrab"    : "Barbed Headcrab"
+		"poison zombie"      : "Poison Zombie"
+		"lacerator"          : "Lacerator"
+		"chem burster"       : "Chem Burster"
+		"chem zombie"        : "Chem Zombie"
+		"shadow corruptor"   : "Shadow Corruptor"
+		"ass kicker"         : "Ass Kicker"
+		"ancient nightmare"  : "Ancient Nightmare"
+		"bonemesh"           : "Bonemesh"
+		"doom crab"          : "Doom Crab"
+		"devourer"           : "Devourer"
+		"frost shade"        : "Frost Shade"
+		"giga gore child"    : "Giga Gore Child"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"red marrow"         : "Red Marrow"
+		"shade"              : "Shade"
+		"the butcher"        : "The Butcher"
+		"the tickle monster" : "The Tickle Monster"
+		"wil o' wisp"        : "Wil O' Wisp"
+	]
+	touchdeathclass(choices) : "On Touch Respawn Class" : "zombie" : "Any living zombie touching the brush will be set to this class name on death." =
+	[
+		"zombie"             : "Zombie"
+		"classic zombie"     : "Classic Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"fast zombie torso"  : "Fast Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"fresh dead"         : "Fresh Dead"
+		"ghoul"              : "Ghoul"
+		"gore child"         : "Gore Child"
+		"headcrab"           : "Headcrab"
+		"initial dead"       : "Initial Dead"
+		"recent dead"        : "Recent Dead"
+		"super zombie"       : "Super Zombie"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"fast headcrab"      : "Fast Headcrab"
+		"shadow lurker"      : "Shadow Lurker"
+		"shadow walker"      : "Shadow Walker"
+		"skeletal crawler"   : "Skeletal Crawler"
+		"skeletal walker"    : "Skeletal Walker"
+		"wraith"             : "Wraith"
+		"petrified wraith"   : "Petrified Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"vile bloated zombie" : "Vile Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"poison headcrab"    : "Poison Headcrab"
+		"barbed headcrab"    : "Barbed Headcrab"
+		"poison zombie"      : "Poison Zombie"
+		"lacerator"          : "Lacerator"
+		"chem burster"       : "Chem Burster"
+		"chem zombie"        : "Chem Zombie"
+		"shadow corruptor"   : "Shadow Corruptor"
+		"ass kicker"         : "Ass Kicker"
+		"ancient nightmare"  : "Ancient Nightmare"
+		"bonemesh"           : "Bonemesh"
+		"doom crab"          : "Doom Crab"
+		"devourer"           : "Devourer"
+		"frost shade"        : "Frost Shade"
+		"giga gore child"    : "Giga Gore Child"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"red marrow"         : "Red Marrow"
+		"shade"              : "Shade"
+		"the butcher"        : "The Butcher"
+		"the tickle monster" : "The Tickle Monster"
+		"wil o' wisp"        : "Wil O' Wisp"
+	]
+	endtouchdeathclass(choices) : "On Leaving Respawn Class" : "zombie" : "Same as Touching Respawn Class but for when leaving the brush." =
+	[
+		"zombie"             : "Zombie"
+		"classic zombie"     : "Classic Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"fast zombie torso"  : "Fast Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"fresh dead"         : "Fresh Dead"
+		"ghoul"              : "Ghoul"
+		"gore child"         : "Gore Child"
+		"headcrab"           : "Headcrab"
+		"initial dead"       : "Initial Dead"
+		"recent dead"        : "Recent Dead"
+		"super zombie"       : "Super Zombie"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"fast headcrab"      : "Fast Headcrab"
+		"shadow lurker"      : "Shadow Lurker"
+		"shadow walker"      : "Shadow Walker"
+		"skeletal crawler"   : "Skeletal Crawler"
+		"skeletal walker"    : "Skeletal Walker"
+		"wraith"             : "Wraith"
+		"petrified wraith"   : "Petrified Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"vile bloated zombie" : "Vile Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"poison headcrab"    : "Poison Headcrab"
+		"barbed headcrab"    : "Barbed Headcrab"
+		"poison zombie"      : "Poison Zombie"
+		"lacerator"          : "Lacerator"
+		"chem burster"       : "Chem Burster"
+		"chem zombie"        : "Chem Zombie"
+		"shadow corruptor"   : "Shadow Corruptor"
+		"ass kicker"         : "Ass Kicker"
+		"ancient nightmare"  : "Ancient Nightmare"
+		"bonemesh"           : "Bonemesh"
+		"doom crab"          : "Doom Crab"
+		"devourer"           : "Devourer"
+		"frost shade"        : "Frost Shade"
+		"giga gore child"    : "Giga Gore Child"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"red marrow"         : "Red Marrow"
+		"shade"              : "Shade"
+		"the butcher"        : "The Butcher"
+		"the tickle monster" : "The Tickle Monster"
+		"wil o' wisp"        : "Wil O' Wisp"
+	]
+	onlywhenclass(choices)   : "Player Must Be This Class" : "disabled" : "Set this to a specific class to change only these zombie types, separate multiple classes with commas." =
+	[
+		"disabled"           : "Disabled"
+		"zombie"             : "Zombie"
+		"classic zombie"     : "Classic Zombie"
+		"fast zombie legs"   : "Fast Zombie Legs"
+		"fast zombie torso"  : "Fast Zombie Torso"
+		"flesh creeper"      : "Flesh Creeper"
+		"fresh dead"         : "Fresh Dead"
+		"ghoul"              : "Ghoul"
+		"gore child"         : "Gore Child"
+		"headcrab"           : "Headcrab"
+		"initial dead"       : "Initial Dead"
+		"recent dead"        : "Recent Dead"
+		"super zombie"       : "Super Zombie"
+		"zombie legs"        : "Zombie Legs"
+		"zombie torso"       : "Zombie Torso"
+		"fast headcrab"      : "Fast Headcrab"
+		"shadow lurker"      : "Shadow Lurker"
+		"shadow walker"      : "Shadow Walker"
+		"skeletal crawler"   : "Skeletal Crawler"
+		"skeletal walker"    : "Skeletal Walker"
+		"wraith"             : "Wraith"
+		"petrified wraith"   : "Petrified Wraith"
+		"bloated zombie"     : "Bloated Zombie"
+		"vile bloated zombie" : "Vile Bloated Zombie"
+		"fast zombie"        : "Fast Zombie"
+		"poison headcrab"    : "Poison Headcrab"
+		"barbed headcrab"    : "Barbed Headcrab"
+		"poison zombie"      : "Poison Zombie"
+		"lacerator"          : "Lacerator"
+		"chem burster"       : "Chem Burster"
+		"chem zombie"        : "Chem Zombie"
+		"shadow corruptor"   : "Shadow Corruptor"
+		"ass kicker"         : "Ass Kicker"
+		"ancient nightmare"  : "Ancient Nightmare"
+		"bonemesh"           : "Bonemesh"
+		"doom crab"          : "Doom Crab"
+		"devourer"           : "Devourer"
+		"frost shade"        : "Frost Shade"
+		"giga gore child"    : "Giga Gore Child"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"red marrow"         : "Red Marrow"
+		"shade"              : "Shade"
+		"the butcher"        : "The Butcher"
+		"the tickle monster" : "The Tickle Monster"
+		"wil o' wisp"        : "Wil O' Wisp"
+	]
+	onetime(choices)         : "One Time?" : 0 : "If yes then anyone who gets swapped will be respawned as the last class they were before the change." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	instantchange(choices)   : "Change Instantly?" : 1 : "If yes then anyone who gets swapped will instantly be changed right on the spot." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)                  : "Enable the entity."
+	input disable(void)                 : "Disable the entity."
+	input seton(integer)                : "Set Enabled keyvalue."
+	input settouchclass(string)         : "Set On Touch Class keyvalue."
+	input setendtouchclass(string)      : "Set On Leaving Class keyvalue."
+	input settouchdeathclass(string)    : "Set On Touch Respawn Class keyvalue."
+	input setendtouchdeathclass(string) : "Set On Leaving Respawn Class keyvalue."
+	input setonetime(integer)           : "Set One Time keyvalue. <boolean>"
+	input setinstantchange(integer)     : "Set Change Instantly keyvalue. <boolean>"
+	input setonlywhenclass(string)      : "Set Only When Class keyvalue."
+]
+
+@SolidClass base(Targetname) = trigger_bossclass : "ZS: A zombie that touches this brush"
+[
+	// Keys
+	enabled(choices)       : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	silent(choices)        : "Silent" : 0 : "If yes then then the server does not announce that a player has become the new boss." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	instantchange(choices) : "Change Instantly?" : 1 : "If yes then anyone who gets swapped will instantly be changed right on the spot." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	class(choices)         : "Force to Specific Class?" : "" : "If set then the new boss will be this class" =
+	[
+		""                   : "Disabled"
+		"ass kicker"         : "Ass Kicker"
+		"ancient nightmare"  : "Ancient Nightmare"
+		"bonemesh"           : "Bonemesh"
+		"doom crab"          : "Doom Crab"
+		"devourer"           : "Devourer"
+		"giga gore child"    : "Giga Gore Child"
+		"nightmare"          : "Nightmare"
+		"puke pus"           : "Puke Pus"
+		"red marrow"         : "Red Marrow"
+		"shade"              : "Shade"
+		"the butcher"        : "The Butcher"
+		"the tickle monster" : "The Tickle Monster"
+		"wil o' wisp"        : "Wil O' Wisp"
+	]
+
+	// Inputs
+	input enable(void)               : "Enable the entity."
+	input disable(void)              : "Disable the entity."
+	input seton(integer)             : "Set Enabled keyvalue. <boolean>"
+	input setsilent(integer)         : "Set Silent keyvalue. <boolean>"
+	input setinstantchange(integer)  : "Set Change Instantly keyvalue. <boolean>"
+	input setclass(string)           : "Set specific class to spawn, must be a boss class e.g 'Giga Gore Child'"
+	input spawnboss(void)            : "Spawns the boss using the zombie with the highest score"
+
+	// Outputs
+	output OnBossTouched(void)       : "Set when a boss starts touching the brush. Is not fired when a zombie becomes a boss in this volume."
+]
+
+@SolidClass base(Targetname) = func_arsenalzone : "ZS: Anyone within this brush is able to purchase items."
+[
+	// Keys
+	enabled(choices) : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)   : "Enable the entity."
+	input disable(void)  : "Disable the entity."
+	input seton(integer) : "Set Enabled keyvalue."
+]
+
+///////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Point Entities //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+@BaseClass base(Targetname) = ZSSpawn
+[
+	// Keys
+	disabled(choices)   : "Disabled" : 0 : "If disabled, players cannot spawn here." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)  : "Enable the spawn point."
+	input disable(void) : "Disable the spawn point."
+	input toggle(void)  : "Toggle the spawn point."
+]
+
+@PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_human       : "ZS: Humans can spawn here." []
+@PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_zombie      : "ZS: Zombies can spawn here." []
+@PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_undead      : "ZS: Zombies can spawn here. Alias of info_player_zombie." []
+@PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_zombie_boss : "ZS: Boss Zombies will spawn here." []
+@PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_redeemed    : "ZS: Redeemed players can spawn here. Use of this is optional." []
+
+@PointClass base(Targetname, Angles) studio("models/props_wasteland/medbridge_post01.mdl") = info_sigilnode : "ZS: Manual Placement of Sigils ONLY when dynamic placement isn't enough."
+[
+	// Keys
+	forcespawn(choices) : "Force Spawn" : 0 : "Forces this sigil to always spawn" =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+]
+
+@PointClass base(Targetname) = info_noskills : "ZS: Disables the use of NxN skills." []
+
+@PointClass base(Targetname) = logic_beats  : "ZS: Allows you to turn beats (the ambient music) on or off."
+[
+	// Keys
+	enabled(choices) : "Enabled" : 1 : "Allows ZS beats" =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)  : "Enables beats."
+	input disable(void) : "Disables beats."
+]
+
+@PointClass base(Targetname) = logic_dynamicspawning : "ZS: Allows you to control dynamic spawning."
+[
+	// Keys
+	enabled(choices) : "Enabled" : 1 : "Should dynamic spawning be on?" =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input enable(void)  : "Enable dynamic spawning."
+	input disable(void) : "Disable dynamic spawning."
+]
+
+@PointClass base(Targetname,Origin) iconsprite("particles/smokey") sphere( radius ) = zombiegasses  : "ZS: Manually place a point for the zombies' noxious gases."
+[
+	// Keys
+	radius(integer) : "Radius" : 250 : "Radius that this can damage humans/heal zombies."
+]
+
+@PointClass base(Targetname) = logic_pickupdrop : "ZS: Controls events when players pickup or drop things."
+[
+	// Keys
+	EntityToWatch(target_destination) : "Entity to Watch" : " " : "Name of the entity to watch (for outputs)."
+
+	// Inputs
+	input ForceDrop(string)     : "Forces the dropping of something that's picked up by a human."
+	input DisablePickup(string) : "Disables human pickups for the specified entity. Does not force dropping if currently carried, use the above input."
+	input EnablePickup(string)  : "Enables human pickups for the specified entity."
+
+	// Outputs
+	output OnPickedUp(void)     : "Activator is the player, caller is the entity that was picked up."
+	output OnDropped(void)      : "Activator is the player, caller is the entity that was picked up."
+
+]
+
+@PointClass base(Targetname) = logic_points : "ZS: Allows you to control and call outputs based on points."
+[
+	// Inputs
+	input addtoactivator(float)           : "Adds <number> to the activator."
+	input addtocaller(float)              : "Adds <number> to the caller."
+	input takefromactivator(integer)      : "Takes <number> from the activator."
+	input takefromcaller(integer)         : "Takes <number> from the caller."
+	input setactivatoramount(integer)     : "Sets the amount that activator has to <number>."
+	input setcalleramount(integer)        : "Sets the amount that caller has to <number>."
+	input callifactivatorhave(integer)    : "If the activator has this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+	input callifactivatornothave(integer) : "If the activator does bot have this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+	input callifcallerhave(integer)       : "If the caller has this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+	input callifcallernothave(integer)    : "If the call does not have this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+
+	// Outputs
+	output OnConditionPassed(void)        : "Thrown by ourselves when a condition is passed. The activator is always the player in question. The arguments are the amount that was checked against."
+	output OnConditionFailed(void)        : "Thrown by ourselves when a condition is failed. The activator is always the player in question. The arguments are the amount that was checked against."
+]
+
+@PointClass base(Targetname) = logic_brains : "ZS: Allows you to control and call outputs based on brains."
+[
+	// Inputs
+	input addtoactivator(integer)         : "Adds <number> to the activator."
+	input addtocaller(integer)            : "Adds <number> to the caller."
+	input takefromactivator(integer)      : "Takes <number> from the activator."
+	input takefromcaller(integer)         : "Takes <number> from the caller."
+	input setactivatoramount(integer)     : "Sets the amount that activator has to <number>."
+	input setcalleramount(integer)        : "Sets the amount that caller has to <number>."
+	input callifactivatorhave(integer)    : "If the activator has this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+	input callifactivatornothave(integer) : "If the activator does bot have this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+	input callifcallerhave(integer)       : "If the caller has this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+	input callifcallernothave(integer)    : "If the call does not have this amount then OnConditionPassed is thrown, otherwise OnConditionFailed."
+	input redeemactivator(void)           : "Instantly redeems the activator."
+	input redeemcaller(void)              : "Instantly redeems the caller."
+	input setredeembrains(integer)        : "Sets the amount of brains required for a zombie to automatically redeem. Setting it to 0 means no automatic redemptions."
+
+	// Outputs
+	output OnConditionPassed(void)        : "Thrown by ourselves when a condition is passed. The activator is always the player in question. The arguments are the amount that was checked against."
+	output OnConditionFailed(void)        : "Thrown by ourselves when a condition is failed. The activator is always the player in question. The arguments are the amount that was checked against."
+]
+
+@PointClass base(Targetname) = logic_startingloadout : "ZS: Allows you to control what people start with."
+[
+	// Keys
+	startingloadout(string) : "Starting Loadout" : "worth" : "Sets the starting load out for all new humans. This is a comma-separated list of entity classes which is then separated by colons. For example: weapon_zs_peashooter:1,weapon_zs_axe:1,item_ammo_pistol:2 would give everyone a peashooter, an axe, and spawn two boxes of pistol ammo on them. It also accepts none for absolutely no starting items and worth for using the worth menu (default)."
+
+	// Inputs
+	input setstartingloadout(string) : "Sets the keyvalue"
+]
+
+@PointClass base(Targetname) = logic_worth : "ZS: Allows you to control Worth."
+[
+	// Keys
+	startingworth(integer) : "Starting Worth" : 100 : "The amount of Worth to start with. Use 0 to disable Worth."
+
+	// Inputs
+	input setstartingworth(integer) : "Sets the amount of worth to start with."
+]
+
+@PointClass base(Targetname) = logic_barricade : "ZS: Allows or disallows specific entities from being nailed."
+[
+	// Inputs
+	input disablethese(string) : "Takes the arguments in the form of a comma-separated array and disables any entities with that name. For example, disablethese objective1,somethingimportant,somethingelse. This would disable nailing of those entities."
+	input enablethese(string)  : "Takes the arguments in the form of a comma-separated array and enables any entities with that name. For example, enablethese objective1,somethingimportant,somethingelse. This would enable nailing of those entities."
+]
+
+@PointClass base(Targetname) = logic_difficulty : "ZS: Adjusts the difficulty of the game."
+[
+	// Inputs
+	input setzombiespeedmultiplier(float)  : "Multiplyer for Zombie speed."
+	input setzombiedamagemultiplier(float) : "Multiplyer for Zombie damage."
+]
+
+@PointClass base(Targetname) = logic_pickups : "ZS: Allows you to control how much stuff people can pickup in the map. Only things placed by the mapper work with this system. Stuff from dead humans doesn't count."
+[
+	// Keys
+	maxweaponpickups(integer)      : "Max Weapon Pickups"      : 5 : "How many weapons a player can pickup from the map."
+	maxammopickups(integer)        : "Max Ammo Pickups"        : 5 : "How many ammo boxes a player can pickup from the map."
+	maxflashlightpickups(integer)  : "Max Flashlight Pickups"  : 5 : "How many flashlight batteries a player can pickup from the map."
+	weaponrequiredforammo(choices) : "Correct Weapon Required" : 0 : "If 1 then players must have a weapon that takes the ammo before being able to pick up an ammo box." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input setmaxweaponpickups(integer)      : "Set the number of weapons a player can pickup from the map."
+	input setmaxammopickups(integer)        : "Set the number of ammo boxes a player can pickup from the map."
+	input setmaxflashlightpickups(integer)  : "Set the number of flashlight batteries a player can pickup from the map."
+	input setweaponrequiredforammo(integer) : "If 1 then players must have a weapon that takes the ammo before being able to pick up an ammo box."
+]
+
+@PointClass base(Targetname) = logic_classunlock  : "ZS: Allows you to control class unlocks."
+[
+	// Keys
+	class(string)          : "Class" : "zombie" : "Sets the name of the class to watch for any outputs."
+	bossesenabled(choices) : "Enable Bosses" : 1 : "When enabled, bosses spawn at wave end as normal." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input unlockclass(string)       : "Forces a class to be unlocked."
+	input lockclass(string)         : "Forces a class to be locked."
+	input setbossesenabled(integer) : "Enables or disables boss zombies."
+
+	// Outputs
+	output OnClassUnlocked(void)    : "Called when the class we're watching's class is unlocked by the game. This output isn't called if the class is unlocked by any logic_classunlock entities, only by the game."
+]
+
+@PointClass studio("models/crossbow_bolt.mdl") base(Targetname,Angles) = prop_nail  : "ZS: Allows you to manually place nails."
+[
+	// Keys
+	healthoverride(integer) : "Health Override" : -1 : "Sets the nail's maximum health to a specific number. Set to -1 or 0 to disable override"
+	healthmultiplier(float) : "Health Multiply" : 1  : "Multiply the nail's default maximum health by this number."
+	unremovable(choices)    : "Unremovable"     : 0  : "Set to yes to make this nail unremovable by players." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+
+	// Inputs
+	input sethealth(integer)           : "Sets the nail's remaining health."
+	input attachto(target_destination) : "Parent to this entity."
+	input nailto(target_destination)   : "Nail to this entity. Use attachto first and then this to weld the two. Use 'worldspawn' here to weld to the world."
+	input setname(string)              : "Display this text as the owner name."
+	input setunremovable(integer)      : "Set if this nail is unremovable."
+	input toggleunremovable(integer)   : "Toggle unremovable state."
+]
+
+@PointClass studio("models/Items/BoxMRounds.mdl") base(Targetname, Parentname, Angles) = prop_ammo  : "ZS: Game Specific Ammo."
+[
+	// Keys
+	ammotype(choices)           : "Ammo Type"  : "pistol"   : "Ammo type this entity becomes" =
+	[
+		"pistol"                : "Pistol"
+		"smg1"                  : "Sub-Machine Gun"
+		"ar2"                   : "Assault Rifle"
+		"pulse"                 : "Pulse"
+		"buckshot"              : "Shotgun"
+		"357"                   : "Rifle"
+		"XBowBolt"              : "Crossbow Bolts"
+		"grenade"               : "Grenades"
+		"SniperRound"           : "Barricade Boards"
+		"sniperpenetratedround" : "Det-Packs"
+		"Battery"               : "Medical Ammo"
+		"striderminigun"        : "Message Beacons"
+		"GaussEnergy"           : "Nails"
+		"stone"                 : "Stones"
+		"thumper"               : "Turrets"
+	]
+	amount(integer)             : "Amount" : 0 : "Amount of ammo that collecting this item gives"
+	neverremove(choices)  		: "Never Remove" : 0 : "Never remove when used or damage, for repeated uses." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	ignorepickupcount(choices)  : "Ignore Pickup Counter" : 0 : "Set to ignore a maxpickupcounter, if any." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	ignoreuse(choices)          : "Ignore Use" : 0 : "Set to disable being able to pickup via use key" =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+
+	// Inputs
+	input givetoactivator(void)         : "Forces the ammo onto the activator."
+	input setneverremove(integer)       : "Set to make infinite uses."
+	input setignorepickupcount(integer) : "Set to ignore any max pickup counter."
+	input setignoreuse(integer)         : "Set to disable being able to pickup via use key"
+	input setammotype(string)         	: "Set to change the ammo type of this entity."
+
+	// Outputs
+	output OnPickupPassed(void)			: "Called when the ammo is given to the player."
+	output OnPickupFailed(void)			: "Called when the ammo is not given to the player"
+]
+
+@PointClass studio("models/weapons/w_irifle.mdl") base(Targetname, Parentname, Angles) = prop_weapon  : "ZS: Game Specific Weapon."
+[
+	// Keys
+	weapontype(string)         : "Weapon Type" : "weapon_zs_m4" : "Weapon type this entity becomes"
+	empty(choices)             : "Empty" : 0 : "Set to empty the weapon of any default ammo" =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	neverremove(choices)       : "Never Remove" : 0 : "Never remove when used or damage, for repeated uses." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	ignorepickupcount(choices) : "Ignore Pickup Counter" : 0 : "Set to ignore a maxpickupcounter, if any." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	ignoreuse(choices)         : "Ignore Use" : 0 : "Set to disable being able to pickup via use key" =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	restrained(choices)        : "Restrained" : 0 : "Freeze the weapon in midair." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+
+	// Inputs
+	input givetoactivator(void)         : "Forces the weapon onto the activator."
+	input setneverremove(integer)       : "Set to make infinite uses."
+	input setignorepickupcount(integer) : "Set to ignore any max pickup counter."
+	input setignoreuse(integer)         : "Set to disable being able to pickup via use key"
+	input setweapontype(string)         : "Set to change the weapon type of this entity."
+	input setempty(string)        		: "Set to empty the weapon of any default ammo."
+
+	// Outputs
+	output OnPickupPassed(void)			: "Called when the weapon is given to the player."
+	output OnPickupFailed(void)			: "Called when the weapon is not given to the player"
+]
+
+@PointClass base(Targetname, Parentname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."
+[
+	// Keys
+	hint(string)    : "Hint"    : " " : "The hint to display."
+	viewer(choices) : "Seen By" : 0   : "The team that can view us." =
+	[
+		"-1" : "Disabled"
+		"0"  : "Everyone"
+		"3"  : "Zombies"
+		"4"  : "Humans"
+	]
+	range(integer)  : "Range" : 0 : "The range from the player's camera we must be in to see this hint. It can also be 0 for infinite."
+
+	// Inputs
+	input sethint(string)    : "Sets the hint to display."
+	input setviewer(integer) : "Sets the team that can view us. Use 0 for everyone, -1 for no one (inactive), 3 for zombie, and 4 for human."
+	input setrange(float)    : "Sets the range from the player's camera we must be in to see this hint. It can also be 0 for infinite which is the default."
+]
+
+@PointClass base(Targetname, Parentname) = prop_playergib  : "ZS: Allows you to manually place gibs."
+[
+	// Keys
+	gibtype(choices) : "Gib Type"  : 1 : "Overrides the gib's type." =
+	[
+		1 : "Skull"        // "models/gibs/HGIBS.mdl"
+		2 : "Spine"        // "models/gibs/HGIBS_spine.mdl"
+		3 : "Rib"          // "models/gibs/HGIBS_rib.mdl"
+		4 : "Scapula"      // "models/gibs/HGIBS_scapula.mdl"
+		7 : "Small Chunk"  // "models/gibs/antlion_gib_medium_2.mdl"
+		5 : "Medium Chunk" // "models/gibs/Antlion_gib_Large_1.mdl"
+		6 : "Large Chunk"  // "models/gibs/Strider_Gib4.mdl"
+	]
+	lifetime(integer) : "Lifetime" : 0 : "Overrides how long for this gib should live. 0 for never automatically remove."
+]
+
+@PointClass base(Targetname) = logic_winlose : "ZS: When activated, this will end the round immediately, with the specified outcome."
+[
+	// Keys
+	endslowmo(choices)   : "Enable Slow Motion Effect?" : 1 : "Enables or disables the slow motion effect at the end of the round." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	endcamera(choices)   : "Enable Camera?" : 1 : "Enables or disables an end round camera." =
+		[
+			0 : "No"
+			1 : "Yes"
+		]
+	endcamerapos(vector) : "Custom Camera Vector" : "" : "Sets a custom position of the end round camera."
+	winmusic(sound)      : "Win Music" : "default" : "The music that plays when the human team have won the round. 'default' for normal function"
+	losemusic(sound)     : "Lose Music" : "default" : "The music that plays when the human team have lost the round. 'default' for normal function"
+
+	// Inputs
+	input win(void)               : "Humans win the game, map over."
+	input lose(void)              : "Humans lose the game, map over."
+	input setendslomo(integer)    : "Enables or disables the slow motion effect at the end of the round."
+	input setendcamera(integer)   : "Enables or disables an end round camera."
+	input setendcamerapos(vector) : "Sets the vector for where the end round camera should go to."
+	input setwinmusic(string)     : "The music that plays when the human team have won the round. 'default' for normal function."
+	input setlosemusic(string)    : "The music that plays when the human team have lost the round. 'default' for normal function."
+	// Outputs
+	output onwin(void)            : "Called when humans win even if not by this entity."
+	output onlose(void)           : "Called when humans lose even if not by this entity."
+]
+
+@PointClass base(Targetname) = logic_infliction : "ZS: Watches for the specified infliction level."
+[
+	// Keys
+	infliction(float) : "Infliction" : "0.5" : "Defines infliction to watch for (float between 0.0 - 1.0)."
+
+	// Outputs
+	output OnInflictionReached(void) : "Called when the specified infliction level has been reached."
+	output OnLastHuman(void)         : "Called when there is one person alive. !caller and !activator are both the last human's entity."
+]
+
+@PointClass base(Targetname) = logic_waves : "ZS: Watches for the start of the specified wave."
+[
+	// Keys
+	wave(integer) : "Wave" : 1 : "Any On* outputs will watch for this wave. Use -1 for all waves."
+
+	// Inputs
+	input AdvanceWave(void)     : "Advances to the next wave and sets the wave to active."
+	input EndWave(void)         : "Sets the time that the wave ends to this very moment."
+	input StartWave(void)       : "Sets the time that the wave begins to this very moment."
+	input SetWave(integer)      : "Sets the wave to the number specified. This does not change the wave state between active and inactive."
+	input SetWaves(integer)     : "Sets the total amount of waves to the number specified. Don't worry about class unlocks, the gamemode does not use the max waves value directly."
+	input SetWaveStart(integer) : "Sets the time that the wave will start to TimeNow + <time>. You should use this instead of delayed entity inputs."
+	input SetWaveEnd(integer)   : "Sets the time that the wave will end to TimeNow + <time>. You should use this instead of delayed entity inputs."
+
+	// Outputs
+	output OnWaveStart(void)    : "Called when the specified wave has started."
+	output OnWaveEnd(void)      : "Called when the specified wave has ended."
+]
+
+@PointClass base(Targetname) = point_zsmessage : "ZS: Custom message that is displayed with the specified message."
+[
+	// Keys
+	team(choices)                    : "Team" : "all" : "Filter which team gets the message." =
+	[
+		"zombie"  : "Zombies"
+		"human"   : "Humans"
+		"private" : "Activator Only"
+		"all"     : "All"
+	]
+	displaytime(integer)             : "Display Time" : 8 : "How long the input message displays for, does not have an effect on HUD messages."
+	position(choices)                : "Message Position" : "center" : "Where the message is seen." =
+	[
+		"center" : "Center"
+		"top"    : "Top Right"
+	]
+	textcolor(color255)              : "Text Colour" : "255 255 255" : "Sets the color of an input message."
+
+	// Inputs
+	input message(string)             : "What to display. Supports the markup library."
+	input sethumanhudmessage(string)  : "Set a message to display in the human wave hud."
+	input setzombiehudmessage(string) : "Set a message to display in the zombie wave hud."
+	input clearhumanhudmessage(void)  : "Clear the message to display in the human wave hud."
+	input clearzombiehudmessage(void) : "Clear the message to display in the zombie wave hud."
+	input setdisplaytime(integer)     : "Change how long the input message displays for."
+	input settextcolor(string)        : "Takes an 'R G B' string to change the color of the next message."
+]
+
+@PointClass base(Targetname) = logic_pantsmode : "ZS: When activated, this will set the special Pants Mode on."
+[
+	// Inputs
+	input enable(void)  : "Enables pants mode."
+	input disable(void) : "Disables pants mode."
+]
+
+@PointClass base(Targetname) = info_custommessage : "ZS: Allows several substrings to be concatenated together to form one message, attaches to messaging entities like game_text, point_worldhint and point_zsmessage"
+[
+	// Keys
+	displayentity(target_destination) : "Target Messaging Entity" : "" : "The entity used to display the message, can be a targetname of a class game_text, point_worldhint or point_zsmessage"
+	zsmessagemode(choices)            : "Point_zsmessage Method" :  0  : "If using a point_zsmessage, select the method of display with this key" =
+	[
+		0  : "Centred HUD Message"
+		1  : "Corner Human HUD Message"
+		2  : "Corner Zombie HUD Message"
+	]
+	string01(string)                  : "String 01" : "" : "Part 01 of the full string, there can be up to 99 of these."
+	string02(string)                  : "String 02" : "" : "Part 02 of the full string, there can be up to 99 of these."
+	string03(string)                  : "String 03" : "" : "Part 03 of the full string, there can be up to 99 of these."
+	string04(string)                  : "String 04" : "" : "Part 04 of the full string, there can be up to 99 of these."
+	string05(string)                  : "String 05" : "" : "Part 05 of the full string, there can be up to 99 of these."
+	string06(string)                  : "String 06" : "" : "Part 06 of the full string, there can be up to 99 of these."
+
+	// Inputs
+	input displaystrings(string) : "Concatenates and displays the full string using the attached entity"
+	input setstring01(string)    : "Sets part 01 of the full string, there can be up to 99 of these."
+	input setstring02(string)    : "Sets part 02 of the full string, there can be up to 99 of these."
+	input setstring03(string)    : "Sets part 03 of the full string, there can be up to 99 of these."
+	input setstring04(string)    : "Sets part 04 of the full string, there can be up to 99 of these."
+	input setstring05(string)    : "Sets part 05 of the full string, there can be up to 99 of these."
+	input setstring06(string)    : "Sets part 06 of the full string, there can be up to 99 of these."
+
+	// Outputs
+	output OnDisplayed(void)     : "Called when the message has successfully displayed."
+]
+
+@PointClass base(Targetname) = logic_stripweapons : "ZS: Allows the map to strip all or specific weapons by classname"
+[
+	// Keys
+	keepfists(choices) : "Keep Fists" : 1 : "If yes, the stripallweapons input strips all weapons but fists" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	// Inputs
+	input stripweapon(string)     : "Strips a single weapon as mentioned in arguments"
+	input stripallweapons(string) : "Strips all the weapons the activator has, keeps fists if flag is true"
+	input setkeepfists(integer)   : "If 1 the next stripallweapons inputs strip all weapons but fists"
+]
+
+///////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Weapons + Items /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+@PointClass base(Weapon)                                                        = weapon_map_base              : "Used for creating parentable map made weapons" []
+
+@PointClass base(Weapon) studio("models/weapons/w_rif_ak47.mdl")                = weapon_zs_akbar              : "Ammo Type: Assault Rifle.\nA low clip size assault rifle." []
+@PointClass base(Weapon) studio("models/weapons/w_rif_sg552.mdl")               = weapon_zs_amigo              : "Ammo Type: Assault Rifle.\nFill in the missing assault rifle role for the second tier." []
+@PointClass base(Weapon) studio("models/weapons/w_annabelle.mdl")               = weapon_zs_annabelle          : "Ammo Type: Rifle.\nThis rifle loads rounds individually." []
+@PointClass base(Weapon) studio("models/items/item_item_crate.mdl")             = weapon_zs_arsenalcrate       : "Allows people to purchase weapons, the owner gets a discount." []
+@PointClass base(Weapon) studio("models/weapons/w_Pistol.mdl")                  = weapon_zs_artemis            : "Ammo Type: Bolts.\nA pair of minature crossbows. Fires quick successions of explosive bolts. " []
+@PointClass base(Weapon) studio("models/props/cs_militia/axe.mdl")              = weapon_zs_axe                : "An axe..." []
+@PointClass base(Weapon) studio("models/weapons/w_rocket_launcher.mdl")         = weapon_zs_barricadekit       : "Ammo Type: Boards.\nA ready-to-go, all-in-one board deployer." []
+@PointClass base(Weapon) studio("models/weapons/w_pist_usp.mdl")                = weapon_zs_battleaxe          : "Ammo Type: Pistol.\nHigh Damage for a starting pistol." []
+@PointClass base(Weapon) studio("models/weapons/w_supershorty.mdl")             = weapon_zs_blaster            : "Ammo Type: Shotgun.\nA small shotgun" []
+@PointClass base(Weapon) studio("models/props_debris/wood_board06a.mdl")        = weapon_zs_boardpack          : "Ammo Type: Boards.\nIt's simply a pack of wooden junk kept together with some duct tape." []
+@PointClass base(Weapon) studio("models/weapons/w_shotgun.mdl")                 = weapon_zs_boomstick          : "Ammo Type: Shotgun.\nThis shotgun allows you to load up to four shells in the chamber at once." []
+@PointClass base(Weapon) studio("models/props_c17/utilityconnecter005.mdl")     = weapon_zs_brassknuckles      : "Some brass knuckles for fists." []
+@PointClass base(Weapon) studio("models/weapons/w_smg_p90.mdl")                 = weapon_zs_bulletstorm        : "Ammo Type: SMG.\nHas Storm firing mode: Fire rate is 60% but two bullets are fired at once." []
+@PointClass base(Weapon) studio("models/props_combine/breenbust.mdl")           = weapon_zs_bust               : "Craftable Weapon.\nRecipe: Plank + Breen's Bust" []
+@PointClass base(Weapon) studio("models/props_lab/cleaver.mdl")                 = weapon_zs_butcherknife       : "A large cleaver, for hacking and slashing body parts." []
+@PointClass base(Weapon) studio("models/weapons/w_crossbow.mdl")                = weapon_zs_charon             : "Ammo Type: Bolts.\nA rapid firing crossbow with no special effect." []
+@PointClass base(Weapon) studio("models/weapons/w_rif_famas.mdl")               = weapon_zs_crackler           : "Ammo Type: Assault Rifle.\nA reduced fire-rate assault rifle'" []
+@PointClass base(Weapon) studio("models/props_debris/wood_board06a.mdl")        = weapon_zs_craftingpack       : "A pack of assorted items which seem to have greater use when combined with other things." []
+@PointClass base(Weapon) studio("models/weapons/w_crossbow.mdl")                = weapon_zs_crossbow           : "Ammo Type: Bolts.\nThis ancient weapon can easily skewer groups of zombies." []
+@PointClass base(Weapon) studio("models/weapons/w_crowbar.mdl")                 = weapon_zs_crowbar            : "Instantly kills headcrabs." []
+@PointClass base(Weapon) studio("models/weapons/w_pist_deagle.mdl")             = weapon_zs_deagle             : "Ammo Type: Pistol.\nThis handgun uses high-powered rounds that have more knockback than others." []
+@PointClass base(Weapon) studio("models/weapons/w_c4_planted.mdl")              = weapon_zs_detpack            : "A pack of explosives that can be placed on surfaces and detonated remotely." []
+@PointClass base(Weapon) studio("models/weapons/w_alyx_gun.mdl")                = weapon_zs_dominator          : "Ammo Type: Pulse.\nAn extremely powerful weapon from another place and time." []
+@PointClass base(Weapon) studio("models/combine_scanner.mdl")                   = weapon_zs_drone              : "A deployable, remotely controlled device. Ideal for scouting, retrieval and targeted attacks." []
+@PointClass base(Weapon) studio("models/weapons/w_hammer.mdl")                  = weapon_zs_electrohammer      : "Craftable Weapon.\nRecipe: Battery and Hammer " []
+@PointClass base(Weapon) studio("models/weapons/w_rif_galil.mdl")               = weapon_zs_ender              : "Ammo Type: Shotgun.\nAn automatic shotgun" []
+@PointClass base(Weapon) studio("models/weapons/w_crowbar.mdl")                 = weapon_zs_executioner        : "An axe capable of executioning attacks." []
+@PointClass base(Weapon) studio("models/weapons/w_pist_fiveseven.mdl")          = weapon_zs_eraser             : "Ammo Type: Pistol.\nDamage increases as the gun empties. The last shot is worth triple damage." []
+@PointClass base(Weapon) studio("models/weapons/w_eq_flashbang.mdl")            = weapon_zs_flashbomb          : "Deals no damage but stuns all zombies around the flash, especially if they're looking at it." []
+@PointClass base(Weapon) studio("models/props_c17/metalpot002a.mdl")            = weapon_zs_fryingpan          : "A frying pan..." []
+@PointClass base(Weapon) studio("models/props/cs_militia/axe.mdl")              = weapon_zs_frotchet           : "Craftable Weapon.\nRecipe: Axe and Eternal Ice Shard" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_glock18.mdl")            = weapon_zs_glock3             : "Ammo Type: Pistol.\nA mult-shot pistol" []
+@PointClass base(Weapon) studio("models/weapons/w_superphyscannon.mdl")         = weapon_zs_gluon              : "Ammo Type: Pulse.\nProjects a stream of gluons at the target, causing immense damage." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_grenade            : "A simple fragmentation grenade." []
+@PointClass base(Weapon) studio("models/combine_turrets/floor_turret.mdl")      = weapon_zs_gunturret          : "Ammo Type: SMG.\nThis automated turret requires constant upkeep to be useful." []
+@PointClass base(Weapon) studio("models/combine_turrets/floor_turret.mdl")      = weapon_zs_gunturret_buckshot : "Ammo Type: Shotgun.\nAn automated turret that fires spread shots." []
+@PointClass base(Weapon) studio("models/weapons/w_hammer.mdl")                  = weapon_zs_hammer             : "Ammo Type: Nails.\nA simple but extremely useful tool. Allows you to hammer in nails." []
+@PointClass base(Weapon) studio("models/props_junk/meathook001a.mdl")           = weapon_zs_hook               : "Oi! Fresh Meat!" []
+@PointClass base(Weapon) studio("models/props_junk/harpoon002a.mdl")            = weapon_zs_harpoon            : "A throwable harpoon with long range." []
+@PointClass base(Weapon) studio("models/weapons/w_snip_awp.mdl")                = weapon_zs_hunter             : "Ammo Type: Rifle.\nFires special large caliber rounds." []
+@PointClass base(Weapon) studio("models/weapons/w_smg1.mdl")                    = weapon_zs_hurricane          : "Ammo Type: Pulse.\nFires shots that slow targets. The rate increases as the magazine empties." []
+@PointClass base(Weapon) studio("models/weapons/w_rif_aug.mdl")                 = weapon_zs_inferno            : "Ammo Type: Assault Rifle.\nAn assault rifle with impressive accuracy." []
+@PointClass base(Weapon) studio("models/weapons/w_pistol.mdl")                  = weapon_zs_inquisitor         : "Ammo Type: Bolts.\nA practical design in a one-hand version. Pierces a single zombie." []
+@PointClass base(Weapon) studio("models/weapons/w_rif_galil.mdl")               = weapon_zs_jackhammer         : "Ammo Type: Shotgun \nAn automatic drum shotgun with a large clip size." []
+@PointClass base(Weapon) studio("models/weapons/w_mach_m249para.mdl")           = weapon_zs_juggernaut         : "Ammo Type: Assault Rifle \nA light machine gun." []
+@PointClass base(Weapon) studio("models/props_c17/computer01_keyboard.mdl")     = weapon_zs_keyboard           : "For the keyboard warrior." []
+@PointClass base(Weapon) studio("models/props/cs_militia/axe.mdl")              = weapon_zs_kongolaxe          : "Craftable Weapon.\nAxe and Butcher's Knife" []
+@PointClass base(Weapon) studio("models/props_interiors/Furniture_Lamp01a.mdl") = weapon_zs_lamp               : "Lamp them one." []
+@PointClass base(Weapon) studio("models/weapons/w_crowbar.mdl")                 = weapon_zs_longsword          : "A longsword to cleave through zombies." []
+@PointClass base(Weapon) studio("models/weapons/w_357.mdl")                     = weapon_zs_longarm            : "Ammo Type: Pistol.\nThis gun's bullets deal extremely large amounts of damage. " []
+@PointClass base(Weapon) studio("models/weapons/w_rif_m4a1.mdl")                = weapon_zs_m4                 : "Ammo Type: Assault Rifle.\nUsing this gun reduces the distance that zombies can see your aura." []
+@PointClass base(Weapon) studio("models/weapons/w_357.mdl")                     = weapon_zs_magnum             : "Ammo Type: Pistol.\nThis gun's bullets will bounce off of walls which deal extra damage." []
+@PointClass base(Weapon) studio("models/manhack.mdl")                           = weapon_zs_manhack            : "A remotely controlled device. Ideal for scouting and attacking from safety." []
+@PointClass base(Weapon) studio("models/manhack.mdl")                           = weapon_zs_manhack_saw        : "Craftable Weapon.\nRecipe: Sawblade and Manhack" []
+@PointClass base(Weapon) studio("models/items/healthkit.mdl")                   = weapon_zs_medicalkit         : "Ammo Type: Battery.\nFor healing yourself and others. For points of course." []
+@PointClass base(Weapon) studio("models/healthvial.mdl")                        = weapon_zs_mediccloudbomb     : "Explodes in to a cloud of healing gas. Heals 2HP, every second, for 10 seconds." []
+@PointClass base(Weapon) studio("models/weapons/w_pistol.mdl")                  = weapon_zs_medicgun           : "Ammo Type: Medical Ammo.\nFires medical darts which can heal at a range." []
+@PointClass base(Weapon) studio("models/weapons/w_sledgehammer.md")             = weapon_zs_megamasher         : "Craftable Weapon.\nRecipe: Explosive Barrel + Hammer" []
+@PointClass base(Weapon) studio("models/props_combine/combine_mine01.mdl")      = weapon_zs_messagebeacon      : "These display messages that can be seen by fellow human players." []
+@PointClass base(Weapon) studio("models/weapons/w_rocket_launcher.mdl")         = weapon_zs_minelayer          : "DIY Home Defense." []
+@PointClass base(Weapon) studio("models/props_junk/glassbottle01a.mdl")         = weapon_zs_molotov            : "A highly flammable concoction, use at your own risk. " []
+@PointClass base(Weapon) studio("models/weapons/w_357.mdl")                     = weapon_zs_novablaster        : "Ammo Type: Pulse.\nA ricochet pulse projectile revolver." []
+@PointClass base(Weapon) studio("models/weapons/w_shotgun.mdl")                 = weapon_zs_oberon             : "Ammo Type: Pulse.\nFires bursts of pulse shots that slow targets." []
+@PointClass base(Weapon) studio("models/weapons/w_pistol.mdl")                  = weapon_zs_owens              : "Ammo Type: Pistol.\nSprays single pistol shots at a target." []
+@PointClass base(Weapon) studio("models/props_junk/propane_tank001a.mdl")       = weapon_zs_oxygentank         : "Trinket\nGrants a significant amount of extra breathing time while underwater. " []
+@PointClass base(Weapon) studio("models/weapons/w_pist_p228.mdl")               = weapon_zs_peashooter         : "Ammo Type: Pistol.\nA high fire-rate and accuracy, but low damge pistol." []
+@PointClass base(Weapon) studio("models/props_canal/mattpipe.mdl")              = weapon_zs_pipe               : "Moves zombie's vision on hit" []
+@PointClass base(Weapon) studio("models/props_debris/wood_chunk03b.mdl")        = weapon_zs_plank              : "A solid piece of wood you can find pretty much anywhere" []
+@PointClass base(Weapon) studio("models/weapons/w_pot.mdl")                     = weapon_zs_pot                : "A pan with longer range" []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_proxymine          : "A proximity mine that explodes when near zombies." []
+@PointClass base(Weapon) studio("models/weapons/w_IRifle.mdl")                  = weapon_zs_pulserifle         : "Ammo Type: Pulse.\nDeals massive damage and slows targets." []
+@PointClass base(Weapon) studio("models/weapons/w_snip_awp.mdl")                = weapon_zs_quasar             : "Ammo Type: Pulse.\nA scoped rifle that slows targets." []
+@PointClass base(Weapon) studio("models/weapons/w_snip_g3sg1.mdl")              = weapon_zs_quicksilver        : "Ammo Type: Rifle.\nA semi-automatic rifle." []
+@PointClass base(Weapon) studio("models/weapons/w_smg_ump45.mdl")               = weapon_zs_reaper             : "Ammo Type: SMG.\nA low fire-rate, high powered sub-machinegun." []
+@PointClass base(Weapon) studio("models/props_debris/rebar004b_48.mdl")         = weapon_zs_rebarmace          : "A big concrete mace. Moves zombie's vision on hit" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_elite.mdl")              = weapon_zs_redeemers          : "Ammo Type: Pistol.\nThe weapons you get when you redeem." []
+@PointClass base(Weapon) studio("models/props_lab/powerbox01a.mdl")             = weapon_zs_remantler          : "A deployable device capable of combining two of the same weapon to return one upgraded version." []
+@PointClass base(Weapon) studio("models/props/de_nuke/smokestack01.mdl")        = weapon_zs_repairfield        : "Ammo Type: Pulse.\nConsumes ammo to repair nearby props and deployables" []
+@PointClass base(Weapon) studio("models/Items/ammocrate_ar2.mdl")               = weapon_zs_resupplybox        : "Allows survivors to get ammunition for their current weapon." []
+@PointClass base(Weapon) studio("models/weapons/w_annabelle.mdl")               = weapon_zs_sawedoff           : "Ammo Type: Shotgun.\nCan fire both rounds at once for higher burst damage." []
+@PointClass base(Weapon) studio("models/weapons/w_crowbar.mdl")                 = weapon_zs_sawhack            : "Craftable Weapon.\nRecipe: Sawblade and Axe" []
+@PointClass base(Weapon) studio("models/weapons/w_snip_sg550.mdl")              = weapon_zs_scar               : "Ammo Type: Assault Rifle.\nFUDA" []
+@PointClass base(Weapon) studio("models/weapons/w_shovel.mdl")                  = weapon_zs_shovel             : "Instantly kills zombies that are knocked down." []
+@PointClass base(Weapon) studio("models/weapons/w_bugbait.mdl")                 = weapon_zs_sigilfragment      : "Returns you to the nearest, uncorrupted Sanity Sigil." []
+@PointClass base(Weapon) studio("models/weapons/w_smg_tmp.mdl")                 = weapon_zs_silencer           : "Ammo Type: SMG.\nVery high firerate SMG." []
+@PointClass base(Weapon) studio("models/weapons/w_pist_fiveseven.mdl")          = weapon_zs_slinger            : "Ammo Type: Bolts.\nA basic bolt pistol gun." []
+@PointClass base(Weapon) studio("models/weapons/w_sledgehammer.mdl")            = weapon_zs_sledgehammer       : "Do the Mario!" []
+@PointClass base(Weapon) studio("models/weapons/w_shot_xm1014.mdl")             = weapon_zs_slugrifle          : "Ammo Type: Rifle.\nThis powerful rifle instantly kills any zombie with a head shot." []
+@PointClass base(Weapon) studio("models/weapons/w_smg_mp5.mdl")                 = weapon_zs_smg                : "Ammo Type: SMG.\nA standard SMG." []
+@PointClass base(Weapon) studio("models/weapons/w_crossbow.mdl")                = weapon_zs_spinfusor          : "Ammo Type: Pulse.\nLaunches highly explosive pulse projectiles." []
+@PointClass base(Weapon) studio("models/props_combine/combine_light001a.mdl")   = weapon_zs_spotlamp           : "Allows you to place dynamic lighting." []
+@PointClass base(Weapon) studio("models/props_junk/rock001a.mdl")               = weapon_zs_stone              : "A simple stone found laying pretty much anywhere." []
+@PointClass base(Weapon) studio("models/weapons/w_snip_scout.mdl")              = weapon_zs_stubber            : "Ammo Type: Rifle.\nA lightweight sniper-rifle." []
+@PointClass base(Weapon) studio("models/weapons/w_crowbar.mdl")                 = weapon_zs_stunbaton          : "Although weak but has the ability to slow zombies with an electric shock." []
+@PointClass base(Weapon) studio("models/weapons/w_shot_m3super90.mdl")          = weapon_zs_sweepershotgun     : "Ammo Type: Shotgun.\nA basic shotgun." []
+@PointClass base(Weapon) studio("models/weapons/w_knife_ct.mdl")                = weapon_zs_swissarmyknife     : "The classic melee weapon." []
+@PointClass base(Weapon) studio("models/weapons/w_smg1.mdl")                    = weapon_zs_tosser             : "Ammo Type: SMG.\nA basic SMG." []
+@PointClass base(Weapon) studio("models/weapons/w_pist_fiveseven.mdl")          = weapon_zs_tempest            : "Ammo Type: Pistol.\nA burst firing pistol." []
+@PointClass base(Weapon) studio("models/weapons/w_smg_mac10.mdl")               = weapon_zs_uzi                : "Ammo Type: SMG.\nA higher powered, but still basic SMG." []
+@PointClass base(Weapon) studio("models/weapons/w_pist_usp.mdl")                = weapon_zs_waraxe             : "Craftable Weapon.\nRecipe: Battleaxe Handgun + Glock. " []
+@PointClass base(Weapon) studio("models/props_c17/tools_wrench01a.mdl ")        = weapon_zs_wrench             : "This tool can be used to repair deployables as long as they were not damaged recently." []
+@PointClass base(Weapon) studio("models/props_c17/utilityconnecter006c.mdl")    = weapon_zs_zapper             : "Ammo Type: Pulse.\nZaps zombies in range." []
+@PointClass base(Weapon) studio("models/weapons/w_crossbow.mdl")                = weapon_zs_zeus               : "Ammo Type: Bolts.\nAn electric crossbow capable of chaining to multiple zombies." []
+@PointClass base(Weapon) studio("models/weapons/w_alyx_gun.mdl")                = weapon_zs_z9000              : "Ammo Type: Pulse.\nDoesn't do as much damage as the other guns but slows targets on hit" []
+
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_magnet           : "Trinket\nSlowly pulls ammo and weapons towards you." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_vitpackagei      : "Trinket\n+3 maximum health." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_vitpackageii     : "Trinket\n+7 maximum health." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_vitpackageiii    : "Trinket\n+10 maximum health." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_cardpackagei     : "Trinket\n+4 maximum blood armor." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_cardpackageii    : "Trinket\n+6 maximum blood armor." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_cardpackageiii   : "Trinket\n+10 maximum blood armor." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_vitalsigns       : "Trinket\n+15% healing received." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_regenimplant     : "Trinket\nHeals 1 health every 12 seconds." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_bloodpack        : "Trinket\nConsumes itself to generate 20 blood armor if health falls bellow 50%." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_ammovesti        : "Trinket\n+2% reload speed." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_ammovestii       : "Trinket\n+3% reload speed." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_owensgrip        : "Trinket\n+10% reload speed with pistols." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_smgstrap         : "Trinket\n+10% reload speed with SMGs." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_assaultpouch     : "Trinket\n+10% reload speed with assault rifles." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_shellholder      : "Trinket\n+10% reload speed with shotguns." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_riflebandolier   : "Trinket\n+10% reload speed with rifles." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_boltquiver       : "Trinket\n+10% reload speed with crossbows." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_pulsecharger     : "Trinket\n+10% reload speed with pulse weapons." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_expsatchel       : "Trinket\n+10% reload speed with impact mine weapons." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_boxingtraining   : "Trinket\nCombo punches result in stunned zombies." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_momentumsupsysi  : "Trinket\n-5% melee swing impact delay." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_momentumsupsysii : "Trinket\n-10% melee swing impact delay." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_momentumsupsysiii : "Trinket\n-18% melee swing impact delay." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_hemoadrenali     : "Trinket\n+2% melee damage converted to blood armor." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_hemoadrenalii    : "Trinket\n+3% melee damage converted to blood armor." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_hemoadrenaliii   : "Trinket\n+4% melee damage converted to blood armor." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_adrenalineamp    : "Trinket\n+30 movement speed on melee kill for 10 seconds." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_powergauntlet    : "Trinket\n+50% damage on 5th successful consecutive melee attack on zombies." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_acrobatframei    : "Trinket\n+6% jump power." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_acrobatframeii   : "Trinket\n+15% jump power." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_featherfallframe : "Trinket\n-25% fall damage taken." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_nightvision      : "Trinket\nGoggles for seeing in the dark and reducing the effects of dim vision." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_portablehole     : "Trinket\n+13% weapon switch speed." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_galvanizer       : "Trinket\n-40% slowing effects intensity." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_pathfinder       : "Trinket\n+25% barricade phasing movement speed." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_analgestic       : "Trinket\n-44% low health slow intensity." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_aimcomp          : "Trinket\n-52% low health aim shaking intensity." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_autorecoverysystem : "Trinket\n+33% faster knockdown recovery." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_pulseimpedance   : "Trinket\nSlow from pulse weapons and stun batons also slow zombie attack speed." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_olympianframe    : "Trinket\n+100% prop throwing strength." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_targetingvisori  : "Trinket\n+3% tighter aiming reticule." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_targetingvisorii : "Trinket\n+4% tighter aiming reticule." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_targetingvisoriii : "Trinket\n+5% tighter aiming reticule." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_targetingvisoriv : "Trinket\n+6% tighter aiming reticule." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_pulseampi        : "Trinket\n+12% slow from pulse weapons and stun batons." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_pulseampii       : "Trinket\n+16% slow from pulse weapons and stun batons." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_pulseampiii      : "Trinket\n+22% slow from pulse weapons and stun batons." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_curbstompers     : "Trinket\nInstantly kills headcrabs and deals 50 damage to torso classes you land on." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_breakfallsoles   : "Trinket\nDeals 500% fall damage to zombies landed on.\nNo fall damage taken when landing on zombies." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_barbedarmor      : "Trinket\n+Reflects melee damage to attackers." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_kevlar           : "Trinket\n-10% melee damage taken." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_antitoxinpack    : "Trinket\n-7% poison damage taken." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_hemostasisi      : "Trinket\n-9% bleed damage taken." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_hemostasisii     : "Trinket\n-18% bleed damage taken." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_eodvest          : "Trinket\n-20% explosive damage taken.\n-24% fire damage taken." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_forcedamp        : "Trinket\n-25% physics impact damage taken." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_mininggoggles    : "Trinket\n-40% duration of vision altering effects." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_necrosense       : "Trinket\nHides aura from zombies in close proximity." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_reactiveflasher  : "Trinket\nConsumes itself to blinds and disorient melee attacker for 2 seconds." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_arsenalpack      : "Trinket\nA portable arsenal crate on ones back." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_resupplypack     : "Trinket\nA portable resupply box on ones back." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_loadingex        : "Trinket\n+170% prop carrying capacity.\n-60% prop carrying slow down." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_instructionsmanual : "Trinket\n-15% deployable pack time." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_blueprintsi      : "Trinket\n+5% repair rate." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_blueprintsii     : "Trinket\n+9% repair rate." []
+
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_blackcore        : "Boss Trinket\n+13 leg damage to melee attacks." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_ancientcore      : "Boss Trinket\n+15% melee damage." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_eternalice       : "Boss Trinket\nSlows movement and attack speed of melee attackers." []
+@PointClass base(Weapon) studio("models/weapons/w_grenade.mdl")                 = weapon_zs_t_shadeectoplasm   : "Boss Trinket\nReduces damage from projectiles by 10%.\nIncreases object throwing strength by 70%." []

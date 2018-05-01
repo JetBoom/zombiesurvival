@@ -1,0 +1,3 @@
+INC_CLIENT()
+
+SWEP.Slot = 5
