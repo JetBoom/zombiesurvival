@@ -82,7 +82,7 @@ killicon.Add("weapon_zs_gigagorechild", "zombiesurvival/killicons/zombiebaby_hd_
 killicon.Add("weapon_zs_crow", "zombiesurvival/killicons/crow", color_white)
 killicon.Add("weapon_zs_fastzombie", "zombiesurvival/killicons/fastzombie_hd", color_white)
 killicon.Add("weapon_zs_bloatedzombie", "zombiesurvival/killicons/bloatedzombie_hd", color_white)
-killicon.Add("weapon_zs_poisonzombie", "zombiesurvival/killicons/poisonzombie_hd", color_white)
+killicon.Add("weapon_zs_poisonzombie", "zombiesurvival/killicons/acidzombie_hd", color_white)
 killicon.Add("weapon_zs_chemzombie", "zombiesurvival/killicons/chemzombie_hd", color_white)
 killicon.Add("weapon_zs_ghoul", "zombiesurvival/killicons/ghoul_hd", color_white)
 killicon.Add("dummy_chemzombie", "zombiesurvival/killicons/chemzombie_hd", color_white)
