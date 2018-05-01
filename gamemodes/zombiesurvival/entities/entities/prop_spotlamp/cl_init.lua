@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:Initialize()
 	self:SetRenderBounds(Vector(-72, -72, -72), Vector(72, 72, 128))
@@ -25,7 +25,7 @@ function ENT:DrawTranslucent()
 		local LightPos = epos + LightNrm * 5
 
 		render.SetMaterial(matLight)
-		local Visibile	= util.PixelVisible( LightPos, 16, self.PixVis )	
+		local Visibile	= util.PixelVisible( LightPos, 16, self.PixVis )
 
 		if not Visibile then return end
 
@@ -39,4 +39,14 @@ function ENT:DrawTranslucent()
 		render.DrawSprite(LightPos, Size, Size, Col, Visibile * ViewDot)
 		render.DrawSprite(LightPos, Size*0.4, Size*0.4, Color(255, 255, 255, Alpha), Visibile * ViewDot)
 	end
+
+	local name
+	local owner = self:GetObjectOwner()
+	if owner:IsValidHuman() then
+		name = owner:Name()
+	end
+
+	cam.Start3D2D(self:LocalToWorld(Vector(self:OBBMaxs().x, 0, 1)), self:LocalToWorldAngles(Angle(180, 270, 180)), 0.05)
+		self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1), name)
+	cam.End3D2D()
 end

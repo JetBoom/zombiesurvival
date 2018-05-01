@@ -2,12 +2,17 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.ChargeTime = 2
+SWEP.ChargeTime = 2.1
 
 function SWEP:PrimaryAttack()
 	if self:GetChargeStart() == 0 then
 		self:SetChargeStart(CurTime())
-		self.Owner:EmitSound("weapons/cguard/charging.wav", 80, 60)
+
+		self.m_ViewAngles = self:GetOwner():EyeAngles()
+
+		if IsFirstTimePredicted() then
+			self:EmitSound(")ambient/levels/labs/teleport_mechanism_windup5.wav", 80, 185, 0.75)
+		end
 	end
 end
 
@@ -20,7 +25,7 @@ end
 
 function SWEP:Think()
 	if self:GetCharge() >= 1 then
-		self.Owner:Kill()
+		self:GetOwner():Kill()
 	end
 
 	self:NextThink(CurTime())
@@ -34,8 +39,9 @@ end
 function SWEP:Move(mv)
 	local charge = self:GetCharge()
 	if charge > 0 then
-		mv:SetMaxSpeed(mv:GetMaxSpeed() * math.max(0, 1 - charge * 2))
-		mv:SetMaxClientSpeed(mv:GetMaxSpeed())
+		local mul = 1 + charge * 0.7
+		mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
+		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
 	end
 end
 

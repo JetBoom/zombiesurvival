@@ -1,9 +1,11 @@
 AddCSLuaFile()
 
-SWEP.Base = "weapon_zs_zombie"
+DEFINE_BASECLASS("weapon_zs_zombie")
+
+SWEP.PrintName = "Fast Zombie"
 
 SWEP.ViewModel = Model("models/weapons/v_fza.mdl")
-SWEP.WorldModel = Model("models/weapons/w_crowbar.mdl")
+SWEP.WorldModel = ""
 
 if CLIENT then
 	SWEP.ViewModelFOV = 70
@@ -11,13 +13,17 @@ end
 
 SWEP.MeleeDelay = 0
 SWEP.MeleeReach = 42
-SWEP.MeleeDamage = 8
+SWEP.MeleeDamage = 7 --8
 SWEP.MeleeForceScale = 0.1
-SWEP.MeleeSize = 1.5
+SWEP.MeleeSize = 4.5 --1.5
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.Primary.Delay = 0.32
 
-SWEP.PounceDamage = 1 --SWEP.PounceDamage = 10
+SWEP.SlowMeleeDelay = 0.8
+SWEP.SlowMeleeDamage = 18
+
+SWEP.PounceDamage = 20
+SWEP.PounceDamageVsPlayerMul = 0.2
 SWEP.PounceDamageType = DMG_IMPACT
 SWEP.PounceReach = 26
 SWEP.PounceSize = 12
@@ -32,10 +38,10 @@ SWEP.Secondary.Automatic = false
 SWEP.NextClimbSound = 0
 SWEP.NextAllowPounce = 0
 function SWEP:Think()
-	self.BaseClass.Think(self)
+	BaseClass.Think(self)
 
 	local curtime = CurTime()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 
 	if self.NextAllowJump and self.NextAllowJump <= curtime then
 		self.NextAllowJump = nil
@@ -45,15 +51,16 @@ function SWEP:Think()
 
 	if self:GetClimbing() then
 		if self:GetClimbSurface() and owner:KeyDown(IN_ATTACK2) then
-			if SERVER and curtime >= self.NextClimbSound then
-				local speed = owner:GetVelocity():Length()
-				if speed >= 50 then
-					if speed >= 100 then
+			if curtime >= self.NextClimbSound and IsFirstTimePredicted() then
+				local speed = owner:GetVelocity():LengthSqr()
+				if speed >= 2500 then
+					if speed >= 10000 then
 						self.NextClimbSound = curtime + 0.25
 					else
 						self.NextClimbSound = curtime + 0.8
 					end
-					owner:EmitSound("player/footsteps/metalgrate"..math.random(4)..".wav")
+
+					self:PlayClimbSound()
 				end
 			end
 		else
@@ -61,7 +68,62 @@ function SWEP:Think()
 		end
 	end
 
-	if self:GetSwinging() then
+	if self:IsSlowSwinging() then
+		if curtime >= self:GetSlowSwingEnd() then
+			self:SetSlowSwingEnd(0)
+
+			if IsFirstTimePredicted() then
+				self.MeleeAnimationMul = 1 / owner:GetMeleeSpeedMul()
+				self:SendAttackAnim()
+
+				local hit = false
+				local traces = owner:CompensatedZombieMeleeTrace(self.MeleeReach, self.MeleeSize)
+				local prehit = self.PreHit
+				if prehit then
+					local ins = true
+					for _, tr in pairs(traces) do
+						if tr.Entity == prehit.Entity then
+							ins = false
+							break
+						end
+					end
+					if ins then
+						local eyepos = owner:EyePos()
+						if prehit.Entity:IsValid() and prehit.Entity:NearestPoint(eyepos):DistToSqr(eyepos) <= self.MeleeReach * self.MeleeReach then
+							table.insert(traces, prehit)
+						end
+					end
+					self.PreHit = nil
+				end
+
+				local damage = self:GetSlowSwingDamage(self:GetTracesNumPlayers(traces))
+
+				for _, trace in ipairs(traces) do
+					if not trace.Hit then continue end
+
+					hit = true
+
+					if trace.HitWorld then
+						self:MeleeHitWorld(trace)
+					else
+						local ent = trace.Entity
+						if ent and ent:IsValid() then
+							self:MeleeHit(ent, trace, damage)
+							if ent:IsPlayer() then
+								self:MeleeHitPlayer(ent, trace, damage)
+							end
+						end
+					end
+				end
+
+				if hit then
+					self:PlayHitSound()
+				else
+					self:PlayMissSound()
+				end
+			end
+		end
+	elseif self:GetSwinging() then
 		if not owner:KeyDown(IN_ATTACK) and self.SwingStop and self.SwingStop <= curtime then
 			self:SetSwinging(false)
 			self.SwingStop = nil
@@ -74,10 +136,11 @@ function SWEP:Think()
 		if self.RoarCheck <= curtime then
 			self.RoarCheck = nil
 
-			if owner:GetVelocity():Length2D() <= 0.5 and owner:IsOnGround() then
+			if owner:GetVelocity():Length2DSqr() <= 1 and owner:IsOnGround() then
 				self:SetRoarEndTime(curtime + self.RoarTime)
-				if SERVER then
-					owner:EmitSound("NPC_FastZombie.Frenzy")
+
+				if IsFirstTimePredicted() then
+					self:PlaySwingEndSound()
 				end
 			end
 		end
@@ -89,9 +152,7 @@ function SWEP:Think()
 			dir.z = math.Clamp(dir.z, -0.5, 0.9)
 			dir:Normalize()
 
-			owner:LagCompensation(true)
-
-			local traces = owner:PenetratingMeleeTrace(self.PounceReach, self.PounceSize, nil, owner:LocalToWorld(owner:OBBCenter()), dir)
+			local traces = owner:CompensatedZombieMeleeTrace(self.PounceReach, self.PounceSize, owner:WorldSpaceCenter(), dir)
 			local damage = self:GetDamage(self:GetTracesNumPlayers(traces), self.PounceDamage)
 
 			local hit = false
@@ -107,19 +168,16 @@ function SWEP:Think()
 					local ent = trace.Entity
 					if ent and ent:IsValid() then
 						hit = true
-						self:MeleeHit(ent, trace, damage, ent:IsPlayer() and 1 or 10)
+						self:MeleeHit(ent, trace, damage * (ent:IsPlayer() and self.PounceDamageVsPlayerMul or ent.PounceWeakness or 1), ent:IsPlayer() and 1 or 10)
 					end
 				end
 			end
 
-			if SERVER and hit then
-				owner:EmitSound("physics/flesh/flesh_strider_impact_bullet1.wav")
-				owner:EmitSound("npc/fast_zombie/wake1.wav")
-			end
-
-			owner:LagCompensation(false)
-
 			if hit then
+				if IsFirstTimePredicted() then
+					self:PlayPounceHitSound()
+				end
+
 				self:StopPounce()
 			end
 		end
@@ -131,8 +189,80 @@ function SWEP:Think()
 	return true
 end
 
+function SWEP:PlayClimbSound()
+	self:EmitSound("player/footsteps/metalgrate"..math.random(4)..".wav")
+end
+
+function SWEP:PlayPounceHitSound()
+	self:EmitSound("physics/flesh/flesh_strider_impact_bullet1.wav")
+	self:EmitSound("npc/fast_zombie/wake1.wav", nil, nil, nil, CHAN_AUTO)
+end
+
+function SWEP:PlaySwingEndSound()
+	self:EmitSound("NPC_FastZombie.Frenzy")
+end
+
+function SWEP:MeleeHitPlayer(ent, trace, damage)
+	ent:MeleeViewPunch(damage)
+	local nearest = ent:NearestPoint(trace.StartPos)
+	util.Blood(nearest, math.Rand(damage * 0.5, damage * 0.75), (nearest - trace.StartPos):GetNormalized(), math.Rand(damage * 5, damage * 10), true)
+end
+
+function SWEP:GetSlowSwingDamage(numplayers, basedamage)
+	basedamage = basedamage or self.SlowMeleeDamage
+
+	if numplayers then
+		return basedamage * math.Clamp(1.2 - numplayers * 0.2, 0.5, 1)
+	end
+
+	return basedamage
+end
+
+function SWEP:Move(mv)
+	if self:IsPouncing() or self:GetPounceTime() > 0 then
+		mv:SetMaxSpeed(0)
+		mv:SetMaxClientSpeed(0)
+	elseif self:GetClimbing() then
+		mv:SetMaxSpeed(0)
+		mv:SetMaxClientSpeed(0)
+
+		local owner = self:GetOwner()
+		local tr = self:GetClimbSurface()
+		local angs = owner:SyncAngles()
+		local dir = tr and tr.Hit and (tr.HitNormal.z <= -0.5 and (angs:Forward() * -1) or math.abs(tr.HitNormal.z) < 0.75 and tr.HitNormal:Angle():Up()) or Vector(0, 0, 1)
+		local vel = Vector(0, 0, 4)
+
+		if owner:KeyDown(IN_FORWARD) then
+			owner:SetGroundEntity(nil)
+			vel = vel + dir * 250 --160
+		end
+		if owner:KeyDown(IN_BACK) then
+			vel = vel + dir * -250 ---160
+		end
+
+		if vel.z == 4 then
+			if owner:KeyDown(IN_MOVERIGHT) then
+				vel = vel + angs:Right() * 100 --60
+			end
+			if owner:KeyDown(IN_MOVELEFT) then
+				vel = vel + angs:Right() * -100 ---60
+			end
+		end
+
+		mv:SetVelocity(vel)
+
+		return true
+	elseif self:GetSwinging() then
+		mv:SetMaxSpeed(mv:GetMaxSpeed() * 0.6666)
+		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * 0.6666)
+	elseif self:IsSlowSwinging() then
+		mv:SetMaxSpeed(mv:GetMaxSpeed() * 0.85)
+		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * 0.85)
+	end
+end
+
 function SWEP:MeleeHitEntity(ent, trace, damage, forcescale)
-	self.BaseClass.MeleeHitEntity(self, ent, trace, damage, forcescale ~= nil and forcescale * 0.25)
+	BaseClass.MeleeHitEntity(self, ent, trace, damage, forcescale ~= nil and forcescale * 0.25)
 end
 
 local climblerp = 0
@@ -155,22 +285,74 @@ function SWEP:Swung()
 		self:StartSwingingSound()
 	end
 
-	self.BaseClass.Swung(self)
+	BaseClass.Swung(self)
 end
 
 function SWEP:PrimaryAttack()
-	if self:IsPouncing() or self:GetPounceTime() > 0 or not self.Owner:OnGround() and not self:IsClimbing() and self.Owner:WaterLevel() < 2 then return end
+	if self:IsSlowSwinging() or self:IsPouncing() or self:GetPounceTime() > 0 then return end
 
-	self.BaseClass.PrimaryAttack(self)
+	local owner = self:GetOwner()
+
+	if self:IsClimbing() or owner:WaterLevel() >= 2 or owner:GetVelocity():LengthSqr() < 64 then
+		BaseClass.PrimaryAttack(self)
+	elseif CurTime() >= self:GetNextPrimaryFire() then
+		local armdelay = owner:GetMeleeSpeedMul()
+
+		self:SetNextPrimaryFire(CurTime() + (self.SlowMeleeDelay + 0.25) * armdelay)
+		self:SetNextSecondaryFire(self:GetNextPrimaryFire() + 0.5)
+
+		self:SetSlowSwingEnd(CurTime() + self.SlowMeleeDelay * armdelay)
+		owner:DoAttackEvent()
+
+		if IsFirstTimePredicted() then
+			self:PlaySlowSwingSound()
+		end
+
+		self:StopSwingingSound()
+		self:SetSwinging(false)
+
+		local trace = self:GetOwner():CompensatedMeleeTrace(self.MeleeReach, self.MeleeSize)
+		if trace.HitNonWorld then
+			trace.IsPreHit = true
+			self.PreHit = trace
+		end
+
+		self.IdleAnimation = CurTime() + self:SequenceDuration() * armdelay
+	end
 end
 
-local climbtrace = {mask = MASK_SOLID_BRUSHONLY, mins = Vector(-4, -4, -4), maxs = Vector(4, 4, 4)}
+function SWEP:PlaySlowSwingSound()
+	self:EmitSound("npc/fast_zombie/leap1.wav")
+end
+
+local climbtrace = {mask = MASK_SOLID_BRUSHONLY, mins = Vector(-5, -5, -5), maxs = Vector(5, 5, 5)}
 function SWEP:GetClimbSurface()
-	local owner = self.Owner
-	climbtrace.start = owner:GetPos() + owner:GetUp() * 8
-	climbtrace.endpos = climbtrace.start + owner:SyncAngles():Forward() * 24
-	local tr = util.TraceHull(climbtrace)
+	local owner = self:GetOwner()
+
+	local fwd = owner:SyncAngles():Forward()
+	local up = owner:GetUp()
+	local pos = owner:GetPos()
+	local height = owner:OBBMaxs().z
+	local tr
+	local ha
+	for i=5, height, 5 do
+		if not tr or not tr.Hit then
+			climbtrace.start = pos + up * i
+			climbtrace.endpos = climbtrace.start + fwd * 36
+			tr = util.TraceHull(climbtrace)
+			ha = i
+			if tr.Hit and not tr.HitSky then break end
+		end
+	end
+
 	if tr.Hit and not tr.HitSky then
+		climbtrace.start = pos + up * ha --tr.HitPos + tr.HitNormal
+		climbtrace.endpos = climbtrace.start + owner:SyncAngles():Up() * (height - ha)
+		local tr2 = util.TraceHull(climbtrace)
+		if tr2.Hit and not tr2.HitSky then
+			return tr2
+		end
+
 		return tr
 	end
 end
@@ -178,15 +360,16 @@ end
 function SWEP:SecondaryAttack()
 	if self:IsPouncing() or self:IsClimbing() or self:GetPounceTime() > 0 then return end
 
-	if self.Owner:IsOnGround() then
+	if self:GetOwner():IsOnGround() then
 		if CurTime() < self:GetNextPrimaryFire() or CurTime() < self:GetNextSecondaryFire() or CurTime() < self.NextAllowPounce then return end
 
 		self:SetNextPrimaryFire(math.huge)
 		self:SetPounceTime(CurTime() + self.PounceStartDelay)
 
-		self.Owner:ResetJumpPower()
-		if SERVER then
-			self.Owner:EmitSound("npc/fast_zombie/leap1.wav")
+		self:GetOwner():ResetJumpPower()
+
+		if IsFirstTimePredicted() then
+			self:PlayPounceStartSound()
 		end
 	elseif self:GetClimbSurface() then
 		self:StartClimbing()
@@ -214,14 +397,14 @@ function SWEP:StartPounce()
 
 	self:SetPounceTime(0)
 
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner:IsOnGround() then
 		self:SetPouncing(true)
 
 		self.m_ViewAngles = owner:EyeAngles()
 
-		if SERVER then
-			owner:EmitSound("NPC_FastZombie.Scream")
+		if IsFirstTimePredicted() then
+			self:PlayPounceSound()
 		end
 
 		local ang = owner:EyeAngles()
@@ -236,8 +419,16 @@ function SWEP:StartPounce()
 		self.NextAllowJump = CurTime()
 		self.NextAllowPounce = CurTime() + self.PounceDelay
 		self:SetNextPrimaryFire(CurTime() + 0.1)
-		self.Owner:ResetJumpPower()
+		self:GetOwner():ResetJumpPower()
 	end
+end
+
+function SWEP:PlayPounceStartSound()
+	self:EmitSound("npc/fast_zombie/leap1.wav", nil, nil, nil, CHAN_AUTO)
+end
+
+function SWEP:PlayPounceSound()
+	self:EmitSound("NPC_FastZombie.Scream", nil, nil, nil, CHAN_AUTO)
 end
 
 function SWEP:StopPounce()
@@ -249,33 +440,33 @@ function SWEP:StopPounce()
 	self.NextAllowJump = CurTime() + 0.25
 	self.NextAllowPounce = CurTime() + self.PounceDelay
 	self:SetNextPrimaryFire(CurTime() + 0.1)
-	self.Owner:ResetJumpPower()
+	self:GetOwner():ResetJumpPower()
 end
 
 function SWEP:Reload()
-	self.BaseClass.SecondaryAttack(self)
+	BaseClass.SecondaryAttack(self)
 end
 
 function SWEP:OnRemove()
 	self.Removing = true
 
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		self:StopSwingingSound()
 		owner:ResetJumpPower()
 	end
 
-	self.BaseClass.OnRemove(self)
+	BaseClass.OnRemove(self)
 end
 
 function SWEP:Holster()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		self:StopSwingingSound()
 		owner:ResetJumpPower()
 	end
 
-	self.BaseClass.Holster(self)
+	BaseClass.Holster(self)
 end
 
 function SWEP:ResetJumpPower(power)
@@ -286,87 +477,48 @@ function SWEP:ResetJumpPower(power)
 	end
 end
 
-function SWEP:StartMoaning()
+--[[function SWEP:CheckIdleAnimation()
 end
+SWEP.CheckAttackAnimation = SWEP.CheckIdleAnimation]]
 
-function SWEP:StopMoaning()
+function SWEP:CheckMoaning()
 end
-
-function SWEP:StartMoaningSound()
-end
+SWEP.StartMoaning = SWEP.CheckMoaning
+SWEP.StopMoaning = SWEP.CheckMoaning
+SWEP.StartMoaningSound = SWEP.CheckMoaning
+SWEP.DoSwingEvent = SWEP.CheckMoaning
 
 function SWEP:PlayHitSound()
-	self.Owner:EmitSound("NPC_FastZombie.AttackHit")
+	self:EmitSound("NPC_FastZombie.AttackHit", nil, nil, nil, CHAN_AUTO)
 end
 
 function SWEP:PlayMissSound()
-	self.Owner:EmitSound("NPC_FastZombie.AttackMiss")
+	self:EmitSound("NPC_FastZombie.AttackMiss", nil, nil, nil, CHAN_AUTO)
 end
 
 function SWEP:PlayAttackSound()
 end
 
 function SWEP:PlayIdleSound()
-	self.Owner:EmitSound("NPC_FastZombie.AlertFar")
+	self:GetOwner():EmitSound("NPC_FastZombie.AlertFar")
 	self:SetRoarEndTime(CurTime() + self.RoarTime)
 end
 
 function SWEP:PlayAlertSound()
-	self.Owner:EmitSound("NPC_FastZombie.Frenzy")
+	self:GetOwner():EmitSound("NPC_FastZombie.Frenzy")
 	self:SetRoarEndTime(CurTime() + self.RoarTime)
 end
 
 function SWEP:StartSwingingSound()
-	self.Owner:EmitSound("NPC_FastZombie.Gurgle")
+	self:EmitSound("NPC_FastZombie.Gurgle")
 end
 
 function SWEP:StopSwingingSound()
-	self.Owner:StopSound("NPC_FastZombie.Gurgle")
+	self:StopSound("NPC_FastZombie.Gurgle")
 end
 
 function SWEP:IsMoaning()
 	return false
-end
-
-function SWEP:Move(mv)
-	if self:IsPouncing() or self:GetPounceTime() > 0 then
-		mv:SetMaxSpeed(0)
-		mv:SetMaxClientSpeed(0)
-	elseif self:GetClimbing() then
-		mv:SetMaxSpeed(0)
-		mv:SetMaxClientSpeed(0)
-
-		local owner = self.Owner
-		local tr = self:GetClimbSurface()
-		local angs = self.Owner:SyncAngles()
-		local dir = tr and tr.Hit and (tr.HitNormal.z <= -0.5 and (angs:Forward() * -1) or math.abs(tr.HitNormal.z) < 0.75 and tr.HitNormal:Angle():Up()) or Vector(0, 0, 1)
-		local vel = Vector(0, 0, 4)
-
-		if owner:KeyDown(IN_FORWARD) then
-			vel = vel + dir * 250 --160
-		end
-		if owner:KeyDown(IN_BACK) then
-			vel = vel + dir * -250 ---160
-		end
-
-		if vel.z == 4 then
-			if owner:KeyDown(IN_MOVERIGHT) then
-				vel = vel + angs:Right() * 100 --60
-			end
-			if owner:KeyDown(IN_MOVELEFT) then
-				vel = vel + angs:Right() * -100 ---60
-			end
-		end
-
-		mv:SetVelocity(vel)
-
-		return true
-	elseif self:GetSwinging() then
-		--[[mv:SetMaxSpeed(math.min(mv:GetMaxSpeed(), 60))
-		mv:SetMaxClientSpeed(math.min(mv:GetMaxClientSpeed(), 60))]]
-		mv:SetMaxSpeed(mv:GetMaxSpeed() * 0.9)
-		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * 0.9)
-	end
 end
 
 function SWEP:SetRoarEndTime(time)
@@ -418,6 +570,18 @@ function SWEP:SetPouncing(leaping)
 	self:SetDTBool(3, leaping)
 end
 
+function SWEP:SetSlowSwingEnd(time)
+	self:SetDTFloat(3, time)
+end
+
+function SWEP:GetSlowSwingEnd()
+	return self:GetDTFloat(3)
+end
+
+function SWEP:IsSlowSwinging()
+	return self:GetSlowSwingEnd() > 0
+end
+
 function SWEP:GetPouncing()
 	return self:GetDTBool(3)
 end
@@ -426,7 +590,7 @@ SWEP.IsPouncing = SWEP.GetPouncing
 if CLIENT then return end
 
 function SWEP:Deploy()
-	self.Owner:CreateAmbience("fastzombieambience")
+	self:GetOwner():CreateAmbience("fastzombieambience")
 
-	return self.BaseClass.Deploy(self)
+	return BaseClass.Deploy(self)
 end

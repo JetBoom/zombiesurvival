@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 SWEP.MoanDelay = 3
 
@@ -12,8 +9,8 @@ SWEP.MoanDelay = 3
 end
 
 function SWEP:Holster()
-	if self.Owner:IsValid() then
-		self.Owner:SetBarricadeGhosting(false)
+	if self:GetOwner():IsValid() then
+		self:GetOwner():SetBarricadeGhosting(false)
 	end
 
 	return self.BaseClass.Holster(self)

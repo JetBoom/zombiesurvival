@@ -1,6 +1,8 @@
 ENT.Type = "anim"
 ENT.Base = "status__base"
 
+ENT.Ephemeral = true
+
 function ENT:SetEndTime(time)
 	self:SetDTFloat(0, time)
 end

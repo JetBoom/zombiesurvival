@@ -16,7 +16,7 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo	= "none"
 
-SWEP.PounceDamage = 7
+SWEP.PounceDamage = 8
 SWEP.PounceDamageType = DMG_SLASH
 
 SWEP.NoHitRecovery = 0.75
@@ -31,7 +31,7 @@ end
 if SERVER then SWEP.NextHeal = 0 end
 function SWEP:Think()
 	local curtime = CurTime()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 
 	if self:GetBurrowTime() > 0 and curtime >= self:GetBurrowTime() then
 		if not self:CanBurrow() then
@@ -41,6 +41,12 @@ function SWEP:Think()
 			if SERVER and curtime >= self.NextHeal then
 				self.NextHeal = curtime + 0.333
 
+				if owner:GetVelocity():LengthSqr() > 8 then
+					local effectdata = EffectData()
+						effectdata:SetOrigin(owner:GetPos() % 2)
+					util.Effect("headcrab_dust", effectdata, true, true)
+				end
+
 				if owner:Health() < owner:GetMaxHealth() then
 					owner:SetHealth(owner:Health() + 1)
 				end
@@ -49,19 +55,20 @@ function SWEP:Think()
 	elseif self:GetBurrowTime() < 0 and curtime >= -self:GetBurrowTime() then
 		self:SetBurrowTime(0)
 	elseif self:GetPouncing() then
+		local delay = owner:GetMeleeSpeedMul()
 		if owner:IsOnGround() or 1 < owner:WaterLevel() then
 			self:SetPouncing(false)
-			self:SetNextPrimaryFire(curtime + self.NoHitRecovery)
+			self:SetNextPrimaryFire(curtime + self.NoHitRecovery * delay)
 		else
-			owner:LagCompensation(true)
+			--owner:LagCompensation(true)
 
 			local shootpos = owner:GetShootPos()
-			local trace = util.TraceHull({start = shootpos, endpos = shootpos + owner:GetForward() * 8, mins = owner:OBBMins() * 0.8, maxs = owner:OBBMaxs() * 0.8, filter = owner:GetMeleeFilter()})
+			local trace = owner:CompensatedMeleeTrace(8, 12, shootpos, owner:GetForward())
 			local ent = trace.Entity
 
 			if trace.Hit then
 				self:SetPouncing(false)
-				self:SetNextPrimaryFire(curtime + self.HitRecovery)
+				self:SetNextPrimaryFire(curtime + self.HitRecovery * delay)
 			end
 
 			if ent:IsValid() then
@@ -73,7 +80,6 @@ function SWEP:Think()
 
 				local damage = self.PounceDamage
 
-				local phys = ent:GetPhysicsObject()
 				if ent:IsPlayer() then
 					ent:MeleeViewPunch(damage)
 					if SERVER then
@@ -82,9 +88,12 @@ function SWEP:Think()
 					end
 
 					owner:AirBrake()
-				elseif phys:IsValid() and phys:IsMoveable() then
-					phys:ApplyForceOffset(damage * 600 * owner:EyeAngles():Forward(), (ent:NearestPoint(shootpos) + ent:GetPos() * 2) / 3)
-					ent:SetPhysicsAttacker(owner)
+				else
+					local phys = ent:GetPhysicsObject()
+					if phys:IsValid() and phys:IsMoveable() then
+						phys:ApplyForceOffset(damage * 600 * owner:EyeAngles():Forward(), (ent:NearestPoint(shootpos) + ent:GetPos() * 2) / 3)
+						ent:SetPhysicsAttacker(owner)
+					end
 				end
 
 				ent:TakeSpecialDamage(damage, self.PounceDamageType, owner, self, trace.HitPos)
@@ -96,7 +105,7 @@ function SWEP:Think()
 				end
 			end
 
-			owner:LagCompensation(false)
+			--owner:LagCompensation(false)
 		end
 	end
 
@@ -105,7 +114,7 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if self:GetPouncing() or CurTime() < self:GetNextPrimaryFire() or not owner:IsOnGround() or self:IsBurrowing() then return end
 
 	local vel = owner:GetAimVector()
@@ -135,25 +144,39 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if self:GetPouncing() or CurTime() < self:GetNextPrimaryFire() or not owner:IsOnGround() then return end
 
 	if self:GetBurrowTime() == 0 then
 		if self:CanBurrow() then
-			self:SetBurrowTime(CurTime() + self.BurrowTime)
-			if SERVER then owner:EmitSound("npc/antlion/digdown1.wav", 60, 100) end
+			self:BurrowDown()
 		end
 	elseif self:GetBurrowTime() > 0 and CurTime() >= self:GetBurrowTime() then
-		self:SetBurrowTime(-(CurTime() + self.BurrowTime))
-		if SERVER then owner:EmitSound("npc/antlion/digup1.wav", 60, 100) end
-		owner:DrawShadow(true)
+		self:BurrowUp()
 	end
 end
 
+function SWEP:BurrowDown()
+	self:SetBurrowTime(CurTime() + self.BurrowTime)
+	if SERVER then self:GetOwner():EmitSound("npc/antlion/digdown1.wav", 60, 100, 0.5) end
+end
+
+function SWEP:BurrowUp()
+	self:SetBurrowTime(-(CurTime() + self.BurrowTime))
+	if SERVER then self:GetOwner():EmitSound("npc/antlion/digup1.wav", 60, 100, 0.5) end
+	self:GetOwner():DrawShadow(true)
+end
+
+local traceGround = {mask = MASK_SOLID_BRUSHONLY}
 function SWEP:CanBurrow()
-	local owner = self.Owner
-	local tr = util.TraceLine({start = owner:GetPos(), endpos = owner:GetPos() - owner:GetUp() * 8, mask = MASK_SOLID_BRUSHONLY})
-	return tr.HitWorld and (tr.MatType == MAT_DIRT or tr.MatType == MAT_SAND or tr.MatType == MAT_SLOSH or tr.MatType == MAT_FOILAGE or tr.MatType == 88)
+	local owner = self:GetOwner()
+	if not owner:IsOnGround() or owner:WaterLevel() >= 2 then return false end
+
+	traceGround.start = owner:GetPos() % 4
+	traceGround.endpos = traceGround.start + Vector(0, 0, -128)
+	local tr = util.TraceLine(traceGround)
+
+	return tr.HitWorld and (tr.MatType == MAT_DIRT or tr.MatType == MAT_SAND or tr.MatType == MAT_SLOSH or tr.MatType == MAT_FOILAGE or tr.MatType == 88 or tr.HitTexture == "**displacement**")
 end
 
 function SWEP:Move(mv)
@@ -172,24 +195,24 @@ function SWEP:Move(mv)
 end
 
 function SWEP:EmitHitSound()
-	self.Owner:EmitSound("npc/headcrab_poison/ph_wallhit"..math.random(1, 2)..".wav")
+	self:GetOwner():EmitSound(string.format("npc/headcrab_poison/ph_wallhit%d.wav", math.random(2)))
 end
 
 function SWEP:EmitBiteSound()
-	self.Owner:EmitSound("NPC_HeadCrab.Bite")
+	self:GetOwner():EmitSound("NPC_HeadCrab.Bite")
 end
 
 function SWEP:EmitIdleSound()
-	local ent = self.Owner:MeleeTrace(4096, 24, self.Owner:GetMeleeFilter()).Entity
-	if ent:IsValid() and ent:IsPlayer() then
-		self.Owner:EmitSound("NPC_HeadCrab.Alert")
+	local ent = self:GetOwner():CompensatedMeleeTrace(4096, 24).Entity
+	if ent:IsValidPlayer() then
+		self:GetOwner():EmitSound("NPC_HeadCrab.Alert")
 	else
-		self.Owner:EmitSound("NPC_HeadCrab.Idle")
+		self:GetOwner():EmitSound("NPC_HeadCrab.Idle")
 	end
 end
 
 function SWEP:EmitAttackSound()
-	self.Owner:EmitSound("NPC_HeadCrab.Attack")
+	self:GetOwner():EmitSound("NPC_HeadCrab.Attack")
 end
 
 function SWEP:SetPouncing(pouncing)
@@ -206,13 +229,20 @@ end
 SWEP.IsPouncing = SWEP.GetPouncing
 
 function SWEP:SetBurrowTime(time)
+	local owner = self:GetOwner()
+
 	self:SetDTFloat(1, time)
 
-	if SERVER then
+	if owner:IsValid() then
 		if time == 0 then
-			self.Owner:TemporaryNoCollide(true)
+			owner.NoCollideAll = nil
+			owner:CollisionRulesChanged()
+			if SERVER then
+				owner:TemporaryNoCollide(true)
+			end
 		else
-			self.Owner:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
+			owner.NoCollideAll = true
+			owner:CollisionRulesChanged()
 		end
 	end
 end

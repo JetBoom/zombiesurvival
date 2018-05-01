@@ -1,5 +1,4 @@
 ENT.Type = "anim"
-ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 ENT.m_NoNailUnfreeze = true
 ENT.NoNails = true
@@ -13,19 +12,7 @@ function ENT:SetObjectHealth(health)
 	self:SetDTFloat(0, health)
 	if health <= 0 and not self.Destroyed then
 		self.Destroyed = true
-
-		local ent = ents.Create("prop_physics")
-		if ent:IsValid() then
-			ent:SetModel(self:GetModel())
-			ent:SetMaterial(self:GetMaterial())
-			ent:SetAngles(self:GetAngles())
-			ent:SetPos(self:GetPos())
-			ent:SetSkin(self:GetSkin() or 0)
-			ent:SetColor(self:GetColor())
-			ent:Spawn()
-			ent:Fire("break", "", 0)
-			ent:Fire("kill", "", 0.1)
-		end
+		self:FakePropBreak()
 	end
 end
 

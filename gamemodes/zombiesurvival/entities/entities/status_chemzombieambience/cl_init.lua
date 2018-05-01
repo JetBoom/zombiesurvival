@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
@@ -17,14 +17,14 @@ function ENT:OnRemove()
 end
 
 function ENT:Think()
-	self.AmbientSound:PlayEx(0.67, 100 + math.sin(RealTime()))
+	self.AmbientSound:PlayEx(0.67, 100 + RealTime() % 1)
 end
 
 local matGlow = Material("sprites/glow04_noz")
 local colGlow = Color(0, 255, 0, 255)
 function ENT:DrawTranslucent()
 	local owner = self:GetOwner()
-	if owner:IsValid() and (owner ~= LocalPlayer() or owner:ShouldDrawLocalPlayer()) then
+	if owner:IsValid() and (owner ~= MySelf or owner:ShouldDrawLocalPlayer()) then
 		local pos = owner:LocalToWorld(owner:OBBCenter())
 		render.SetMaterial(matGlow)
 		render.DrawSprite(pos, math.Rand(64, 72), math.Rand(64, 72), colGlow)
@@ -50,7 +50,7 @@ function ENT:DrawTranslucent()
 			particle:SetAirResistance(12)
 			particle:SetColor(0, 200, 0)
 
-			emitter:Finish()
+			emitter:Finish() emitter = nil collectgarbage("step", 64)
 		end
 	end
 end

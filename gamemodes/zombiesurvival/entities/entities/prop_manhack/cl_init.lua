@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:Initialize()
 	self:SetRenderBounds(Vector(-72, -72, -72), Vector(72, 72, 72))
@@ -56,7 +56,7 @@ function ENT:Think()
 		particle:SetBounce(0.2)
 		particle:SetColor(sat, sat, sat)
 
-		emitter:Finish()
+		emitter:Finish() emitter = nil collectgarbage("step", 64)
 	end
 end
 
@@ -78,29 +78,30 @@ end
 
 local colLight = Color(255, 0, 0)
 local colWhite = Color(255, 255, 255)
-local colHealth = Color(255, 255, 255)
 local matLight = Material("sprites/light_ignorez")
 function ENT:DrawTranslucent()
+
+	local alpha = self:TransAlphaToMe()
+	render.SetBlend(alpha)
 	self:DrawModel()
-
 	self:DrawSubModel()
+	render.SetBlend(1)
 
-	local lp = LocalPlayer()
-	local owner = self:GetOwner()
+	local lp = MySelf
+	local owner = self:GetObjectOwner()
 
 	if lp:IsValid() and lp:Team() == TEAM_HUMAN and owner:IsValid() and owner:IsPlayer() then
 		local ang = EyeAngles()
 		ang.pitch = 0
-		local right = ang:Right()
+
 		ang:RotateAroundAxis(ang:Up(), 270)
 		ang:RotateAroundAxis(ang:Forward(), 90)
-		cam.Start3D2D(self:LocalToWorld(Vector(0, 0, 16)), ang, 0.025)
-			draw.SimpleTextBlurry(owner:Name(), "ZS3D2DFont", 0, 0, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			local perc = math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1)
-			colHealth.r = 255
-			colHealth.g = perc ^ 0.3 * 255
-			colHealth.b = perc * 255
-			draw.SimpleTextBlurry(math.ceil(perc * 100), "ZS3D2DFontBig", 0, 0, colHealth, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+		cam.Start3D2D(self:LocalToWorld(Vector(0, 0, 16)), ang, 0.03)
+			local name = ""
+			if owner:IsValid() and owner:IsPlayer() then
+				name = owner:ClippedName()
+			end
+			self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1), name, 150, 0.85, -150)
 		cam.End3D2D()
 	end
 
@@ -146,7 +147,7 @@ function ENT:DrawTranslucent()
 end
 
 function ENT:CreateMove(cmd)
-	if self:GetOwner() ~= LocalPlayer() then return end
+	if self:GetObjectOwner() ~= MySelf then return end
 
 	if not self:BeingControlled() then return end
 
@@ -168,23 +169,29 @@ function ENT:CreateMove(cmd)
 end
 
 function ENT:ShouldDrawLocalPlayer(pl)
-	if self:GetOwner() ~= LocalPlayer() then return end
+	if self:GetObjectOwner() ~= MySelf then return end
 
 	if self:BeingControlled() then
+		if MySelf == pl and not MySelf.TargetIDFilter then
+			MySelf.TargetIDFilter = self
+		end
+
 		return true
+	elseif MySelf == pl and MySelf.TargetIDFilter then
+		MySelf.TargetIDFilter = nil
 	end
 end
 
-local ViewHullMins = Vector(-4, -4, -4)
-local ViewHullMaxs = Vector(4, 4, 4)
+local trace_cam = {mask = MASK_VISIBLE, mins = Vector(-4, -4, -4), maxs = Vector(4, 4, 4)}
 function ENT:CalcView(pl, origin, angles, fov, znear, zfar)
-	if self:GetOwner() ~= pl then return end
-
-	if not self:BeingControlled() then return end
+	if self:GetObjectOwner() ~= pl or not self:BeingControlled() then return end
 
 	local filter = player.GetAll()
 	filter[#filter + 1] = self
-	local tr = util.TraceHull({start = self:GetPos(), endpos = self:GetPos() + angles:Forward() * -48, mask = MASK_SHOT, filter = filter, mins = ViewHullMins, maxs = ViewHullMaxs})
+	trace_cam.start = self:GetPos()
+	trace_cam.endpos = trace_cam.start + angles:Forward() * -48
+	trace_cam.filter = filter
+	local tr = util.TraceHull(trace_cam)
 
 	return {origin = tr.HitPos + tr.HitNormal * 3}
 end

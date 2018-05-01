@@ -2,7 +2,7 @@ ENT.Base = "logic_points"
 ENT.Type = "point"
 
 function ENT:Add(pl, amount)
-	if pl and pl:IsValid() and pl:IsPlayer() and pl:Team() == TEAM_UNDEAD then
+	if pl and pl:IsValidZombie() then
 		amount = math.Round(amount)
 		if amount < 0 then
 			pl:TakeBrains(-amount)

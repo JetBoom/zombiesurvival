@@ -1,11 +1,11 @@
 AddCSLuaFile()
 
+SWEP.PrintName = "'Z9000' Pulse Pistol"
+SWEP.Description = "Although the Z9000 does not deal that much damage, the pulse shots it fires will slow targets."
+SWEP.Slot = 1
+SWEP.SlotPos = 0
+
 if CLIENT then
-	SWEP.PrintName = "'Z9000' Pulse Pistol"
-	SWEP.Description = "Although the Z9000 does not deal that much damage, the pulse shots it fires will slow targets."
-	SWEP.Slot = 1
-	SWEP.SlotPos = 0
-	
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 
@@ -30,9 +30,9 @@ SWEP.UseHands = true
 
 SWEP.CSMuzzleFlashes = false
 
-SWEP.ReloadSound = Sound("Weapon_Alyx_Gun.Reload")
-SWEP.Primary.Sound = Sound("Weapon_Alyx_Gun.Single")
-SWEP.Primary.Damage = 14
+SWEP.ReloadSound = Sound("weapons/alyx_gun/alyx_shotgun_cock1.wav")
+SWEP.Primary.Sound = Sound("weapons/alyx_gun/alyx_gun_fire3.wav")
+SWEP.Primary.Damage = 14.5
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.2
 
@@ -41,27 +41,26 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pulse"
 SWEP.Primary.DefaultClip = 50
 
-SWEP.ConeMax = 0.04
-SWEP.ConeMin = 0.03
+SWEP.ConeMax = 2
+SWEP.ConeMin = 1.5
 
 SWEP.IronSightsPos = Vector(-5.95, 3, 2.75)
 SWEP.IronSightsAng = Vector(-0.15, -1, 2)
 
 SWEP.TracerName = "AR2Tracer"
 
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.25)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.0175, 1)
+
+SWEP.PointsMultiplier = GAMEMODE.PulsePointsMultiplier
+
 function SWEP.BulletCallback(attacker, tr, dmginfo)
 	local ent = tr.Entity
-	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_UNDEAD then
-		ent:AddLegDamage(8)
+	if ent:IsValidZombie() then
+		ent:AddLegDamageExt(4.5, attacker, attacker:GetActiveWeapon(), SLOWTYPE_PULSE)
 	end
 
-	local e = EffectData()
-		e:SetOrigin(tr.HitPos)
-		e:SetNormal(tr.HitNormal)
-		e:SetRadius(8)
-		e:SetMagnitude(1)
-		e:SetScale(1)
-	util.Effect("cball_bounce", e)
-
-	GenericBulletCallback(attacker, tr, dmginfo)
+	if IsFirstTimePredicted() then
+		util.CreatePulseImpactEffect(tr.HitPos, tr.HitNormal)
+	end
 end

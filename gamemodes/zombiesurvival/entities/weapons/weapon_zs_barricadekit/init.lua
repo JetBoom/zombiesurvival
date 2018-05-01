@@ -1,10 +1,7 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function SWEP:Deploy()
-	gamemode.Call("WeaponDeployed", self.Owner, self)
+	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 
@@ -23,14 +20,14 @@ function SWEP:Holster()
 end
 
 function SWEP:SpawnGhost()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		owner:GiveStatus("ghost_barricadekit")
 	end
 end
 
 function SWEP:RemoveGhost()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		owner:RemoveStatus("ghost_barricadekit", false, true)
 	end
@@ -46,7 +43,8 @@ end
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 
-	local owner = self.Owner
+	local owner = self:GetOwner()
+	if not gamemode.Call("CanPlaceNail", owner) then return false end
 
 	local status = owner.status_ghost_barricadekit
 	if not (status and status:IsValid()) then return end

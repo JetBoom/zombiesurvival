@@ -3,17 +3,21 @@ CLASS.TranslationName = "class_fast_zombie"
 CLASS.Description = "description_fast_zombie"
 CLASS.Help = "controls_fast_zombie"
 
-CLASS.Model = Model("models/player/zombie_fast.mdl") --Model("models/Zombie/Fast.mdl")
+CLASS.BetterVersion = "Lacerator"
 
-CLASS.Wave = 1 / 2
-CLASS.Revives = true
+CLASS.Model = Model("models/player/zombie_fast.mdl")
+
+CLASS.Wave = 2 / 6
 CLASS.Infliction = 0.5 -- We auto-unlock this class if 50% of humans are dead regardless of what wave it is.
+CLASS.Revives = true
 
-CLASS.Health = 125
-CLASS.Speed = 250
+CLASS.Health = 150
+CLASS.Speed = 255
 CLASS.SWEP = "weapon_zs_fastzombie"
 
-CLASS.Points = 4
+CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
+
+CLASS.CanTaunt = true
 
 CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 58)}
 CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 32)}
@@ -28,6 +32,22 @@ CLASS.VoicePitch = 0.75
 CLASS.NoFallDamage = true
 CLASS.NoFallSlowdown = true
 
+local math_random = math.random
+local math_min = math.min
+local math_Clamp = math.Clamp
+local CurTime = CurTime
+local STEPSOUNDTIME_NORMAL = STEPSOUNDTIME_NORMAL
+local STEPSOUNDTIME_WATER_FOOT = STEPSOUNDTIME_WATER_FOOT
+local STEPSOUNDTIME_ON_LADDER = STEPSOUNDTIME_ON_LADDER
+local STEPSOUNDTIME_WATER_KNEE = STEPSOUNDTIME_WATER_KNEE
+local ACT_ZOMBIE_CLIMB_UP = ACT_ZOMBIE_CLIMB_UP
+local ACT_ZOMBIE_LEAP_START = ACT_ZOMBIE_LEAP_START
+local ACT_ZOMBIE_LEAPING = ACT_ZOMBIE_LEAPING
+local ACT_HL2MP_RUN_ZOMBIE = ACT_HL2MP_RUN_ZOMBIE
+local ACT_HL2MP_RUN_ZOMBIE_FAST = ACT_HL2MP_RUN_ZOMBIE_FAST
+local ACT_HL2MP_IDLE_CROUCH_ZOMBIE = ACT_HL2MP_IDLE_CROUCH_ZOMBIE
+local ACT_HL2MP_WALK_CROUCH_ZOMBIE_01 = ACT_HL2MP_WALK_CROUCH_ZOMBIE_01
+
 function CLASS:Move(pl, mv)
 	local wep = pl:GetActiveWeapon()
 	if wep.Move and wep:Move(mv) then
@@ -35,12 +55,11 @@ function CLASS:Move(pl, mv)
 	end
 
 	if mv:GetForwardSpeed() <= 0 then
-		mv:SetMaxSpeed(math.min(mv:GetMaxSpeed(), 90))
-		mv:SetMaxClientSpeed(math.min(mv:GetMaxClientSpeed(), 90))
+		mv:SetMaxSpeed(math_min(mv:GetMaxSpeed(), 90))
+		mv:SetMaxClientSpeed(math_min(mv:GetMaxClientSpeed(), 90))
 	end
 end
 
-local mathrandom = math.random
 local StepLeftSounds = {
 	"npc/fast_zombie/foot1.wav",
 	"npc/fast_zombie/foot2.wav"
@@ -51,9 +70,9 @@ local StepRightSounds = {
 }
 function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
 	if iFoot == 0 then
-		pl:EmitSound(StepLeftSounds[mathrandom(#StepLeftSounds)], 70)
+		pl:EmitSound(StepLeftSounds[math_random(#StepLeftSounds)], 70)
 	else
-		pl:EmitSound(StepRightSounds[mathrandom(#StepRightSounds)], 70)
+		pl:EmitSound(StepRightSounds[math_random(#StepRightSounds)], 70)
 	end
 
 	return true
@@ -80,37 +99,52 @@ function CLASS:PlayerStepSoundTime(pl, iType, bWalking)
 	return 250
 end
 
+function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
+	return true
+end
+
+function CLASS:IgnoreLegDamage(pl, dmginfo)
+	return true
+end
+
 function CLASS:CalcMainActivity(pl, velocity)
 	local wep = pl:GetActiveWeapon()
-	if not wep:IsValid() or not wep.GetClimbing then return end
+	if not wep:IsValid() or not wep.GetClimbing or not wep.GetPounceTime then return end
 
 	if wep:GetClimbing() then
-		pl.CalcIdeal = ACT_ZOMBIE_CLIMB_UP
-		return true
-	elseif wep:GetPounceTime() > 0 then
-		pl.CalcIdeal = ACT_ZOMBIE_LEAP_START
-		return true
+		return ACT_ZOMBIE_CLIMB_UP, -1
 	end
 
-	local speed = velocity:Length2D()
+	if wep:GetPounceTime() > 0 then
+		return ACT_ZOMBIE_LEAP_START, -1
+	end
+
 	if not pl:OnGround() or pl:WaterLevel() >= 3 then
-		pl.CalcIdeal = ACT_ZOMBIE_LEAPING
-	elseif speed <= 0.5 and wep:IsRoaring() then
-		pl.CalcSeqOverride = pl:LookupSequence("menu_zombie_01")
-	elseif speed > 16 and wep:GetSwinging() then
-		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE
-	else
-		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE_FAST
+		return ACT_ZOMBIE_LEAPING, -1
 	end
 
-	return true
+	local speed = velocity:Length2DSqr()
+
+	if speed <= 1 and wep:IsRoaring() then
+		return 1, pl:LookupSequence("menu_zombie_01")
+	end
+
+	if speed > 256 and wep:GetSwinging() then --16^2
+		return ACT_HL2MP_RUN_ZOMBIE, -1
+	end
+
+	if pl:Crouching() then
+		return speed <= 1 and ACT_HL2MP_IDLE_CROUCH_ZOMBIE or ACT_HL2MP_WALK_CROUCH_ZOMBIE_01, -1
+	end
+
+	return ACT_HL2MP_RUN_ZOMBIE_FAST, -1
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 	local wep = pl:GetActiveWeapon()
-	if not wep:IsValid() or not wep.GetClimbing then return end
+	if not wep:IsValid() or not wep.GetClimbing or not wep.GetPounceTime then return end
 
-	if wep:GetSwinging() then
+	if wep.GetSwinging and wep:GetSwinging() then
 		if not pl.PlayingFZSwing then
 			pl.PlayingFZSwing = true
 			pl:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_RANGE_FRENZY)
@@ -122,9 +156,9 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 
 	if wep:GetClimbing() then
 		local vel = pl:GetVelocity()
-		local speed = vel:Length()
-		if speed > 8 then
-			pl:SetPlaybackRate(math.Clamp(speed / 160, 0, 1) * (vel.z < 0 and -1 or 1))
+		local speed = vel:LengthSqr()
+		if speed > 64 then --8^2
+			pl:SetPlaybackRate(math_Clamp(speed / 25600, 0, 1) * (vel.z < 0 and -1 or 1)) --160^2
 		else
 			pl:SetPlaybackRate(0)
 		end
@@ -132,7 +166,7 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 		return true
 	end
 
-	if wep:GetPounceTime() > 0 then
+	if wep.GetPounceTime and wep:GetPounceTime() > 0 then
 		pl:SetPlaybackRate(0.25)
 
 		if not pl.m_PrevFrameCycle then
@@ -145,7 +179,6 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 		pl.m_PrevFrameCycle = nil
 	end
 
-	local speed = velocity:Length2D()
 	if not pl:OnGround() or pl:WaterLevel() >= 3 then
 		pl:SetPlaybackRate(1)
 
@@ -155,9 +188,10 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 
 		return true
 	end
-	if speed <= 0.5 and wep:IsRoaring() then
+
+	if wep:IsRoaring() and velocity:Length2DSqr() <= 1 then
 		pl:SetPlaybackRate(0)
-		pl:SetCycle(math.Clamp(1 - (wep:GetRoarEndTime() - CurTime()) / wep.RoarTime, 0, 1) * 0.9)
+		pl:SetCycle(math_Clamp(1 - (wep:GetRoarEndTime() - CurTime()) / wep.RoarTime, 0, 1) * 0.9)
 
 		return true
 	end
@@ -165,34 +199,37 @@ end
 
 function CLASS:DoAnimationEvent(pl, event, data)
 	if event == PLAYERANIMEVENT_ATTACK_PRIMARY then
+		pl:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_RANGE_ZOMBIE_SPECIAL, true)
+		return ACT_INVALID
+	elseif event == PLAYERANIMEVENT_RELOAD then
 		return ACT_INVALID
 	end
 end
 
 if SERVER then
 	function CLASS:ReviveCallback(pl, attacker, dmginfo)
-		if not pl.Revive and not dmginfo:GetInflictor().IsMelee and dmginfo:GetDamageType() ~= DMG_BLAST and dmginfo:GetDamageType() ~= DMG_BURN and (pl:LastHitGroup() == HITGROUP_LEFTLEG or pl:LastHitGroup() == HITGROUP_RIGHTLEG) and math.random(3) == 1 then
-			local classtable = GAMEMODE.ZombieClasses["Fast Zombie Legs"]
-			if classtable then
-				pl:RemoveStatus("overridemodel", false, true)
-				local deathclass = pl.DeathClass or pl:GetZombieClass()
-				pl:SetZombieClass(classtable.Index)
-				pl:DoHulls(classtable.Index, TEAM_UNDEAD)
-				pl.DeathClass = deathclass
+		if math.random(2) == 2 or not pl:ShouldReviveFrom(dmginfo, self.Hull[2].z * 0.4) then return false end
 
-				pl:EmitSound("physics/flesh/flesh_bloody_break.wav", 100, 75)
+		local classtable = math_random(3) == 3 and GAMEMODE.ZombieClasses["Fast Zombie Legs"] or GAMEMODE.ZombieClasses["Fast Zombie Torso"]
+		if classtable then
+			pl:RemoveStatus("overridemodel", false, true)
+			local deathclass = pl.DeathClass or pl:GetZombieClass()
+			pl:SetZombieClass(classtable.Index)
+			pl:DoHulls(classtable.Index, TEAM_UNDEAD)
+			pl.DeathClass = deathclass
 
-				pl:Gib()
-				pl.Gibbed = nil
+			pl:EmitSound("physics/flesh/flesh_bloody_break.wav", 100, 75)
 
-				timer.Simple(0, function()
-					if IsValid(pl) then
-						pl:SecondWind()
-					end
-				end)
+			pl:Gib()
+			pl.Gibbed = nil
 
-				return true
-			end
+			timer.Simple(0, function()
+				if IsValid(pl) then
+					pl:SecondWind()
+				end
+			end)
+
+			return true
 		end
 
 		return false

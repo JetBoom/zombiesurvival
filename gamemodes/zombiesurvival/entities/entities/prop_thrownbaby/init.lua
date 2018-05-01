@@ -1,33 +1,42 @@
-AddCSLuaFile("shared.lua")
-AddCSLuaFile("cl_init.lua")
+INC_SERVER()
 
-include("shared.lua")
+ENT.AlwaysProjectile = true -- Quick fix to stop people being able to use this as ammo to prop kill.
 
-ENT.m_IsProjectile = true -- Quick fix to stop people being able to use this as ammo to prop kill.
+ENT.Created = 0
 
 function ENT:Initialize()
 	self:SetModel("models/props_c17/doll01.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS) --self:PhysicsInitBox(Vector(-10.8, -10.8, -10.8), Vector(10.8, 10.8, 10.8))
 	self:SetModelScale(1.3, 0)
+	self:SetCustomCollisionCheck(true)
+	self:SetCollisionGroup(COLLISION_GROUP_PROJECTILE)
+	self:CollisionRulesChanged()
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
-		phys:SetMass(10)
+		phys:SetMass(1)
 		phys:EnableMotion(true)
 		phys:Wake()
 	end
+
+	self.Created = CurTime()
 
 	self:Fire("kill", "", 20)
 end
 
 function ENT:Think()
-	if not self:GetSettled() and CurTime() >= self:GetCreationTime() + 0.25 and self:GetVelocity():Length() <= 16 then
+	if not self:GetSettled() and CurTime() >= self.Created + 0.75 and self:GetVelocity():LengthSqr() <= 256 then
 		self:SetSettled(true)
 		self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
+
+		net.Start("zs_nestbuilt")
+		net.Broadcast()
 	end
 end
 
 function ENT:OnTakeDamage(dmginfo)
+	if dmginfo:GetDamage() <= 0 then return end
+
 	local attacker = dmginfo:GetAttacker()
 	if dmginfo:GetDamage() >= 1 and not (attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_UNDEAD) then
 		self:Destroy()

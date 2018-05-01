@@ -11,15 +11,24 @@ ENT.GhostRotateFunction = "Up"
 
 function ENT:Initialize()
 	self:DrawShadow(false)
-	self:SetMaterial("models/wireframe") --self:SetMaterial("models/debug/debugwhite")
+	self:SetMaterial("models/wireframe")
 	self:SetModel(self.GhostModel)
+	self:SetModelScale(self.GhostScale or 1)
 
 	self:RecalculateValidity()
 end
 
 function ENT:IsInsideProp()
-	for _, ent in pairs(ents.FindInBox(self:WorldSpaceAABB())) do
-		if ent and ent ~= self and ent:IsValid() and ent:GetMoveType() == MOVETYPE_VPHYSICS and ent:GetSolid() > 0 then return true end
+	if self.GhostNotBarricadeProp then return false end
+
+	local mycenter = self:WorldSpaceCenter()
+	for _, ent in pairs(ents.FindInSphere(mycenter, self:BoundingRadius())) do
+		if ent and ent ~= self and ent:IsValid() and ent:GetMoveType() == MOVETYPE_VPHYSICS and ent:GetSolid() > 0 then
+			local nearest = ent:NearestPoint(mycenter)
+			if self:NearestPoint(nearest):DistToSqr(nearest) <= 144 then
+				return true
+			end
+		end
 	end
 
 	return false
@@ -38,7 +47,7 @@ function ENT:RecalculateValidity()
 	local eyeangles = owner:EyeAngles()
 	local shootpos = owner:GetShootPos()
 	local entity
-	local tr = util.TraceLine({start = shootpos, endpos = shootpos + owner:GetAimVector() * 48, mask = MASK_SOLID, filter = owner})
+	local tr = util.TraceLine({start = shootpos, endpos = shootpos + owner:GetAimVector() * 48, mask = MASK_SOLID_BRUSHONLY, filter = owner})
 
 	if tr.HitWorld and not tr.HitSky or tr.HitNonWorld and self.GhostPlaceOnEntities then
 		if self.GhostHitNormalOffset then
@@ -52,13 +61,20 @@ function ENT:RecalculateValidity()
 		eyeangles:RotateAroundAxis(eyeangles:Forward(), rot.roll)
 
 		local valid = true
-		if self.GhostLimitedNormal and tr.HitNormal.z < self.GhostLimitedNormal or self:IsInsideProp() then
+		if self.GhostLimitedNormal and tr.HitNormal.z < self.GhostLimitedNormal then
 			valid = false
 		elseif self.GhostDistance then
 			for _, ent in pairs(ents.FindInSphere(tr.HitPos, self.GhostDistance)) do
-				if ent and ent:IsValid() and ent:GetClass() == self.GhostEntity then
-					valid = false
-					break
+				if ent and ent:IsValid() then
+					if self.GhostEntityWildCard then
+						if self.GhostEntityWildCard == ent:GetClass():sub(1, #self.GhostEntityWildCard) then
+							valid = false
+							break
+						end
+					elseif ent:GetClass() == self.GhostEntity then
+						valid = false
+						break
+					end
 				end
 			end
 		end
@@ -82,6 +98,13 @@ function ENT:RecalculateValidity()
 
 		self:SetValidPlacement(valid)
 	else
+		local rot = self.GhostNoTraceRot
+		if rot then
+			eyeangles:RotateAroundAxis(eyeangles:Right(), rot.pitch)
+			eyeangles:RotateAroundAxis(eyeangles:Up(), rot.yaw)
+			eyeangles:RotateAroundAxis(eyeangles:Forward(), rot.roll)
+		end
+
 		self:SetValidPlacement(false)
 	end
 
@@ -94,6 +117,10 @@ function ENT:RecalculateValidity()
 	local pos, ang = tr.HitPos, eyeangles
 	self:SetPos(pos)
 	self:SetAngles(ang)
+
+	if self:GetValidPlacement() and self:IsInsideProp() then
+		self:SetValidPlacement(false)
+	end
 
 	return pos, ang, entity
 end

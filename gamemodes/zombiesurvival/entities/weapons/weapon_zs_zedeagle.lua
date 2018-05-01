@@ -1,10 +1,10 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "'Zombie Drill' Desert Eagle"
-	SWEP.Slot = 1
-	SWEP.SlotPos = 0
+SWEP.PrintName = "'Zombie Drill' Desert Eagle"
+SWEP.Slot = 1
+SWEP.SlotPos = 0
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
 
@@ -33,10 +33,11 @@ SWEP.Primary.ClipSize = 7
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
 
-SWEP.ConeMax = 0.06
-SWEP.ConeMin = 0.03
-
+SWEP.ConeMax = 3
+SWEP.ConeMin = 1.5
 
 SWEP.WalkSpeed = SPEED_ZOMBIEESCAPE_NORMAL
 SWEP.Primary.KnockbackScale = ZE_KNOCKBACKSCALE
 SWEP.Primary.DefaultClip = 99999
+
+SWEP.AllowQualityWeapons = false

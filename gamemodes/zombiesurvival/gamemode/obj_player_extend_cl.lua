@@ -1,5 +1,4 @@
 local meta = FindMetaTable("Player")
-if not meta then return end
 
 function meta:FloatingScore(victim, effectname, frags, flags)
 	if MySelf == self then
@@ -20,12 +19,27 @@ end
 function meta:RemoveStatus(sType, bSilent, bInstant, sExclude)
 end
 
+function meta:HasWon()
+	return self:Team() == TEAM_HUMAN and self:GetObserverMode() == OBS_MODE_ROAMING
+end
+
 function meta:GetStatus(sType)
 	local ent = self["status_"..sType]
-	if ent and ent.Owner == self then return ent end
+	if ent and ent:GetOwner() == self then return ent end
 end
 
 function meta:GiveStatus(sType, fDie)
+end
+
+function meta:KnockDown(time)
+end
+
+local ViewHullMins = Vector(-8, -8, -8)
+local ViewHullMaxs = Vector(8, 8, 8)
+function meta:GetThirdPersonCameraPos(origin, angles)
+	local allplayers = player.GetAll()
+	local tr = util.TraceHull({start = origin, endpos = origin + angles:Forward() * -math.max(36, self:Team() == TEAM_UNDEAD and self:GetZombieClassTable().CameraDistance or self:BoundingRadius()), mask = MASK_SHOT, filter = allplayers, mins = ViewHullMins, maxs = ViewHullMaxs})
+	return tr.HitPos + tr.HitNormal * 3
 end
 
 function meta:IsFriend()
@@ -110,6 +124,11 @@ function meta:DoHulls(classid, teamid)
 			elseif self:GetJumpPower() ~= DEFAULT_JUMP_POWER then
 				self:SetJumpPower(DEFAULT_JUMP_POWER)
 			end
+			if classtab.Gravity then
+				self:SetGravity(classtab.Gravity)
+			elseif self:GetGravity() ~= 1 then
+				self:SetGravity(1)
+			end
 
 			if classtab.ClientsideModelScale then
 				self.ClientsideModelScale = Vector(1, 1, 1) * classtab.ClientsideModelScale
@@ -117,9 +136,11 @@ function meta:DoHulls(classid, teamid)
 				m:Scale(self.ClientsideModelScale)
 				self:EnableMatrix("RenderMultiply", m)
 			end
-			self.NoCollideAll = classtab.NoCollideAll
+			self.NoCollideAll = classtab.NoCollideAll or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
+			--self.NoCollideInside = classtab.NoCollideInside or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
 			self.AllowTeamDamage = classtab.AllowTeamDamage
 			self.NeverAlive = classtab.NeverAlive
+			self.KnockbackScale = classtab.KnockbackScale
 			local phys = self:GetPhysicsObject()
 			if phys:IsValid() then
 				phys:SetMass(classtab.Mass or DEFAULT_MASS)
@@ -134,14 +155,17 @@ function meta:DoHulls(classid, teamid)
 		self:SetViewOffsetDucked(DEFAULT_VIEW_OFFSET_DUCKED)
 		self:SetStepSize(DEFAULT_STEP_SIZE)
 		self:SetJumpPower(DEFAULT_JUMP_POWER)
+		self:SetGravity(1)
 
 		if self.ClientsideModelScale then
 			self.ClientsideModelScale = nil
 			self:DisableMatrix("RenderMultiply")
 		end
 		self.NoCollideAll = nil
+		--self.NoCollideInside = nil
 		self.AllowTeamDamage = nil
 		self.NeverAlive = nil
+		self.KnockbackScale = nil
 		local phys = self:GetPhysicsObject()
 		if phys:IsValid() then
 			phys:SetMass(DEFAULT_MASS)
@@ -154,14 +178,30 @@ function meta:GivePenalty(amount)
 end
 
 function meta:SetZombieClass(cl)
-	self:CallZombieFunction("SwitchedAway")
+	self:CallZombieFunction0("SwitchedAway")
 
 	local classtab = GAMEMODE.ZombieClasses[cl]
 	if classtab then
 		self.Class = classtab.Index or cl
-		self:CallZombieFunction("SwitchedTo")
+		self:CallZombieFunction0("SwitchedTo")
 	end
 end
+
+function meta:GetRateOfPalsy(ft, frightened, health, threshold, gunsway)
+	local healthth = health <= threshold and (((threshold - health) / threshold) * 7) or 0
+
+	return ft * (
+					(frightened and 14 or healthth) * (MySelf.AimShakeMul or 1) +
+					(gunsway and (4 * (MySelf.AimSpreadMul or 1)) or 0)
+				)
+end
+
+GM.CachedResupplyAmmoType = "scrap"
+timer.Create("CacheResupplyAmmoType", 0.3333, 0, function()
+	if not GAMEMODE or not MySelf or not MySelf.GetResupplyAmmoType then return end
+
+	GAMEMODE.CachedResupplyAmmoType = MySelf:GetResupplyAmmoType()
+end)
 
 net.Receive("zs_penalty", function(length)
 	local penalty = net.ReadUInt(16)
@@ -171,11 +211,11 @@ end)
 
 net.Receive("zs_dohulls", function(length)
 	local ent = net.ReadEntity()
-	local classid = net.ReadUInt(16)
-	local teamid = net.ReadUInt(16)
+	local classid = net.ReadUInt(8)
+	local is_zombie = net.ReadBool()
 
 	if ent:IsValid() then
-		ent:DoHulls(classid, teamid)
+		ent:DoHulls(classid, is_zombie and TEAM_UNDEAD or TEAM_HUMAN)
 	end
 end)
 
@@ -183,7 +223,7 @@ net.Receive("zs_zclass", function(length)
 	local ent = net.ReadEntity()
 	local id = net.ReadUInt(8)
 
-	if ent:IsValid() and ent:IsPlayer() then
+	if ent:IsValidPlayer() then
 		ent:SetZombieClass(id)
 	end
 end)

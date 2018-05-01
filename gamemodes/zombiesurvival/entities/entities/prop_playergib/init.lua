@@ -1,12 +1,9 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.DieTime = 0
 
 function ENT:Initialize()
-	self.m_Health = 25
+	self.ObjHealth = 25
 
 	if self.DieTime == 0 then
 		self.DieTime = CurTime() + GAMEMODE.GibLifeTime
@@ -61,14 +58,16 @@ function ENT:KeyValue(key, value)
 end
 
 function ENT:OnTakeDamage(dmginfo)
+	if dmginfo:GetDamage() <= 0 then return end
+
 	self:TakePhysicsDamage(dmginfo)
 
-	self.m_Health = self.m_Health - dmginfo:GetDamage()
-	if self.m_Health <= 0 and not self.Destroyed then
+	self.ObjHealth = self.ObjHealth - dmginfo:GetDamage()
+	if self.ObjHealth <= 0 and not self.Destroyed then
 		self.Destroyed = true
 		self.DieTime = 0
 
-		util.Blood(self:GetPos(), math.random(1, 2), Vector(0, 0, 1), 100, self:GetDTInt(0), true)
+		util.Blood(self:GetPos(), math.random(2), Vector(0, 0, 1), 100, self:GetDTInt(0), true)
 	end
 end
 
@@ -79,7 +78,7 @@ function ENT:Think()
 end
 
 function ENT:StartTouch(ent)
-	if self.DieTime ~= 0 and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_UNDEAD and ent:Health() < ent:GetMaxZombieHealth() then
+	if self.DieTime ~= 0 and ent:IsValidLivingZombie() and ent:Health() < ent:GetMaxZombieHealth() and not ent:GetStatus("shockdebuff") --[[and not ent:GetZombieClassTable().Boss]] then
 		self.DieTime = 0
 
 		ent:SetHealth(math.min(ent:GetMaxZombieHealth(), ent:Health() + 10))

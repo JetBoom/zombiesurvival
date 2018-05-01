@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:Initialize()
 	self:SetModelScale(1.3, 0)

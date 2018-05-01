@@ -7,6 +7,9 @@ local PANEL  = {}
 
 function PANEL:Init()
 	self:DockPadding(8, 2, 8, 2)
+
+	self:SetKeyboardInputEnabled(false)
+	self:SetMouseInputEnabled(false)
 end
 
 local matGrad = Material("VGUI/gradient-r")
@@ -157,26 +160,26 @@ function PANEL:AddNotification(...)
 	else
 		notif:DockPadding(8, 0, 8, 0)
 	end
-	
+
 	notif:Dock(TOP)
 
 	local args = {...}
-	
+
 	local FadeTime = GAMEMODE.NotifyFadeTime
-	
+
 	for k, v in pairs(args) do
-		if type(v) == "table" and v.CustomTime and type(v.CustomTime == "number") then 
-			FadeTime = v.CustomTime 
-			break 
+		if type(v) == "table" and v.CustomTime and type(v.CustomTime == "number") then
+			FadeTime = v.CustomTime
+			break
 		end
 	end
-	
+
 	notif:SetAlpha(1)
-	notif:AlphaTo(255, 0.5)
+	notif:AlphaTo(255, 0.15)
 	notif:AlphaTo(1, 1, FadeTime - 1)
-	
-	notif.DieTime = CurTime() + FadeTime 
-	
+
+	notif.DieTime = CurTime() + FadeTime
+
 	return notif
 end
 

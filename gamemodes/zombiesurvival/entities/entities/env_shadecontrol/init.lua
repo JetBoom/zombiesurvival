@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
@@ -28,13 +25,15 @@ function ENT:Think()
 		local ent = self:GetParent()
 		if ent:IsValid() then
 			local eyepos = owner:EyePos()
-			if eyepos:Distance(ent:NearestPoint(eyepos)) <= 400 then
+			if eyepos:DistToSqr(ent:NearestPoint(eyepos)) <= 160000 then --400^2
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() and phys:IsMoveable() and phys:GetMass() <= 300 then
 					local ct = CurTime()
 
 					local frametime = ct - (self.LastThink or ct)
 					self.LastThink = ct
+
+					ent.DisableControlUntil = CurTime() + 2
 
 					phys:Wake()
 

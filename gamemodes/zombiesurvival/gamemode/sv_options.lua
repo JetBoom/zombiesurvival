@@ -1,15 +1,17 @@
 -- Weapon sets that humans can start with if they choose RANDOM.
 GM.StartLoadouts = {
-	{"pshtr", "3pcp", "2pcp", "csknf"},
-	{"btlax", "3pcp", "zpaxe", "stone"},
-	{"stbbr", "3rcp", "zpcpot", "stone"},
+	{"pshtr", "3pcp", "2pcp", "2sgcp", "3sgcp"},
+	{"btlax", "3pcp", "2pcp", "2arcp", "3arcp"},
+	{"stbbr", "3rcp", "2rcp", "2pcp", "3pcp"},
 	{"tossr", "3smgcp", "2smgcp", "zpplnk", "stone"},
 	{"blstr", "3sgcp", "2sgcp", "csknf"},
-	{"owens", "3pcp", "2pcp", "csknf"},
-	{"zpcpot", "medkit", "150mkit"},
-	{"crklr", "3arcp", "2arcp", "zpplnk", "stone"},
-	{"crphmr", "6nails", "hook"},
-	{"blstr", "pipe"}
+	{"owens", "3pcp", "2pcp", "2pls", "3pls"},
+	{"curativei", "medkit", "90mkit", "60mkit"},
+	{"minelayer", "4mines", "6mines"},
+	{"crklr", "3arcp", "2arcp", "xbow1", "xbow2"},
+	{"junkpack", "12nails", "crphmr", "loadingframe"},
+	{"z9000", "3pls", "2pls", "stnbtn"},
+	{"sling", "xbow1", "xbow2", "2sgcp", "3sgcp"}
 }
 
 
@@ -78,10 +80,10 @@ cvars.AddChangeCallback("zs_maxpropsinbarricade", function(cvar, oldvalue, newva
 	GAMEMODE.MaxPropsInBarricade = tonumber(newvalue) or 8
 end)
 
-GM.MaxDroppedItems = CreateConVar("zs_maxdroppeditems", "32", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Maximum amount of dropped items. Prevents spam or lag when lots of people die."):GetInt()
+GM.MaxDroppedItems = 48--[[CreateConVar("zs_maxdroppeditems", "48", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Maximum amount of dropped items. Prevents spam or lag when lots of people die."):GetInt()
 cvars.AddChangeCallback("zs_maxdroppeditems", function(cvar, oldvalue, newvalue)
-	GAMEMODE.MaxDroppedItems = tonumber(newvalue) or 32
-end)
+	GAMEMODE.MaxDroppedItems = tonumber(newvalue) or 48
+end)]]
 
 GM.NailHealthPerRepair = CreateConVar("zs_nailhealthperrepair", "10", FCVAR_ARCHIVE + FCVAR_NOTIFY, "How much health a nail gets when being repaired."):GetInt()
 cvars.AddChangeCallback("zs_nailhealthperrepair", function(cvar, oldvalue, newvalue)
@@ -93,12 +95,12 @@ cvars.AddChangeCallback("zs_nopropdamagefromhumanmelee", function(cvar, oldvalue
 	GAMEMODE.NoPropDamageFromHumanMelee = tonumber(newvalue) == 1
 end)
 
-GM.MedkitPointsPerHealth = CreateConVar("zs_medkitpointsperhealth", "5", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Specifies the amount of healing for players to be given a point. For use with the medkit and such."):GetInt()
+GM.MedkitPointsPerHealth = 8--[[CreateConVar("zs_medkitpointsperhealth", "8", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Specifies the amount of healing for players to be given a point. For use with the medkit and such."):GetInt()
 cvars.AddChangeCallback("zs_medkitpointsperhealth", function(cvar, oldvalue, newvalue)
 	GAMEMODE.MedkitPointsPerHealth = tonumber(newvalue) or 1
-end)
+end)]]
 
-GM.RepairPointsPerHealth = CreateConVar("zs_repairpointsperhealth", "30", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Specifies the amount of repairing for players to be given a point. For use with nails and such."):GetInt()
+GM.RepairPointsPerHealth = CreateConVar("zs_repairpointsperhealth", "35", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Specifies the amount of repairing for players to be given a point. For use with nails and such."):GetInt()
 cvars.AddChangeCallback("zs_repairpointsperhealth", function(cvar, oldvalue, newvalue)
 	GAMEMODE.RepairPointsPerHealth = tonumber(newvalue) or 1
 end)
@@ -142,24 +144,24 @@ GM.HonorableMentions[HM_MOSTBRAINSEATEN].GetPlayer = function(self)
 	return GetMostKey("BrainsEaten")
 end
 
+GM.HonorableMentions[HM_MOSTHEADSHOTS].GetPlayer = function(self)
+	return GetMostKey("Headshots")
+end
+
 GM.HonorableMentions[HM_SCARECROW].GetPlayer = function(self)
 	return GetMostKey("CrowKills")
 end
 
-GM.HonorableMentions[HM_CROWFIGHTER].GetPlayer = function(self)
-	return GetMostKey("CrowVsCrowKills")
+GM.HonorableMentions[HM_DEFENCEDMG].GetPlayer = function(self)
+	return GetMostKey("DefenceDamage")
 end
 
-GM.HonorableMentions[HM_CROWBARRICADEDAMAGE].GetPlayer = function(self)
-	return GetMostKey("CrowBarricadeDamage")
+GM.HonorableMentions[HM_STRENGTHDMG].GetPlayer = function(self)
+	return GetMostKey("StrengthBoostDamage")
 end
 
 GM.HonorableMentions[HM_BARRICADEDESTROYER].GetPlayer = function(self)
 	return GetMostKey("BarricadeDamage")
-end
-
-GM.HonorableMentions[HM_SPAWNPOINT].GetPlayer = function(self)
-	return GetMostKey("DynamicSpawnedOn")
 end
 
 GM.HonorableMentions[HM_HANDYMAN].GetPlayer = function(self)

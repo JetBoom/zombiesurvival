@@ -3,7 +3,7 @@ local drag_modes = {
 	["x / z"] = { "x", "z" },
 	["y"] = { "y" },
 	["pitch / yaw"] = { "pitch", "yaw" },
-	["roll"] = { "roll" }	
+	["roll"] = { "roll" }
 }
 
 local function GetIronSightPrintText( vec, ang )
@@ -25,7 +25,7 @@ local pironsight_enable = SimplePanel( pironsight )
 		if (wep.save_data.IronSightsEnabled) then icbox:SetValue(1)
 		else icbox:SetValue(0) end
 	icbox:Dock(LEFT)
-	
+
 	local ribtn = vgui.Create( "DButton", pironsight_enable )
 		ribtn:SetTall( 20 )
 		ribtn:SetText( "Reset ironsights" )
@@ -43,7 +43,7 @@ local pironsight_drag = SimplePanel( pironsight )
 		modlabel:SetSize( 150, 20 )
 		modlabel:SetText( "Drag mode:" )
 	modlabel:Dock(LEFT)
-	
+
 	local drbox = vgui.Create( "DComboBox", pironsight_drag )
 		drbox:SetTall( 20 )
 		drbox:SetText( wep.cur_drag_mode )
@@ -54,12 +54,12 @@ local pironsight_drag = SimplePanel( pironsight )
 			local modes = drag_modes[value]
 			wep.cur_drag_mode = value
 			for k, v in pairs( wep.ir_drag ) do
-				v[1] = table.HasValue( modes, k ) // set the drag modus
+				v[1] = table.HasValue( modes, k ) -- set the drag modus
 			end
 		end
 	drbox:Dock(FILL)
-	
-pironsight_drag:DockMargin(0,0,0,10)	
+
+pironsight_drag:DockMargin(0,0,0,10)
 pironsight_drag:Dock(TOP)
 
 local ixslider = vgui.Create( "DNumSlider", pironsight )

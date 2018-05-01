@@ -1,4 +1,5 @@
-include("shared.lua")
+INC_CLIENT()
+
 include("animations.lua")
 
 SWEP.DrawAmmo = false
@@ -12,12 +13,12 @@ function SWEP:TranslateFOV(fov)
 	return GAMEMODE.FOVLerp * fov
 end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end
 
 function SWEP:DrawHUD()
-	if GetConVarNumber("crosshair") ~= 1 then return end
+	if GetConVar("crosshair"):GetInt() ~= 1 then return end
 	self:DrawCrosshairDot()
 end
 
@@ -43,22 +44,25 @@ end
 
 function SWEP:DrawWorldModel()
 	local owner = self:GetOwner()
-	if owner:IsValid() and owner.ShadowMan then return end
+	if owner:IsValid() and (owner.ShadowMan or owner.SpawnProtection) then return end
 
 	self:Anim_DrawWorldModel()
 end
 
 local ghostlerp = 0
 function SWEP:GetViewModelPosition(pos, ang)
+	local owner = self:GetOwner()
 	if self:IsSwinging() then
 		local rot = self.SwingRotation
 		local offset = self.SwingOffset
+		local armdelay = owner:GetMeleeSpeedMul()
+		local swingtime = self.SwingTime * (owner.MeleeSwingDelayMul or 1) * armdelay
 
 		ang = Angle(ang.pitch, ang.yaw, ang.roll) -- Copy
 
 		local swingend = self:GetSwingEnd()
-		local delta = self.SwingTime - math.Clamp(swingend - CurTime(), 0, self.SwingTime)
-		local power = CosineInterpolation(0, 1, delta / self.SwingTime)
+		local delta = swingtime - math.Clamp(swingend - CurTime(), 0, swingtime)
+		local power = CosineInterpolation(0, 1, delta / swingtime)
 
 		if power >= 0.9 then
 			power = (1 - power) ^ 0.4 * 2
@@ -71,7 +75,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		ang:RotateAroundAxis(ang:Forward(), rot.roll * power)
 	end
 
-	if self.Owner:GetBarricadeGhosting() then
+	if owner:GetBarricadeGhosting() then
 		ghostlerp = math.min(1, ghostlerp + FrameTime() * 4)
 	elseif ghostlerp > 0 then
 		ghostlerp = math.max(0, ghostlerp - FrameTime() * 5)

@@ -1,12 +1,9 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.CleanupPriority = 2
 
 function ENT:Initialize()
-	self.m_Health = 50
+	self.ObjHealth = 50
 	self.IgnorePickupCount = self.IgnorePickupCount or false
 	self.Forced = self.Forced or false
 	self.NeverRemove = self.NeverRemove or false
@@ -22,6 +19,7 @@ function ENT:Initialize()
 	if phys:IsValid() then
 		phys:SetMaterial("material")
 		phys:EnableMotion(true)
+		phys:SetMass(45)
 		phys:Wake()
 	end
 
@@ -49,14 +47,17 @@ function ENT:Use(activator, caller)
 	if self.IgnoreUse then return end
 	self:GiveToActivator(activator, caller)
 end
+
 function ENT:GiveToActivator(activator, caller)
-	if activator:IsPlayer() and activator:Alive() and not activator:KeyDown(GAMEMODE.UtilityKey) and activator:Team() == TEAM_HUMAN and not self.Removing then
+	if activator:IsPlayer() and activator:Alive() and not activator:KeyDown(GAMEMODE.UtilityKey) and activator:Team() == TEAM_HUMAN and not self.Removing and not (self.NoPickupsTime and CurTime() < self.NoPickupsTime and self.NoPickupsOwner ~= activator) then
 		if self.IgnorePickupCount or (not self.PlacedInMap or not GAMEMODE.MaxAmmoPickups or (activator.AmmoPickups or 0) < GAMEMODE.MaxAmmoPickups or team.NumPlayers(TEAM_HUMAN) <= 1) then
 			if self.PlacedInMap and GAMEMODE.WeaponRequiredForAmmo and team.NumPlayers(TEAM_HUMAN) > 1 then
 				local hasweapon = false
+				local lowertype = string.lower(self:GetAmmoType())
 				for _, wep in pairs(activator:GetWeapons()) do
-					if wep.Primary and wep.Primary.Ammo and string.lower(wep.Primary.Ammo) == string.lower(self:GetAmmoType())
-					or wep.Secondary and wep.Secondary.Ammo and string.lower(wep.Secondary.Ammo) == string.lower(self:GetAmmoType()) then
+					if wep.Primary and wep.Primary.Ammo and string.lower(wep.Primary.Ammo) == lowertype
+					or wep.Secondary and wep.Secondary.Ammo and string.lower(wep.Secondary.Ammo) == lowertype
+					or wep.ResupplyAmmoType and string.lower(wep.ResupplyAmmoType) == lowertype then
 						hasweapon = true
 						break
 					end
@@ -70,6 +71,11 @@ function ENT:GiveToActivator(activator, caller)
 			end
 
 			activator:GiveAmmo(self:GetAmmo(), self:GetAmmoType())
+
+			net.Start("zs_ammopickup")
+				net.WriteUInt(self:GetAmmo(), 16)
+				net.WriteString(self:GetAmmoType())
+			net.Send(activator)
 
 			if self.PlacedInMap and not self.IgnorePickupCount then
 				activator.AmmoPickups = (activator.AmmoPickups or 0) + 1
@@ -128,8 +134,13 @@ function ENT:OnTakeDamage(dmginfo)
 	if self.NeverRemove then return end
 	self:TakePhysicsDamage(dmginfo)
 
-	self.m_Health = self.m_Health - dmginfo:GetDamage()
-	if self.m_Health <= 0 then
+	if dmginfo:GetDamage() <= 0 then return end
+
+	local attacker = dmginfo:GetAttacker()
+	if attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then return end
+
+	self.ObjHealth = self.ObjHealth - dmginfo:GetDamage()
+	if self.ObjHealth <= 0 then
 		self:RemoveNextFrame()
 	end
 end

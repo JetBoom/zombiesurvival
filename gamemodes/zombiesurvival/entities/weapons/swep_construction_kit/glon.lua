@@ -1,5 +1,5 @@
-// NOTE by Clavus: glon was removed from GMod 13, replaced by the util.TableToJSON etc functions
-// In order to maintain compatability and not rewrite all that shit, I'm including it with the SCK.
+-- NOTE by Clavus: glon was removed from GMod 13, replaced by the util.TableToJSON etc functions
+-- In order to maintain compatability and not rewrite all that shit, I'm including it with the SCK.
 
 -- GLON: Garry's Mod Lua Object Notation
 -- A extension of LON: Lua Object Notation
@@ -22,7 +22,7 @@
 	-- 254: The number equal to -math.huge (tostring(math.huge) == "-1.#INF")
 	-- 254: The number equal to math.huge (tostring(math.huge) == "1.#INF")
 	-- 255: reference (Sends the ID of the table to use (for "local t = {} t.a=t"))
-/*local pairs = pairs
+--[[local pairs = pairs
 local type = type
 local string = string
 local math = math
@@ -39,7 +39,7 @@ local GetConVar = GetConVar
 local tonumber = tonumber
 local player = player
 local IsValid = IsValid
-module("glon")*/
+module("glon")]]
 glon = {}
 local encode_types
 local decode_types
@@ -49,7 +49,7 @@ local Read
 local function InDataEscape(s)
 	s = string.gsub(s, "([\1\2])", "\2%1")
 	s = string.gsub(s, "%z", "\2\3")
-	s = string.gsub(s, "\"", "\4") // escape the " character to simplify client commands
+	s = string.gsub(s, "\"", "\4") -- escape the " character to simplify client commands
 	return s
 end
 
@@ -74,9 +74,9 @@ encode_types = {
 		end
 		local s = ""
 		for k,v in pairs(o) do
-		
+
 			if ( !encode_types[type(v)] ) then continue end
-		
+
 			if not is_array then
 				s = s..Write(k, rtabs)
 			end
@@ -277,7 +277,7 @@ decode_types = {
 			elseif c == "\2" then
 				e = true
 			elseif c == "\1" then
-				s = string.gsub(s, "\4", "\"") // unescape quotes
+				s = string.gsub(s, "\4", "\"") -- unescape quotes
 				return s
 			else
 				s = s..c
@@ -319,11 +319,11 @@ decode_types = {
 		return GetConVar(decode_types[7](reader))
 	end,
 	[14	] = function(reader) -- PhysicsObject
-	
+
 		local ent = Entity(decode_types[6](reader))
 		local bone = decode_types[6](reader)
-		
-		if ( !IsValid( ent ) ) then return nil end;	
+
+		if ( !IsValid( ent ) ) then return nil end;
 		return ent:GetPhysicsObjectNum( bone )
 	end,
 	[15 ] = function(reader) -- Color
@@ -399,8 +399,8 @@ function glon.decode(data)
 	elseif data:len() == 0 then
 		return nil
 	end
-	
-	
+
+
 	return Read(setmetatable({
 		s = data,
 		i = 0,

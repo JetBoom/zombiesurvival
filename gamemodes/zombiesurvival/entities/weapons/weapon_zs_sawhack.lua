@@ -1,20 +1,23 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Sawhack"
+SWEP.PrintName = "Sawhack"
 
+if CLIENT then
 	SWEP.ViewModelFOV = 60
 
+	SWEP.ShowViewModel = false
+	SWEP.ShowWorldModel = false
+
 	SWEP.VElements = {
-		["base1+"] = { type = "Model", model = "models/props_lab/tpplug.mdl", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(-1.45, 0, -0.25), angle = Angle(270, 0, 0), size = Vector(0.4, 0.4, 0.1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base1"] = { type = "Model", model = "models/props_lab/tpplug.mdl", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(-1.45, 0, 0.394), angle = Angle(90, 0, 0), size = Vector(0.4, 0.4, 0.1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base"] = { type = "Model", model = "models/props_junk/sawblade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(7.956, 2.181, -18.506), angle = Angle(0, -6.212, 90), size = Vector(0.4, 0.4, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["axe"] = { type = "Model", model = "models/props/cs_militia/axe.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.184, 1.501, -7.421), angle = Angle(2.427, -10, 90), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+		["saw"] = { type = "Model", model = "models/props_junk/sawblade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "axe", pos = Vector(0, 14, -0.021), angle = Angle(0, 0, 0), size = Vector(0.449, 0.449, 0.805), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+		["saw2"] = { type = "Model", model = "models/XQM/Rails/trackball_1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "axe", pos = Vector(0, 14, 0), angle = Angle(0, 90, 0), size = Vector(0.234, 0.234, 0.133), color = Color(255, 255, 255, 255), surpresslightning = false, material = "models/props_lab/door_klab01", skin = 0, bodygroup = {} }
 	}
 
 	SWEP.WElements = {
-		["base1+"] = { type = "Model", model = "models/props_lab/tpplug.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "base", pos = Vector(-1.45, 0, -0.25), angle = Angle(270, 0, 0), size = Vector(0.4, 0.4, 0.1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base1"] = { type = "Model", model = "models/props_lab/tpplug.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "base", pos = Vector(-1.45, 0, 0.394), angle = Angle(90, 0, 0), size = Vector(0.4, 0.4, 0.1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-		["base"] = { type = "Model", model = "models/props_junk/sawblade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(7, 2, -22.5), angle = Angle(0, 0, 90), size = Vector(0.4, 0.4, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+		["axe"] = { type = "Model", model = "models/props/cs_militia/axe.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.023, 2.147, -8.32), angle = Angle(-6.166, 20.881, 86.675), size = Vector(1, 1, 1), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+		["saw2"] = { type = "Model", model = "models/XQM/Rails/trackball_1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "axe", pos = Vector(0, 14, 0), angle = Angle(0, 90, 0), size = Vector(0.234, 0.234, 0.133), color = Color(255, 255, 255, 255), surpresslightning = false, material = "models/props_lab/door_klab01", skin = 0, bodygroup = {} },
+		["saw"] = { type = "Model", model = "models/props_junk/sawblade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "axe", pos = Vector(0, 14, -0.021), angle = Angle(0, 0, 0), size = Vector(0.449, 0.449, 0.805), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 	}
 end
 
@@ -31,7 +34,8 @@ SWEP.Primary.Delay = 0.45
 SWEP.MeleeDamage = 32
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.9
-SWEP.MeleeKnockBack = 10
+SWEP.MeleeKnockBack = 100
+SWEP.MeleeViewPunchScale = 0.25
 
 SWEP.WalkSpeed = SPEED_FAST
 
@@ -44,7 +48,27 @@ SWEP.SwingHoldType = "melee2"
 SWEP.HitDecal = "Manhackcut"
 SWEP.HitAnim = ACT_VM_MISSCENTER
 
+SWEP.AllowQualityWeapons = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.04, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_KNOCK, 10, 1)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Razorhack", "Increased attack delay, but deals more damage while bleeding", function(wept)
+	wept.Primary.Delay = wept.Primary.Delay * 1.25
+	wept.OnMeleeHit = function(self, hitent, hitflesh, tr)
+		if self:GetOwner():GetBleedDamage() > 1 then
+			self.MeleeDamage = wept.MeleeDamage * 1.5
+		end
+	end
+
+	wept.PostOnMeleeHit = function(self, hitent, hitflesh, tr)
+		self.MeleeDamage = wept.MeleeDamage
+	end
+end)
+
 SWEP.NoHitSoundFlesh = true
+
+SWEP.Tier = 2
+SWEP.DismantleDiv = 2
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.random(75, 80))

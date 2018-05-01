@@ -1,5 +1,8 @@
 GM.MaxChannels = {}
-GM.MaxChannels["prop_gunturret"] = 7
+GM.MaxChannels["turret"] = 7
+
+GM.ChannelsToClass = {}
+GM.ChannelsToClass["turret"] = {"prop_gunturret", "prop_gunturret_buckshot", "prop_gunturret_assault", "prop_gunturret_rocket"}
 
 function GM:GetFreeChannel(class)
 	local max = self.MaxChannels[class]
@@ -7,9 +10,11 @@ function GM:GetFreeChannel(class)
 
 	local taken_channels = {}
 
-	for _, ent in pairs(ents.FindByClass(class)) do
-		if ent:IsValid() and ent.GetChannel then
-			taken_channels[ent:GetChannel()] = true
+	for _, j in pairs(self.ChannelsToClass[class]) do
+		for _, ent in pairs(ents.FindByClass(j)) do
+			if ent:IsValid() and ent.GetChannel then
+				taken_channels[ent:GetChannel()] = true
+			end
 		end
 	end
 

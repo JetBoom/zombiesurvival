@@ -1,22 +1,24 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Ghoul"
-end
+SWEP.PrintName = "Ghoul"
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 15
+SWEP.MeleeDamage = 23
 SWEP.MeleeForceScale = 0.5
 SWEP.SlowDownScale = 0.25
+SWEP.EnfeebleDurationMul = 10 / SWEP.MeleeDamage
 --[[SWEP.MeleeForceScale = 0.1
 SWEP.SlowDownScale = 2.25
 SWEP.SlowDownImmunityTime = 2]]
 
 function SWEP:ApplyMeleeDamage(ent, trace, damage)
-	ent:PoisonDamage(damage, self.Owner, self, trace.HitPos)
+	ent:PoisonDamage(damage, self:GetOwner(), self, trace.HitPos)
 	if SERVER and ent:IsPlayer() then
-		ent:GiveStatus("ghoultouch", 10)
+		local gt = ent:GiveStatus("enfeeble", damage * self.EnfeebleDurationMul)
+		if gt and gt:IsValid() then
+			gt.Applier = self:GetOwner()
+		end
 	end
 end
 
@@ -25,28 +27,37 @@ function SWEP:Reload()
 end
 
 function SWEP:PlayAlertSound()
-	self.Owner:EmitSound("npc/fast_zombie/fz_alert_close1.wav", 75, math.Rand(70, 80))
+	self:GetOwner():EmitSound("npc/fast_zombie/fz_alert_close1.wav", 75, math.Rand(70, 80))
 end
 SWEP.PlayIdleSound = SWEP.PlayAlertSound
 
 function SWEP:PlayAttackSound()
-	self.Owner:EmitSound("npc/fast_zombie/leap1.wav", 74, math.Rand(110, 130))
+	self:EmitSound("npc/fast_zombie/leap1.wav", 74, math.Rand(110, 130))
 end
 
+local Spread = {
+	{0, 0},
+	{-1, 0},
+	{1, 0},
+	{-0.5, 0},
+	{0.5, 0}
+}
 local function DoFleshThrow(pl, wep)
 	if pl:IsValid() and pl:Alive() and wep:IsValid() then
 		pl:ResetSpeed()
+		pl.LastRangedAttack = CurTime()
 
 		if SERVER then
 			local startpos = pl:GetShootPos()
 			local aimang = pl:EyeAngles()
+			local ang
 
-			for i=1, 4 do
-				local ang = Angle(aimang.p, aimang.y, aimang.r)
-				ang:RotateAroundAxis(ang:Up(), math.Rand(-8, 8))
-				ang:RotateAroundAxis(ang:Right(), math.Rand(-8, 8))
+			for _, spr in pairs(Spread) do
+				ang = Angle(aimang.p, aimang.y, aimang.r)
+				ang:RotateAroundAxis(ang:Up(), spr[1] * 5)
+				ang:RotateAroundAxis(ang:Right(), spr[2] * 5)
 
-				local ent = ents.Create("projectile_poisonflesh")
+				local ent = ents.Create("projectile_ghoulflesh")
 				if ent:IsValid() then
 					ent:SetPos(startpos)
 					ent:SetOwner(pl)
@@ -54,32 +65,27 @@ local function DoFleshThrow(pl, wep)
 
 					local phys = ent:GetPhysicsObject()
 					if phys:IsValid() then
-						phys:SetVelocityInstantaneous(ang:Forward() * math.Rand(320, 380))
+						phys:SetVelocityInstantaneous(ang:Forward() * 660)
 					end
 				end
 			end
 
-			pl:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav", 72, math.Rand(85, 95))
-		end
-
-		if CurTime() >= (pl.GhoulImmunity or 0) then
-			pl.GhoulImmunity = CurTime() + 2
-			pl:RawCapLegDamage(CurTime() + 2)
+			pl:EmitSound(string.format("physics/body/body_medium_break%d.wav", math.random(2, 4)), 72, math.Rand(85, 95))
 		end
 	end
 end
 
 function SWEP:SecondaryAttack()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if CurTime() < self:GetNextPrimaryFire() or CurTime() < self:GetNextSecondaryFire() or IsValid(owner.FeignDeath) then return end
 
 	self:SetNextSecondaryFire(CurTime() + 3)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	self.Owner:DoAttackEvent()
+	self:GetOwner():DoZombieEvent()
 	self:EmitSound("npc/fast_zombie/leap1.wav", 74, math.Rand(110, 130))
-	self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav", 72, math.Rand(85, 95))
-	self.Owner:RawCapLegDamage(CurTime() + 3)
+	self:EmitSound(string.format("physics/body/body_medium_break%d.wav", math.random(2, 4)), 72, math.Rand(85, 95))
+	--self:GetOwner():RawCapLegDamage(CurTime() + 3)
 	self:SendWeaponAnim(ACT_VM_HITCENTER)
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 

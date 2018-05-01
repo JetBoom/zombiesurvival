@@ -1,6 +1,8 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:Initialize()
+	hook.Add("CreateMove", self, self.CreateMove)
+
 	self:DrawShadow(false)
 	self:SetRenderBounds(Vector(-40, -40, -18), Vector(40, 40, 80))
 
@@ -8,9 +10,22 @@ function ENT:Initialize()
 	if owner:IsValid() then
 		owner.Revive = self
 
+		self.CommandYaw = owner:GetAngles().yaw
+
 		owner:CallWeaponFunction("KnockedDown", self, false)
 		owner:CallZombieFunction("KnockedDown", self, false)
 	end
+end
+
+function ENT:CreateMove(cmd)
+	if MySelf ~= self:GetOwner() then return end
+
+	local ang = cmd:GetViewAngles()
+	ang.yaw = self.CommandYaw or ang.yaw
+	cmd:SetViewAngles(ang)
+
+	cmd:ClearButtons(0)
+	cmd:ClearMovement()
 end
 
 function ENT:OnRemove()

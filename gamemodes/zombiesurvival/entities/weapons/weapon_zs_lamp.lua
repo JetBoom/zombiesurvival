@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Lamp"
+SWEP.PrintName = "Lamp"
 
+if CLIENT then
 	SWEP.ViewModelFOV = 65
 	SWEP.ViewModelFlip = false
 
@@ -38,6 +38,11 @@ SWEP.SwingRotation = Angle(0, -90, -60)
 SWEP.SwingOffset = Vector(0, 30, -40)
 SWEP.SwingTime = 0.4
 SWEP.SwingHoldType = "melee"
+
+SWEP.AllowQualityWeapons = true
+SWEP.DismantleDiv = 2
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.1)
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 80, math.Rand(65, 70))

@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 local function RefreshCrateOwners(pl)
 	for _, ent in pairs(ents.FindByClass("prop_resupplybox")) do
@@ -19,12 +16,14 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	self:SetPlaybackRate(1)
 
+	self:CollisionRulesChanged()
+
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
 		phys:EnableMotion(false)
 	end
 
-	self:SetMaxObjectHealth(200)
+	self:SetMaxObjectHealth(400)
 	self:SetObjectHealth(self:GetMaxObjectHealth())
 end
 
@@ -58,6 +57,10 @@ function ENT:SetObjectHealth(health)
 	if health <= 0 and not self.Destroyed then
 		self.Destroyed = true
 
+		if self:GetObjectOwner():IsValidLivingHuman() then
+			self:GetObjectOwner():SendDeployableLostMessage(self)
+		end
+
 		local ent = ents.Create("prop_physics")
 		if ent:IsValid() then
 			ent:SetModel(self:GetModel())
@@ -74,6 +77,8 @@ function ENT:SetObjectHealth(health)
 end
 
 function ENT:OnTakeDamage(dmginfo)
+	if dmginfo:GetDamage() <= 0 then return end
+
 	self:TakePhysicsDamage(dmginfo)
 
 	local attacker = dmginfo:GetAttacker()
@@ -106,58 +111,18 @@ function ENT:Think()
 	end
 end
 
-local NextUse = {}
 function ENT:Use(activator, caller)
 	if activator:Team() ~= TEAM_HUMAN or not activator:Alive() or GAMEMODE:GetWave() <= 0 then return end
 
 	if not self:GetObjectOwner():IsValid() then
 		self:SetObjectOwner(activator)
+		self:GetObjectOwner():SendDeployableClaimedMessage(self)
 	end
 
 	local owner = self:GetObjectOwner()
-	local owneruid = owner:IsValid() and owner:UniqueID() or "nobody"
-	local myuid = activator:UniqueID()
+	local resup = activator:Resupply(owner, self)
 
-	if CurTime() < (NextUse[myuid] or 0) then
-		activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "no_ammo_here"))
-		return
-	end
-
-	local ammotype
-	local wep = activator:GetActiveWeapon()
-	if not wep:IsValid() then
-		ammotype = "smg1"
-	end
-
-	if not ammotype then
-		ammotype = wep:GetPrimaryAmmoTypeString()
-		if not GAMEMODE.AmmoResupply[ammotype] then
-			ammotype = "smg1"
-		end
-	end
-
-	NextUse[myuid] = CurTime() + 120
-
-	net.Start("zs_nextresupplyuse")
-		net.WriteFloat(NextUse[myuid])
-	net.Send(activator)
-
-	activator:GiveAmmo(GAMEMODE.AmmoResupply[ammotype], ammotype)
-	if activator ~= owner and owner:IsValid() and owner:IsPlayer() and owner:Team() == TEAM_HUMAN then
-		owner.ResupplyBoxUsedByOthers = owner.ResupplyBoxUsedByOthers + 1
-
-		if owner.ResupplyBoxUsedByOthers % 2 == 0 then
-			owner:AddPoints(1)
-		end
-
-		net.Start("zs_commission")
-			net.WriteEntity(self)
-			net.WriteEntity(activator)
-			net.WriteUInt(1, 16)
-		net.Send(owner)
-	end
-
-	if not self.Close then
+	if resup and not self.Close then
 		self:ResetSequence("close")
 		self:EmitSound("items/ammocrate_open.wav")
 	end

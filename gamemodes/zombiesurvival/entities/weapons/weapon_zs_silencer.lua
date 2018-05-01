@@ -1,10 +1,12 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "'Silencer' SMG"
-	SWEP.Slot = 2
-	SWEP.SlotPos = 0
+SWEP.PrintName = "'Silencer' SMG"
+SWEP.Description = "Shrouds your aura and has very high burst DPS for an SMG, but poor accuracy."
 
+SWEP.Slot = 2
+SWEP.SlotPos = 0
+
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 
@@ -23,7 +25,7 @@ SWEP.WorldModel = "models/weapons/w_smg_tmp.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("Weapon_TMP.Single")
-SWEP.Primary.Damage = 22
+SWEP.Primary.Damage = 20
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.06
 
@@ -32,12 +34,24 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
+SWEP.ReloadSpeed = 0.72
+SWEP.FireAnimSpeed = 3
+
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_SMG1
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SMG1
 
-SWEP.ConeMax = 0.13
-SWEP.ConeMin = 0.1
+SWEP.ConeMax = 6.5
+SWEP.ConeMin = 3.6
 
 SWEP.WalkSpeed = SPEED_NORMAL
 
+SWEP.Tier = 3
+
 SWEP.IronSightsPos = Vector(-7, 3, 2.5)
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.8125)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.45)
+
+function SWEP:GetAuraRange()
+	return 512
+end

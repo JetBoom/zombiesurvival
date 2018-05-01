@@ -1,11 +1,11 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "'Zombie Drill' Desert Eagle"
-	SWEP.Description = "This handgun uses high-powered rounds that have more knockback than others." --SWEP.Description = "This high-powered handgun has the ability to pierce through multiple zombies. The bullet's power decreases by half which each zombie it hits."
-	SWEP.Slot = 1
-	SWEP.SlotPos = 0
+SWEP.PrintName = "'Zombie Drill' Desert Eagle"
+SWEP.Description = "This handgun uses high-powered rounds that have more knockback than others." --SWEP.Description = "This high-powered handgun has the ability to pierce through multiple zombies. The bullet's power decreases by half which each zombie it hits."
+SWEP.Slot = 1
+SWEP.SlotPos = 0
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
 
@@ -26,7 +26,7 @@ SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("Weapon_Deagle.Single")
-SWEP.Primary.Damage = 47
+SWEP.Primary.Damage = 57
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.32
 SWEP.Primary.KnockbackScale = 2
@@ -36,5 +36,11 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
-SWEP.ConeMax = 0.1
-SWEP.ConeMin = 0.04
+SWEP.ConeMax = 3.4
+SWEP.ConeMin = 1.25
+
+SWEP.FireAnimSpeed = 1.3
+
+SWEP.Tier = 3
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 2)

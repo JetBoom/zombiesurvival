@@ -1,3 +1,8 @@
+SWEP.PrintName = "'Aegis' Barricade Kit"
+SWEP.Description = "A ready-to-go, all-in-one board deployer.\nIt automatically deploys the board and then firmly attaches it to almost any surface.\nUse PRIMARY FIRE to deploy boards.\nUse SECONADRY FIRE and RELOAD to rotate the board.\nA ghost of the board shows you if placement is valid or not."
+SWEP.Slot = 4
+SWEP.SlotPos = 0
+
 SWEP.ViewModel = "models/weapons/c_rpg.mdl"
 SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
 
@@ -14,6 +19,8 @@ SWEP.Secondary.Automatic = false
 
 SWEP.UseHands = true
 
+SWEP.MaxStock = 5
+
 if CLIENT then
 	SWEP.ViewModelFOV = 60
 end
@@ -22,11 +29,19 @@ SWEP.WalkSpeed = SPEED_SLOWEST
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType("rpg")
-	self:SetDeploySpeed(1.1)
+	GAMEMODE:DoChangeDeploySpeed(self)
+end
+
+function SWEP:Deploy()
+	GAMEMODE:DoChangeDeploySpeed(self)
+
+	return true
 end
 
 function SWEP:CanPrimaryAttack()
-	if self.Owner:IsHolding() or self.Owner:GetBarricadeGhosting() then return false end
+	local owner = self:GetOwner()
+
+	if owner:IsHolding() or owner:GetBarricadeGhosting() then return false end
 
 	if self:GetPrimaryAmmoCount() <= 0 then
 		self:EmitSound("Weapon_Shotgun.Empty")

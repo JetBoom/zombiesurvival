@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
@@ -18,7 +15,6 @@ function ENT:SetPlayer(pPlayer, bExists)
 		if bValid then
 			self:SetPos(pPlayer:GetPos() + Vector(0,0,16))
 		end
-		self.Owner = pPlayer
 		pPlayer[self:GetClass()] = self
 		self:SetOwner(pPlayer)
 		self:SetParent(pPlayer)
@@ -53,9 +49,6 @@ function ENT:Touch(ent)
 end
 
 function ENT:OnRemove()
-	--[[if not self.SilentRemove and self:GetParent():IsValid() then
-		-- Emit death sound
-	end]]
 end
 
 function ENT:SetDie(fTime)

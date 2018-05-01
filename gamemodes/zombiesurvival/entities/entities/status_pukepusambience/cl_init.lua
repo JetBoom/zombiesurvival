@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_NONE
 
@@ -6,7 +6,7 @@ function ENT:Initialize()
 	self:DrawShadow(false)
 
 	self.AmbientSound = CreateSound(self, "npc/zombie_poison/pz_breathe_loop2.wav")
-	self.AmbientSound:PlayEx(0.55, 85)
+	self.AmbientSound:PlayEx(0.75, 65)
 end
 
 function ENT:OnRemove()
@@ -20,7 +20,7 @@ function ENT:Think()
 		if wep:IsValid() and wep.IsSwinging and wep:IsSwinging() then
 			self.AmbientSound:Stop()
 		else
-			self.AmbientSound:PlayEx(0.55, 85 + math.sin(RealTime()))
+			self.AmbientSound:PlayEx(0.75, 65 + math.sin(RealTime()))
 		end
 	end
 end

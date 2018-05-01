@@ -34,6 +34,14 @@ CLASS.AllowTeamDamage = true
 CLASS.NoDeaths = true
 CLASS.Points = 0
 
+local ACT_RUN = ACT_RUN
+local ACT_IDLE = ACT_IDLE
+local ACT_FLY = ACT_FLY
+local IN_JUMP = IN_JUMP
+local IN_MOVELEFT = IN_MOVELEFT
+local IN_MOVERIGHT = IN_MOVERIGHT
+local IN_FORWARD = IN_FORWARD
+
 function CLASS:NoDeathMessage(pl, attacker, dmginfo)
 	return true
 end
@@ -54,19 +62,21 @@ function CLASS:CalcMainActivity(pl, velocity)
 	if pl:OnGround() then
 		local wep = pl:GetActiveWeapon()
 		if wep:IsValid() and wep.IsPecking and wep:IsPecking() then
-			pl.CalcSeqOverride = 5
-		elseif velocity:Length2D() > 0.5 then
-			pl.CalcIdeal = ACT_RUN
-		else
-			pl.CalcIdeal = ACT_IDLE
+			return 1, 5
 		end
-	elseif velocity:Length() > 350 then
-		pl.CalcIdeal = ACT_FLY
-	else
-		pl.CalcSeqOverride = 7
+
+		if velocity:Length2DSqr() > 1 then
+			return ACT_RUN, -1
+		end
+
+		return ACT_IDLE, -1
 	end
 
-	return true
+	if velocity:LengthSqr() > 122500 then --350^2
+		return ACT_FLY, -1
+	end
+
+	return 1, 7
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
@@ -86,7 +96,7 @@ function CLASS:Move(pl, mv)
 	if not pl:GetActiveWeapon().IsCrow then return end
 
 	if not pl:IsOnGround() and pl:KeyDown(IN_JUMP) then
-		local dir = pl:EyeAngles()
+		local dir = mv:GetAngles() --pl:EyeAngles()
 		if pl:KeyDown(IN_MOVELEFT) then
 			dir:RotateAroundAxis(dir:Up(), 20)
 		elseif pl:KeyDown(IN_MOVERIGHT) then
@@ -112,17 +122,8 @@ end
 function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo)
 	pl:SetAllowFullRotation(false)
 
-	if attacker:IsPlayer() and attacker ~= pl then
-		if attacker:Team() == TEAM_HUMAN then
-			attacker.CrowKills = attacker.CrowKills + 1
-		elseif attacker:Team() == TEAM_UNDEAD and attacker:GetZombieClassTable().Name == "Crow" then
-			attacker.CrowVsCrowKills = attacker.CrowVsCrowKills + 1
-
-			net.Start("zs_crow_kill_crow")
-				net.WriteString(pl:Name())
-				net.WriteString(attacker:Name())
-			net.Broadcast()
-		end
+	if attacker:IsPlayer() and attacker ~= pl and attacker:Team() == TEAM_HUMAN then
+		attacker.CrowKills = attacker.CrowKills + 1
 	end
 
 	if pl:Health() < -45 then

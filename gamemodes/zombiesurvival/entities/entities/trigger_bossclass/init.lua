@@ -16,7 +16,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 	if string.sub(name, 1, 2) == "on" then
 		self:FireOutput(name, activator, caller, args)
 	elseif name == "spawnboss" then
-		GAMEMODE:SpawnBossZombie(false, self.Silent)
+		GAMEMODE:SpawnBossZombie(false, self.Silent, self.BossIndex, true)
 	elseif name == "seton" then
 		self.On = tonumber(args) == 1
 		return true
@@ -26,7 +26,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 	elseif name == "disable" then
 		self.On = false
 		return true
-	elseif name == "setsilent" or name == "setinstantchange" then
+	elseif name == "setsilent" or name == "setinstantchange" or name == "setclass" then
 		self:KeyValue(string.sub(name, 4), args)
 	end
 end
@@ -41,6 +41,17 @@ function ENT:KeyValue(key, value)
 		self.Silent = tonumber(value) == 1
 	elseif key == "instantchange" then
 		self.InstantChange = tonumber(value) == 1
+	elseif key == "class" then
+		self.BossIndex = nil
+		for _, classtable in ipairs(GAMEMODE.ZombieClasses) do
+			if classtable.Boss then
+				local classname=GAMEMODE.ZombieClasses[classtable.Index].Name
+				if string.lower(classname) == string.lower(value or "") then
+					self.BossIndex = classtable.Index
+					break
+				end
+			end
+		end
 	end
 end
 
@@ -51,7 +62,7 @@ function ENT:StartTouch(ent)
 		else
 			local prevpos = ent:GetPos()
 			local prevang = ent:EyeAngles()
-			GAMEMODE:SpawnBossZombie(ent, self.Silent)
+			GAMEMODE:SpawnBossZombie(ent, self.Silent, self.BossIndex, true)
 			if self.InstantChange then
 				ent:SetPos(prevpos)
 				ent:SetEyeAngles(prevang)

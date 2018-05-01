@@ -1,8 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Meat Hook"
+SWEP.PrintName = "Meat Hook"
+SWEP.Description = "Impales itself into zombies, dealing damage over time for a seconds. The hook can be recollected by the owner."
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 
@@ -36,6 +37,17 @@ SWEP.SwingRotation = Angle(30, -30, -30)
 SWEP.SwingTime = 0.75
 SWEP.SwingHoldType = "grenade"
 
+SWEP.NoGlassWeapons = true
+
+SWEP.AllowQualityWeapons = true
+SWEP.Weaken = false
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_IMPACT_DELAY, -0.1)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Meat Grapple", "Deals less damage but zombies affected by it take more damage from any source", function(wept)
+	wept.Weaken = true
+	wept.MeleeDamage = wept.MeleeDamage * 0.65
+end)
+
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.random(95, 105))
 end
@@ -49,36 +61,23 @@ function SWEP:PlayHitSound()
 end
 
 function SWEP:OnMeleeHit(hitent, hitflesh, tr)
-	if hitent:IsValid() and hitent:IsPlayer() and hitent:Health() > self.MeleeDamage then
-		hitent:AddLegDamage(30)
+	if SERVER and hitent:IsValid() and hitent:IsPlayer() and hitent:Health() > self.MeleeDamage and not hitent.SpawnProtection then
+		local ang = self:GetOwner():EyeAngles()
+		ang:RotateAroundAxis(ang:Forward(), 180)
 
-		if SERVER then
-			local ang = self.Owner:EyeAngles()
-			ang:RotateAroundAxis(ang:Forward(), 180)
-
-			local ent = ents.Create("prop_meathook")
-			if ent:IsValid() then
-				ent:SetPos(tr.HitPos)
-				ent:Spawn()
-				ent:SetOwner(self.Owner)
-
-				local followed = false
-				if hitent:GetBoneCount() > 1 then
-					local boneindex = hitent:NearestBone(tr.HitPos)
-					if boneindex and boneindex > 0 then
-						ent:FollowBone(hitent, boneindex)
-						ent:SetPos((hitent:GetBonePositionMatrixed(boneindex) * 2 + tr.HitPos) / 3)
-						followed = true
-					end
-				end
-				if not followed then
-					ent:SetParent(hitent)
-				end
-
-				ent:SetAngles(ang)
-			end
-
-			self:Remove()
+		local ent = ents.Create("prop_meathook")
+		if ent:IsValid() then
+			ent:SetPos(tr.HitPos)
+			ent.BaseWeapon = self:GetClass()
+			ent.Weaken = true
+			ent:Spawn()
+			ent.BleedPerTick = 2
+			ent.TicksRemaining = 20
+			ent:SetOwner(self:GetOwner())
+			ent:SetParent(hitent)
+			ent:SetAngles(ang)
 		end
+
+		timer.Simple(0, function() self:GetOwner():StripWeapon(self:GetClass()) end)
 	end
 end

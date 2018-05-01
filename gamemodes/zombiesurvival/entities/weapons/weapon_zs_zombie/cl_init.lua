@@ -1,6 +1,5 @@
-include("shared.lua")
+INC_CLIENT()
 
-SWEP.PrintName = "Zombie"
 SWEP.ViewModelFOV = 70
 SWEP.DrawCrosshair = false
 
@@ -12,10 +11,10 @@ end
 SWEP.DrawWorldModelTranslucent = SWEP.DrawWorldModel
 
 function SWEP:DrawHUD()
-	if GetConVarNumber("crosshair") ~= 1 then return end
+	if GetConVar("crosshair"):GetInt() ~= 1 then return end
 	self:DrawCrosshairDot()
 end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end

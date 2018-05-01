@@ -145,7 +145,7 @@ hook.Add("ShutDown", "noxapi", function()
 end)
 
 concommand.Add("noxapi_forcerefresh", function(sender, command, arguments)
-	if sender._ForcedNoxAPILookup or sender:IsNoxSupporter() then return end
+	if sender._ForcedNoxAPILookup or sender:IsNoxSupporter() or NDB then return end
 
 	sender._ForcedNoxAPILookup = true
 

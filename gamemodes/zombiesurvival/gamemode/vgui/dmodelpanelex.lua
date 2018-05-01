@@ -3,11 +3,11 @@ local PANEL = {}
 function PANEL:SetModel(strModelName)
 	if IsValid(self.Entity) then
 		self.Entity:Remove()
-		self.Entity = nil		
+		self.Entity = nil
 	end
 
 	if not ClientsideModel then return end
-	
+
 	self.Entity = ClientsideModel(strModelName, RENDER_GROUP_OPAQUE_ENTITY)
 	if not IsValid(self.Entity) then return end
 

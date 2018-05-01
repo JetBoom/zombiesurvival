@@ -7,7 +7,8 @@ CLASS.TranslationName = "class_chem_zombie"
 CLASS.Description = "description_chem_zombie"
 CLASS.Help = "controls_chem_zombie"
 
-CLASS.Wave = 1
+CLASS.Wave = 6 / 6
+--CLASS.Sanity = 2 / 3
 CLASS.Health = 100
 CLASS.SWEP = "weapon_zs_chemzombie"
 CLASS.Model = Model("models/Zombie/Poison.mdl")
@@ -23,18 +24,20 @@ CLASS.ViewOffset = Vector(0, 0, 50)
 CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 64)}
 CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 35)}
 
+local math_random = math.random
+
+local ACT_IDLE = ACT_IDLE
+
 function CLASS:CanUse(pl)
 	return false
 end
 
 function CLASS:CalcMainActivity(pl, velocity)
-	if velocity:Length2D() <= 0.5 then
-		pl.CalcIdeal = ACT_IDLE
-	else
-		pl.CalcSeqOverride = 2
+	if velocity:Length2DSqr() <= 1 then
+		return ACT_IDLE, -1
 	end
 
-	return true
+	return 1, 2
 end
 
 local StepSounds = {
@@ -43,12 +46,11 @@ local StepSounds = {
 local ScuffSounds = {
 	"npc/zombie_poison/pz_right_foot1.wav"
 }
-local mathrandom = math.random
 function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
-	if iFoot == 0 and mathrandom() < 0.333 then
-		pl:EmitSound(ScuffSounds[mathrandom(#ScuffSounds)], 80, 90)
+	if iFoot == 0 and math_random() < 0.333 then
+		pl:EmitSound(ScuffSounds[math_random(#ScuffSounds)], 80, 90)
 	else
-		pl:EmitSound(StepSounds[mathrandom(#StepSounds)], 80, 90)
+		pl:EmitSound(StepSounds[math_random(#StepSounds)], 80, 90)
 	end
 
 	return true
@@ -66,10 +68,6 @@ function CLASS:PlayerStepSoundTime(pl, iType, bWalking)
 	return 150
 end
 
-function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
-	pl:FixModelAngles(velocity)
-end
-
 if SERVER then
 	function CLASS:OnSpawned(pl)
 		pl:CreateAmbience("chemzombieambience")
@@ -85,7 +83,7 @@ if SERVER then
 	local function ChemBomb(pl, pos)
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pos)
-		util.Effect("chemzombieexplode", effectdata, true)
+		util.Effect("explosion_chem", effectdata, true)
 
 		if DUMMY_CHEMZOMBIE:IsValid() then
 			DUMMY_CHEMZOMBIE:SetPos(pos)

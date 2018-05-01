@@ -10,6 +10,20 @@ table.insert(GM.CleanupFilter, "env_global")
 table.insert(GM.CleanupFilter, "info_player_terrorist")
 table.insert(GM.CleanupFilter, "info_player_counterterrorist")
 
+local attachmentFallbackMap = table.ToAssoc({
+	"forward",
+	"grenade0",
+	"grenade1",
+	"grenade2",
+	"pistol",
+	"primary",
+	"defusekit",
+	"eholster",
+	"rfoot",
+	"lfoot",
+	"muzzle_flash"
+})
+
 -- We need to fix these important entities.
 hook.Add("EntityKeyValue", "zombieescape", function(ent, key, value)
 	-- The teamid for Terrorist and Counter Terrorist is different than Zombie and Human in ZS.
@@ -26,8 +40,19 @@ hook.Add("EntityKeyValue", "zombieescape", function(ent, key, value)
 	end
 
 	-- Some maps have brushes that regenerate or set health to dumb values. We don't want them. Although this can break maps I can't think of a way to remove the output instead.
-	if (ent:GetClass() == "trigger_multiple" or ent:GetClass() == "trigger_once") and string.find(string.lower(value), "%!.*%,.+%,health") then
+	--[[if (ent:GetClass() == "trigger_multiple" or ent:GetClass() == "trigger_once") and string.find(string.lower(value), "%!.*%,.+%,health") then
 		ent.ZEDelete = true
+	end]]
+
+	-- Samuel Maddock's fix for setparentattachment
+	-- https://github.com/JetBoom/zombiesurvival/pull/178/commits/74aaeb2c2ffc8d5a848945162618de00aacbec72#diff-9fc6a6639c31f62902ca6b7a2f812044L29
+	if value:lower():find("setparentattachment") then
+		local startIdx, endIdx, attachmentName = value:lower():find("^.-,setparentattachment,(.-),")
+
+		if startIdx and attachmentFallbackMap[attachmentName] then
+			startIdx = endIdx - attachmentName:len()
+			return value:sub(1, startIdx - 1) .. "eyes" .. value:sub(endIdx)
+		end
 	end
 end)
 
@@ -53,7 +78,7 @@ hook.Add("InitPostEntityMap", "zombieescape", function(fromze)
 		if GAMEMODE.CurrentRound <= 1 then
 			GAMEMODE:SetWaveStart(CurTime() + GAMEMODE.WaveZeroLength + 30) -- 30 extra seconds for late joiners
 		else
-			GAMEMODE:SetWaveStart(CurTime() + GAMEMODE.ZE_FreezeTime + 5)
+			GAMEMODE:SetWaveStart(CurTime() + GAMEMODE.ZE_FreezeTime)
 		end
 	end
 end)
@@ -140,7 +165,7 @@ hook.Add("DoPlayerDeath", "zombieescape", function(pl, attacker, dmginfo)
 	pl.KilledPos = pl:GetPos()
 
 	if pl:Team() == TEAM_UNDEAD then
-		if attacker:IsValid() and attacker:GetClass() == "trigger_hurt" --[[and dmginfo:GetDamage() >= 1000]] then
+		if attacker:IsValid() and attacker:GetClass() == "trigger_hurt" and not attacker:GetParent():IsValid() --[[and dmginfo:GetDamage() >= 1000]] then
 			pl.KilledByTriggerHurt = CurTime()
 			pl.NextSpawnTime = CurTime() + 10
 		elseif GAMEMODE.RoundEnded then

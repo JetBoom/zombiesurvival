@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_NONE
 

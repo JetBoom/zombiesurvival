@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
@@ -80,13 +80,15 @@ local CModWhiteOut = {
 function ENT:RenderScreenspaceEffects()
 	local eyepos = EyePos()
 	local nearest = self:NearestPoint(eyepos)
-	local dist = eyepos:Distance(nearest)
-	local power = math.Clamp(1 - dist / 300, 0, 1) ^ 2  * self:GetOpenedPercent()
+	local power = math.Clamp(1 - eyepos:DistToSqr(nearest) / 45000, 0, 1) ^ 2 * self:GetOpenedPercent()
 
 	if power > 0 then
-		local size = 5 + power * 10
+		local size = 1 + power * 2
 
-		CModWhiteOut["$pp_colour_brightness"] = power * 0.5
+		CModWhiteOut["$pp_colour_brightness"] = power * 0.25
+		if MySelf:GetObserverMode() == OBS_MODE_NONE then
+			CModWhiteOut["$pp_colour_brightness"] = CModWhiteOut["$pp_colour_brightness"] / 2
+		end
 		DrawBloom(1 - power, power * 4, size, size, 1, 1, 1, 1, 1)
 		DrawColorModify(CModWhiteOut)
 
@@ -195,5 +197,5 @@ function ENT:DrawTranslucent()
 		particle:SetRollDelta(math.Rand(-5, 5))
 	end
 
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end

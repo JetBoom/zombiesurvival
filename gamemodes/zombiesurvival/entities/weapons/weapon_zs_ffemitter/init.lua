@@ -1,10 +1,7 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function SWEP:Deploy()
-	gamemode.Call("WeaponDeployed", self.Owner, self)
+	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 
 	self:SpawnGhost()
 
@@ -21,14 +18,14 @@ function SWEP:Holster()
 end
 
 function SWEP:SpawnGhost()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		owner:GiveStatus("ghost_ffemitter")
 	end
 end
 
 function SWEP:RemoveGhost()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		owner:RemoveStatus("ghost_ffemitter", false, true)
 	end
@@ -37,7 +34,7 @@ end
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 
-	local owner = self.Owner
+	local owner = self:GetOwner()
 
 	local status = owner.status_ghost_ffemitter
 	if not (status and status:IsValid()) then return end
@@ -56,17 +53,20 @@ function SWEP:PrimaryAttack()
 		ent:Spawn()
 
 		ent:SetObjectOwner(owner)
+		ent:SetupDeployableSkillHealth()
 
 		ent:EmitSound("npc/dog/dog_servo12.wav")
-
-		ent:GhostAllPlayersInMe(5)
 
 		self:TakePrimaryAmmo(1)
 
 		local stored = owner:PopPackedItem(ent:GetClass())
 		if stored then
-			ent.m_Health = stored[1]
+			ent:SetObjectHealth(stored[1])
 		end
+
+		local ammo = math.min(owner:GetAmmoCount("pulse"), 150)
+		ent:SetAmmo(ammo)
+		owner:RemoveAmmo(ammo, "pulse")
 
 		if self:GetPrimaryAmmoCount() <= 0 then
 			owner:StripWeapon(self:GetClass())
@@ -78,6 +78,6 @@ function SWEP:Think()
 	local count = self:GetPrimaryAmmoCount()
 	if count ~= self:GetReplicatedAmmo() then
 		self:SetReplicatedAmmo(count)
-		self.Owner:ResetSpeed()
+		self:GetOwner():ResetSpeed()
 	end
 end

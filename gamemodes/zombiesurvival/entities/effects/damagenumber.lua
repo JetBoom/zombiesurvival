@@ -1,7 +1,7 @@
 EFFECT.LifeTime = 3
 
 local TEXT_ALIGN_CENTER = TEXT_ALIGN_CENTER
-local TEXT_ALIGN_TOP = TEXT_ALIGN_TOP
+local TEXT_ALIGN_BOTTOM = TEXT_ALIGN_BOTTOM
 local draw = draw
 local cam = cam
 
@@ -16,11 +16,12 @@ hook.Add("PostDrawTranslucentRenderables", "DrawDamage", function()
 	local curtime = CurTime()
 
 	local ang = EyeAngles()
-	local right = ang:Right()
 	ang:RotateAroundAxis(ang:Up(), -90)
 	ang:RotateAroundAxis(ang:Forward(), 90)
 
-	--cam.IgnoreZ(true)
+	if GAMEMODE.DamageNumberThroughWalls then
+		cam.IgnoreZ(true)
+	end
 
 	for _, particle in pairs(Particles) do
 		if particle and curtime < particle.DieTime then
@@ -30,13 +31,15 @@ hook.Add("PostDrawTranslucentRenderables", "DrawDamage", function()
 
 			c.a = math.Clamp(particle.DieTime - curtime, 0, 1) * 220
 
-			cam.Start3D2D(particle:GetPos(), ang, 0.1)
-				draw.SimpleText(particle.Amount, "ZS3D2DFont2", 0, 0, c, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			cam.Start3D2D(particle:GetPos(), ang, 0.1 * GAMEMODE.DamageNumberScale)
+				draw.SimpleText(particle.Amount, "ZS3D2DFont2", 0, 0, c, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
 			cam.End3D2D()
 		end
 	end
 
-	--cam.IgnoreZ(false)
+	if GAMEMODE.DamageNumberThroughWalls then
+		cam.IgnoreZ(false)
+	end
 
 	if done then
 		Particles = {}
@@ -44,11 +47,11 @@ hook.Add("PostDrawTranslucentRenderables", "DrawDamage", function()
 end)
 
 local gravity = Vector(0, 0, -500)
-
 function EFFECT:Init(data)
 	local pos = data:GetOrigin()
 	local amount = data:GetMagnitude()
 	local Type = data:GetScale()
+	local velscal = GAMEMODE.DamageNumberSpeed
 
 	local vel = VectorRand()
 	vel.z = math.Rand(0.7, 0.98)
@@ -64,16 +67,16 @@ function EFFECT:Init(data)
 	particle:SetCollide(true)
 	particle:SetBounce(0.7)
 	particle:SetAirResistance(32)
-	particle:SetGravity(gravity)
-	particle:SetVelocity(math.Clamp(amount, 5, 50) * 4 * vel)
+	particle:SetGravity(gravity * (velscal ^ 2))
+	particle:SetVelocity(math.Clamp(amount, 5, 50) * 4 * vel * velscal)
 
 	particle.Amount = amount
-	particle.DieTime = CurTime() + 2
+	particle.DieTime = CurTime() + 2 * GAMEMODE.DamageNumberLifetime
 	particle.Type = Type
 
 	table.insert(Particles, particle)
 
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end
 
 function EFFECT:Think()

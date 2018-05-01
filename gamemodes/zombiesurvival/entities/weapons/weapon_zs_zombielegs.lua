@@ -1,8 +1,6 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Zombie Kung Fu"
-end
+SWEP.PrintName = "Zombie Kung Fu"
 
 SWEP.Base = "weapon_zs_zombie"
 
@@ -12,17 +10,17 @@ SWEP.MeleeDamage = 17
 
 SWEP.DelayWhenDeployed = true
 
-function SWEP:Move(mv)
+--[[function SWEP:Move(mv)
 	if self:IsSwinging() then
 		mv:SetMaxSpeed(0)
 		mv:SetMaxClientSpeed(0)
 	end
-end
+end]]
 
 function SWEP:PrimaryAttack(fromsecondary)
 	local n = self:GetNextPrimaryAttack()
 
-	if self.Owner:IsOnGround() or self.Owner:WaterLevel() >= 2 or self.Owner:GetMoveType() ~= MOVETYPE_WALK then
+	if self:GetOwner():IsOnGround() or self:GetOwner():WaterLevel() >= 2 or self:GetOwner():GetMoveType() ~= MOVETYPE_WALK then
 		self.BaseClass.PrimaryAttack(self)
 	end
 
@@ -40,11 +38,11 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:PlayHitSound()
-	self.Owner:EmitSound("npc/zombie/zombie_pound_door.wav")
+	self:EmitSound("npc/zombie/zombie_pound_door.wav", nil, nil, nil, CHAN_AUTO)
 end
 
 function SWEP:PlayAttackSound()
-	self.Owner:EmitSound("npc/zombie/foot_slide"..math.random(3)..".wav")
+	self:EmitSound("npc/zombie/foot_slide"..math.random(3)..".wav", nil, nil, nil, CHAN_AUTO)
 end
 
 function SWEP:Reload()

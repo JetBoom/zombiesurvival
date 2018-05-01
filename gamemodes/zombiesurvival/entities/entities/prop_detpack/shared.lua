@@ -1,18 +1,15 @@
 ENT.Type = "anim"
 
 ENT.CanPackUp = true
-ENT.PackUpTime = 4
+ENT.PackUpTime = 2
 
 ENT.m_NoNailUnfreeze = true
 ENT.NoNails = true
 
 ENT.NoPropDamageDuringWave0 = true
 
-ENT.ExplosionDelay = 1
-
-function ENT:SetExplodeTime(time)
-	self:SetDTFloat(0, time)
-end
+ENT.ExplosionDelay = 1.5
+ENT.ArmTime = 10
 
 function ENT:GetExplodeTime()
 	return self:GetDTFloat(0)

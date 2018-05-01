@@ -1,38 +1,23 @@
-include("shared.lua")
+INC_CLIENT()
 
-SWEP.PrintName = "Junk Pack"
-SWEP.Description = "It's simply a pack of wooden junk kept together with some duct tape.\nVery useful for making barricades when no materials are around.\nNeeds something like a hammer and nails to keep the things in place."
 SWEP.ViewModelFOV = 45
 SWEP.ViewModelFlip = false
 
+SWEP.ShowWorldModel = false
+
+SWEP.ViewModelBoneMods = {
+	["ValveBiped.Bip01_R_Hand"] = { scale = Vector(1, 1, 1), pos = Vector(0, 0, 0), angle = Angle(3.332, -14.445, -21.112) }
+}
+
+SWEP.VElements = {
+	["base"] = { type = "Model", model = "models/props_debris/wood_board06a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4.675, 2.596, -6.753), angle = Angle(180, 66.623, -1.17), size = Vector(0.25, 0.25, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+}
+
+SWEP.WElements = {
+	["base"] = { type = "Model", model = "models/props_debris/wood_board06a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4.675, 2.596, -6.753), angle = Angle(180, 66.623, -1.17), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+}
+
 SWEP.Slot = 4
-SWEP.SlotPos = 0
-
-function SWEP:Deploy()
-	self.IdleAnimation = CurTime() + self:SequenceDuration()
-
-	return true
-end
-
-function SWEP:DrawWorldModel()
-	local owner = self.Owner
-	if owner:IsValid() and self:GetReplicatedAmmo() > 0 then
-		local id = owner:LookupAttachment("anim_attachment_RH")
-		if id and id > 0 then
-			local attch = owner:GetAttachment(id)
-			if attch then
-				cam.Start3D(EyePos() + (owner:GetPos() - attch.Pos + Vector(0, 0, 24)), EyeAngles())
-					self:DrawModel()
-				cam.End3D()
-			end
-		end
-	end
-end
-SWEP.DrawWorldModelTranslucent = SWEP.DrawWorldModel
-
-function SWEP:Initialize()
-	self:SetDeploySpeed(1.1)
-end
 
 function SWEP:GetViewModelPosition(pos, ang)
 	if self:GetPrimaryAmmoCount() <= 0 then
@@ -40,8 +25,4 @@ function SWEP:GetViewModelPosition(pos, ang)
 	end
 
 	return pos, ang
-end
-
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
 end

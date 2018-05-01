@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Knife"
+SWEP.PrintName = "Knife"
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
 end
@@ -32,6 +32,8 @@ SWEP.HitAnim = ACT_VM_MISSCENTER
 SWEP.MissAnim = ACT_VM_PRIMARYATTACK
 
 SWEP.NoHitSoundFlesh = true
+
+SWEP.AllowQualityWeapons = false
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/knife/knife_slash"..math.random(2)..".wav")

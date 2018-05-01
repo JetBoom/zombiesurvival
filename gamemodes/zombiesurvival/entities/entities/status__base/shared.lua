@@ -1,5 +1,7 @@
 ENT.Type = "anim"
 
+ENT.IsStatus = true
+
 function ENT:OnInitialize()
 end
 

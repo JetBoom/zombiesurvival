@@ -1,28 +1,23 @@
-include("shared.lua")
+INC_CLIENT()
 
-SWEP.PrintName = "Message Beacon"
-SWEP.Description = "This beacon allows you to display messages to all other humans in range.\nPress SECONDARY ATTACK to select different messages.\nPress PRIMARY ATTACK to deploy.\nPress SPRINT on a deployed message beacon that you own to pick it up."
 SWEP.DrawCrosshair = false
 
-SWEP.Slot = 4
-SWEP.SlotPos = 0
-
 function SWEP:Deploy()
-	gamemode.Call("WeaponDeployed", self.Owner, self)
+	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 
 	return true
 end
 
 function SWEP:DrawHUD()
-	if GetConVarNumber("crosshair") ~= 1 then return end
+	if GetConVar("crosshair"):GetInt() ~= 1 then return end
 	self:DrawCrosshairDot()
 end
 
 function SWEP:PrimaryAttack()
 end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end
 
 function SWEP:Think()
@@ -39,7 +34,7 @@ end
 
 local Menu
 function SWEP:SecondaryAttack()
-	if Menu and Menu:Valid() then
+	if Menu and Menu:IsValid() then
 		Menu:SetVisible(true)
 		return
 	end

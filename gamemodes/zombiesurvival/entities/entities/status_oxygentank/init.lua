@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
@@ -14,5 +11,5 @@ end
 
 function ENT:Think()
 	local owner = self:GetOwner()
-	if not (owner:IsValid() and owner:Alive() and owner:HasWeapon("weapon_zs_oxygentank")) then self:Remove() end
+	if not (owner:IsValid() and owner:Alive() and owner:HasTrinket("oxygentank")) then self:Remove() end
 end

@@ -1,14 +1,32 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:Initialize()
+	hook.Add("CreateMove", self, self.CreateMove)
+
 	self:DrawShadow(false)
 	self:SetRenderBounds(Vector(-40, -40, -18), Vector(40, 40, 80))
 
 	local owner = self:GetOwner()
+	if owner:IsValid() then
+		owner[self:GetClass()] = self
+
+		self.CommandYaw = owner:GetAngles().yaw
+	end
 	if owner:IsPlayer() then
 		owner.KnockedDown = self
 		owner:SetNoDraw(true)
 	end
+end
+
+function ENT:CreateMove(cmd)
+	if MySelf ~= self:GetOwner() then return end
+
+	local ang = cmd:GetViewAngles()
+	ang.yaw = self.CommandYaw or ang.yaw
+	cmd:SetViewAngles(ang)
+
+	cmd:ClearButtons(0)
+	cmd:ClearMovement()
 end
 
 function ENT:OnRemove()
@@ -16,6 +34,9 @@ function ENT:OnRemove()
 	if owner:IsValid() then
 		owner.KnockedDown = nil
 		owner:SetNoDraw(false)
+		if owner[self:GetClass()] == self then
+			owner[self:GetClass()] = nil
+		end
 	end
 end
 
@@ -25,7 +46,7 @@ function ENT:Think()
 	if owner:IsValid() and 0 < owner:Health() then
 		local rag = owner:GetRagdollEntity()
 		if rag and rag:IsValid() then
-			local endtime = self:GetDTFloat(0)
+			local endtime = self:GetDTFloat(1)
 			if endtime - 0.65 <= ct then
 				local delta = math.max(0.01, endtime - ct)
 				for i = 0, rag:GetPhysicsObjectCount() do

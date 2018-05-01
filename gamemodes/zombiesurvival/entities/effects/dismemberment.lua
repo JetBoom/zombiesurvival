@@ -19,6 +19,7 @@ BoneTranslates["models/zombie/classic.mdl"] = {["ValveBiped.Bip01_Head1"]="Valve
 BoneTranslates["models/zombie/poison.mdl"] = {["ValveBiped.Bip01_Head1"]="ValveBiped.Bip01_Spine4"}
 BoneTranslates["models/zombie/fast.mdl"] = {["ValveBiped.Bip01_Head1"]="ValveBiped.HC_BodyCube"}
 BoneTranslates["models/player/zombie_classic.mdl"] = {["ValveBiped.Bip01_Head1"]="ValveBiped.Bip01_Spine4"}
+BoneTranslates["models/player/zombie_classic_hbfix.mdl"] = {["ValveBiped.Bip01_Head1"]="ValveBiped.Bip01_Spine4"}
 
 local function CollideCallback(particle, hitpos, hitnormal)
 	if particle:GetDieTime() == 0 then return end
@@ -93,7 +94,7 @@ function EFFECT:Render()
 								emitter:SetPos(vBonePos)
 								local vForward = aBoneAng:Forward()
 								for i=1, math.random(0, 2) do
-									local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), vBonePos)
+									local particle = emitter:Add("!sprite_bloodspray"..math.random(8), vBonePos)
 									local force = math.min(1.5, delta) * math.Rand(175, 300)
 									particle:SetVelocity(force * vForward + 0.2 * force * VectorRand())
 									particle:SetDieTime(math.Rand(2.25, 3))
@@ -111,7 +112,7 @@ function EFFECT:Render()
 									particle:SetCollideCallback(CollideCallback)
 									particle:SetLighting(true)
 								end
-								local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), vBonePos)
+								local particle = emitter:Add("!sprite_bloodspray"..math.random(8), vBonePos)
 								local vel = eRagdoll:GetVelocity()
 								particle:SetVelocity(vel)
 								particle:SetDieTime(math.Rand(0.5, 0.75))
@@ -132,6 +133,6 @@ function EFFECT:Render()
 			end
 		end
 
-		emitter:Finish()
+		emitter:Finish() emitter = nil collectgarbage("step", 64)
 	end
 end

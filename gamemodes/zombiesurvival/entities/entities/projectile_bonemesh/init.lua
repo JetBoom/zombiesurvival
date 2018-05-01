@@ -1,25 +1,13 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.LifeTime = 3
 
 function ENT:Initialize()
 	self:SetModel("models/Gibs/HGIBS.mdl")
-	self:PhysicsInitSphere(13)
+	self:PhysicsInitSphere(10) --self:PhysicsInitSphere(13)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_PROJECTILE)
-	self:SetModelScale(2.5, 0)
-	self:SetCustomCollisionCheck(true)
-
-	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:SetMass(20)
-		phys:SetBuoyancyRatio(0.002)
-		phys:EnableMotion(true)
-		phys:Wake()
-	end
+	self:SetModelScale(2, 0) --self:SetModelScale(2.5, 0)
+	self:SetupGenericProjectile(true)
 
 	self:SetMaterial("models/flesh")
 
@@ -28,8 +16,8 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	if self.ExplodeTime <= CurTime() then
-		self:Explode()
+	if self.PhysicsData then
+		self:Explode(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity)
 	end
 
 	if self.DeathTime <= CurTime() then
@@ -40,54 +28,38 @@ function ENT:Think()
 	return true
 end
 
-function ENT:Explode()
+function ENT:Explode(hitpos, hitnormal, hitent)
 	if self.Exploded then return end
 	self.Exploded = true
 	self.DeathTime = 0
 
-	local pos = self:GetPos()
 	local owner = self:GetOwner()
 	if not owner:IsValid() then owner = self end
 
-	util.BlastDamageEx(self, owner, pos, 100, 15, DMG_SLASH)
-
 	local effectdata = EffectData()
-		effectdata:SetOrigin(pos)
-	util.Effect("bonemeshexplode", effectdata)
+		effectdata:SetOrigin(hitpos)
+	util.Effect("explosion_bonemesh", effectdata)
 
-	util.Blood(pos, 150, Vector(0, 0, 1), 300, true)
+	util.Blood(hitpos, 30, hitnormal, 300, true)
 
-	for i=1, 4 do
-		local ent = ents.CreateLimited("prop_playergib")
-		if ent:IsValid() then
-			ent:SetPos(pos + VectorRand() * 4)
-			ent:SetAngles(VectorRand():Angle())
-			ent:SetGibType(math.random(3, #GAMEMODE.HumanGibs))
-			ent:Spawn()
-
-			local phys = ent:GetPhysicsObject()
-			if phys:IsValid() then
-				phys:Wake()
-				phys:SetVelocityInstantaneous(VectorRand():GetNormalized() * math.Rand(120, 620))
-				phys:AddAngleVelocity(VectorRand() * 360)
+	for i = 1, 4 do
+		for _, pl in pairs(ents.FindInSphere(hitpos, 90)) do
+			if pl:IsValidLivingZombie() and not pl:GetStatus("zombie_regen") then
+				local zombieclasstbl = pl:GetZombieClassTable()
+				local ehp = zombieclasstbl.Boss and pl:GetMaxHealth() * 0.4 or pl:GetMaxHealth() * 1.25
+				if pl:Health() <= ehp then
+					local status = pl:GiveStatus("zombie_regen")
+					if status and status:IsValid() then
+						status:SetHealLeft(75)
+					end
+					break
+				end
 			end
 		end
 	end
 end
 
 function ENT:PhysicsCollide(data, physobj)
-	if 20 < data.Speed and 0.2 < data.DeltaTime then
-		self:EmitSound("physics/body/body_medium_impact_hard"..math.random(6)..".wav", 74, math.Rand(95, 105))
-	end
-
-	local ent = data.HitEntity
-	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD then
-		self.ExplodeTime = 0
-		self:NextThink(CurTime())
-	else
-		local normal = data.OurOldVelocity:GetNormalized()
-		local DotProduct = data.HitNormal:Dot(normal * -1)
-
-		physobj:SetVelocityInstantaneous((2 * DotProduct * data.HitNormal + normal) * math.max(100, data.Speed) * 0.9)
-	end
+	self.PhysicsData = data
+	self:NextThink(CurTime())
 end

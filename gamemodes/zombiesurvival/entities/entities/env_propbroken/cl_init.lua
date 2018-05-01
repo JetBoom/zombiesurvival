@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.NextEmit = 0
 
@@ -51,5 +51,5 @@ function ENT:Draw()
 		particle:SetRoll(math.Rand(0, 360))
 		particle:SetRollDelta(math.Rand(-20, 20))
 	end
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end

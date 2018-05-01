@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 local function RefreshCrateOwners(pl)
 	for _, ent in pairs(ents.FindByClass("prop_spotlamp")) do
@@ -16,6 +13,8 @@ hook.Add("OnPlayerChangedTeam", "SpotLamp.OnPlayerChangedTeam", RefreshCrateOwne
 function ENT:Initialize()
 	self:SetModel("models/props_combine/combine_light001a.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
+
+	self:CollisionRulesChanged()
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
@@ -78,6 +77,8 @@ function ENT:SetObjectHealth(health)
 end
 
 function ENT:OnTakeDamage(dmginfo)
+	if dmginfo:GetDamage() <= 0 then return end
+
 	self:TakePhysicsDamage(dmginfo)
 
 	local attacker = dmginfo:GetAttacker()

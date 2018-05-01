@@ -1,8 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Axe"
+SWEP.PrintName = "Axe"
+SWEP.Description = "A simple axe, with balanced stats across the board in terms of damage, range and swing speed."
 
+if CLIENT then
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
 
@@ -27,7 +28,7 @@ SWEP.HoldType = "melee2"
 SWEP.MeleeDamage = 45
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.5
-SWEP.MeleeKnockBack = 32
+SWEP.MeleeKnockBack = 125
 
 SWEP.WalkSpeed = SPEED_FAST
 
@@ -37,6 +38,10 @@ SWEP.SwingOffset = Vector(10, 0, 0)
 SWEP.SwingHoldType = "melee"
 
 SWEP.HitDecal = "Manhackcut"
+
+SWEP.AllowQualityWeapons = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_RANGE, 3)
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.random(65, 70))

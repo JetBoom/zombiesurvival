@@ -1,15 +1,12 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function SWEP:Deploy()
-	self.Owner.SkipCrow = true
+	self:GetOwner().SkipCrow = true
 	return true
 end
 
 function SWEP:Holster()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner:IsValid() then
 		owner:StopSound("NPC_Crow.Flap")
 		owner:SetAllowFullRotation(false)
@@ -18,12 +15,7 @@ end
 SWEP.OnRemove = SWEP.Holster
 
 function SWEP:Think()
-	local owner = self.Owner
-
-	if owner:KeyDown(IN_WALK) then
-		owner:TrySpawnAsGoreChild()
-		return
-	end
+	local owner = self:GetOwner()
 
 	local fullrot = not owner:OnGround()
 	if owner:GetAllowFullRotation() ~= fullrot then
@@ -54,28 +46,28 @@ function SWEP:Think()
 
 	owner:ResetSpeed()
 
-	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_UNDEAD and ent:Alive() and ent:GetZombieClassTable().Name == "Crow" then
+	if ent:IsValidLivingZombie() and ent:GetZombieClassTable().Name == "Crow" then -- Crows can team kill other crows as something to do.
 		ent:TakeSpecialDamage(2, DMG_SLASH, owner, self)
 	end
 end
 
 function SWEP:PrimaryAttack()
-	if CurTime() < self:GetNextPrimaryFire() or not self.Owner:IsOnGround() then return end
+	if CurTime() < self:GetNextPrimaryFire() or not self:GetOwner():IsOnGround() then return end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	self.Owner:EmitSound("NPC_Crow.Squawk")
-	self.Owner.EatAnim = CurTime() + 2
+	self:GetOwner():EmitSound("NPC_Crow.Squawk")
+	self:GetOwner().EatAnim = CurTime() + 2
 
 	self:SetPeckEndTime(CurTime() + 1)
 
-	self.Owner:SetSpeed(1)
+	self:GetOwner():SetSpeed(1)
 end
 
 function SWEP:SecondaryAttack()
 	if CurTime() < self:GetNextSecondaryFire() then return end
 	self:SetNextSecondaryFire(CurTime() + 1.6)
 
-	self.Owner:EmitSound("NPC_Crow.Alert")
+	self:GetOwner():EmitSound("NPC_Crow.Alert")
 end
 
 function SWEP:Reload()

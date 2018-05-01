@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 SWEP.NextAura = 0
 function SWEP:Think()
@@ -13,10 +10,10 @@ function SWEP:Think()
 	if self.NextAura <= CurTime() then
 		self.NextAura = CurTime() + 2
 
-		local origin = self.Owner:LocalToWorld(self.Owner:OBBCenter())
+		local origin = self:GetOwner():LocalToWorld(self:GetOwner():OBBCenter())
 		for _, ent in pairs(ents.FindInSphere(origin, 40)) do
-			if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() ~= TEAM_UNDEAD and ent:Alive() and TrueVisible(origin, ent:NearestPoint(origin)) then
-				ent:PoisonDamage(1, self.Owner, self)
+			if ent and ent:IsValidLivingHuman() and TrueVisible(origin, ent:NearestPoint(origin)) then
+				ent:PoisonDamage(1, self:GetOwner(), self)
 			end
 		end
 	end

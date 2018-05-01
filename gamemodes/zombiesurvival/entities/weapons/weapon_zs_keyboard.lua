@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Keyboard"
+SWEP.PrintName = "Keyboard"
 
+if CLIENT then
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
 
@@ -41,6 +41,11 @@ SWEP.SwingTime = 0.3
 SWEP.SwingRotation = Angle(30, -30, -30)
 SWEP.SwingOffset = Vector(0, -30, 0)
 SWEP.SwingHoldType = "grenade"
+
+SWEP.AllowQualityWeapons = true
+SWEP.DismantleDiv = 2
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.075)
 
 function SWEP:PlayHitSound()
 	self:EmitSound("weapons/melee/keyboard/keyboard_hit-0"..math.random(4)..".ogg")

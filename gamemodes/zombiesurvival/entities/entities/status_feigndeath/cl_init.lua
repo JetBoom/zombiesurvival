@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
@@ -13,6 +13,7 @@ function ENT:OnInitialize()
 	if owner:IsValid() then
 		owner.FeignDeath = self
 		owner.NoCollideAll = true
+		owner:CollisionRulesChanged()
 
 		self.CommandYaw = owner:GetAngles().yaw
 
@@ -22,7 +23,7 @@ function ENT:OnInitialize()
 end
 
 function ENT:CreateMove(cmd)
-	if LocalPlayer() ~= self:GetOwner() then return end
+	if MySelf ~= self:GetOwner() then return end
 
 	local ang = cmd:GetViewAngles()
 	ang.yaw = self.CommandYaw or ang.yaw
@@ -44,12 +45,13 @@ function ENT:OnRemove()
 	if owner:IsValid() then
 		owner.FeignDeath = nil
 		owner.NoCollideAll = owner:Team() == TEAM_UNDEAD and owner:GetZombieClassTable().NoCollideAll
+		owner:CollisionRulesChanged()
 	end
 end
 
 function ENT:DrawTranslucent()
 	local owner = self:GetOwner()
-	if LocalPlayer() ~= owner then return end
+	if MySelf ~= owner then return end
 
 	local pos = owner:GetPos() + EyeAngles():Right() * 32
 	local col = table.Copy(COLOR_GRAY)

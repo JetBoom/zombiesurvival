@@ -1,10 +1,11 @@
 AddCSLuaFile()
 
+SWEP.Base = "weapon_zs_baseshotgun"
+
+SWEP.PrintName = "'Blaster' Shotgun"
+SWEP.Description = "A basic shotgun that can deal significant amounts of damage at close range."
+
 if CLIENT then
-	SWEP.PrintName = "'Blaster' Shotgun"
-	SWEP.Slot = 3
-	SWEP.SlotPos = 0
-	
 	SWEP.ViewModelFlip = false
 
 	SWEP.HUD3DPos = Vector(4, -3.5, -1.2)
@@ -13,18 +14,17 @@ if CLIENT then
 	SWEP.HUD3DBone = "SS.Grip.Dummy"
 end
 
-SWEP.Base = "weapon_zs_base"
-
 SWEP.HoldType = "shotgun"
 
 SWEP.ViewModel = "models/weapons/v_supershorty/v_supershorty.mdl"
 SWEP.WorldModel = "models/weapons/w_supershorty.mdl"
+SWEP.UseHands = false
 
 SWEP.ReloadDelay = 0.4
 
-SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
-SWEP.Primary.Damage = 12
-SWEP.Primary.NumShots = 7
+SWEP.Primary.Sound = Sound("Weapon_Shotgun.NPC_Single")
+SWEP.Primary.Damage = 8.325
+SWEP.Primary.NumShots = 8
 SWEP.Primary.Delay = 0.8
 
 SWEP.Primary.ClipSize = 5
@@ -32,78 +32,36 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "buckshot"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
-SWEP.ConeMax = 0.18
-SWEP.ConeMin = 0.155
+SWEP.ConeMax = 8.75
+SWEP.ConeMin = 5
 
 SWEP.WalkSpeed = SPEED_SLOWER
 
-SWEP.reloadtimer = 0
-SWEP.nextreloadfinish = 0
+SWEP.PumpSound = Sound("Weapon_M3.Pump")
+SWEP.ReloadSound = Sound("Weapon_Shotgun.Reload")
 
-function SWEP:Reload()
-	if self.reloading then return end
+SWEP.PumpActivity = ACT_SHOTGUN_PUMP
 
-	if self:Clip1() < self.Primary.ClipSize and 0 < self.Owner:GetAmmoCount(self.Primary.Ammo) then
-		self:SetNextPrimaryFire(CurTime() + self.ReloadDelay)
-		self.reloading = true
-		self.reloadtimer = CurTime() + self.ReloadDelay
-		self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_START)
-		self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RELOAD_SHOTGUN)
-	end
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Blaster' Slug Gun", "Single accurate slug round, less total damage", function(wept)
+	wept.Primary.Damage = wept.Primary.Damage * 5.5
+	wept.Primary.NumShots = 1
+	wept.ConeMin = wept.ConeMin * 0.15
+	wept.ConeMax = wept.ConeMax * 0.3
+end)
 
-	self:SetIronsights(false)
-end
+function SWEP:SendWeaponAnimation()
+	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+	self:GetOwner():GetViewModel():SetPlaybackRate(self.FireAnimSpeed)
 
-function SWEP:Think()
-	if self.reloading and self.reloadtimer < CurTime() then
-		self.reloadtimer = CurTime() + self.ReloadDelay
-		self:SendWeaponAnim(ACT_VM_RELOAD)
+	timer.Simple(0.15, function()
+		if IsValid(self) then
+			self:SendWeaponAnim(ACT_SHOTGUN_PUMP)
+			self:GetOwner():GetViewModel():SetPlaybackRate(self.FireAnimSpeed)
 
-		self.Owner:RemoveAmmo(1, self.Primary.Ammo, false)
-		self:SetClip1(self:Clip1() + 1)
-		self:EmitSound("Weapon_Shotgun.Reload")
-
-		if self.Primary.ClipSize <= self:Clip1() or self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then
-			self.nextreloadfinish = CurTime() + self.ReloadDelay
-			self.reloading = false
-			self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+			if CLIENT and self:GetOwner() == MySelf then
+				self:EmitSound("weapons/m3/m3_pump.wav", 65, 100, 0.4, CHAN_AUTO)
+			end
 		end
-	end
-
-	local nextreloadfinish = self.nextreloadfinish
-	if nextreloadfinish ~= 0 and nextreloadfinish < CurTime() then
-		self:EmitSound("Weapon_M3.Pump")
-		self:SendWeaponAnim(ACT_SHOTGUN_PUMP)
-		self.nextreloadfinish = 0
-	end
-
-	if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
-		self:SetIronsights(false)
-	end
-end
-
-function SWEP:CanPrimaryAttack()
-	if self.Owner:IsHolding() or self.Owner:GetBarricadeGhosting() then return false end
-
-	if self:Clip1() <= 0 then
-		self:EmitSound("Weapon_Shotgun.Empty")
-		self:SetNextPrimaryFire(CurTime() + 0.25)
-		return false
-	end
-
-	if self.reloading then
-		if 0 < self:Clip1() then
-			self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_FINISH)
-		else
-			self:SendWeaponAnim(ACT_VM_IDLE)
-		end
-		self.reloading = false
-		self:SetNextPrimaryFire(CurTime() + 0.25)
-		return false
-	end
-
-	return true
-end
-
-function SWEP:SecondaryAttack()
+	end)
 end

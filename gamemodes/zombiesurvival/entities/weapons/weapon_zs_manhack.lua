@@ -1,9 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Manhack"
-	SWEP.Description = "A deployable, remotely controlled device.\nIdeal for scouting but also can be used for attacking from safety."
+SWEP.PrintName = "Manhack"
+SWEP.Description = "A deployable, remotely controlled device.\nIdeal for scouting but also can be used for attacking from safety.\nHas sharp blades that pierce into zombies."
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 50
 	SWEP.ShowViewModel = true
@@ -49,11 +49,13 @@ SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
 SWEP.Secondary.Ammo = "dummy"
 
+SWEP.MaxStock = 10
+
 SWEP.WalkSpeed = SPEED_FAST
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType("grenade")
-	self:SetDeploySpeed(1.1)
+	GAMEMODE:DoChangeDeploySpeed(self)
 
 	if CLIENT then
 		self:Anim_Initialize()
@@ -61,10 +63,10 @@ function SWEP:Initialize()
 end
 
 function SWEP:CanPrimaryAttack()
-	if self.Owner:IsHolding() or self.Owner:GetBarricadeGhosting() then return false end
+	if self:GetOwner():IsHolding() or self:GetOwner():GetBarricadeGhosting() then return false end
 
-	for _, ent in pairs(ents.FindByClass("prop_manhac*")) do
-		if ent:GetOwner() == self.Owner then return false end
+	for _, ent in pairs(ents.FindByClass("prop_manhack*")) do
+		if ent:GetObjectOwner() == self:GetOwner() then return false end
 	end
 
 	if self:GetPrimaryAmmoCount() <= 0 then
@@ -79,7 +81,7 @@ function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	self:SendWeaponAnim(ACT_VM_THROW)
 	owner:DoAttackEvent()
 
@@ -90,8 +92,9 @@ function SWEP:PrimaryAttack()
 		local ent = ents.Create(self.DeployClass)
 		if ent:IsValid() then
 			ent:SetPos(owner:GetShootPos())
-			ent:SetOwner(owner)
 			ent:Spawn()
+			ent:SetObjectOwner(owner)
+			ent:SetupPlayerSkills()
 
 			local stored = owner:PopPackedItem(ent:GetClass())
 			if stored then
@@ -102,7 +105,7 @@ function SWEP:PrimaryAttack()
 			local phys = ent:GetPhysicsObject()
 			if phys:IsValid() then
 				phys:Wake()
-				phys:SetVelocityInstantaneous(self.Owner:GetAimVector() * 200)
+				phys:SetVelocityInstantaneous(self:GetOwner():GetAimVector() * 200)
 			end
 
 			if not owner:HasWeapon(self.ControlWeapon) then
@@ -129,7 +132,7 @@ function SWEP:Reload()
 end
 
 function SWEP:Deploy()
-	GAMEMODE:WeaponDeployed(self.Owner, self)
+	GAMEMODE:WeaponDeployed(self:GetOwner(), self)
 
 	if self:GetPrimaryAmmoCount() <= 0 then
 		self:SendWeaponAnim(ACT_VM_THROW)
@@ -169,7 +172,7 @@ local colWhite = Color(220, 220, 220, 230)
 SWEP.HUD3DPos = Vector(5, 2, 0)
 
 function SWEP:PostDrawViewModel(vm)
-	if not self.HUD3DPos or GAMEMODE.WeaponHUDMode == 1 then return end
+	if not self.HUD3DPos or not GAMEMODE:ShouldDraw3DWeaponHUD() then return end
 
 	local bone = vm:LookupBone("ValveBiped.Bip01_R_Hand")
 	if not bone then return end

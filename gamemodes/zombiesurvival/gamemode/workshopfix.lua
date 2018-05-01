@@ -11,11 +11,11 @@ if scripted_ents.GetStored(ENTITYCLASS) ~= nil then return end
 
 print("Workshop version...")
 
-local foldername = GAMEMODE.FolderName
+local gmfoldername = GAMEMODE.FolderName
 
-local entitiespath = foldername.."/entities/entities/"
-local effectspath = foldername.."/entities/effects/"
-local weaponspath = foldername.."/entities/weapons/"
+local entitiespath = gmfoldername.."/entities/entities/"
+local effectspath = gmfoldername.."/entities/effects/"
+local weaponspath = gmfoldername.."/entities/weapons/"
 
 -- ENTITIES
 local files, folders = file.Find(entitiespath.."*", "LUA")
@@ -55,7 +55,7 @@ for _, foldername in pairs(folders) do
 end
 
 -- EFFECTS
-local files, folders = file.Find(effectspath.."*", "LUA")
+files, folders = file.Find(effectspath.."*", "LUA")
 
 for _, filename in pairs(files) do
 	if SERVER then
@@ -89,7 +89,7 @@ for _, foldername in pairs(folders) do
 end
 
 -- WEAPONS
-local files, folders = file.Find(weaponspath.."*", "LUA")
+files, folders = file.Find(weaponspath.."*", "LUA")
 
 for _, filename in pairs(files) do
 	SWEP = {}

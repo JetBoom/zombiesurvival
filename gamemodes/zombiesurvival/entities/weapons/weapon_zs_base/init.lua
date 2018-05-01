@@ -1,15 +1,18 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
+INC_SERVER()
+
 AddCSLuaFile("animations.lua")
 
-include("shared.lua")
-
 function SWEP:Think()
-	if self.IdleAnimation and self.IdleAnimation <= CurTime() then
-		self.IdleAnimation = nil
-		self:SendWeaponAnim(ACT_VM_IDLE)
-	end
-	if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
+	if self:GetIronsights() and not self:GetOwner():KeyDown(IN_ATTACK2) then
 		self:SetIronsights(false)
+	end
+
+	if self:GetReloadFinish() > 0 then
+		if CurTime() >= self:GetReloadFinish() then
+			self:FinishReload()
+		end
+	elseif self.IdleAnimation and self.IdleAnimation <= CurTime() then
+		self.IdleAnimation = nil
+		self:SendWeaponAnim(self.IdleActivity)
 	end
 end

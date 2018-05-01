@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
@@ -19,14 +19,9 @@ function ENT:DrawHint()
 		if range <= 0 then
 			DrawWorldHint(self:GetHint(), pos)
 		else
-			local dist = pos:Distance(eyepos)
-			if dist <= range then
-				--[[local fadeoff = range * 0.75
-				if dist >= fadeoff then
-					DrawWorldHint(self:GetHint(), pos, 1 - (dist - fadeoff) / range)
-				else]]
-					DrawWorldHint(self:GetHint(), pos)
-				--end
+			local dist = pos:DistToSqr(eyepos)
+			if dist <= range * range then
+				DrawWorldHint(self:GetHint(), pos)
 			end
 		end
 	end

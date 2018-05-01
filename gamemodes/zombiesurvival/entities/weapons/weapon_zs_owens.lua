@@ -1,10 +1,12 @@
 AddCSLuaFile()
 
+SWEP.PrintName = "'Owens' Handgun"
+SWEP.Description = "A somewhat less accurate pistol that fires two shots that deal respectable total damage."
+
+SWEP.Slot = 1
+SWEP.SlotPos = 0
+
 if CLIENT then
-	SWEP.PrintName = "'Owens' Handgun"
-	SWEP.Slot = 1
-	SWEP.SlotPos = 0
-	
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 
@@ -25,17 +27,24 @@ SWEP.CSMuzzleFlashes = false
 
 SWEP.ReloadSound = Sound("Weapon_Pistol.Reload")
 SWEP.Primary.Sound = Sound("Weapon_Pistol.NPC_Single")
-SWEP.Primary.Damage = 12
+SWEP.Primary.Damage = 14.2
 SWEP.Primary.NumShots = 2
 SWEP.Primary.Delay = 0.2
 
-SWEP.Primary.ClipSize = 12
+SWEP.Primary.ClipSize = 10
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
+SWEP.Primary.ClipMultiplier = 12/10
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
-SWEP.ConeMax = 0.08
-SWEP.ConeMin = 0.04
+SWEP.ReloadSpeed = 0.7
+
+SWEP.ConeMax = 4
+SWEP.ConeMin = 2.5
 
 SWEP.IronSightsPos = Vector(-5.95, 3, 2.75)
 SWEP.IronSightsAng = Vector(-0.15, -1, 2)
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.46, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.22, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.0175, 1)

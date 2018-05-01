@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:PlayerSet(pPlayer, bExists)
 	pPlayer.Bleed = self
@@ -10,7 +7,7 @@ end
 function ENT:Think()
 	local owner = self:GetOwner()
 
-	if self:GetDamage() <= 0 or owner:Team() == TEAM_UNDEAD then
+	if self:GetDamage() <= 0 then
 		self:Remove()
 		return
 	end
@@ -24,6 +21,8 @@ function ENT:Think()
 	dir:Normalize()
 	util.Blood(owner:WorldSpaceCenter(), 3, dir, 32)
 
-	self:NextThink(CurTime() + 1)
+	local moving = owner:GetVelocity():LengthSqr() >= 19600 --140^2
+	local ticktime = (moving and 0.65 or 1.3)/(owner.BleedSpeedMul or 1)
+	self:NextThink(CurTime() + ticktime)
 	return true
 end

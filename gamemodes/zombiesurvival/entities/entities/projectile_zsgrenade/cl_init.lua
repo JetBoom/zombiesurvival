@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.NextTickSound = 0
 ENT.LastTickSound = 0
@@ -28,7 +28,7 @@ function ENT:Think()
 		particle:SetRoll(math.Rand(-0.2, 0.2))
 		particle:SetColor(50, 50, 50)
 
-		emitter:Finish()
+		emitter:Finish() emitter = nil collectgarbage("step", 64)
 	end
 
 	if curtime >= self.NextTickSound then

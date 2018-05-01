@@ -2,6 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
+SWEP.PrintName = "Super Zombie"
+
 SWEP.MeleeDamage = 45
 
 function SWEP:Reload()
@@ -23,9 +25,9 @@ function SWEP:Move(mv)
 		mv:SetMaxSpeed(0)
 		mv:SetMaxClientSpeed(0)
 
-		local owner = self.Owner
+		local owner = self:GetOwner()
 		local tr = self:GetClimbSurface()
-		local angs = self.Owner:SyncAngles()
+		local angs = mv:GetAngles() --owner:SyncAngles()
 		local dir = tr and tr.Hit and (tr.HitNormal.z <= -0.5 and (angs:Forward() * -1) or math.abs(tr.HitNormal.z) < 0.75 and tr.HitNormal:Angle():Up()) or Vector(0, 0, 1)
 		local vel = Vector(0, 0, 4)
 
@@ -53,15 +55,14 @@ end
 
 SWEP.NextClimbSound = 0
 function SWEP:Think()
-	local curtime = CurTime()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 
 	if self:GetClimbing() then
 		if self:GetClimbSurface() and owner:KeyDown(IN_ATTACK2) then
 			if SERVER and CurTime() >= self.NextClimbSound then
-				local speed = owner:GetVelocity():Length()
-				if speed >= 16 then
-					if speed >= 50 then
+				local speed = owner:GetVelocity():LengthSqr()
+				if speed >= 256 then
+					if speed >= 2500 then
 						self.NextClimbSound = CurTime() + 0.75
 					else
 						self.NextClimbSound = CurTime() + 1
@@ -95,7 +96,7 @@ end
 
 local climbtrace = {mask = MASK_SOLID_BRUSHONLY, mins = Vector(-5, -5, -5), maxs = Vector(5, 5, 5)}
 function SWEP:GetClimbSurface()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 
 	local fwd = owner:SyncAngles():Forward()
 	local up = owner:GetUp()
@@ -125,7 +126,7 @@ end
 function SWEP:SecondaryAttack()
 	if self:IsClimbing() then return end
 
-	if not self.Owner:IsOnGround() and self.Owner:GetVelocity():Length() < 200 and self:GetClimbSurface() then
+	if not GAMEMODE.ZombieEscape and not self:GetOwner():IsOnGround() and self:GetOwner():GetVelocity():LengthSqr() < 40000 and self:GetClimbSurface() then
 		self:StartClimbing()
 	else
 		self.BaseClass.SecondaryAttack(self)

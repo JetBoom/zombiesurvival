@@ -29,11 +29,11 @@ function EFFECT:Init(data)
 	emitter:SetNearClip(24, 32)
 
 	for boneid = 1, ent:GetBoneCount() - 1 do
-		local pos, ang = ent:GetBonePositionMatrixed(boneid)
+		local pos = ent:GetBonePositionMatrixed(boneid)
 		if pos and pos ~= basepos then
 			for i=1, math.random(1, 3) do
 				local heading = (VectorRand():GetNormalized() + up + dir * 2) / 4
-				local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), pos + heading)
+				local particle = emitter:Add("!sprite_bloodspray"..math.random(8), pos + heading)
 				particle:SetVelocity(speed * math.Rand(0.5, 1) * heading)
 				particle:SetDieTime(math.Rand(3, 6))
 				particle:SetStartAlpha(200)
@@ -51,7 +51,7 @@ function EFFECT:Init(data)
 			end
 
 			for i=1, 4 do
-				local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), pos)
+				local particle = emitter:Add("!sprite_bloodspray"..math.random(8), pos)
 				particle:SetVelocity(math.Rand(0.5, 4) * (VectorRand():GetNormalized() + dir))
 				particle:SetDieTime(math.Rand(0.75, 2))
 				particle:SetStartAlpha(230)
@@ -66,7 +66,7 @@ function EFFECT:Init(data)
 		end
 	end
 
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end
 
 function EFFECT:Think()

@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.NextWaterDamage = 0
 
@@ -9,14 +6,18 @@ function ENT:Initialize()
 	self:SetModel("models/combine_scanner.mdl")
 	self:SetUseType(SIMPLE_USE)
 
+	self:PhysicsInitBox(Vector(-30, -17, -14.15), Vector(18.29, 11.86, 15))
 	self:PhysicsInit(SOLID_VPHYSICS)
+
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
+		phys:SetMaterial("metal")
 		phys:SetMass(75)
 		phys:EnableDrag(false)
 		phys:EnableMotion(true)
 		phys:Wake()
 		phys:SetBuoyancyRatio(0.8)
+		phys:AddGameFlag(FVPHYSICS_NO_IMPACT_DMG)
 
 		local Constraint = ents.Create("phys_keepupright")
 		Constraint:SetAngles(Angle(0, 0, 0))
@@ -29,7 +30,7 @@ function ENT:Initialize()
 
 	self:StartMotionController()
 
-	self:SetMaxObjectHealth(100)
+	self:SetMaxObjectHealth(self.MaxHealth)
 	self:SetObjectHealth(self:GetMaxObjectHealth())
 
 	self.LastThink = CurTime()
@@ -37,20 +38,57 @@ function ENT:Initialize()
 	self:SetSequence(2)
 	self:SetPlaybackRate(1)
 	self:UseClientSideAnimation(true)
-
-	--[[local ent = ents.Create("fhb")
-	if ent:IsValid() then
-		ent:SetPos(self:GetPos())
-		ent:SetAngles(self:GetAngles())
-		ent:SetParent(self)
-		ent:SetOwner(self)
-		ent.Size = 9
-		ent:Spawn()
-	end]]
-
+	self:SetCustomCollisionCheck(true)
 	self:CollisionRulesChanged()
 
 	hook.Add("SetupPlayerVisibility", self, self.SetupPlayerVisibility)
+end
+
+function ENT:SetupPlayerSkills()
+	local owner = self:GetObjectOwner()
+	local newmaxhealth = self.MaxHealth
+	local currentmaxhealth = self:GetMaxObjectHealth()
+	local defaults = scripted_ents.Get(self:GetClass())
+	local maxspeed = defaults.MaxSpeed
+	local acceleration = defaults.Acceleration
+	local carrymass = defaults.CarryMass
+	local loaded = false
+
+	if owner:IsValid() then
+		newmaxhealth = newmaxhealth * (owner.ControllableHealthMul or 1)
+		maxspeed = maxspeed * owner:GetTotalAdditiveModifier("ControllableSpeedMul", "DroneSpeedMul")
+		acceleration = acceleration * (owner.ControllableHandlingMul or 1)
+		carrymass = carrymass * (owner.DroneCarryMassMul or 1)
+		loaded = owner:IsSkillActive(SKILL_LOADEDHULL)
+	end
+
+	newmaxhealth = math.ceil(newmaxhealth)
+
+	self:SetMaxObjectHealth(newmaxhealth)
+	self:SetObjectHealth(self:GetObjectHealth() / currentmaxhealth * newmaxhealth)
+
+	self.MaxSpeed = maxspeed
+	self.Acceleration = acceleration
+	self.CarryMass = carrymass
+
+	if loaded then
+		if not IsValid(self.LoadedProp) then
+			local ent = ents.Create("prop_dynamic_override")
+			if ent:IsValid() then
+				ent:SetModel("models/props_junk/propane_tank001a.mdl")
+				ent:SetModelScale(0.65, 0)
+				ent:SetParent(self)
+				ent:SetOwner(self)
+				ent:SetLocalPos(Vector(-5, 0, -6.5))
+				ent:SetLocalAngles(Angle(-40, 0, 0))
+				ent:Spawn()
+
+				self.LoadedProp = ent
+			end
+		end
+	elseif IsValid(self.LoadedProp) then
+		self.LoadedProp:Remove()
+	end
 end
 
 function ENT:SetObjectHealth(health)
@@ -62,30 +100,46 @@ function ENT:SetObjectHealth(health)
 end
 
 function ENT:OnTakeDamage(dmginfo)
-	--if dmginfo:GetDamageType() ~= DMG_CRUSH and not self._AllowDamage then return end
+	if dmginfo:GetDamage() <= 0 then return end
 
 	local attacker = dmginfo:GetAttacker()
-	if not (attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
-		self:TakePhysicsDamage(dmginfo)
+	if attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then return end
 
-		self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
+	self:TakePhysicsDamage(dmginfo)
 
-		--self:EmitSound("npc/scanner/scanner_pain"..math.random(2)..".wav", 0.65, math.Rand(120, 130))
-		self:EmitSound("npc/manhack/gib.wav")
+	if dmginfo:GetDamageType() == DMG_ACID then
+		dmginfo:SetDamage(dmginfo:GetDamage() * 2)
+	end
 
-		local effectdata = EffectData()
-			effectdata:SetOrigin(self:NearestPoint(dmginfo:GetDamagePosition()))
-			effectdata:SetNormal(VectorRand():GetNormalized())
-			effectdata:SetMagnitude(4)
-			effectdata:SetScale(1.33)
-		util.Effect("sparks", effectdata)
+	self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
+
+	self:EmitSound("npc/scanner/scanner_pain"..math.random(2)..".wav", 65, math.Rand(120, 130))
+
+	local effectdata = EffectData()
+		effectdata:SetOrigin(self:NearestPoint(dmginfo:GetDamagePosition()))
+		effectdata:SetNormal(VectorRand():GetNormalized())
+		effectdata:SetMagnitude(4)
+		effectdata:SetScale(1.33)
+	util.Effect("sparks", effectdata)
+end
+
+function ENT:Use(activator, caller)
+	if not activator:IsPlayer() or activator:Team() ~= TEAM_HUMAN or not self:GetObjectOwner():IsValid() or activator:GetInfo("zs_nousetodeposit") ~= "0" then return end
+
+	local ammotype = self.AmmoType
+	local curammo = self:GetAmmo()
+
+	local togive = math.min(GAMEMODE.AmmoCache[ammotype], activator:GetAmmoCount(ammotype), self.MaxAmmo - curammo)
+	if togive > 0 then
+		self:SetAmmo(curammo + togive)
+		activator:RemoveAmmo(togive, ammotype)
+		activator:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+		self:EmitSound("npc/turret_floor/click1.wav")
 	end
 end
 
-function ENT:Use(pl)
-	if pl == self:GetOwner() and pl:Team() == TEAM_HUMAN and pl:Alive() and self:GetVelocity():Length() <= self.HoverSpeed then
-		self:OnPackedUp(pl)
-	end
+function ENT:AltUse(activator, tr)
+	self:PackUp(activator)
 end
 
 function ENT:PhysicsCollide(data, phys)
@@ -94,10 +148,11 @@ function ENT:PhysicsCollide(data, phys)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_drone")
-	pl:GiveAmmo(1, "drone")
+	pl:GiveEmptyWeapon(self.SWEP)
+	pl:GiveAmmo(1, self.DeployableAmmo)
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
+	pl:GiveAmmo(self:GetAmmo(), self.AmmoType)
 
 	self:Remove()
 end
@@ -105,11 +160,11 @@ end
 function ENT:PhysicsSimulate(phys, frametime)
 	phys:Wake()
 
-	local owner = self:GetOwner()
-	if not owner:IsValid() then return SIM_NOTHING end
+	local owner = self:GetObjectOwner()
+	if not owner:IsValid() or self.DisableControlUntil and CurTime() < self.DisableControlUntil then return SIM_NOTHING end
 
 	local vel = phys:GetVelocity()
-	local movedir = Vector()
+	local movedir = Vector(0, 0, 0)
 	local eyeangles = owner:SyncAngles()
 	local aimangles = owner:EyeAngles()
 
@@ -131,6 +186,10 @@ function ENT:PhysicsSimulate(phys, frametime)
 		end
 		if owner:KeyDown(IN_GRENADE1) then
 			movedir = movedir - Vector(0, 0, 0.5)
+		end
+		local angdiff = math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw)
+		if math.abs(angdiff) > 4 then
+			phys:AddAngleVelocity(Vector(0, 0, math.Clamp(angdiff, -64, 64) * frametime * 100 - phys:GetAngleVelocity().z * 0.95))
 		end
 	end
 
@@ -161,7 +220,8 @@ function ENT:PhysicsSimulate(phys, frametime)
 	phys:EnableGravity(false)
 	phys:SetAngleDragCoefficient(20000)
 	phys:SetVelocityInstantaneous(vel)
-	phys:AddAngleVelocity(Vector(0, 0, math.Clamp(math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw), -32, 32) * frametime * 3))
+
+	self:SetPhysicsAttacker(owner)
 
 	return SIM_NOTHING
 end
@@ -170,15 +230,79 @@ function ENT:Destroy()
 	if self.Destroyed then return end
 	self.Destroyed = true
 
-	self:EmitSound("npc/manhack/gib.wav")
+	local pos = self:LocalToWorld(self:OBBCenter())
+
+	self:EmitSound("npc/scanner/scanner_explode_crash2.wav")
 
 	local effectdata = EffectData()
-		effectdata:SetOrigin(self:LocalToWorld(self:OBBCenter()))
-	util.Effect("HelicopterMegaBomb", effectdata, true, true)
+		effectdata:SetOrigin(pos)
 		effectdata:SetNormal(Vector(0, 0, 1))
 		effectdata:SetMagnitude(5)
 		effectdata:SetScale(1.5)
 	util.Effect("sparks", effectdata)
+
+	local owner = self:GetObjectOwner()
+	if owner:IsValidLivingHuman() and owner:IsSkillActive(SKILL_LOADEDHULL) then
+		effectdata = EffectData()
+			effectdata:SetOrigin(pos)
+			effectdata:SetNormal(Vector(0, 0, -1))
+		util.Effect("decal_scorch", effectdata)
+
+		self:EmitSound("npc/env_headcrabcanister/explosion.wav", 100, 100)
+		ParticleEffect("dusty_explosion_rockets", pos, angle_zero)
+
+		util.BlastDamagePlayer(self, owner, pos, 128, 225, DMG_ALWAYSGIB)
+	else
+		util.Effect("HelicopterMegaBomb", effectdata, true, true)
+	end
+
+	local amount = math.floor(self:GetAmmo() * 0.5)
+	while amount > 0 do
+		local todrop = math.min(amount, 50)
+		amount = amount - todrop
+		local ent = ents.Create("prop_ammo")
+		if ent:IsValid() then
+			local heading = VectorRand():GetNormalized()
+			ent:SetAmmoType(self.AmmoType)
+			ent:SetAmmo(todrop)
+			ent:SetPos(pos + heading * 4)
+			ent:SetAngles(VectorRand():Angle())
+			ent:Spawn()
+
+			local phys = ent:GetPhysicsObject()
+			if phys:IsValid() then
+				phys:ApplyForceOffset(heading * math.Rand(8000, 32000), pos)
+			end
+		end
+	end
+end
+
+function ENT:BulletCallback(tr, dmginfo)
+	local ent = tr.Entity
+	if not ent or not ent:IsValid() then return end
+
+	if ent:IsValidZombie() then
+		ent:AddLegDamage(4.5)
+	end
+end
+
+function ENT:FireTurret(src, dir)
+	if self:GetNextFire() <= CurTime() then
+		local curammo = self:GetAmmo()
+		if curammo > 0 then
+			local owner = self:GetObjectOwner()
+
+			self:SetNextFire(CurTime() + 0.15)
+			self:SetAmmo(curammo - 1)
+
+			owner:LagCompensation(true)
+			self:FireBulletsLua(src, dir, 5, 1, 16.5, owner, nil, "AR2Tracer", self.BulletCallback, nil, nil, self.GunRange, nil, self)
+			owner:LagCompensation(false)
+		else
+			self:SetNextFire(CurTime() + 2)
+			self:EmitSound("npc/turret_floor/die.wav")
+		end
+	end
 end
 
 ENT.PhysDamageImmunity = 0
@@ -186,6 +310,10 @@ function ENT:Think()
 	if self.Destroyed then
 		if not self.CreatedDebris then
 			self.CreatedDebris = true
+
+			if self:GetObjectOwner():IsValidLivingHuman() then
+				self:GetObjectOwner():SendDeployableLostMessage(self)
+			end
 
 			local ent = ents.Create("prop_physics")
 			if ent:IsValid() then
@@ -207,7 +335,7 @@ function ENT:Think()
 		return
 	end
 
-	local owner = self:GetOwner()
+	local owner = self:GetObjectOwner()
 	if owner:IsValid() then
 		self:SetPhysicsAttacker(owner)
 
@@ -220,14 +348,27 @@ function ENT:Think()
 		return
 	end
 
+	self:CalculateFireAngles()
+
+	if self:GetAmmo() > 0 then
+		if self:BeingControlled() and owner:KeyDown(IN_ATTACK) then
+			if not self:IsFiring() then self:SetFiring(true) end
+			self:FireTurret(self:GetRedLightPos(), self:GetGunAngles():Forward())
+		else
+			self:SetFiring(false)
+		end
+	end
+
 	if self:WaterLevel() >= 2 and CurTime() >= self.NextWaterDamage then
 		self.NextWaterDamage = CurTime() + 0.2
 
 		self:TakeDamage(10)
 	end
 
+	self:NextThink(CurTime())
+
 	local data = self.HitData
-	if not data then return end
+	if not data then return true end
 	self.HitData = nil
 
 	local ent = data.HitEntity
@@ -238,22 +379,50 @@ function ENT:Think()
 		end
 	end
 
-	local dir = (self:GetPos() - data.HitPos):GetNormalized()
-
 	if data.Speed > self.HoverSpeed then
 		local phys = self:GetPhysicsObject()
 		if phys:IsValid() then
-			phys:AddVelocity(dir * 50)
+			local dir = self:GetPos() - data.HitPos
+			dir:Normalize()
+			phys:AddVelocity(dir * 20)
 		end
 	end
 
-	if data.Speed >= self.MaxSpeed * 0.75 and ent and ent:IsWorld() and CurTime() >= self.PhysDamageImmunity then
+	if ((not owner:IsSkillActive(SKILL_STABLEHULL) and data.Speed >= self.MaxSpeed * 0.75) or (self.LastShadeLaunch and self.LastShadeLaunch + 2 > CurTime())) and
+	 	ent and ent:IsWorld() and CurTime() >= self.PhysDamageImmunity then
 		self:TakeDamage(math.Clamp(data.Speed * 0.11, 0, 40))
 	end
+
+	return true
 end
 
 function ENT:SetupPlayerVisibility(pl)
-	if pl ~= self:GetOwner() then return end
+	if pl ~= self:GetObjectOwner() then return end
 
 	AddOriginToPVS(self:GetPos())
+	AddOriginToPVS(self:GetPos() + pl:GetAimVector() * 1024)
+end
+
+function ENT:SetObjectHealth(health)
+	self:SetDTFloat(0, health)
+
+	if health <= 0 and not self.Destroyed then
+		self.Destroyed = true
+	end
+end
+
+function ENT:SetMaxObjectHealth(health)
+	self:SetDTFloat(1, health)
+end
+
+function ENT:SetNextFire(tim)
+	self:SetDTFloat(2, tim)
+end
+
+function ENT:SetAmmo(ammo)
+	self:SetDTInt(0, ammo)
+end
+
+function ENT:SetFiring(onoff)
+	self:SetDTBool(0, onoff)
 end

@@ -1,14 +1,12 @@
-include("shared.lua")
+INC_CLIENT()
 
-SWEP.PrintName = "Gun Turret"
-SWEP.Description = "This automated turret requires constant upkeep to be useful.\nPress PRIMARY ATTACK to deploy the turret.\nPress SECONDARY ATTACK and RELOAD to rotate the turret.\nPress USE on a deployed turret to give it some of your SMG ammunition.\nPress USE on a deployed turret with no owner (blue light) to reclaim it."
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 
 function SWEP:DrawHUD()
-	if GetConVarNumber("crosshair") ~= 1 then return end
+	if GetConVar("crosshair"):GetInt() ~= 1 then return end
 	self:DrawCrosshairDot()
 end
 
@@ -25,15 +23,15 @@ SWEP.DrawWorldModelTranslucent = SWEP.DrawWorldModel
 function SWEP:PrimaryAttack()
 end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end
 
 function SWEP:Think()
-	if self.Owner:KeyDown(IN_ATTACK2) then
+	if self:GetOwner():KeyDown(IN_ATTACK2) then
 		self:RotateGhost(FrameTime() * 60)
 	end
-	if self.Owner:KeyDown(IN_RELOAD) then
+	if self:GetOwner():KeyDown(IN_RELOAD) then
 		self:RotateGhost(FrameTime() * -60)
 	end
 end
@@ -44,5 +42,5 @@ function SWEP:RotateGhost(amount)
 		surface.PlaySound("npc/headcrab_poison/ph_step4.wav")
 		nextclick = RealTime() + 0.3
 	end
-	RunConsoleCommand("_zs_ghostrotation", math.NormalizeAngle(GetConVarNumber("_zs_ghostrotation") + amount))
+	RunConsoleCommand("_zs_ghostrotation", math.NormalizeAngle(GetConVar("_zs_ghostrotation"):GetFloat() + amount))
 end

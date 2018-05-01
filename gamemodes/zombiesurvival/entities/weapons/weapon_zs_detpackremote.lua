@@ -1,14 +1,14 @@
 AddCSLuaFile()
 
+SWEP.PrintName = "Detonation Pack Remote"
+SWEP.Description = "Allows the user to remotely detonate their detonation packs."
+SWEP.Slot = 4
+SWEP.SlotPos = 0
+
 if CLIENT then
 	SWEP.ViewModelFOV = 50
 	SWEP.BobScale = 0.5
 	SWEP.SwayScale = 0.5
-	SWEP.PrintName = "Detonation Pack Remote"
-	SWEP.Description = "Allows the user to remotely detonate their detonation packs."
-
-	SWEP.Slot = 4
-	SWEP.SlotPos = 0
 end
 
 SWEP.ViewModel = "models/weapons/c_slam.mdl"
@@ -33,6 +33,8 @@ SWEP.NoPickupNotification = true
 
 SWEP.HoldType = "slam"
 
+SWEP.NoDeploySpeedChange = true
+
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 end
@@ -40,12 +42,12 @@ end
 if SERVER then
 function SWEP:Think()
 	for _, ent in pairs(ents.FindByClass("prop_detpack")) do
-		if ent:GetOwner() == self.Owner then
+		if ent:GetOwner() == self:GetOwner() then
 			return
 		end
 	end
 
-	self.Owner:StripWeapon(self:GetClass())
+	self:GetOwner():StripWeapon(self:GetClass())
 end
 end
 
@@ -55,7 +57,7 @@ function SWEP:PrimaryAttack()
 	if CLIENT then return end
 
 	for _, ent in pairs(ents.FindByClass("prop_detpack")) do
-		if ent:GetOwner() == self.Owner and ent:GetExplodeTime() == 0 then
+		if ent:GetOwner() == self:GetOwner() and ent:GetExplodeTime() == 0 then
 			ent:SetExplodeTime(CurTime() + ent.ExplosionDelay)
 		end
 	end
@@ -67,9 +69,9 @@ end
 function SWEP:Reload()
 	return false
 end
-	
+
 function SWEP:Deploy()
-	gamemode.Call("WeaponDeployed", self.Owner, self)
+	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 
 	self:SendWeaponAnim(ACT_SLAM_DETONATOR_IDLE)
 
@@ -82,8 +84,8 @@ end
 
 if not CLIENT then return end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end
 
 function SWEP:Think()

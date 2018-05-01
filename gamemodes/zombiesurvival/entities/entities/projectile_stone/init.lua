@@ -1,23 +1,12 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include('shared.lua')
+INC_SERVER()
 
 function ENT:Initialize()
 	self.DieTime = CurTime() + 30
 
 	self:SetModel("models/props_junk/rock001a.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 	self:SetTrigger(true)
-
-	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:SetMass(4)
-		phys:SetBuoyancyRatio(0.01)
-		phys:EnableDrag(false)
-		phys:Wake()
-	end
+	self:SetupGenericProjectile(true)
 end
 
 function ENT:Think()
@@ -38,13 +27,13 @@ function ENT:PhysicsCollide(data, phys)
 end
 
 function ENT:StartTouch(ent)
-	if self.DieTime ~= 0 and ent:IsValid() and ent:IsPlayer() and ent:Alive() then
+	if self.DieTime ~= 0 and ent:IsValidLivingPlayer() then
 		local owner = self:GetOwner()
 		if not owner:IsValid() then owner = self end
 
 		if ent ~= owner and ent:Team() ~= self.Team then
 			ent:EmitSound("weapons/crossbow/hitbod"..math.random(2)..".wav")
-			ent:TakeSpecialDamage(self.Damage, DMG_CLUB, owner, self, nil, Vector(0, 0, 60000))
+			ent:TakeSpecialDamage(self.Damage, DMG_CLUB, owner, self, nil)
 			self:Explode()
 		end
 	end

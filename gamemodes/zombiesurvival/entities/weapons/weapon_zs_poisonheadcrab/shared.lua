@@ -1,8 +1,10 @@
+SWEP.PrintName = "Poison Headcrab"
+
 SWEP.ZombieOnly = true
 SWEP.IsMelee = true
 
 SWEP.ViewModel = "models/weapons/v_knife_t.mdl"
-SWEP.WorldModel = "models/weapons/w_knife_t.mdl"
+SWEP.WorldModel = ""
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -16,27 +18,26 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo	= "none"
 
-SWEP.PounceDamage = 10
-SWEP.PounceDamagePerTick = 5
-SWEP.PounceDamageTicks = 10
-SWEP.PounceDamageTime = 1
-SWEP.PounceDamageVsPropsMultiplier = 2
+SWEP.PounceDamage = 34
+SWEP.PounceWindUp = 0.9
+SWEP.SilentPounceWindUp = 2.1
+SWEP.SpitWindUp = 0.8
 
 function SWEP:Initialize()
 	self:HideViewAndWorldModel()
 end
 
-local function DoPoisoned(hitent, owner, damage, timername)
+--[[local function DoPoisoned(hitent, owner, damage, timername)
 	if not (hitent:IsValid() and hitent:Alive()) then
-		timer.Destroy(timername)
+		timer.Remove(timername)
 		return
 	end
 
 	hitent:PoisonDamage(damage, owner)
-end
+end]]
 function SWEP:Think()
 	local curtime = CurTime()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 
 	if self:IsGoingToSpit() and self:GetNextSpit() <= curtime then
 		self:SetNextSpit(0)
@@ -45,13 +46,14 @@ function SWEP:Think()
 
 		if SERVER then
 			owner:EmitSound("weapons/crossbow/bolt_fly4.wav", 74, 150)
+			owner.LastRangedAttack = CurTime()
 
 			local ent = ents.Create("projectile_poisonspit")
 			if ent:IsValid() then
 				ent:SetOwner(owner)
 				local aimvec = owner:GetAimVector()
-				aimvec.z = math.max(aimvec.z, -0.25)
-				aimvec:Normalize()
+				--[[aimvec.z = math.max(aimvec.z, -0.25)
+				aimvec:Normalize()]]
 				local vStart = owner:GetShootPos()
 				local tr = util.TraceLine({start=vStart, endpos=vStart + owner:GetAimVector() * 30, filter=owner})
 				if tr.Hit then
@@ -62,7 +64,7 @@ function SWEP:Think()
 				ent:Spawn()
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() then
-					phys:SetVelocityInstantaneous(aimvec * 510)
+					phys:SetVelocityInstantaneous(aimvec * 900 --[[510]])
 				end
 			end
 		end
@@ -83,14 +85,15 @@ function SWEP:Think()
 			end
 		end
 	elseif self:IsLeaping() then
+		local delay = owner:GetMeleeSpeedMul()
 		if owner:IsOnGround() or 1 < owner:WaterLevel() then
 			self:SetLeaping(false)
-			self:SetNextPrimaryFire(curtime + 0.8)
+			self:SetNextPrimaryFire(curtime + 0.8 * delay)
 		else
-			owner:LagCompensation(true)
+			--owner:LagCompensation(true)
 
 			local vStart = owner:LocalToWorld(owner:OBBCenter())
-			local trace = util.TraceHull({start = vStart, endpos = vStart + owner:GetForward() * (owner:BoundingRadius() + 8), mins = owner:OBBMins() * 0.8, maxs = owner:OBBMaxs() * 0.8, filter = owner:GetMeleeFilter()})
+			local trace = owner:CompensatedMeleeTrace(owner:BoundingRadius() + 8, 12, vStart, owner:GetForward())
 			local ent = trace.Entity
 
 			if ent:IsValid() then
@@ -104,7 +107,7 @@ function SWEP:Think()
 				end
 
 				self:SetLeaping(false)
-				self:SetNextPrimaryFire(curtime + 1)
+				self:SetNextPrimaryFire(curtime + 1 * delay)
 
 				if SERVER then
 					owner:EmitSound("NPC_BlackHeadcrab.Bite")
@@ -113,21 +116,17 @@ function SWEP:Think()
 
 				if ent:IsPlayer() then
 					ent:MeleeViewPunch(self.PounceDamage)
-					ent:PoisonDamage(self.PounceDamage, owner, self)
-					local timername = tostring(ent).."poisonedby"..tostring(owner)..CurTime()
-					timer.CreateEx(timername, self.PounceDamageTime, self.PounceDamageTicks, DoPoisoned, ent, owner, self.PounceDamagePerTick, timername)
-				else
-					ent:PoisonDamage(self.PounceDamage * self.PounceDamageVsPropsMultiplier, owner, self)
 				end
+				ent:PoisonDamage(self.PounceDamage, owner, self)
 			elseif trace.HitWorld then
 				if SERVER then
 					owner:EmitSound("NPC_BlackHeadcrab.Impact")
 				end
 				self:SetLeaping(false)
-				self:SetNextPrimaryFire(curtime + 1)
+				self:SetNextPrimaryFire(curtime + 1 * delay)
 			end
 
-			owner:LagCompensation(false)
+			--owner:LagCompensation(false)
 		end
 	end
 
@@ -136,10 +135,10 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if self:IsLeaping() or self:IsGoingToSpit() or self:IsGoingToLeap() or CurTime() < self:GetNextPrimaryFire() or not owner:IsOnGround() then return end
 
-	self:SetNextLeap(CurTime() + 1.25)
+	self:SetNextLeap(CurTime() + self.PounceWindUp)
 
 	self.m_ViewAngles = owner:EyeAngles()
 
@@ -149,30 +148,26 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	if self:IsLeaping() or self:IsGoingToSpit() or self:IsGoingToLeap() or CurTime() < self:GetNextSecondaryFire() or not self.Owner:IsOnGround() then return end
+	if self:IsLeaping() or self:IsGoingToSpit() or self:IsGoingToLeap() or CurTime() < self:GetNextSecondaryFire() or not self:GetOwner():IsOnGround() then return end
 
-	self:SetNextSpit(CurTime() + 1)
+	self:SetNextSpit(CurTime() + self.SpitWindUp)
 
 	if SERVER then
-		self.Owner:EmitSound("npc/headcrab_poison/ph_scream"..math.random(1, 3)..".wav")
+		self:GetOwner():EmitSound("npc/headcrab_poison/ph_scream"..math.random(3)..".wav")
 	end
 end
 
 function SWEP:Reload()
 	if self:GetNextReload() > CurTime() then return end
-	self:SetNextReload(CurTime() + 3)
+	self:SetNextReload(CurTime() + self.SilentPounceWindUp)
 
 	if SERVER then
-		self.Owner:LagCompensation(true)
-
-		local ent = self.Owner:MeleeTrace(4096, 24, self.Owner:GetMeleeFilter()).Entity
-		if ent:IsValid() and ent:IsPlayer() then
-			self.Owner:EmitSound("npc/headcrab_poison/ph_warning"..math.random(1, 3)..".wav")
+		local ent = self:GetOwner():CompensatedMeleeTrace(4096, 24).Entity
+		if ent:IsValidPlayer() then
+			self:GetOwner():EmitSound("npc/headcrab_poison/ph_warning"..math.random(3)..".wav")
 		else
-			self.Owner:EmitSound("npc/headcrab_poison/ph_idle"..math.random(1, 3)..".wav")
+			self:GetOwner():EmitSound("npc/headcrab_poison/ph_idle"..math.random(3)..".wav")
 		end
-
-		self.Owner:LagCompensation(false)
 	end
 
 	return false
@@ -210,11 +205,11 @@ end
 SWEP.IsLeaping = SWEP.GetLeaping
 
 function SWEP:SetNextLeap(time)
-	self:SetDTFloat(0, time)
+	self:SetDTFloat(DT_WEAPON_BASE_FLOAT_RELOADEND + 1, time)
 end
 
 function SWEP:GetNextLeap()
-	return self:GetDTFloat(0)
+	return self:GetDTFloat(DT_WEAPON_BASE_FLOAT_RELOADEND + 1)
 end
 
 function SWEP:IsGoingToLeap()

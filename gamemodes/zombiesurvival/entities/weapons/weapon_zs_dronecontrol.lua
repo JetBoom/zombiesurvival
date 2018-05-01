@@ -1,16 +1,13 @@
 AddCSLuaFile()
 
+SWEP.PrintName = "Drone Control"
+SWEP.Description = "Controller for your Drone."
+SWEP.Slot = 4
+SWEP.SlotPos = 0
+
 if CLIENT then
-	SWEP.PrintName = "Drone Control"
-	SWEP.Description = "Controller for your Drone."
-
-	SWEP.ViewModelFOV = 50
-
 	SWEP.BobScale = 0.5
 	SWEP.SwayScale = 0.5
-
-	SWEP.Slot = 4
-	SWEP.SlotPos = 0
 end
 
 SWEP.ViewModel = "models/weapons/c_slam.mdl"
@@ -23,7 +20,7 @@ SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "none"
 
-SWEP.Secondary.Delay = 20
+SWEP.Secondary.Delay = 0
 SWEP.Secondary.Heal = 10
 
 SWEP.Secondary.ClipSize = -1
@@ -39,6 +36,10 @@ SWEP.NoPickupNotification = true
 
 SWEP.HoldType = "slam"
 
+SWEP.NoDeploySpeedChange = true
+SWEP.NoTransfer = true
+SWEP.AutoSwitchFrom	= false
+
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 	self:SetDeploySpeed(10)
@@ -51,35 +52,42 @@ function SWEP:Think()
 	end
 
 	if SERVER then
-		for _, ent in pairs(ents.FindByClass("prop_drone")) do
-			if ent:GetOwner() == self.Owner then
+		for _, ent in pairs(ents.FindByClass("prop_drone*")) do
+			if ent:IsValid() and ent:GetObjectOwner() == self:GetOwner() then
 				return
 			end
 		end
 
-		self.Owner:StripWeapon(self:GetClass())
+		self:GetOwner():StripWeapon(self:GetClass())
 	end
 end
 
+function SWEP:GetResupplyAmmoType()
+	local owner = self:GetOwner()
+	if owner:IsValid() and owner.DroneControlAmmo then
+		return owner.DroneControlAmmo
+	end
+	return "smg1"
+end
+
 function SWEP:PrimaryAttack()
+end
+
+function SWEP:SecondaryAttack()
 	if IsFirstTimePredicted() then
 		self:SetDTBool(0, not self:GetDTBool(0))
 
 		if CLIENT then
-			LocalPlayer():EmitSound(self:GetDTBool(0) and "buttons/button17.wav" or "buttons/button19.wav", 0)
+			MySelf:EmitSound(self:GetDTBool(0) and "buttons/button17.wav" or "buttons/button19.wav", 0)
 		end
 	end
 end
 
-function SWEP:SecondaryAttack()
+function SWEP:Reload()
 end
 
-function SWEP:Reload()
-	return false
-end
-	
 function SWEP:Deploy()
-	gamemode.Call("WeaponDeployed", self.Owner, self)
+	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 
@@ -92,11 +100,8 @@ function SWEP:Holster()
 	return true
 end
 
-function SWEP:Reload()
-end
-
 if not CLIENT then return end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end

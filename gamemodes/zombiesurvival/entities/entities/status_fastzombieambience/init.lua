@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
@@ -9,5 +6,6 @@ end
 
 function ENT:Think()
 	local owner = self:GetOwner()
-	if not (owner:Alive() and owner:Team() == TEAM_UNDEAD and owner:GetZombieClassTable().Name == "Fast Zombie") then self:Remove() end
+	local name = owner:GetZombieClassTable().Name
+	if not (owner:Alive() and owner:Team() == TEAM_UNDEAD and (name == "Fast Zombie" or name == "Slingshot Zombie" or name == "Fast Zombie Torso" or name == "Slingshot Zombie Torso")) then self:Remove() end
 end

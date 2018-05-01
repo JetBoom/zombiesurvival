@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Pot"
+SWEP.PrintName = "Pot"
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
 
@@ -37,6 +37,11 @@ SWEP.MissGesture = SWEP.HitGesture
 SWEP.SwingRotation = Angle(30, -30, -30)
 SWEP.SwingTime = 0.3
 SWEP.SwingHoldType = "grenade"
+
+SWEP.AllowQualityWeapons = true
+SWEP.Culinary = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.1)
 
 function SWEP:PlayHitSound()
 	self:EmitSound("weapons/melee/frying_pan/pan_hit-0"..math.random(4)..".ogg")

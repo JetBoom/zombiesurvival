@@ -59,12 +59,9 @@ local DrawSharpen = DrawSharpen
 local EyePos = EyePos
 local TEAM_HUMAN = TEAM_HUMAN
 local TEAM_UNDEAD = TEAM_UNDEAD
-local render_UpdateScreenEffectTexture = render.UpdateScreenEffectTexture
 local render_SetMaterial = render.SetMaterial
-local render_DrawScreenQuad = render.DrawScreenQuad
 local render_DrawSprite = render.DrawSprite
-local render_DrawBeam = render.DrawBeam
-local render_GetLightRGB = render.GetLightRGB
+local render_SetLightingMode = render.SetLightingMode
 local math_Approach = math.Approach
 local FrameTime = FrameTime
 local CurTime = CurTime
@@ -73,6 +70,8 @@ local math_min = math.min
 local math_max = math.max
 local math_abs = math.abs
 local team_GetPlayers = team.GetPlayers
+
+local FullBright = false
 
 local tColorModDead = {
 	["$pp_colour_contrast"] = 1.25,
@@ -111,20 +110,31 @@ local tColorModZombie = {
 }
 
 local tColorModZombieVision = {
-	["$pp_colour_colour"] = 0.75,
-	["$pp_colour_brightness"] = -0.15,
-	["$pp_colour_contrast"] = 1.5,
+	["$pp_colour_colour"] = 3,
+	["$pp_colour_brightness"] = -0.1,
+	["$pp_colour_contrast"] = 1,
 	["$pp_colour_mulr"]	= 0,
 	["$pp_colour_mulg"] = 0,
 	["$pp_colour_mulb"] = 0,
 	["$pp_colour_addr"] = 0,
-	["$pp_colour_addg"] = 0,
+	["$pp_colour_addg"] = 0.1,
+	["$pp_colour_addb"] = 0
+}
+
+local tColorModNightVision = {
+	["$pp_colour_colour"] = 0.99,
+	["$pp_colour_brightness"] = -0.34,
+	["$pp_colour_contrast"] = 1.46,
+	["$pp_colour_mulr"] = 0,
+	["$pp_colour_mulg"] = 1,
+	["$pp_colour_mulb"] = 0,
+	["$pp_colour_addr"] = 0,
+	["$pp_colour_addg"] = 0.2,
 	["$pp_colour_addb"] = 0
 }
 
 local redview = 0
 local fear = 0
-local matTankGlass = Material("models/props_lab/Tank_Glass001")
 function GM:_RenderScreenspaceEffects()
 	if MySelf.Confusion and MySelf.Confusion:IsValid() then
 		MySelf.Confusion:RenderScreenSpaceEffects()
@@ -137,16 +147,6 @@ function GM:_RenderScreenspaceEffects()
 	if self.DrawPainFlash and self.HurtEffect > 0 then
 		DrawSharpen(1, math_min(6, self.HurtEffect * 3))
 	end
-
-	--[[if MySelf:Team() == TEAM_UNDEAD and self.m_ZombieVision and not matTankGlass:IsError() then
-		render_UpdateScreenEffectTexture()
-		matTankGlass:SetFloat("$envmap", 0)
-		matTankGlass:SetFloat("$envmaptint", 0)
-		matTankGlass:SetFloat("$refractamount", 0.035)
-		matTankGlass:SetInt("$ignorez", 1)
-		render_SetMaterial(matTankGlass)
-		render_DrawScreenQuad()
-	end]]
 
 	if self.ColorModEnabled then
 		if not MySelf:Alive() and MySelf:GetObserverMode() ~= OBS_MODE_CHASE then
@@ -163,72 +163,82 @@ function GM:_RenderScreenspaceEffects()
 				DrawColorModify(tColorModZombie)
 			end
 		else
-			local curr = tColorModHuman["$pp_colour_addr"]
-			local health = MySelf:Health()
-			if health <= 50 then
-				--tColorModHuman["$pp_colour_addr"] = math_min(0.3 - health * 0.006, curr + FrameTime() * 0.055)
-				redview = math_Approach(redview, 1 - health / 50, FrameTime() * 0.2)
-			elseif 0 < curr then
-				--tColorModHuman["$pp_colour_addr"] = math_max(0, curr - FrameTime() * 0.1)
-				redview = math_Approach(redview, 0, FrameTime() * 0.2)
+			if self.m_NightVision then
+				DrawColorModify(tColorModNightVision)
+			else
+				local curr = tColorModHuman["$pp_colour_addr"]
+				local health = MySelf:Health()
+				local maxhealth = MySelf:GetMaxHealth() / 3
+				if health <= maxhealth then
+					redview = math_Approach(redview, 1 - health / maxhealth, FrameTime() * 0.2)
+				elseif 0 < curr then
+					redview = math_Approach(redview, 0, FrameTime() * 0.2)
+				end
+
+				tColorModHuman["$pp_colour_addr"] = redview * (0.035 + math_abs(math_sin(CurTime() * 2)) * 0.14)
+				tColorModHuman["$pp_colour_brightness"] = fear * -0.045
+				tColorModHuman["$pp_colour_contrast"] = 1 + fear * 0.15
+				tColorModHuman["$pp_colour_colour"] = 1 - fear * 0.725 --0.85
+
+				DrawColorModify(tColorModHuman)
 			end
-
-			tColorModHuman["$pp_colour_addr"] = redview * (0.035 + math_abs(math.sin(CurTime() * 2)) * 0.14)
-			tColorModHuman["$pp_colour_brightness"] = fear * -0.045
-			tColorModHuman["$pp_colour_contrast"] = 1 + fear * 0.15
-			tColorModHuman["$pp_colour_colour"] = 1 - fear * 0.725 --0.85
-
-			DrawColorModify(tColorModHuman)
 		end
 	end
 end
 
+function GM:_RenderScene()
+	if (self.m_ZombieVision and MySelf:Team() == TEAM_UNDEAD) or (self.m_NightVision and MySelf:Team() == TEAM_HUMAN and not MySelf:GetStatus("dimvision")) then
+		render_SetLightingMode(1)
+		FullBright = true
+	else
+		FullBright = false
+	end
+end
+
+function GM:FullBrightOn()
+	if FullBright then
+		render_SetLightingMode(1)
+	end
+end
+
+function GM:FullBrightOff()
+	if FullBright then
+		render_SetLightingMode(0)
+	end
+end
+
+hook.Add("PreDrawOpaqueRenderables", "ZFullBright", GM.FullBrightOff)
+hook.Add("PreDrawTranslucentRenderables", "ZFullBright", GM.FullBrightOff)
+hook.Add("PostDrawTranslucentRenderables", "ZFullBright", GM.FullBrightOn)
+hook.Add("PreDrawViewModel", "ZFullBright", GM.FullBrightOff)
+hook.Add("RenderScreenspaceEffects", "ZFullBright", GM.FullBrightOff)
+
 local matGlow = Material("Sprites/light_glow02_add_noz")
 local colHealthEmpty = GM.AuraColorEmpty
 local colHealthFull = GM.AuraColorFull
-local colHealth = Color(255, 255, 255, 255)
-local matPullBeam = Material("cable/rope")
-local colPullBeam = Color(255, 255, 255, 255)
-function GM:_PostDrawOpaqueRenderables()
-	if MySelf:Team() == TEAM_UNDEAD then
-		if self.Auras then
-			local eyepos = EyePos()
-			for _, pl in pairs(team_GetPlayers(TEAM_HUMAN)) do
-				if pl:Alive() and pl:GetPos():Distance(eyepos) <= pl:GetAuraRange() then
-					local healthfrac = math_max(pl:Health(), 0) / pl:GetMaxHealth()
-					colHealth.r = math_Approach(colHealthEmpty.r, colHealthFull.r, math_abs(colHealthEmpty.r - colHealthFull.r) * healthfrac)
-					colHealth.g = math_Approach(colHealthEmpty.g, colHealthFull.g, math_abs(colHealthEmpty.g - colHealthFull.g) * healthfrac)
-					colHealth.b = math_Approach(colHealthEmpty.b, colHealthFull.b, math_abs(colHealthEmpty.b - colHealthFull.b) * healthfrac)
+local colHealth = Color(255, 255, 255)
+function GM:DrawHumanIndicators()
+	if MySelf:Team() ~= TEAM_UNDEAD or not self.Auras or self.m_ZombieVision then return end
 
-					--local attach = pl:GetAttachment(pl:LookupAttachment("chest")) -- This probably lagged so much.
-					--local pos = attach and attach.Pos or pl:WorldSpaceCenter()
-					local pos = pl:WorldSpaceCenter()
+	local eyepos = EyePos()
+	local range, dist, healthfrac, pos, size
+	for _, pl in pairs(team_GetPlayers(TEAM_HUMAN)) do
+		range = pl:GetAuraRangeSqr()
+		dist = pl:GetPos():DistToSqr(eyepos)
+		if pl:Alive() and dist <= range and (not pl:GetDTBool(DT_PLAYER_BOOL_NECRO) or dist >= 27500) then
+			healthfrac = math_max(pl:Health(), 0) / pl:GetMaxHealth()
+			colHealth.r = math_Approach(colHealthEmpty.r, colHealthFull.r, math_abs(colHealthEmpty.r - colHealthFull.r) * healthfrac)
+			colHealth.g = math_Approach(colHealthEmpty.g, colHealthFull.g, math_abs(colHealthEmpty.g - colHealthFull.g) * healthfrac)
+			colHealth.b = math_Approach(colHealthEmpty.b, colHealthFull.b, math_abs(colHealthEmpty.b - colHealthFull.b) * healthfrac)
 
-					render_SetMaterial(matGlow)
-					render_DrawSprite(pos, 13, 13, colHealth)
-					local size = math_sin(self.HeartBeatTime + pl:EntIndex()) * 50 - 21
-					if size > 0 then
-						render_DrawSprite(pos, size * 1.5, size, colHealth)
-						render_DrawSprite(pos, size, size * 1.5, colHealth)
-					end
-				end
-			end
-		end
-	elseif MySelf:Team() == TEAM_HUMAN then
-		self:DrawCraftingEntity()
+			pos = pl:WorldSpaceCenter()
 
-		local holding = MySelf.status_human_holding
-		if holding and holding:IsValid() and holding:GetIsHeavy() then
-			local object = holding:GetObject()
-			if object:IsValid() then
-				local pullpos = holding:GetPullPos()
-				local hingepos = holding:GetHingePos()
-				local r, g, b = render_GetLightRGB(hingepos)
-				colPullBeam.r = r * 255
-				colPullBeam.g = g * 255
-				colPullBeam.b = b * 255
-				render_SetMaterial(matPullBeam)
-				render_DrawBeam(hingepos, pullpos, 0.5, 0, pullpos:Distance(hingepos) / 128, colPullBeam)
+			render_SetMaterial(matGlow)
+			render_DrawSprite(pos, 13, 13, colHealth)
+			size = math_sin(self.HeartBeatTime + pl:EntIndex()) * 50 - 21
+			if size > 0 then
+				render_DrawSprite(pos, size * 1.5, size, colHealth)
+				render_DrawSprite(pos, size, size * 1.5, colHealth)
 			end
 		end
 	end
@@ -243,11 +253,49 @@ function GM:ToggleZombieVision(onoff)
 		if not self.m_ZombieVision then
 			self.m_ZombieVision = true
 			MySelf:EmitSound("npc/stalker/breathing3.wav", 0, 230)
-			MySelf:SetDSP(30)
 		end
 	elseif self.m_ZombieVision then
 		self.m_ZombieVision = nil
 		MySelf:EmitSound("npc/zombie/zombie_pain6.wav", 0, 110)
-		MySelf:SetDSP(0)
 	end
+end
+
+net.Receive("zs_togglezvision", function(length)
+	gamemode.Call("ToggleZombieVision")
+end)
+
+local CModWhiteOut = {
+	["$pp_colour_addr"] = 0,
+	["$pp_colour_addg"] = 0,
+	["$pp_colour_addb"] = 0,
+	["$pp_colour_brightness"] = 0,
+	["$pp_colour_contrast"] = 1,
+	["$pp_colour_colour"] = 1,
+	["$pp_colour_mulr"] = 0,
+	["$pp_colour_mulg"] = 0,
+	["$pp_colour_mulb"] = 0
+}
+local WhiteOutEnd
+local WhiteOutFadeTime
+local function RenderWhiteOut()
+	local dt = math_max(WhiteOutEnd - CurTime(), 0) / WhiteOutFadeTime
+	if dt <= 0 then
+		WhiteOutEnd = nil
+		WhiteOutFadeTime = nil
+		hook.Remove("RenderScreenspaceEffects", "WhiteOut")
+	else
+		local size = 5 + dt * 10
+		CModWhiteOut["$pp_colour_brightness"] = dt ^ 2
+		DrawBloom(1 - dt, dt * 3, size, size, 1, 1, 1, 1, 1)
+		DrawColorModify(CModWhiteOut)
+	end
+end
+
+function util.WhiteOut(time, fadeouttime)
+	time = time or 1
+
+	WhiteOutEnd = math_max(CurTime() + time, WhiteOutEnd or 0)
+	WhiteOutFadeTime = math_max(fadeouttime or time, WhiteOutFadeTime or 0)
+
+	hook.Add("RenderScreenspaceEffects", "WhiteOut", RenderWhiteOut)
 end

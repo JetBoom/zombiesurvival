@@ -1,22 +1,18 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.NextEmit = 0
 
 function ENT:Initialize()
 	self:DrawShadow(false)
 
-	self.AmbientSound = CreateSound(self, "npc/antlion_guard/growl_idle.wav")
-	self.AmbientSound:PlayEx(0.55, 130)
+	self.AmbientSound = CreateSound(self, "ambient/levels/citadel/citadel_ambient_scream_loop1.wav")
+	self.AmbientSound:PlayEx(1, 88)
 
 	self:GetOwner().status_shadeambience = self
 end
 
 function ENT:OnRemove()
 	self.AmbientSound:Stop()
-end
-
-function ENT:Think()
-	self.AmbientSound:PlayEx(0.55, 130 + math.sin(RealTime()))
 end
 
 function ENT:Draw()
@@ -46,7 +42,7 @@ function ENT:Draw()
 			particle:SetRollDelta(math.Rand(-5, 5))
 			particle:SetColor(255, 255, 190)
 
-			emitter:Finish()
+			emitter:Finish() emitter = nil collectgarbage("step", 64)
 		end
 	end
 end

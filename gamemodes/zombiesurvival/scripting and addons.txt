@@ -118,13 +118,13 @@ Function. Adds a floating score number in the world.
 GM:FloatingScore(Entity ent, [String type, Integer score, Integer flags])
 
 Hook. Called when the player gets profits from a crate they own.
-GM:ReceivedCommission(Entity crate, Player buyer, Integer points)
+GM:ReceivedCommission(Entity crate, Player buyer, Float points)
 
 Hook. Called when the player heals another player.
-GM:HealedOtherPlayer(Player other, Integer points)
+GM:HealedOtherPlayer(Player other, Float points)
 
 Hook. Called when the player repairs an object.
-GM:RepairedObject(Entity object, Integer pointsreceived)
+GM:RepairedObject(Entity object, Float pointsreceived)
 
 Function. Suppresses the Arsenal Upgrade message for provided number of seconds.
 GM:SuppressArsenalUpgrades(Float time)

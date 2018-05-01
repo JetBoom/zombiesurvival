@@ -1,12 +1,12 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_NONE
 
 function ENT:Initialize()
 	self:DrawShadow(false)
 
-	self.AmbientSound = CreateSound(self, "npc/antlion_guard/growl_idle.wav")
-	self.AmbientSound:PlayEx(0.55, 110)
+	self.AmbientSound = CreateSound(self, "zombiesurvival/nightmare_ambiance.ogg")
+	self.AmbientSound:PlayEx(0.8, 100)
 end
 
 function ENT:OnRemove()
@@ -14,15 +14,15 @@ function ENT:OnRemove()
 end
 
 function ENT:Think()
-	owner = self:GetOwner()
+	--[[owner = self:GetOwner()
 	if owner:IsValid() then
 		local wep = owner:GetActiveWeapon()
 		if wep:IsValid() and wep.IsSwinging and wep:IsSwinging() then
 			self.AmbientSound:Stop()
-		else
-			self.AmbientSound:PlayEx(0.55, 110 + math.sin(RealTime()))
-		end
-	end
+		else]]
+			--self.AmbientSound:PlayEx(0.8, 100 + RealTime() % 0.1)
+		--[[end
+	end]]
 end
 
 function ENT:Draw()

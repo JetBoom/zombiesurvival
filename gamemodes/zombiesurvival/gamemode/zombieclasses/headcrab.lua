@@ -10,14 +10,14 @@ CLASS.Unlocked = true
 
 CLASS.SWEP = "weapon_zs_headcrab"
 
-CLASS.Health = 40
-CLASS.Speed = 160
+CLASS.Health = 70
+CLASS.Speed = 175
 CLASS.JumpPower = 100
 
 CLASS.NoFallDamage = true
 CLASS.NoFallSlowdown = true
 
-CLASS.Points = 2
+CLASS.Points = CLASS.Health/GM.HeadcrabZombiePointRatio
 
 CLASS.Hull = {Vector(-12, -12, 0), Vector(12, 12, 18.1)}
 CLASS.HullDuck = {Vector(-12, -12, 0), Vector(12, 12, 18.1)}
@@ -33,6 +33,13 @@ CLASS.IsHeadcrab = true
 
 CLASS.PainSounds = {"NPC_HeadCrab.Pain"}
 CLASS.DeathSounds = {"NPC_HeadCrab.Die"}
+
+CLASS.BloodColor = BLOOD_COLOR_YELLOW
+
+local CurTime = CurTime
+local math_min = math.min
+local math_Clamp = math.Clamp
+local math_abs = math.abs
 
 function CLASS:Move(pl, mv)
 	local wep = pl:GetActiveWeapon()
@@ -54,37 +61,34 @@ function CLASS:CalcMainActivity(pl, velocity)
 	if wep:IsValid() and wep.GetBurrowTime then
 		local time = wep:GetBurrowTime()
 		if time > 0 then
-			pl.CalcSeqOverride = 11
-			return true
-		elseif time < 0 then
-			pl.CalcSeqOverride = 10
-			return true
+			return 1, 11
+		end
+		if time < 0 then
+			return 1, 10
 		end
 	end
 
 	if pl:OnGround() then
-		if velocity:Length2D() > 0.5 then
-			pl.CalcIdeal = ACT_RUN
-		else
-			pl.CalcSeqOverride = 1
+		if velocity:Length2DSqr() > 1 then
+			return ACT_RUN, -1
 		end
-	elseif pl:WaterLevel() >= 3 then
-		pl.CalcSeqOverride = 6
-	else
-		pl.CalcSeqOverride = 5
+
+		return 1, 1
 	end
 
-	return true
+	if pl:WaterLevel() >= 3 then
+		return 1, 6
+	end
+
+	return 1, 5
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
-	pl:FixModelAngles(velocity)
-
 	local wep = pl:GetActiveWeapon()
 	if wep:IsValid() and wep.GetBurrowTime then
 		local time = wep:GetBurrowTime()
 		if time ~= 0 then
-			pl:SetCycle(math.Clamp((math.abs(time) - CurTime()) / wep.BurrowTime, 0, 1))
+			pl:SetCycle(math_Clamp((math_abs(time) - CurTime()) / wep.BurrowTime, 0, 1))
 			pl:SetPlaybackRate(0)
 			return true
 		end
@@ -105,8 +109,8 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 	end
 
 	local len2d = velocity:Length2D()
-	if len2d > 0.5 then
-		pl:SetPlaybackRate(math.min(len2d / maxseqgroundspeed * 0.5, 2))
+	if len2d > 1 then
+		pl:SetPlaybackRate(math_min(len2d / maxseqgroundspeed * 0.5, 2))
 	else
 		pl:SetPlaybackRate(1)
 	end
@@ -117,7 +121,7 @@ end
 function CLASS:DoesntGiveFear(pl)
 	local wep = pl:GetActiveWeapon()
 	if wep:IsValid() and wep.GetBurrowTime then
-		return wep:GetBurrowTime() > 0 and CurTime() > math.abs(wep:GetBurrowTime())
+		return wep:GetBurrowTime() > 0 and CurTime() > math_abs(wep:GetBurrowTime())
 	end
 end
 CLASS.NoDraw = CLASS.DoesntGiveFear
@@ -140,7 +144,7 @@ CLASS.Icon = "zombiesurvival/killicons/headcrab"
 
 function CLASS:PrePlayerDraw(pl)
 	local wep = pl:GetActiveWeapon()
-	if wep:IsValid() and wep.GetBurrowTime and wep:GetBurrowTime() ~= 0 and CurTime() >= math.abs(wep:GetBurrowTime()) then
+	if wep:IsValid() and wep.GetBurrowTime and wep:GetBurrowTime() ~= 0 and CurTime() >= math_abs(wep:GetBurrowTime()) then
 		return true
 	end
 end

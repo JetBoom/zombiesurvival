@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 local function RefreshDetpackOwners(pl)
 	for _, ent in pairs(ents.FindByClass("prop_detpack")) do
@@ -16,6 +13,8 @@ hook.Add("OnPlayerChangedTeam", "Detpack.OnPlayerChangedTeam", RefreshDetpackOwn
 ENT.NextBlip = 0
 
 function ENT:Initialize()
+	self.CreateTime = CurTime()
+
 	self:SetModel("models/weapons/w_c4_planted.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
@@ -35,6 +34,8 @@ end
 
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
+
+	if dmginfo:GetDamage() <= 0 then return end
 
 	if not self.Exploded and dmginfo:GetDamage() >= 9 then
 		local attacker = dmginfo:GetAttacker()
@@ -63,14 +64,22 @@ function ENT:Explode()
 	self.Exploded = true
 
 	local owner = self:GetOwner()
-	if owner:IsValid() and owner:IsPlayer() and owner:Team() == TEAM_HUMAN then
+	if owner:IsValidHuman() then
 		local pos = self:GetPos()
 
-		util.BlastDamage2(self, owner, pos, 320, 600)
+		util.BlastDamagePlayer(self, owner, pos, 256, 480, DMG_ALWAYSGIB)
 
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pos)
-		util.Effect("Explosion", effectdata)
+			effectdata:SetNormal(self:GetUp() * -1)
+		util.Effect("decal_scorch", effectdata)
+
+		for i=1, 3 do
+			self:EmitSound("npc/env_headcrabcanister/explosion.wav", 75 + i * 5, 100)
+		end
+		for i=1, 2 do
+			ParticleEffect("dusty_explosion_rockets", pos, angle_zero)
+		end
 	end
 end
 
@@ -98,4 +107,10 @@ function ENT:OnPackedUp(pl)
 	pl:GiveAmmo(1, "sniperpenetratedround")
 
 	self:Remove()
+end
+
+function ENT:SetExplodeTime(time)
+	if self.CreateTime + self.ArmTime > CurTime() then return end
+
+	self:SetDTFloat(0, time)
 end

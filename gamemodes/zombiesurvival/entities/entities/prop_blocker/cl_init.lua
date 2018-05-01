@@ -1,1 +1,1 @@
-include("shared.lua")
+INC_CLIENT()

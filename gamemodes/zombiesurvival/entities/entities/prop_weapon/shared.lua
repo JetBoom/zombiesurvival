@@ -8,22 +8,18 @@ function ENT:HumanHoldable(pl)
 end
 
 function ENT:SetWeaponType(class)
-	local weptab = weapons.GetStored(class)
-	if weptab then
+	local weptab = weapons.Get(class)
+	if string.sub(class, 1, 12) == "weapon_zs_t_" then -- Convertor
+		if SERVER then
+			self:MakeInvItemConvert(class)
+		end
+	elseif weptab then
 		if weptab.WorldModel then
 			self:SetModel(weptab.WorldModel)
-		elseif weptab.Base then
-			local weptabb = weapons.GetStored(weptab.Base)
-			if weptabb and weptabb.WorldModel then
-				self:SetModel(weptabb.WorldModel)
-			end
 		end
 
-		if SERVER and weptab.BoxPhysicsMax then
-			self:PhysicsInitBox(weptab.BoxPhysicsMin, weptab.BoxPhysicsMax)
-			self:SetCollisionBounds(weptab.BoxPhysicsMin, weptab.BoxPhysicsMax)
-			self:SetSolid(SOLID_VPHYSICS)
-			self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
+		if SERVER then
+			self:SetupPhysics(weptab)
 		end
 
 		if weptab.ModelScale then

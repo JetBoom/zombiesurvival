@@ -1,10 +1,17 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 ENT.AnimTime = 0.25
 
 function ENT:OnRemove()
+	local object = self:GetObject()
+	if object:IsValid() then
+		object.IgnoreMelee = nil
+		object.IgnoreTraces = nil
+		object.IgnoreBullets = nil
+	end
+
 	local owner = self:GetOwner()
 	if owner == MySelf then
 		if self.Rotating then
@@ -26,6 +33,13 @@ end
 
 function ENT:Initialize()
 	hook.Add("Move", self, self.Move)
+
+	local object = self:GetObject()
+	if object:IsValid() then
+		object.IgnoreMelee = true
+		object.IgnoreTraces = true
+		object.IgnoreBullets = true
+	end
 
 	self.Created = CurTime()
 

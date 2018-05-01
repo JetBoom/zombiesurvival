@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.NextHeal = 0
 
@@ -38,8 +35,8 @@ function ENT:Think()
 		if fCurTime >= self.NextHeal then
 			self.NextHeal = fCurTime + 0.25
 
-			if owner:Health() < owner:GetMaxHealth() then
-				owner:SetHealth(owner:Health() + 1)
+			if owner:Health() < owner:GetMaxHealth() and not owner:GetZombieClassTable().Boss then
+				owner:SetHealth(math.min(owner:GetMaxHealth(), owner:Health() + math.min(owner:GetMaxHealth() * 0.035, 3)))
 			end
 		end
 	end

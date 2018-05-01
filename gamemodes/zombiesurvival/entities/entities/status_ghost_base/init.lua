@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:Think()
 	self:RecalculateValidity()
@@ -10,4 +7,7 @@ function ENT:Think()
 	if not (owner:IsValid() and owner:GetActiveWeapon():IsValid() and owner:GetActiveWeapon():GetClass() == self.GhostWeapon) then
 		self:Remove()
 	end
+
+	self:NextThink(CurTime())
+	return true
 end

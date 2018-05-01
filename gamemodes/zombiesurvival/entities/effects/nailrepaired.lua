@@ -6,6 +6,7 @@ function EFFECT:Init(data)
 	local norepair = data:GetMagnitude() == 0
 
 	local emitter = ParticleEmitter(pos)
+
 	for i=1, math.random(16, 24) do
 		local particle = emitter:Add("sprites/glow04_noz", pos)
 		particle:SetVelocity((norm + VectorRand()):GetNormalized() * math.Rand(8, 24))
@@ -24,6 +25,8 @@ function EFFECT:Init(data)
 		particle:SetRoll(math.Rand(0, 360))
 		particle:SetRollDelta(math.Rand(-8, 8))
 	end
+
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end
 
 function EFFECT:Think()

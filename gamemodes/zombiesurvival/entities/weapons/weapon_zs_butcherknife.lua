@@ -1,8 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Butcher Knife"
+SWEP.PrintName = "Butcher Knife"
+SWEP.Description = "A very fast swinging butcher knife, capable of mincing zombies very quickly up close."
 
+if CLIENT then
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
 
@@ -27,10 +28,10 @@ SWEP.NoDroppedWorldModel = true
 --[[SWEP.BoxPhysicsMax = Vector(8, 1, 4)
 SWEP.BoxPhysicsMin = Vector(-8, -1, -4)]]
 
-SWEP.MeleeDamage = 40
+SWEP.MeleeDamage = 45
 SWEP.MeleeRange = 48
 SWEP.MeleeSize = 0.875
-SWEP.Primary.Delay = 0.7
+SWEP.Primary.Delay = 0.5
 
 SWEP.WalkSpeed = SPEED_FAST
 
@@ -41,6 +42,13 @@ SWEP.MissGesture = SWEP.HitGesture
 
 SWEP.HitDecal = "Manhackcut"
 SWEP.HitAnim = ACT_VM_MISSCENTER
+
+SWEP.Tier = 2
+
+SWEP.AllowQualityWeapons = true
+SWEP.Culinary = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.06)
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/knife/knife_slash"..math.random(2)..".wav", 72, math.Rand(85, 95))
@@ -56,7 +64,7 @@ function SWEP:PlayHitFleshSound()
 end
 
 function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
-	if hitent:IsValid() and hitent:IsPlayer() and hitent:Health() <= 0 then
+	--[[if hitent:IsValid() and hitent:IsPlayer() and hitent:Health() <= 0 then
 		-- Dismember closest limb to tr.HitPos
-	end
+	end]]
 end

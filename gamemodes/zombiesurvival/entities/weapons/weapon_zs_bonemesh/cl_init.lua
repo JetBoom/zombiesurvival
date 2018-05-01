@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 SWEP.PrintName = "Bone Mesh"
 SWEP.ViewModelFOV = 47

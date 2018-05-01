@@ -21,7 +21,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:OnRemove()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		if owner.Flapping then
 			owner:StopSound("NPC_Crow.Flap")

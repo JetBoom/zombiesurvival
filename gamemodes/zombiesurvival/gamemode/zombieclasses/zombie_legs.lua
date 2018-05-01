@@ -3,6 +3,7 @@ CLASS.TranslationName = "class_zombie_legs"
 CLASS.Description = "description_zombie_legs"
 
 CLASS.Model = Model("models/player/zombie_classic.mdl")
+CLASS.OverrideModel = Model("models/Zombie/Classic_legs.mdl")
 CLASS.NoHead = true
 
 CLASS.Wave = 0
@@ -14,7 +15,9 @@ CLASS.Health = 100
 CLASS.Speed = 170
 CLASS.JumpPower = 250
 
-CLASS.Points = 1
+CLASS.CanTaunt = true
+
+CLASS.Points = CLASS.Health/GM.LegsZombiePointRatio
 
 CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 32)}
 CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 32)}
@@ -31,55 +34,46 @@ CLASS.VoicePitch = 0.65
 
 CLASS.SWEP = "weapon_zs_zombielegs"
 
+CLASS.BloodColor = -1
+
+local math_random = math.random
+
+function CLASS:DoesntGiveFear(pl)
+	return pl.FeignDeath and pl.FeignDeath:IsValid()
+end
+
 if SERVER then
-	function CLASS:OnSpawned(pl)
-		local status = pl:GiveStatus("overridemodel")
-		if status and status:IsValid() then
-			status:SetModel("models/Zombie/Classic_legs.mdl")
-		end
+	function CLASS:AltUse(pl)
+		pl:StartFeignDeath()
 	end
 
-	function CLASS:AltUse(pl)
-		local feigndeath = pl.FeignDeath
-		if feigndeath and feigndeath:IsValid() then
-			if CurTime() >= feigndeath:GetStateEndTime() then
-				feigndeath:SetState(1)
-				feigndeath:SetStateEndTime(CurTime() + 1.5)
-			end
-		elseif pl:IsOnGround() and not pl:KeyDown(IN_FORWARD) and not pl:KeyDown(IN_MOVERIGHT) and not pl:KeyDown(IN_MOVELEFT) and not pl:KeyDown(IN_BACK) then
-			local wep = pl:GetActiveWeapon()
-			if wep:IsValid() and not wep:IsSwinging() and CurTime() > wep:GetNextPrimaryFire() then
-				local status = pl:GiveStatus("feigndeath")
-				if status and status:IsValid() then
-					status:SetStateEndTime(CurTime() + 1.5)
-				end
-			end
-		end
+	function CLASS:IgnoreLegDamage(pl, dmginfo)
+		return true
 	end
 end
 
---[[function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
-	--if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC then
-	if dmginfo:GetDamagePosition().z > pl:GetPos().z + 48 then
+function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
+	if not dmginfo:IsBulletDamage() then return true end
+
+	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC and dmginfo:GetDamagePosition().z > pl:LocalToWorld(Vector(0, 0, self.Hull[2].z * 1.33)).z then
 		dmginfo:SetDamage(0)
 		dmginfo:ScaleDamage(0)
 	end
 
 	return true
-end]]
+end
 
-function CLASS:Move(pl, mv)
+--[[function CLASS:Move(pl, mv)
 	local wep = pl:GetActiveWeapon()
 	if wep.Move and wep:Move(mv) then
 		return true
 	end
-end
+end]]
 
 function CLASS:ShouldDrawLocalPlayer(pl)
 	return true
 end
 
-local mathrandom = math.random
 local StepSounds = {
 	"npc/zombie/foot1.wav",
 	"npc/zombie/foot2.wav",
@@ -91,23 +85,23 @@ local ScuffSounds = {
 	"npc/zombie/foot_slide3.wav"
 }
 function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
-	if mathrandom() < 0.15 then
-		pl:EmitSound(ScuffSounds[mathrandom(#ScuffSounds)], 70)
+	if math_random() < 0.15 then
+		pl:EmitSound(ScuffSounds[math_random(#ScuffSounds)], 70)
 	else
-		pl:EmitSound(StepSounds[mathrandom(#StepSounds)], 70)
+		pl:EmitSound(StepSounds[math_random(#StepSounds)], 70)
 	end
 
 	return true
 end
 --[[function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
 	if iFoot == 0 then
-		if mathrandom() < 0.15 then
+		if math_random() < 0.15 then
 			pl:EmitSound("Zombie.ScuffLeft")
 		else
 			pl:EmitSound("Zombie.FootstepLeft")
 		end
 	else
-		if mathrandom() < 0.15 then
+		if math_random() < 0.15 then
 			pl:EmitSound("Zombie.ScuffRight")
 		else
 			pl:EmitSound("Zombie.FootstepRight")
@@ -132,14 +126,18 @@ end
 function CLASS:CalcMainActivity(pl, velocity)
 	local feign = pl.FeignDeath
 	if feign and feign:IsValid() then
-		pl.CalcSeqOverride = pl:LookupSequence("zombie_slump_rise_02_fast")
-	elseif velocity:Length2D() <= 0.5 then
-		pl.CalcIdeal = ACT_HL2MP_IDLE_ZOMBIE
-	else
-		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE
+		if feign:GetDirection() == DIR_BACK then
+			return 1, pl:LookupSequence("zombie_slump_rise_02_fast")
+		end
+
+		return ACT_HL2MP_ZOMBIE_SLUMP_RISE, -1
 	end
 
-	return true
+	if velocity:Length2DSqr() <= 1 then
+		return ACT_HL2MP_IDLE_ZOMBIE, -1
+	end
+
+	return ACT_HL2MP_RUN_ZOMBIE, -1
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
@@ -156,7 +154,7 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 	end
 
 	local len2d = velocity:Length2D()
-	if len2d > 0.5 then
+	if len2d > 1 then
 		pl:SetPlaybackRate(math.min(len2d / maxseqgroundspeed * 0.75, 3))
 	else
 		pl:SetPlaybackRate(1)

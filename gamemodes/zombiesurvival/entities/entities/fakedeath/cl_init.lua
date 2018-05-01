@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
@@ -7,7 +7,7 @@ function ENT:Initialize()
 end
 
 function ENT:DrawTranslucent()
-	local cycle = math.Clamp((CurTime() - self.Created) * 0.8, 0, 1) * self:GetDeathSequenceLength()
+	local cycle = math.Clamp((CurTime() - self.Created) * 0.8, 0, 1) * self:GetDeathSequenceLength() + self:GetDeathSequenceStart()
 	local sequence = self:GetDeathSequence()
 
 	if cycle == 1 then

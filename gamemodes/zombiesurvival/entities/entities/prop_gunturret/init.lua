@@ -1,12 +1,12 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.LastHitSomething = 0
+ENT.TurretDeployableAmmo = "thumper"
+ENT.LastHitPeriod = 0.5
+ENT.Hitbox = "prop_hitbox_gunturret"
 
 local function RefreshTurretOwners(pl)
-	for _, ent in pairs(ents.FindByClass("prop_gunturret")) do
+	for _, ent in pairs(ents.FindByClass("prop_gunturret*")) do
 		if ent:IsValid() and ent:GetObjectOwner() == pl then
 			ent:ClearObjectOwner()
 			ent:ClearTarget()
@@ -18,8 +18,9 @@ hook.Add("OnPlayerChangedTeam", "GunTurret.OnPlayerChangedTeam", RefreshTurretOw
 
 function ENT:Initialize()
 	self:SetModel("models/Combine_turrets/Floor_turret.mdl")
+	self:SetModelScale(self.ModelScale or 1, 0)
 	self:PhysicsInit(SOLID_VPHYSICS)
-
+	self:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	self:SetUseType(SIMPLE_USE)
 
 	local phys = self:GetPhysicsObject()
@@ -30,8 +31,43 @@ function ENT:Initialize()
 	end
 
 	self:SetAmmo(self.DefaultAmmo)
-	self:SetMaxObjectHealth(250)
+	self:SetMaxObjectHealth(self.MaxHealth)
 	self:SetObjectHealth(self:GetMaxObjectHealth())
+	self:SetScanSpeed(1)
+	self:SetScanMaxAngle(1)
+
+	local ent = ents.Create(self.Hitbox)
+	if ent:IsValid() then
+		ent:SetPos(self:GetPos())
+		ent:SetAngles(self:GetAngles())
+		ent:SetOwner(self)
+		ent:SetParent(self)
+		ent:Spawn()
+
+		self:DeleteOnRemove(ent)
+		self.Hitbox = ent
+		self:SetTurretHitbox(ent)
+	end
+
+	self:SetupPlayerSkills()
+
+	hook.Add("SetupPlayerVisibility", self, self.SetupPlayerVisibility)
+end
+
+function ENT:SetupPlayerSkills()
+	local owner = self:GetObjectOwner()
+	local scanspeed = 1
+	local scanangle = 1
+
+	if owner:IsValid() then
+		scanspeed = scanspeed * (owner.TurretScanSpeedMul or 1)
+		scanangle = scanangle * (owner.TurretScanAngleMul or 1)
+	end
+
+	self:SetScanSpeed(scanspeed)
+	self:SetScanMaxAngle(scanangle)
+
+	self:SetupDeployableSkillHealth("TurretHealthMul")
 end
 
 function ENT:SetObjectHealth(health)
@@ -45,6 +81,10 @@ function ENT:SetObjectHealth(health)
 			effectdata:SetOrigin(pos)
 		util.Effect("Explosion", effectdata, true, true)
 
+		if self:GetObjectOwner():IsValidLivingHuman() then
+			self:GetObjectOwner():SendDeployableLostMessage(self)
+		end
+
 		local amount = math.ceil(self:GetAmmo() * 0.5)
 		while amount > 0 do
 			local todrop = math.min(amount, 50)
@@ -52,7 +92,7 @@ function ENT:SetObjectHealth(health)
 			local ent = ents.Create("prop_ammo")
 			if ent:IsValid() then
 				local heading = VectorRand():GetNormalized()
-				ent:SetAmmoType("smg1")
+				ent:SetAmmoType(self.AmmoType)
 				ent:SetAmmo(todrop)
 				ent:SetPos(pos + heading * 8)
 				ent:SetAngles(VectorRand():Angle())
@@ -67,55 +107,39 @@ function ENT:SetObjectHealth(health)
 	end
 end
 
-local tempknockback
-function ENT:StartBulletKnockback()
-	tempknockback = {}
-end
-
-function ENT:EndBulletKnockback()
-	tempknockback = nil
-end
-
-function ENT:DoBulletKnockback(scale)
-	for ent, prevvel in pairs(tempknockback) do
-		local curvel = ent:GetVelocity()
-		ent:SetVelocity(curvel * -1 + (curvel - prevvel) * scale + prevvel)
-	end
-end
-
+local TEMPTURRET
 local function BulletCallback(attacker, tr, dmginfo)
 	local ent = tr.Entity
 	if ent:IsValid() then
-		if ent:IsPlayer() then
-			if ent:Team() == TEAM_UNDEAD and tempknockback then
-				if attacker:GetTarget() == ent then
-					attacker.LastHitSomething = CurTime()
-				end
-				tempknockback[ent] = ent:GetVelocity()
-			end
-		else
-			local phys = ent:GetPhysicsObject()
-			if ent:GetMoveType() == MOVETYPE_VPHYSICS and phys:IsValid() and phys:IsMoveable() then
-				ent:SetPhysicsAttacker(attacker)
-			end
+		if TEMPTURRET:GetTarget() == ent and ent:IsPlayer() and ent:Team() == TEAM_UNDEAD then
+			TEMPTURRET.LastHitSomething = CurTime()
 		end
 
-		dmginfo:SetAttacker(attacker:GetObjectOwner())
-		dmginfo:SetInflictor(attacker)
+		dmginfo:SetInflictor(TEMPTURRET)
 	end
+end
+
+function ENT:PlayShootSound()
+	-- Handled by the looping sound.
 end
 
 function ENT:FireTurret(src, dir)
 	if self:GetNextFire() <= CurTime() then
 		local curammo = self:GetAmmo()
-		if curammo > 0 then
-			self:SetNextFire(CurTime() + 0.1)
-			self:SetAmmo(curammo - 1)
+		local owner = self:GetObjectOwner()
+		local twinvolley = self:GetManualControl() and owner:IsSkillActive(SKILL_TWINVOLLEY)
+		if curammo > (twinvolley and 1 or 0) then
+			self:SetNextFire(CurTime() + self.FireDelay * (twinvolley and 1.5 or 1))
+			self:SetAmmo(curammo - (twinvolley and 2 or 1))
 
-			self:StartBulletKnockback()
-			self:FireBullets({Num = 1, Src = src, Dir = dir, Spread = Vector(0.05, 0.05, 0), Tracer = 1, Force = 1, Damage = 12, Callback = BulletCallback})
-			self:DoBulletKnockback(0.04)
-			self:EndBulletKnockback()
+			if self:GetAmmo() == 0 then
+				owner:SendDeployableOutOfAmmoMessage(self)
+			end
+
+			self:PlayShootSound()
+
+			TEMPTURRET = self
+			self:FireBulletsLua(src, dir, self.Spread, self.NumShots * (twinvolley and 2 or 1), self.Damage, self:GetObjectOwner(), nil, nil, BulletCallback, nil, nil, nil, nil, self)
 		else
 			self:SetNextFire(CurTime() + 2)
 			self:EmitSound("npc/turret_floor/die.wav")
@@ -147,15 +171,14 @@ function ENT:Think()
 			if self:IsFiring() then self:SetFiring(false) end
 			local target = self:GetTarget()
 			if target:IsValid() then
-				if self:IsValidTarget(target) and CurTime() < self.LastHitSomething + 0.5 then
-					local shootpos = self:ShootPos()
-					self:FireTurret(shootpos, (self:GetTargetPos(target) - shootpos):GetNormalized())
+				if self:IsValidTarget(target) and CurTime() < self.LastHitSomething + self.LastHitPeriod then
+					self:FireTurret(self:ShootPos(), (self:GetTargetPos(target) - self:ShootPos()):GetNormalized())
 				else
 					self:ClearTarget()
 					self:EmitSound("npc/turret_floor/deploy.wav")
 				end
 			else
-				local target = self:SearchForTarget()
+				target = self:SearchForTarget()
 				if target then
 					self:SetTarget(target)
 					self:SetTargetReceived(CurTime())
@@ -171,22 +194,32 @@ function ENT:Think()
 	return true
 end
 
+function ENT:SetupPlayerVisibility(pl)
+	if pl ~= self:GetObjectOwner() then return end
+
+	AddOriginToPVS(self:GetPos())
+	AddOriginToPVS(self:GetPos() + pl:GetAimVector() * 1024)
+end
+
 function ENT:Use(activator, caller)
 	if self.Removing or not activator:IsPlayer() or self:GetMaterial() ~= "" then return end
 
 	if activator:Team() == TEAM_HUMAN then
 		if self:GetObjectOwner():IsValid() then
-			local curammo = self:GetAmmo()
-			local togive = math.min(math.min(15, activator:GetAmmoCount("smg1")), self.MaxAmmo - curammo)
-			if togive > 0 then
-				self:SetAmmo(curammo + togive)
-				activator:RemoveAmmo(togive, "smg1")
-				activator:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
-				self:EmitSound("npc/turret_floor/click1.wav")
-				--gamemode.Call("PlayerRepairedObject", activator, self, togive * 1.5, self)
+			if activator:GetInfo("zs_nousetodeposit") == "0" then
+				local curammo = self:GetAmmo()
+				local togive = math.min(15, activator:GetAmmoCount(self.AmmoType), self.MaxAmmo - curammo)
+				if togive > 0 then
+					self:SetAmmo(curammo + togive)
+					activator:RemoveAmmo(togive, self.AmmoType)
+					activator:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+					self:EmitSound("npc/turret_floor/click1.wav")
+					--gamemode.Call("PlayerRepairedObject", activator, self, togive * 1.5, self)
+				end
 			end
 		else
 			self:SetObjectOwner(activator)
+			self:GetObjectOwner():SendDeployableClaimedMessage(self)
 			if not activator:HasWeapon("weapon_zs_gunturretcontrol") then
 				activator:Give("weapon_zs_gunturretcontrol")
 			end
@@ -199,11 +232,11 @@ function ENT:AltUse(activator, tr)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_gunturret")
-	pl:GiveAmmo(1, "thumper")
+	pl:GiveEmptyWeapon(self.SWEP)
+	pl:GiveAmmo(1, self.TurretDeployableAmmo)
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
-	pl:GiveAmmo(self:GetAmmo(), "smg1")
+	pl:GiveAmmo(self:GetAmmo(), self.AmmoType)
 
 	self:Remove()
 end
@@ -211,9 +244,94 @@ end
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 
+	if dmginfo:GetDamage() <= 0 then return end
+
 	local attacker = dmginfo:GetAttacker()
 	if not (attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
 		self:ResetLastBarricadeAttacker(attacker, dmginfo)
 		self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
 	end
+end
+
+local tabSearch = {mask = MASK_SHOT}
+function ENT:SearchForTarget()
+	local shootpos = self:ShootPos()
+	local owner = self:GetObjectOwner()
+
+	tabSearch.start = shootpos
+	tabSearch.endpos = shootpos + self:GetGunAngles():Forward() * self.SearchDistance * (owner.TurretRangeMul or 1)
+	tabSearch.filter = self:GetCachedScanFilter()
+	local tr = util.TraceLine(tabSearch)
+	local ent = tr.Entity
+	if ent and ent:IsValid() and self:IsValidTarget(ent) then
+		return ent
+	end
+end
+
+function ENT:SetAmmo(ammo)
+	self:SetDTInt(0, ammo)
+end
+
+function ENT:SetMaxObjectHealth(health)
+	self:SetDTInt(1, health)
+end
+
+function ENT:SetChannel(channel)
+	self:SetDTInt(2, channel)
+end
+
+function ENT:SetFiring(onoff)
+	self:SetDTBool(0, onoff)
+end
+
+function ENT:SetScanMaxAngle(angle)
+	self:SetDTFloat(5, angle)
+end
+
+function ENT:SetScanSpeed(speed)
+	self:SetDTFloat(4, speed)
+end
+
+function ENT:SetNextFire(tim)
+	self:SetDTFloat(2, tim)
+end
+
+function ENT:ClearObjectOwner()
+	self:SetObjectOwner(NULL)
+end
+
+function ENT:ClearTarget()
+	self:SetTarget(NULL)
+end
+
+function ENT:SetTargetReceived(tim)
+	self:SetDTFloat(0, tim)
+end
+
+function ENT:SetTargetLost(tim)
+	self:SetDTFloat(1, tim)
+end
+
+function ENT:SetTarget(ent)
+	if ent:IsValid() then
+		self:SetTargetReceived(CurTime())
+		self.LastHitSomething = CurTime()
+	else
+		self:SetTargetLost(CurTime())
+	end
+
+	self:SetDTEntity(0, ent)
+end
+
+function ENT:SetObjectOwner(ent)
+	self:SetDTEntity(1, ent)
+	if self.HitBox then
+		self.HitBox:SetObjectOwner(ent)
+	end
+
+	self:SetupPlayerSkills()
+end
+
+function ENT:SetTurretHitbox(ent)
+	self:SetDTEntity(2, ent)
 end

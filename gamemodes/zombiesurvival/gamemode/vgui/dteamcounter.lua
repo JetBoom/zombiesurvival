@@ -19,7 +19,7 @@ function PANEL:Init()
 	self.m_Counter = vgui.Create("DLabel", self)
 	self.m_Counter:SetFont("ZSHUDFontSmaller")
 
-	self:Refresh()
+	self:RefreshContents()
 end
 
 function PANEL:Paint()
@@ -29,7 +29,7 @@ end
 function PANEL:Think()
 	if RealTime() >= self.NextRefresh then
 		self.NextRefresh = RealTime() + 1
-		self:Refresh()
+		self:RefreshContents()
 	end
 end
 
@@ -50,7 +50,7 @@ function PANEL:PerformLayout()
 	self.m_Counter:AlignRight()
 end
 
-function PANEL:Refresh()
+function PANEL:RefreshContents()
 	local numplayers = team.NumPlayers(self.m_Team)
 	self.m_PrevPlayers = self.m_PrevPlayers or numplayers
 

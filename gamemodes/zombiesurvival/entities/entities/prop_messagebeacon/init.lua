@@ -1,9 +1,6 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
+INC_SERVER()
 
-include("shared.lua")
-
-ENT.m_Health = 100
+ENT.ObjHealth = 100
 
 function ENT:Initialize()
 	self:SetModel("models/props_combine/combine_mine01.mdl")
@@ -13,6 +10,8 @@ function ENT:Initialize()
 	self:SetCollisionBounds(Vector(-8.29, -8.29, 0), Vector(8.29, 8.29, 10.13))
 	self:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	self:SetUseType(SIMPLE_USE)
+
+	self:CollisionRulesChanged()
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
@@ -44,17 +43,19 @@ function ENT:KeyValue(key, value)
 end
 
 function ENT:OnTakeDamage(dmginfo)
+	if dmginfo:GetDamage() <= 0 then return end
+
 	self:TakePhysicsDamage(dmginfo)
 
 	if not self.Destroyed then
 		local attacker = dmginfo:GetAttacker()
-		if not (attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
-			if attacker:Team() == TEAM_UNDEAD and self:HumanNearby() then
+		if not attacker:IsValidHuman() then
+			if attacker:IsValidZombie() and self:HumanNearby() then
 				attacker:AddLifeBarricadeDamage(dmginfo:GetDamage())
 			end
 
-			self.m_Health = self.m_Health - dmginfo:GetDamage()
-			if self.m_Health <= 0 then
+			self.ObjHealth = self.ObjHealth - dmginfo:GetDamage()
+			if self.ObjHealth <= 0 then
 				self.Destroyed = true
 				local effectdata = EffectData()
 					effectdata:SetOrigin(self:LocalToWorld(self:OBBCenter()))
@@ -77,7 +78,7 @@ function ENT:OnPackedUp(pl)
 	pl:GiveEmptyWeapon("weapon_zs_messagebeacon")
 	pl:GiveAmmo(1, "striderminigun")
 
-	pl:PushPackedItem(self:GetClass(), self.m_Health)
+	pl:PushPackedItem(self:GetClass(), self.ObjHealth)
 
 	self:Remove()
 end

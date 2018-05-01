@@ -15,7 +15,7 @@ CLASS.Health = 100
 CLASS.Speed = 130
 CLASS.JumpPower = 120
 
-CLASS.Points = 1
+CLASS.Points = CLASS.Health/GM.TorsoZombiePointRatio
 
 CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 20)}
 CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 20)}
@@ -32,25 +32,27 @@ CLASS.DeathSounds = {"npc/zombie/zombie_die1.wav", "npc/zombie/zombie_die2.wav",
 
 CLASS.VoicePitch = 0.65
 
+CLASS.IsTorso = true
+
+local math_random = math.random
+local ACT_WALK = ACT_WALK
+
 function CLASS:CalcMainActivity(pl, velocity)
-	if velocity:Length2D() <= 0.5 then
-		pl.CalcSeqOverride = 1
-	else
-		pl.CalcIdeal = ACT_WALK
+	if velocity:Length2DSqr() <= 1 then
+		return 1, 1
 	end
 
-	return true
+	return ACT_WALK, -1
 end
 
-local mathrandom = math.random
 local ScuffSounds = {
 	"npc/zombie/foot_slide1.wav",
 	"npc/zombie/foot_slide2.wav",
 	"npc/zombie/foot_slide3.wav"
 }
 function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
-	if mathrandom() < 0.07 then
-		pl:EmitSound(ScuffSounds[mathrandom(#ScuffSounds)], 70, 90)
+	if math_random() < 0.07 then
+		pl:EmitSound(ScuffSounds[math_random(#ScuffSounds)], 70, 90)
 	end
 
 	return true
@@ -63,13 +65,9 @@ function CLASS:DoAnimationEvent(pl, event, data)
 	end
 end
 
-function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
-	pl:FixModelAngles(velocity)
-end
-
 if SERVER then
 	function CLASS:OnSecondWind(pl)
-		pl:EmitSound("npc/zombie/zombie_voice_idle"..math.random(1, 14)..".wav", 100, 85)
+		pl:EmitSound("npc/zombie/zombie_voice_idle"..math.random(14)..".wav", 100, 85)
 	end
 end
 

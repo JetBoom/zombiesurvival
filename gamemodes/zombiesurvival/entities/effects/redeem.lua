@@ -22,7 +22,7 @@ function EFFECT:Init(data)
 		particle:SetRollDelta(math.Rand(-32, 32))
 	end
 
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end
 
 function EFFECT:Think()

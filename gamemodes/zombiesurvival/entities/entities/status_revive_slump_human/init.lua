@@ -12,7 +12,7 @@ function ENT:Think()
 
 			if not owner:Alive() then
 				owner:SecondWind()
-				owner:Freeze(true)
+				--owner:Freeze(true)
 				owner:TemporaryNoCollide()
 			end
 		end

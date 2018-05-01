@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
@@ -9,5 +6,6 @@ end
 
 function ENT:Think()
 	local owner = self:GetOwner()
-	if not (owner:Alive() and owner:Team() == TEAM_UNDEAD and owner:GetZombieClassTable().Name == "The Tickle Monster") then self:Remove() end
+	local classname = owner:GetZombieClassTable().Name
+	if not (owner:Alive() and owner:Team() == TEAM_UNDEAD and (classname == "Nightmare" or classname == "Ancient Nightmare")) then self:Remove() end
 end

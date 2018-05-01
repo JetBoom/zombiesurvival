@@ -30,7 +30,7 @@ local color_frame_background = Color(0, 0, 0, 220)
 SKIN.color_frame_background = color_frame_background
 SKIN.color_frame_border = Color(0, 80, 0, 255)
 
-SKIN.colTextEntryText = Color(10, 10, 10)
+SKIN.colTextEntryText = Color(200, 200, 200)
 SKIN.colTextEntryTextHighlight = Color(30, 255, 0)
 SKIN.colTextEntryTextBorder = Color(70, 90, 70, 255)
 
@@ -49,7 +49,6 @@ SKIN.colTextEntryTextCursor	= Color( 0, 0, 100, 255 )]]
 
 function SKIN:PaintPropertySheet(panel, w, h)
 	local ActiveTab = panel:GetActiveTab()
-	local Offset = 0
 	if ActiveTab then Offset = ActiveTab:GetTall() - 8 end
 
 	draw.RoundedBox(8, 0, 0, w, h, self.colTab)
@@ -76,7 +75,6 @@ local texDownEdge = surface.GetTextureID("gui/gradient_down")
 local texRightEdge = surface.GetTextureID("gui/gradient")
 function PaintGenericFrame(panel, x, y, wid, hei, edgesize)
 	edgesize = edgesize or math.ceil(math.min(hei * 0.1, math.min(16, wid * 0.1)))
-	local dedgesize = edgesize * 2
 	local hedgesize = edgesize * 0.5
 	DisableClipping(true)
 	surface.DrawRect(x, y, wid, hei)
@@ -228,6 +226,24 @@ function SKIN:PaintButton(panel, w, h)
 	surface.SetTexture(texRightEdge)
 	surface.DrawTexturedRect(w - edgesize, 0, edgesize, h)
 	surface.DrawTexturedRectRotated(math.ceil(edgesize * 0.5), math.ceil(h * 0.5), edgesize, h, 180)
+end
+
+function SKIN:PaintComboDownArrowClassSel(panel, w, h)
+	local y = math.sin(UnPredictedCurTime() * 3) * 5 * (w/15) - 1
+
+	if panel.ComboBox:GetDisabled() then
+		return self.tex.Input.ComboBox.Button.Disabled(0, 0, w, h)
+	end
+
+	if panel.ComboBox.Depressed or panel.ComboBox:IsMenuOpen() then
+		return self.tex.Input.Slider.H.Down(0, y, w, h)
+	end
+
+	if panel.ComboBox.Hovered then
+		return self.tex.Input.Slider.H.Hover(0, y, w, h)
+	end
+
+	self.tex.Input.Slider.H.Normal(0, y, w, h)
 end
 
 derma.DefineSkin("zombiesurvival", "The default Derma skin for Zombie Survival", SKIN, "Default")

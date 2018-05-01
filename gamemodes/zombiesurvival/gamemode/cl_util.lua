@@ -6,6 +6,26 @@ concommand.Add("printdxinfo", function()
 	print("Supports Vertex Shaders 2.0: "..tostring(render.SupportsVertexShaders_2_0()))
 end)
 
+local ammonames = {
+	["pistol"] = "pistolammo",
+	["buckshot"] = "shotgunammo",
+	["smg1"] = "smgammo",
+	["ar2"] = "assaultrifleammo",
+	["357"] = "rifleammo",
+	["pulse"] = "pulseammo",
+	["battery"] = "50mkit",
+	["xbowbolt"] = "crossbowammo",
+	["impactmine"] = "impactmine",
+	["chemical"] = "chemical",
+	["gaussenergy"] = "nail"
+}
+
+concommand.Add("zs_quickbuyammo", function()
+	if ammonames[GAMEMODE.CachedResupplyAmmoType] then
+		RunConsoleCommand("zs_pointsshopbuy", "ps_"..ammonames[GAMEMODE.CachedResupplyAmmoType])
+	end
+end)
+
 local function GetViewModelPosition(self, pos, ang)
 	return pos + ang:Forward() * -256, ang
 end
@@ -18,7 +38,7 @@ end
 
 -- Scales the screen based around 1080p but doesn't make things TOO tiny on low resolutions.
 function BetterScreenScale()
-	return math.Clamp(ScrH() / 1080, 0.6, 1)
+	return math.max(ScrH() / 1080, 0.851) * GAMEMODE.InterfaceSize
 end
 
 function render.GetLightRGB(pos)

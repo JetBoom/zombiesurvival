@@ -1,4 +1,4 @@
-util.PrecacheModel("models/props_phx/construct/metal_dome360.mdl")
+util.PrecacheModel("models/props/cs_italy/orange.mdl")
 
 EFFECT.LifeTime = 2
 
@@ -9,12 +9,35 @@ function EFFECT:Init(data)
 	self.Offset = data:GetStart()
 	self.Ent = data:GetEntity()
 
-	sound.Play("weapons/fx/rics/ric"..math.random(5)..".wav", pos, 68, math.Rand(120, 130))
+	sound.Play("weapons/fx/rics/ric"..math.random(5)..".wav", pos, 68, math.Rand(150, 170))
 
-	self.Entity:SetModel("models/props_phx/construct/metal_dome360.mdl")
+	self.Entity:SetModel("models/props/cs_italy/orange.mdl")
 	self.Entity:SetMoveType(MOVETYPE_NONE)
-	self.Entity:SetModelScale(0.5, 0)
+	self.Entity:SetModelScale(2, 0)
 	self.Entity:SetAngles(angles)
+
+	if self.Ent:IsValid() then
+		local offset = self.Ent:LocalToWorld(self.Offset)
+
+		local emitter = ParticleEmitter(offset)
+		emitter:SetNearClip(24, 32)
+
+		for i=1, 2 do
+			local particle = emitter:Add("sprites/glow04_noz", offset)
+			particle:SetDieTime(1)
+			particle:SetColor(90,130,255)
+			particle:SetStartAlpha(255)
+			particle:SetEndAlpha(0)
+			particle:SetStartSize(4)
+			particle:SetEndSize(15)
+			particle:SetVelocity((angles:Up() + VectorRand()):GetNormal() * 300)
+			particle:SetGravity(VectorRand() * 20 + Vector(0, 0, -400))
+			particle:SetCollide(true)
+			particle:SetBounce(0.75)
+			particle:SetAirResistance(12)
+		end
+		emitter:Finish() emitter = nil collectgarbage("step", 64)
+	end
 
 	self.DieTime = CurTime() + self.LifeTime
 end

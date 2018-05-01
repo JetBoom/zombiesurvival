@@ -27,7 +27,7 @@ end
 
 function ENT:GetDrownTime()
 	local owner = self:GetOwner()
-	if owner:IsValid() and owner:HasWeapon("weapon_zs_oxygentank") then
+	if owner:IsValid() and owner:HasTrinket("oxygentank") then
 		return 300
 	end
 
@@ -36,7 +36,7 @@ end
 
 function ENT:GetRecoverTime()
 	local owner = self:GetOwner()
-	if owner:IsValid() and owner:HasWeapon("weapon_zs_oxygentank") then
+	if owner:IsValid() and owner:HasTrinket("oxygentank") then
 		return 20
 	end
 

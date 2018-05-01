@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:Initialize()
 	hook.Add("Move", self, self.Move)
@@ -34,9 +31,19 @@ function ENT:Initialize()
 
 	local object = self:GetObject()
 	if object:IsValid() then
+		object.IgnoreMeleeTeam = TEAM_HUMAN
+		object.IgnoreTraces = true
+		object.IgnoreBullets = true
+
 		for _, ent in pairs(ents.FindByClass("logic_pickupdrop")) do
 			if ent.EntityToWatch == object:GetName() and ent:IsValid() then
 				ent:Input("onpickedup", owner, object, "")
+			end
+		end
+
+		for _, ent in pairs(ents.FindByClass("point_propnocollide")) do
+			if ent:IsValid() and ent:GetProp() == object then
+				ent:Remove()
 			end
 		end
 
@@ -47,17 +54,39 @@ function ENT:Initialize()
 
 			self:SetObjectMass(objectphys:GetMass())
 
-			if owner.BuffMuscular or (objectphys:GetMass() < CARRY_DRAG_MASS and (object:OBBMins():Length() + object:OBBMaxs():Length() < CARRY_DRAG_VOLUME or object.NoVolumeCarryCheck)) then
-				objectphys:AddGameFlag(FVPHYSICS_PLAYER_HELD)
-				object._OriginalMass = objectphys:GetMass()
+			object.PreHoldCollisionGroup = object.PreHoldCollisionGroup or object:GetCollisionGroup()
+			object.PreHoldAlpha = object.PreHoldAlpha or object:GetAlpha()
+			object.PreHoldRenderMode = object.PreHoldRenderMode or object:GetRenderMode()
 
-				objectphys:EnableGravity(false)
-				objectphys:SetMass(2)
+			objectphys:AddGameFlag(FVPHYSICS_PLAYER_HELD)
+			object._OriginalMass = objectphys:GetMass()
 
-				object:SetOwner(owner)
-			else
-				self:SetIsHeavy(true)
-				self:SetHingePos(object:NearestPoint(self:GetPullPos()))
+			objectphys:EnableGravity(false)
+			objectphys:SetMass(2)
+
+			object:SetOwner(owner)
+			object:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+			object:SetRenderMode(RENDERMODE_TRANSALPHA)
+			object:SetAlpha(180)
+
+			self.StartX = owner.InputMouseX or 0
+			self.StartY = owner.InputMouseY or 0
+
+			local children = object:GetChildren()
+			for _, child in pairs(children) do
+				if not child:IsValid() then continue end
+
+				child.PreHoldCollisionGroup = child.PreHoldCollisionGroup or child:GetCollisionGroup()
+				if child:IsPhysicsModel() then -- Stops child sprites from getting fucked up rendering
+					child.PreHoldAlpha = child.PreHoldAlpha or child:GetAlpha()
+					child.PreHoldRenderMode = child.PreHoldRenderMode or child:GetRenderMode()
+
+					child:SetAlpha(180)
+					child:SetRenderMode(RENDERMODE_TRANSALPHA)
+				end
+
+				child:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+				child:CollisionRulesChanged()
 			end
 
 			object:CollisionRulesChanged()
@@ -65,7 +94,24 @@ function ENT:Initialize()
 	end
 end
 
+local function DoubleCheck(object)
+	if not IsValid(object) then return end
+
+	for _, status in pairs(ents.FindByClass("status_human_holding")) do
+		if status:IsValid() and not status.Removing and status:GetObject() == object then
+			return
+		end
+	end
+
+	object.IgnoreMeleeTeam = nil
+	object.IgnoreTraces = nil
+	object.IgnoreBullets = nil
+end
+
 function ENT:OnRemove()
+	if self.Removing then return end
+	self.Removing = true
+
 	local owner = self:GetOwner()
 	if owner:IsValid() then
 		--owner.status_human_holding = nil
@@ -82,6 +128,12 @@ function ENT:OnRemove()
 
 	local object = self:GetObject()
 	if object:IsValid() then
+		object.IgnoreMelee = nil
+		object.IgnoreTraces = nil
+		object.IgnoreBullets = nil
+
+		timer.Simple(0.1, function() DoubleCheck(object) end)
+
 		local objectphys = object:GetPhysicsObject()
 		if objectphys:IsValid() then
 			objectphys:ClearGameFlag(FVPHYSICS_PLAYER_HELD)
@@ -94,7 +146,24 @@ function ENT:OnRemove()
 			end
 
 			if not self:GetIsHeavy() then
-				object:GhostAllPlayersInMe(2.5, true)
+				if not object:GhostAllPlayersInMe(4, true) then
+					object:SetCollisionGroup(object.PreHoldCollisionGroup or COLLISION_GROUP_NONE)
+				end
+				object:SetAlpha(object.PreHoldAlpha or 255)
+				object:SetRenderMode(object.PreHoldRenderMode or RENDERMODE_NORMAL)
+
+				local children = object:GetChildren()
+				for _, child in pairs(children) do
+					if not child:IsValid() then continue end
+
+					child:SetCollisionGroup(child.PreHoldCollisionGroup or COLLISION_GROUP_NONE)
+					if child:IsPhysicsModel() then
+						child:SetAlpha(child.PreHoldAlpha or 255)
+						child:SetRenderMode(child.PreHoldRenderMode or RENDERMODE_NORMAL)
+					end
+
+					child:CollisionRulesChanged()
+				end
 			end
 
 			object:SetOwner(NULL)
@@ -117,8 +186,8 @@ concommand.Add("_zs_rotateang", function(sender, command, arguments)
 	local y = tonumbersafe(arguments[2])
 
 	if x and y then
-		sender.InputMouseX = math.Clamp(x * 0.2, -180, 180)
-		sender.InputMouseY = math.Clamp(y * 0.2, -180, 180)
+		sender.InputMouseX = math.NormalizeAngle(x)--sender.InputMouseX + math.Clamp(x * 0.02, -180, 180)
+		sender.InputMouseY = math.NormalizeAngle(y)--sender.InputMouseY + math.Clamp(y * 0.02, -180, 180)
 	end
 end)
 
@@ -131,7 +200,7 @@ function ENT:Think()
 
 	local object = self:GetObject()
 	local owner = self:GetOwner()
-	if not object:IsValid() or object:IsNailed() or not owner:IsValid() or not owner:Alive() or not owner:Team() == TEAM_HUMAN then
+	if not object:IsValid() or object:IsNailed() or not owner:IsValid() or not owner:Alive() or owner:Team() ~= TEAM_HUMAN then
 		self:Remove()
 		return
 	end
@@ -146,11 +215,11 @@ function ENT:Think()
 	end
 
 	if self:GetIsHeavy() then
-		if 64 < self:GetHingePos():Distance(self:GetPullPos()) then
+		if self:GetHingePos():DistToSqr(self:GetPullPos()) >= 4096 then
 			self:Remove()
 			return
 		end
-	elseif 64 < nearestpoint:Distance(shootpos) then
+	elseif nearestpoint:DistToSqr(shootpos) >= 4096 then
 		self:Remove()
 		return
 	end
@@ -168,7 +237,7 @@ function ENT:Think()
 		objectphys:ApplyForceOffset(objectphys:GetMass() * frametime * 450 * (pullpos - hingepos):GetNormalized(), hingepos)
 	elseif owner:KeyDown(IN_ATTACK2) and not owner:GetActiveWeapon().NoPropThrowing then
 		owner:ConCommand("-attack2")
-		objectphys:ApplyForceCenter(objectphys:GetMass() * math.Clamp(1.25 - math.min(1, (object:OBBMins():Length() + object:OBBMaxs():Length()) / CARRY_DRAG_VOLUME), 0.25, 1) * 500 * owner:GetAimVector())
+		objectphys:ApplyForceCenter(objectphys:GetMass() * math.Clamp(1.25 - math.min(1, (object:OBBMins():Length() + object:OBBMaxs():Length()) / CARRY_DRAG_VOLUME), 0.25, 1) * 500 * owner:GetAimVector() * (owner.ObjectThrowStrengthMul or 1))
 		object:SetPhysicsAttacker(owner)
 
 		self:Remove()
@@ -178,7 +247,7 @@ function ENT:Think()
 			local obbcenter = object:OBBCenter()
 			local objectpos = shootpos + owner:GetAimVector() * 48
 			objectpos = objectpos - obbcenter.z * object:GetUp()
-			objectpos = objectpos - obbcenter.y * object:GetRight()
+			objectpos = objectpos + obbcenter.y * object:GetRight()
 			objectpos = objectpos - obbcenter.x * object:GetForward()
 			self.ObjectPosition = objectpos
 			if not self.ObjectAngles then
@@ -191,8 +260,16 @@ function ENT:Think()
 				self.ObjectAngles = object:GetAngles()
 			end
 		elseif owner:KeyDown(IN_WALK) then
-			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Up(), owner.InputMouseX or 0)
-			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Right(), owner.InputMouseY or 0)
+			local xdiff = math.NormalizeAngle(self.StartX - (owner.InputMouseX or 0))
+			local ydiff = math.NormalizeAngle(self.StartY - (owner.InputMouseY or 0))
+			local sxdiff = xdiff * FrameTime() * 8
+			local sydiff = ydiff * FrameTime() * 8
+
+			self.ObjectAngles:RotateAroundAxis(owner:GetUp(), sxdiff)
+			self.ObjectAngles:RotateAroundAxis(owner:GetRight(), sydiff)
+
+			self.StartX = math.NormalizeAngle(self.StartX - (sxdiff))
+			self.StartY = math.NormalizeAngle(self.StartY - (sydiff))
 		end
 
 		ShadowParams.pos = self.ObjectPosition
@@ -202,6 +279,7 @@ function ENT:Think()
 	end
 
 	object:SetPhysicsAttacker(owner)
+	object.LastHeld = CurTime()
 
 	self:NextThink(ct)
 	return true

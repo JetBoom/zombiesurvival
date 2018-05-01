@@ -1,10 +1,6 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
+INC_SERVER()
 
-include("shared.lua")
-
-ENT.Damage = 5
-ENT.Type = "anim"
+ENT.Damage = 4
 
 function ENT:Initialize()
 	self.DeathTime = CurTime() + 30
@@ -12,15 +8,7 @@ function ENT:Initialize()
 	self:DrawShadow(false)
 	self:PhysicsInitSphere(1)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_PROJECTILE)
-
-	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:SetMass(4)
-		phys:SetBuoyancyRatio(0.002)
-		phys:EnableMotion(true)
-		phys:Wake()
-	end
+	self:SetupGenericProjectile(true)
 end
 
 function ENT:Think()
@@ -51,7 +39,7 @@ function ENT:Explode(vHitPos, vHitNormal, eHitEntity)
 	local effectdata = EffectData()
 		effectdata:SetOrigin(vHitPos)
 		effectdata:SetNormal(vHitNormal)
-	util.Effect("fleshhit", effectdata)
+	util.Effect("hit_flesh", effectdata)
 end
 
 function ENT:PhysicsCollide(data, phys)

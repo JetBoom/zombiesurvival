@@ -3,14 +3,16 @@ CLASS.TranslationName = "class_poison_headcrab"
 CLASS.Description = "description_poison_headcrab"
 CLASS.Help = "controls_poison_headcrab"
 
+CLASS.BetterVersion = "Barbed Headcrab"
+
 CLASS.Model = Model("models/headcrabblack.mdl")
 
-CLASS.Wave = 2 / 3
+CLASS.Wave = 3 / 6
 CLASS.Threshold = 0.6
 
 CLASS.SWEP = "weapon_zs_poisonheadcrab"
 
-CLASS.Health = 70
+CLASS.Health = 85
 CLASS.Speed = 145
 CLASS.JumpPower = 100
 
@@ -19,7 +21,7 @@ CLASS.NoFallSlowdown = true
 
 CLASS.IsHeadcrab = true
 
-CLASS.Points = 4
+CLASS.Points = CLASS.Health/GM.HeadcrabZombiePointRatio
 
 CLASS.Hull = {Vector(-12, -12, 0), Vector(12, 12, 18.1)}
 CLASS.HullDuck = {Vector(-12, -12, 0), Vector(12, 12, 18.1)}
@@ -34,6 +36,20 @@ CLASS.CantDuck = true
 CLASS.PainSounds = {"NPC_BlackHeadcrab.Pain"}
 CLASS.DeathSounds = {"NPC_BlackHeadcrab.Die"}
 
+CLASS.BloodColor = BLOOD_COLOR_GREEN
+
+local math_random = math.random
+local CurTime = CurTime
+local math_max = math.max
+local math_sin = math.sin
+local math_pi = math.pi
+
+local ACT_RUN = ACT_RUN
+local STEPSOUNDTIME_NORMAL = STEPSOUNDTIME_NORMAL
+local STEPSOUNDTIME_WATER_FOOT = STEPSOUNDTIME_WATER_FOOT
+local STEPSOUNDTIME_ON_LADDER = STEPSOUNDTIME_ON_LADDER
+local STEPSOUNDTIME_WATER_KNEE = STEPSOUNDTIME_WATER_KNEE
+
 function CLASS:Move(pl, mv)
 	local wep = pl:GetActiveWeapon()
 	if wep.Move and wep:Move(mv) then
@@ -45,7 +61,6 @@ function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
 	return true
 end
 
-local mathrandom = math.random
 local StepSounds = {
 	"npc/headcrab_poison/ph_step1.wav",
 	"npc/headcrab_poison/ph_step2.wav",
@@ -53,7 +68,7 @@ local StepSounds = {
 	"npc/headcrab_poison/ph_step4.wav"
 }
 function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
-	pl:EmitSound(StepSounds[mathrandom(#StepSounds)], 60)
+	pl:EmitSound(StepSounds[math_random(#StepSounds)], 60)
 
 	return true
 end
@@ -79,32 +94,28 @@ function CLASS:CalcMainActivity(pl, velocity)
 	local wep = pl:GetActiveWeapon()
 	if wep:IsValid() then
 		if wep.ShouldPlayLeapAnimation and wep:ShouldPlayLeapAnimation() then
-			pl.CalcSeqOverride = 7
-			return true
-		elseif wep.IsGoingToSpit and wep:IsGoingToSpit() then
-			pl.CalcSeqOverride = 2
-			return true
+			return 1, 7
+		end
+
+		if wep.IsGoingToSpit and wep:IsGoingToSpit() then
+			return 1, 2
 		end
 	end
 
 	if pl:OnGround() then
-		if velocity:Length2D() > 0.5 then
-			pl.CalcIdeal = ACT_RUN
-		else
-			pl.CalcSeqOverride = 4
+		if velocity:Length2DSqr() > 1 then
+			return ACT_RUN, -1
 		end
-	else
-		pl.CalcSeqOverride = 6
+
+		return 1, 4
 	end
 
-	return true
+	return 1, 6
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
-	pl:FixModelAngles(velocity)
-
 	local seq = pl:GetSequence()
-	if seq == 2 or seq == 7 then
+	--[[if seq == 2 or seq == 7 then
 		pl:SetPlaybackRate(1)
 
 		if not pl.m_PrevFrameCycle then
@@ -115,6 +126,38 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 		return true
 	elseif pl.m_PrevFrameCycle then
 		pl.m_PrevFrameCycle = nil
+	end]]
+
+	if seq == 2 then
+		local wep = pl:GetActiveWeapon()
+		if wep:IsValid() and wep.SpitWindUp then
+			local spitend = wep:GetNextSpit()
+			local lerp = 1 - math_max(0, spitend - CurTime()) / wep.SpitWindUp
+
+			if lerp == 1 then
+				pl:SetCycle(0.6 + math_sin(CurTime() * math_pi) * 0.1)
+			else
+				pl:SetCycle(lerp * 0.6)
+			end
+			pl:SetPlaybackRate(0)
+
+			return true
+		end
+	elseif seq == 7 then
+		local wep = pl:GetActiveWeapon()
+		if wep:IsValid() and wep.PounceWindUp then
+			local spitend = wep:GetNextLeap()
+			local lerp = 1 - math_max(0, spitend - CurTime()) / wep.PounceWindUp
+
+			if lerp == 1 then
+				pl:SetCycle(0.7 + math_sin(CurTime() * math_pi) * 0.1)
+			else
+				pl:SetCycle(lerp * 0.7)
+			end
+			pl:SetPlaybackRate(0)
+
+			return true
+		end
 	end
 end
 

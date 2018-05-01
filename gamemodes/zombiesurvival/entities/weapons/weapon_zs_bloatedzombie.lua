@@ -1,15 +1,13 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Bloated Zombie"
-end
+SWEP.PrintName = "Bloated Zombie"
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 30
+SWEP.MeleeDamage = 31
 SWEP.MeleeForceScale = 1.25
 
-SWEP.Primary.Delay = 1.5
+SWEP.Primary.Delay = 1.4
 
 function SWEP:Reload()
 	self.BaseClass.SecondaryAttack(self)
@@ -20,11 +18,11 @@ function SWEP:PlayAlertSound()
 end
 
 function SWEP:PlayIdleSound()
-	self.Owner:EmitSound("npc/barnacle/barnacle_tongue_pull"..math.random(3)..".wav")
+	self:GetOwner():EmitSound("npc/barnacle/barnacle_tongue_pull"..math.random(3)..".wav")
 end
 
 function SWEP:PlayAttackSound()
-	self.Owner:EmitSound("npc/ichthyosaur/attack_growl"..math.random(3)..".wav", 70, math.Rand(145, 155))
+	self:EmitSound("npc/ichthyosaur/attack_growl"..math.random(3)..".wav", 70, math.Rand(145, 155))
 end
 
 if not CLIENT then return end

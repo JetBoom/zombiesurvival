@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:CreateSubModel()
 	local ent = ClientsideModel("models/props_junk/sawblade001a.mdl", RENDERGROUP_OPAQUE)

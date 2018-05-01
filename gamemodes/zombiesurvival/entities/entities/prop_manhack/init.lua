@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.NextWaterDamage = 0
 
@@ -17,6 +14,7 @@ function ENT:Initialize()
 		phys:EnableMotion(true)
 		phys:Wake()
 		phys:SetBuoyancyRatio(0.8)
+		phys:AddGameFlag(FVPHYSICS_NO_IMPACT_DMG)
 
 		local Constraint = ents.Create("phys_keepupright")
 		Constraint:SetAngles(Angle(0, 0, 0))
@@ -50,6 +48,7 @@ function ENT:Initialize()
 		ent:SetOwner(self)
 		ent.Size = self.HitBoxSize
 		ent:Spawn()
+		ent.IgnoreMelee = false
 	end
 
 	ent = ents.Create("env_projectedtexture")
@@ -60,7 +59,7 @@ function ENT:Initialize()
 		ent:SetKeyValue("farz", 400)
 		ent:SetKeyValue("nearz", 8)
 		ent:SetKeyValue("lightfov", 80)
-		local owner = self:GetOwner()
+		local owner = self:GetObjectOwner()
 		if owner:IsValid() and owner:IsPlayer() then
 			local vcol = owner:GetPlayerColor()
 			if vcol then
@@ -84,9 +83,57 @@ function ENT:Initialize()
 		ent:Input("SpotlightTexture", NULL, NULL, "effects/flashlight001")
 	end
 
+	self:SetCustomCollisionCheck(true)
 	self:CollisionRulesChanged()
 
 	hook.Add("SetupPlayerVisibility", self, self.SetupPlayerVisibility)
+end
+
+function ENT:SetupPlayerSkills()
+	local owner = self:GetObjectOwner()
+	local newmaxhealth = self.MaxHealth
+	local currentmaxhealth = self:GetMaxObjectHealth()
+	local defaults = scripted_ents.Get(self:GetClass())
+	local hitdamage = defaults.HitDamage
+	local maxspeed = defaults.MaxSpeed
+	local acceleration = defaults.Acceleration
+	local loaded = false
+
+	if owner:IsValid() then
+		newmaxhealth = newmaxhealth * owner:GetTotalAdditiveModifier("ControllableHealthMul", "ManhackHealthMul")
+		hitdamage = hitdamage * (owner.ManhackDamageMul or 1)
+		maxspeed = maxspeed * (owner.ControllableSpeedMul or 1)
+		acceleration = acceleration * (owner.ControllableHandlingMul or 1)
+		loaded = owner:IsSkillActive(SKILL_LOADEDHULL)
+	end
+
+	newmaxhealth = math.ceil(newmaxhealth)
+
+	self:SetMaxObjectHealth(newmaxhealth)
+	self:SetObjectHealth(self:GetObjectHealth() / currentmaxhealth * newmaxhealth)
+
+	self.HitDamage = hitdamage
+	self.MaxSpeed = maxspeed
+	self.Acceleration = acceleration
+
+	if loaded then
+		if not IsValid(self.LoadedProp) then
+			local ent = ents.Create("prop_dynamic_override")
+			if ent:IsValid() then
+				ent:SetModel("models/props_junk/propane_tank001a.mdl")
+				ent:SetModelScale(0.5, 0)
+				ent:SetParent(self)
+				ent:SetOwner(self)
+				ent:SetLocalPos(Vector(-5, 0, -6.5))
+				ent:SetLocalAngles(Angle(-40, 0, 0))
+				ent:Spawn()
+
+				self.LoadedProp = ent
+			end
+		end
+	elseif IsValid(self.LoadedProp) then
+		self.LoadedProp:Remove()
+	end
 end
 
 function ENT:SetObjectHealth(health)
@@ -98,28 +145,35 @@ function ENT:SetObjectHealth(health)
 end
 
 function ENT:OnTakeDamage(dmginfo)
-	--if dmginfo:GetDamageType() ~= DMG_CRUSH and not self._AllowDamage then return end
+	if dmginfo:GetDamage() <= 0 then return end
 
 	local attacker = dmginfo:GetAttacker()
-	if not (attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
-		self:TakePhysicsDamage(dmginfo)
+	if attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then return end
 
-		self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
+	self:TakePhysicsDamage(dmginfo)
 
-		--self:EmitSound("npc/scanner/scanner_pain"..math.random(2)..".wav", 0.65, math.Rand(120, 130))
-		self:EmitSound("npc/manhack/gib.wav")
-
-		local effectdata = EffectData()
-			effectdata:SetOrigin(self:NearestPoint(dmginfo:GetDamagePosition()))
-			effectdata:SetNormal(VectorRand():GetNormalized())
-			effectdata:SetMagnitude(4)
-			effectdata:SetScale(1.33)
-		util.Effect("sparks", effectdata)
+	if dmginfo:GetDamageType() == DMG_ACID then
+		dmginfo:SetDamage(dmginfo:GetDamage() * 2)
 	end
+
+	self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
+
+	if attacker:IsValidZombie() and dmginfo:GetInflictor().MeleeDamage then
+		self:EmitSound("npc/manhack/bat_away.wav")
+	else
+		self:EmitSound("npc/manhack/gib.wav")
+	end
+
+	local effectdata = EffectData()
+		effectdata:SetOrigin(self:NearestPoint(dmginfo:GetDamagePosition()))
+		effectdata:SetNormal(VectorRand():GetNormalized())
+		effectdata:SetMagnitude(4)
+		effectdata:SetScale(1.33)
+	util.Effect("sparks", effectdata)
 end
 
 function ENT:Use(pl)
-	if pl == self:GetOwner() and pl:Team() == TEAM_HUMAN and pl:Alive() and self:GetVelocity():Length() <= self.HoverSpeed then
+	if pl == self:GetObjectOwner() and pl:Team() == TEAM_HUMAN and pl:Alive() and self:GetVelocity():Length() <= self.HoverSpeed then
 		self:OnPackedUp(pl)
 	end
 end
@@ -141,15 +195,21 @@ end
 function ENT:PhysicsSimulate(phys, frametime)
 	phys:Wake()
 
-	local owner = self:GetOwner()
-	if not owner:IsValid() then return SIM_NOTHING end
+	local owner = self:GetObjectOwner()
+	if not owner:IsValid() or self.DisableControlUntil and CurTime() < self.DisableControlUntil then return SIM_NOTHING end
 
 	local vel = phys:GetVelocity()
-	local movedir = Vector()
+	local movedir = Vector(0, 0, 0)
 	local eyeangles = owner:SyncAngles()
 	local aimangles = owner:EyeAngles()
 
+	local trace = {mask = MASK_HOVER, filter = self, start = self:GetPos()}
+	local tr, tr2
+
 	if self:BeingControlled() then
+		trace.endpos = trace.start - Vector(0, 0, self.HoverHeight * 0.333)
+		tr = util.TraceLine(trace)
+
 		if owner:KeyDown(IN_FORWARD) then
 			movedir = movedir + aimangles:Forward()
 		end
@@ -168,6 +228,12 @@ function ENT:PhysicsSimulate(phys, frametime)
 		if owner:KeyDown(IN_GRENADE1) then
 			movedir = movedir - Vector(0, 0, 0.5)
 		end
+		trace.endpos = trace.start + Vector(0, 0, self.HoverHeight * 0.5)
+		tr2 = util.TraceLine(trace)
+
+		if tr.Hit and not tr2.Hit then
+			movedir.z = 0.5
+		end
 	end
 
 	if movedir == vector_origin then
@@ -184,10 +250,8 @@ function ENT:PhysicsSimulate(phys, frametime)
 	end
 
 	if movedir == vector_origin and vel:Length() <= self.HoverSpeed then
-		local trace = {mask = MASK_HOVER, filter = self}
-		trace.start = self:GetPos()
 		trace.endpos = trace.start + Vector(0, 0, self.HoverHeight * -2)
-		local tr = util.TraceLine(trace)
+		tr = util.TraceLine(trace)
 
 		local hoverdir = (trace.start - tr.HitPos):GetNormalized()
 		local hoverfrac = (0.5 - tr.Fraction) * 2
@@ -197,7 +261,15 @@ function ENT:PhysicsSimulate(phys, frametime)
 	phys:EnableGravity(false)
 	phys:SetAngleDragCoefficient(10000)
 	phys:SetVelocityInstantaneous(vel)
-	phys:AddAngleVelocity(Vector(0, 0, math.Clamp(math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw), -32, 32) * frametime * 3))
+
+	local diff = math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw)
+	local z = math.Clamp(diff, -32, 32) * frametime * 10
+	local curz = phys:GetAngleVelocity().z
+	z = z - curz * (frametime * math.min(1, math.abs(z - curz) ^ 2 * 0.02))
+
+	phys:AddAngleVelocity(Vector(0, 0, z))
+
+	self:SetPhysicsAttacker(owner)
 
 	return SIM_NOTHING
 end
@@ -206,15 +278,35 @@ function ENT:Destroy()
 	if self.Destroyed then return end
 	self.Destroyed = true
 
+	local epicenter = self:LocalToWorld(self:OBBCenter())
+
+	if self:GetObjectOwner():IsValidLivingHuman() then
+		self:GetObjectOwner():SendDeployableLostMessage(self)
+	end
+
 	self:EmitSound("npc/manhack/gib.wav")
 
 	local effectdata = EffectData()
-		effectdata:SetOrigin(self:LocalToWorld(self:OBBCenter()))
-	util.Effect("HelicopterMegaBomb", effectdata, true, true)
+		effectdata:SetOrigin(epicenter)
 		effectdata:SetNormal(Vector(0, 0, 1))
 		effectdata:SetMagnitude(5)
 		effectdata:SetScale(1.5)
 	util.Effect("sparks", effectdata)
+
+	local owner = self:GetObjectOwner()
+	if owner:IsValidLivingHuman() and owner:IsSkillActive(SKILL_LOADEDHULL) then
+		effectdata = EffectData()
+			effectdata:SetOrigin(epicenter)
+			effectdata:SetNormal(Vector(0, 0, -1))
+		util.Effect("decal_scorch", effectdata)
+
+		self:EmitSound("npc/env_headcrabcanister/explosion.wav", 100, 100)
+		ParticleEffect("dusty_explosion_rockets", epicenter, angle_zero)
+
+		util.BlastDamagePlayer(self, owner, epicenter, 128, 225, DMG_ALWAYSGIB)
+	else
+		util.Effect("HelicopterMegaBomb", effectdata, true, true)
+	end
 end
 
 ENT.PhysDamageImmunity = 0
@@ -243,7 +335,7 @@ function ENT:Think()
 		return
 	end
 
-	local owner = self:GetOwner()
+	local owner = self:GetObjectOwner()
 	if owner:IsValid() then
 		self:SetPhysicsAttacker(owner)
 
@@ -270,28 +362,25 @@ function ENT:Think()
 end
 
 function ENT:ThreadSafePhysicsCollide(data)
-	local diddamage = false
+	local owner = self:GetObjectOwner()
+	if not owner:IsValidLivingHuman() then return end
+
+	local hitflesh = false
+	local hitentity = false
 	local ent = data.HitEntity
-	if ent and ent:IsValid() then
-		if ent:IsPlayer() and ent:Team() == TEAM_UNDEAD and ent:Alive() and CurTime() >= (self.NextTouch[ent] or 0) then
-			diddamage = true
 
-			self.NextTouch[ent] = CurTime() + self.HitCooldown
+	if ent and ent:IsValid() and CurTime() >= (self.NextTouch[ent] or 0) then
+		--if ent.LastHeld and CurTime() < ent.LastHeld + 0.1 then return end
+		local nest = ent.ZombieConstruction
 
-			local owner = self:GetOwner()
-			if not owner:IsValid() then owner = self end
+		hitentity = true
 
-			ent:TakeDamage(self.HitDamage, owner, self)
-			self:EmitHitFleshSound()
+		self.NextTouch[ent] = CurTime() + self.HitCooldown
 
-			local dir = (self:GetPos() - data.HitPos):GetNormalized()
+		ent:TakeSpecialDamage(self.HitDamage, DMG_SLASH, owner, self)
 
-			util.Blood(data.HitPos, math.random(10, 14), dir, 200)
-
-			local phys = self:GetPhysicsObject()
-			if phys:IsValid() then
-				phys:AddVelocity(dir * self.BounceFleshVelocity)
-			end
+		if ent:IsPlayer() and ent:Team() == TEAM_UNDEAD and ent:Alive() or nest then
+			hitflesh = true
 		else
 			local physattacker = ent:GetPhysicsAttacker()
 			if physattacker:IsValid() and physattacker:Team() == TEAM_HUMAN then
@@ -300,30 +389,42 @@ function ENT:ThreadSafePhysicsCollide(data)
 		end
 	end
 
-	if not diddamage then
+	if hitflesh then
+		self:EmitHitFleshSound()
+
 		local dir = (self:GetPos() - data.HitPos):GetNormalized()
 
-		if data.Speed > self.HoverSpeed then
-			local phys = self:GetPhysicsObject()
-			if phys:IsValid() then
-				phys:AddVelocity(dir * self.BounceVelocity)
-			end
-		end
+		util.Blood(data.HitPos, math.random(10, 14), dir, 200)
 
-		if data.DeltaTime > 0.33 and data.Speed > 32 then
-			self:EmitHitSound()
-
-			local effectdata = EffectData()
-				effectdata:SetOrigin(self:NearestPoint(data.HitPos))
-				effectdata:SetNormal(data.HitNormal)
-				effectdata:SetMagnitude(2)
-				effectdata:SetScale(1)
-			util.Effect("sparks", effectdata)
+		local phys = self:GetPhysicsObject()
+		if phys:IsValid() then
+			phys:AddVelocity(dir * self.BounceFleshVelocity)
 		end
+	elseif data.DeltaTime > 0.33 and data.Speed > 32 then
+		self:EmitHitSound()
 
-		if data.Speed >= self.MaxSpeed * self.SelfDamageSpeed and ent and ent:IsWorld() and CurTime() >= self.PhysDamageImmunity then
-			self:TakeDamage(math.Clamp(data.Speed * self.SelfDamageMul, 0, 30))
+		local effectdata = EffectData()
+			effectdata:SetOrigin(self:NearestPoint(data.HitPos))
+			effectdata:SetNormal(data.HitNormal)
+			effectdata:SetMagnitude(2)
+			effectdata:SetScale(1)
+		util.Effect("sparks", effectdata)
+	end
+
+	if hitentity then return end
+
+	local dir = (self:GetPos() - data.HitPos):GetNormalized()
+
+	if data.Speed > self.HoverSpeed then
+		local phys = self:GetPhysicsObject()
+		if phys:IsValid() then
+			phys:AddVelocity(dir * self.BounceVelocity)
 		end
+	end
+
+	if ((not owner:IsSkillActive(SKILL_STABLEHULL) and data.Speed >= self.MaxSpeed * 0.75) or (self.LastShadeLaunch and self.LastShadeLaunch + 2 > CurTime())) and
+		ent and ent:IsWorld() and CurTime() >= self.PhysDamageImmunity then
+		self:TakeDamage(math.Clamp(data.Speed * self.SelfDamageMul, 0, 40))
 	end
 end
 
@@ -336,18 +437,23 @@ function ENT:EmitHitSound()
 end
 
 function ENT:SetupPlayerVisibility(pl)
-	if pl ~= self:GetOwner() then return end
+	if pl ~= self:GetObjectOwner() then return end
 
 	AddOriginToPVS(self:GetPos())
 end
 
 if CLIENT then return end
 
-local ENT = {}
+local fhbENT = {}
 
-ENT.Type = "anim"
+fhbENT.Type = "anim"
 
-function ENT:Initialize()
+fhbENT.FHB = true
+
+fhbENT.IgnoreMelee = true
+fhbENT.IgnoreBullets = true
+
+function fhbENT:Initialize()
 	local size = self.Size or 16
 
 	self:SetNoDraw(true)
@@ -364,46 +470,15 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 end
 
---[[function ENT:OnTakeDamage(dmginfo)
-	local parent = self:GetParent()
-	if parent:IsValid() then
-		parent._AllowDamage = true
-		parent:TakePhysicsDamage(dmginfo)
-		parent:TakeDamage(dmginfo)
-		parent._AllowDamage = false
-	end
-end]]
-
-function ENT:Use(ent)
+function fhbENT:Use(ent)
 	local parent = self:GetParent()
 	if parent:IsValid() then
 		parent:Use(ent, ent, 0, 0)
 	end
 end
 
--- Unfortunately I couldn't come up with a way to do this without hijacking these rather expensive functions.
-local oldtl = util.TraceLine
-function util.TraceLine(t)
-	local r = oldtl(t)
-	local e = r.Entity
-	if e:IsValid() and e:GetClass() == "fhb" then
-		r.Entity = e:GetParent()
-	end
-	return r
-end
-
-local oldth = util.TraceHull
-function util.TraceHull(t)
-	local r = oldth(t)
-	local e = r.Entity
-	if e:IsValid() and e:GetClass() == "fhb" then
-		r.Entity = e:GetParent()
-	end
-	return r
-end
-
-function ENT:UpdateTransmitState()
+function fhbENT:UpdateTransmitState()
 	return TRANSMIT_NEVER
 end
 
-scripted_ents.Register(ENT, "fhb")
+scripted_ents.Register(fhbENT, "fhb")

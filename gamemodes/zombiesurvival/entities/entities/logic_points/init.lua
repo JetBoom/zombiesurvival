@@ -1,9 +1,9 @@
 ENT.Type = "point"
 
 function ENT:Add(pl, amount)
-	if pl and pl:IsValid() and pl:IsPlayer() and pl:Team() == TEAM_HUMAN then
-		amount = math.Round(amount)
+	if pl and pl:IsValidHuman() then
 		if amount < 0 then
+			amount = math.Round(amount)
 			pl:TakePoints(-amount)
 		else
 			pl:AddPoints(amount)
@@ -12,7 +12,7 @@ function ENT:Add(pl, amount)
 end
 
 function ENT:Set(pl, amount)
-	if pl and pl:IsValid() and pl:IsPlayer() and pl:Team() == TEAM_HUMAN then
+	if pl and pl:IsValidHuman() then
 		self:SetAmount(pl, amount)
 	end
 end
@@ -26,13 +26,13 @@ function ENT:GetAmount(pl)
 end
 
 function ENT:CallIf(pl, amount)
-	if pl and pl:IsValid() and pl:IsPlayer() then
+	if pl and pl:IsValidPlayer() then
 		self:Input(pl:Team() == TEAM_HUMAN and self:GetAmount(pl) >= amount and "onconditionpassed" or "onconditionfailed", pl, self, amount)
 	end
 end
 
 function ENT:CallIfNot(pl, amount)
-	if pl and pl:IsValid() and pl:IsPlayer() then
+	if pl and pl:IsValidPlayer() then
 		self:Input(pl:Team() == TEAM_HUMAN and self:GetAmount(pl) >= amount and "onconditionfailed" or "onconditionpassed", pl, self, amount)
 	end
 end

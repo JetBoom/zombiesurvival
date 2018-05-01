@@ -6,13 +6,15 @@ CLASS.Help = "controls_flesh_creeper"
 CLASS.Wave = 0
 CLASS.Hidden = true
 CLASS.Unlocked = true
-CLASS.Health = 100
+CLASS.NotRandomStart = true
+
+CLASS.Health = 175
 CLASS.SWEP = "weapon_zs_fleshcreeper"
 CLASS.Model = Model("models/antlion.mdl")
-CLASS.Speed = 175
+CLASS.Speed = 160
 CLASS.JumpPower = 220
 
-CLASS.Points = 4
+CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
 
 CLASS.VoicePitch = 0.55
 
@@ -23,20 +25,16 @@ CLASS.ModelScale = 0.65
 --[[CLASS.ModelScale = 0.6324555
 CLASS.ClientsideModelScale = 0.4 / CLASS.ModelScale]]
 
-CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 48)}
-CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 48)}
+CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 36)}
+CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 36)}
 
-CLASS.Hull[1].x = -16
-CLASS.Hull[2].x = 16
-CLASS.Hull[1].y = -16
-CLASS.Hull[2].y = 16
-CLASS.HullDuck[1].x = -16
-CLASS.HullDuck[2].x = 16
-CLASS.HullDuck[1].y = -16
-CLASS.HullDuck[2].y = 16
+CLASS.ViewOffset = Vector(0, 0, 35.5)
+CLASS.ViewOffsetDucked = Vector(0, 0, 35.5)
 
-CLASS.ViewOffset = Vector(0, 0, 40)
-CLASS.ViewOffsetDucked = Vector(0, 0, 10)
+local CurTime = CurTime
+local math_random = math.random
+local math_sin = math.sin
+local IN_JUMP = IN_JUMP
 
 function CLASS:CanUse(pl)
 	return GAMEMODE:GetDynamicSpawning() and not GAMEMODE.ZombieEscape
@@ -44,10 +42,7 @@ end
 
 function CLASS:Move(pl, mv)
 	local wep = pl:GetActiveWeapon()
-	if wep:IsValid() and wep.IsInAttackAnim and (wep:IsInAttackAnim() or wep:GetHoldingRightClick()) then
-		mv:SetMaxSpeed(0)
-		mv:SetMaxClientSpeed(0)
-
+	if wep.Move and wep:Move(mv) then
 		return true
 	end
 
@@ -61,37 +56,38 @@ function CLASS:CalcMainActivity(pl, velocity)
 	local wep = pl:GetActiveWeapon()
 	if wep:IsValid() and wep.IsInAttackAnim then
 		if wep:IsInAttackAnim() then
-			pl.CalcSeqOverride = 14
-			return true
-		elseif wep:GetHoldingRightClick() then
-			pl.CalcSeqOverride = 21
-			return true
+			return 1, 14
+		end
+
+		if wep:GetHoldingRightClick() then
+			return 1, 21
 		end
 	end
 
-	if velocity:Length2D() > 0.5 then
+	if wep.IsPouncing and wep:IsPouncing() then
+		return ACT_GLIDE, -1
+	end
+
+	if velocity:Length2DSqr() > 1 then
 		--[[if pl:Crouching() and pl:OnGround() then
-			pl.CalcSeqOverride = 17
+			return 1, 17
 		else]]
-			pl.CalcSeqOverride = 4
+			return 1, 4
 		--[[end
 	elseif pl:Crouching() and pl:OnGround() then
 		pl.CalcSeqOverride = 40]]
-	else
-		pl.CalcSeqOverride = 2
 	end
 
-	return true
+
+	return 1, 2
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
-	pl:FixModelAngles(velocity)
-
 	local wep = pl:GetActiveWeapon()
 	if wep:IsValid() and wep.IsInAttackAnim then
 		if wep:IsInAttackAnim() then
 			pl:SetPlaybackRate(0)
-			pl:SetCycle((1 - (wep:GetAttackAnimTime() - CurTime()) / wep.Primary.Delay))
+			pl:SetCycle(1 - (wep:GetAttackAnimTime() - CurTime()) / wep.Primary.Delay)
 
 			return true
 		elseif wep:GetHoldingRightClick() then
@@ -100,7 +96,7 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 			local delta = CurTime() - wep:GetRightClickStart()
 			if delta > 1 then
 				--pl:SetCycle(0.333 + (delta * 3 % 1) * 0.2)
-				pl:SetCycle(0.5 + math.sin(delta * 12) * 0.05)
+				pl:SetCycle(0.5 + math_sin(delta * 12) * 0.05)
 			else
 				--pl:SetCycle(delta / 3)
 				pl:SetCycle(delta / 2)
@@ -110,10 +106,10 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 		end
 	end
 
-	if velocity:Length2D() >= 16 then
+	if velocity:Length2DSqr() >= 256 then
 		GAMEMODE.BaseClass.UpdateAnimation(GAMEMODE.BaseClass, pl, velocity, maxseqgroundspeed)
 
-		--[[local dir = Vector()
+		--[[local dir = Vector(0, 0, 0)
 		dir:Set(velocity)
 		dir.z = 0
 		dir:Normalize()
@@ -162,9 +158,8 @@ local FootSounds = {
 	"npc/zombie/foot2.wav",
 	"npc/zombie/foot3.wav"
 }
-local mathrandom = math.random
 function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
-	pl:EmitSound(FootSounds[mathrandom(#FootSounds)], 65, math.random(105, 115))
+	pl:EmitSound(FootSounds[math_random(#FootSounds)], 65, math.random(105, 115))
 
 	return true
 end
@@ -182,7 +177,7 @@ end
 
 if not CLIENT then return end
 
---CLASS.Icon = "zombiesurvival/killicons/flesh_creeper"
+CLASS.Icon = "zombiesurvival/killicons/fleshcreeper"
 
 local matFlesh = Material("models/flesh")
 function CLASS:PrePlayerDraw(pl)

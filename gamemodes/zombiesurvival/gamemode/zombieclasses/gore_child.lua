@@ -1,3 +1,4 @@
+CLASS.Icon = "zombiesurvival/killicons/gigagorechild"
 CLASS.Name = "Gore Child"
 CLASS.TranslationName = "class_gore_child"
 CLASS.Description = "description_gore_child"
@@ -7,8 +8,8 @@ CLASS.Wave = 0
 CLASS.Unlocked = true
 CLASS.Hidden = true
 
-CLASS.Health = 15
-CLASS.Speed = 120
+CLASS.Health = 20
+CLASS.Speed = 150
 
 CLASS.Points = 0.5
 
@@ -31,7 +32,19 @@ CLASS.HullDuck = {Vector(-16, -16, 0) * CLASS.ModelScale, Vector(16, 16, 60) * C
 
 CLASS.CanFeignDeath = true
 
-local mathrandom = math.random
+local CurTime = CurTime
+local math_random = math.random
+local math_max = math.max
+local math_min = math.min
+local math_ceil = math.ceil
+
+local DIR_BACK = DIR_BACK
+local ACT_HL2MP_ZOMBIE_SLUMP_RISE = ACT_HL2MP_ZOMBIE_SLUMP_RISE
+local ACT_HL2MP_SWIM_PISTOL = ACT_HL2MP_SWIM_PISTOL
+local ACT_HL2MP_IDLE_CROUCH_ZOMBIE = ACT_HL2MP_IDLE_CROUCH_ZOMBIE
+local ACT_HL2MP_WALK_CROUCH_ZOMBIE_01 = ACT_HL2MP_WALK_CROUCH_ZOMBIE_01
+local ACT_HL2MP_RUN_ZOMBIE = ACT_HL2MP_RUN_ZOMBIE
+
 local StepLeftSounds = {
 	"npc/zombie/foot1.wav",
 	"npc/zombie/foot2.wav"
@@ -42,9 +55,9 @@ local StepRightSounds = {
 }
 function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
 	if iFoot == 0 then
-		pl:EmitSound(StepLeftSounds[mathrandom(#StepLeftSounds)], 55, 150)
+		pl:EmitSound(StepLeftSounds[math_random(#StepLeftSounds)], 55, 150)
 	else
-		pl:EmitSound(StepRightSounds[mathrandom(#StepRightSounds)], 55, 150)
+		pl:EmitSound(StepRightSounds[math_random(#StepRightSounds)], 55, 150)
 	end
 
 	return true
@@ -54,26 +67,25 @@ function CLASS:CalcMainActivity(pl, velocity)
 	local feign = pl.FeignDeath
 	if feign and feign:IsValid() then
 		if feign:GetDirection() == DIR_BACK then
-			pl.CalcSeqOverride = pl:LookupSequence("zombie_slump_rise_02_fast")
-		else
-			pl.CalcIdeal = ACT_HL2MP_ZOMBIE_SLUMP_RISE
+			return 1, pl:LookupSequence("zombie_slump_rise_02_fast")
 		end
-		return true
+
+		return ACT_HL2MP_ZOMBIE_SLUMP_RISE, -1
 	end
 
 	if pl:WaterLevel() >= 3 then
-		pl.CalcIdeal = ACT_HL2MP_SWIM_PISTOL
-	elseif pl:Crouching() then
-		if velocity:Length2D() <= 0.5 then
-			pl.CalcIdeal = ACT_HL2MP_IDLE_CROUCH_ZOMBIE
-		else
-			pl.CalcIdeal = ACT_HL2MP_WALK_CROUCH_ZOMBIE_01 - 1 + math.ceil((CurTime() / 4 + pl:EntIndex()) % 3)
-		end
-	else
-		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE
+		return ACT_HL2MP_SWIM_PISTOL, -1
 	end
 
-	return true
+	if pl:Crouching() and pl:OnGround() then
+		if velocity:Length2DSqr() <= 1 then
+			return ACT_HL2MP_IDLE_CROUCH_ZOMBIE, -1
+		end
+
+		return ACT_HL2MP_WALK_CROUCH_ZOMBIE_01 - 1 + math_ceil((CurTime() / 4 + pl:EntIndex()) % 3), -1
+	end
+
+	return ACT_HL2MP_RUN_ZOMBIE, -1
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
@@ -93,34 +105,37 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 	local feign = pl.FeignDeath
 	if feign and feign:IsValid() then
 		if feign:GetState() == 1 then
-			pl:SetCycle(1 - math.max(feign:GetStateEndTime() - CurTime(), 0) * 0.666)
+			pl:SetCycle(1 - math_max(feign:GetStateEndTime() - CurTime(), 0) * 0.666)
 		else
-			pl:SetCycle(math.max(feign:GetStateEndTime() - CurTime(), 0) * 0.666)
+			pl:SetCycle(math_max(feign:GetStateEndTime() - CurTime(), 0) * 0.666)
 		end
 		pl:SetPlaybackRate(0)
 		return true
 	end
 
 	local len2d = velocity:Length2D()
-	if len2d > 0.5 then
-		pl:SetPlaybackRate(math.min(len2d / maxseqgroundspeed, 3))
+	if len2d > 1 then
+		pl:SetPlaybackRate(math_min(len2d / maxseqgroundspeed, 3))
 	else
 		pl:SetPlaybackRate(1)
 	end
 
-	if velocity:Length2D() >= 16 then
-		pl:SetPlaybackRate(pl:GetPlaybackRate() * 1.5)
+	if len2d >= 16 then
+		pl:SetPlaybackRate(pl:GetPlaybackRate() * 2)
 	end
 
 	return true
 end
 
 function CLASS:PlayerStepSoundTime(pl, iType, bWalking)
-	return GAMEMODE.BaseClass.PlayerStepSoundTime(GAMEMODE.BaseClass, pl, iType, bWalking) * 0.5
+	return GAMEMODE.BaseClass.PlayerStepSoundTime(GAMEMODE.BaseClass, pl, iType, bWalking) * 0.4
 end
 
 function CLASS:DoAnimationEvent(pl, event, data)
 	if event == PLAYERANIMEVENT_ATTACK_PRIMARY then
+		return ACT_INVALID
+	elseif event == PLAYERANIMEVENT_RELOAD then
+		pl:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_TAUNT_ZOMBIE, true)
 		return ACT_INVALID
 	end
 end
@@ -130,21 +145,21 @@ function CLASS:DoesntGiveFear(pl)
 end
 
 function CLASS:PlayPainSound(pl)
-	pl:EmitSound("ambient/creatures/teddy.wav", 65, math.random(140, 150))
-	pl.NextPainSound = CurTime() + 0.6
+	pl:EmitSound("ambient/creatures/teddy.wav", 65, math_random(140, 150))
+	pl.NextPainSound = CurTime() + 0.5
 
 	return true
 end
 
 function CLASS:PlayDeathSound(pl)
-	pl:EmitSound("ambient/voices/citizen_beaten"..math.random(5)..".wav", 70, math.random(140, 150))
+	pl:EmitSound("ambient/voices/citizen_beaten"..math_random(5)..".wav", 70, math_random(140, 150))
 
 	return true
 end
 
 if SERVER then
 	function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo)
-		pl:FakeDeath(pl:LookupSequence("death_0"..math.random(4)), self.ModelScale)
+		pl:FakeDeath(pl:LookupSequence("death_0"..math_random(4)), self.ModelScale)
 
 		return true
 	end
@@ -156,25 +171,34 @@ if SERVER then
 	function CLASS:AltUse(pl)
 		pl:StartFeignDeath()
 	end
-end
 
---[[function CLASS:Move(pl, move)
-	local mypos = move:GetOrigin()
+	function CLASS:OnSpawned(pl)
+		local oldhands = pl:GetHands()
+		if IsValid(oldhands) then
+			oldhands:Remove()
+		end
 
-	for _, ent in pairs(team.GetPlayers(TEAM_HUMAN)) do
-		local pos = ent:GetPos()
-		local dist = mypos:Distance(pos)
-		if dist <= 16 then
-			local dir = mypos - pos
-			dir.z = 0
-			dir:Normalize()
-			move:SetVelocity(move:GetVelocity() + FrameTime() * 400 * (1 - dist / 16) * dir)
+		local hands = ents.Create("zs_hands")
+		if hands:IsValid() then
+			hands:DoSetup(pl)
+			hands:Spawn()
 		end
 	end
-end]]
+end
 
 if not CLIENT then return end
 
-function CLASS:ShouldDrawLocalPlayer(pl)
+CLASS.Icon = "zombiesurvival/killicons/gorechild"
+
+local render_ModelMaterialOverride = render.ModelMaterialOverride
+
+local matSheet = Material("models/props_c17/doll01")
+function CLASS:DrawHands(pl, hands)
+	render_ModelMaterialOverride(matSheet)
+
+	hands:DrawModel()
+
+	render_ModelMaterialOverride(nil)
+
 	return true
 end

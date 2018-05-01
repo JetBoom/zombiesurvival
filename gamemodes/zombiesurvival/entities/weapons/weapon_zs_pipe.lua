@@ -1,8 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Lead Pipe"
+SWEP.PrintName = "Lead Pipe"
+SWEP.Description = "The weight of a lead pipe carries enough force to shock a target's focus but has a lower swing speed than other melee weapons."
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 
@@ -25,11 +26,11 @@ SWEP.ViewModel = "models/weapons/c_stunstick.mdl"
 SWEP.WorldModel = "models/props_canal/mattpipe.mdl"
 SWEP.UseHands = true
 
-SWEP.MeleeDamage = 40
-SWEP.MeleeRange = 50
+SWEP.MeleeDamage = 45
+SWEP.MeleeRange = 53
 SWEP.MeleeSize = 1.15
 
-SWEP.Primary.Delay = 1.75
+SWEP.Primary.Delay = 1.2
 
 SWEP.UseMelee1 = true
 
@@ -39,6 +40,10 @@ SWEP.MissGesture = SWEP.HitGesture
 SWEP.SwingRotation = Angle(30, -30, -30)
 SWEP.SwingTime = 0.4
 SWEP.SwingHoldType = "grenade"
+
+SWEP.AllowQualityWeapons = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.12)
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.random(55, 65))

@@ -1,10 +1,7 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function SWEP:Deploy()
-	gamemode.Call("WeaponDeployed", self.Owner, self)
+	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 
 	self:SpawnGhost()
 
@@ -21,14 +18,14 @@ function SWEP:Holster()
 end
 
 function SWEP:SpawnGhost()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		owner:GiveStatus("ghost_resupplybox")
 	end
 end
 
 function SWEP:RemoveGhost()
-	local owner = self.Owner
+	local owner = self:GetOwner()
 	if owner and owner:IsValid() then
 		owner:RemoveStatus("ghost_resupplybox", false, true)
 	end
@@ -37,15 +34,13 @@ end
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 
-	local owner = self.Owner
+	local owner = self:GetOwner()
 
 	local status = owner.status_ghost_resupplybox
 	if not (status and status:IsValid()) then return end
-	status:RecalculateValidity()
-	if not status:GetValidPlacement() then return end
 
 	local pos, ang = status:RecalculateValidity()
-	if not pos or not ang then return end
+	if not status:GetValidPlacement() or not pos or not ang then return end
 
 	self:SetNextPrimaryAttack(CurTime() + self.Primary.Delay)
 
@@ -56,6 +51,7 @@ function SWEP:PrimaryAttack()
 		ent:Spawn()
 
 		ent:SetObjectOwner(owner)
+		ent:SetupDeployableSkillHealth()
 
 		ent:EmitSound("npc/dog/dog_servo12.wav")
 
@@ -78,6 +74,6 @@ function SWEP:Think()
 	local count = self:GetPrimaryAmmoCount()
 	if count ~= self:GetReplicatedAmmo() then
 		self:SetReplicatedAmmo(count)
-		self.Owner:ResetSpeed()
+		self:GetOwner():ResetSpeed()
 	end
 end

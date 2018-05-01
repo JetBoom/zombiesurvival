@@ -1,8 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Plank"
+SWEP.PrintName = "Plank"
+SWEP.Description = "A strip of wood of which repeated swings that connect with it build up momentum and overall damage output."
 
+if CLIENT then
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
 
@@ -27,17 +28,21 @@ SWEP.UseHands = true
 SWEP.BoxPhysicsMin = Vector(-0.5764, -2.397225, -20.080572) * SWEP.ModelScale
 SWEP.BoxPhysicsMax = Vector(0.70365, 2.501825, 19.973375) * SWEP.ModelScale
 
-SWEP.MeleeDamage = 20
+SWEP.MeleeDamage = 16
 SWEP.MeleeRange = 48
 SWEP.MeleeSize = 0.875
 SWEP.Primary.Delay = 0.37
 
-SWEP.WalkSpeed = SPEED_FASTEST
+SWEP.WalkSpeed = SPEED_FASTER
 
 SWEP.UseMelee1 = true
 
 SWEP.HitGesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE
 SWEP.MissGesture = SWEP.HitGesture
+
+SWEP.AllowQualityWeapons = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_RANGE, 4)
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/knife/knife_slash"..math.random(2)..".wav")
@@ -54,7 +59,9 @@ end
 function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
 	if hitent:IsValid() and hitent:IsPlayer() then
 		local combo = self:GetDTInt(2)
-		self:SetNextPrimaryFire(CurTime() + math.max(0.2, self.Primary.Delay * (1 - combo / 10)))
+		local owner = self:GetOwner()
+		local armdelay = owner:GetMeleeSpeedMul()
+		self:SetNextPrimaryFire(CurTime() + math.max(0.2, self.Primary.Delay * (1 - combo / 10)) * armdelay)
 
 		self:SetDTInt(2, combo + 1)
 	end

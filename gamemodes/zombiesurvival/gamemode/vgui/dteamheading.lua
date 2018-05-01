@@ -17,7 +17,7 @@ end
 function PANEL:Think()
 	if RealTime() >= self.NextRefresh then
 		self.NextRefresh = RealTime() + self.RefreshTime
-		self:Refresh()
+		self:RefreshContents()
 	end
 end
 
@@ -31,7 +31,7 @@ function PANEL:PerformLayout()
 	self.m_Icon:CenterVertical()
 end
 
-function PANEL:Refresh()
+function PANEL:RefreshContents()
 	local teamid = self:GetTeam()
 
 	self.m_TeamNameLabel:SetText(team.GetName(teamid))

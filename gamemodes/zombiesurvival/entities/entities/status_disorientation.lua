@@ -5,6 +5,8 @@ ENT.Base = "status__base"
 
 ENT.LifeTime = 3
 
+ENT.Ephemeral = true
+
 function ENT:Initialize()
 	self.BaseClass.Initialize(self)
 
@@ -16,7 +18,7 @@ function ENT:Initialize()
 	end
 
 	local parent = self:GetParent()
-	if parent:IsValid() and (SERVER or CLIENT and LocalPlayer() == parent) then
+	if parent:IsValid() and (SERVER or CLIENT and MySelf == parent) then
 		parent:SetDSP(35)
 	end
 
@@ -30,7 +32,7 @@ function ENT:GetPower()
 end
 
 function ENT:CreateMove(cmd)
-	if LocalPlayer() ~= self:GetOwner() then return end
+	if MySelf ~= self:GetOwner() then return end
 
 	local curtime = CurTime()
 	local frametime = FrameTime()
@@ -44,7 +46,7 @@ function ENT:CreateMove(cmd)
 end
 
 function ENT:RenderScreenspaceEffects()
-	if LocalPlayer() ~= self:GetOwner() then return end
+	if MySelf ~= self:GetOwner() then return end
 
 	local power = self:GetPower()
 

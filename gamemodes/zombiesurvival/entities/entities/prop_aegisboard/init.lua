@@ -1,11 +1,12 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
+INC_SERVER()
 
-include("shared.lua")
+ENT.StrictNoSkyCade = true
 
 function ENT:Initialize()
 	self:SetModel("models/props_debris/wood_board05a.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
+
+	self:CollisionRulesChanged()
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
@@ -45,10 +46,13 @@ end
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 
+	if dmginfo:GetDamage() <= 0 then return end
+
 	local attacker = dmginfo:GetAttacker()
 	if not (attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN) then
 		self:ResetLastBarricadeAttacker(attacker, dmginfo)
 		self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
+		self:EmitSound("physics/wood/wood_plank_break"..math.random(1,4)..".wav", 65)
 	end
 end
 
@@ -77,7 +81,7 @@ function ENT:AltUse(activator, tr)
 end
 
 function ENT:OnPackedUp(pl)
-	pl:GiveEmptyWeapon("weapon_zs_barricadekit")
+	--pl:GiveEmptyWeapon("weapon_zs_barricadekit")
 	pl:GiveAmmo(1, "SniperRound")
 
 	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())

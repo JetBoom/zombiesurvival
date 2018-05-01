@@ -3,6 +3,7 @@ CLASS.TranslationName = "class_fast_zombie_legs"
 CLASS.Description = "description_fast_zombie_legs"
 
 CLASS.Model = Model("models/player/zombie_fast.mdl")
+CLASS.OverrideModel = Model("models/Gibs/Fast_Zombie_Legs.mdl")
 CLASS.NoHead = true
 
 CLASS.Wave = 0
@@ -14,7 +15,9 @@ CLASS.Health = 75
 CLASS.Speed = 200
 CLASS.JumpPower = 250
 
-CLASS.Points = 2
+CLASS.CanTaunt = true
+
+CLASS.Points = CLASS.Health/GM.LegsZombiePointRatio
 
 CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 32)}
 CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 32)}
@@ -28,16 +31,11 @@ CLASS.CanFeignDeath = false
 
 CLASS.VoicePitch = 0.65
 
+CLASS.BloodColor = -1
+
 CLASS.SWEP = "weapon_zs_fastzombielegs"
 
 if SERVER then
-	function CLASS:OnSpawned(pl)
-		local status = pl:GiveStatus("overridemodel")
-		if status and status:IsValid() then
-			status:SetModel("models/Gibs/Fast_Zombie_Legs.mdl")
-		end
-	end
-
 	function CLASS:AltUse(pl)
 		local feigndeath = pl.FeignDeath
 		if feigndeath and feigndeath:IsValid() then
@@ -55,23 +53,29 @@ if SERVER then
 			end
 		end
 	end
+
+	function CLASS:IgnoreLegDamage(pl, dmginfo)
+		return true
+	end
 end
 
---[[function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
-	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC then
+function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
+	if not dmginfo:IsBulletDamage() then return true end
+
+	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC and dmginfo:GetDamagePosition().z > pl:LocalToWorld(Vector(0, 0, self.Hull[2].z * 1.33)).z then
 		dmginfo:SetDamage(0)
 		dmginfo:ScaleDamage(0)
 	end
 
 	return true
-end]]
+end
 
-function CLASS:Move(pl, mv)
+--[[function CLASS:Move(pl, mv)
 	local wep = pl:GetActiveWeapon()
 	if wep.Move and wep:Move(mv) then
 		return true
 	end
-end
+end]]
 
 function CLASS:ShouldDrawLocalPlayer(pl)
 	return true
@@ -120,14 +124,14 @@ end
 function CLASS:CalcMainActivity(pl, velocity)
 	local feign = pl.FeignDeath
 	if feign and feign:IsValid() then
-		pl.CalcSeqOverride = pl:LookupSequence("zombie_slump_rise_02_fast")
-	elseif velocity:Length2D() <= 0.5 then
-		pl.CalcIdeal = ACT_HL2MP_IDLE_ZOMBIE
-	else
-		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE
+		return 1, pl:LookupSequence("zombie_slump_rise_02_fast")
 	end
 
-	return true
+	if velocity:Length2DSqr() <= 1 then
+		return ACT_HL2MP_IDLE_ZOMBIE, -1
+	end
+
+	return ACT_HL2MP_RUN_ZOMBIE, -1
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
@@ -144,7 +148,7 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 	end
 
 	local len2d = velocity:Length2D()
-	if len2d > 0.5 then
+	if len2d > 1 then
 		pl:SetPlaybackRate(math.min(len2d / maxseqgroundspeed * 0.75, 3))
 	else
 		pl:SetPlaybackRate(1)
@@ -155,7 +159,7 @@ end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/legs"
+CLASS.Icon = "zombiesurvival/killicons/fast_legs"
 
 -- This whole point of this is to stop drawing decals on the upper part of the model. It doesn't actually do anything to the visible model.
 local undo = false

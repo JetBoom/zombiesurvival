@@ -32,7 +32,7 @@ local function CollideCallback(oldparticle, hitpos, hitnormal)
 
 	local emitter = ParticleEmitter(pos)
 	for i=1, num do
-		local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), pos)
+		local particle = emitter:Add("!sprite_bloodspray"..math.random(8), pos)
 		particle:SetLighting(true)
 		particle:SetVelocity(VectorRand():GetNormalized() * math.Rand(75, 150) + nhitnormal)
 		particle:SetDieTime(3)
@@ -48,7 +48,7 @@ local function CollideCallback(oldparticle, hitpos, hitnormal)
 		particle:SetColor(255, 0, 0)
 		particle:SetCollideCallback(CollideCallbackSmall)
 	end
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end
 
 function EFFECT:Init(data)
@@ -60,7 +60,7 @@ function EFFECT:Init(data)
 	local emitter = ParticleEmitter(pos)
 	for i=1, data:GetMagnitude() do
 		local heading = (VectorRand():GetNormalized() * 3 + dir) / 4
-		local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), pos + heading)
+		local particle = emitter:Add("!sprite_bloodspray"..math.random(8), pos + heading)
 		particle:SetVelocity(force * math.Rand(0.8, 1) * heading)
 		particle:SetDieTime(math.Rand(3, 6))
 		particle:SetStartAlpha(200)
@@ -76,7 +76,7 @@ function EFFECT:Init(data)
 		particle:SetColor(255, 0, 0)
 		particle:SetCollideCallback(CollideCallback)
 	end
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end
 
 function EFFECT:Think()

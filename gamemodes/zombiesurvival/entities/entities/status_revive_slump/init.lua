@@ -1,13 +1,10 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 function ENT:PlayerSet(pPlayer, bExists)
 	self.HealCarryOver = self.HealCarryOver or 0
 
 	pPlayer.Revive = self
-	pPlayer:Freeze(true)
+	--pPlayer:Freeze(true)
 	if not bExists then
 		pPlayer:GodEnable()
 		self.GodDisableTime = CurTime() + 0.1
@@ -31,7 +28,7 @@ function ENT:Think()
 			self.GodDisableTime = nil
 		end
 
-		self.HealCarryOver = self.HealCarryOver + FrameTime() * 10
+		self.HealCarryOver = self.HealCarryOver + FrameTime() * self:GetReviveHeal()
 		if self.HealCarryOver >= 1 then
 			local toheal = math.floor(self.HealCarryOver)
 			owner:SetHealth(math.min(owner:GetMaxHealth(), owner:Health() + toheal))
@@ -47,7 +44,8 @@ function ENT:OnRemove()
 	local parent = self:GetOwner()
 	if parent:IsValid() then
 		parent.Revive = nil
-		parent:Freeze(false)
+		--parent:Freeze(false)
 		parent:GodDisable()
+		parent:AddFlags(FL_ONGROUND)
 	end
 end

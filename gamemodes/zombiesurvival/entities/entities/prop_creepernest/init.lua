@@ -1,20 +1,19 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.NextDecay = 0
 ENT.BuildsThisTick = 0
+ENT.ZombieConstruction = true
 
 function ENT:Initialize()
 	self:SetModel("models/props_wasteland/antlionhill.mdl")
-	self:PhysicsInitBox(Vector(-20, -20, 0), Vector(20, 20, 40))
-	self:SetCollisionBounds(Vector(-20, -20, 0), Vector(20, 20, 40))
+	self:PhysicsInitBox(Vector(-18, -18, 0), Vector(18, 18, 36))
+	self:SetCollisionBounds(Vector(-18, -18, 0), Vector(18, 18, 36))
+	self:SetSolid(SOLID_VPHYSICS)
+	self:SetModelScale(0.2, 0)
 	self:SetUseType(SIMPLE_USE)
 
-	--self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
 	self:SetCustomCollisionCheck(true)
-	self:CollisionRulesChanged()
+	self:CollisionRulesChanged() --self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
 
 	self:ManipulateBoneScale(0, self.ModelScale)
 
@@ -36,10 +35,12 @@ function ENT:BuildUp()
 		self.BuildsThisTick = 0
 	end
 
+	if self:GetNestLastDamaged() + 1 > CurTime() then return end
+
 	if self.BuildsThisTick < 3 then
 		self.BuildsThisTick = self.BuildsThisTick + 1
 
-		self:SetNestHealth(math.min(self:GetNestHealth() + FrameTime() * self:GetNestMaxHealth() * 0.025, self:GetNestMaxHealth()))
+		self:SetNestHealth(math.min(self:GetNestHealth() + FrameTime() * self:GetNestMaxHealth() * 0.1, self:GetNestMaxHealth()))
 	end
 end
 
@@ -58,32 +59,46 @@ function ENT:Think()
 end
 
 function ENT:OnTakeDamage(dmginfo)
-	if self:GetNestHealth() <= 0 then return end
+	if self:GetNestHealth() <= 0 or dmginfo:GetDamage() <= 0 then return end
 
 	local attacker = dmginfo:GetAttacker()
 	if attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_UNDEAD then
-		local owner = self.Owner
+		local owner = self:GetNestOwner()
 		if attacker:GetZombieClassTable().Name ~= "Flesh Creeper" then
 			return
 		end
 
-		if owner and owner:IsValid() and owner:Team() == TEAM_UNDEAD and owner ~= attacker and not attacker:IsAdmin() and owner:GetZombieClassTable().Name == "Flesh Creeper" and owner:Alive() and owner:GetPos():Distance(self:GetPos()) <= 768 then
-			attacker:CenterNotify(COLOR_RED, translate.ClientFormat(attacker, "x_has_built_this_nest_and_is_still_around", owner))
+		if owner and owner:IsValidZombie() and owner ~= attacker and not attacker:IsAdmin() and owner:GetZombieClassTable().Name == "Flesh Creeper" and owner:Alive() and owner:GetPos():DistToSqr(self:GetPos()) <= 589824 then --768^2
+			attacker:CenterNotify(COLOR_RED, translate.ClientFormat(attacker, "x_has_built_this_nest_and_is_still_around", owner:Name()))
 			return
 		end
 
-		if #ents.FindByClass(self:GetClass()) == 1 and not attacker:IsAdmin() and owner ~= attacker then
+		-- Disabled. Small maps can be limited to 1 nest due to their layout and it can result in an indestructible nest that hampers zombie progress.
+		--[[if #ents.FindByClass(self:GetClass()) == 1 and not attacker:IsAdmin() and owner ~= attacker then
 			attacker:CenterNotify(COLOR_RED, translate.ClientGet(attacker, "no_other_nests"))
 			return
-		end
+		end]]
 	end
 
-	self:SetNestHealth(self:GetNestHealth() - dmginfo:GetDamage())
+	local damage = dmginfo:GetDamage() * (dmginfo:GetInflictor().FlyingControllable and 0.3 or 1)
+	if self:GetNestBuilt() and attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
+		local points = damage / self:GetNestMaxHealth() * 5
+
+		attacker.PointQueue = attacker.PointQueue + points
+
+		local pos = self:GetPos()
+		pos.z = pos.z + 32
+
+		attacker.LastDamageDealtPos = pos
+		attacker.LastDamageDealtTime = CurTime()
+	end
+
+	self:SetNestHealth(self:GetNestHealth() - damage)
 	self:SetNestLastDamaged(CurTime())
 
 	if self:GetNestHealth() <= 0 then
 		if self:GetNestBuilt() and attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
-			attacker:AddPoints(5)
+			--attacker:AddPoints(5)
 			attacker.NestsDestroyed = attacker.NestsDestroyed + 1
 		end
 

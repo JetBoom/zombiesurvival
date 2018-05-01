@@ -20,12 +20,12 @@ if CLIENT then
 	SWEP.Slot			= 5
 	SWEP.SlotPos		= 10
 	SWEP.ViewModelFlip	= false
-	
+
 	SWEP.DrawCrosshair	= false
-	
+
 	SWEP.ShowViewModel 	= true
 	SWEP.ShowWorldModel = true
-	
+
 end
 
 local debugging = false
@@ -49,8 +49,8 @@ end
 
 
 SWEP.HoldType = "pistol"
-SWEP.HoldTypes = { "normal", "melee", "melee2", "fist", 
-"knife", "smg", "ar2", "pistol", "revolver", "rpg", "physgun", 
+SWEP.HoldTypes = { "normal", "melee", "melee2", "fist",
+"knife", "smg", "ar2", "pistol", "revolver", "rpg", "physgun",
 "grenade", "shotgun", "crossbow", "slam", "duel", "passive",
 "camera" }
 
@@ -59,7 +59,7 @@ SWEP.AdminSpawnable		= true
 
 SWEP.ViewModel			= "models/weapons/v_pistol.mdl"
 SWEP.WorldModel			= "models/weapons/w_pistol.mdl"
-SWEP.CurWorldModel 		= "models/weapons/w_pistol.mdl" // this is where shit gets hacky 
+SWEP.CurWorldModel 		= "models/weapons/w_pistol.mdl" -- this is where shit gets hacky
 
 SWEP.ViewModelFOV		= 70
 SWEP.BobScale			= 0
@@ -77,10 +77,10 @@ local sck_class = ""
 function SWEP:Initialize()
 
 	self:SetWeaponHoldType(self.HoldType)
-	
+
 	self:SetIronSights( true )
 	self:ResetIronSights()
-	
+
 	if CLIENT then
 		self:CreateWeaponWorldModel()
 		self:ClientInit()
@@ -88,11 +88,11 @@ function SWEP:Initialize()
 			file.CreateDir("swep_construction_kit")
 		end
 	end
-	
+
 	self.Dropped = false
-	
+
 	sck_class = self:GetClass()
-	
+
 end
 
 function SWEP:Equip()
@@ -103,28 +103,28 @@ end
 
 function SWEP:PrimaryAttack()
 
-	self.Weapon:SetNextPrimaryFire(CurTime() + 0.2)
+	self:SetNextPrimaryFire(CurTime() + 0.2)
 
 	if CLIENT then
 		self:OpenMenu()
 	end
 	if game.SinglePlayer() then
-		self.Owner:SendLua("LocalPlayer():GetActiveWeapon():OpenMenu()")
+		self:GetOwner():SendLua("LocalPlayer():GetActiveWeapon():OpenMenu()")
 	end
-	
+
 end
 
 function SWEP:SecondaryAttack()
-	
-	self.Weapon:SetNextSecondaryFire(CurTime() + 0.2)
-	
+
+	self:SetNextSecondaryFire(CurTime() + 0.2)
+
 	if CLIENT then
 		self:OpenMenu()
 	end
 	if game.SinglePlayer() then
-		self.Owner:SendLua("LocalPlayer():GetActiveWeapon():OpenMenu()")
+		self:GetOwner():SendLua("LocalPlayer():GetActiveWeapon():OpenMenu()")
 	end
-	
+
 end
 
 
@@ -132,7 +132,7 @@ function SWEP:SetupDataTables()
 
 	self:DTVar( "Bool", 0, "ironsights" )
 	self:DTVar( "Bool", 1, "thirdperson" )
-	
+
 end
 
 function SWEP:ToggleIronSights()
@@ -162,17 +162,17 @@ end
 
 function SWEP:SetThirdPerson( b )
 	self.dt.thirdperson = b
-	
-	local owner = self.Owner
+
+	local owner = self:GetOwner()
 	if (!IsValid(owner)) then owner = self.LastOwner end
 	if (!IsValid(owner)) then return end
-	
-	if (self.dt.thirdperson) then 
+
+	if (self.dt.thirdperson) then
 		owner:SetViewEntity(game.GetWorld())
 		owner:CrosshairDisable()
-	else 
+	else
 		owner:SetViewEntity(owner)
-		owner:CrosshairEnable() 
+		owner:CrosshairEnable()
 	end
 end
 
@@ -181,17 +181,17 @@ function SWEP:GetThirdPerson()
 end
 
 function SWEP:GetViewModelPosition(pos, ang)
-	
-	//if true then return pos, ang end
-	//SCKDebugRepeat( "SWEP:VMPos", "Getting viewmodel pos" )
-	
+
+	--if true then return pos, ang end
+	--SCKDebugRepeat( "SWEP:VMPos", "Getting viewmodel pos" )
+
 	local bIron = self.dt.ironsights
 	local fIronTime = self.fIronTime or 0
 
 	if (not bIron and fIronTime < CurTime() - self.IronsightTime) then
 		return pos, ang
 	end
-	
+
 	self.IronSightsPos, self.IronSightsAng = self:GetIronSightCoordination()
 
 	local Mul = 1.0
@@ -218,7 +218,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 	pos = pos + Offset.x * Right * Mul
 	pos = pos + Offset.y * Forward * Mul
 	pos = pos + Offset.z * Up * Mul
-	
+
 	return pos, ang
 end
 
@@ -230,11 +230,11 @@ SWEP.ir_yw = CreateConVar( "_sp_ironsight_yaw", 0.0 )
 SWEP.ir_r = CreateConVar( "_sp_ironsight_roll", 0.0 )
 
 function SWEP:GetIronSightCoordination()
-	
+
 	local vec = Vector( self.ir_x:GetFloat(), self.ir_y:GetFloat(), self.ir_z:GetFloat() )
 	local ang = Vector( self.ir_p:GetFloat(), self.ir_yw:GetFloat(), self.ir_r:GetFloat() )
 	return vec, ang
-	
+
 end
 
 function SWEP:GetHoldTypes()
@@ -242,16 +242,16 @@ function SWEP:GetHoldTypes()
 end
 
 SWEP.LastOwner = nil
-/***************************
+--[[**************************
 	Helper functions
-***************************/
+**************************]]
 SWEP.IsSCK = true
 function GetSCKSWEP( pl )
 	local wep = pl:GetActiveWeapon()
 	if (IsValid(wep) and wep.IsSCK) then
 		return wep
 	end
-	//Error("Not holding SWEP Construction Kit!")
+	--Error("Not holding SWEP Construction Kit!")
 	return NULL
 end
 

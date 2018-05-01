@@ -1,7 +1,4 @@
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("shared.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 ENT.m_NextStrainSound = 0
 
@@ -17,6 +14,7 @@ end)
 
 function ENT:Initialize()
 	self:SetModel("models/crossbow_bolt.mdl")
+	self:SetModelScale(0.75)
 	self.m_NailUnremovable = self.m_NailUnremovable or false
 	self.HealthOveride = self.HealthOveride or -1
 	self.HealthMultiplier = self.HealthMultiplier or 1
@@ -57,6 +55,39 @@ function ENT:AttachTo(baseent, attachent, physbone, physbone2)
 		baseent:SetBarricadeHealth(health)
 		baseent:SetBarricadeRepairs(baseent:GetMaxBarricadeRepairs())
 	end
+
+	baseent:RecalculateNailBonuses()
+end
+
+function ENT:SetAttachEntity(ent, physbone1, physbone2)
+	self.m_AttachEntity = ent
+
+	local baseent = self:GetBaseEntity()
+	if not baseent:IsValid() then return end
+
+	local cons = constraint.Weld(baseent, ent, physbone1 or 0, physbone2 or 0, 0, true)
+	if cons ~= nil then
+		for _, oldcons in pairs(constraint.FindConstraints(baseent, "Weld")) do
+			if oldcons.Ent1 == ent or oldcons.Ent2 == ent then
+				cons = oldcons.Constraint
+				break
+			end
+		end
+	end
+
+	cons:DeleteOnRemove(self)
+	self:SetNailConstraint(cons)
+
+	if baseent:IsValid() then
+		baseent:CollisionRulesChanged()
+	end
+	if ent and ent:IsValid() then
+		ent:CollisionRulesChanged()
+	end
+
+	timer.Simple(0.1, function() GAMEMODE:EvaluatePropFreeze() end)
+
+	return cons
 end
 
 function ENT:SetNailConstraint(const)
@@ -118,7 +149,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 		return true
 	elseif name == "sethealth" then
 		self:SetNewHealth(args)
-		
+
 		return true
 	elseif name == "setunremoveable" or name == "setunremovable" then
 		self.m_NailUnremovable = tonumber(args) == 1

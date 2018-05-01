@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.NextEmit = 0
 
@@ -11,7 +11,7 @@ function ENT:Initialize()
 		cmodel:SetMoveType(MOVETYPE_NONE)
 		cmodel:SetParent(self)
 		cmodel:SetOwner(self)
-		cmodel:SetModelScale(0.6, 0)
+		cmodel:SetModelScale(0.4, 0)
 		cmodel:Spawn()
 
 		self.CModel = cmodel
@@ -26,9 +26,6 @@ end
 
 local matOverride = Material("models/shiny")
 function ENT:Draw()
-	--[[local parent = self:GetParent()
-	if parent == LocalPlayer() and parent:IsValid() and not parent:ShouldDrawLocalPlayer() then return end]]
-
 	local hittime = self:GetHitTime()
 	if hittime == 0 then
 		render.SetColorModulation(0, 1, 0)
@@ -60,5 +57,5 @@ function ENT:Draw()
 	particle:SetRollDelta(math.Rand(-10, 10))
 	particle:SetColor(30, 255, 30)
 
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end

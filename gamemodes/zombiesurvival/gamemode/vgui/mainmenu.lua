@@ -2,7 +2,7 @@
 GM.REVISION = 4352
 
 function GM:OpenMainMenu()
-	if MainMenu and MainMenu:Valid() then
+	if MainMenu and MainMenu:IsValid() then
 		MainMenu:MakePopup()
 		return
 	end
@@ -72,7 +72,7 @@ function GM:OpenMainMenu()
 	button:DockMargin(40, 8, 0, 0)
 	button.Tooltip = "mainmenu_tooltip_spectate"
 
-	local button = vgui.Create("ZSMenuButton", MainMenu)
+	button = vgui.Create("ZSMenuButton", MainMenu)
 	button:SetText("PLAY")
 	button:SizeToContents()
 	button:Dock(BOTTOM)

@@ -1,10 +1,12 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "'Battleaxe' Handgun"
-	SWEP.Slot = 1
-	SWEP.SlotPos = 0
+SWEP.PrintName = "'Battleaxe' Handgun"
+SWEP.Description = "An accurate, reliable pistol with considerable damage."
 
+SWEP.Slot = 1
+SWEP.SlotPos = 0
+
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 
@@ -22,7 +24,7 @@ SWEP.WorldModel = "models/weapons/w_pist_usp.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("Weapon_USP.Single")
-SWEP.Primary.Damage = 22
+SWEP.Primary.Damage = 24
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.2
 
@@ -33,5 +35,8 @@ GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
 SWEP.IronSightsPos = Vector(-5.9, 12, 2.3)
 
-SWEP.ConeMax = 0.05
-SWEP.ConeMin = 0.015
+SWEP.ConeMax = 2.5
+SWEP.ConeMin = 0.75
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.0175, 1)

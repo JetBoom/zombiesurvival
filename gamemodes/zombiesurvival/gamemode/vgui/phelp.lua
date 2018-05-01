@@ -61,7 +61,7 @@ function MakepCredits()
 	frame:SetTall(y + 8)
 	frame:Center()
 	frame:SetAlpha(0)
-	frame:AlphaTo(255, 0.5, 0)
+	frame:AlphaTo(255, 0.15, 0)
 	frame:MakePopup()
 end
 
@@ -70,7 +70,7 @@ function MakepHelp()
 
 	if pHelp then
 		pHelp:SetAlpha(0)
-		pHelp:AlphaTo(255, 0.5, 0)
+		pHelp:AlphaTo(255, 0.15, 0)
 		pHelp:SetVisible(true)
 		pHelp:MakePopup()
 		return
@@ -135,7 +135,7 @@ function MakepHelp()
 	gamemode.Call("BuildHelpMenu", Window, propertysheet)
 
 	Window:SetAlpha(0)
-	Window:AlphaTo(255, 0.5, 0)
+	Window:AlphaTo(255, 0.15, 0)
 	Window:MakePopup()
 end
 

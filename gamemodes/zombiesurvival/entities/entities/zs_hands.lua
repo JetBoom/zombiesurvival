@@ -6,13 +6,13 @@ ENT.RenderGroup		= RENDERGROUP_OTHER
 
 
 function ENT:Initialize()
-	
+
 	hook.Add( "OnViewModelChanged", self, self.ViewModelChanged )
 
 	self:SetNotSolid( true )
 	self:DrawShadow( false )
 	self:SetTransmitWithParent( true ) -- Transmit only when the viewmodel does!
-	
+
 end
 
 function ENT:DoSetup( ply )
@@ -50,7 +50,7 @@ end
 
 function ENT:ViewModelChanged( vm, old, new )
 	if not IsValid(self) then return end
-	
+
 	-- Ignore other peoples viewmodel changes!
 	if ( vm:GetOwner() != self:GetOwner() ) then return end
 
@@ -59,7 +59,7 @@ function ENT:ViewModelChanged( vm, old, new )
 end
 
 function ENT:AttachToViewmodel( vm )
-	
+
 	self:AddEffects( EF_BONEMERGE )
 	self:SetParent( vm )
 	self:SetMoveType( MOVETYPE_NONE )
@@ -67,4 +67,10 @@ function ENT:AttachToViewmodel( vm )
 	self:SetPos( Vector( 0, 0, 0 ) )
 	self:SetAngles( Angle( 0, 0, 0 ) )
 
+end
+
+function ENT:Draw()
+	if MySelf:CallZombieFunction1("DrawHands", self) then return end
+
+	self:DrawModel()
 end

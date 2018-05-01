@@ -1,9 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Manhack Control"
-	SWEP.Description = "Controller for your Manhack."
+SWEP.PrintName = "Manhack Control"
+SWEP.Description = "Controller for your Manhack."
 
+if CLIENT then
 	SWEP.ViewModelFOV = 50
 
 	SWEP.BobScale = 0.5
@@ -41,6 +41,10 @@ SWEP.NoPickupNotification = true
 
 SWEP.HoldType = "slam"
 
+SWEP.NoDeploySpeedChange = true
+SWEP.NoTransfer = true
+SWEP.AutoSwitchFrom	= false
+
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 	self:SetDeploySpeed(10)
@@ -54,12 +58,12 @@ function SWEP:Think()
 
 	if SERVER then
 		for _, ent in pairs(ents.FindByClass(self.EntityClass)) do
-			if ent:GetOwner() == self.Owner then
+			if ent:IsValid() and ent:GetObjectOwner() == self:GetOwner() then
 				return
 			end
 		end
 
-		self.Owner:StripWeapon(self:GetClass())
+		self:GetOwner():StripWeapon(self:GetClass())
 	end
 end
 
@@ -68,7 +72,7 @@ function SWEP:PrimaryAttack()
 		self:SetDTBool(0, not self:GetDTBool(0))
 
 		if CLIENT then
-			LocalPlayer():EmitSound(self:GetDTBool(0) and "buttons/button17.wav" or "buttons/button19.wav", 0)
+			MySelf:EmitSound(self:GetDTBool(0) and "buttons/button17.wav" or "buttons/button19.wav", 0)
 		end
 	end
 end
@@ -79,9 +83,9 @@ end
 function SWEP:Reload()
 	return false
 end
-	
+
 function SWEP:Deploy()
-	gamemode.Call("WeaponDeployed", self.Owner, self)
+	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 
@@ -99,6 +103,6 @@ end
 
 if not CLIENT then return end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end

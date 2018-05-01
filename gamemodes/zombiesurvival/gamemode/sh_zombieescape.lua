@@ -8,6 +8,8 @@ GM.ZE_TimeLimit = 60 * 16
 
 GM.DefaultZombieClass = GM.ZombieClasses["Super Zombie"].Index
 
+DEFAULT_JUMP_POWER = 195
+
 local CSSWEAPONS = {"weapon_knife","weapon_glock","weapon_usp","weapon_p228","weapon_deagle",
 	"weapon_elite","weapon_fiveseven","weapon_m3","weapon_xm1014","weapon_galil",
 	"weapon_ak47","weapon_scout","weapon_sg552","weapon_awp","weapon_g3sg1",
@@ -26,7 +28,7 @@ function GM:Move(pl, move)
 			move:SetMaxSpeed(move:GetMaxSpeed() * 0.95)
 			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.95)
 		end
-	elseif pl:CallZombieFunction("Move", move) then
+	elseif pl:CallZombieFunction1("Move", move) then
 		return
 	end
 
@@ -43,13 +45,13 @@ function GM:GetZombieDamageScale(pos, ignore)
 end
 
 function GM:ScalePlayerDamage(pl, hitgroup, dmginfo)
-	if dmginfo:IsBulletDamage() then
-		if hitgroup == HITGROUP_HEAD then
-			pl.m_LastHeadShot = CurTime()
-		end
+	if not dmginfo:IsBulletDamage() then return end
+
+	if dmginfo:IsBulletDamage() and hitgroup == HITGROUP_HEAD then
+		pl.m_LastHeadShot = CurTime()
 	end
 
-	if not pl:CallZombieFunction("ScalePlayerDamage", hitgroup, dmginfo) then
+	if not pl:CallZombieFunction2("ScalePlayerDamage", hitgroup, dmginfo) then
 		if hitgroup == HITGROUP_HEAD then
 			dmginfo:SetDamage(dmginfo:GetDamage() * 2)
 		elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG or hitgroup == HITGROUP_GEAR then
@@ -85,21 +87,25 @@ hook.Add("Initialize", "RegisterDummyEntities", function()
 	scripted_ents.Register(ENT, "ammo_50ae")
 	scripted_ents.Register(ENT, "ammo_556mm_box")
 	scripted_ents.Register(ENT, "player_weaponstrip")
-	
+
 	--CSS Weapons for ZE map parenting
 	for i, weapon in pairs(CSSWEAPONS) do
-		weapons.Register({Base = "weapon_map_base"},weapon) 
+		weapons.Register({Base = "weapon_map_base"},weapon)
 	end
 end)
 
 hook.Add( "PlayerCanPickupWeapon", "RestrictMapWeapons", function( ply, wep )
+	if wep:GetClass() == "weapon_knife" then
+		if ply:Team() == TEAM_HUMAN then return false end
+	else
+		if table.HasValue(CSSWEAPONS,wep:GetClass()) and ply:Team() == TEAM_UNDEAD then return false end
+	end
 
 	local weps = ply:GetWeapons()
-		
 	--Only allow one special weapon per player
 	for k, v in pairs(weps) do
-		if table.HasValue( CSSWEAPONS, v:GetClass() ) or v:GetClass()=="weapon_map_base" then return false end
+		if table.HasValue( CSSWEAPONS, v:GetClass() ) or v:GetClass() == "weapon_map_base" then return false end
 	end
-		
+
 	return true
 end)

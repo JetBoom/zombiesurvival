@@ -1,7 +1,4 @@
-AddCSLuaFile("shared.lua")
-AddCSLuaFile("cl_init.lua")
-
-include("shared.lua")
+INC_SERVER()
 
 local ViewHullMins = Vector(-4, -4, -4)
 local ViewHullMaxs = Vector(4, 4, 4)

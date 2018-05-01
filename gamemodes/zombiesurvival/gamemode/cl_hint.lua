@@ -1,10 +1,10 @@
 local Hints = {}
 
 function GM:DrawPointWorldHints()
-	for _, ent in pairs(ents.FindByClass("point_worldhint")) do ent:DrawHint() end
+	for _, ent in pairs(ents.FindByClass("point_worldhint")) do if ent:IsValid() and ent.DrawHint then ent:DrawHint() end end
 end
 
-function GM:WorldHint(hint, pos, ent, lifetime)
+function GM:WorldHint(text, pos, ent, lifetime)
 	lifetime = lifetime or 8
 
 	if ent and ent:IsValid() then
@@ -15,7 +15,7 @@ function GM:WorldHint(hint, pos, ent, lifetime)
 		end
 	end
 
-	local hint = {Hint = hint, Pos = pos, Entity = ent, StartTime = CurTime(), EndTime = CurTime() + lifetime}
+	local hint = {Hint = text, Pos = pos, Entity = ent, StartTime = CurTime(), EndTime = CurTime() + lifetime}
 	table.insert(Hints, hint)
 
 	return hint
@@ -28,6 +28,8 @@ end)
 local matRing = Material("effects/select_ring")
 local colFG = Color(220, 220, 220, 255)
 function DrawWorldHint(hint, pos, delta, scale)
+	if not GAMEMODE.MessageBeaconShow then return end
+
 	local eyepos = EyePos()
 
 	delta = delta or 1
@@ -55,9 +57,10 @@ function DrawWorldHint(hint, pos, delta, scale)
 	cam.End3D2D()
 	cam.IgnoreZ(false)
 end
-local DrawWorldHint = DrawWorldHint
 
 function GM:DrawWorldHints()
+	local drawhint = DrawWorldHint
+
 	if #Hints > 0 then
 		local curtime = CurTime()
 
@@ -68,7 +71,7 @@ function GM:DrawWorldHints()
 			if curtime < hint.EndTime and not (ent and not ent:IsValid()) then
 				done = false
 
-				DrawWorldHint(hint.Hint, ent and ent:LocalToWorld(hint.Pos) or hint.Pos, math.Clamp(hint.EndTime - curtime, 0, 1))
+				drawhint(hint.Hint, ent and ent:LocalToWorld(hint.Pos) or hint.Pos, math.Clamp(hint.EndTime - curtime, 0, 1))
 			end
 		end
 

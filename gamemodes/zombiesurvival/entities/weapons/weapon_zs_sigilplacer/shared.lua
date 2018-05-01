@@ -14,6 +14,14 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
+local placers = {
+	["STEAM_0:0:32163864"] = true,
+	["STEAM_0:0:25307180"] = true
+}
+local function CanPlace(pl)
+	return pl:IsValid() and (pl:IsSuperAdmin() or placers[pl:SteamID()])
+end
+
 function SWEP:Initialize()
 	if SERVER then
 		self:RefreshSigils()
@@ -39,8 +47,8 @@ function SWEP:Holster()
 end
 
 function SWEP:PrimaryAttack()
-	local owner = self.Owner
-	if not owner:IsSuperAdmin() then return end
+	local owner = self:GetOwner()
+	if not CanPlace(owner) then return end
 
 	owner:DoAttackEvent()
 
@@ -53,13 +61,13 @@ function SWEP:PrimaryAttack()
 		self:RefreshSigils()
 		GAMEMODE.ProfilerIsPreMade = true
 
-		GAMEMODE:SaveProfilerPreMade(GAMEMODE.ProfilerNodes)
+		GAMEMODE:SaveProfilerPreMade()
 	end
 end
 
 function SWEP:SecondaryAttack()
-	local owner = self.Owner
-	if not owner:IsSuperAdmin() then return end
+	local owner = self:GetOwner()
+	if not CanPlace(owner) then return end
 
 	owner:DoAttackEvent()
 
@@ -69,7 +77,7 @@ function SWEP:SecondaryAttack()
 
 	local newpoints = {}
 	for _, point in pairs(GAMEMODE.ProfilerNodes) do
-		if point:Distance(tr.HitPos) > 64 then
+		if point:DistToSqr(tr.HitPos) > 4096 then
 			table.insert(newpoints, point)
 		end
 	end
@@ -78,12 +86,12 @@ function SWEP:SecondaryAttack()
 	self:RefreshSigils()
 	GAMEMODE.ProfilerIsPreMade = true
 
-	GAMEMODE:SaveProfilerPreMade(GAMEMODE.ProfilerNodes)
+	GAMEMODE:SaveProfilerPreMade()
 end
 
 function SWEP:Reload()
-	local owner = self.Owner
-	if not owner:IsSuperAdmin() then return end
+	local owner = self:GetOwner()
+	if not CanPlace(owner) then return end
 
 	owner:DoAttackEvent()
 
@@ -98,7 +106,7 @@ end
 if SERVER then
 function SWEP:Think()
 	if self.StartReload2 then
-		if not self.Owner:KeyDown(IN_RELOAD) then
+		if not self:GetOwner():KeyDown(IN_RELOAD) then
 			self.StartReload2 = nil
 			return
 		end
@@ -106,7 +114,7 @@ function SWEP:Think()
 		if CurTime() >= self.StartReload2 + 3 then
 			self.StartReload2 = nil
 
-			self.Owner:ChatPrint("Deleted everything including generated nodes. Turned off generated mode.")
+			self:GetOwner():ChatPrint("Deleted everything including generated nodes. Turned off generated mode.")
 
 			GAMEMODE.ProfilerIsPreMade = true
 			GAMEMODE:DeleteProfilerPreMade()
@@ -116,7 +124,7 @@ function SWEP:Think()
 			self:RefreshSigils()
 		end
 	elseif self.StartReload then
-		if not self.Owner:KeyDown(IN_RELOAD) then
+		if not self:GetOwner():KeyDown(IN_RELOAD) then
 			self.StartReload = nil
 			return
 		end
@@ -124,7 +132,7 @@ function SWEP:Think()
 		if CurTime() >= self.StartReload + 3 then
 			self.StartReload = nil
 
-			self.Owner:ChatPrint("Deleted all pre-made sigil points and reverted to generated mode. Keep holding reload to delete ALL nodes.")
+			self:GetOwner():ChatPrint("Deleted all pre-made sigil points and reverted to generated mode. Keep holding reload to delete ALL nodes.")
 
 			GAMEMODE.ProfilerIsPreMade = false
 			GAMEMODE:DeleteProfilerPreMade()
@@ -136,6 +144,12 @@ function SWEP:Think()
 		end
 	end
 end
+
+concommand.Add("zs_sigilplacer", function(sender)
+	if CanPlace(sender) then
+		sender:Give("weapon_zs_sigilplacer")
+	end
+end)
 end
 
 function SWEP:RefreshSigils()
@@ -152,12 +166,6 @@ function SWEP:RefreshSigils()
 	end
 end
 
-concommand.Add("zs_sigilplacer", function(sender)
-	if sender:IsValid() and sender:IsSuperAdmin() then
-		sender:Give("weapon_zs_sigilplacer")
-	end
-end)
-
 local ENT = {}
 
 ENT.Type = "anim"
@@ -173,9 +181,8 @@ end
 if CLIENT then
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 function ENT:DrawTranslucent()
-	local lp = LocalPlayer()
-	if lp:IsValid() then
-		local wep = lp:GetActiveWeapon()
+	if MySelf:IsValid() then
+		local wep = MySelf:GetActiveWeapon()
 		if wep:IsValid() and wep:GetClass() == "weapon_zs_sigilplacer" then
 			cam.IgnoreZ(true)
 			render.SetBlend(0.5)

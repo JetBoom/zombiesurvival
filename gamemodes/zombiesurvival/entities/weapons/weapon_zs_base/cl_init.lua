@@ -1,4 +1,5 @@
-include("shared.lua")
+INC_CLIENT()
+
 include("animations.lua")
 
 SWEP.DrawAmmo = true
@@ -20,11 +21,11 @@ function SWEP:Deploy()
 end
 
 function SWEP:TranslateFOV(fov)
-	return GAMEMODE.FOVLerp * fov
+	return (GAMEMODE.FOVLerp + (self.IsScoped and not GAMEMODE.DisableScopes and 0 or (1 - GAMEMODE.FOVLerp) * (1 - GAMEMODE.IronsightZoomScale))) * fov
 end
 
 function SWEP:AdjustMouseSensitivity()
-	if self:GetIronsights() then return GAMEMODE.FOVLerp end
+	if self:GetIronsights() then return GAMEMODE.FOVLerp + (self.IsScoped and not GAMEMODE.DisableScopes and 0 or (1 - GAMEMODE.FOVLerp) * (1 - GAMEMODE.IronsightZoomScale)) end
 end
 
 function SWEP:PreDrawViewModel(vm)
@@ -38,11 +39,11 @@ function SWEP:PostDrawViewModel(vm)
 		render.SetBlend(1)
 	end
 
-	if not self.HUD3DPos or GAMEMODE.WeaponHUDMode == 1 then return end
-
-	local pos, ang = self:GetHUD3DPos(vm)
-	if pos then
-		self:Draw3DHUD(vm, pos, ang)
+	if self.HUD3DPos and GAMEMODE:ShouldDraw3DWeaponHUD() then
+		local pos, ang = self:GetHUD3DPos(vm)
+		if pos then
+			self:Draw3DHUD(vm, pos, ang)
+		end
 	end
 end
 
@@ -87,29 +88,41 @@ local function GetAmmoColor(clip, maxclip)
 	end
 end
 
-function SWEP:Draw3DHUD(vm, pos, ang)
-	local wid, hei = 180, 200
-	local x, y = wid * -0.6, hei * -0.5
-	local clip = self:Clip1()
-	local spare = self.Owner:GetAmmoCount(self:GetPrimaryAmmoType())
-	local maxclip = self.Primary.ClipSize
-
+function SWEP:GetDisplayAmmo(clip, spare, maxclip)
 	if self.RequiredClip ~= 1 then
 		clip = math.floor(clip / self.RequiredClip)
 		spare = math.floor(spare / self.RequiredClip)
 		maxclip = math.ceil(maxclip / self.RequiredClip)
 	end
 
+	if self.AmmoUse then
+		clip = math.floor(clip / self.AmmoUse)
+		spare = math.floor(spare / self.AmmoUse)
+		maxclip = math.ceil(maxclip / self.AmmoUse)
+	end
+
+	return clip, spare, maxclip
+end
+
+function SWEP:Draw3DHUD(vm, pos, ang)
+	local wid, hei = 180, 200
+	local x, y = wid * -0.6, hei * -0.5
+	local clip = self:Clip1()
+	local spare = self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType())
+	local maxclip = self.Primary.ClipSize
+
+	local dclip, dspare, dmaxclip = self:GetDisplayAmmo(clip, spare, maxclip)
+
 	cam.Start3D2D(pos, ang, self.HUD3DScale / 2)
 		draw.RoundedBoxEx(32, x, y, wid, hei, colBG, true, false, true, false)
 
-		local displayspare = maxclip > 0 and self.Primary.DefaultClip ~= 99999
+		local displayspare = dmaxclip > 0 and self.Primary.DefaultClip ~= 99999
 		if displayspare then
-			draw.SimpleTextBlurry(spare, spare >= 1000 and "ZS3D2DFontSmall" or "ZS3D2DFont", x + wid * 0.5, y + hei * 0.75, spare == 0 and colRed or spare <= maxclip and colYellow or colWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlurry(dspare, dspare >= 1000 and "ZS3D2DFontSmall" or "ZS3D2DFont", x + wid * 0.5, y + hei * 0.75, dspare == 0 and colRed or dspare <= dmaxclip and colYellow or colWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
-		GetAmmoColor(clip, maxclip)
-		draw.SimpleTextBlurry(clip, clip >= 100 and "ZS3D2DFont" or "ZS3D2DFontBig", x + wid * 0.5, y + hei * (displayspare and 0.3 or 0.5), colAmmo, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		GetAmmoColor(dclip, dmaxclip)
+		draw.SimpleTextBlurry(dclip, dclip >= 100 and "ZS3D2DFont" or "ZS3D2DFontBig", x + wid * 0.5, y + hei * (displayspare and 0.3 or 0.5), colAmmo, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 end
 
@@ -119,29 +132,36 @@ function SWEP:Draw2DHUD()
 	local wid, hei = 180 * screenscale, 64 * screenscale
 	local x, y = ScrW() - wid - screenscale * 128, ScrH() - hei - screenscale * 72
 	local clip = self:Clip1()
-	local spare = self.Owner:GetAmmoCount(self:GetPrimaryAmmoType())
+	local spare = self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType())
 	local maxclip = self.Primary.ClipSize
 
-	if self.RequiredClip ~= 1 then
-		clip = math.floor(clip / self.RequiredClip)
-		spare = math.floor(spare / self.RequiredClip)
-		maxclip = math.ceil(maxclip / self.RequiredClip)
-	end
+	local dclip, dspare, dmaxclip = self:GetDisplayAmmo(clip, spare, maxclip)
 
 	draw.RoundedBox(16, x, y, wid, hei, colBG)
 
-	local displayspare = maxclip > 0 and self.Primary.DefaultClip ~= 99999
+	local displayspare = dmaxclip > 0 and self.Primary.DefaultClip ~= 99999
 	if displayspare then
-		draw.SimpleTextBlurry(spare, spare >= 1000 and "ZSHUDFontSmall" or "ZSHUDFont", x + wid * 0.75, y + hei * 0.5, spare == 0 and colRed or spare <= maxclip and colYellow or colWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleTextBlurry(dspare, dspare >= 1000 and "ZSHUDFontSmall" or "ZSHUDFont", x + wid * 0.75, y + hei * 0.5, dspare == 0 and colRed or dspare <= dmaxclip and colYellow or colWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	GetAmmoColor(clip, maxclip)
-	draw.SimpleTextBlurry(clip, clip >= 100 and "ZSHUDFont" or "ZSHUDFontBig", x + wid * (displayspare and 0.25 or 0.5), y + hei * 0.5, colAmmo, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	GetAmmoColor(dclip, dmaxclip)
+	draw.SimpleTextBlurry(dclip, dclip >= 100 and "ZSHUDFont" or "ZSHUDFontBig", x + wid * (displayspare and 0.25 or 0.5), y + hei * 0.5, colAmmo, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 function SWEP:Think()
-	if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
+	if self:GetIronsights() and not self:GetOwner():KeyDown(IN_ATTACK2) then
 		self:SetIronsights(false)
+	end
+
+	if self:GetReloadFinish() > 0 then
+		if CurTime() >= self:GetReloadFinish() then
+			self:FinishReload()
+		end
+
+		return
+	elseif self.IdleAnimation and self.IdleAnimation <= CurTime() then
+		self.IdleAnimation = nil
+		self:SendWeaponAnim(self.IdleActivity)
 	end
 end
 
@@ -149,7 +169,7 @@ function SWEP:GetIronsightsDeltaMultiplier()
 	local bIron = self:GetIronsights()
 	local fIronTime = self.fIronTime or 0
 
-	if not bIron and fIronTime < CurTime() - 0.25 then 
+	if not bIron and fIronTime < CurTime() - 0.25 then
 		return 0
 	end
 
@@ -165,16 +185,16 @@ end
 
 local ghostlerp = 0
 function SWEP:CalcViewModelView(vm, oldpos, oldang, pos, ang)
-	local bIron = self:GetIronsights()
+	local bIron = self:GetIronsights() and not GAMEMODE.NoIronsights
 
 	if bIron ~= self.bLastIron then
 		self.bLastIron = bIron
 		self.fIronTime = CurTime()
 
-		if bIron then 
+		if bIron then
 			self.SwayScale = 0.3
 			self.BobScale = 0.1
-		else 
+		else
 			self.SwayScale = 2.0
 			self.BobScale = 1.5
 		end
@@ -195,7 +215,7 @@ function SWEP:CalcViewModelView(vm, oldpos, oldang, pos, ang)
 		pos = pos + Offset.x * Mul * ang:Right() + Offset.y * Mul * ang:Forward() + Offset.z * Mul * ang:Up()
 	end
 
-	if self.Owner:GetBarricadeGhosting() then
+	if self:GetOwner():GetBarricadeGhosting() then
 		ghostlerp = math.min(1, ghostlerp + FrameTime() * 4)
 	elseif ghostlerp > 0 then
 		ghostlerp = math.max(0, ghostlerp - FrameTime() * 5)
@@ -209,14 +229,14 @@ function SWEP:CalcViewModelView(vm, oldpos, oldang, pos, ang)
 	return pos, ang
 end
 
-function SWEP:DrawWeaponSelection(...)
-	return self:BaseDrawWeaponSelection(...)
+function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
+	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end
 
 function SWEP:DrawHUD()
-	self:DrawCrosshair()
+	self:DrawWeaponCrosshair()
 
-	if GAMEMODE.WeaponHUDMode >= 1 then
+	if GAMEMODE:ShouldDraw2DWeaponHUD() then
 		self:Draw2DHUD()
 	end
 end
@@ -265,7 +285,7 @@ end
 
 function SWEP:DrawWorldModel()
 	local owner = self:GetOwner()
-	if owner:IsValid() and owner.ShadowMan then return end
+	if owner:IsValid() and (owner.ShadowMan or owner.SpawnProtection) then return end
 
 	self:Anim_DrawWorldModel()
 end

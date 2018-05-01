@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 
 function ENT:Initialize()
 	self:SetRenderBounds(Vector(-72, -72, -72), Vector(72, 72, 128))
@@ -12,7 +12,7 @@ local colFlash = Color(30, 255, 30)
 function ENT:Draw()
 	self:DrawModel()
 
-	if not MySelf:IsValid() then return end
+	if not MySelf:IsValid() or MySelf:Team() ~= TEAM_HUMAN then return end
 
 	local owner = self:GetObjectOwner()
 
@@ -24,13 +24,15 @@ function ENT:Draw()
 
 		draw.SimpleText(translate.Get("arsenal_crate"), "ZS3D2DFont2", 0, 0, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
+		self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1))
+
 		if MySelf:Team() == TEAM_HUMAN and GAMEMODE:PlayerCanPurchase(MySelf) then
 			colFlash.a = math.abs(math.sin(CurTime() * 5)) * 255
-			draw.SimpleText(translate.Get("purchase_now"), "ZS3D2DFont2Small", 0, -64, colFlash, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.SimpleText(translate.Get("purchase_now"), "ZS3D2DFont2", 0, 32, colFlash, TEXT_ALIGN_CENTER)
 		end
 
 		if owner:IsValid() and owner:IsPlayer() then
-			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 64, owner == MySelf and COLOR_BLUE or COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 120, owner == MySelf and COLOR_LBLUE or COLOR_GRAY, TEXT_ALIGN_CENTER)
 		end
 
 	cam.End3D2D()

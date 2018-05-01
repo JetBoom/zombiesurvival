@@ -1,5 +1,4 @@
 GM.MapEditorPrefix = "zs"
-
 file.CreateDir(GM.MapEditorPrefix.."maps")
 
 concommand.Add("mapeditor_add", function(sender, command, arguments)
@@ -54,7 +53,7 @@ local function ME_Pickup(pl, ent, uid)
 		ent:SetPos(util.TraceLine({start=pl:GetShootPos(),endpos=pl:GetShootPos() + pl:GetAimVector() * 3000, filter={pl, ent}}).HitPos)
 		return
 	end
-	timer.Destroy(uid.."mapeditorpickup")
+	timer.Remove(uid.."mapeditorpickup")
 	GAMEMODE:SaveMapEditorFile()
 end
 
@@ -65,7 +64,7 @@ concommand.Add("mapeditor_pickup", function(sender, command, arguments)
 	if tr.Entity and tr.Entity:IsValid() then
 		for i, ent in ipairs(GAMEMODE.MapEditorEntities) do
 			if ent == tr.Entity then
-				timer.CreateEx(sender:UniqueID().."mapeditorpickup", 0.25, 0, ME_Pickup, sender, ent, sender:UniqueID())
+				timer.Create(sender:UniqueID().."mapeditorpickup", 0.25, 0, function() ME_Pickup(sender, ent, sender:UniqueID()) end)
 			end
 		end
 	end
@@ -176,7 +175,7 @@ end)
 concommand.Add("mapeditor_drop", function(sender, command, arguments)
 	if not sender:IsSuperAdmin() then return end
 
-	timer.Destroy(sender:UniqueID().."mapeditorpickup")
+	timer.Remove(sender:UniqueID().."mapeditorpickup")
 	GAMEMODE:SaveMapEditorFile()
 end)
 
@@ -268,7 +267,7 @@ allowedtypes["Angle"] = true
 allowedtypes["boolean"] = true
 local function MakeTable(tab, done)
 	local str = ""
-	local done = done or {}
+	done = done or {}
 
 	local sequential = table.IsSequential(tab)
 
@@ -280,7 +279,7 @@ local function MakeTable(tab, done)
 			if sequential then
 				key = ""
 			else
-				if keytype == "number" or keytype == "boolean" then 
+				if keytype == "number" or keytype == "boolean" then
 					key ="["..tostring(key).."]="
 				else
 					key = "["..string.format("%q", tostring(key)).."]="
@@ -295,7 +294,7 @@ local function MakeTable(tab, done)
 					str = str..key.."{"..MakeTable(value, done).."},"
 				end
 			else
-				if valuetype == "string" then 
+				if valuetype == "string" then
 					value = string.format("%q", value)
 				elseif valuetype == "Vector" then
 					value = "Vector("..value.x..","..value.y..","..value.z..")"

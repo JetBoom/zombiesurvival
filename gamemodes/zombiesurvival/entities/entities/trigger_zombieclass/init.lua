@@ -5,9 +5,9 @@ function ENT:Initialize()
 
 	if self.On == nil then self.On = true end
 	if self.InstantChange == nil then self.InstantChange = true end
-	if self.OnlyWhenClass == nil then 
-		self.OnlyWhenClass = {} 
-		self.OnlyWhenClass[1] = -1 
+	if self.OnlyWhenClass == nil then
+		self.OnlyWhenClass = {}
+		self.OnlyWhenClass[1] = -1
 	end
 end
 
@@ -38,7 +38,7 @@ function ENT:KeyValue(key, value)
 		self.TouchClass = string.lower(value)
 	elseif key == "onlywhenclass" then
 		self.OnlyWhenClass = {}
-		if value == "disabled" then 
+		if value == "disabled" then
 			self.OnlyWhenClass[1] = -1
 		else
 			self.OnlyWhenClass[1] = -1
@@ -65,7 +65,7 @@ function ENT:KeyValue(key, value)
 end
 
 function ENT:DoTouch(ent, class_name, death_class_name)
-	if self.On and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_UNDEAD then
+	if self.On and ent:IsValidLivingZombie() then
 		local prev = ent:GetZombieClass()
 		if table.HasValue( self.OnlyWhenClass, prev ) or self.OnlyWhenClass[1] == -1 then
 			if class_name and class_name ~= string.lower(ent:GetZombieClassTable().Name) then

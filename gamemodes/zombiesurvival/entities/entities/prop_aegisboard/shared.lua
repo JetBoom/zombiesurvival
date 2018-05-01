@@ -5,6 +5,7 @@ ENT.NoNails = true
 
 ENT.CanPackUp = true
 ENT.PackUpTime = 3
+ENT.IgnorePackTimeMul = true
 
 ENT.IsBarricadeObject = true
 
@@ -34,9 +35,4 @@ end
 
 function ENT:HitByWrench(wep, owner, tr)
 	return true
-end
-
-function ENT:CanBePackedBy(pl)
-	local owner = self:GetObjectOwner()
-	return not owner:IsValid() or owner == pl or owner:Team() ~= TEAM_HUMAN or gamemode.Call("PlayerIsAdmin", pl)
 end

@@ -1,10 +1,20 @@
 ENT.Type = "anim"
 ENT.RenderGroup = RENDERGROUP_BOTH
 
+ENT.SWEP = "weapon_zs_gunturret"
+
+ENT.AmmoType = "smg1"
+ENT.FireDelay = 0.1
+ENT.NumShots = 1
+ENT.Damage = 9.6
+ENT.PlayLoopingShootSound = true
+ENT.Spread = 2
 ENT.SearchDistance = 768
 ENT.MinimumAimDot = 0.5
 ENT.DefaultAmmo = 0 --250
 ENT.MaxAmmo = 1000
+ENT.MaxHealth = 150
+ENT.ModelScale = 1
 
 ENT.NoReviveFromKills = true
 
@@ -13,14 +23,14 @@ ENT.PoseYaw = 0
 
 ENT.m_NoNailUnfreeze = true
 ENT.NoNails = true
+ENT.IgnoreBullets = true
 
 ENT.CanPackUp = true
 
-ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
 
-local NextCache = 0
-local CachedFilter = {}
+local HITGROUP_HEAD = HITGROUP_HEAD
+local MASK_SOLID = MASK_SOLID
 
 function ENT:GetLocalAnglesToTarget(target)
 	return self:WorldToLocalAngles(self:GetAnglesToTarget(target))
@@ -39,38 +49,62 @@ function ENT:GetAnglesToPos(pos)
 end
 
 function ENT:IsValidTarget(target)
-	return target:IsPlayer() and target:Team() == TEAM_UNDEAD and target:Alive() and self:GetForward():Dot(self:GetAnglesToTarget(target):Forward()) >= self.MinimumAimDot and TrueVisible(self:ShootPos(), self:GetTargetPos(target), self)
+	return target:IsPlayer() and target:Team() == TEAM_UNDEAD and target:Alive() and not target:GetZombieClassTable().NoTurretTarget and not target:GetStatus("zombiespawnbuff")
+	and self:GetForward():Dot(self:GetAnglesToTarget(target):Forward()) >= self.MinimumAimDot
+	and TrueVisibleFilters(self:ShootPos(), self:GetTargetPos(target), self, self.Hitbox)
 end
 
+local M_Player = FindMetaTable("Player")
+local P_Team = M_Player.Team
+local temp_attacker
+local temp_hb
+local function ManualTraceFilter(ent)
+	if ent == temp_attacker or ent == temp_hb or getmetatable(ent) == M_Player and P_Team(ent) == TEAM_HUMAN then
+		return false
+	end
+
+	return true
+end
+
+local trace_manual = {mask = MASK_SHOT, filter = ManualTraceFilter}
 function ENT:GetManualTrace()
 	local owner = self:GetObjectOwner()
-	local filter = owner:GetMeleeFilter()
-	table.insert(filter, self)
-	return owner:TraceLine(4096, MASK_SOLID, filter)
+	local start = self:ShootPos()
+
+	trace_manual.start = start
+	trace_manual.endpos = start + owner:GetAimVector() * self.SearchDistance * (owner.TurretRangeMul or 1)
+
+	temp_attacker = self
+	temp_hb = self:GetTurretHitbox()
+
+	return util.TraceLine(trace_manual)
 end
 
 function ENT:CalculatePoseAngles()
+	local deltatime = FrameTime()
+
 	local owner = self:GetObjectOwner()
 	if not owner:IsValid() or self:GetAmmo() <= 0 or self:GetMaterial() ~= "" then
-		self.PoseYaw = math.Approach(self.PoseYaw, 0, FrameTime() * 60)
-		self.PosePitch = math.Approach(self.PosePitch, 15, FrameTime() * 30)
+		self.PoseYaw = math.Approach(self.PoseYaw, 0, deltatime * 60)
+		self.PosePitch = math.Approach(self.PosePitch, 15, deltatime * 30)
 		return
 	end
 
 	if self:GetManualControl() then
 		local ang = self:GetLocalAnglesToPos(self:GetManualTrace().HitPos)
-		self.PoseYaw = math.Approach(self.PoseYaw, math.Clamp(math.NormalizeAngle(ang.yaw), -60, 60), FrameTime() * 140)
-		self.PosePitch = math.Approach(self.PosePitch, math.Clamp(math.NormalizeAngle(ang.pitch), -15, 15), FrameTime() * 140)
+		self.PoseYaw = math.Approach(self.PoseYaw, math.Clamp(math.NormalizeAngle(ang.yaw), -60, 60), deltatime * 140)
+		self.PosePitch = math.Approach(self.PosePitch, math.Clamp(math.NormalizeAngle(ang.pitch), -15, 15), deltatime * 140)
 	else
 		local target = self:GetTarget()
+		local angm = self:GetScanMaxAngle()
 		if target:IsValid() then
 			local ang = self:GetLocalAnglesToTarget(target)
-			self.PoseYaw = math.Approach(self.PoseYaw, math.Clamp(math.NormalizeAngle(ang.yaw), -60, 60), FrameTime() * 140)
-			self.PosePitch = math.Approach(self.PosePitch, math.Clamp(math.NormalizeAngle(ang.pitch), -15, 15), FrameTime() * 100)
+			self.PoseYaw = math.Approach(self.PoseYaw, math.Clamp(math.NormalizeAngle(ang.yaw), -60 * angm, 60 * angm), deltatime * 140)
+			self.PosePitch = math.Approach(self.PosePitch, math.Clamp(math.NormalizeAngle(ang.pitch), -15 * angm, 15 * angm), deltatime * 100)
 		else
-			local ct = CurTime()
-			self.PoseYaw = math.Approach(self.PoseYaw, math.sin(ct) * 45, FrameTime() * 60)
-			self.PosePitch = math.Approach(self.PosePitch, math.cos(ct * 1.4) * 15, FrameTime() * 30)
+			local ct = CurTime() * self:GetScanSpeed()
+			self.PoseYaw = math.Approach(self.PoseYaw, math.sin(ct) * 45 * angm, deltatime * 60)
+			self.PosePitch = math.Approach(self.PosePitch, math.cos(ct * 1.4) * 15 * angm, deltatime * 30)
 		end
 	end
 end
@@ -78,48 +112,43 @@ end
 function ENT:GetScanFilter()
 	local filter = team.GetPlayers(TEAM_HUMAN)
 	filter[#filter + 1] = self
+	filter[#filter + 1] = self:GetTurretHitbox()
+	for  _, pl in pairs(team.GetPlayers(TEAM_UNDEAD)) do
+		if pl:GetZombieClassTable().NoTurretTarget then
+			filter[#filter + 1] = pl
+		end
+	end
+	-- TODO: Cache this, should be relatively okay right now with just 1 second caches though.
+	table.Add(filter, ents.FindByClass("prop_ffemitterfield"))
 	return filter
 end
 
--- Getting all of some team is straining every frame when there's 5 or so turrets. I could probably use CONTENTS_TEAM* if I knew what they did.
+-- Getting all of some team is straining every frame when there's 5 or so turrets.
+local NextCache = 0
 function ENT:GetCachedScanFilter()
-	if CurTime() < NextCache and CachedFilter then return CachedFilter end
+	if CurTime() < NextCache and self.CachedFilter then return self.CachedFilter end
 
-	CachedFilter = self:GetScanFilter()
+	self.CachedFilter = self:GetScanFilter()
 	NextCache = CurTime() + 1
 
-	return CachedFilter
-end
-
-local tabSearch = {mask = MASK_SHOT}
-function ENT:SearchForTarget()
-	local shootpos = self:ShootPos()
-
-	tabSearch.start = shootpos
-	tabSearch.endpos = shootpos + self:GetGunAngles():Forward() * self.SearchDistance
-	tabSearch.filter = self:GetCachedScanFilter()
-	local tr = util.TraceLine(tabSearch)
-	local ent = tr.Entity
-	if ent and ent:IsValid() and self:IsValidTarget(ent) then
-		return ent
-	end
+	return self.CachedFilter
 end
 
 function ENT:GetTargetPos(target)
 	if not (target:IsPlayer() and target:GetZombieClassTable().NoHead) then
 		local boneid = target:GetHitBoxBone(HITGROUP_HEAD, 0)
 		if boneid and boneid > 0 then
-			local p, a = target:GetBonePosition(boneid)
-			if pl then
-				return p
+			local bp = target:GetBonePositionMatrixed(boneid)
+			if bp then
+				return bp
 			end
 		end
 	end
 
-	return target:LocalToWorld(target:OBBCenter())
+	return target:WorldSpaceCenter()
 end
 
-function ENT:HumanHoldable(pl)
+function ENT:HumanHoldable()
 	return true
 end
 
@@ -155,32 +184,12 @@ function ENT:GetGunAngles()
 	return ang
 end
 
-function ENT:SetAmmo(ammo)
-	self:SetDTInt(0, ammo)
-end
-
 function ENT:GetAmmo()
 	return self:GetDTInt(0)
 end
 
-function ENT:SetTarget(ent)
-	if ent:IsValid() then
-		self:SetTargetReceived(CurTime())
-		if SERVER then
-			self.LastHitSomething = CurTime()
-		end
-	else
-		self:SetTargetLost(CurTime())
-	end
-	self:SetDTEntity(0, ent)
-end
-
 function ENT:GetObjectHealth()
 	return self:GetDTFloat(3)
-end
-
-function ENT:SetMaxObjectHealth(health)
-	self:SetDTInt(1, health)
 end
 
 function ENT:GetMaxObjectHealth()
@@ -191,56 +200,36 @@ function ENT:GetChannel()
 	return self:GetDTInt(2)
 end
 
-function ENT:SetChannel(channel)
-	self:SetDTInt(2, channel)
-end
-
 function ENT:GetTarget()
 	return self:GetDTEntity(0)
-end
-
-function ENT:SetObjectOwner(ent)
-	self:SetDTEntity(1, ent)
 end
 
 function ENT:GetObjectOwner()
 	return self:GetDTEntity(1)
 end
 
-function ENT:ClearObjectOwner()
-	self:SetObjectOwner(NULL)
-end
-
-function ENT:ClearTarget()
-	self:SetTarget(NULL)
-end
-
-function ENT:SetTargetReceived(tim)
-	self:SetDTFloat(0, tim)
+function ENT:GetTurretHitbox()
+	return self:GetDTEntity(2)
 end
 
 function ENT:GetTargetReceived()
 	return self:GetDTFloat(0)
 end
 
-function ENT:SetTargetLost(tim)
-	self:SetDTFloat(1, tim)
-end
-
 function ENT:GetTargetLost()
 	return self:GetDTFloat(1)
-end
-
-function ENT:SetNextFire(tim)
-	self:SetDTFloat(2, tim)
 end
 
 function ENT:GetNextFire()
 	return self:GetDTFloat(2)
 end
 
-function ENT:SetFiring(onoff)
-	self:SetDTBool(0, onoff)
+function ENT:GetScanSpeed()
+	return self:GetDTFloat(4)
+end
+
+function ENT:GetScanMaxAngle()
+	return self:GetDTFloat(5)
 end
 
 function ENT:IsFiring()
@@ -251,17 +240,12 @@ function ENT:GetManualControl()
 	local owner = self:GetObjectOwner()
 	if owner:IsValid() and owner:Alive() and owner:Team() == TEAM_HUMAN then
 		local wep = owner:GetActiveWeapon()
-		if wep:IsValid() and wep:GetClass() == "weapon_zs_gunturretcontrol" and wep.GetTurret and wep:GetTurret() == self and not wep:GetDTBool(0) then
+		if wep:IsValid() and wep:GetClass() == "weapon_zs_gunturretcontrol" and wep.GetTurret and wep:GetTurret() == self and wep:GetDTBool(0) then
 			return true
 		end
 	end
 
 	return false
-end
-
-function ENT:CanBePackedBy(pl)
-	local owner = self:GetObjectOwner()
-	return not owner:IsValid() or owner == pl or owner:Team() ~= TEAM_HUMAN or gamemode.Call("PlayerIsAdmin", pl)
 end
 
 util.PrecacheSound("npc/turret_floor/die.wav")

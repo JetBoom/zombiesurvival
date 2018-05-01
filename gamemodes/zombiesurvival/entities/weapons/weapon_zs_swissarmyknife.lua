@@ -1,9 +1,9 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.PrintName = "Knife"
-	SWEP.Description = "Deals double damage to the back."
+SWEP.PrintName = "Knife"
+SWEP.Description = "A small bladed weapon that deals double damage to the back."
 
+if CLIENT then
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
 end
@@ -34,6 +34,10 @@ SWEP.MissAnim = ACT_VM_PRIMARYATTACK
 
 SWEP.NoHitSoundFlesh = true
 
+SWEP.AllowQualityWeapons = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.085)
+
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/knife/knife_slash"..math.random(2)..".wav")
 end
@@ -47,7 +51,7 @@ function SWEP:PlayHitFleshSound()
 end
 
 function SWEP:OnMeleeHit(hitent, hitflesh, tr)
-	if hitent:IsValid() and hitent:IsPlayer() and not self.m_BackStabbing and math.abs(hitent:GetForward():Angle().yaw - self.Owner:GetForward():Angle().yaw) <= 90 then
+	if hitent:IsValid() and hitent:IsPlayer() and not self.m_BackStabbing and math.abs(hitent:GetForward():Angle().yaw - self:GetOwner():GetForward():Angle().yaw) <= 90 then
 		self.m_BackStabbing = true
 		self.MeleeDamage = self.MeleeDamage * 2
 	end

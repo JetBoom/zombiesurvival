@@ -3,7 +3,8 @@ ENT.Type = "anim"
 AccessorFuncDT(ENT, "DeathSequence", "Int", 0)
 AccessorFuncDT(ENT, "DeathAngles", "Angle", 0)
 AccessorFuncDT(ENT, "DeathSequenceLength", "Float", 0)
-AccessorFuncDT(ENT, "RemoveTime", "Float", 1)
+AccessorFuncDT(ENT, "DeathSequenceStart", "Float", 1)
+AccessorFuncDT(ENT, "RemoveTime", "Float", 2)
 
 function ENT:SharedInitialize()
 	self:SetSolid(SOLID_NONE)

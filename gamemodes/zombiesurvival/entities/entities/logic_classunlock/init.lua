@@ -19,6 +19,11 @@ function ENT:AcceptInput(name, activator, caller, args)
 				v.Locked = true
 				v.Unlocked = false
 
+				net.Start("zs_classunlockstate")
+					net.WriteInt(k, 8)
+					net.WriteBool(v.Unlocked)
+				net.Broadcast()
+
 				if classname ~= "all" then
 					for _, pl in pairs(player.GetAll()) do
 						if pl:GetZombieClass() == k then
@@ -39,6 +44,11 @@ function ENT:AcceptInput(name, activator, caller, args)
 			if classname == "all" or string.lower(v.Name) == classname then
 				v.Unlocked = true
 				v.Locked = false
+
+				net.Start("zs_classunlockstate")
+					net.WriteInt(k, 8)
+					net.WriteBool(v.Unlocked)
+				net.Broadcast()
 			end
 		end
 	elseif name == "defaultclass" then

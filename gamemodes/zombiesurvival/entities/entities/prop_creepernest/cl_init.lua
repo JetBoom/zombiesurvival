@@ -1,12 +1,13 @@
-include("shared.lua")
+INC_CLIENT()
 
 ENT.Seed = 0
 ENT.Tall = 0
 ENT.Blocked = false
 
 function ENT:Initialize()
-	local dist = math.max(16, GAMEMODE.DynamicSpawnDist) * 2
+	local dist = math.max(16, GAMEMODE.CreeperNestDist) * 2
 
+	self:SetModelScale(0.2, 0)
 	self:SetRenderBounds(Vector(-dist, -dist, -dist), Vector(dist, dist, dist))
 	self:ManipulateBoneScale(0, self.ModelScale)
 
@@ -21,6 +22,7 @@ function ENT:Initialize()
 		self.FloorModel:Spawn()
 		self.FloorModel:ManipulateBoneScale(0, Vector(0.01, 0.01, 0.01))
 		self.FloorModel:SetMaterial("models/flesh")
+		self.FloorModel:SetSolid(SOLID_NONE)
 	end
 
 	self.Seed = math.Rand(0, 10)
@@ -46,7 +48,7 @@ function ENT:Think()
 		local blocked = false
 		local nearest = self:GetPos()
 		for _, human in pairs(team.GetPlayers(TEAM_HUMAN)) do
-			if util.SkewedDistance(human:GetPos(), nearest, 2.75) <= GAMEMODE.DynamicSpawnDist then
+			if util.SkewedDistance(human:GetPos(), nearest, 2.75) <= GAMEMODE.CreeperNestDist then
 				blocked = true
 				break
 			end
@@ -81,9 +83,6 @@ ENT.NextEmit = 0
 local gravParticle = Vector(0, 0, -200)
 local matFlesh = Material("models/flesh")
 local matWireframe = Material("models/wireframe")
-local matBeam = Material("Effects/laser1", "smooth")
-local r, g = 0, 0
-local colRing = Color(0, 0, 0, 255)
 function ENT:Draw()
 	local curtime = CurTime() + self.Seed
 	local a = math.abs(math.sin(curtime)) ^ 3
@@ -92,46 +91,18 @@ function ENT:Draw()
 	local floormodel = self.FloorModel
 	local fmvalid = floormodel:IsValid()
 
-	if MySelf:IsValid() and MySelf:Team() == TEAM_UNDEAD and built then
-		local frametime = FrameTime() * 500
-		local ringtime = (curtime / 2 % 1) ^ 0.5
-		local ringsize = ringtime * GAMEMODE.DynamicSpawnDist
-		local beamsize = ringtime * 20
-		local up = self:GetUp()
-		local ang = self:GetForward():Angle()
-		ang.yaw = curtime * 360 % 360
-		local ringpos = self:GetPos() + up * 16
-		local blocked = self.Blocked
-		local a = (1 - ringtime) * 0.8
-
-		r = math.Approach(r, blocked and 255 or 0, frametime)
-		g = math.Approach(g, blocked and 0 or 255, frametime)
-		colRing.r = r * a
-		colRing.g = g * a
-
-		render.SetMaterial(matBeam)
-		render.StartBeam(19)
-		for i=1, 19 do
-			render.AddBeam(ringpos + ang:Forward() * ringsize, beamsize, beamsize, colRing)
-			ang:RotateAroundAxis(up, 20)
-		end
-		render.EndBeam()
-	end
-
 	if built then
 		render.ModelMaterialOverride(matFlesh)
-		--if fmvalid then floormodel:SetNoDraw(false) end
 	else
 		render.ModelMaterialOverride(matWireframe)
 		render.SetColorModulation(self.Tall, 0, 0)
-		--if fmvalid then floormodel:SetNoDraw(true) end
 	end
 
 	if fmvalid then
 		floormodel:ManipulateBoneScale(0, Vector(hscale * 1.1 + 0.05, hscale * 1.1 + 0.05, 0.02 * self.Tall))
 	end
 
-	self:ManipulateBoneScale(0, Vector(hscale, hscale, (0.1 - a * 0.005) * self.Tall))
+	self:ManipulateBoneScale(0, Vector(hscale * 5, hscale * 5, (0.5 - a * 0.025) * self.Tall))
 	self:DrawModel()
 
 	render.SetColorModulation(1, 1, 1)
@@ -149,7 +120,7 @@ function ENT:Draw()
 	emitter:SetNearClip(16, 24)
 
 	for i=0, math.Rand(0, 1) ^ 0.5 * 10 do
-		local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), pos)
+		local particle = emitter:Add("!sprite_bloodspray"..math.random(8), pos)
 		particle:SetGravity(gravParticle)
 		particle:SetDieTime(math.Rand(4, 6))
 		particle:SetVelocity(Angle(math.Rand(-85, -70), math.Rand(0, 360), 0):Forward() * math.Rand(100, 200))
@@ -163,5 +134,5 @@ function ENT:Draw()
 		particle:SetCollide(true)
 	end
 
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end

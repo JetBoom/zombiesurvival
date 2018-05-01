@@ -1,4 +1,4 @@
-include("shared.lua")
+INC_CLIENT()
 include("cl_animations.lua")
 
 ENT.ColorModulation = Color(0.15, 0.8, 1)
@@ -9,27 +9,23 @@ function ENT:Think()
 		self.LastWeaponType = class
 
 		self:RemoveModels()
-		self.ShowWorldModel = nil
 
-		local weptab = weapons.GetStored(class)
+		local weptab = weapons.Get(class)
 		if weptab then
-			self.ShowWorldModel = not weptab.NoDroppedWorldModel
+			local showmdl = weptab.ShowWorldModel or not self:LookupBone("ValveBiped.Bip01_R_Hand") and not weptab.NoDroppedWorldModel
+			self.ShowBaseModel = weptab.ShowWorldModel == nil and true or showmdl
 
 			if weptab.WElements then
 				self.WElements = table.FullCopy(weptab.WElements)
 				self:CreateModels(self.WElements)
 			end
+
+			self.ColorModulation = weptab.DroppedColorModulation or self.ColorModulation
+			self.PropWeapon = true
+			self.QualityTier = weptab.QualityTier
+			self.Branch = weptab.Branch
+			self.BranchData = weptab.Branches and weptab.Branches[self.Branch]
 		end
-	end
-end
-
-function ENT:DrawTranslucent()
-	if not self.NoDrawSubModels then
-		self:RenderModels()
-	end
-
-	if self.ShowWorldModel == nil or self.ShowWorldModel then
-		self.BaseClass.DrawTranslucent(self)
 	end
 end
 

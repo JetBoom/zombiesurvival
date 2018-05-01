@@ -3,7 +3,8 @@ local PANEL = {}
 PANEL.NextRefresh = 0
 PANEL.RefreshTime = 1
 
-local col2 = Color(180, 100, 0, 200)
+local col2 = Color(190, 150, 80, 210)
+local coldark = Color(0, 0, 0, 100)
 
 local function GetTargetEntIndex()
 	return GAMEMODE.HumanMenuLockOn and GAMEMODE.HumanMenuLockOn:IsValid() and GAMEMODE.HumanMenuLockOn:EntIndex() or 0
@@ -18,9 +19,10 @@ local function GiveDoClick(self)
 end
 
 function PANEL:Init()
-	self.m_AmmoCountLabel = EasyLabel(self, "0", "DefaultFontBold", color_black)
+	local font = "ZSAmmoName"
+	self.m_AmmoCountLabel = EasyLabel(self, "0", font, color_black)
 
-	self.m_AmmoTypeLabel = EasyLabel(self, " ", "ZSAmmoName", col2)
+	self.m_AmmoTypeLabel = EasyLabel(self, " ", font, col2)
 
 	self.m_DropButton = vgui.Create("DImageButton", self)
 	self.m_DropButton:SetImage("icon16/box.png")
@@ -41,8 +43,8 @@ local colBG = Color(5, 5, 5, 180)
 function PANEL:Paint()
 	local tall = self:GetTall()
 	local csize = tall - 8
-	draw.RoundedBox(8, 0, 0, self:GetWide(), tall, colBG)
-	draw.RoundedBox(8, 8, tall * 0.5 - csize * 0.5, csize, csize, col2)
+	draw.RoundedBoxEx(8, 0, 0, self:GetWide(), tall, colBG)
+	draw.RoundedBox(4, 8, tall * 0.5 - csize * 0.5, csize, csize, col2)
 
 	return true
 end
@@ -50,12 +52,15 @@ end
 function PANEL:Think()
 	if RealTime() >= self.NextRefresh then
 		self.NextRefresh = RealTime() + self.RefreshTime
-		self:Refresh()
+		self:RefreshContents()
 	end
 end
 
-function PANEL:Refresh()
-	self.m_AmmoCountLabel:SetText(MySelf:GetAmmoCount(self:GetAmmoType()))
+function PANEL:RefreshContents()
+	local count = MySelf:GetAmmoCount(self:GetAmmoType())
+
+	self.m_AmmoCountLabel:SetTextColor(count == 0 and coldark or color_black)
+	self.m_AmmoCountLabel:SetText(count)
 	self.m_AmmoCountLabel:SizeToContents()
 
 	self:InvalidateLayout()
@@ -80,7 +85,7 @@ function PANEL:SetAmmoType(ammotype)
 	self.m_AmmoTypeLabel:SetText(GAMEMODE.AmmoNames[ammotype] or ammotype)
 	self.m_AmmoTypeLabel:SizeToContents()
 
-	self:Refresh()
+	self:RefreshContents()
 end
 
 function PANEL:GetAmmoType()

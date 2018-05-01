@@ -14,12 +14,13 @@ end)
 local mapname = string.lower(game.GetMap())
 if file.Exists(GM.ProfilerFolderPreMade.."/"..mapname..".txt", "DATA") then
 	GM.ProfilerIsPreMade = true
-	GM.ProfilerNodes = Deserialize(file.Read(GM.ProfilerFolderPreMade.."/"..mapname..".txt", "DATA"))
+	local data = Deserialize(file.Read(GM.ProfilerFolderPreMade.."/"..mapname..".txt", "DATA"))
+	GM.ProfilerNodes = data.Nodes ~= nil and data.Nodes or data or GM.ProfilerNodes
 	SRL = nil
 elseif file.Exists(GM.FolderName.."/gamemode/"..GM.ProfilerFolderPreMade.."/"..mapname..".lua", "LUA") then
 	include(GM.ProfilerFolderPreMade.."/"..mapname..".lua")
 	GM.ProfilerIsPreMade = true
-	GM.ProfilerNodes = SRL or GM.ProfilerNodes
+	GM.ProfilerNodes = SRL and SRL.Nodes ~= nil and SRL.Nodes or SRL or GM.ProfilerNodes
 	SRL = nil
 end
 
@@ -29,8 +30,8 @@ function GM:ClearProfiler()
 	self:SaveProfiler()
 end
 
-function GM:SaveProfilerPreMade(tab)
-	file.Write(self:GetProfilerFilePreMade(), Serialize(tab))
+function GM:SaveProfilerPreMade()
+	file.Write(self:GetProfilerFilePreMade(), Serialize({Nodes = self.ProfilerNodes, Version = self.ProfilerVersion}))
 end
 
 function GM:DeleteProfilerPreMade()
@@ -43,16 +44,58 @@ function GM:SaveProfiler()
 	file.Write(self:GetProfilerFile(), Serialize({Nodes = self.ProfilerNodes, Version = self.ProfilerVersion}))
 end
 
+local function FetchNodes(body, len, headers, code)
+	if code == 200 and len > 0 then
+		local data = Deserialize(body)
+		if data then
+			if data.Nodes then
+				GAMEMODE.ProfilerNodes = data.Nodes
+			else
+				GAMEMODE.ProfilerNodes = data
+			end
+			GAMEMODE.ProfilerIsPreMade = true
+
+			if GAMEMODE.DidInitPostEntity then
+				gamemode.Call("CreateSigils", false, true)
+			end
+		end
+	end
+end
+
+function GM:LoadNodeProfile(data)
+	if not data.Version and self.ProfilerVersion == 0 then -- old, versionless format
+		if data.Nodes then
+			self.ProfilerNodes = data.Nodes
+		else
+			self.ProfilerNodes = data
+		end
+
+		return true
+	elseif data.Nodes and data.Version >= self.ProfilerVersion then
+		if data.Nodes then
+			self.ProfilerNodes = data.Nodes
+		else
+			self.ProfilerNodes = data
+		end
+
+		return true
+	end
+
+	return false
+end
+
 function GM:LoadProfiler()
 	if not self:ProfilerEnabled() or self.ProfilerIsPreMade then return end
+
+	if self.UseOnlineProfiles and not NDB then
+		http.Fetch("http://www.noxiousnet.com/zs_nodes/"..mapname..".txt", FetchNodes)
+	end
 
 	local filename = self:GetProfilerFile()
 	if file.Exists(filename, "DATA") then
 		local data = Deserialize(file.Read(filename, "DATA"))
-		if not data.Version and self.ProfilerVersion == 0 then -- old, versionless format
-			self.ProfilerNodes = data
-		elseif data.Nodes and data.Version >= self.ProfilerVersion then
-			self.ProfilerNodes = data.Nodes
+		if data then
+			self:LoadNodeProfile(data)
 		end
 	end
 end
@@ -145,7 +188,7 @@ function GM:ProfilerPlayerValid(pl)
 
 	-- What about zombie spawns?
 	for _, ent in pairs(team.GetValidSpawnPoint(TEAM_UNDEAD)) do
-		if ent:GetPos():Distance(plcenter) < 420 then
+		if ent:GetPos():DistToSqr(plcenter) < 176400 then --420^2
 			--print('near spawn')
 			return false
 		end
@@ -160,6 +203,7 @@ function GM:ProfilerPlayerValid(pl)
 	end
 
 	-- Check to see if they're near a window or the entrance of somewhere. This also doubles as a check for long hallways.
+	local tr
 	local ang = Angle(0, 0, 0)
 	for t = 0, 359, 15 do
 		ang.yaw = t
@@ -167,13 +211,13 @@ function GM:ProfilerPlayerValid(pl)
 		for d = 32, 92, 24 do
 			trace.start = plcenter + ang:Forward() * d
 			trace.endpos = trace.start + Vector(0, 0, 640)
-			local tr = util.TraceHull(trace)
+			tr = util.TraceHull(trace)
 			if not tr.Hit or tr.HitNormal.z > -0.65 then
 				--print('not hit ceiling')
 				return false
 			end
 			trace.endpos = trace.start + Vector(0, 0, -64)
-			local tr = util.TraceHull(trace)
+			tr = util.TraceHull(trace)
 			if not tr.Hit or tr.HitNormal.z < 0.65 then
 				--print('not hit floor')
 				return false
@@ -251,6 +295,6 @@ end
 timer.Create("ZSProfiler", 3, 0, function() GAMEMODE:ProfilerTick() end)
 hook.Add("OnWaveStateChanged", "ZSProfiler", function() -- Only profile during start
 	if GAMEMODE:GetWave() > 0 then
-		timer.Destroy("ZSProfiler")
+		timer.Remove("ZSProfiler")
 	end
 end)

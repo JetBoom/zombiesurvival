@@ -1,7 +1,8 @@
 AddCSLuaFile()
 
+SWEP.PrintName = "Bust-on-a-stick"
+
 if CLIENT then
-	SWEP.PrintName = "Bust-on-a-stick"
 	SWEP.ViewModelFOV = 70
 	SWEP.ViewModelFlip = false
 
@@ -27,8 +28,8 @@ SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
 SWEP.WorldModel = Model("models/props_combine/breenbust.mdl")
 SWEP.UseHands = true
 
-SWEP.MeleeDamage = 100
-SWEP.MeleeRange = 60
+SWEP.MeleeDamage = 50
+SWEP.MeleeRange = 50
 SWEP.MeleeSize = 1.4
 
 SWEP.UseMelee1 = false
@@ -39,6 +40,14 @@ SWEP.MissGesture = SWEP.HitGesture
 SWEP.SwingRotation = Angle(30, -30, -30)
 SWEP.SwingTime = 0.3
 SWEP.SwingHoldType = "grenade"
+
+SWEP.AllowQualityWeapons = true
+
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.1, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_RANGE, 2, 1)
+
+SWEP.Tier = 2
+SWEP.DismantleDiv = 2
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.Rand(35, 45))

@@ -1,28 +1,27 @@
-include("shared.lua")
+INC_CLIENT()
 
-SWEP.PrintName = "Wraith"
 SWEP.ViewModelFOV = 47
 
 --[[function SWEP:Holster()
-	if self.Owner:IsValid() and self.Owner == MySelf then
-		self.Owner:SetBarricadeGhosting(false)
+	if self:GetOwner():IsValid() and self:GetOwner() == MySelf then
+		self:GetOwner():SetBarricadeGhosting(false)
 	end
 
 	return self.BaseClass.Holster(self)
 end]]
 
 function SWEP:PreDrawViewModel(vm)
-	self.Owner:CallZombieFunction("PrePlayerDraw")
+	self:GetOwner():CallZombieFunction0("PrePlayerDraw")
 end
 
 function SWEP:PostDrawViewModel(vm)
-	self.Owner:CallZombieFunction("PostPlayerDraw")
+	self:GetOwner():CallZombieFunction0("PostPlayerDraw")
 end
 
 --[[function SWEP:Think()
 	self.BaseClass.Think(self)
 
-	if self.Owner:IsValid() and MySelf == self.Owner then
+	if self:GetOwner():IsValid() and MySelf == self:GetOwner() then
 		self:BarricadeGhostingThink()
 	end
 end]]
