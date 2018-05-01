@@ -1,7 +1,7 @@
---[[version 1.1 - tier system.
-You must be running at least version of ZS:R (being Version 7 - Tier System)
+--[[version 1.2
+You must be running the latest version of ZS:R (being Version 7 - Tier System)
 for this file to be working. 
-Also you need version 1.1 of this file for the current ZS:R version
+Also you need version at least 1.2 of this file for the current ZS:R version
 listed or the client can not buy certain items such as ammo types.]]--
 
 GM.ZombieEscapeWeapons = {
