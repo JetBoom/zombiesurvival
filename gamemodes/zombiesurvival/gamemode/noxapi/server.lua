@@ -115,7 +115,7 @@ function CACHE:WaitForBuffer()
 end
 
 hook.Add("PlayerInitialSpawn", "noxapi", function(pl)
-	if NDB or pl:IsBot() then return end
+	--[[if NDB or pl:IsBot() then return end
 
 	local steamid = pl:SteamID()
 	local memberlevel = CACHE:Get(steamid)
@@ -127,11 +127,11 @@ hook.Add("PlayerInitialSpawn", "noxapi", function(pl)
 	else
 		table.insert(Buffer, {steamid, pl})
 		CACHE:WaitForBuffer()
-	end
+	end]]
 end)
 
 hook.Add("Initialize", "noxapi", function()
-	resource.AddFile("materials/noxiousnet/noxicon.png")
+	--resource.AddFile("materials/noxiousnet/noxicon.png")
 
 	if not NDB then
 		CACHE:Load()
@@ -145,7 +145,7 @@ hook.Add("ShutDown", "noxapi", function()
 end)
 
 concommand.Add("noxapi_forcerefresh", function(sender, command, arguments)
-	if sender._ForcedNoxAPILookup or sender:IsNoxSupporter() or NDB then return end
+	--[[if sender._ForcedNoxAPILookup or sender:IsNoxSupporter() or NDB then return end
 
 	sender._ForcedNoxAPILookup = true
 
@@ -162,5 +162,5 @@ concommand.Add("noxapi_forcerefresh", function(sender, command, arguments)
 		end
 
 		CACHE:Set(steamid, level)
-	end)
+	end)]]
 end)
