@@ -1567,6 +1567,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.Allergic = nil
 	pl.GhostCade = nil
 	pl.FastResupply = nil
+	pl.FastTeleport = nil
 	pl.CrateShare = nil
 
 
@@ -2022,7 +2023,7 @@ concommand.Add("zs_pointsshopsell", function(sender, command, arguments)
 
     if not itemtab then return end
 
-    if itemtab.SWEP then
+    if itemtab.SWEP and GAMEMODE.ItemCategories[itemtab.Category].Sellable then
         if not sender:HasWeapon(itemtab.SWEP) then
             sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "dont_have_weapon_x", itemtab.Name))
             sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")

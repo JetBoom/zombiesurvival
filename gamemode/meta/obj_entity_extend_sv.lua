@@ -222,7 +222,7 @@ function meta:SigilTeleport(pl)
 	local status = pl:GiveStatus("sigil_teleport")
 	if status:IsValid() then
 		status:SetCurrentSigil(self)
-		status:SetEndTime(CurTime() + (self.TeleportTime or 5))
+		status:SetEndTime(CurTime() + (pl.FastTeleport and GAMEMODE.SigilTeleportTimeTrait or GAMEMODE.SigilTeleportTime))
 	end
 end
 
