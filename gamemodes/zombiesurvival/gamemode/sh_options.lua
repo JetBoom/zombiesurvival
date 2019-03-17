@@ -654,7 +654,7 @@ GM:AddDeployableInfo("prop_drone",				"Drone",				"weapon_zs_drone")
 GM:AddDeployableInfo("prop_drone_pulse",		"Pulse Drone",			"weapon_zs_drone_pulse")
 GM:AddDeployableInfo("prop_drone_hauler",		"Hauler Drone",			"weapon_zs_drone_hauler")
 GM:AddDeployableInfo("prop_rollermine",			"Rollermine",			"weapon_zs_rollermine")
-
+GM:AddDeployableInfo("prop_tv",                   	 "TV",                    	"weapon_zs_tv")
 
 GM.MaxSigils = 3
 
