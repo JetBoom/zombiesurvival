@@ -2240,3 +2240,11 @@ end
 function PlayMenuCloseSound()
 	MySelf:EmitSound("buttons/lightswitch2.wav", 100, 20)
 end
+
+function GM:PlayerBindPress(ply, bind, pressed)
+    if IsValid( ply ) and ply:Team() == TEAM_UNDEAD and ply:Alive() and not IsFirstTimePredicted() then
+        if (bind == "impulse 100") then
+            self:ToggleZombieVision()
+        end
+    end
+end
