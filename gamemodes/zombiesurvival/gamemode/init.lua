@@ -2200,11 +2200,6 @@ function GM:PlayerInitialSpawnRound(pl)
 
 	local uniqueid = pl:UniqueID()
 
-	if table.HasValue(self.FanList, uniqueid) then
-		pl.DamageVulnerability = (pl.DamageVulnerability or 1) + 10
-		pl:PrintTranslatedMessage(HUD_PRINTTALK, "thanks_for_being_a_fan_of_zs")
-	end
-
 	if self.PreviouslyDied[uniqueid] or ZSBOT then
 		-- They already died and reconnected.
 		pl:ChangeTeam(TEAM_UNDEAD)
