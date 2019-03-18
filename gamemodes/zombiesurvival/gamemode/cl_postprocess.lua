@@ -260,9 +260,16 @@ function GM:ToggleZombieVision(onoff)
 	end
 end
 
-net.Receive("zs_togglezvision", function(length)
-	gamemode.Call("ToggleZombieVision")
-end)
+function GM:PlayerButtonDown( ply, button ) 
+	if not IsFirstTimePredicted() then return end
+	if not IsValid( ply ) or ply != MySelf then return end
+	
+	if ply:Team() == TEAM_UNDEAD and ply:Alive() then
+		if button == KEY_F then
+			self:ToggleZombieVision()
+		end
+	end
+end
 
 local CModWhiteOut = {
 	["$pp_colour_addr"] = 0,
