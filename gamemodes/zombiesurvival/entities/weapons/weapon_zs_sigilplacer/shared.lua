@@ -15,8 +15,8 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
 local placers = {
-	["STEAM_0:0:32163864"] = true,
-	["STEAM_0:0:25307180"] = true
+	["STEAM_0:0:1111"] = true,
+	["STEAM_0:0:2222"] = true
 }
 local function CanPlace(pl)
 	return pl:IsValid() and (pl:IsSuperAdmin() or placers[pl:SteamID()])
