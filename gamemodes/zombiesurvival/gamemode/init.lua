@@ -474,7 +474,6 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_deployableout")
 	util.AddNetworkString("zs_trinketconsumed")
 	util.AddNetworkString("zs_nailremoved")
-	util.AddNetworkString("zs_togglezvision")
 	util.AddNetworkString("zs_remantlercontent")
 	util.AddNetworkString("zs_classunlockstate")
 	util.AddNetworkString("zs_changeclass")
@@ -4309,11 +4308,6 @@ end
 
 function GM:PlayerSwitchFlashlight(pl, newstate)
 	if pl:Team() == TEAM_UNDEAD then
-		if newstate then
-			net.Start("zs_togglezvision")
-			net.Send(pl)
-		end
-
 		return false
 	end
 

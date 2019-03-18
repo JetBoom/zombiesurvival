@@ -260,10 +260,6 @@ function GM:ToggleZombieVision(onoff)
 	end
 end
 
-net.Receive("zs_togglezvision", function(length)
-	gamemode.Call("ToggleZombieVision")
-end)
-
 local CModWhiteOut = {
 	["$pp_colour_addr"] = 0,
 	["$pp_colour_addg"] = 0,
