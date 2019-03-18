@@ -1780,6 +1780,10 @@ function GM:PlayerBindPress(pl, bind, wasin)
 		elseif P_Team(pl) == TEAM_HUMAN then
 			self:ToggleOTSCamera()
 		end
+	elseif bind == "impulse 100" then
+		if P_Team(pl) == TEAM_UNDEAD and pl:Alive() then
+			self:ToggleZombieVision()
+		end
 	end
 end
 
