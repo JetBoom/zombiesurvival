@@ -3524,7 +3524,7 @@ function GM:ZombieKilledHuman(pl, attacker, inflictor, dmginfo, headshot, suicid
 		GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_ZOMBIECLASS, classtab.Name, "BrainsEaten", 1)
 	end
 
-	if not pl.Gibbed and not suicide then
+	if not pl.Gibbed and not suicide and not headshot then
 		local status = pl:GiveStatus("revive_slump_human")
 		if status then
 			status:SetReviveTime(CurTime() + 4)
@@ -4312,10 +4312,6 @@ function GM:WaveStateChanged(newstate)
 end
 
 function GM:PlayerSwitchFlashlight(pl, newstate)
-	if pl:Team() == TEAM_UNDEAD then
-		return false
-	end
-
 	if pl:Team() == TEAM_HUMAN and CurTime() >= pl.NextFlashlightSwitch then
 		pl.NextFlashlightSwitch = CurTime() + 0.75
 		return true

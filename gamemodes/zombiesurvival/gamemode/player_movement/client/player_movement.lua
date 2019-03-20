@@ -81,7 +81,7 @@ function GM:_CreateMove(cmd)
 				local frightened = MySelf:GetStatus("frightened")
 				local gunsway = MySelf.GunSway
 
-				if (health <= threshold or frightened or gunsway) and not GAMEMODE.ZombieEscape then
+				if (health <= threshold or frightened and frightened:IsValid() or gunsway) and not GAMEMODE.ZombieEscape then
 					local ft = FrameTime()
 
 					staggerdir = (staggerdir + ft * 8 * VectorRand()):GetNormalized()
