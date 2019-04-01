@@ -352,13 +352,18 @@ function GM:OpenInventory()
 	topspace:AlignTop(8)
 	topspace:CenterHorizontal()
 
-	local invgrid = vgui.Create("DGrid", frame)
-	invgrid:SetSize(wid - 16 * screenscale, frame:GetTall() - 8 - topspace:GetTall())
-	invgrid:MoveBelow(topspace, 16)
+	local invListPanel = vgui.Create("DScrollPanel", frame)
+	invListPanel:Dock( FILL )
+	local sbar = invListPanel:GetVBar()
+	sbar.Enabled = true
+	invListPanel:DockMargin(0, topspace:GetTall() + 8, 0, 0)
+	invListPanel:InvalidateParent(true)
+
+	local invgrid = vgui.Create("DGrid", invListPanel)
+	invgrid:SetSize(invListPanel:GetWide() - sbar:GetWide(), invListPanel:GetTall())
 	invgrid:SetCols(5)
 	invgrid:SetColWide((70 + (invgrid:GetWide() - 70*5) / 4) * screenscale)
 	invgrid:SetRowHeight(70 * screenscale)
-	invgrid:CenterHorizontal()
 	frame.Grid = invgrid
 
 	for item, count in pairs(self.ZSInventory) do
