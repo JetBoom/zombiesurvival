@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/wraith1/s_midsectiondull"
+	"$envmap" "models/wraith1/stalkerspec"
+	"$envmapmask" "models/wraith1/s_midsectionmask"
+	"$envmapsphere" 1
+}

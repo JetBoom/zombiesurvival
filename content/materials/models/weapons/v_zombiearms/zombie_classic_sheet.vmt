@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/weapons/v_zombiearms/zombie_classic_sheet"
+	"$bumpmap" "models/weapons/v_zombiearms/zombie_classic_sheet_normal"
+}

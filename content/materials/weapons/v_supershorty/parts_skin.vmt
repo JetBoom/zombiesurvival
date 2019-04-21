@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "weapons\v_supershorty\parts_skin"
+		"$envmapmask" "weapons\v_supershorty\parts_skin_specular"
+		"$envmap" "env_cubemap"
+		"$envmaptint" "[ .45 .45 .45 ]"
+		"$envmapconstrast" .4
+}
+

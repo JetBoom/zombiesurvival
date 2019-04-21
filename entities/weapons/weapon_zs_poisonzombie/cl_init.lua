@@ -1,0 +1,3 @@
+INC_CLIENT()
+
+SWEP.ViewModelFOV = 47

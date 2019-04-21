@@ -1,0 +1,48 @@
+JBGM LICENSE
+
+VERSION Xx420xX4, 05 May 2018
+
+Copyright � 2018 William Moodhe
+
+Anyone is allowed to copy, upload, or distribute copies of this license, but changing it is not allowed.
+
+Preamble
+
+The GNU license was garbage so I made my own. If you don't like it then feel free to delete the gamemode.
+A good portion of people have seen fit to modify stuff I've made, make it so people can "donate" for premium features, and subsequently generate revenue using things that I and others have created without permission. Then they ban members of my Steam groups, DDoS my own servers, openly insult me despite never having talked to me, and be jerks in general.
+
+So I will be issuing DMCA take down notices to server hosts and others who think that I'm joking. Server hosts have typically sided with me during the few times I've needed to do this. I don't plan on being 'that guy' and going after gmod servers trying to stay alive but I do plan on weeding out a few of the bigger jerks out there.
+
+tl;dr - I won't screw with you if you don't screw with me.
+
+The precise terms and conditions for copying, distribution and modification follow.
+
+TERMS AND CONDITIONS
+
+0. Definitions
+
+"License" refers to this file.
+
+"Author" refers to the person William Moodhe <williammoodhe@gmail.com> 
+
+"Content" refers to all files and folders that the license came with as well as the intellectual property and all derivitive works.
+
+"Copyright" refers to the laws on intellectual property and the legal rights automatically granted to the Author during the creation of the Content.
+
+"Modify" refers to editing the Content as well as creating programs or code which depends on the Content to run. For the purpose of this license, deleting things without deleting the entire Content is ALSO considered editing.
+
+1. For any conditions not outlined in the License, refer to your country or state laws for Copyright.
+[Host your server in Russia.]
+
+2. You may freely copy, distribute, create derivitive works and distribute derivitive works of the Content as long as you obey the License and the License is not Modified.
+[Feel free to make edits.]
+
+3. You will not Modify the Content in such a way that it will, directly or indirectly, generate revenue without explicit, written permission from the Author. CLARIFICATION: This clause does not include cosmetic features such as hats, PointShop, etc. as long as it is not possible to purchase gameplay advantages.
+[For example: it is not allowed to make it so you can pay to have extra health, points, speed, etc. It is allowed to have revenue-generating addons that offer only cosmetics or features that do not change the gameplay.]
+
+4. You will not deny access to the Author to anything in such a way that it would not allow the Author to see if the Gamemode was Modified.
+[For example: banning my Steam groups from your server.]
+
+5. If you do not agree to any of the above conditions you must delete the Content in its entirety as well as all copies of the Content and derivitive works of the Content that you have made.
+
+END TERMS AND CONDITIONS

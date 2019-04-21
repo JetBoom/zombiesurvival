@@ -1,0 +1,10 @@
+hook.Add("InitPostEntityMap", "Adding", function()
+	local ent = ents.FindByClass("trigger_teleport")
+
+	ent[1]:Remove()
+	ent[3]:Remove()
+	ent[7]:Remove()
+	ent[11]:Remove()
+	ent[13]:Remove()
+	ent[14]:Remove()
+end)

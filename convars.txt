@@ -1,0 +1,2 @@
+There are a plethora of new convars. You can use these after the +map declaration in your srcds.exe line or just put them in the console.
+For an updated list of convars and what they do, type "find zs_" in the console.

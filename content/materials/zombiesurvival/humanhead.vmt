@@ -1,0 +1,8 @@
+"UnlitGeneric" 
+{ 
+	"$basetexture" "zombiesurvival/humanhead"
+	"$vertexcolor" 1 
+	"$vertexalpha" 1 
+	"$nolod" 1
+	"$ignorez" 1
+} 

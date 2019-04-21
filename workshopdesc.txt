@@ -1,0 +1,9 @@
+A massive gamemode where humans are pit against a zombie horde. All zombies are controlled by actual players instead of NPCs. When a human dies, they become part of the Undead!
+
+Comes with tons of weapons, multiple classes for zombies, boss zombies, an in-depth barricading system, and the new Classic Mode.
+
+WARNING: THIS GAMEMODE WILL NOT WORK PROPERLY FROM THE WORKSHOP. AN UPCOMING GMOD UPDATE IS REQUIRED BEFORE GAMEMODES WORK ON THE STEAM WORKSHOP. IF YOU ARE PLANNING TO HOST A SERVER THEN DOWNLOAD FROM THE SVN. THIS IS ONLY FOR DOWNLOADING CONTENT.
+
+SVN: svn://noxiousnet.com/trunk/public/gmod13/zombiesurvival
+Forum: http://www.noxiousnet.com/forums/index.php?board=43.0
+FP Thread: http://facepunch.com/showthread.php?t=1160198

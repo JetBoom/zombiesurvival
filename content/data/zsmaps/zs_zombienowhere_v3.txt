@@ -1,0 +1,1 @@
+SRL={{["Class"]="info_player_zombie",["Angles"]=Angle(0,88.396209716797,0),["Position"]=Vector(-511.33920288086,667.03381347656,408.03125)}}

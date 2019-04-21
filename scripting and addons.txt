@@ -1,0 +1,151 @@
+Zombie Survival now sports the following custom hooks and stuff.
+If you're adding new game features then you would probably want to use hooks instead of overwriting files that may be updated.
+You're a big boy, you know how to make hooks and use autorun so I won't go in to that. Just use them as if they were any other hook.
+Returning anything besides nil in a hook will override the gamemode's stuff.
+
+If you're going to be calling gamemode functions then use gamemode.Call so hooks are called and everything works properly.
+gamemode.Call("EndRound", TEAM_HUMAN) instead of GAMEMODE:EndRound(TEAM_HUMAN)
+MOST OF THE TIME THERE IS A HOOK CALLED AFTER THE FIRST ONE CALLED PostHookName
+
+=SHARED=
+
+Hook. Can a player purchase something from a crate? Return false to explicitly not allow, true to explicitly allow.
+GM:PlayerCanPurchase(Player ply)
+
+Hook. Can a player checkout their worth loadout?
+GM:PlayerCanCheckout(Player ply)
+
+Hook. Called when a weapon is succesfully deployed. Used for setting player walk speeds.
+GM:WeaponDeployed(Player ply, Weapon wep)
+
+Hook. Can a player be healed?
+GM:PlayerCanBeHealed(Player pl)
+
+Hook. Is a class unlocked?
+GM:IsClassUnlocked(Integer class)
+
+=SERVER SIDE=
+
+Hook. Called when the game wants to turn waves on or off.
+GM:SetWaveActive(Bool active)
+
+Hook. Called when the game wants to set the time that a wave will start.
+GM:SetWaveStart(Float time)
+
+Hook. Called when the game wants to set the time that a wave will end.
+GM:SetWaveEnd(Float time)
+
+Hook. Called when the game wants to set the wave to something.
+GM:SetWave(Integer wave)
+
+Hook and function. End a round with a team as the winner. Bit of a complication here: zombies don't actually win ZS. The point is to survive so if you die you must redeem to have a shot at winning.
+GM:EndRound(Integer team)
+
+Hook. Called when a player repairs an object. Usually a nail.
+GM:PlayerRepairedObject(Player ply, Entity object, Float repaired, Weapon wep)
+
+Hook. Called when a nail is created. ent1 and ent2 are the two entities. ent2 may be the world.
+GM:OnNailCreated(Entity ent1, Entity ent2, Entity nail)
+
+Hook. Called when someone heals a team member (NOT THEMSELF).
+GM:PlayerHealedTeamMember(Player healer, Player target, Float health, Weapon wep)
+
+Hook. Called when there is one human left.
+GM:LastHuman(Player pl)
+
+Hook. Called when a zombie kills the last human.
+GM:LastBite(Player victim, Player attacker)
+
+Hook and function. Gives a player their default equipment or a random loadout if they have none.
+GM:GiveDefaultOrRandomEquipment(Player pl)
+
+Hook and function. Gives a player random equipment without checking their favorites.
+GM:GiveRandomEquipment(Player pl)
+
+Hook and function. Loads the next map. HERE IS WHERE YOU PUT YOUR MAP VOTING AND STUFF. RETURN TRUE TO OVERRIDE.
+GM:LoadNextMap()
+
+Hook. Called when a player has told the server that GM:HookGetLocal (client-side hook below) has been called. DO NOT TRUST THE CLIENT ON THIS, SHOULD ONLY BE USED FOR COSMETICS AND SENDING NETWORKED STUFF.
+GM:PlayerReady(Player pl)
+
+Function. Recalculates if a prop should be frozen or not due to being nailed and such. Use true as a second argument to check all props that have a constraint to this one as well.
+GM:EvaluatePropFreeze(Entity ent, Bool usehierarchy)
+
+Hook. Human kills a zombie.
+GM:HumanKilledZombie(Player victim, Player attacker, DamageInfo dmginfo, Bool headshot, Bool wassuicide)
+
+Hook. Zombie kills a human.
+GM:HumanKilledZombie(Player victim, Player attacker, DamageInfo dmginfo, Bool headshot, Bool wassuicide)
+
+SELF-EXPLANATORY HOOKS AND FUNCTIONS
+GM:LoadMapEditorFile()
+GM:SetupSpawnPoints()
+GM:RemoveUnusedEntities()
+GM:ReplaceMapWeapons()
+GM:ReplaceMapAmmo()
+GM:ReplaceMapBatteries()
+GM:CreateZombieGas()
+GM:SetupProps()
+GM:DoHonorableMentions()
+GM:PostDoHonorableMentions(filter)
+GM:PostEndRound(winner)
+GM:CalculateInfliction()
+GM:RemoveDuplicateAmmo(pl)
+GM:ShouldAntiGrief(ent, attacker, dmginfo, health)
+GM:PostHumanKilledZombie(ply, attacker, dmginfo, assister, assistfrags, headshot)
+GM:PostZombieKilledHuman(ply, attacker, dmginfo, headshot, wassuicide)
+GM:CanDamageNail(nail, attacker, inflictor, damage, dmginfo)
+GM:OnNailDamaged(nail, attacker, inflictor, damage, dmginfo)
+GM:OnNailDestroyed(nail, attacker, inflictor, damage, dmginfo)
+GM:OnNailRemoved(nail, ent1, ent2, remover)
+GM:OnPlayerChangedTeam(ply, oldteam, newteam)
+GM:PlayerPointsAdded(ply, points)
+GM:PlayerRedeemed(ply)
+GM:WaveStateChanged(active)
+
+=CLIENT SIDE=
+
+Function. Adds a death notice.
+GM:AddDeathNotice(String attackername, Integer attackerteam, String inflictor, String victimname, Integer victimteam, Bool headshot)
+
+Called when the player sees LocalPlayer() as a valid entity and MySelf is available to be called.
+GM:HookGetLocal(Player pl)
+
+Hook. Called when the player dies as a human. attackername is the player's name. Note, this is only called when killed by another player and while a human.
+GM:LocalPlayerDied(String attackername)
+
+Function. Adds a floating score number in the world.
+GM:FloatingScore(Entity ent, [String type, Integer score, Integer flags])
+
+Hook. Called when the player gets profits from a crate they own.
+GM:ReceivedCommission(Entity crate, Player buyer, Float points)
+
+Hook. Called when the player heals another player.
+GM:HealedOtherPlayer(Player other, Float points)
+
+Hook. Called when the player repairs an object.
+GM:RepairedObject(Entity object, Float pointsreceived)
+
+Function. Suppresses the Arsenal Upgrade message for provided number of seconds.
+GM:SuppressArsenalUpgrades(Float time)
+
+Function. Add an honorable mention to the end board.
+GM:AddHonorableMention(Player ply, Integer mention, Integer data)
+
+Hook. Called when opening the human context menu.
+GM:HumanMenu()
+
+Hook and function. Toggles zombie dark to light vision.
+GM:ToggleZombieVision()
+
+Hook. Called when you click a person's name in the scoreboard.
+GM:ClickedPlayerButton(Player ply, Panel panel)
+
+Hook. Called when you click a person's name in the honorable mentions.
+GM:ClickedEndBoardPlayer(Player ply, Panel panel)
+
+Hook. Called when building the help menu. Use this to add new sheets.
+GM:BuildHelpMenu(Panel helpwindow, Panel propertysheet)
+
+Hook. Called when building the options menu. Use this to add extra options.
+GM:AddExtraOptions(Panel panellist, Panel optionsmenu)
