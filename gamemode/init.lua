@@ -995,7 +995,7 @@ end
 function GM:KillAllCrows()
     for _, pl in pairs(player.GetAll()) do
         if (pl:IsValidLivingZombie() and pl:GetZombieClassTable().Name == "Crow") then
-            pl:kill()
+            pl:Kill()
         end
     end
 end
