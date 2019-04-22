@@ -71,6 +71,10 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 	elseif itemtab.SWEP then
 		if string.sub(itemtab.SWEP, 1, 6) ~= "weapon" then
 			if GAMEMODE:GetInventoryItemType(itemtab.SWEP) == INVCAT_TRINKETS and sender:HasInventoryItem(itemtab.SWEP) then
+				if GAMEMODE:CanBuyTrinkets(sender) ~= true then
+					GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "limit_of_trinkets_reached"))
+					return
+				end
 				local wep = ents.Create("prop_invitem")
 				if wep:IsValid() then
 					wep:SetPos(sender:GetShootPos())
@@ -79,6 +83,10 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 					wep:Spawn()
 				end
 			else
+				if GAMEMODE:CanBuyTrinkets(sender) ~= true then
+					GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "limit_of_trinkets_reached"))
+					return
+				end
 				sender:AddInventoryItem(itemtab.SWEP)
 			end
 		elseif sender:HasWeapon(itemtab.SWEP) then
