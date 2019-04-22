@@ -17,6 +17,30 @@ GM.ZSInventoryPrefix = {
 GM.Assemblies = {}
 GM.Breakdowns = {}
 
+function GM:GetTrinkets(pl)
+	local items = pl:GetInventoryItems()
+	local trinkets = {}
+	local trinketsArrayPos = 1
+	for invitem, count in pairs(items) do
+		if invitem then
+			if self:GetInventoryItemType(invitem) == INVCAT_TRINKETS then
+				trinkets[trinketsArrayPos] = invitem
+				trinketsArrayPos = trinketsArrayPos + 1 
+			end
+		end
+	end
+	return trinkets
+end
+
+
+function GM:GetTrinketsNumber(pl)
+	return #self:GetTrinkets(pl)
+end
+
+function GM:CanBuyTrinkets(pl)
+	return self:GetTrinketsNumber(pl) + 1 <= self.MAX_TRINKETS
+end
+
 function GM:GetInventoryItemType(item)
 	for typ, aff in pairs(self.ZSInventoryPrefix) do
 		if string.sub(item, 1, 4) == aff then

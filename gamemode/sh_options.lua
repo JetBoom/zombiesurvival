@@ -24,6 +24,8 @@ GM.ZombieEscapeWeaponsSecondary = {
 GM.CartFile = "zscarts.txt"
 GM.SkillLoadoutsFile = "zsskloadouts.txt"
 
+GM.MAX_TRINKETS = 12
+
 ITEMCAT_GUNS = 1
 ITEMCAT_AMMO = 2
 ITEMCAT_MELEE = 3

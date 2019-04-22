@@ -46,7 +46,7 @@ local WorthButtons = {}
 local function Checkout(tobuy)
 	if tobuy and #tobuy > 0 then
 		gamemode.Call("SuppressArsenalUpgrades", 1)
-
+		MySelf.selectedTrinketsWorthMenu = 0
 		RunConsoleCommand("worthcheckout", unpack(tobuy))
 
 		if pWorth and pWorth:IsValid() then
@@ -405,6 +405,7 @@ function MakepWorth()
 	local dragbase = scroller:GetChildren()[1]
 	local tabs = dragbase:GetChildren()
 
+	MySelf.selectedTrinketsWorthMenu = 0
 	GAMEMODE:CreateItemInfoViewer(frame, propertysheet, topspace, bottomspace, MENU_WORTH)
 	GAMEMODE:ConfigureMenuTabs(tabs, tabhei, function(tabpanel)
 		pWorth.Viewer:SetVisible(tabpanel ~= tabs[1])
@@ -598,11 +599,15 @@ function PANEL:DoClick(silent, force)
 	local id = self.ID
 	local tab = FindStartingItem(id)
 	local goodcart = true
-
 	if not tab then return end
 
 	if self.On then
 		self.On = nil
+		if tab.SWEP then
+			if GAMEMODE:GetInventoryItemType(tab.SWEP) == INVCAT_TRINKETS then
+				MySelf.selectedTrinketsWorthMenu = MySelf.selectedTrinketsWorthMenu - 1
+			end
+		end
 		if not silent then
 			surface.PlaySound("buttons/button18.wav")
 		end
@@ -611,12 +616,20 @@ function PANEL:DoClick(silent, force)
 		surface.PlaySound("buttons/button8.wav")
 		return
 	else
-		if remainingworth < tab.Price then
+		if remainingworth < tab.Price or MySelf.selectedTrinketsWorthMenu >= GAMEMODE.MAX_TRINKETS then
+			if MySelf.selectedTrinketsWorthMenu >= GAMEMODE.MAX_TRINKETS then 
+				MySelf:PrintTranslatedMessage(HUD_PRINTTALK, "limit_of_trinkets_reached")
+			end
 			if not force then
 				surface.PlaySound("buttons/button8.wav")
 				return
 			else
 				goodcart = false
+			end
+		end
+		if tab.SWEP then
+			if GAMEMODE:GetInventoryItemType(tab.SWEP) == INVCAT_TRINKETS then
+				MySelf.selectedTrinketsWorthMenu = MySelf.selectedTrinketsWorthMenu + 1
 			end
 		end
 		self.On = true
