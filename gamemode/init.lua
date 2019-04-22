@@ -3138,7 +3138,7 @@ function GM:KeyPress(pl, key)
             else
                 local plvel = pl:GetVelocity()
                 if pl:GetPhysicsObject():IsPenetrating() then
-                    if plvel == vector_origin then
+                    if (plvel.x == 0 and plvel.y == 0 and (plvel.z == -4.5 or plvel.z == 0)) then
                         pl.LastGhostFailureVelocity = nil
                         pl:SetBarricadeGhosting(true)
                     else
