@@ -994,7 +994,7 @@ end
 
 function GM:KillAllCrows()
     for _, pl in pairs(player.GetAll()) do
-        if (pl:IsValidLivingZombie() and pl:GetZombieClassTable().Name == "Crow") then
+        if (pl:IsZombie() or pl.IsZSBot) and pl:GetZombieClassTable().Name == "Crow" then
             pl:Kill()
         end
     end
@@ -1012,7 +1012,7 @@ function GM:Think()
             end
         elseif self:GetWaveStart() ~= -1 then
             if self:GetWaveStart() <= time then
-                self:KillAllCrows()
+                GAMEMODE:KillAllCrows()
                 gamemode.Call("SetWaveActive", true)
             elseif self.BossZombies and not self.PantsMode and not self:IsClassicMode() and not self.ZombieEscape
             and self.LastBossZombieSpawned ~= wave and wave > 0 and not self.RoundEnded
