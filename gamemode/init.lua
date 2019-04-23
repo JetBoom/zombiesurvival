@@ -993,8 +993,8 @@ end
  
 
 function GM:KillAllCrows()
-    for _, pl in pairs(player.GetAll()) do
-        if (pl:IsZombie() or pl.IsZSBot) and pl:GetZombieClassTable().Name == "Crow" then
+    for _, pl in pairs(team.GetPlayers(TEAM_UNDEAD)) do
+        if pl:GetZombieClassTable().Name == "Crow" then
             pl:Kill()
         end
     end
