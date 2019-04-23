@@ -16,7 +16,7 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	self:SetPlaybackRate(1)
 
-	self:CollisionRulesChanged()
+	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
