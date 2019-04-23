@@ -58,6 +58,10 @@ function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilte
 	return true
 end
 
+function CLASS:OnSpawned(pl)
+	pl:SetCollisionGroup(COLLISION_GROUP_WORLD)
+end
+
 function CLASS:CalcMainActivity(pl, velocity)
 	if pl:OnGround() then
 		local wep = pl:GetActiveWeapon()
