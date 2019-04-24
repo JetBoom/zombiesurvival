@@ -47,9 +47,14 @@ function ENT:GiveToActivator(activator, caller)
 	end
 
 	local itypecat = GAMEMODE:GetInventoryItemType(itype)
-	if itypecat == INVCAT_TRINKETS and activator:HasInventoryItem(itype) then
-		activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_already_have_this_trinket"))
-		return
+	if itypecat == INVCAT_TRINKETS then
+		if activator:HasInventoryItem(itype) then
+			activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_already_have_this_trinket"))
+			return
+		elseif not GAMEMODE:CanBuyTrinkets(activator) then
+			activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "limit_of_trinkets_reached"))
+			return
+		end
 	end
 
 	activator:AddInventoryItem(itype)
