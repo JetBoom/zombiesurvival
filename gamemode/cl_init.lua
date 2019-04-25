@@ -1,10 +1,3 @@
--- Sometimes persistent ones don't get created.
-local dummy = CreateClientConVar("_zs_dummyconvar", 1, false, false)
-local oldCreateClientConVar = CreateClientConVar
-function CreateClientConVar(...)
-	return oldCreateClientConVar(...) or dummy
-end
-
 include("sh_globals.lua")
 
 include("obj_entity_extend_cl.lua")
