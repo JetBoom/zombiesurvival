@@ -603,7 +603,8 @@ function GM:OpenRemantlerMenu(remantler)
 	trinketsframe:SetPaintBackground(false)
 	frame.TrinketsFrame = trinketsframe
 
-	local ammoframe = vgui.Create("DPanel")
+	local ammoframe = vgui.Create("DScrollPanel")
+	ammoframe:GetVBar().Enabled = true
 	sheet = remprop:AddSheet("Ammunition", ammoframe, GAMEMODE.ItemCategoryIcons[ITEMCAT_AMMO], false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	ammoframe:SetSize(wid - 8, boty - topy - 8 - topspace:GetTall())
