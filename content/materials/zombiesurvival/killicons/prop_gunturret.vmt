@@ -1,0 +1,10 @@
+"UnlitGeneric"
+{
+	"$basetexture" "zombiesurvival/killicons/prop_gunturret"
+	"$nolod" 1
+	"$nomip" 1
+	"$ignorez" 1
+	"$translucent" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}

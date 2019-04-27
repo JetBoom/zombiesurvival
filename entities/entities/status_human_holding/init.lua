@@ -256,7 +256,7 @@ function ENT:Think()
 		end
 
 		if owner:KeyDown(IN_SPEED) then
-			if owner:KeyPressed(IN_SPEED) then
+			if owner:KeyPressed(IN_SPEED) and not owner:KeyPressed(IN_WALK) then
 				self.ObjectAngles = object:GetAngles()
 			end
 		elseif owner:KeyDown(IN_WALK) then

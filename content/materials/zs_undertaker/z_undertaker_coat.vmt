@@ -1,0 +1,16 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "zs_undertaker/z_undertaker"
+	"$bumpmap" "zs_undertaker/z_undertaker_normal"
+	"$halflambert" "1"
+	"$nocull" 1
+	
+	"$phong" "1"
+	"$phongexponent" "6"
+	"$phongboost" "0.4"
+	"$phongfresnelranges" "[0 0.2 0.5]"
+	
+	// "$rimlight" "1"
+	// "$rimlightexponent" "5"
+	// "$rimlightboost" "0.01"
+}
