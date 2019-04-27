@@ -229,10 +229,6 @@ function GM:_InputMouseApply(cmd, x, y, ang)
 		RunConsoleCommand("_zs_rotateang", snapanglex, snapangley)
 		return true
 	end
-
-	if self:UseOverTheShoulder() and P_Team(MySelf) == TEAM_HUMAN then
-		self:InputMouseApplyOTS(cmd, x, y, ang)
-	end
 end
 
 function GM:_GUIMousePressed(mc)
@@ -839,6 +835,8 @@ function GM:DrawSigilTeleportBar(x, y, fraction, target, screenscale)
 	draw_SimpleText(translate.Get("point_at_a_sigil_to_choose_destination"), "ZSHUDFontSmaller", x, y + draw_GetFontHeight("ZSHUDFontSmaller") * 2 - 16, colSigilTeleport, TEXT_ALIGN_CENTER)
 end
 
+local OSTintro = 0
+
 function GM:HumanHUD(screenscale)
 	local curtime = CurTime()
 	local w, h = ScrW(), ScrH()
@@ -855,7 +853,13 @@ function GM:HumanHUD(screenscale)
 		if self:GetWave() == 0 and not self:GetWaveActive() then
 			local txth = draw_GetFontHeight("ZSHUDFontSmall")
 			local desiredzombies = self:GetDesiredStartingZombies()
-
+			-- Play Intro
+			if self:GetWave() >= 1 and OSTintro == 0 and MySelf:GetInfo("zs_intro") == "1" and not self.ZombieEscape then
+				if OSTintro == 0 then
+				MySelf:EmitSound("zombiesurvival/zsrintrov2.mp3", 50, 100, 0.5)
+				OSTintro = 1 -- So it doesn't repeat the track again.
+				end
+			end
 			draw_SimpleTextBlurry(translate.Get("waiting_for_players").." "..util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			if desiredzombies > 0 then

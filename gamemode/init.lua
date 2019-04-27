@@ -3870,6 +3870,7 @@ function GM:PlayerSpawn(pl)
             if self.StartingLoadout then
                 self:GiveStartingLoadout(pl)
             elseif pl.m_PreRedeem then
+                timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
                 if self.RedeemLoadout then
                     for _, class in pairs(self.RedeemLoadout) do
                         pl:Give(class)

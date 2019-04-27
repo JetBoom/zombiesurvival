@@ -142,6 +142,12 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
+	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText(translate.Get("options_intro_music"))
+	check:SetConVar("zs_intro")
+	check:SizeToContents()
+	list:AddItem(check)
+
 	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Enable post processing")
 	check:SetConVar("zs_postprocessing")

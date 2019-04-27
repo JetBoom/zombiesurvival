@@ -442,6 +442,7 @@ LANGUAGE.controls_extinctioncrab					= "> PRIMARY: Leap Attack\n> SECONDARY: Ext
 LANGUAGE.controls_deathtrooper					    = "> PRIMARY: laser fire"
 LANGUAGE.controls_ancient_wraith                    = "> PRIMARY: power strike\n> SECONDARY: fast strike"
 
+LANGUAGE.options_intro_music                  		= "Enable intro music"
 
 -- The help file... Quite big! I wouldn't blame you if you didn't translate this part.
 LANGUAGE.help_cat_introduction						= "Introduction"
