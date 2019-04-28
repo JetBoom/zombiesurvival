@@ -22,6 +22,43 @@ function player.GetAllSpectators()
 	return t
 end
 
+function FindPlayerByName(target)
+	if target == '' then
+		ply:PrintMessage(HUD_PRINTTALK, "Invalid name")
+		return
+	end
+	for k,v in pairs( player.GetAll() ) do
+		if v:Nick() == target then
+			return v
+		end
+	end
+	ply:PrintMessage(HUD_PRINTTALK, "Name didn't match any players, try again")
+	return nil
+end
+
+function FindPlayerByPartialName(ply, target)
+	local playerFound = nil
+	local matchedPlayers = 0
+	if target == '' then
+		ply:PrintMessage(HUD_PRINTTALK, "Invalid name")
+		return
+	end
+	for k,v in pairs( player.GetAll() ) do
+		if string.match(string.lower(v:Nick()), string.lower(target)) then
+			playerFound = v
+			matchedPlayers = matchedPlayers + 1
+		end
+	end
+	if matchedPlayers == 1 then
+		return playerFound
+	elseif matchedPlayers > 1 then
+		ply:PrintMessage(HUD_PRINTTALK, "Got more than one match, try again")
+	else
+		ply:PrintMessage(HUD_PRINTTALK, "Name didn't match any players, try again")
+	end
+	return nil
+end
+
 function FindStartingItem(id)
 	local item = FindItem(id)
 	if item and item.WorthShop then return item end
