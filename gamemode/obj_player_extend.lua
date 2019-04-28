@@ -233,6 +233,7 @@ function meta:NearArsenalCrate()
 	local arseents = {}
 	table.Add(arseents, ents.FindByClass("prop_arsenalcrate"))
 	table.Add(arseents, ents.FindByClass("status_arsenalpack"))
+	table.Add(arseents, GAMEMODE:GetUncorruptedSigils())
 
 	for _, ent in pairs(arseents) do
 		local nearest = ent:NearestPoint(pos)
