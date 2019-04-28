@@ -74,7 +74,6 @@ end)
 end]]
 
 -- Save on global lookup time.
-local collectgarbage = collectgarbage
 local render = render
 local surface = surface
 local draw = draw
@@ -84,26 +83,19 @@ local ents = ents
 local util = util
 local math = math
 local string = string
-local bit = bit
 local gamemode = gamemode
 local hook = hook
 local Vector = Vector
-local VectorRand = VectorRand
 local Angle = Angle
-local AngleRand = AngleRand
-local Entity = Entity
 local Color = Color
 local FrameTime = FrameTime
 local RealTime = RealTime
 local CurTime = CurTime
-local SysTime = SysTime
 local EyePos = EyePos
 local EyeAngles = EyeAngles
 local pairs = pairs
 local ipairs = ipairs
 local tostring = tostring
-local tonumber = tonumber
-local type = type
 local ScrW = ScrW
 local ScrH = ScrH
 local Lerp = Lerp
@@ -111,9 +103,6 @@ local EF_DIMLIGHT = EF_DIMLIGHT
 local TEXT_ALIGN_CENTER = TEXT_ALIGN_CENTER
 local TEXT_ALIGN_LEFT = TEXT_ALIGN_LEFT
 local TEXT_ALIGN_RIGHT = TEXT_ALIGN_RIGHT
-local TEXT_ALIGN_TOP = TEXT_ALIGN_TOP
-local TEXT_ALIGN_BOTTOM = TEXT_ALIGN_BOTTOM
-local TEXT_ALIGN_TOP_REAL = TEXT_ALIGN_TOP_REAL
 local TEXT_ALIGN_BOTTOM_REAL = TEXT_ALIGN_BOTTOM_REAL
 
 local TEAM_HUMAN = TEAM_HUMAN
@@ -124,8 +113,6 @@ local COLOR_PURPLE = COLOR_PURPLE
 local COLOR_GRAY = COLOR_GRAY
 local COLOR_RED = COLOR_RED
 local COLOR_DARKRED = COLOR_DARKRED
-local COLOR_DARKGREEN = COLOR_DARKGREEN
-local COLOR_GREEN = COLOR_GREEN
 local COLOR_WHITE = COLOR_WHITE
 
 local vector_up = Vector(0, 0, 1)
@@ -569,7 +556,7 @@ function GM:DrawFearMeter(power, screenscale)
 
 		local sigils = GAMEMODE.CachedSigils
 		local corruptsigils = 0
-		for i=1, self.MaxSigils do
+		for i = 1, self.MaxSigils do
 			sigil = sigils[i]
 			health = 0
 			maxhealth = 0
@@ -839,7 +826,6 @@ function GM:DrawSigilTeleportBar(x, y, fraction, target, screenscale)
 	draw_SimpleText(translate.Get("point_at_a_sigil_to_choose_destination"), "ZSHUDFontSmaller", x, y + draw_GetFontHeight("ZSHUDFontSmaller") * 2 - 16, colSigilTeleport, TEXT_ALIGN_CENTER)
 end
 
-local OSTintro = 0
 
 function GM:HumanHUD(screenscale)
 	local curtime = CurTime()
@@ -1367,7 +1353,7 @@ function GM:CreateScalingFonts()
 	surface.CreateLegacyFont(fontfamily, screenscale * (42 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * (72 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontBigBlur", false, false, 8)
 
-	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd/2), 0, fontaa, false, "ZSAmmoName", false, false)
+	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd / 2), 0, fontaa, false, "ZSAmmoName", false, false)
 
 	local liscreenscale = math.max(0.95, BetterScreenScale())
 
@@ -1499,8 +1485,8 @@ end
 -- These can be accessed without pointing to the IMaterial by using ! before the material string.
 function GM:CreateSpriteMaterials()
 	local params = {["$translucent"] = "1", ["$vertexcolor"] = "1", ["$vertexalpha"] = "1"}
-	for i=1, 8 do
-		params["$basetexture"] = "Decals/blood"..i
+	for i = 1, 8 do
+		params["$basetexture"] = "Decals/blood" .. i
 		CreateMaterial("sprite_bloodspray" .. i, "UnlitGeneric", params)
 	end
 end
@@ -1528,12 +1514,12 @@ function GM:InitializeBeats()
 
 		self.Beats[dirname] = {}
 		local highestexist
-		for i=1, 10 do
-			local a, __ = file.Find("sound/zombiesurvival/beats/"..dirname.."/"..i..".*", "GAME")
+		for i = 1, 10 do
+			local a, __ = file.Find("sound/zombiesurvival/beats/" .. dirname .. "/" .. i .. ".*", "GAME")
 			local a1 = FirstOfGoodType(a)
 			if a1 then
-				local filename = "zombiesurvival/beats/"..dirname.."/"..a1
-				if file.Exists("sound/"..filename, "GAME") then
+				local filename = "zombiesurvival/beats/" .. dirname .. "/" .. a1
+				if file.Exists("sound/" .. filename, "GAME") then
 					self.Beats[dirname][i] = Sound(filename)
 					highestexist = filename
 
@@ -2143,28 +2129,26 @@ function GM:KeyPress(pl, key)
 end
 
 function GM:KeyRelease(pl, key)
-	if key == self.MenuKey then
-		if self.HumanMenuPanel and self.HumanMenuPanel:IsValid() then
-			if self.InventoryMenu and self.InventoryMenu:IsValid() then
-				self.InventoryMenu:SetVisible(false)
+	if key == self.MenuKey and self.HumanMenuPanel and self.HumanMenuPanel:IsValid() then
+		if self.InventoryMenu and self.InventoryMenu:IsValid() then
+			self.InventoryMenu:SetVisible(false)
 
-				if self.m_InvViewer and self.m_InvViewer:IsValid() then
-					self.m_InvViewer:SetVisible(false)
-				end
+			if self.m_InvViewer and self.m_InvViewer:IsValid() then
+				self.m_InvViewer:SetVisible(false)
 			end
+		end
 
-			if self.HumanMenuSupplyChoice then
-				self.HumanMenuSupplyChoice:CloseMenu()
-			end
+		if self.HumanMenuSupplyChoice then
+			self.HumanMenuSupplyChoice:CloseMenu()
+		end
 
-			if self.InventoryMenu.SelInv then
-				self.InventoryMenu.SelInv = nil
-				self:DoAltSelectedItemUpdate()
+		if self.InventoryMenu.SelInv then
+			self.InventoryMenu.SelInv = nil
+			self:DoAltSelectedItemUpdate()
 
-				local grid = self.InventoryMenu.Grid
-				for k, v in pairs(grid:GetChildren()) do
-					v.On = false
-				end
+			local grid = self.InventoryMenu.Grid
+			for k, v in pairs(grid:GetChildren()) do
+				v.On = false
 			end
 		end
 	end
@@ -2226,12 +2210,12 @@ function GM:Rewarded(class, amount)
 	local wep = weapons.Get(class)
 	if wep and wep.PrintName and #wep.PrintName > 0 then
 		if killicon.Get(class) == killicon.Get("default") then
-			self:CenterNotify(COLOR_PURPLE, toptext..": ", color_white, wep.PrintName)
+			self:CenterNotify(COLOR_PURPLE, toptext .. ": ", color_white, wep.PrintName)
 		else
-			self:CenterNotify({killicon = class}, " ", COLOR_PURPLE, toptext..": ", color_white, wep.PrintName)
+			self:CenterNotify({killicon = class}, " ", COLOR_PURPLE, toptext .. ": ", color_white, wep.PrintName)
 		end
 	elseif amount then
-		self:CenterNotify(COLOR_PURPLE, toptext..": ", color_white, amount .. " " .. class)
+		self:CenterNotify(COLOR_PURPLE, toptext .. ": ", color_white, amount .. " " .. class)
 	else
 		self:CenterNotify(COLOR_PURPLE, toptext)
 	end
