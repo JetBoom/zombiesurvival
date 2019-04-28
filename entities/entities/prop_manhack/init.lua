@@ -71,7 +71,7 @@ function ENT:Initialize()
 				vcol.x = math.Clamp(math.ceil(vcol.x * 255), 0, 255)
 				vcol.y = math.Clamp(math.ceil(vcol.y * 255), 0, 255)
 				vcol.z = math.Clamp(math.ceil(vcol.z * 255), 0, 255)
-				ent:SetKeyValue("lightcolor", vcol.x.." "..vcol.y.." "..vcol.z.." "..255)
+				ent:SetKeyValue("lightcolor", vcol.x .. " " .. vcol.y .. " " .. vcol.z .. " " .. 255)
 			else
 				ent:SetKeyValue("lightcolor", "200 220 255 255")
 			end

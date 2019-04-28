@@ -450,7 +450,7 @@ net.Receive("zs_pls_kill_pl", function(length)
 		local assistername = assister:Name()
 
 		if victim == MySelf and victimteam == TEAM_HUMAN then
-			gamemode.Call("LocalPlayerDied", attackername.." and "..assistername)
+			gamemode.Call("LocalPlayerDied", attackername .. " and " .. assistername)
 		end
 
 		victim:CallZombieFunction5("OnKilled", attacker, attacker, attacker == victim, headshot, DamageInfo())

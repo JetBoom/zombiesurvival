@@ -4,7 +4,7 @@ function PANEL:PaintAt( x, y, dw, dh )
 
 	self:LoadMaterial()
 
-	if ( !self.m_Material ) then return true end
+	if ( not self.m_Material ) then return true end
 
 	surface.SetMaterial( self.m_Material )
 	surface.SetDrawColor( self.m_Color.r, self.m_Color.g, self.m_Color.b, self.m_Color.a )
@@ -15,7 +15,7 @@ function PANEL:PaintAt( x, y, dw, dh )
 		local h = self.ActualHeight
 		
 		-- Image is bigger than panel, shrink to suitable size
-		if ( w > dw && h > dh ) then
+		if ( w > dw and h > dh ) then
 		
 			if ( w > dw ) then
 			

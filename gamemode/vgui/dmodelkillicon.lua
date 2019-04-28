@@ -8,7 +8,7 @@ end
 
 local matWhite = Material("models/debug/debugwhite")
 function PANEL:Paint(w, h)
-	if !IsValid( self.Entity ) then return end
+	if not IsValid( self.Entity ) then return end
 	
 	self:LayoutEntity( self.Entity )
 	

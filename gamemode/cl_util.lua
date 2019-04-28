@@ -22,7 +22,7 @@ local ammonames = {
 
 concommand.Add("zs_quickbuyammo", function()
 	if ammonames[GAMEMODE.CachedResupplyAmmoType] then
-		RunConsoleCommand("zs_pointsshopbuy", "ps_"..ammonames[GAMEMODE.CachedResupplyAmmoType])
+		RunConsoleCommand("zs_pointsshopbuy", "ps_" .. ammonames[GAMEMODE.CachedResupplyAmmoType])
 	end
 end)
 

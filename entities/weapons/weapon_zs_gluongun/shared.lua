@@ -169,23 +169,22 @@ function SWEP:Drawspiral()
     Rotator = Rotator - 10
     local Times = 50 --12
     render.StartBeam( 2 + Times );
-    // add start
     self.Dir = (self.EndPos - self.StartPos):GetNormal()
     self.Inc = (self.EndPos - self.StartPos):Length() / Times
     local RAng = self.Dir:Angle()
     RAng:RotateAroundAxis(RAng:Right(),90)
     RAng:RotateAroundAxis(RAng:Up(),Rotator)
     render.AddBeam(
-        self.StartPos,                // Start position
-        20,                    // Width
-        CurTime(),                // Texture coordinate
-        Color( 255, 255, 255, 200 )        // Color --Color( 64, 255, 64, 200 )
+        self.StartPos,                -- Start position
+        20,                    -- Width
+        CurTime(),                -- Texture coordinate
+        Color( 255, 255, 255, 200 )        -- Color --Color( 64, 255, 64, 200 )
     )
 
     for i = 0, Times do
-        // get point
-        RAng:RotateAroundAxis(RAng:Up(),360/(Times/sinq))
-        local point = ( self.StartPos + self.Dir * ( i * self.Inc ) ) + RAng:Forward() * (math.sin((i/Times)*math.pi))*11
+        -- get point
+        RAng:RotateAroundAxis(RAng:Up(),360 / (Times / sinq))
+        local point = ( self.StartPos + self.Dir * ( i * self.Inc ) ) + RAng:Forward() * (math.sin((i / Times) * math.pi)) * 11
         render.AddBeam(
             point,
             20,
@@ -205,7 +204,7 @@ function SWEP:Drawspiral()
     
     
     render.StartBeam( 2 + Times );
-    // add start
+    -- add start
     self.Dir = (self.EndPos - self.StartPos):GetNormal()
     self.Inc = (self.EndPos - self.StartPos):Length() / Times
     local RAng = self.Dir:Angle()
@@ -219,7 +218,7 @@ function SWEP:Drawspiral()
     )
 
     for i = 0, Times do
-        // get point
+        -- get point
         RAng:RotateAroundAxis(RAng:Up(),360/(Times/sinq))
         local point = ( self.StartPos + self.Dir * ( i * self.Inc ) ) + RAng:Forward() * (math.sin((i/Times)*math.pi))*5
         render.AddBeam(
@@ -241,7 +240,7 @@ function SWEP:Drawspiral()
     
     
     render.StartBeam( 2 + Times );
-    // add start
+    -- add start
     self.Dir = (self.EndPos - self.StartPos):GetNormal()
     self.Inc = (self.EndPos - self.StartPos):Length() / Times
     local RAng = self.Dir:Angle()
@@ -254,7 +253,7 @@ function SWEP:Drawspiral()
     )
 
     for i = 0, Times do
-        // get point
+        -- get point
         local point = ( self.StartPos + self.Dir * ( i * self.Inc ) ) --+ VectorRand()*math.random(1,10)
         render.AddBeam(
             point,
@@ -277,12 +276,12 @@ function SWEP:Drawspiral()
 end
 function SWEP:GetMuzzlePos( weapon, attachment )
 
-    if(!IsValid(weapon)) then return end
+    if(not IsValid(weapon)) then return end
 
     local origin = weapon:GetPos()
     local angle = weapon:GetAngles()
     if weapon:IsWeapon() and weapon:IsCarriedByLocalPlayer() then
-        if( IsValid( weapon:GetOwner() ) && GetViewEntity() == weapon:GetOwner() ) then
+        if( IsValid( weapon:GetOwner() ) and GetViewEntity() == weapon:GetOwner() ) then
             local viewmodel = weapon:GetOwner():GetViewModel()
             if( IsValid( viewmodel ) ) then
                 weapon = viewmodel
@@ -290,7 +289,7 @@ function SWEP:GetMuzzlePos( weapon, attachment )
         end
     end
     local attachment = weapon:GetAttachment( attachment or 1 )
-    if( !attachment ) then
+    if( not attachment ) then
         return origin, angle
     end
     return attachment.Pos, attachment.Ang

@@ -72,7 +72,7 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	if !self.NextLeeroy then
+	if not self.NextLeeroy then
 		self.NextLeeroy = CurTime() + 3.2
 		self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 		self.Owner:SetAnimation( PLAYER_ATTACK1 )

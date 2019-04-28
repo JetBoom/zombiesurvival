@@ -58,28 +58,50 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 		effectdata:SetNormal(tr.HitNormal)
 	util.Effect("skyhammer3", effectdata)
 end
-
-
-local function BlastDamage2NoSelf(inflictor, attacker, epicenter, radius, damage)
-    for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
-        if ent and ent:IsValid() and ent != attacker then
-            local nearest = ent:NearestPoint(epicenter)
-            if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
-                ent:TakeSpecialDamage(((radius - nearest:Distance(epicenter)) / radius) * damage, DMG_BLAST, attacker, inflictor, nearest)
-            end
-        end
-    end
-end
-
-
-function SWEP:OnMeleeHit(hitent, hitflesh, tr)
-    local effectdata = EffectData()
-        effectdata:SetOrigin(tr.HitPos)
-        effectdata:SetNormal(tr.HitNormal)
-    if IsFirstTimePredicted() then
-        util.Effect("skyhammer3", effectdata) 
-    end
+
+
+
+
+local function BlastDamage2NoSelf(inflictor, attacker, epicenter, radius, damage)
+
+    for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
+
+        if ent and ent:IsValid() and ent ~= attacker then
+
+            local nearest = ent:NearestPoint(epicenter)
+
+            if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
+
+                ent:TakeSpecialDamage(((radius - nearest:Distance(epicenter)) / radius) * damage, DMG_BLAST, attacker, inflictor, nearest)
+
+            end
+
+        end
+
+    end
+
+end
+
+
+
+
+
+function SWEP:OnMeleeHit(hitent, hitflesh, tr)
+
+    local effectdata = EffectData()
+
+        effectdata:SetOrigin(tr.HitPos)
+
+        effectdata:SetNormal(tr.HitNormal)
+
+    if IsFirstTimePredicted() then
+
+        util.Effect("skyhammer3", effectdata) 
+
+    end
+
     BlastDamage2NoSelf(self, self.Owner, tr.HitPos, 650, 800)
 	self.Owner:SetGroundEntity(NULL)
-    self.Owner:SetVelocity(-420 * 1 * self.Owner:GetAimVector())
+    self.Owner:SetVelocity(-420 * 1 * self.Owner:GetAimVector())
+
 end

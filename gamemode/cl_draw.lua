@@ -43,7 +43,7 @@ function draw.SimpleTextBlurry(text, font, x, y, col, xalign, yalign)
 		colBlur.b = col.b
 		colBlur.a = col.a * math.Rand(0.35, 0.6)
 
-		draw_SimpleText(text, font.."Blur", x, y, colBlur, xalign, yalign)
+		draw_SimpleText(text, font .. "Blur", x, y, colBlur, xalign, yalign)
 	end
 	draw_SimpleText(text, font, x, y, col, xalign, yalign)
 end
@@ -55,7 +55,7 @@ function draw.DrawTextBlurry(text, font, x, y, col, xalign)
 		colBlur.b = col.b
 		colBlur.a = col.a * math.Rand(0.35, 0.6)
 
-		draw_DrawText(text, font.."Blur", x, y, colBlur, xalign)
+		draw_DrawText(text, font .. "Blur", x, y, colBlur, xalign)
 	end
 	draw_DrawText(text, font, x, y, col, xalign)
 end

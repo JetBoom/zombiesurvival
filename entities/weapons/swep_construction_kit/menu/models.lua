@@ -2,7 +2,7 @@
 local function GetVModelsText()
 
 	local wep = GetSCKSWEP( LocalPlayer() )
-	if (!IsValid(wep)) then return "" end
+	if (not IsValid(wep)) then return "" end
 
 	local str = ("SWEP.VElements = {\n")
 	local i = 0
@@ -17,7 +17,7 @@ local function GetVModelsText()
 			local i = 0
 			for k, v in pairs( v.bodygroup ) do
 				if (v <= 0) then continue end
-				if ( i != 0 ) then str = str..", " end
+				if ( i ~= 0 ) then str = str..", " end
 				i = 1
 				str = str.."["..k.."] = "..v
 			end
@@ -46,7 +46,7 @@ end
 local function GetWModelsText()
 
 	local wep = GetSCKSWEP( LocalPlayer() )
-	if (!IsValid(wep)) then return "" end
+	if (not IsValid(wep)) then return "" end
 
 	local str = ("SWEP.WElements = {\n")
 	local i = 0
@@ -61,7 +61,7 @@ local function GetWModelsText()
 			local i = 0
 			for k, v in pairs( v.bodygroup ) do
 				if (v <= 0) then continue end
-				if ( i != 0 ) then str = str..", " end
+				if ( i ~= 0 ) then str = str..", " end
 				i = 1
 				str = str.."["..k.."] = "..v
 			end
@@ -770,7 +770,7 @@ local function CreateBoneModifier( data, panel, ent )
 
 	local delay = 0
 	-- we have to call it later when loading settings because the viewmodel needs to be changed first
-	if (data.bone != "") then delay = 2 end
+	if (data.bone ~= "") then delay = 2 end
 
 	timer.Simple(delay, function()
 		local option = PopulateBoneList( bonebox, ent )
@@ -899,7 +899,7 @@ Color modulation
 local function CreateModelPanel( name, preset_data )
 
 	local data = wep.v_models[name]
-	if (!preset_data) then preset_data = {} end
+	if (not preset_data) then preset_data = {} end
 
 	-- default data
 	data.type = preset_data.type or "Model"
@@ -955,7 +955,7 @@ Color
 local function CreateSpritePanel( name, preset_data )
 
 	local data = wep.v_models[name]
-	if (!preset_data) then preset_data = {} end
+	if (not preset_data) then preset_data = {} end
 
 	-- default data
 	data.type = preset_data.type or "Sprite"
@@ -1008,7 +1008,7 @@ Size
 local function CreateQuadPanel( name, preset_data )
 
 	local data = wep.v_models[name]
-	if (!preset_data) then preset_data = {} end
+	if (not preset_data) then preset_data = {} end
 
 	-- default data
 	data.type = preset_data.type or "Quad"
@@ -1048,10 +1048,10 @@ mnbtn.DoClick = function()
 	local new = string.Trim( mntext:GetValue() )
 	if (new) then
 		if (new == "") then CreateNote("Empty name field!") return end
-		if (wep.v_models[new] != nil) then CreateNote("Name already exists!") return end
+		if (wep.v_models[new] ~= nil) then CreateNote("Name already exists!") return end
 		wep.v_models[new] = {}
 
-		if (!wep.v_panelCache[new]) then
+		if (not wep.v_panelCache[new]) then
 			if (boxselected == "Model") then
 				wep.v_panelCache[new] = CreateModelPanel( new )
 			elseif (boxselected == "Sprite") then
@@ -1294,7 +1294,7 @@ Color modulation
 local function CreateWorldModelPanel( name, preset_data )
 
 	local data = wep.w_models[name]
-	if (!preset_data) then preset_data = {} end
+	if (not preset_data) then preset_data = {} end
 
 	-- default data
 	data.type = preset_data.type or "Model"
@@ -1349,7 +1349,7 @@ Color
 local function CreateWorldSpritePanel( name, preset_data )
 
 	local data = wep.w_models[name]
-	if (!preset_data) then preset_data = {} end
+	if (not preset_data) then preset_data = {} end
 
 	-- default data
 	data.type = preset_data.type or "Sprite"
@@ -1402,7 +1402,7 @@ Size
 local function CreateWorldQuadPanel( name, preset_data )
 
 	local data = wep.w_models[name]
-	if (!preset_data) then preset_data = {} end
+	if (not preset_data) then preset_data = {} end
 
 	-- default data
 	data.type = preset_data.type or "Quad"
@@ -1442,10 +1442,10 @@ mnwbtn.DoClick = function()
 	local new = string.Trim( mnwtext:GetValue() )
 	if (new) then
 		if (new == "") then CreateWNote("Empty name field!") return end
-		if (wep.w_models[new] != nil) then CreateWNote("Name already exists!") return end
+		if (wep.w_models[new] ~= nil) then CreateWNote("Name already exists!") return end
 		wep.w_models[new] = {}
 
-		if (!wep.w_panelCache[new]) then
+		if (not wep.w_panelCache[new]) then
 			if (wboxselected == "Model") then
 				wep.w_panelCache[new] = CreateWorldModelPanel( new )
 			elseif (wboxselected == "Sprite") then
@@ -1470,7 +1470,7 @@ for k, v in pairs( wep.save_data.w_models ) do
 	wep.w_models[k] = {}
 
 	-- backwards compatability
-	if (!v.bone or v.bone == "") then
+	if (not v.bone or v.bone == "") then
 		v.bone = "ValveBiped.Bip01_R_Hand"
 	end
 
@@ -1495,7 +1495,7 @@ importbtn.DoClick = function()
 	for k, v in pairs( wep.v_models ) do
 		local name = k
 		local i = 1
-		while(wep.w_models[name] != nil) do
+		while(wep.w_models[name] ~= nil) do
 			name = k..""..i
 			i = i + 1
 
@@ -1506,7 +1506,7 @@ importbtn.DoClick = function()
 		local new_preset = table.Copy(v)
 		new_preset.bone = "ValveBiped.Bip01_R_Hand" -- switch to hand bone by default
 
-		--if (new_preset.rel and new_preset.rel != "") then
+		--if (new_preset.rel and new_preset.rel ~= "") then
 			new_preset.pos = Vector(v.pos.x, v.pos.y, v.pos.z)
 			if (v.angle) then
 				new_preset.angle = Angle(v.angle.p, v.angle.y, v.angle.r)

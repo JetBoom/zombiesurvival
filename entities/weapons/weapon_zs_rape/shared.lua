@@ -41,8 +41,7 @@ local sounds2 = {
 
 
 
-/*---------------------------------------------------------
----------------------------------------------------------*/
+
 function SWEP:Initialize()
 	--self:SetWeaponHoldType( self.HoldType )
 end
@@ -51,29 +50,23 @@ function SWEP:DrawWorldModel()
 end
 
 
-/*---------------------------------------------------------
-	Reload does nothing
----------------------------------------------------------*/
+
 function SWEP:Reload()
 end
 
 
-/*---------------------------------------------------------
-   Think
----------------------------------------------------------*/
+
 function SWEP:Think()
 end
 
-/*---------------------------------------------------------
-	PrimaryAttack
----------------------------------------------------------*/
+
 function SWEP:PrimaryAttack()
 
 	local tr = self.Owner:GetEyeTrace().Entity
 	if not tr:IsValid() then return end
 	if tr:IsNPC() or tr:IsPlayer() or ( tr:GetClass() == 'prop_ragdoll' ) then else return end
 	
-	--if ( !self:CanPrimaryAttack() ) then return end this is stupid base shit
+	--if ( not self:CanPrimaryAttack() ) then return end this is stupid base shit
 	if tr:GetPos():Distance( self.Owner:GetPos() ) > self.Primary.Distance then return end
 		
 	if SERVER then
@@ -85,8 +78,8 @@ function SWEP:PrimaryAttack()
 end
 
 SWEP.NextSecondaryAttack = 0
-/*---------------------------------------------------------
-	SecondaryAttack
+---------------------------------------------------------
+--	SecondaryAttack
 ---------------------------------------------------------*/
 function SWEP:SecondaryAttack()
 
@@ -102,27 +95,27 @@ end
 
 
 
-/*---------------------------------------------------------
-	Checks the objects before any action is taken
-	This is to make sure that the entities haven't been removed
+---------------------------------------------------------
+--	Checks the objects before any action is taken
+--	This is to make sure that the entities haven't been removed
 ---------------------------------------------------------
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	
 	draw.SimpleText( self.IconLetter, "CSSelectIcons", x + wide/2, y + tall*0.2, Color( 255, 210, 0, 255 ), TEXT_ALIGN_CENTER )
 	
-	// try to fool them into thinking they're playing a Tony Hawks game
+	--// try to fool them into thinking they're playing a Tony Hawks game
 	draw.SimpleText( self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-14, 14), Color( 255, 210, 0, math.Rand(10, 120) ), TEXT_ALIGN_CENTER )
 	draw.SimpleText( self.IconLetter, "CSSelectIcons", x + wide/2 + math.Rand(-4, 4), y + tall*0.2+ math.Rand(-9, 9), Color( 255, 210, 0, math.Rand(10, 120) ), TEXT_ALIGN_CENTER )
 	
-end*/
+end
 
 
-/*---------------------------------------------------------
-	DrawHUD
+---------------------------------------------------------
+--	DrawHUD
 	
-	Just a rough mock up showing how to draw your own crosshair.
+--	Just a rough mock up showing how to draw your own crosshair.
 	
----------------------------------------------------------*/
+---------------------------------------------------------
 function SWEP:DrawHUD()
 
 

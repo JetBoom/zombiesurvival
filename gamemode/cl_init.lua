@@ -864,7 +864,7 @@ local OSTintro = 0
 				OSTintro = 1 -- So it doesn't repeat the track again.
 				end
 			end
-			draw_SimpleTextBlurry(translate.Get("waiting_for_players").." "..util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("waiting_for_players") .. " " .. util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			if desiredzombies > 0 then
 				draw_SimpleTextBlurry(translate.Get(self:HasSigils() and "humans_furthest_from_sigils_are_zombies" or "humans_closest_to_spawns_are_zombies"), "ZSHUDFontSmall", w * 0.5, h * 0.25 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
@@ -895,7 +895,7 @@ local OSTintro = 0
 			surface_SetDrawColor(30, 30, 230, 180)
 			surface_DrawOutlinedRect(w * 0.4, h * 0.35, w * 0.2, 12)
 			surface_DrawRect(w * 0.4, h * 0.35, w * 0.2 * (1 - drown:GetDrown()), 12)
-			draw_SimpleTextBlurry(translate.Get("breath").." ", "ZSHUDFontSmall", w * 0.4, h * 0.35 + 6, COLOR_LBLUE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("breath") .. " ", "ZSHUDFontSmall", w * 0.4, h * 0.35 + 6, COLOR_LBLUE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
 	end
 
@@ -1501,7 +1501,7 @@ function GM:CreateSpriteMaterials()
 	local params = {["$translucent"] = "1", ["$vertexcolor"] = "1", ["$vertexalpha"] = "1"}
 	for i=1, 8 do
 		params["$basetexture"] = "Decals/blood"..i
-		CreateMaterial("sprite_bloodspray"..i, "UnlitGeneric", params)
+		CreateMaterial("sprite_bloodspray" .. i, "UnlitGeneric", params)
 	end
 end
 
@@ -2228,7 +2228,7 @@ function GM:Rewarded(class, amount)
 			self:CenterNotify({killicon = class}, " ", COLOR_PURPLE, toptext..": ", color_white, wep.PrintName)
 		end
 	elseif amount then
-		self:CenterNotify(COLOR_PURPLE, toptext..": ", color_white, amount.." "..class)
+		self:CenterNotify(COLOR_PURPLE, toptext..": ", color_white, amount .. " " .. class)
 	else
 		self:CenterNotify(COLOR_PURPLE, toptext)
 	end

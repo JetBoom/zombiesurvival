@@ -53,13 +53,13 @@ function ENT:AcceptInput(name, caller, activator, args)
 
 		return true
 	elseif name == "setundeadhudmessage" or name == "setzombiehudmessage" then
-		SetGlobalString("hudoverride"..TEAM_UNDEAD, args)
+		SetGlobalString("hudoverride" .. TEAM_UNDEAD, args)
 	elseif name == "sethumanhudmessage" or name == "setsurvivorhudmessage" then
-		SetGlobalString("hudoverride"..TEAM_HUMAN, args)
+		SetGlobalString("hudoverride" .. TEAM_HUMAN, args)
 	elseif name == "clearundeadhudmessage" or name == "clearzombiehudmessage" then
-		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
+		SetGlobalString("hudoverride" .. TEAM_UNDEAD, "")
 	elseif name == "clearhumanhudmessage" or name == "clearsurvivorhudmessage" then
-		SetGlobalString("hudoverride"..TEAM_HUMAN, "")
+		SetGlobalString("hudoverride" .. TEAM_HUMAN, "")
 	elseif name == "setdisplaytime" then
 		self.DisplayTime = tonumber(args)
 	elseif name == "settextcolor" or name == "settextcolour" then

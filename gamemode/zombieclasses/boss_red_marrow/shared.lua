@@ -113,8 +113,8 @@ function CLASS:ProcessDamage(pl, dmginfo)
 	local newhp = hp - dmg
 	local nulldmg = dmgthreshold - newhp
 
-	if newhp <= dmgthreshold and pl["bloodth"..numthreshold] then
-		pl["bloodth"..numthreshold] = false
+	if newhp <= dmgthreshold and pl["bloodth" .. numthreshold] then
+		pl["bloodth" .. numthreshold] = false
 		dmginfo:SetDamage(dmg - nulldmg)
 		pl:GiveStatus("redmarrow", 3)
 

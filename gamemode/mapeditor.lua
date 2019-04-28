@@ -1,5 +1,5 @@
 GM.MapEditorPrefix = "zs"
-file.CreateDir(GM.MapEditorPrefix.."maps")
+file.CreateDir(GM.MapEditorPrefix .. "maps")
 
 concommand.Add("mapeditor_add", function(sender, command, arguments)
 	if not sender:IsSuperAdmin() then return end
@@ -53,7 +53,7 @@ local function ME_Pickup(pl, ent, uid)
 		ent:SetPos(util.TraceLine({start=pl:GetShootPos(),endpos=pl:GetShootPos() + pl:GetAimVector() * 3000, filter={pl, ent}}).HitPos)
 		return
 	end
-	timer.Remove(uid.."mapeditorpickup")
+	timer.Remove(uid .. "mapeditorpickup")
 	GAMEMODE:SaveMapEditorFile()
 end
 
@@ -64,7 +64,7 @@ concommand.Add("mapeditor_pickup", function(sender, command, arguments)
 	if tr.Entity and tr.Entity:IsValid() then
 		for i, ent in ipairs(GAMEMODE.MapEditorEntities) do
 			if ent == tr.Entity then
-				timer.Create(sender:UniqueID().."mapeditorpickup", 0.25, 0, function() ME_Pickup(sender, ent, sender:UniqueID()) end)
+				timer.Create(sender:UniqueID() .. "mapeditorpickup", 0.25, 0, function() ME_Pickup(sender, ent, sender:UniqueID()) end)
 			end
 		end
 	end
@@ -175,7 +175,7 @@ end)
 concommand.Add("mapeditor_drop", function(sender, command, arguments)
 	if not sender:IsSuperAdmin() then return end
 
-	timer.Remove(sender:UniqueID().."mapeditorpickup")
+	timer.Remove(sender:UniqueID() .. "mapeditorpickup")
 	GAMEMODE:SaveMapEditorFile()
 end)
 
@@ -216,7 +216,7 @@ function GM:LoadMapEditorFile()
 				if ent:IsValid() then
 					ent:SetPos(Vector(tonumber(expstuff[2]), tonumber(expstuff[3]), tonumber(expstuff[4])))
 					for i=5, #expstuff do
-						local kv = string.Explode("§", expstuff[i])
+						local kv = string.Explode("ï¿½", expstuff[i])
 						ent:SetKeyValue(kv[1], kv[2])
 					end
 					ent:Spawn()

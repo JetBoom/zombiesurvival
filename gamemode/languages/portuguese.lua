@@ -307,7 +307,7 @@ LANGUAGE.help_cont_being_a_zombie					 = [[<p>Dicas para esta seção:
 <li>O Headcrab Venenoso pode por os Humanos confusos se atingirem na cabeça.</li>
 <li>Vá para humanos com pouca vida! Os zombies também são atraídos, então tente ser o primeiro a matar a vitíma!</li>
 <li>O Medidor de Horda no fundo do ecrã indica a quantidade de dano que podes resistir, mais zombies, mais resistencia!</li>
-<li>Se não tens zombies suficientes para acabar com uma barricada, tenta caçar..hehe.."coleguas de equipa" em outro sítio.</li>
+<li>Se não tens zombies suficientes para acabar com uma barricada, tenta caçar..hehe .. "coleguas de equipa" em outro sítio.</li>
 <li>Se uma área está muito escura, pressione o botão de LATERNA para VISÃO NOCTURNA.</li>
 </ul></p>
 ]]

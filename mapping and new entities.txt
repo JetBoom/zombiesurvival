@@ -197,7 +197,7 @@ Keyvalues:
 	infliction: Defines infliction to watch for (float between 0.0 - 1.0).
 Outputs:
 	OnInflictionReached: Called when the above value is reached.
-	OnLastHuman: Called when there is one person alive. !caller and !activator are both the last human's entity.
+	OnLastHuman: Called when there is one person alive. !caller and not activator are both the last human's entity.
 
 point_zsmessage
 Keyvalues:

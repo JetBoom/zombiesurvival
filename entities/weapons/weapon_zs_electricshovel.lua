@@ -59,7 +59,7 @@ end
 
 local function BlastDamage2NoSelf(inflictor, attacker, epicenter, radius, damage)
     for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
-        if ent and ent:IsValid() and ent != attacker then
+        if ent and ent:IsValid() and ent ~= attacker then
             local nearest = ent:NearestPoint(epicenter)
             if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
                 ent:TakeSpecialDamage(((radius - nearest:Distance(epicenter)) / radius) * damage, DMG_BLAST, attacker, inflictor, nearest)

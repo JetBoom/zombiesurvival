@@ -772,7 +772,7 @@
 
 	// Outputs
 	output OnInflictionReached(void) : "Called when the specified infliction level has been reached."
-	output OnLastHuman(void)         : "Called when there is one person alive. !caller and !activator are both the last human's entity."
+	output OnLastHuman(void)         : "Called when there is one person alive. !caller and not activator are both the last human's entity."
 ]
 
 @PointClass base(Targetname) = logic_waves : "ZS: Watches for the start of the specified wave."

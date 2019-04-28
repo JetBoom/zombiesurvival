@@ -32,7 +32,7 @@ function ENT:Draw()
 	
 	if owner == LocalPlayer() then return end
 	
-	if !MySelf:RadiusCheck(owner, GAMEMODE.TransparencyRadius) then 
+	if not MySelf:RadiusCheck(owner, GAMEMODE.TransparencyRadius) then 
 		self:DrawModel()
 	end
 end

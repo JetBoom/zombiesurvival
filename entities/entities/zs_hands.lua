@@ -52,7 +52,7 @@ function ENT:ViewModelChanged( vm, old, new )
 	if not IsValid(self) then return end
 
 	-- Ignore other peoples viewmodel changes!
-	if ( vm:GetOwner() != self:GetOwner() ) then return end
+	if ( vm:GetOwner() ~= self:GetOwner() ) then return end
 
 	self:AttachToViewmodel( vm )
 

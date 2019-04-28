@@ -44,10 +44,10 @@ function EFFECT:Render()
 		local amount = self.Amount
 		local flooramount = math_floor(amount)
 		if amount == flooramount then
-			draw_SimpleText(amount.." HP", "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_CENTER)
+			draw_SimpleText(amount .. " HP", "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_CENTER)
 		else
 			draw_SimpleText(flooramount, "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_RIGHT)
-			draw_SimpleText(tostring(amount - flooramount):sub(2).." HP", "ZS3D2DFont2", 2, 8, col, TEXT_ALIGN_LEFT)
+			draw_SimpleText(tostring(amount - flooramount):sub(2) .. " HP", "ZS3D2DFont2", 2, 8, col, TEXT_ALIGN_LEFT)
 		end
 	cam_End3D2D()
 	cam_IgnoreZ(false)

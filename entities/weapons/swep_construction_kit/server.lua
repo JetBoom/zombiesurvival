@@ -1,7 +1,7 @@
 local function CanPickup( pl, wep )
 
 	if (wep:GetClass() == sck_class) then
-		return pl:KeyDown(IN_RELOAD) or !wep.Dropped
+		return pl:KeyDown(IN_RELOAD) or not wep.Dropped
 	end
 
 end
@@ -81,10 +81,10 @@ concommand.Add("swepck_viewmodelfov", Cmd_ViewModelFOV)
 local function Cmd_ViewModel( pl, cmd, args )
 
 	local wep = GetSCKSWEP( pl )
-	if (!IsValid(wep)) then return end
+	if (not IsValid(wep)) then return end
 	local newmod = args[1] or wep.ViewModel
 	newmod = newmod..".mdl"
-	if !file.Exists(newmod, "GAME") then return end
+	if not file.Exists(newmod, "GAME") then return end
 
 	--util.PrecacheModel(newmod)
 	wep.ViewModel = newmod
@@ -95,7 +95,7 @@ local function Cmd_ViewModel( pl, cmd, args )
 
 	local quickswitch = nil
 	for k, v in pairs( pl:GetWeapons() ) do
-		if (v:GetClass() != wep:GetClass()) then
+		if (v:GetClass() ~= wep:GetClass()) then
 			quickswitch = v:GetClass()
 			break
 		end
@@ -116,10 +116,10 @@ concommand.Add("swepck_viewmodel", Cmd_ViewModel)
 local function Cmd_WorldModel( pl, cmd, args )
 
 	local wep = GetSCKSWEP( pl )
-	if (!IsValid(wep)) then return end
+	if (not IsValid(wep)) then return end
 	local newmod = args[1] or wep.CurWorldModel
 	newmod = newmod..".mdl"
-	if !file.Exists(newmod, "GAME") then return end
+	if not file.Exists(newmod, "GAME") then return end
 
 	util.PrecacheModel(newmod)
 	wep.CurWorldModel = newmod

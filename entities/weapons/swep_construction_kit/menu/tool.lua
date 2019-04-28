@@ -37,8 +37,8 @@ local panim = SimplePanel(ptool)
 				abtn.DoClick = function()
 					RunConsoleCommand("swepck_playanimation", anim[2])
 					wep:ResetSequenceInfo()
-					if (anim[2] != nil) then wep:SendWeaponAnim(anim[2]) end
-					if (anim[3] != nil) then LocalPlayer():SetAnimation(anim[3]) end
+					if (anim[2] ~= nil) then wep:SendWeaponAnim(anim[2]) end
+					if (anim[3] ~= nil) then LocalPlayer():SetAnimation(anim[3]) end
 				end
 			agrid:AddItem(abtn)
 
@@ -92,7 +92,7 @@ local psettings = SimplePanel(ptool)
 			sabtn:SetText( "Save as:" )
 			sabtn.DoClick = function()
 
-				if !IsValid(wep) then return end
+				if not IsValid(wep) then return end
 
 				local text = string.Trim(satext:GetValue())
 				if (text == "") then return end
@@ -125,7 +125,7 @@ local psettings = SimplePanel(ptool)
 				local filename = "swep_construction_kit/"..text..".txt"
 
 				local succ, val = pcall(glon.encode, save_data)
-				if (!succ || !val) then LocalPlayer():ChatPrint("Failed to encode settings!") return end
+				if (not succ or not val) then LocalPlayer():ChatPrint("Failed to encode settings!") return end
 
 				file.Write(filename, val)
 				LocalPlayer():ChatPrint("Saved file \""..text.."\"!")
@@ -155,14 +155,14 @@ local psettings = SimplePanel(ptool)
 
 				local filename = "swep_construction_kit/"..text..".txt"
 
-				if (!file.Exists(filename, "DATA")) then
+				if (not file.Exists(filename, "DATA")) then
 					CreateSettingsNote( "No such file exists!" )
 					return
 				end
 
 				local glondata = file.Read(filename)
 				local succ, new_preset = pcall(glon.decode, glondata)
-				if (!succ || !new_preset) then LocalPlayer():ChatPrint("Failed to load settings!") return end
+				if (not succ or not new_preset) then LocalPlayer():ChatPrint("Failed to load settings!") return end
 
 				new_preset._savename = text
 
