@@ -265,7 +265,7 @@ end
 
 
 hook.Add( "PlayerSay", "Reset_Skill_Web", function( ply, text )
-	local command = '!resetskill'
+	local command = '!resetskills'
 	print('testttt')
 	if string.match(string.lower(text), command)  then
 		print('testttt 1')
