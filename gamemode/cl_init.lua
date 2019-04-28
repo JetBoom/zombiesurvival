@@ -1932,9 +1932,12 @@ function GM:_PrePlayerDraw(pl)
 			end
 			render_SetBlend(blend)
 			if myteam == TEAM_HUMAN and blend < 0.5 then
+				pac.IgnoreEntity(pl)
 				render_ModelMaterialOverride(matWhite)
 				render_SetColorModulation(0.2, 0.2, 0.2)
 				shadowman = true
+			else
+				pac.UnIgnoreEntity(pl)
 			end
 			undo = true
 		end
