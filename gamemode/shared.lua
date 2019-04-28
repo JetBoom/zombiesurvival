@@ -6,6 +6,7 @@ GM.Website	=	"http://www.noxiousnet.com"
 -- No, adding a gun doesn't make your name worth being here.
 GM.Credits = {
 	{"William \"JetBoom\" Moodhe", "williammoodhe@gmail.com (www.noxiousnet.com)", "Creator / Programmer"},
+	{"LindaBigTits", "", "Programmer / Main Dev of FZS"},
 	{"11k", "tjd113@gmail.com", "Zombie view models"},
 	{"Eisiger", "k2deseve@gmail.com", "Zombie kill icons"},
 	{"Austin \"Little Nemo\" Killey", "austin_odyssey@yahoo.com", "Ambient music"},

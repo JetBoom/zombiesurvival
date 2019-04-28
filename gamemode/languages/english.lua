@@ -251,6 +251,11 @@ LANGUAGE.message_beacon_24							= "Zombies are coming. Build a barricade!"
 LANGUAGE.message_beacon_25							= "Plan B here"
 LANGUAGE.message_beacon_26							= "furrys go here!!"
 
+-- Weapons
+LANGUAGE.worth_wrench                               = "Mechanic's Wrench"
+LANGUAGE.worth_medgun                               = "Medic Gun"
+LANGUAGE.ars_crossbow                               = "'Impaler' Crossbow"
+
 -- Class names
 LANGUAGE.class_zombie								= "Zombie"
 LANGUAGE.class_zombie_gore_blaster					= "Gore Blaster Zombie"
