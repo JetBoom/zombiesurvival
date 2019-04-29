@@ -37,7 +37,7 @@ function SWEP:Reload()
 
 	owner:DoAnimationEvent(ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE)
 
-	owner:EmitSound("weapons/melee/crowbar/crowbar_hit-" .. math.random(4) .. ".ogg")
+	owner:EmitSound("weapons/melee/crowbar/crowbar_hit-"..math.random(4)..".ogg")
 
 	ent:GetParent():RemoveNail(ent, nil, self:GetOwner())
 	ent:GetParent():SetPhysicsAttacker(self:GetOwner())

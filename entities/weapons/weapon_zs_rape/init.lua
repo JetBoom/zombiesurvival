@@ -143,16 +143,16 @@ local InProgress = false
 
 concommand.Add( SWEP.PRIMARYPW, function( ply, cmd, args )
 
-	if not ply or not ply:IsValid() then return end
+	if !ply or !ply:IsValid() then return end
 
 	if not ply:HasWeapon( "weapon_zs_rape" ) then return end
 	InProgress = true
 
 	local plyAttacker = ply
 	local plyAttackerPos = plyAttacker:GetPos()
-
+	
 	local plyVictim = plyAttacker:GetEyeTrace().Entity
-	if not plyVictim or plyVictim == nil or not plyVictim:IsValid() then return end
+	if !plyVictim or plyVictim == nil or !plyVictim:IsValid() then return end
 	local plyVictimHealth = plyVictim:Health()
 	local plyVictimPos = plyVictim:GetPos()
 	local VictimType = 1
@@ -227,7 +227,7 @@ concommand.Add( SWEP.PRIMARYPW, function( ply, cmd, args )
 		
 	end
 	
-	local thrustTimerString = "RapeThrust" .. math.random(1337)
+	local thrustTimerString = "RapeThrust"..math.random(1337)
 	local phys = ragAttacker:GetPhysicsObjectNum( 11 )
 	if phys and phys:IsValid() then
 		phys:SetVelocity( Vector( 0, 0, 100000 ) )
@@ -240,7 +240,7 @@ concommand.Add( SWEP.PRIMARYPW, function( ply, cmd, args )
 	end
 	
 	
-	local soundTimerString = "EmitRapeSounds" .. math.random(1337)
+	local soundTimerString = "EmitRapeSounds"..math.random(1337)
 	timer.Create( soundTimerString, SoundDelay, 0, function()
 		ragVictim:EmitSound( sounds[math.random(#sounds)] )
 	end )
@@ -272,11 +272,13 @@ concommand.Add( SWEP.PRIMARYPW, function( ply, cmd, args )
 				end
 			end
 		end
-
+		
 		SafeRemoveEntity( ragAttacker )
-		if VictimType ~= 3 then SafeRemoveEntity( ragVictim ) end
-		timer.Remove( soundTimerString )
-		timer.Remove( thrustTimerString )
+		if VictimType != 3 then SafeRemoveEntity( ragVictim ) end
+		
+		timer.Destroy( soundTimerString )
+		timer.Destroy( thrustTimerString )
+	
 	end )
 
 end )
@@ -288,23 +290,30 @@ hook.Add( "CanPlayerSuicide", "RAPESWEP.CanPlayerSuicide", function( ply )
 end )
 
 
+/*--jesus code
+
+--print( player.GetByID(1):GetEyeTrace().PhysicsBone )
+
 local Ragdolls = ents.FindByClass( "prop_ragdoll" )
 
-
+--for k,v in pairs(Ragdolls) do
 local v = Ragdolls[1]
 
 	print(v:GetModel())
 	local basepos = Vector( -662, 432.5, -11135.5 )
+		
 	for i = 1, v:GetPhysicsObjectCount() do
 		local phys = v:GetPhysicsObjectNum(i)
 		if phys and phys:IsValid() then
+			
 			local pos = phys:GetPos()
 			pos:Sub( basepos )
 			local ang = phys:GetAngles()
-			-- print("Vector( "..pos.x..", "..pos.y..", "..pos.z.." )," )
-			-- timer.Simple(0.2, function() print("Angle( "..ang.p..", "..ang.y..", "..ang.r.." )," ) end )
+			
+			print("Vector( "..pos.x..", "..pos.y..", "..pos.z.." )," )
+			timer.Simple(0.2, function() print("Angle( "..ang.p..", "..ang.y..", "..ang.r.." )," ) end )
 		end
 	end
 
 --end
-
+*/

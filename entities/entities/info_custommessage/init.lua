@@ -20,7 +20,7 @@ function ENT:DisplayStrings()
 	for k,v in pairs(ents.FindByName(self.DisplayTarget)) do
 		local EntityClass = v:GetClass()
 		if EntityClass == "game_text" then
-			v:Input("AddOutput", self, self, "message " .. FullString)
+			v:Input("AddOutput", self, self, "message "..FullString)
 			v:Input("Display", self, self, FullString)
 		elseif EntityClass == "point_zsmessage" then
 			if self.ZSMessageMode == "1" then

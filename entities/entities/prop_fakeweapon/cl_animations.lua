@@ -14,7 +14,7 @@ function ENT:RenderModels(ble, cmod)
 
 	for k, name in pairs( self.wRenderOrder ) do
 		local v = self.WElements[name]
-		if (not v) then self.wRenderOrder = nil break end
+		if (!v) then self.wRenderOrder = nil break end
 		if (v.hide) then continue end
 
 		local pos, ang
@@ -25,7 +25,7 @@ function ENT:RenderModels(ble, cmod)
 			pos, ang = self:GetBoneOrientation( self.WElements, v, "ValveBiped.Bip01_R_Hand" )
 		end
 
-		if (not pos) then continue end
+		if (!pos) then continue end
 
 		local model = v.modelEnt
 		local sprite = v.spriteMaterial
@@ -45,17 +45,17 @@ function ENT:RenderModels(ble, cmod)
 
 			if (v.material == "") then
 				model:SetMaterial("")
-			elseif (model:GetMaterial() ~= v.material) then
+			elseif (model:GetMaterial() != v.material) then
 				model:SetMaterial( v.material )
 			end
 
-			if (v.skin and v.skin ~= model:GetSkin()) then
+			if (v.skin and v.skin != model:GetSkin()) then
 				model:SetSkin(v.skin)
 			end
 
 			if (v.bodygroup) then
 				for k, v in ipairs( v.bodygroup ) do
-					if (model:GetBodygroup(k) ~= v) then
+					if (model:GetBodygroup(k) != v) then
 						model:SetBodygroup(k, v)
 					end
 				end
@@ -101,17 +101,17 @@ end
 
 function ENT:GetBoneOrientation( basetab, tab, bone_override )
 	local bone, pos, ang
-	if (tab.rel and tab.rel ~= "") then
+	if (tab.rel and tab.rel != "") then
 
 		local v = basetab[tab.rel]
 
-		if (not v) then return end
+		if (!v) then return end
 
 		-- Technically, if there exists an element with the same name as a bone
 		-- you can get in an infinite loop. Let's just hope nobody's that stupid.
 		pos, ang = self:GetBoneOrientation( basetab, v )
 
-		if (not pos) then return end
+		if (!pos) then return end
 
 		pos = pos + ang:Forward() * v.pos.x + ang:Right() * v.pos.y + ang:Up() * v.pos.z
 		ang:RotateAroundAxis(ang:Up(), v.angle.y)
@@ -122,7 +122,7 @@ function ENT:GetBoneOrientation( basetab, tab, bone_override )
 
 		bone = self:LookupBone(bone_override or tab.bone)
 
-		if (not bone) then return end
+		if (!bone) then return end
 
 		pos, ang = Vector(0,0,0), Angle(0,0,0)
 		local m = self:GetBoneMatrix(bone)
@@ -135,10 +135,10 @@ function ENT:GetBoneOrientation( basetab, tab, bone_override )
 end
 
 function ENT:CreateModels( tab )
-	if (not tab) then return end
+	if (!tab) then return end
 
 	for k, v in pairs( tab ) do
-		if (v.type == "Model" and v.model and v.model ~= "" and (not IsValid(v.modelEnt) or v.createdModel ~= v.model) and
+		if (v.type == "Model" and v.model and v.model != "" and (!IsValid(v.modelEnt) or v.createdModel != v.model) and
 				string.find(v.model, ".mdl") and file.Exists (v.model, "GAME") ) then
 
 			v.modelEnt = ClientsideModel(v.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
@@ -151,7 +151,7 @@ function ENT:CreateModels( tab )
 			else
 				v.modelEnt = nil
 			end
-		elseif (v.type == "Sprite" and v.sprite and v.sprite ~= "" and (not v.spriteMaterial or v.createdSprite ~= v.sprite)
+		elseif (v.type == "Sprite" and v.sprite and v.sprite != "" and (!v.spriteMaterial or v.createdSprite != v.sprite)
 			and file.Exists ("materials/"..v.sprite..".vmt", "GAME")) then
 
 			local name = v.sprite.."-"

@@ -44,7 +44,7 @@ end
 function ENT:MakeInvItemConvert(class)
 	local ent = ents.Create("prop_invitem")
 	if ent:IsValid() then
-		if not ent:SetInventoryItemType("trinket_" .. string.sub(class, 13)) then return end
+		if not ent:SetInventoryItemType("trinket_"..string.sub(class, 13)) then return end
 
 		ent:Spawn()
 		ent:SetPos(self:GetPos())

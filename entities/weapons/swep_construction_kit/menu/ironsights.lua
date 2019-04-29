@@ -18,7 +18,7 @@ local pironsight_enable = SimplePanel( pironsight )
 		icbox:SetSize( 150, 20 )
 		icbox:SetText( "Enable ironsights" )
 		icbox.OnChange = function()
-			if (wep:GetIronSights() ~= icbox:GetChecked()) then
+			if (wep:GetIronSights() != icbox:GetChecked()) then
 				RunConsoleCommand("swepck_toggleironsights")
 			end
 		end

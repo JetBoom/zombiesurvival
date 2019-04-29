@@ -75,7 +75,7 @@ encode_types = {
 		local s = ""
 		for k,v in pairs(o) do
 
-			if ( not encode_types[type(v)] ) then continue end
+			if ( !encode_types[type(v)] ) then continue end
 
 			if not is_array then
 				s = s..Write(k, rtabs)
@@ -311,7 +311,7 @@ decode_types = {
 		local t = decode_types[2](reader, rtabs)
 		local d = EffectData()
 		for k,v in pairs(t) do
-			d["Set" .. CEffectDataTranslation[k]](d, v)
+			d["Set"..CEffectDataTranslation[k]](d, v)
 		end
 		return d
 	end,
@@ -323,7 +323,7 @@ decode_types = {
 		local ent = Entity(decode_types[6](reader))
 		local bone = decode_types[6](reader)
 
-		if ( not IsValid( ent ) ) then return nil end;
+		if ( !IsValid( ent ) ) then return nil end;
 		return ent:GetPhysicsObjectNum( bone )
 	end,
 	[15 ] = function(reader) -- Color

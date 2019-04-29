@@ -31,14 +31,14 @@ end
 local debugging = false
 
 function SCKDebug( msg )
-	if not debugging then return end
+	if !debugging then return end
 	MsgN("[SCK] "..msg)
 end
 
 local repmsg = {}
 function SCKDebugRepeat( tag, msg )
-	if not debugging then return end
-	if not repmsg[tag] then repmsg[tag] = { last = 0, num = 0 } end
+	if !debugging then return end
+	if !repmsg[tag] then repmsg[tag] = { last = 0, num = 0 } end
 	repmsg[tag].num = repmsg[tag].num + 1
 	if (CurTime() - repmsg[tag].last >= 1) then
 		MsgN("[SCK][Repeated "..repmsg[tag].num.." times in last sec] "..msg)
@@ -136,7 +136,7 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:ToggleIronSights()
-	self.dt.ironsights = not self.dt.ironsights
+	self.dt.ironsights = !self.dt.ironsights
 end
 
 function SWEP:SetIronSights( b )
@@ -157,15 +157,15 @@ function SWEP:ResetIronSights()
 end
 
 function SWEP:ToggleThirdPerson()
-	self:SetThirdPerson( not self.dt.thirdperson )
+	self:SetThirdPerson( !self.dt.thirdperson )
 end
 
 function SWEP:SetThirdPerson( b )
 	self.dt.thirdperson = b
 
 	local owner = self:GetOwner()
-	if (not IsValid(owner)) then owner = self.LastOwner end
-	if (not IsValid(owner)) then return end
+	if (!IsValid(owner)) then owner = self.LastOwner end
+	if (!IsValid(owner)) then return end
 
 	if (self.dt.thirdperson) then
 		owner:SetViewEntity(game.GetWorld())
