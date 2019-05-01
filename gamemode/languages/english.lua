@@ -251,6 +251,11 @@ LANGUAGE.message_beacon_24							= "Zombies are coming. Build a barricade!"
 LANGUAGE.message_beacon_25							= "Plan B here"
 LANGUAGE.message_beacon_26							= "furrys go here!!"
 
+-- Weapons
+LANGUAGE.worth_wrench                               = "Mechanic's Wrench"
+LANGUAGE.worth_medgun                               = "Medic Gun"
+LANGUAGE.ars_crossbow                               = "'Impaler' Crossbow"
+
 -- Class names
 LANGUAGE.class_zombie								= "Zombie"
 LANGUAGE.class_zombie_gore_blaster					= "Gore Blaster Zombie"
@@ -266,6 +271,7 @@ LANGUAGE.class_fresh_dead							= "Fresh Dead"
 LANGUAGE.class_recent_dead							= "Recent Dead"
 LANGUAGE.class_agile_dead							= "Agile Dead"
 LANGUAGE.class_ghoul								= "Ghoul"
+LANGUAGE.class_night_reaver							= "Night Reaver"
 LANGUAGE.class_chilled_ghoul						= "Frigid Ghoul"
 LANGUAGE.class_elderghoul							= "Elder Ghoul"
 LANGUAGE.class_noxiousghoul							= "Noxious Ghoul"
@@ -323,6 +329,7 @@ LANGUAGE.class_ancient_wraith                       = "ancient wraith"
 -- Class descriptions
 LANGUAGE.description_zombie							= "The basic zombie is very durable and has powerful claws.\nIt's hard to keep down, especially if not shot in the head."
 LANGUAGE.description_zombie_gore_blaster			= "Gore Blaster Zombies send viscera in all direction when killed which can cause minor harm.\nTheir claws can also inflict bleeding."
+LANGUAGE.description_night_reaver			        = "Night Reaver's claws inflict heavy bleeding and darkens the victim vision. Despite missing a head Night Reaver's gigantic arms make it extremely hard to outrun and they also make it an ideal melee main destroyer."
 LANGUAGE.description_poison_zombie					= "This mutated zombie is not only extremely durable but has abnormal strength.\nIts body is extremely toxic and will even tear out and toss its own flesh at things too far away to hit."
 LANGUAGE.description_wild_poison_zombie				= "An erratic mutation of the poison zombie, making it stronger and tankier.\nIts flesh toss is much more sporadic and deadly."
 LANGUAGE.description_fast_zombie					= "This boney cadaver is much faster than other zombies.\nThey aren't much of a threat by themselves but can reach nearly any area by climbing with their razor sharp claws\nThey also have no problem hunting down weak or hurt humans."
@@ -407,6 +414,7 @@ LANGUAGE.controls_bloodsucker_headcrab				= "> PRIMARY: Lunge attack\n> ON HIT H
 LANGUAGE.controls_poison_headcrab					= "> PRIMARY: Lunge attack\n> SECONDARY: Spit poison\n> ON HIT HUMAN: Deadly poison\n> ON HIT POISON IN EYES: Blind\n> RELOAD: Scream"
 LANGUAGE.controls_barbed_headcrab					= "> PRIMARY: Lunge attack\n> SECONDARY: Spit bristle\n> ON HIT HUMAN: Strong bleed\n> RELOAD: Scream"
 LANGUAGE.controls_the_tickle_monster				= "> PRIMARY: Elastic claws\n> SECONDARY: Moan"
+LANGUAGE.controls_night_reaver      				= "> PRIMARY: Death claw\n> SECONDARY: Moan"
 LANGUAGE.controls_nightmare							= "> PRIMARY: Death touch\n> SECONDARY: Moan"
 LANGUAGE.controls_ancient_nightmare					= "> PRIMARY: Death claw\n> SECONDARY: Moan"
 LANGUAGE.controls_devourer							= "> PRIMARY: Claw\n> SECONDARY: Reel target in with projectile"
@@ -442,6 +450,7 @@ LANGUAGE.controls_extinctioncrab					= "> PRIMARY: Leap Attack\n> SECONDARY: Ext
 LANGUAGE.controls_deathtrooper					    = "> PRIMARY: laser fire"
 LANGUAGE.controls_ancient_wraith                    = "> PRIMARY: power strike\n> SECONDARY: fast strike"
 
+LANGUAGE.options_intro_music                  		= "Enable intro music"
 
 -- The help file... Quite big! I wouldn't blame you if you didn't translate this part.
 LANGUAGE.help_cat_introduction						= "Introduction"

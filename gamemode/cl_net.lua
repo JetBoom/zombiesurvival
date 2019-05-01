@@ -131,7 +131,7 @@ net.Receive("zs_wavestart", function(length)
 		end
 	end
 
-	surface_PlaySound("ambient/creatures/town_zombie_call1.wav")
+	surface_PlaySound("zombiesurvival/round_start.mp3")
 end)
 
 net.Receive("zs_classunlock", function(length)
@@ -147,6 +147,8 @@ net.Receive("zs_waveend", function(length)
 	if wave < GAMEMODE:GetNumberOfWaves() and wave > 0 then
 		GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Format("wave_x_is_over", wave))
 		GAMEMODE:CenterNotify(translate.Get("wave_x_is_over_sub"))
+
+		surface_PlaySound("zombiesurvival/round_end.mp3")
 
 		if MySelf:IsValid() and P_Team(MySelf) == TEAM_HUMAN then
 			if MySelf:GetZSSPRemaining() > 0 then

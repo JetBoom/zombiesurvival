@@ -6,6 +6,7 @@ GM.Website	=	"http://www.noxiousnet.com"
 -- No, adding a gun doesn't make your name worth being here.
 GM.Credits = {
 	{"William \"JetBoom\" Moodhe", "williammoodhe@gmail.com (www.noxiousnet.com)", "Creator / Programmer"},
+	{"LindaBigTits", "", "Programmer / Main Dev of FZS"},
 	{"11k", "tjd113@gmail.com", "Zombie view models"},
 	{"Eisiger", "k2deseve@gmail.com", "Zombie kill icons"},
 	{"Austin \"Little Nemo\" Killey", "austin_odyssey@yahoo.com", "Ambient music"},
@@ -87,30 +88,29 @@ vector_tiny = Vector(0.001, 0.001, 0.001)
 
 -- ogg/mp3 still doesn't work with SoundDuration() function
 GM.SoundDuration = {
-	["zombiesurvival/music_win.ogg"] = 33.149,
-	["zombiesurvival/music_lose.ogg"] = 45.714,
-	["zombiesurvival/lasthuman.ogg"] = 120.503,
+	["zombiesurvival/music_win.wav"] = 33.149,
+	["zombiesurvival/music_lose.wav"] = 45.714,
+	["zombiesurvival/lasthuman.wav"] = 120.503,
 
-	["zombiesurvival/beats/defaulthuman/1.ogg"] = 7.111,
-	["zombiesurvival/beats/defaulthuman/2.ogg"] = 7.111,
-	["zombiesurvival/beats/defaulthuman/3.ogg"] = 7.111,
-	["zombiesurvival/beats/defaulthuman/4.ogg"] = 7.111,
-	["zombiesurvival/beats/defaulthuman/5.ogg"] = 7.111,
-	["zombiesurvival/beats/defaulthuman/6.ogg"] = 14.222,
-	["zombiesurvival/beats/defaulthuman/7.ogg"] = 14.222,
-	["zombiesurvival/beats/defaulthuman/8.ogg"] = 7.111,
-	["zombiesurvival/beats/defaulthuman/9.ogg"] = 14.222,
+	["zombiesurvival/beats/zsrhuman/1.wav"] = 9,
+	["zombiesurvival/beats/zsrhuman/2.wav"] = 9,
+	["zombiesurvival/beats/zsrhuman/3.wav"] = 9,
+	["zombiesurvival/beats/zsrhuman/4.wav"] = 9,
+	["zombiesurvival/beats/zsrhuman/5.wav"] = 9,
+	["zombiesurvival/beats/zsrhuman/6.wav"] = 9,
+	["zombiesurvival/beats/zsrhuman/7.wav"] = 9,
+	["zombiesurvival/beats/zsrhuman/8.wav"] = 14,
+	["zombiesurvival/beats/zsrhuman/9.wav"] = 19,
 
-	["zombiesurvival/beats/defaultzombiev2/1.ogg"] = 8,
-	["zombiesurvival/beats/defaultzombiev2/2.ogg"] = 8,
-	["zombiesurvival/beats/defaultzombiev2/3.ogg"] = 8,
-	["zombiesurvival/beats/defaultzombiev2/4.ogg"] = 8,
-	["zombiesurvival/beats/defaultzombiev2/5.ogg"] = 8,
-	["zombiesurvival/beats/defaultzombiev2/6.ogg"] = 6.038,
-	["zombiesurvival/beats/defaultzombiev2/7.ogg"] = 6.038,
-	["zombiesurvival/beats/defaultzombiev2/8.ogg"] = 6.038,
-	["zombiesurvival/beats/defaultzombiev2/9.ogg"] = 6.038,
-	["zombiesurvival/beats/defaultzombiev2/10.ogg"] = 6.038
+	["zombiesurvival/beats/zsrzombie/1.wav"] = 7,
+	["zombiesurvival/beats/zsrzombie/2.wav"] = 7,
+	["zombiesurvival/beats/zsrzombie/3.wav"] = 7,
+	["zombiesurvival/beats/zsrzombie/4.wav"] = 7,
+	["zombiesurvival/beats/zsrzombie/5.wav"] = 7,
+	["zombiesurvival/beats/zsrzombie/6.wav"] = 9,
+	["zombiesurvival/beats/zsrzombie/7.wav"] = 14,
+	["zombiesurvival/beats/zsrzombie/8.wav"] = 14,
+	["zombiesurvival/beats/zsrzombie/9.wav"] = 19
 }
 
 local SERVER = SERVER

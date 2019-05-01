@@ -184,7 +184,7 @@ function meta:ApplyTrinkets(override)
 
 				if SERVER then
 					if skilltbl.PairedWeapon then
-						local pairedwep = "weapon_zs_t_"..skilltbl.Trinket
+						local pairedwep = "weapon_zs_t_" .. skilltbl.Trinket
 						if hastrinket and not self:HasWeapon(pairedwep) then
 							self:Give(pairedwep)
 						elseif not hastrinket and self:HasWeapon(pairedwep) then

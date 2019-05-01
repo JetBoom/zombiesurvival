@@ -714,8 +714,8 @@ end
 function meta:RemoveStatus(sType, bSilent, bInstant, sExclude)
 	local removed
 
-	for _, ent in pairs(ents.FindByClass("status_"..sType)) do
-		if ent:GetOwner() == self and not (sExclude and ent:GetClass() == "status_"..sExclude) then
+	for _, ent in pairs(ents.FindByClass("status_" .. sType)) do
+		if ent:GetOwner() == self and not (sExclude and ent:GetClass() == "status_" .. sExclude) then
 			if bInstant then
 				ent:Remove()
 			else
@@ -730,7 +730,7 @@ function meta:RemoveStatus(sType, bSilent, bInstant, sExclude)
 end
 
 function meta:GetStatus(sType)
-	local ent = self["status_"..sType]
+	local ent = self["status_" .. sType]
 	if ent and ent:IsValid() and ent:GetOwner() == self then return ent end
 end
 
@@ -755,7 +755,7 @@ function meta:GiveStatus(sType, fDie)
 		cur:SetPlayer(self, true)
 		return cur
 	else
-		local ent = ents.Create("status_"..sType)
+		local ent = ents.Create("status_" .. sType)
 		if ent:IsValid() then
 			ent:Spawn()
 			if fDie then
@@ -1068,7 +1068,7 @@ function meta:UpdateAllZombieClasses()
 end
 
 function meta:CreateAmbience(class)
-	class = "status_"..class
+	class = "status_" .. class
 
 	for _, ent in pairs(ents.FindByClass(class)) do
 		if ent:GetOwner() == self then return end
@@ -1490,7 +1490,7 @@ function meta:TemporaryNoCollide(force)
 		if e and e:IsValid() and e:IsPlayer() and e ~= self and GAMEMODE:ShouldCollide(self, e) then
 			self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
 
-			local timername = "TemporaryNoCollide"..self:UniqueID()
+			local timername = "TemporaryNoCollide" .. self:UniqueID()
 			timer.Create(timername, 0, 0, function() nocollidetimer(self, timername) end)
 
 			return

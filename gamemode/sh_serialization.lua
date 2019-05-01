@@ -9,7 +9,7 @@ function Deserialize(sIn)
 
 	if string.sub(sIn, 5, 5) ~= "{" then return out end
 
-	sIn = sIn.." return SRL"
+	sIn = sIn .. " return SRL"
 	local func = CompileString(sIn, "deserialize", false)
 	if type(func) == "string" then
 		print("Deserialization error: "..func)

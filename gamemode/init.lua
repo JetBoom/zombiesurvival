@@ -1641,11 +1641,11 @@ function GM:RestartGame()
     self:SetWaveActive(false)
  
     SetGlobalInt("numwaves", -2)
-    if GetGlobalString("hudoverride"..TEAM_UNDEAD, "") ~= "" then
-        SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
+    if GetGlobalString("hudoverride" .. TEAM_UNDEAD, "") ~= "" then
+        SetGlobalString("hudoverride" .. TEAM_UNDEAD, "")
     end
-    if GetGlobalString("hudoverride"..TEAM_HUMAN, "") ~= "" then
-        SetGlobalString("hudoverride"..TEAM_HUMAN, "")
+    if GetGlobalString("hudoverride" .. TEAM_HUMAN, "") ~= "" then
+        SetGlobalString("hudoverride" .. TEAM_HUMAN, "")
     end
  
     timer.Simple(0.25, function() GAMEMODE:DoRestartGame() end)
@@ -1782,7 +1782,7 @@ function GM:EndRound(winner)
     net.Broadcast()
  
     GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_ROUND,
-        winner == TEAM_HUMAN and "Wins" or ("LossWave"..self:GetWave()), game.GetMap(), 1)
+        winner == TEAM_HUMAN and "Wins" or ("LossWave" .. self:GetWave()), game.GetMap(), 1)
  
     if winner == TEAM_HUMAN then
         for _, ent in pairs(ents.FindByClass("logic_winlose")) do
@@ -2448,14 +2448,14 @@ function GM:PropBroken(ent, attacker)
         ent._PROPBROKEN = true
  
         if attacker.LogID and type(attacker.LogID) == "function" then --failsafe for local dev
-            PrintMessage(HUD_PRINTCONSOLE, attacker:LogID().." broke "..ent:GetModel())
+            PrintMessage(HUD_PRINTCONSOLE, attacker:LogID() .. " broke " .. ent:GetModel())
         end
     end
 end
  
 function GM:NestDestroyed(ent, attacker)
     if IsValid(ent) and IsValid(attacker) and type(attacker.LogID) == "function" and attacker:IsPlayer() and attacker:Team() == TEAM_UNDEAD then
-        PrintMessage(HUD_PRINTCONSOLE, attacker:LogID().." team killed a nest at "..tostring(ent:GetPos()).." (builder: "..(ent:GetOwner() and ent:GetOwner():IsValid() and ent:GetOwner():IsPlayer() and ent:GetOwner():LogID() or "unknown")..")")
+        PrintMessage(HUD_PRINTCONSOLE, attacker:LogID() .. " team killed a nest at " .. tostring(ent:GetPos()).." (builder: "..(ent:GetOwner() and ent:GetOwner():IsValid() and ent:GetOwner():IsPlayer() and ent:GetOwner():LogID() or "unknown")..")")
     end
 end
  
@@ -3096,7 +3096,7 @@ function GM:WeaponDeployed(pl, wep)
     self:DoChangeDeploySpeed(wep)
  
     -- Don't change speed instantly to stop people from shooting and then running away with a faster weapon.
-    local timername = tostring(pl).."speedchange"
+    local timername = tostring(pl) .. "speedchange"
     timer.Remove(timername)
  
     local speed = pl:ResetSpeed(true) -- Determine what speed we SHOULD get without actually setting it.
@@ -3870,6 +3870,7 @@ function GM:PlayerSpawn(pl)
             if self.StartingLoadout then
                 self:GiveStartingLoadout(pl)
             elseif pl.m_PreRedeem then
+                timer.Simple( 0.5, function() pl:EmitSound("zombiesurvival/redeem.mp3", 100, 100, 1) end )
                 if self.RedeemLoadout then
                     for _, class in pairs(self.RedeemLoadout) do
                         pl:Give(class)

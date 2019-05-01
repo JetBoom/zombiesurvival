@@ -102,7 +102,7 @@ function GM:RegisterZombieClasses()
 			if CLASS.Name then
 				self:RegisterZombieClass(CLASS.Name, CLASS)
 			else
-				ErrorNoHalt("CLASS "..filename.." has no 'Name' member!")
+				ErrorNoHalt("CLASS " .. filename.." has no 'Name' member!")
 			end
 
 			included[filename] = CLASS
@@ -125,7 +125,7 @@ function GM:RegisterZombieClasses()
 		if CLASS.Name then
 			self:RegisterZombieClass(CLASS.Name, CLASS)
 		else
-			ErrorNoHalt("CLASS "..foldername.." has no 'Name' member!")
+			ErrorNoHalt("CLASS " .. foldername.." has no 'Name' member!")
 		end
 
 		included[foldername..".lua"] = CLASS
@@ -156,7 +156,7 @@ function GM:RegisterZombieClasses()
 				v.Order = old_Order
 				v.IsDefault = old_IsDefault
 			else
-				ErrorNoHalt("CLASS "..tostring(v.Name).." uses base class "..base.." but it doesn't exist!")
+				ErrorNoHalt("CLASS " .. tostring(v.Name) .. " uses base class " .. base.." but it doesn't exist!")
 			end
 		end
 

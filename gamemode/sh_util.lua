@@ -192,7 +192,7 @@ function string.AndSeparate(list)
 	local length = #list
 	if length <= 0 then return "" end
 	if length == 1 then return list[1] end
-	if length == 2 then return list[1].." and "..list[2] end
+	if length == 2 then return list[1] .. " and " .. list[2] end
 
 	return table.concat(list, ", ", 1, length - 1)..", and "..list[length]
 end
@@ -458,14 +458,14 @@ end
 
 function AccessorFuncDT(tab, membername, type, id)
 	local emeta = FindMetaTable("Entity")
-	local setter = emeta["SetDT"..type]
-	local getter = emeta["GetDT"..type]
+	local setter = emeta["SetDT" .. type]
+	local getter = emeta["GetDT" .. type]
 
-	tab["Set"..membername] = function(me, val)
+	tab["Set" .. membername] = function(me, val)
 		setter(me, id, val)
 	end
 
-	tab["Get"..membername] = function(me)
+	tab["Get" .. membername] = function(me)
 		return getter(me, id)
 	end
 end

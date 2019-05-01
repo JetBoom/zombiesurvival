@@ -142,7 +142,7 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 	wept.Branch = branch and branch.No
 
 	if wept.PrintName then
-		wept.PrintName = (branch and branch.NewNames and branch.NewNames[i] or branch and quality[3] or quality[1]).." "..(branch and branch.PrintName or wept.PrintName)
+		wept.PrintName = (branch and branch.NewNames and branch.NewNames[i] or branch and quality[3] or quality[1]) .. " " .. (branch and branch.PrintName or wept.PrintName)
 	end
 
 	if wept.PrimaryRemantleModifier then
@@ -193,7 +193,7 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 			end
 
 			if self.DeployableInfo[wept.DeployClass] then
-				self:AddDeployableInfo(newcl, quality[1].." "..self.DeployableInfo[wept.DeployClass].Name, "")
+				self:AddDeployableInfo(newcl, quality[1] .. " " .. self.DeployableInfo[wept.DeployClass].Name, "")
 			end
 		end)
 
@@ -262,7 +262,7 @@ function GM:CreateWeaponQualities()
 end
 
 function GM:GetWeaponClassOfQuality(classname, quality, branch)
-	return classname.."_"..string.char(113 + (branch or 0))..quality
+	return classname .. "_" .. string.char(113 + (branch or 0))..quality
 end
 
 function GM:GetDismantleScrap(wtbl, invitem)

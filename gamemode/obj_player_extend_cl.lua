@@ -24,7 +24,7 @@ function meta:HasWon()
 end
 
 function meta:GetStatus(sType)
-	local ent = self["status_"..sType]
+	local ent = self["status_" .. sType]
 	if ent and ent:GetOwner() == self then return ent end
 end
 

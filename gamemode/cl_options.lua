@@ -1,5 +1,5 @@
-GM.BeatSetHumanDefault = "defaulthuman"
-GM.BeatSetZombieDefault = "defaultzombiev2"
+GM.BeatSetHumanDefault = "zsrhuman"
+GM.BeatSetZombieDefault = "zsrzombie"
 
 GM.ItemCategoryIcons = {
 	[ITEMCAT_GUNS] = "icon16/gun.png",
@@ -87,6 +87,7 @@ end)
 CreateClientConVar("zs_noredeem", "0", true, true)
 CreateClientConVar("zs_alwaysvolunteer", "0", true, true)
 CreateClientConVar("zs_nobosspick", "0", true, true)
+CreateClientConVar("zs_intro", "1", true, true)
 CreateClientConVar("zs_nousetodeposit", "0", true, true)
 CreateClientConVar("zs_nopickupprops", "0", true, true)
 

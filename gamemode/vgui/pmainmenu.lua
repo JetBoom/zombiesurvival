@@ -77,7 +77,7 @@ function MakepPlayerColor()
 	colpicker:SetPalette(false)
 	colpicker.UpdateConVars = function(me, color)
 		me.NextConVarCheck = SysTime() + 0.2
-		RunConsoleCommand("cl_playercolor", color.r / 100 .." ".. color.g / 100 .." ".. color.b / 100)
+		RunConsoleCommand("cl_playercolor", color.r / 100  .. " " ..  color.g / 100  .. " " ..  color.b / 100)
 	end
 	local r, g, b = string.match(GetConVar("cl_playercolor"):GetString(), "(%g+) (%g+) (%g+)")
 	if r then
@@ -96,7 +96,7 @@ function MakepPlayerColor()
 	colpicker:SetPalette(false)
 	colpicker.UpdateConVars = function(me, color)
 		me.NextConVarCheck = SysTime() + 0.2
-		RunConsoleCommand("cl_weaponcolor", color.r / 100 .." ".. color.g / 100 .." ".. color.b / 100)
+		RunConsoleCommand("cl_weaponcolor", color.r / 100  .. " " ..  color.g / 100  .. " " ..  color.b / 100)
 	end
 	r, g, b = string.match(GetConVar("cl_weaponcolor"):GetString(), "(%g+) (%g+) (%g+)")
 	if r then

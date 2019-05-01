@@ -111,7 +111,7 @@ function PANEL:SetNotification(...)
 			avatar:DockMargin(0, (self:GetTall() - avatar:GetTall()) / 2, 0, 0)
 
 			if v:IsValid() then
-				self:AddLabel(" "..v:Name(), team.GetColor(v:Team()), DefaultFontEntity)
+				self:AddLabel(" " .. v:Name(), team.GetColor(v:Team()), DefaultFontEntity)
 			else
 				self:AddLabel(" ?", team.GetColor(TEAM_UNASSIGNED), DefaultFontEntity)
 			end

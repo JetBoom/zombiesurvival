@@ -642,7 +642,7 @@ function meta:TemporaryBarricadeObject()
 			self.IsBarricadeObject = true
 			self:CollisionRulesChanged()
 
-			local timername = "TemporaryBarricadeObject"..self:GetCreationID()
+			local timername = "TemporaryBarricadeObject" .. self:GetCreationID()
 			timer.Create(timername, 0, 0, function() barricadetimer(self, timername) end)
 
 			return

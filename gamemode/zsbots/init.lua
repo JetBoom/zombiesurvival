@@ -331,10 +331,10 @@ function ZSBOTS:CreateBot(teamid, name)
 
 	if not name then
 		autonameindex = autonameindex + 1
-		name = "Player "..autonameindex
+		name = "Player " .. autonameindex
 	end
 
-	name = "BOT "..name
+	name = "BOT " .. name
 
 	ZSBOT = true
 

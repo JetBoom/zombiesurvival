@@ -277,7 +277,7 @@ concommand.Add("zs_upgrade", function(sender, command, arguments)
 	end
 
 	local upgname = classtbl.PrintName
-	sender:CenterNotify(COLOR_CYAN, translate.ClientGet(sender, "remantle_success"), color_white, " "..upgname)
+	sender:CenterNotify(COLOR_CYAN, translate.ClientGet(sender, "remantle_success"), color_white, " " .. upgname)
 	sender:SendLua("surface.PlaySound(\"buttons/lever"..math.random(5)..".wav\")")
 	sender:RemoveAmmo(scrapcost, "scrap")
 

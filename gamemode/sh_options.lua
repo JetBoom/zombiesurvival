@@ -89,7 +89,7 @@ function GM:AddStartingItem(signature, category, price, swep, name, desc, model,
 end
 
 function GM:AddPointShopItem(signature, category, price, swep, name, desc, model, callback)
-	local item = self:AddItem("ps_"..signature, category, price, swep, name, desc, model, callback)
+	local item = self:AddItem("ps_" .. signature, category, price, swep, name, desc, model, callback)
 	item.PointShop = true
 	return item
 end
@@ -296,6 +296,13 @@ GM:AddStartingItem("bloodshot",			ITEMCAT_OTHER,			35,				"weapon_zs_bloodshotbo
 ------------
 -- Points --
 ------------
+
+-- Utility function to setup a weapon's DefaultClip.
+function GM:SetupDefaultClip(tab)
+	tab.DefaultClip = math.ceil(tab.ClipSize * self.SurvivalClips * (tab.ClipMultiplier or 1))
+end
+
+
 
 -- Tier 1
 GM:AddPointShopItem("dustermusket",		ITEMCAT_GUNS,			20,				"weapon_zs_dustermusket", nil, nil, nil, function(pl) pl:GiveEmptyWeapon("weapon_zs_dustermusket") end)
@@ -753,13 +760,13 @@ GM.SurvivalClips = 7 --2
 GM.ResupplyBoxCooldown = 30
 
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
-GM.LastHumanSound = Sound("zombiesurvival/lasthuman.ogg")
+GM.LastHumanSound = Sound("zombiesurvival/lasthuman.wav")
 
 -- Sound played when humans all die.
-GM.AllLoseSound = Sound("zombiesurvival/music_lose.ogg")
+GM.AllLoseSound = Sound("zombiesurvival/music_lose.wav")
 
 -- Sound played when humans survive.
-GM.HumanWinSound = Sound("zombiesurvival/music_win.ogg")
+GM.HumanWinSound = Sound("zombiesurvival/music_win.wav")
 
 -- Sound played to a person when they die as a human.
 GM.DeathSound = Sound("zombiesurvival/human_death_stinger.ogg")
