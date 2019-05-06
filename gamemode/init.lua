@@ -112,6 +112,8 @@ include("zsbots/init.lua")
  
 include_library("statistics")
  
+AddCSLuaFile("sh_compass.lua")
+
 local pairs = pairs
 local ipairs = ipairs
 local IN_WALK = IN_WALK

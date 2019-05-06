@@ -71,6 +71,7 @@ include_library("player_movement")
 include_library("inventory")
 include_library("ammoexpand")
 
+include("sh_compass.lua")
 ----------------------
 
 GM.EndRound = false
