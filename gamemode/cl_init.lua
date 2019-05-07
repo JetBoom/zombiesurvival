@@ -763,7 +763,7 @@ function GM:PlayBeats(teamid, fear)
 	--if (LASTHUMAN or self:GetAllSigilsDestroyed()) and cv_ShouldPlayMusic:GetBool() then
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
 		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + SoundDuration(self.LastHumanSound) - 0.025
+		NextBeat = RealTime() + SoundDuration(self.LastHumanSound)
 		return
 	end
 
@@ -771,8 +771,11 @@ function GM:PlayBeats(teamid, fear)
 
 	local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
 	if not beats then return end
-
-	LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 10), 3)
+	if teamid == TEAM_HUMAN then
+		LastBeatLevel = 1
+	else
+		LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 10), 3)
+	end
 
 	local snd = beats[LastBeatLevel]
 	if snd then
@@ -847,7 +850,7 @@ local OSTintro = 0
 			local desiredzombies = self:GetDesiredStartingZombies()
 			-- Play Intro
 			if self:GetWave() >= 1 and OSTintro == 0 and MySelf:GetInfo("zs_intro") == "1" and not self.ZombieEscape then
-				MySelf:EmitSound("zombiesurvival/zsrintrov2.mp3", 50, 100, 0.5)
+				MySelf:EmitSound("zombiesurvival/zsrintrov2.wav", 50, 100, 0.5)
 				OSTintro = 1 -- So it doesn't repeat the track again.
 			end
 			draw_SimpleTextBlurry(translate.Get("waiting_for_players") .. " " .. util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
@@ -1520,9 +1523,12 @@ function GM:InitializeBeats()
 			local a1 = FirstOfGoodType(a)
 			if a1 then
 				local filename = "zombiesurvival/beats/" .. dirname .. "/" .. a1
-				if file.Exists("sound/" .. filename, "GAME") then
+				-- had to add a string match bellow because somehow it'd still find the horrible old human beats
+				if file.Exists("sound/" .. filename, "GAME") and not string.match(filename, "beats/default") then
 					self.Beats[dirname][i] = Sound(filename)
 					highestexist = filename
+					resource.AddSingleFile("sound/" .. filename)
+					util.PrecacheSound(filename)
 
 					continue
 				end
