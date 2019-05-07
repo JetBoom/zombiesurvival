@@ -91,18 +91,6 @@ vector_tiny = Vector(0.001, 0.001, 0.001)
 GM.SoundDuration = {
 	["zombiesurvival/music_win.wav"] = 33.149,
 	["zombiesurvival/music_lose.wav"] = 45.714,
-	["zombiesurvival/lasthuman.wav"] = 120.503,
-
-	["zombiesurvival/beats/zsrhuman/1.wav"] = 9,
-	["zombiesurvival/beats/zsrhuman/2.wav"] = 9,
-	["zombiesurvival/beats/zsrhuman/3.wav"] = 9,
-	["zombiesurvival/beats/zsrhuman/4.wav"] = 9,
-	["zombiesurvival/beats/zsrhuman/5.wav"] = 9,
-	["zombiesurvival/beats/zsrhuman/6.wav"] = 9,
-	["zombiesurvival/beats/zsrhuman/7.wav"] = 9,
-	["zombiesurvival/beats/zsrhuman/8.wav"] = 14,
-	["zombiesurvival/beats/zsrhuman/9.wav"] = 19,
-
 	["zombiesurvival/beats/zsrzombie/1.wav"] = 7,
 	["zombiesurvival/beats/zsrzombie/2.wav"] = 7,
 	["zombiesurvival/beats/zsrzombie/3.wav"] = 7,

@@ -763,7 +763,7 @@ function GM:PlayBeats(teamid, fear)
 	--if (LASTHUMAN or self:GetAllSigilsDestroyed()) and cv_ShouldPlayMusic:GetBool() then
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
 		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + SoundDuration(self.LastHumanSound) - 0.025
+		NextBeat = RealTime() + SoundDuration(self.LastHumanSound)
 		return
 	end
 
@@ -847,7 +847,7 @@ local OSTintro = 0
 			local desiredzombies = self:GetDesiredStartingZombies()
 			-- Play Intro
 			if self:GetWave() >= 1 and OSTintro == 0 and MySelf:GetInfo("zs_intro") == "1" and not self.ZombieEscape then
-				MySelf:EmitSound("zombiesurvival/zsrintrov2.mp3", 50, 100, 0.5)
+				MySelf:EmitSound("zombiesurvival/zsrintrov2.wav", 50, 100, 0.5)
 				OSTintro = 1 -- So it doesn't repeat the track again.
 			end
 			draw_SimpleTextBlurry(translate.Get("waiting_for_players") .. " " .. util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
