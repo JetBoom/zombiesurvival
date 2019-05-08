@@ -36,6 +36,19 @@ function FindPlayerByName(target)
 	return nil
 end
 
+-- Make players download all the content
+function GM:SetDownloadbleContent(Directory)
+	assert(Directory, "Parameter Directory can't be nill!")
+	local files, folders = file.Find( Directory .. "/*", "GAME" )
+	for k, v in pairs( files ) do
+		resource.AddFile( Directory .. "/" .. v )
+	end
+	
+	for k, folder in pairs( folders ) do
+		self:SetDownloadbleContent(Directory .. "/" .. folder )
+	end
+end
+
 function FindPlayerByPartialName(ply, target)
 	local playerFound = nil
 	local matchedPlayers = 0
