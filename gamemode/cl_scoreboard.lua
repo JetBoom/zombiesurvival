@@ -55,6 +55,15 @@ function PANEL:Init()
 	self.m_TitleLabel:NoClipping(true)
 	self.m_TitleLabel.Paint = BlurPaint
 
+	self.m_MapNameLabel = vgui.Create("DLabel", self)
+	self.m_MapNameLabel.Font = "ZSScoreBoardTitle"
+	self.m_MapNameLabel:SetFont(self.m_TitleLabel.Font)
+	self.m_MapNameLabel:SetText('Map: ' .. game.GetMap())
+	self.m_MapNameLabel:SetTextColor(COLOR_GRAY)
+	self.m_MapNameLabel:SizeToContents()
+	self.m_MapNameLabel:NoClipping(true)
+	self.m_MapNameLabel.Paint = BlurPaint
+
 	self.m_ServerNameLabel = vgui.Create("DLabel", self)
 	self.m_ServerNameLabel.Font = "ZSScoreBoardSubTitle"
 	self.m_ServerNameLabel:SetFont(self.m_ServerNameLabel.Font)
@@ -94,6 +103,7 @@ function PANEL:PerformLayout()
 	self.m_AuthorLabel:MoveBelow(self.m_TitleLabel)
 	self.m_ContactLabel:MoveBelow(self.m_AuthorLabel)
 
+	self.m_MapNameLabel:SetPos(math.min(self:GetWide() - self.m_MapNameLabel:GetWide(), self:GetWide() * 0.75 - self.m_MapNameLabel:GetWide() * 2.3), 0)
 	self.m_ServerNameLabel:SetPos(math.min(self:GetWide() - self.m_ServerNameLabel:GetWide(), self:GetWide() * 0.75 - self.m_ServerNameLabel:GetWide() * 0.5), 32 - self.m_ServerNameLabel:GetTall() / 2)
 
 	self.m_HumanHeading:SetSize(self:GetWide() / 2 - 32, 28 * screenscale)
