@@ -407,10 +407,10 @@ function PANEL:RefreshPlayer()
 	self.m_PlayerLabel:SetText(name)
 	self.m_PlayerLabel:SetAlpha(240)
 
-	self.m_PointsLabel:SetText(pl:GetPoints())
+	self.m_PointsLabel:SetText(parseToK(pl, pl:GetPoints()))
 	self.m_PointsLabel:SetAlpha(240)
 
-	self.m_ScoreLabel:SetText(pl:Frags())
+	self.m_ScoreLabel:SetText(parseToK(pl, pl:Frags()))
 	self.m_ScoreLabel:SetAlpha(240)
 
 	local rlvl = pl:GetZSRemortLevel()
