@@ -73,7 +73,8 @@ function PANEL:Init()
 	self.m_ZombieHeading = vgui.Create("DTeamHeading", self)
 	self.m_ZombieHeading:SetTeam(TEAM_UNDEAD)
 
-	self.m_PointsLabel = EasyLabel(self, "Score", "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_PointsLabel = EasyLabel(self, "Points", "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_ScoreLabel = EasyLabel(self, "Score", "ZSScoreBoardPlayer", COLOR_GRAY)
 	self.m_RemortCLabel = EasyLabel(self, "R.LVL", "ZSScoreBoardPlayer", COLOR_GRAY)
 
 	self.m_BrainsLabel = EasyLabel(self, "Brains", "ZSScoreBoardPlayer", COLOR_GRAY)
@@ -103,8 +104,12 @@ function PANEL:PerformLayout()
 	self.m_ZombieHeading:SetPos(self:GetWide() * 0.75 - self.m_ZombieHeading:GetWide() * 0.5, 110 * screenscale - self.m_ZombieHeading:GetTall())
 
 	self.m_PointsLabel:SizeToContents()
-	self.m_PointsLabel:SetPos((self:GetWide() / 2 - 24) * 0.6 - self.m_PointsLabel:GetWide() * 0.35, 110 * screenscale - self.m_HumanHeading:GetTall())
+	self.m_PointsLabel:SetPos((self:GetWide() / 2 - 24) * 0.44 - self.m_PointsLabel:GetWide() * 0.20, 110 * screenscale - self.m_HumanHeading:GetTall())
 	self.m_PointsLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
+
+	self.m_ScoreLabel:SizeToContents()
+	self.m_ScoreLabel:SetPos((self:GetWide() / 2 - 24) * 0.6 - self.m_ScoreLabel:GetWide() * 0.35, 110 * screenscale - self.m_HumanHeading:GetTall())
+	self.m_ScoreLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
 
 	self.m_RemortCLabel:SizeToContents()
 	self.m_RemortCLabel:SetPos((self:GetWide() / 2 - 24) * 0.71 - self.m_RemortCLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
@@ -299,6 +304,7 @@ function PANEL:Init()
 	self.m_ClassImage:SetVisible(false)
 
 	self.m_PlayerLabel = EasyLabel(self, " ", "ZSScoreBoardPlayer", COLOR_WHITE)
+	self.m_PointsLabel = EasyLabel(self, " ", "ZSScoreBoardPlayerSmall", COLOR_WHITE)
 	self.m_ScoreLabel = EasyLabel(self, " ", "ZSScoreBoardPlayerSmall", COLOR_WHITE)
 	self.m_RemortLabel = EasyLabel(self, " ", "ZSScoreBoardPlayerSmaller", COLOR_WHITE)
 
@@ -354,6 +360,10 @@ function PANEL:PerformLayout()
 	self.m_PlayerLabel:MoveRightOf(self.m_AvatarButton, 4)
 	self.m_PlayerLabel:CenterVertical()
 
+	self.m_PointsLabel:SizeToContents()
+	self.m_PointsLabel:SetPos(self:GetWide() * 0.45 - self.m_PointsLabel:GetWide() / 2, 0)
+	self.m_PointsLabel:CenterVertical()
+
 	self.m_ScoreLabel:SizeToContents()
 	self.m_ScoreLabel:SetPos(self:GetWide() * 0.6 - self.m_ScoreLabel:GetWide() / 2, 0)
 	self.m_ScoreLabel:CenterVertical()
@@ -396,6 +406,9 @@ function PANEL:RefreshPlayer()
 	end
 	self.m_PlayerLabel:SetText(name)
 	self.m_PlayerLabel:SetAlpha(240)
+
+	self.m_PointsLabel:SetText(pl:GetPoints())
+	self.m_PointsLabel:SetAlpha(240)
 
 	self.m_ScoreLabel:SetText(pl:Frags())
 	self.m_ScoreLabel:SetAlpha(240)
