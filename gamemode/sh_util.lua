@@ -49,6 +49,15 @@ function GM:SetDownloadbleContent(Directory)
 	end
 end
 
+function parseToK(ply, number)
+	if (number >= 1000) then
+		local mult = 10^1
+		return tostring(math.floor((number / 1000) * mult) / mult) .. 'k'
+	else
+		return number
+	end
+end
+
 function FindPlayerByPartialName(ply, target)
 	local playerFound = nil
 	local matchedPlayers = 0
