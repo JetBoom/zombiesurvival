@@ -55,12 +55,6 @@ local function CanBuy(item, pan)
 		return false
 	end
 
-	if item.SWEP then
-		if (GAMEMODE:GetInventoryItemType(item.SWEP) == INVCAT_TRINKETS) then
-			return GAMEMODE:CanBuyTrinkets(MySelf)
-		end
-	end
-
 	return true
 end
 
