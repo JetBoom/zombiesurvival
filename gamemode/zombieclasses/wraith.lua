@@ -114,8 +114,8 @@ function CLASS:GetAlpha(pl)
 	local wep = pl:GetActiveWeapon()
 	if not wep.IsAttacking then wep = NULL end
 
-	if wep:IsValid() and wep:IsAttacking() then
-		return 0.7
+	if (wep:IsValid() and wep:IsAttacking()) or pl:GetVelocity():Length() > 0 then
+		return 0.8
 	end
 
 	local eyepos = EyePos()
@@ -123,8 +123,7 @@ function CLASS:GetAlpha(pl)
 	local norm = nearest - eyepos
 	norm:Normalize()
 	local dot = EyeVector():Dot(norm)
-
-	local vis = (dot * 0.4 + pl:GetVelocity():Length() / self.Speed / 2 - eyepos:Distance(nearest) / 400) * dot
+	local vis = (dot * 0.4 + (pl:GetVelocity():Length()) / self.Speed / 2 - eyepos:Distance(nearest) / 400) * dot
 
 	return math_Clamp(vis, MySelf:IsValid() and MySelf:Team() == TEAM_UNDEAD and 0.137 or 0, 0.7)
 end
