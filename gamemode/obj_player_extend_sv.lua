@@ -613,7 +613,12 @@ function meta:ChangeToCrow()
 end
 
 function meta:SelectRandomPlayerModel()
-	self:SetModel(player_manager.TranslatePlayerModel(GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)]))
+	local selectedModel = GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)]
+	if (util.IsValidModel(selectedModel)) then
+		self:SetModel(player_manager.TranslatePlayerModel())
+	else
+		self:SelectRandomPlayerModel()
+	end
 end
 
 function meta:GiveEmptyWeapon(weptype)
