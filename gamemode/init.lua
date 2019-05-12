@@ -3251,7 +3251,7 @@ function GM:ShutDown()
 end
  
 function GM:PlayerUse(pl, ent)
-    if not pl:Alive() or pl:Team() == TEAM_UNDEAD and pl:GetZombieClassTable().NoUse or pl:GetBarricadeGhosting() then return false end
+    if not pl:Alive() or pl:Team() == TEAM_UNDEAD and pl:GetZombieClassTable().NoUse then return false end
  
     if pl:IsHolding() and pl:GetHolding() ~= ent then return false end
  
