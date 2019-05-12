@@ -22,11 +22,9 @@ function GM:GetTrinkets(pl)
 	local trinkets = {}
 	local trinketsArrayPos = 1
 	for invitem, count in pairs(items) do
-		if invitem then
-			if self:GetInventoryItemType(invitem) == INVCAT_TRINKETS then
-				trinkets[trinketsArrayPos] = invitem
-				trinketsArrayPos = trinketsArrayPos + 1 
-			end
+		if invitem and self:GetInventoryItemType(invitem) == INVCAT_TRINKETS then
+			trinkets[trinketsArrayPos] = invitem
+			trinketsArrayPos = trinketsArrayPos + 1 
 		end
 	end
 	return trinkets
@@ -34,11 +32,12 @@ end
 
 
 function GM:GetTrinketsNumber(pl)
+	print(#self:GetTrinkets(pl) .. ' and ' .. table.Count(self:GetTrinkets(pl)))
 	return #self:GetTrinkets(pl)
 end
 
 function GM:CanBuyTrinkets(pl)
-	return self:GetTrinketsNumber(pl) + 1 <= self.MAX_TRINKETS
+	return self:GetTrinketsNumber(pl) < self.MAX_TRINKETS
 end
 
 function GM:GetInventoryItemType(item)
