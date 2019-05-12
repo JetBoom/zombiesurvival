@@ -4,7 +4,6 @@ function SWEP:Reload()
 	if CurTime() < self:GetNextPrimaryFire() then return end
 
 	local owner = self:GetOwner()
-	if owner:GetBarricadeGhosting() then return end
 
 	local tr = owner:CompensatedMeleeTrace(self.MeleeRange, self.MeleeSize)
 	local trent = tr.Entity
@@ -94,7 +93,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 end
 
 function SWEP:SecondaryAttack()
-	if self:GetPrimaryAmmoCount() <= 0 or CurTime() < self:GetNextPrimaryFire() or self:GetOwner():GetBarricadeGhosting() then return end
+	if self:GetPrimaryAmmoCount() <= 0 or CurTime() < self:GetNextPrimaryFire() then return end
 
 	local owner = self:GetOwner()
 
