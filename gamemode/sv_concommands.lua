@@ -124,7 +124,6 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 		sender:TakePoints(cost)
 		sender:SendLua("surface.PlaySound(\"ambient/levels/labs/coinslot1.wav\")")
 	end
-	sender:PrintTranslatedMessage(HUD_PRINTTALK, usescrap and "created_x_for_y_scrap" or "purchased_x_for_y_points", itemtab.Name, cost)
 
 	GAMEMODE:AddItemStocks(id, -1)
 
