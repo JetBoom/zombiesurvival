@@ -304,6 +304,7 @@ function GM:Initialize()
 end
  
 function GM:AddNetworkStrings()
+    util.AddNetworkString( "zs_firstplayerspawn" )
     util.AddNetworkString("zs_gamestate")
     util.AddNetworkString("zs_wavestart")
     util.AddNetworkString("zs_waveend")

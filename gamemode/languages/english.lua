@@ -19,6 +19,7 @@ RULES FOR TRANSLATORS!!
 translate.AddLanguage("en", "English")
 
 -- Various gamemode stuff
+LANGUAGE.first_join_warning						= "You are probably lagging right now, that's normal!! Just wait  a couple of seconds\n\nYou are mounting/downloading content right now, so it's normal to see errors."
 LANGUAGE.minute_points_added						= "No damage received for a whole minute! Added %d points."
 LANGUAGE.infliction_reached_class_unlocked			= "%d%% infliction has been reached! %s unlocked!"
 LANGUAGE.infliction_reached							= "%d%% of humans have died!"
