@@ -554,6 +554,54 @@ function util.IntersectRayWithQuad(start, dir, quad_bottom_left, quad_angles, qu
 	end
 end
 
+local function DrawLagWarningOverlay(message)
+	local DermaPanel = vgui.Create( "DFrame" )
+    local secondsLeft = 11
+	DermaPanel:SetSkin("Default")
+	DermaPanel:SetTitle("Player model selection")
+	DermaPanel:SetSize(400, 200)
+    DermaPanel:Center()
+    DermaPanel:ShowCloseButton(false)
+	DermaPanel:SetDraggable(false)
+	DermaPanel:SetBackgroundBlur( true )
+	DermaPanel:SetDeleteOnClose(true)
+	DermaPanel:SetTitle("Warning")
+    DermaPanel.Paint = function(s, w, h)
+       draw.RoundedBox(5, 0, 0, w, 200, Color(255, 255, 255)) 
+       draw.RoundedBox(5, 0, 0, w, 25, Color(246, 246, 246)) 
+    end
+    DermaPanel.lblTitle.UpdateColours = function( label, skin )
+        label:SetTextStyleColor( Color( 0, 0, 0 ) )
+   end
+
+	local list = vgui.Create("DPanelList", DermaPanel)
+	list:Dock(FILL)
+	local messageLabel = vgui.Create("DLabel", list)
+	messageLabel:SetText( "You are probably lagging right now, that's normal!! Just wait  a couple of seconds\n\nYou are mounting/downloading content right now, so it's normal to see errors." )
+    messageLabel:SizeToContents()
+    messageLabel:SetColor(Color(0,0,0))
+    messageLabel:SetPos(0, 50)
+    
+	local DermaAgreeButton = vgui.Create( "DButton", DermaPanel )
+    DermaAgreeButton:SetText( "Wait " .. secondsLeft .. "seconds" )
+	DermaAgreeButton:SetParent( DermaPanel )	
+    DermaAgreeButton:SetPos(0, 150)
+    DermaAgreeButton:SetSize(90, 20)
+    DermaAgreeButton:CenterHorizontal()
+    timer.Create("playerFirstJoinTimer", 1, 11, function()
+        secondsLeft = secondsLeft - 1
+        if (secondsLeft <= 0) then
+            DermaAgreeButton.DoClick = function()
+                DermaPanel:Close()
+            end
+            DermaAgreeButton:SetText( "Agree" )
+        else
+            DermaAgreeButton:SetText( "Wait " .. secondsLeft .. " seconds" )
+        end
+    end)
+    DermaPanel:MakePopup()
+end
+
 local pulseeffect = EffectData()
 pulseeffect:SetRadius(8)
 pulseeffect:SetMagnitude(1)
@@ -563,3 +611,21 @@ function util.CreatePulseImpactEffect(hitpos, hitnormal)
 	pulseeffect:SetNormal(hitnormal)
 	util.Effect("cball_bounce", pulseeffect)
 end
+
+
+
+hook.Add("PlayerInitialSpawn", "FirstJoin", function(ply)
+	if SERVER and not ply:IsBot() and ply:GetPData("firstJoin", true) then
+		PrintMessage(HUD_PRINTTALK, ply:Nick() .. " has joined for the first time!")
+		ply:SetPData("firstJoin", false)
+		net.Start("zs_firstplayerspawn")
+		net.Send(ply)
+	end
+end)
+
+if CLIENT then
+	net.Receive("zs_firstplayerspawn", function()
+		DrawLagWarningOverlay(_ply)
+	end)
+end
+
