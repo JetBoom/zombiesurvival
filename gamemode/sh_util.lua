@@ -577,7 +577,7 @@ local function DrawLagWarningOverlay(message)
 	local list = vgui.Create("DPanelList", DermaPanel)
 	list:Dock(FILL)
 	local messageLabel = vgui.Create("DLabel", list)
-	messageLabel:SetText( "You are probably lagging right now, that's normal!! Just wait  a couple of seconds\n\nYou are mounting/downloading content right now, so it's normal to see errors." )
+	messageLabel:SetText(message)
     messageLabel:SizeToContents()
     messageLabel:SetColor(Color(0,0,0))
     messageLabel:SetPos(0, 50)
@@ -615,9 +615,9 @@ end
 
 
 hook.Add("PlayerInitialSpawn", "FirstJoin", function(ply)
-	if SERVER and not ply:IsBot() and ply:GetPData("firstJoin", true) then
+	if SERVER and not ply:IsBot() and ply:GetPData("firstJoin", "true") == "true" then
 		PrintMessage(HUD_PRINTTALK, ply:Nick() .. " has joined for the first time!")
-		ply:SetPData("firstJoin", false)
+		ply:SetPData("firstJoin", "false")
 		net.Start("zs_firstplayerspawn")
 		net.Send(ply)
 	end
@@ -625,7 +625,7 @@ end)
 
 if CLIENT then
 	net.Receive("zs_firstplayerspawn", function()
-		DrawLagWarningOverlay(_ply)
+		DrawLagWarningOverlay(translate.Get("first_join_warning"))
 	end)
 end
 
