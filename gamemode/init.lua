@@ -1904,7 +1904,7 @@ function GM:PlayerReadyRound(pl)
         -- This is just so they get updated on what class they are and have their hulls set up right.
         pl:DoHulls(classid, TEAM_UNDEAD)
     elseif pl:Team() == TEAM_HUMAN then
-        if self:GetWave() <= 0 and self.StartingWorth > 0 and not self.StartingLoadout and not self.ZombieEscape then
+        if self:GetWave() <= 0 and self.StartingWorth > 0 and not self.StartingLoadout and not self.ZombieEscape and pl:GetPData("firstJoin", "true") == "false" then
             pl:SendLua("InitialWorthMenu()")
         else
             gamemode.Call("GiveDefaultOrRandomEquipment", pl)
