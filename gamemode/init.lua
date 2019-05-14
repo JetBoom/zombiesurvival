@@ -1058,7 +1058,7 @@ function GM:Think()
         elseif self:GetWaveStart() ~= -1 then
             if self:GetWaveStart() <= time then
                 GAMEMODE:KillAllCrows()
-                gamemode.Call("SetWaveActive", true)
+                timer.Simple(0.3, function() gamemode.Call("SetWaveActive", true) end)
             elseif self.BossZombies and not self.PantsMode and not self:IsClassicMode() and not self.ZombieEscape
             and self.LastBossZombieSpawned ~= wave and wave > 0 and not self.RoundEnded
             and (self.BossZombiePlayersRequired <= 0 or #player.GetAll() >= self.BossZombiePlayersRequired) then
