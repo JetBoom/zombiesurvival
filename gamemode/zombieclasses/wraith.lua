@@ -114,8 +114,11 @@ function CLASS:GetAlpha(pl)
 	local wep = pl:GetActiveWeapon()
 	if not wep.IsAttacking then wep = NULL end
 
-	if (wep:IsValid() and wep:IsAttacking()) or pl:GetVelocity():Length() > 0 then
-		return 0.8
+	if wep:IsValid() and wep:IsAttacking() then
+		return 0.7
+	end
+	if pl:GetVelocity():Length() > 0 then
+		return 0.3
 	end
 
 	local eyepos = EyePos()
