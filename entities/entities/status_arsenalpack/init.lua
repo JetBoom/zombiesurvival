@@ -6,7 +6,6 @@ function ENT:Initialize()
 
 	self:SetModel("models/Items/item_item_crate.mdl")
 	self:SetMoveType(MOVETYPE_NONE)
-	self:PhysicsInitSphere(3)
 	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
 end
 
