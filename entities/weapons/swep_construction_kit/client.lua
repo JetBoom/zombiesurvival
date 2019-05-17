@@ -1082,9 +1082,7 @@ local function CreateMenu( preset )
 
 	local tbtn = vgui.Create( "DButton", tpanel )
 		tbtn:SetText( "Toggle thirdperson" )
-		tbtn.DoClick = function()
-			RunConsoleCommand("swepck_togglethirdperson")
-		end
+		tbtn.DoClick = function() end
 
 	tbtn:Dock(FILL)
 
