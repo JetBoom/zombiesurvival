@@ -614,7 +614,7 @@ end
 
 function meta:SelectRandomPlayerModel()
 	local selectedModel = GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)]
-	if (util.IsValidModel(selectedModel)) then
+	if selectedModel and util.IsValidModel(selectedModel) then
 		self:SetModel(player_manager.TranslatePlayerModel())
 	else
 		self:SelectRandomPlayerModel()

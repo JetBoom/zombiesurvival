@@ -656,7 +656,7 @@ GM.RestrictedModels = {
 -- If a person has no player model then use one of these (auto-generated).
 GM.RandomPlayerModels = {}
 for name, mdl in pairs(player_manager.AllValidModels()) do
-	if not table.HasValue(GM.RestrictedModels, string.lower(mdl)) and util.IsValidModel(name) then
+	if name and not table.HasValue(GM.RestrictedModels, string.lower(mdl)) and util.IsValidModel(name) then
 		table.insert(GM.RandomPlayerModels, name)
 	end
 end
