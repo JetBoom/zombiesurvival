@@ -1768,12 +1768,6 @@ function GM:PlayerBindPress(pl, bind, wasin)
 	if bind == "gmod_undo" or bind == "undo" then
 		RunConsoleCommand("+zoom")
 		timer.Create("ReleaseZoom", 1, 1, function() RunConsoleCommand("-zoom") end)
-	elseif bind == "+menu_context" then
-		if P_Team(pl) == TEAM_UNDEAD then
-			self.ZombieThirdPerson = not self.ZombieThirdPerson
-		elseif P_Team(pl) == TEAM_HUMAN then
-			self:ToggleOTSCamera()
-		end
 	end
 end
 
