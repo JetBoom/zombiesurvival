@@ -47,6 +47,11 @@ function ENT:GiveToActivator(activator, caller)
 	end
 
 	local itypecat = GAMEMODE:GetInventoryItemType(itype)
+	if self.Owner and self.DroppedTime and self.pickUpProtected and (self.Owner ~= activator:SteamID()) then
+		local timeLeft = GAMEMODE.DroppedItemsTimeout - (CurTime() - self.DroppedTime)
+		activator:CenterNotify(COLOR_RED, translate.Format("this_item_has_a_owner", timeLeft))
+		return
+	end
 	if itypecat == INVCAT_TRINKETS then
 		if activator:HasInventoryItem(itype) then
 			activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_already_have_this_trinket"))

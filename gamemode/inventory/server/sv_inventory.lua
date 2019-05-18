@@ -132,8 +132,11 @@ function meta:DropInventoryItemByType(itype)
 	if ent:IsValid() then
 		ent:SetInventoryItemType(itype)
 		ent:Spawn()
+		ent.Owner = self:GetOwner()
 		ent.DroppedTime = CurTime()
-
+		timer.Simple(GAMEMODE.DroppedItemsTimeout, function()
+			ent.Owner = nil
+		end)
 		self:TakeInventoryItem(itype)
 		self:UpdateAltSelectedWeapon()
 

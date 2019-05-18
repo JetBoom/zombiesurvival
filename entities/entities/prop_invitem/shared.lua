@@ -3,6 +3,13 @@ ENT.Base = "prop_baseoutlined"
 
 ENT.NoNails = true
 
+function ENT:Think()
+	local pos = self:LocalToWorld(self:OBBCenter())
+	local effectdata = EffectData()
+		effectdata:SetOrigin(pos)
+	util.Effect("nailrepaired", effectdata, true, true)
+end
+
 function ENT:HumanHoldable(pl)
 	return pl:KeyDown(GAMEMODE.UtilityKey)
 end
