@@ -848,9 +848,9 @@ function meta:DropWeaponByType(class)
 			ent:SetClip1(wep:Clip1())
 			ent:SetClip2(wep:Clip2())
 			ent.DroppedTime = CurTime()
-			ent.Owner = self:GetOwner()
+			ent.Owner = wep:GetOwner()
 			ent.pickUpProtected = true
-			timer.Simple(GAMEMODE.DroppedItemsTimeout, function() 
+			timer.Simple(GAMEMODE.DroppedItemsTimeout, function()
 				ent.pickUpProtected = false
 			end)
 

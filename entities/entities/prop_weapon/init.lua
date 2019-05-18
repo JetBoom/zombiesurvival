@@ -100,8 +100,8 @@ function ENT:GiveToActivator(activator, caller)
 		self:Input("OnPickupFailed", activator)
 		return
 	end
-	
-	if self.Owner and self.DroppedTime and self.pickUpProtected and (self.Owner ~= activator:SteamID()) then
+
+	if self.Owner and self.DroppedTime and self.pickUpProtected and (self.Owner:SteamID() ~= activator:SteamID()) then
 		local timeLeft = GAMEMODE.DroppedItemsTimeout - (CurTime() - self.DroppedTime)
 		self:Input("OnPickupFailed", activator)
 		activator:CenterNotify(COLOR_RED, translate.Format("this_item_has_a_owner", timeLeft))

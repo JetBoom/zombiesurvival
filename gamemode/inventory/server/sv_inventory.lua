@@ -132,10 +132,11 @@ function meta:DropInventoryItemByType(itype)
 	if ent:IsValid() then
 		ent:SetInventoryItemType(itype)
 		ent:Spawn()
-		ent.Owner = self:GetOwner()
+		ent.Owner = self
+		ent.pickUpProtected = true
 		ent.DroppedTime = CurTime()
 		timer.Simple(GAMEMODE.DroppedItemsTimeout, function()
-			ent.Owner = nil
+			ent.pickUpProtected = false
 		end)
 		self:TakeInventoryItem(itype)
 		self:UpdateAltSelectedWeapon()

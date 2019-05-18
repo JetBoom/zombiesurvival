@@ -45,9 +45,8 @@ function ENT:GiveToActivator(activator, caller)
 	if not itype then
 		return
 	end
-
 	local itypecat = GAMEMODE:GetInventoryItemType(itype)
-	if self.Owner and self.DroppedTime and self.pickUpProtected and (self.Owner ~= activator:SteamID()) then
+	if  self.Owner and self.DroppedTime and self.pickUpProtected and (self.Owner:SteamID() ~= activator:SteamID()) then
 		local timeLeft = GAMEMODE.DroppedItemsTimeout - (CurTime() - self.DroppedTime)
 		activator:CenterNotify(COLOR_RED, translate.Format("this_item_has_a_owner", timeLeft))
 		return
