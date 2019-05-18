@@ -14,9 +14,6 @@ function ENT:Initialize()
 end
 
 function ENT:DrawPreciseModel(ble, cmod)
-	if self.PropWeapon and not self.ShowBaseModel then
-		render.SetBlend(0)
-	end
 	self:DrawModel()
 	if self.PropWeapon and not self.ShowBaseModel then
 		render.SetBlend(1)

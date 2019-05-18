@@ -101,6 +101,8 @@ CARRY_SPEEDLOSS_PERKG = 1.3
 -- but can never be slower than this.
 CARRY_SPEEDLOSS_MINSPEED = 88
 
+
+GM.DroppedItemsTimeout = 60 -- Seconds
 GM.MaxLegDamage = 3
 GM.MaxArmDamage = 3
 
