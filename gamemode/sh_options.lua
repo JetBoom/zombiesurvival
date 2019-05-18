@@ -24,6 +24,8 @@ GM.ZombieEscapeWeaponsSecondary = {
 GM.CartFile = "zscarts.txt"
 GM.SkillLoadoutsFile = "zsskloadouts.txt"
 
+GM.BotsCanBeCrows = false -- if true bots can block doors as crows
+
 GM.MAX_TRINKETS = 12
 
 ITEMCAT_GUNS = 1

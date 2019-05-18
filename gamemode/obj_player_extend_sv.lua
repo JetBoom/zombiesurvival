@@ -597,6 +597,8 @@ function meta:PopPackedItem(class)
 end
 
 function meta:ChangeToCrow()
+	if not GAMEMODE.BotsCanBeCrows then return end
+	print("ok im a crow anyway bitch f yo")
 	self.StartCrowing = nil
 
 	local crowclass = GAMEMODE.ZombieClasses["Crow"]

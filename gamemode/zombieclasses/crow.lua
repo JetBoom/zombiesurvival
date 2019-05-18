@@ -59,6 +59,9 @@ function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilte
 end
 
 function CLASS:OnSpawned(pl)
+	if (pl:IsBot() and not GAMEMODE.BotsCanBeCrows) then
+		pl:Kill()
+	end
 	pl:SetCollisionGroup(COLLISION_GROUP_WORLD)
 end
 
