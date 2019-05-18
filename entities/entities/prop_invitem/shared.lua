@@ -7,7 +7,9 @@ function ENT:Think()
 	local pos = self:LocalToWorld(self:OBBCenter())
 	local effectdata = EffectData()
 		effectdata:SetOrigin(pos)
-	util.Effect("nailrepaired", effectdata, true, true)
+	if CurTime()%15 == 0 then
+		util.Effect("nailrepaired", effectdata, true, true)
+	end
 end
 
 function ENT:HumanHoldable(pl)
