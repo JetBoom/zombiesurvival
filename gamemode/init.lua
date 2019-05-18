@@ -1296,7 +1296,7 @@ function GM:CalculateInfliction(victim, attacker)
     local wonhumans = 0
     local hum
     for _, pl in pairs(player.GetAllActive()) do
-        if not pl.Disconnecting then
+        if not pl.Disconnecting and not pl:IsBot() then
             if pl:Team() == TEAM_UNDEAD then
                 zombies = zombies + 1
             elseif pl:HasWon() then
