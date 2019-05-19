@@ -613,12 +613,15 @@ function meta:ChangeToCrow()
 	self.DeathClass = curclass
 end
 
-function meta:SelectRandomPlayerModel()
+function meta:SelectRandomPlayerModel(depth)
+	local stackDepth = depth or 0
 	local selectedModel = GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)]
 	if selectedModel and util.IsValidModel(selectedModel) then
 		self:SetModel(player_manager.TranslatePlayerModel())
-	else
+	elseif (stackDepth <= 3) then
 		self:SelectRandomPlayerModel()
+	else
+		self:SetModel("models/player/kleiner.mdl")
 	end
 end
 
