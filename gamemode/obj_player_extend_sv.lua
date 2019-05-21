@@ -598,7 +598,7 @@ end
 
 function meta:ChangeToCrow()
 	self.StartCrowing = nil
-	
+
 	local crowclass = GAMEMODE.ZombieClasses["Crow"]
 	if not crowclass then return end
 	if not GAMEMODE.BotsCanBeCrows and self:IsBot() then return end
