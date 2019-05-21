@@ -36,6 +36,16 @@ local function Cmd_SetHoldType( pl, cmd, args )
 end
 concommand.Add("swepck_setholdtype", Cmd_SetHoldType)
 
+local function Cmd_ToggleThirdPerson( pl, cmd, args )
+
+	local wep = GetSCKSWEP( pl )
+	if (IsValid(wep)) then
+		wep:ToggleThirdPerson()
+	end
+
+end
+concommand.Add("swepck_togglethirdperson", Cmd_ToggleThirdPerson)
+
 local function Cmd_PlayAnimation( pl, cmd, args )
 
 	local wep = GetSCKSWEP( pl )
