@@ -615,9 +615,9 @@ end
 
 function meta:SelectRandomPlayerModel(depth)
 	local stackDepth = depth or 0
-	local selectedModel = GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)]
+	local selectedModel = player_manager.TranslatePlayerModel(GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)])
 	if selectedModel and util.IsValidModel(selectedModel) then
-		self:SetModel(player_manager.TranslatePlayerModel())
+		self:SetModel(selectedModel)
 	elseif (stackDepth <= 3) then
 		self:SelectRandomPlayerModel()
 	else
