@@ -597,11 +597,11 @@ function meta:PopPackedItem(class)
 end
 
 function meta:ChangeToCrow()
-	if not GAMEMODE.BotsCanBeCrows and self:IsBot() then return end
 	self.StartCrowing = nil
-
+	
 	local crowclass = GAMEMODE.ZombieClasses["Crow"]
 	if not crowclass then return end
+	if not GAMEMODE.BotsCanBeCrows and self:IsBot() then return end
 
 	local curclass = self.DeathClass or self:GetZombieClass()
 	local crowindex = crowclass.Index
