@@ -3,7 +3,6 @@ GM.ZombieEscapeWeaponsPrimary = {
 	"weapon_zs_zesweeper",
 	"weapon_zs_zesmg",
 	"weapon_zs_zeinferno",
-	"weapon_zs_zestubber",
 	"weapon_zs_zebulletstorm",
 	"weapon_zs_zesilencer",
 	"weapon_zs_zequicksilver",
@@ -15,6 +14,7 @@ GM.ZombieEscapeWeaponsSecondary = {
 	"weapon_zs_zedeagle",
 	"weapon_zs_zebattleaxe",
 	"weapon_zs_zeeraser",
+	"weapon_zs_zelongsword",
 	"weapon_zs_zeglock",
 	"weapon_zs_zetempest"
 }
@@ -146,7 +146,6 @@ GM:AddStartingItem("blstr",				ITEMCAT_GUNS,			45,				"weapon_zs_blaster")
 GM:AddStartingItem("tossr",				ITEMCAT_GUNS,			45,				"weapon_zs_tosser")
 GM:AddStartingItem("stbbr",				ITEMCAT_GUNS,			45,				"weapon_zs_stubber")
 GM:AddStartingItem("crklr",				ITEMCAT_GUNS,			45,				"weapon_zs_crackler")
-GM:AddStartingItem("sling",				ITEMCAT_GUNS,			45,				"weapon_zs_slinger")
 GM:AddStartingItem("z9000",				ITEMCAT_GUNS,			20,				"weapon_zs_z9000")
 GM:AddStartingItem("minelayer",			ITEMCAT_GUNS,			30,				"weapon_zs_minelayer")
 
