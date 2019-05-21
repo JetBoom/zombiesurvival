@@ -658,10 +658,14 @@ GM.RestrictedModels = {
 -- If a person has no player model then use one of these (auto-generated).
 GM.RandomPlayerModels = {}
 for name, mdl in pairs(player_manager.AllValidModels()) do
-	if name and not table.HasValue(GM.RestrictedModels, string.lower(mdl)) and util.IsValidModel(name) then
+	if name and not table.HasValue(GM.RestrictedModels, string.lower(mdl)) and util.IsValidModel(mdl) then
 		table.insert(GM.RandomPlayerModels, name)
+	else
+		print('model ' .. mdl .. ' is not valid, therefore not adding it!')	
 	end
 end
+
+assert(#GM.RandomPlayerModels, "\n--------------------------------------\nERROR !!! GM.RandomPlayerModels must not be empty!!!")
 
 GM.DeployableInfo = {}
 function GM:AddDeployableInfo(class, name, wepclass)
