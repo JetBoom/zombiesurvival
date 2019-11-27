@@ -453,38 +453,38 @@ GM:AddSkill(SKILL_CARDIOTONIC, "Cardiotonic", GOOD.."Hold shift to run whilst dr
 GM:AddSkill(SKILL_UNBOUND, "Unbound", GOOD.."-60% reduced delay from switching weapons affecting movement speed\n"..BAD.."-4 movement speed",
 																-4,			-4,					{}, TREE_SPEEDTREE)
 -- Medic Tree
-GM:AddSkill(SKILL_SURGEON1, "Surgeon I", GOOD.."-8% medical kit cooldown",
+GM:AddSkill(SKILL_SURGEON1, translate.Get"skill_surgeon1_name", GOOD.."skill_surgeon1_desc",
 																-4,			6,					{SKILL_NONE, SKILL_SURGEON2}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_SURGEON2, "Surgeon II", GOOD.."-9% medical kit cooldown",
+GM:AddSkill(SKILL_SURGEON2, translate.Get"skill_surgeon2_name", GOOD.."skill_surgeon2_desc",
 																-3,			3,					{SKILL_WORTHINESS4, SKILL_SURGEON3}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_SURGEON3, "Surgeon III", GOOD.."-10% medical kit cooldown",
+GM:AddSkill(SKILL_SURGEON3, translate.Get"skill_surgeon3_name", GOOD.."skill_surgeon3_desc",
 																-2,			0,					{SKILL_U_MEDICCLOUD, SKILL_D_FRAIL, SKILL_SURGEONIV}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_SURGEONIV, "Surgeon IV", GOOD.."-11% medical kit cooldown",
+GM:AddSkill(SKILL_SURGEONIV, translate.Get"skill_surgeon4_name", GOOD.."skill_surgeon4_desc",
 																-2,			-3,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYI, "Biology I", GOOD.."+8% medic tool effectiveness",
+GM:AddSkill(SKILL_BIOLOGYI, translate.Get"skill_biology1_name", GOOD.."skill_biology1_desc",
 																4,			6,					{SKILL_NONE, SKILL_BIOLOGYII}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYII, "Biology II", GOOD.."+9% medic tool effectiveness",
+GM:AddSkill(SKILL_BIOLOGYII, translate.Get"skill_biology2_name", GOOD.."skill_biology2_desc",
 																3,			3,					{SKILL_BIOLOGYIII, SKILL_SMARTTARGETING}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYIII, "Biology III", GOOD.."+10% medic tool effectiveness",
+GM:AddSkill(SKILL_BIOLOGYIII, translate.Get"skill_biology3_name", GOOD.."skill_biology3_desc",
 																2,			0,					{SKILL_U_MEDICCLOUD, SKILL_U_ANTITODESHOT, SKILL_BIOLOGYIV}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYIV, "Biology IV", GOOD.."+11% medic tool effectiveness",
+GM:AddSkill(SKILL_BIOLOGYIV, translate.Get"skill_biology4_name", GOOD.."skill_biology4_desc",
 																2,			-3,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_D_FRAIL, "Debuff: Frail", GOOD.."+20 starting Worth\n"..GOOD.."+5 starting points\n"..BAD.."Cannot be healed above 25% health",
+GM:AddSkill(SKILL_D_FRAIL, translate.Get"skill_frail_name", GOOD..translate.Get"skill_frail_desc"..GOOD..translate.Get"skill_frail_desc2"..BAD..translate.Get"skill_frail_desc3",
 																-4,			-2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_U_MEDICCLOUD, "Unlock: Medic Cloud Bomb", GOOD.."Unlocks purchasing the Medic Cloud Bomb\nSlowly heals all humans inside the cloud",
+GM:AddSkill(SKILL_U_MEDICCLOUD, translate.Get"skill_u_mediccloud_name", GOOD..translate.Get"skill_u_mediccloud_desc",
 																0,			-2,					{SKILL_DISPERSION}, TREE_SUPPORTTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_SMARTTARGETING, "Smart Targeting", GOOD.."Medical weapon darts lock onto targets with right click\n"..BAD.."+75% medic tool fire delay\n"..BAD.."-30% healing effectiveness on medical darts",
+GM:AddSkill(SKILL_SMARTTARGETING, translate.Get"skill_smart_targeting_name", GOOD..translate.Get"skill_smart_targeting_desc"..BAD..translate.Get"skill_smart_targeting_desc2"..BAD..translate.Get"skill_smart_targeting_desc3",
 																0,			2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_RECLAIMSOL, "Recoverable Solution", GOOD.."60% of wasted medical dart ammo is returned to you\n"..BAD.."+150% medic tool fire delay\n"..BAD.."-40% medic tool reload speed\n"..BAD.."Cannot speed boost full health players",
+GM:AddSkill(SKILL_RECLAIMSOL, translate.Get"skill_recovablesol_name", GOOD..translate.Get"skill_recovablesol_desk"..BAD..translate.Get"skill_recovablesol_desk2"..BAD..translate.Get"skill_recovablesol_desk3"..BAD..translate.Get"skill_recovablesol_desk4",
 																0,			4,					{SKILL_SMARTTARGETING}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_U_STRENGTHSHOT, "Unlock: Strength Shot Gun", GOOD.."Unlocks purchasing the Strength Shot Gun\nTarget damage +25% for 10 seconds\nExtra damage is given to you as points\nTarget is not healed",
+GM:AddSkill(SKILL_U_STRENGTHSHOT, translate.Get"skill_u_strenghtshot_name", GOOD..translate.Get"skill_u_strenghtshot_desc",
 																0,			0,					{SKILL_SMARTTARGETING}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_WORTHINESS4, "Worthiness IV", GOOD.."+5 starting worth\n"..BAD.."-3 starting points",
+GM:AddSkill(SKILL_WORTHINESS4, translate.Get"skill_worthiness_name", GOOD..translate.Get"skill_worthiness_desc"..BAD..translate.Get"skill_worthiness_desc2",
 																-5,			2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_U_ANTITODESHOT, "Unlock: Antidote Handgun", GOOD.."Unlocks purchasing the Antidote Handgun\nFires piercing blasts that heal poison greatly\nCleanses statuses from targets with a small point gain\nDoes not heal health",
+GM:AddSkill(SKILL_U_ANTITODESHOT, translate.Get"skill_u_antidoteshot_name", GOOD..translate.Get"skill_u_antidoteshot_desc",
 																4,			-2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_DISPERSION, "Dispersion", GOOD.."+15% cloud bomb radius\n"..BAD.."-10% cloud bomb time",
+GM:AddSkill(SKILL_DISPERSION, translate.Get"skill_dispersion_name", GOOD..translate.Get"skill_dispersion_desc"..BAD..translate.Get"skill_dispersion_desc2",
 																0,			-4,					{}, TREE_SUPPORTTREE)
 
 -- Defence Tree

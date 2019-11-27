@@ -52,9 +52,7 @@ net.Receive("zs_skill_is_unlocked", function(length, pl)
 	if skill and not pl:IsSkillUnlocked(skillid) and pl:GetZSSPRemaining() >= 1 and pl:SkillCanUnlock(skillid) and not skill.Disabled then
 		pl:SetSkillUnlocked(skillid, true)
 
-		local msg = "You've unlocked a skill: "..skill.Name
-		pl:CenterNotify(msg)
-		pl:PrintMessage(HUD_PRINTTALK, msg)
+		PrintTranslatedMessage(HUD_PRINTTALK, "you_unlocked_skill", skill.Name)
 
 		if activate then
 			pl:SetSkillDesired(skillid, true)
@@ -70,13 +68,13 @@ end)
 
 net.Receive("zs_skills_reset", function(length, pl)
 	if pl:GetZSLevel() < 10 then
-		pl:SkillNotify("You must be level 10 to reset your skills.")
+		pl:SkillNotify(translate.Format("you_must_10lvl"))
 		return
 	end
 
 	local time = os.time()
 	if pl.NextSkillReset and time < pl.NextSkillReset then
-		pl:SkillNotify("You must wait before resetting your skills again.")
+		pl:SkillNotify(translate.Format("you_must_wait_untill_refund"))
 		return
 	end
 
@@ -89,7 +87,7 @@ end)
 
 net.Receive("zs_skills_refunded", function(length, pl)
 	if pl.SkillsRefunded then
-		pl:SkillNotify("The skill tree has changed and your skills have been refunded.")
+		pl:SkillNotify(translate.Format("skills_tree_refunded"))
 	end
 
 	pl.SkillsRefunded = false

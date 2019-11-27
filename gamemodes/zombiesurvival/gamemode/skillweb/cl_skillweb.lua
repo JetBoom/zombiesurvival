@@ -122,7 +122,7 @@ net.Receive("zs_skills_nextreset", function(length)
 		local days = math.floor(GAMEMODE.NextSkillReset / 86400)
 		local btn = GAMEMODE.SkillWeb.Reset
 
-		btn:SetText(GAMEMODE.NextSkillReset <= 0 and "Reset" or (days .. " days left"))
+		btn:SetText(GAMEMODE.NextSkillReset <= 0 and translate.Get("skills_reset") or translate.Format("skills_reset", days))
 		btn:SetDisabled(GAMEMODE.NextSkillReset > 0)
 	end
 end)
@@ -201,7 +201,7 @@ end
 
 local hoveredskill
 
-local REMORT_SKILL = {Name = "Remort", Description = "Go even further beyond.\nLose all skills, experience, skill points, and levels.\nStart at level 1 but with 1 extra skill point.\nCan remort multiple times for multiple extra skill points."}
+local REMORT_SKILL = {Name = translate.Get"skill_rem_name", Description = translate.Get"skill_rem_desc"}
 
 local PANEL = {}
 
@@ -325,7 +325,7 @@ function PANEL:Init()
 
 	local delbtn = vgui.Create("DButton", bottomleft)
 	delbtn:SetFont("ZSHUDFontSmallest")
-	delbtn:SetText("Delete")
+	delbtn:SetText(translate.Get"skills_loadout_delete")
 	delbtn:SizeToContents()
 	delbtn:SetTall(bottomleft:GetTall() / 5)
 	delbtn:Dock(BOTTOM)
@@ -351,14 +351,14 @@ function PANEL:Init()
 
 	local savebtn = vgui.Create("DButton", bottomleft)
 	savebtn:SetFont("ZSHUDFontSmallest")
-	savebtn:SetText("Save")
+	savebtn:SetText(translate.Get"skills_loadout_save")
 	savebtn:SizeToContents()
 	savebtn:SetTall(bottomleft:GetTall() / 5)
 	savebtn:Dock(BOTTOM)
 	savebtn.DoClick = function(me)
 		surface.PlaySound("zombiesurvival/ui/misc1.ogg")
 
-		local frame = Derma_StringRequest("Save skill loadout", "Enter a name for this skill loadout.", "Name",
+		local frame = Derma_StringRequest(translate.Get"skills_loadout_save_title", translate.Get"skills_loadout_save_title2", translate.Get"skills_loadout_save_name",
 		function(strTextOut)
 			SaveSkillLoadout(strTextOut)
 			UpdateDropDown(dropdown)
@@ -366,7 +366,7 @@ function PANEL:Init()
 			self:DisplayMessage("Skill loadout '" .. strTextOut .."' saved!", COLOR_GREEN)
 		end,
 		function(strTextOut) end,
-		"OK", "Cancel")
+		translate.Get"skills_misc_ok", translate.Get"skills_misc_cancel")
 
 		frame:GetChildren()[5]:GetChildren()[2]:SetTextColor(Color(30, 30, 30))
 	end
@@ -375,7 +375,7 @@ function PANEL:Init()
 
 	local loadbtn = vgui.Create("DButton", bottomleft)
 	loadbtn:SetFont("ZSHUDFontSmallest")
-	loadbtn:SetText("Load")
+	loadbtn:SetText(translate.Get"skills_loadout_load")
 	loadbtn:SizeToContents()
 	loadbtn:SetTall(bottomleft:GetTall() / 5)
 	loadbtn:Dock(BOTTOM)
@@ -406,7 +406,7 @@ function PANEL:Init()
 
 	local activateall = vgui.Create("DButton", bottomlefttop)
 	activateall:SetFont("ZSHUDFontSmallest")
-	activateall:SetText("Activate All")
+	activateall:SetText(translate.Get"skills_activate_all")
 	activateall:SizeToContents()
 	activateall:SetTall(activateall:GetTall())
 	activateall:Dock(TOP)
@@ -414,9 +414,9 @@ function PANEL:Init()
 		surface.PlaySound("zombiesurvival/ui/misc1.ogg")
 
 		if #MySelf:GetUnlockedSkills() == 0 then
-			self:DisplayMessage("You have no skills to activate!", COLOR_RED)
+			self:DisplayMessage(translate.Get"no_skills_to_ativate", COLOR_RED)
 		else
-			self:DisplayMessage("All unlocked skills activated.", COLOR_GREEN)
+			self:DisplayMessage(translate.Get"all_skills_ativated", COLOR_GREEN)
 		end
 
 		net.Start("zs_skills_all_desired")
@@ -426,7 +426,7 @@ function PANEL:Init()
 
 	local deactivateall = vgui.Create("DButton", bottomlefttop)
 	deactivateall:SetFont("ZSHUDFontSmallest")
-	deactivateall:SetText("Deactivate All")
+	deactivateall:SetText(translate.Get"skills_deactivate_all")
 	deactivateall:SizeToContents()
 	deactivateall:SetTall(deactivateall:GetTall())
 	deactivateall:DockMargin(0, 5, 0, 0)
@@ -435,9 +435,9 @@ function PANEL:Init()
 		surface.PlaySound("zombiesurvival/ui/misc1.ogg")
 
 		if #MySelf:GetUnlockedSkills() == 0 then
-			self:DisplayMessage("You have no skills to deactivate!", COLOR_RED)
+			self:DisplayMessage(translate.Get"no_skills_to_deativate", COLOR_RED)
 		else
-			self:DisplayMessage("All unlocked skills deactivated.", COLOR_RED)
+			self:DisplayMessage(translate.Get"all_skills_deativated", COLOR_RED)
 		end
 
 		net.Start("zs_skills_all_desired")
@@ -450,7 +450,7 @@ function PANEL:Init()
 
 	local reset = vgui.Create("DButton", bottomlefttop)
 	reset:SetFont("ZSHUDFontSmaller")
-	reset:SetText(resettime <= 0 and "Reset" or (days .. " days left"))
+	reset:SetText(resettime <= 0 and translate.Get("skills_reset") or translate.Format("x_days_left", days))
 	reset:SetDisabled(resettime > 0)
 	reset:SizeToContents()
 	reset:SetTall(reset:GetTall())
@@ -458,11 +458,11 @@ function PANEL:Init()
 	reset:Dock(TOP)
 	reset.DoClick = function(me)
 		Derma_Query(
-			"Reset all skills and refund SP?\nYou can only do this once per week.",
-			"Warning",
-			"OK",
+			translate.Get"skills_reset_desc",
+			translate.Get"warning",
+			translate.Get"skills_misc_ok",
 			function() net.Start("zs_skills_reset") net.SendToServer() end,
-			"Cancel",
+			translate.Get"skills_misc_cancel",
 			function() end
 		)
 	end
@@ -472,7 +472,7 @@ function PANEL:Init()
 	topright:DockPadding(10, 10, 10, 10)
 
 	local quit = vgui.Create("DButton", topright)
-	quit:SetText("Quit")
+	quit:SetText(translate.Get"skills_quit")
 	quit:SetFont("ZSHUDFont")
 	quit:Dock(FILL)
 	quit.DoClick = function()
@@ -485,7 +485,7 @@ function PANEL:Init()
 
 	local spremaining = vgui.Create("DEXChangingLabel", bottom)
 	spremaining:SetChangeFunction(function()
-		return "Unused skill points: "..MySelf:GetZSSPRemaining()
+		return translate.Format("skills_unused_sp", MySelf:GetZSSPRemaining())
 	end, true)
 	spremaining:SetChangedFunction(function()
 		if MySelf:GetZSSPRemaining() >= 1 then
@@ -510,7 +510,7 @@ function PANEL:Init()
 	contextmenu:SetVisible(false)
 
 	local button = vgui.Create("DButton", contextmenu)
-	button:SetText("Activate")
+	button:SetText(translate.Get"skill_activate")
 	button:SetFont("ZSHUDFontSmall")
 	button:SetDisabled(false)
 	button:SetSize(128 * screenscale, 32 * screenscale)
@@ -568,7 +568,7 @@ function PANEL:Init()
 	local warningtext = vgui.Create("DLabel", self)
 	warningtext:SetTextColor(COLOR_RED)
 	warningtext:SetFont("ZSHUDFontSmall")
-	warningtext:SetText("Changes applied on respawn!")
+	warningtext:SetText(translate.Get"skills_changes_apply_on_spawn")
 	warningtext:SizeToContents()
 	warningtext:SetKeyboardInputEnabled(false)
 	warningtext:SetMouseInputEnabled(false)
@@ -629,7 +629,7 @@ function PANEL:UpdateQuickStats()
 	end
 
 	for i=1,3 do
-		local prefix = i == 1 and "Health" or i == 2 and "Speed" or "Worth"
+		local prefix = i == 1 and translate.Get"skills_stats_health" or i == 2 and translate.Get"skills_stats_speed" or translate.Get"skills_stats_worth"
 		local val = i == 2 and SPEED_NORMAL or 100
 		self.QuickStats[i]:SetText(prefix .. " : " .. (val + (skillmodifiers[i] or 0)))
 	end
@@ -1114,42 +1114,42 @@ function PANEL:OnMousePressed(mc)
 
 			if hoveredskill == -1 and can_remort then
 				Derma_Query(
-					"Are you ABSOLUTELY sure you want to remort?\nYou will revert to level 1, lose all skills, but have 1 extra SP.\nThis cannot be undone!",
-					"Warning",
-					"OK",
+					translate.Get"skills_rem_desc",
+			        translate.Get"warning",
+			        translate.Get"skills_misc_ok",
 					function() net.Start("zs_skills_remort") net.SendToServer() end,
-					"Cancel",
+					translate.Get"skills_misc_cancel",
 					function() end
 				)
 
 				return
 			elseif hoveredskill == -1 then
-				self:DisplayMessage("You need to be level 50 to remort!", COLOR_RED)
+				self:DisplayMessage(translate.Get"you_must_be_50lvl", COLOR_RED)
 				surface.PlaySound("buttons/button8.wav")
 
 				return
 			elseif MySelf:IsSkillDesired(hoveredskill) then
 				if GAMEMODE.Skills[hoveredskill].AlwaysActive then
-					self:DisplayMessage("You can't deactivate this skill!", COLOR_RED)
+					self:DisplayMessage(translate.Get"you_cant_deactivate_skill", COLOR_RED)
 					surface.PlaySound("buttons/button8.wav")
 
 					return
 				end
 
-				contextmenu.Button:SetText("Deactivate")
+				contextmenu.Button:SetText(translate.Get"skill_deactivate")
 			elseif MySelf:IsSkillUnlocked(hoveredskill) then
-				contextmenu.Button:SetText("Activate")
+				contextmenu.Button:SetText(translate.Get"skill_activate")
 			elseif MySelf:SkillCanUnlock(hoveredskill) then
 				if MySelf:GetZSSPRemaining() >= 1 then
-					contextmenu.Button:SetText("Unlock")
+					contextmenu.Button:SetText(translate.Get"skill_unlock")
 				else
-					self:DisplayMessage("You need SP to unlock this skill!", COLOR_RED)
+					self:DisplayMessage(translate.Get"you_need_sp_to_unlock", COLOR_RED)
 					surface.PlaySound("buttons/button8.wav")
 
 					return
 				end
 			else
-				self:DisplayMessage("You need to unlock an adjacent skill and meet any listed requirements!", COLOR_RED)
+				self:DisplayMessage(translate.Get"you_need_adjacent_to_unlock", COLOR_RED)
 				surface.PlaySound("buttons/button8.wav")
 
 				return
@@ -1189,7 +1189,7 @@ function GM:DrawXPBar(x, y, w, h, xpw, barwm, hm, level)
 	local rlevel = MySelf:GetZSRemortLevel()
 	local append = ""
 	if rlevel > 0 then
-		append = " // R.Level "..rlevel
+		append = translate.Get"rlevel"..rlevel
 	end
 
 	surface.SetDrawColor(0, 0, 0, 220)
@@ -1201,7 +1201,7 @@ function GM:DrawXPBar(x, y, w, h, xpw, barwm, hm, level)
 	surface.DrawRect(x, y + 2, barw * progress, 2)
 
 	if level == GAMEMODE.MaxLevel then
-		draw_SimpleText("Level MAX"..append, "ZSXPBar", xpw / 2, h / 2 + y, COLOR_GREEN, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw_SimpleText(translate.Get"level_max"..append, "ZSXPBar", xpw / 2, h / 2 + y, COLOR_GREEN, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	else
 		if progress > 0 then
 			local lx = x + barw * progress - 1
@@ -1213,8 +1213,8 @@ function GM:DrawXPBar(x, y, w, h, xpw, barwm, hm, level)
 			surface.DrawLine(lx, y - 1, lx, y + 5)
 		end
 
-		draw_SimpleText("Level "..level..append, "ZSXPBar", x, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw_SimpleText(string.CommaSeparate(xp).." / "..string.CommaSeparate(GAMEMODE:XPForLevel(level + 1)).." XP", "ZSXPBar", x + barw, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw_SimpleText(translate.Get"level"..level..append, "ZSXPBar", x, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw_SimpleText(string.CommaSeparate(xp).." / "..string.CommaSeparate(GAMEMODE:XPForLevel(level + 1))..translate.Get"xp", "ZSXPBar", x + barw, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -1270,7 +1270,7 @@ function PANEL:Paint(w, h)
 	local sp = MySelf:GetZSSPRemaining()
 	if sp > 0 then
 		colFlash.a = 90 + math.abs(math.sin(RealTime() * 2)) * 160
-		draw_SimpleText(sp.." SP", "ZSHUDFontSmallest", w - 2, h / 2, colFlash, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw_SimpleText(sp..translate.Get"sp", "ZSHUDFontSmallest", w - 2, h / 2, colFlash, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 end
 
