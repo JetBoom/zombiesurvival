@@ -351,106 +351,106 @@ local GOOD = "^"..COLORID_GREEN
 local BAD = "^"..COLORID_RED
 
 -- Health Tree
-GM:AddSkill(SKILL_STOIC1, "Stoic I", GOOD.."+1 maximum health\n"..BAD.."-0.75 movement speed",
+GM:AddSkill(SKILL_STOIC1, translate.Get"skill_stoic1_name", GOOD..translate.Get"skill_stoic1_desc"..BAD..translate.Get"skill_stoic1_desc2",
 																-4,			-6,					{SKILL_NONE, SKILL_STOIC2}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC2, "Stoic II", GOOD.."+2 maximum health\n"..BAD.."-1.5 movement speed",
+GM:AddSkill(SKILL_STOIC2, translate.Get"skill_stoic2_name", GOOD..translate.Get"skill_stoic2_desc"..BAD..translate.Get"skill_stoic2_desc2",
 																-4,			-4,					{SKILL_STOIC3, SKILL_VITALITY1, SKILL_REGENERATOR}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC3, "Stoic III", GOOD.."+4 maximum health\n"..BAD.."-3 movement speed",
+GM:AddSkill(SKILL_STOIC3, translate.Get"skill_stoic3_name", GOOD..translate.Get"skill_stoic3_desc"..BAD..translate.Get"skill_stoic3_desc2",
 																-3,			-2,					{SKILL_STOIC4}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC4, "Stoic IV", GOOD.."+6 maximum health\n"..BAD.."-4.5 movement speed",
+GM:AddSkill(SKILL_STOIC4, translate.Get"skill_stoic4_name", GOOD..translate.Get"skill_stoic4_desc"..BAD..translate.Get"skill_stoic4_desc2",
 																-3,			0,					{SKILL_STOIC5}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC5, "Stoic V", GOOD.."+7 maximum health\n"..BAD.."-5.25 movement speed",
+GM:AddSkill(SKILL_STOIC5, translate.Get"skill_stoic5_name", GOOD..translate.Get"skill_stoic5_desc"..BAD..translate.Get"skill_stoic5_desc2",
 																-3,			2,					{SKILL_BLOODARMOR, SKILL_TANKER}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_D_HEMOPHILIA, "Debuff: Hemophilia", GOOD.."+10 starting Worth\n"..GOOD.."+3 starting scrap\n"..BAD.."Bleed for 25% extra damage when hit",
+GM:AddSkill(SKILL_D_HEMOPHILIA, translate.Get"skill_hemophilia_name", GOOD..translate.Get"skill_hemophilia_desc"..GOOD..translate.Get"skill_hemophilia_desc2"..BAD..translate.Get"skill_hemophilia_desc3",
 																4,			2,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_GLUTTON, "Glutton", GOOD.."Gain up to 30 blood armor when you eat food\n"..GOOD.."Blood armor gained can exceed the cap by 40\n"..BAD.."-5 maximum health\n"..BAD.."No longer receive health from eating food",
+GM:AddSkill(SKILL_GLUTTON, translate.Get"skill_glutton_name", GOOD..translate.Get"skill_glutton_desc"..GOOD..translate.Get"skill_glutton_desc2"..BAD..translate.Get"skill_glutton_desc3"..BAD..translate.Get"skill_glutton_desc4",
 																3,			-2,					{SKILL_GOURMET, SKILL_BLOODARMOR}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_PREPAREDNESS, "Preparedness", GOOD.."Your starting item can be a random food item",
+GM:AddSkill(SKILL_PREPAREDNESS, translate.Get"skill_preparedness_name", GOOD..translate.Get"skill_preparedness_desc",
 																4,			-6,					{SKILL_NONE}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_GOURMET, "Gourmet", GOOD.."+100% recovery from food\n"..BAD.."+200% time to eat food",
+GM:AddSkill(SKILL_GOURMET, translate.Get"skill_gourmet_name", GOOD..translate.Get"skill_gourmet_desc"..BAD..translate.Get"skill_gourmet_desc2",
 																4,			-4,					{SKILL_PREPAREDNESS, SKILL_VITALITY1}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_HAEMOSTASIS, "Haemostasis", GOOD.."Resist status effects while you have at least 2 blood armor\n"..BAD.."Lose 2 blood armor on resist\n"..BAD.."-25% blood armor damage absorption",
+GM:AddSkill(SKILL_HAEMOSTASIS, translate.Get"skill_haemostasis_name", GOOD..translate.Get"skill_haemostasis_desc"..BAD..translate.Get"skill_haemostasis_desc2"..BAD..translate.Get"skill_haemostasis_desc3",
 																4,			6,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_BLOODLETTER, "Bloodletter", GOOD.."+100% blood armor generated\n"..BAD.."Losing all blood armor inflicts 5 bleed damage",
+GM:AddSkill(SKILL_BLOODLETTER, translate.Get"skill_bloodletter_name", GOOD..translate.Get"skill_bloodletter_desc"..BAD..translate.Get"skill_bloodletter_desc2",
 																0,			4,					{SKILL_ANTIGEN}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_REGENERATOR, "Regenerator", GOOD.."Regenerate 1 health every 6s when below 60% health\n"..BAD.."-6 maximum health",
+GM:AddSkill(SKILL_REGENERATOR, translate.Get"skill_regenerator_name", GOOD..translate.Get"skill_regenerator_desc"..BAD..translate.Get"skill_regenerator_desc2",
 																-5,			-2,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_BLOODARMOR, "Blood Armor", GOOD.."Regenerate 1 blood armor every 8 seconds upto your blood armor max\nBase blood armor maximum is 20\nBase blood armor damage absorption is 50%\n"..BAD.."-13 maximum health",
+GM:AddSkill(SKILL_BLOODARMOR, translate.Get"skill_bloodarmor_name", GOOD..translate.Get"skill_bloodarmor_desc"..BAD..translate.Get"skill_bloodarmor_desc2",
 																2,			2,					{SKILL_IRONBLOOD, SKILL_BLOODLETTER, SKILL_D_HEMOPHILIA}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_IRONBLOOD, "Iron Blood", GOOD.."+25% damage reduction from blood armor\n"..GOOD.."Bonus doubled when health is 50% or less\n"..BAD.."-50% maximum blood armor",
+GM:AddSkill(SKILL_IRONBLOOD, translate.Get"skill_ironblood_name", GOOD..translate.Get"skill_ironblood_desc"..GOOD..translate.Get"skill_ironblood_desc2"..BAD..translate.Get"skill_ironblood_desc3",
 																2,			4,					{SKILL_HAEMOSTASIS, SKILL_CIRCULATION}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_D_WEAKNESS, "Debuff: Weakness", GOOD.."+15 starting Worth\n"..GOOD.."+1 end of wave points\n"..BAD.."-45 maximum health",
+GM:AddSkill(SKILL_D_WEAKNESS, translate.Get"skill_weakness_name", GOOD..translate.Get"skill_weakness_desc"..GOOD..translate.Get"skill_weakness_desc2"..BAD..translate.Get"skill_weakness_desc3",
 																1,			-1,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_VITALITY1, "Vitality I", GOOD.."+1 maximum health",
+GM:AddSkill(SKILL_VITALITY1, translate.Get"skill_vitality_name", GOOD..translate.Get"skill_vitality_desc",
 																0,			-4,					{SKILL_VITALITY2}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_VITALITY2, "Vitality II", GOOD.."+1 maximum health",
+GM:AddSkill(SKILL_VITALITY2, translate.Get"skill_vitality2_name", GOOD..translate.Get"skill_vitality2_desc",
 																0,			-2,					{SKILL_VITALITY3}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_VITALITY3, "Vitality III", GOOD.."+1 maximum health",
+GM:AddSkill(SKILL_VITALITY3, translate.Get"skill_vitality3_name", GOOD..translate.Get"skill_vitality3_desc",
 																0,			-0,					{SKILL_D_WEAKNESS}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_TANKER, "Tanker", GOOD.."+20 maximum health\n"..BAD.."-15 movement speed",
+GM:AddSkill(SKILL_TANKER, translate.Get"skill_tanker_name", GOOD..translate.Get"skill_tanker_desc"..BAD..translate.Get"skill_tanker_desc2",
 																-5,			4,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_FORAGER, "Forager", GOOD.."25% chance to collect food from resupply boxes\n"..BAD.."+20% resupply box delay",
+GM:AddSkill(SKILL_FORAGER, translate.Get"skill_forager_name", GOOD..translate.Get"skill_forager_desc"..BAD..translate.Get"skill_forager_desc2",
 																5,			-2,					{SKILL_GOURMET}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_SUGARRUSH, "Sugar Rush", GOOD.."+35 speed boost from food for 14 seconds\n"..BAD.."-35% recovery from food\n",
+GM:AddSkill(SKILL_SUGARRUSH, translate.Get"skill_sugarrus_name", GOOD..translate.Get"skill_sugarrus_desc"..BAD..translate.Get"skill_sugarrus_desc2",
 																4,			0,					{SKILL_GOURMET}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_CIRCULATION, "Circulation", GOOD.."+1 maximum blood armor",
+GM:AddSkill(SKILL_CIRCULATION, translate.Get"skill_circulation_name", GOOD..translate.Get"skill_circulation_desc",
 																4,			4,					{SKILL_SANGUINE}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_SANGUINE, "Sanguine", GOOD.."+11 maximum blood armor\n"..BAD.."-9 maximum health",
+GM:AddSkill(SKILL_SANGUINE, translate.Get"skill_sanguine_name", GOOD..translate.Get"skill_sanguine_desc"..BAD..translate.Get"skill_sanguine_desc2",
 																6,			2,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_ANTIGEN, "Antigen", GOOD.."+5% blood armor damage absorption\n"..BAD.."-3 maximum health",
+GM:AddSkill(SKILL_ANTIGEN, translate.Get"skill_antigen_name", GOOD..translate.Get"skill_antigen_desc"..BAD..translate.Get"skill_antigen_desc2",
 																-2,			4,					{}, TREE_HEALTHTREE)
 -- Speed Tree
-GM:AddSkill(SKILL_SPEED1, "Speed I", GOOD.."+0.75 movement speed\n"..BAD.."-1 maximum health",
+GM:AddSkill(SKILL_SPEED1, translate.Get"skill_speed1_name", GOOD..translate.Get"skill_speed1_desc"..BAD..translate.Get"skill_speed1_desc2",
 																-4,			6,					{SKILL_NONE, SKILL_SPEED2}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED2, "Speed II", GOOD.."+1.5 movement speed\n"..BAD.."-2 maximum health",
+GM:AddSkill(SKILL_SPEED2, translate.Get"skill_speed2_name", GOOD..translate.Get"skill_speed2_desc"..BAD..translate.Get"skill_speed2_desc2",
 																-4,			4,					{SKILL_SPEED3, SKILL_PHASER, SKILL_SPEED2, SKILL_U_CORRUPTEDFRAGMENT}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED3, "Speed III", GOOD.."+3 movement speed\n"..BAD.."-4 maximum health",
+GM:AddSkill(SKILL_SPEED3, translate.Get"skill_speed3_name", GOOD..translate.Get"skill_speed3_desc"..BAD..translate.Get"skill_speed3_desc2",
 																-4,			2,					{SKILL_SPEED4}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED4, "Speed IV", GOOD.."+4.5 movement speed\n"..BAD.."-6 maximum health",
+GM:AddSkill(SKILL_SPEED4, translate.Get"skill_speed4_name", GOOD..translate.Get"skill_speed4_desc"..BAD..translate.Get"skill_speed4_desc2",
 																-4,			0,					{SKILL_SPEED5, SKILL_SAFEFALL}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED5, "Speed V", GOOD.."+5.25 movement speed\n"..BAD.."-7 maximum health",
+GM:AddSkill(SKILL_SPEED5, translate.Get"skill_speed5_name", GOOD..translate.Get"skill_speed5_desc"..BAD..translate.Get"skill_speed5_desc2",
 																-4,			-2,					{SKILL_ULTRANIMBLE, SKILL_BACKPEDDLER, SKILL_MOTIONI, SKILL_CARDIOTONIC, SKILL_UNBOUND}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_AGILEI, "Agile I", GOOD.."+4% jumping power\n"..BAD.."-2 movement speed",
+GM:AddSkill(SKILL_AGILEI, translate.Get"skill_agile1_name", GOOD..translate.Get"skill_agile1_desc"..BAD..translate.Get"skill_agile1_desc2",
 																4,			6,					{SKILL_NONE, SKILL_AGILEII}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_AGILEII, "Agile II", GOOD.."+5% jumping power\n"..BAD.."-3 movement speed",
+GM:AddSkill(SKILL_AGILEII, translate.Get"skill_agile2_name", GOOD..translate.Get"skill_agile2_desc"..BAD..translate.Get"skill_agile2_desc2",
 																4,			2,					{SKILL_AGILEIII, SKILL_WORTHINESS3}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_AGILEIII, "Agile III", GOOD.."+6% jumping power\n"..BAD.."-4 movement speed",
+GM:AddSkill(SKILL_AGILEIII, translate.Get"skill_agile3_name", GOOD..translate.Get"skill_agile3_desc"..BAD..translate.Get"skill_agile3_desc2",
 																4,			-2,					{SKILL_SAFEFALL, SKILL_ULTRANIMBLE, SKILL_SURESTEP, SKILL_INTREPID}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_D_SLOW, "Debuff: Slow", GOOD.."+15 starting Worth\n"..GOOD.."+1 end of wave points\n"..BAD.."-33.75 movement speed",
+GM:AddSkill(SKILL_D_SLOW, translate.Get"skill_slow_name", GOOD..translate.Get"skill_slow_desc"..GOOD..translate.Get"skill_slow_desc2"..BAD..translate.Get"skill_slow_desc3",
 																0,			-4,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_MOTIONI, "Motion I", GOOD.."+0.75 movement speed",
+GM:AddSkill(SKILL_MOTIONI, translate.Get"skill_motion1_name", GOOD..translate.Get"skill_motion1_desc",
 																-2,			-2,					{SKILL_MOTIONII}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_MOTIONII, "Motion II", GOOD.."+0.75 movement speed",
+GM:AddSkill(SKILL_MOTIONII, translate.Get"skill_motion2_name", GOOD..translate.Get"skill_motion2_desc",
 																-1,			-1,					{SKILL_MOTIONIII}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_MOTIONIII, "Motion III", GOOD.."+0.75 movement speed",
+GM:AddSkill(SKILL_MOTIONIII, translate.Get"skill_motion3_name", GOOD..translate.Get"skill_motion3_desc",
 																0,			-2,					{SKILL_D_SLOW}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_BACKPEDDLER, "Backpeddler", GOOD.."Move the same speed in all directions\n"..BAD.."-7 movement speed\n"..BAD.."Receive leg damage on any melee hit",
+GM:AddSkill(SKILL_BACKPEDDLER, translate.Get"skill_backpeddler_name", GOOD..translate.Get"skill_backpeddler_desc"..BAD..translate.Get"skill_backpeddler_desc2"..BAD..translate.Get"skill_backpeddler_desc3",
 																-6,			0,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_PHASER, "Phaser", GOOD.."+15% barricade phasing movement speed\n"..BAD.."+15% sigil teleportation time",
+GM:AddSkill(SKILL_PHASER, translate.Get"skill_phaser_name", GOOD..translate.Get"skill_phaser_desc"..BAD..translate.Get"skill_phaser_desc2",
 																-1,			4,					{SKILL_D_WIDELOAD, SKILL_DRIFT}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_DRIFT, "Drift", GOOD.."+5% barricade phasing movement speed",
+GM:AddSkill(SKILL_DRIFT, translate.Get"skill_drift_name", GOOD..translate.Get"skill_drift_desc",
 																1,			3,					{SKILL_WARP}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_WARP, "Warp", GOOD.."-5% sigil teleportation time",
+GM:AddSkill(SKILL_WARP, translate.Get"skill_warp_name", GOOD..translate.Get"skill_warp_desc",
 																2,			2,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SAFEFALL, "Safe Fall", GOOD.."-40% fall damage taken\n"..GOOD.."+50% faster fall damage knockdown recovery\n"..BAD.."+40% slow down from landing or fall damage",
+GM:AddSkill(SKILL_SAFEFALL, translate.Get"skill_safefall_name", GOOD..translate.Get"skill_safefall_desc"..GOOD..translate.Get"skill_safefall_desc2"..BAD..translate.Get"skill_safefall_desc3",
 																0,			0,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_D_WIDELOAD, "Debuff: Wide Load", GOOD.."+20 starting Worth\n"..GOOD.."-5% resupply delay\n"..BAD.."Phasing speed limited to 1 for the first 6 seconds of phasing",
+GM:AddSkill(SKILL_D_WIDELOAD, translate.Get"skill_wideload_name", GOOD..translate.Get"skill_wideload_desc"..GOOD..translate.Get"skill_wideload_desc2"..BAD..translate.Get"skill_wideload_desc3",
 																1,			1,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_U_CORRUPTEDFRAGMENT, "Unlock: Corrupted Fragment", GOOD.."Unlocks purchasing the Corrupted Fragment\nGoes to corrupted sigils instead",
+GM:AddSkill(SKILL_U_CORRUPTEDFRAGMENT, translate.Get"skill_corruptedfrag_name", GOOD..translate.Get"skill_corruptedfrag_desc",
 																-2,			2,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_ULTRANIMBLE, "Ultra Nimble", GOOD.."+15 movement speed\n"..BAD.."-20 maximum health",
+GM:AddSkill(SKILL_ULTRANIMBLE, translate.Get"skill_ultranimble_name", GOOD..translate.Get"skill_ultranimble_desc"..BAD..translate.Get"skill_ultranimble_desc2",
 																0,			-6,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_WORTHINESS3, "Worthiness III", GOOD.."+5 starting worth\n"..BAD.."-3 starting points",
+GM:AddSkill(SKILL_WORTHINESS3, translate.Get"skill_worthiness3_name", GOOD..translate.Get"skill_worthiness3_desc"..BAD..translate.Get"skill_worthiness3_desc2",
 																6,			2,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SURESTEP, "Sure Step", GOOD.."-30% effectiveness of slows\n"..BAD.."-4 movement speed",
+GM:AddSkill(SKILL_SURESTEP, translate.Get"skill_surestep_name", GOOD..translate.Get"skill_surestep_desc"..BAD..translate.Get"skill_surestep_desc2",
 																6,			0,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_INTREPID, "Intrepid", GOOD.."-35% low health slow intensity\n"..BAD.."-4 movement speed",
+GM:AddSkill(SKILL_INTREPID, translate.Get"skill_intrepid_name", GOOD..translate.Get"skill_intrepid_desc"..BAD..translate.Get"skill_intrepid_desc2",
 																6,			-4,					{SKILL_ROBUST}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_ROBUST, "Robust", GOOD.."-6% movement speed reduction with heavy weapons",
+GM:AddSkill(SKILL_ROBUST, translate.Get"skill_robust_name", GOOD..translate.Get"skill_robust_desc",
 																5,			-5,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_CARDIOTONIC, "Cardiotonic", GOOD.."Hold shift to run whilst draining blood armor\n"..BAD.."-12 movement speed\n"..BAD.."-20% blood armor damage absorption\nSprinting grants +40 move speed",
+GM:AddSkill(SKILL_CARDIOTONIC, translate.Get"skill_cardiotonic_name", GOOD..translate.Get"skill_cardiotonic_desc"..BAD..translate.Get"skill_cardiotonic_desc2"..BAD..translate.Get"skill_cardiotonic_desc3",
 																-6,			-4,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_UNBOUND, "Unbound", GOOD.."-60% reduced delay from switching weapons affecting movement speed\n"..BAD.."-4 movement speed",
+GM:AddSkill(SKILL_UNBOUND, translate.Get"skill_unbound_name", GOOD..translate.Get"skill_unbound_desc"..BAD..translate.Get"skill_unbound_desc2",
 																-4,			-4,					{}, TREE_SPEEDTREE)
 -- Medic Tree
 GM:AddSkill(SKILL_SURGEON1, translate.Get"skill_surgeon1_name", GOOD.."skill_surgeon1_desc",

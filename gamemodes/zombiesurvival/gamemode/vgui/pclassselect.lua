@@ -42,12 +42,12 @@ end
 function PANEL:Init()
 	self.ClassButtons = {}
 
-	self.ClassTypeButton = EasyButton(nil, bossmode and "Open Normal Class Selection" or "Open Boss Class Selection", 8, 4)
+	self.ClassTypeButton = EasyButton(nil, bossmode and translate.Get"cselect_open_normal" or translate.Get"cselect_open_boss", 8, 4)
 	self.ClassTypeButton:SetFont("ZSHUDFontSmall")
 	self.ClassTypeButton:SizeToContents()
 	self.ClassTypeButton.DoClick = BossTypeDoClick
 
-	self.CloseButton = EasyButton(nil, "Close", 8, 4)
+	self.CloseButton = EasyButton(nil, translate.Get"cselect_close", 8, 4)
 	self.CloseButton:SetFont("ZSHUDFontSmall")
 	self.CloseButton:SizeToContents()
 	self.CloseButton.DoClick = function() Window:Remove() end
