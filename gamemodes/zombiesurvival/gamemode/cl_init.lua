@@ -1076,7 +1076,7 @@ function GM:DrawCrateIndicators()
 			surface_SetDrawColor(255, 255, 255, alpha)
 			surface_DrawTexturedRect(-123, -113, 248, 228)
 
-			draw_SimpleTextBlurry("Arsenal Crate", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get"arsenal_crate", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
 			cam_IgnoreZ(false)
@@ -1150,7 +1150,7 @@ function GM:DrawRemantlerIndicators()
 			surface_SetDrawColor(255, 255, 255, alpha)
 			surface_DrawTexturedRect(-128, -128, 256, 256)
 
-			draw_SimpleTextBlurry("Weapon Remantler", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get"weapon_remantler_distance", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
 			cam_IgnoreZ(false)
@@ -1184,7 +1184,7 @@ function GM:DrawNestIndicators()
 		surface_SetDrawColor(255, 255, 255, alpha)
 		surface_DrawTexturedRect(-128, -128, 256, 256)
 
-		draw_SimpleTextBlurry("Nest", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Get"nest_distance", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 		if distance < 80000 then
 			local nown = nest:GetNestOwner()

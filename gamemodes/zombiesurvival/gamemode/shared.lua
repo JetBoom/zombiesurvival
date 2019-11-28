@@ -76,8 +76,8 @@ GM.EndRound = false
 GM.StartingWorth = 100
 GM.ZombieVolunteers = {}
 
-team.SetUp(TEAM_ZOMBIE, "The Undead", Color(0, 255, 0, 255))
-team.SetUp(TEAM_SURVIVORS, "Survivors", Color(0, 160, 255, 255))
+team.SetUp(TEAM_ZOMBIE, translate.Get"team_name_undead", Color(0, 255, 0, 255))
+team.SetUp(TEAM_SURVIVORS, translate.Get"team_name_survivors", Color(0, 160, 255, 255))
 
 local validmodels = player_manager.AllValidModels()
 validmodels["tf01"] = nil

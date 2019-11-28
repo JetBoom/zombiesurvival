@@ -3,7 +3,7 @@ local function pointslabelThink(self)
 	if self.m_LastPoints ~= points then
 		self.m_LastPoints = points
 
-		self:SetText("Points to spend: "..points)
+		self:SetText(translate.Format"points_to_spend_x", points)
 		self:SizeToContents()
 	end
 end
@@ -78,7 +78,7 @@ local function ItemPanelThink(self)
 			if stocks ~= self.m_LastStocks then
 				self.m_LastStocks = stocks
 
-				self.StockLabel:SetText(stocks.." remaining")
+				self.StockLabel:SetText(translate.Format"remaining_x", stocks)
 				self.StockLabel:SizeToContents()
 				self.StockLabel:AlignRight(10)
 				self.StockLabel:SetTextColor(stocks > 0 and COLOR_GRAY or COLOR_RED)
@@ -138,16 +138,16 @@ function GM:ViewerStatBarUpdate(viewer, display, sweptable)
 		end
 
 		local statnum, stattext = statshow[6] and sweptable[statshow[6]][statshow[1]] or sweptable[statshow[1]]
-		if statshow[1] == "Damage" and sweptable.Primary.NumShots and sweptable.Primary.NumShots > 1 then
+		if statshow[1] == translate.Get"stat_damage" and sweptable.Primary.NumShots and sweptable.Primary.NumShots > 1 then
 			stattext = statnum .. " x " .. sweptable.Primary.NumShots-- .. " (" .. (statnum * sweptable.Primary.NumShots) .. ")"
-		elseif statshow[1] == "WalkSpeed" then
+		elseif statshow[1] == translate.Get"stat_walk_speed" then
 			stattext = speedtotext[SPEED_NORMAL]
 			if speedtotext[sweptable[statshow[1]]] then
 				stattext = speedtotext[sweptable[statshow[1]]]
 			elseif sweptable[statshow[1]] < SPEED_SLOWEST then
 				stattext = speedtotext[-1]
 			end
-		elseif statshow[1] == "ClipSize" then
+		elseif statshow[1] == translate.Get"stat_clip_size2" then
 			stattext = statnum / sweptable.RequiredClip
 		else
 			stattext = statnum
@@ -156,9 +156,9 @@ function GM:ViewerStatBarUpdate(viewer, display, sweptable)
 		viewer.ItemStats[i]:SetText(statshow[2])
 		viewer.ItemStatValues[i]:SetText(stattext)
 
-		if statshow[1] == "Damage" then
+		if statshow[1] == translate.Get"stat_damage" then
 			statnum = statnum * sweptable.Primary.NumShots
-		elseif statshow[1] == "ClipSize" then
+		elseif statshow[1] == translate.Get"stat_clip_size2" then
 			statnum = statnum / sweptable.RequiredClip
 		end
 
@@ -257,7 +257,7 @@ local function ItemPanelDoClick(self)
 
 	local ppurbl = viewer.m_PurchasePrice
 	local price = self.NoPoints and math.ceil(GAMEMODE:PointsToScrap(shoptbl.Worth)) or math.floor(shoptbl.Worth * (MySelf.ArsenalDiscount or 1))
-	ppurbl:SetText(price .. (self.NoPoints and " Scrap" or " Points"))
+	ppurbl:SetText(price .. (self.NoPoints and translate.Get"ps_scrap" or translate.Get"ps_points"))
 	ppurbl:SizeToContents()
 	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
 	ppurbl:SetVisible(true)
@@ -276,7 +276,7 @@ local function ItemPanelDoClick(self)
 
 	ppurbl = viewer.m_AmmoPrice
 	price = math.floor(9 * (MySelf.ArsenalDiscount or 1))
-	ppurbl:SetText(price .. " Points")
+	ppurbl:SetText(translate.Format"ps_points_x", price)
 	ppurbl:SizeToContents()
 	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
 	ppurbl:SetVisible(canammo)
@@ -354,7 +354,7 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 	itempan.DoClick = ItemPanelDoClick
 	itempan.DoRightClick = function()
 		local menu = DermaMenu(itempan)
-		menu:AddOption("Buy", function() RunConsoleCommand("zs_pointsshopbuy", itempan.ID, itempan.NoPoints and "scrap") end)
+		menu:AddOption(translate.Get"ps_buy", function() RunConsoleCommand("zs_pointsshopbuy", itempan.ID, itempan.NoPoints and "scrap") end)
 		menu:Open()
 	end
 	list:AddItem(itempan)
@@ -412,7 +412,7 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 	pricelabel:AlignRight(alignri)
 
 	if tab.MaxStock then
-		local stocklabel = EasyLabel(itempan, tab.MaxStock.." remaining", "ZSHUDFontTiny")
+		local stocklabel = EasyLabel(itempan, translate.Format"remaining_max_x", tab.MaxStock, "ZSHUDFontTiny")
 		stocklabel:SizeToContents()
 		stocklabel:AlignRight(alignri)
 		stocklabel:SetPos(itempan:GetWide() - stocklabel:GetWide(), itempan:GetTall() * 0.45 - stocklabel:GetTall() * 0.5)
@@ -610,7 +610,7 @@ function GM:CreateItemInfoViewer(frame, propertysheet, topspace, bottomspace, me
 	purchaseb:SetVisible(false)
 	viewer.m_PurchaseB = purchaseb
 
-	local namelab = EasyLabel(purchaseb, "Purchase", "ZSBodyTextFontBig", COLOR_WHITE)
+	local namelab = EasyLabel(purchaseb, translate.Get"purchase", "ZSBodyTextFontBig", COLOR_WHITE)
 	namelab:SetVisible(false)
 	viewer.m_PurchaseLabel = namelab
 
@@ -624,7 +624,7 @@ function GM:CreateItemInfoViewer(frame, propertysheet, topspace, bottomspace, me
 	ammopb:SetVisible(false)
 	viewer.m_AmmoB = ammopb
 
-	namelab = EasyLabel(ammopb, "Ammo", "ZSBodyTextFontBig", COLOR_WHITE)
+	namelab = EasyLabel(ammopb, translate.Get"purchase_ammo", "ZSBodyTextFontBig", COLOR_WHITE)
 	namelab:SetVisible(false)
 	viewer.m_AmmoL = namelab
 
@@ -660,9 +660,9 @@ function GM:OpenArsenalMenu()
 	local topspace = vgui.Create("DPanel", frame)
 	topspace:SetWide(wid - 16)
 
-	local title = EasyLabel(topspace, "The Points Shop", "ZSHUDFontSmall", COLOR_WHITE)
+	local title = EasyLabel(topspace, translate.Get"points_shop_title", "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
-	local subtitle = EasyLabel(topspace, "For all of your zombie apocalypse needs!", "ZSHUDFontTiny", COLOR_WHITE)
+	local subtitle = EasyLabel(topspace, translate.Get"points_shop_title2", "ZSHUDFontTiny", COLOR_WHITE)
 	subtitle:CenterHorizontal()
 	subtitle:MoveBelow(title, 4)
 
@@ -671,7 +671,7 @@ function GM:OpenArsenalMenu()
 	topspace:AlignTop(8)
 	topspace:CenterHorizontal()
 
-	local wsb = EasyButton(topspace, "Worth Menu", 8, 4)
+	local wsb = EasyButton(topspace, translate.Get"points_worth_menu", 8, 4)
 	wsb:SetFont("ZSHUDFontSmaller")
 	wsb:SizeToContents()
 	wsb:AlignRight(8)
@@ -681,7 +681,7 @@ function GM:OpenArsenalMenu()
 	local bottomspace = vgui.Create("DPanel", frame)
 	bottomspace:SetWide(topspace:GetWide())
 
-	local pointslabel = EasyLabel(bottomspace, "Points to spend: 0", "ZSHUDFontTiny", COLOR_GREEN)
+	local pointslabel = EasyLabel(bottomspace, translate.Get"points_to_spend_0", "ZSHUDFontTiny", COLOR_GREEN)
 	pointslabel:AlignTop(4)
 	pointslabel:AlignLeft(8)
 	pointslabel.Think = pointslabelThink
@@ -746,7 +746,7 @@ function GM:OpenArsenalMenu()
 					local ispacer = trinkets and ((i-1) % 3)+1 or i
 					local start = i == (catid == ITEMCAT_GUNS and 2 or ind)
 
-					tbn = EasyButton(tabpane, trinkets and subcats[i] or ("Tier " .. i), 2, 8)
+					tbn = EasyButton(tabpane, trinkets and subcats[i] or (translate.Format"tier_x" .. i), 2, 8)
 					tbn:SetFont(trinkets and "ZSHUDFontSmallest" or "ZSHUDFontSmall")
 					tbn:SetAlpha(start and 255 or 70)
 					tbn:AlignRight((trinkets and -35 or -15) * screenscale -

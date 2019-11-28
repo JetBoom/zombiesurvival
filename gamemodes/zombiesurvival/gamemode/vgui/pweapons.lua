@@ -142,7 +142,7 @@ function MakepWeapons(silent)
 
 	local y = 8
 
-	local title = EasyLabel(frame, "Weapon Database", "ZSHUDFont", color_white)
+	local title = EasyLabel(frame, translate.Get"main_weapondata_title", "ZSHUDFont", color_white)
 	title:SetPos(wid * 0.5 - title:GetWide() * 0.5, y)
 	y = y + title:GetTall() + 8
 
@@ -154,14 +154,14 @@ function MakepWeapons(silent)
 
 	local tree = vgui.Create("DTree", propertysheet)
 	tree:SetWide(propertysheet:GetWide() - 16)
-	local sheet = propertysheet:AddSheet("Weapons", tree, nil, false, false)
+	local sheet = propertysheet:AddSheet(translate.Get"weapondata_weapons", tree, nil, false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	tree:SetIndentSize(4)
 	frame.WeaponsTree = tree
 
 	tree = vgui.Create("DTree", propertysheet)
 	tree:SetWide(propertysheet:GetWide() - 16)
-	sheet = propertysheet:AddSheet("Crafts", tree, nil, false, false)
+	sheet = propertysheet:AddSheet(translate.Get"weapondata_crafts", tree, nil, false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	tree:SetIndentSize(4)
 	frame.CraftsTree = tree

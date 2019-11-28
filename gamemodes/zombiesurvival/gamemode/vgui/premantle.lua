@@ -3,7 +3,7 @@ local function ScrapLabelThink(self)
 	if self.m_LastScrap ~= scrap then
 		self.m_LastScrap = scrap
 
-		self:SetText("Scrap for usage: "..scrap)
+		self:SetText(translate.Format"scrap_for_usage_x", scrap)
 		self:SizeToContents()
 	end
 end
@@ -13,14 +13,14 @@ local function SelectedInv()
 end
 
 local function DismantleClick()
-	Derma_Query("Dismantle weapon? This cannot be reversed.", "Confirm Dissassembling Weapon",
-	"Dismantle", function()
+	Derma_Query(translate.Get"r_dismantle_click", translate.Get"r_dismantle_click2",
+	translate.Get"r_dismantle_button", function()
 		RunConsoleCommand("zs_dismantle", SelectedInv())
 
 		GAMEMODE.RemantlerInterface:Close()
 		GAMEMODE.RemantlerInterface = nil
 	end,
-	"Cancel", function()
+	translate.Get"skills_misc_cancel", function()
 	end)
 end
 
@@ -338,7 +338,7 @@ function PANEL:Paint(w, h)
 				render.ModelMaterialOverride()
 				render.SetColorModulation(1, 1, 1)
 
-				local txt = "Standard"
+				local txt = translate.Get"r_standart_name"
 				local quals = GAMEMODE.WeaponQualities[id]
 				if quals then
 					txt = node.Name or branch == 0 and quals[1] or quals[3]
@@ -390,7 +390,7 @@ function PANEL:Paint(w, h)
 		self.Bottom:Stop()
 
 		if hovquality and hovbranch then
-			local txt, scost = "Standard", ""
+			local txt, scost = translate.Get"r_standart_name", ""
 
 			local quals = GAMEMODE.WeaponQualities[hovquality]
 			if quals then
@@ -401,7 +401,7 @@ function PANEL:Paint(w, h)
 			self.QualityName:SetText(txt)
 			self.QualityName:SizeToContents()
 
-			self.ScrapCost:SetText(scost ~= "" and "Scrap Cost: " .. scost or "")
+			self.ScrapCost:SetText(scost ~= "" and translate.Format"r_scrap_cost_x", scost or "")
 			self.ScrapCost:SetTextColor(scost ~= "" and MySelf:GetAmmoCount("scrap") >= scost and COLOR_WHITE or COLOR_RED)
 			self.ScrapCost:SizeToContents()
 
@@ -411,7 +411,7 @@ function PANEL:Paint(w, h)
 
 			for i=1, 5 do
 				dtxt = " "
-				if txt ~= "Standard" and altdesc and altdescs and altdescs[i] then
+				if txt ~= translate.Get"r_standart_name" and altdesc and altdescs and altdescs[i] then
 					dtxt = altdescs[i]
 				end
 
@@ -459,7 +459,7 @@ net.Receive("zs_remantleconf", function()
 	ri.m_ContentsLabel:CenterHorizontal()
 
 	local retscrap = GAMEMODE:GetDismantleScrap(gtbl)
-	local disscraptxt = gtbl.NoDismantle and "Cannot Dismantle" or "Dismantle for " .. retscrap .. " Scrap"
+	local disscraptxt = gtbl.NoDismantle and translate.Get"r_cannot_dismantle" or translate.Format"r_dismantle_for_x", retscrap
 
 	ri.m_Dismantle:SetText(disscraptxt)
 	ri.m_Dismantle:SizeToContents()
@@ -478,7 +478,7 @@ function PANEL:OnMousePressed(mc)
 		local prev = self.RemantleNodes[hovbranch][hovquality - 1] or hovquality == 1 and self.RemantleNodes[0][0]
 		if cqua and hovquality > cqua and prev and prev.Unlocked and not current.Locked then
 			if self.GunTab.AmmoIfHas and MySelf:GetAmmoCount(self.GunTab.Primary.Ammo) == 0 then
-				GAMEMODE:CenterNotify(COLOR_RED, "You don't have the deployable ammo type for this!")
+				GAMEMODE:CenterNotify(COLOR_RED, translate.Get"r_no_deploable_ammo")
 				surface.PlaySound("buttons/button8.wav")
 
 				return
@@ -490,13 +490,13 @@ function PANEL:OnMousePressed(mc)
 
 				return
 			else
-				GAMEMODE:CenterNotify(COLOR_RED, "You need enough scrap to upgrade this weapon!")
+				GAMEMODE:CenterNotify(COLOR_RED, translate.Get"r_not_enough_scrap")
 				surface.PlaySound("buttons/button8.wav")
 
 				return
 			end
 		else
-			GAMEMODE:CenterNotify(COLOR_RED, "You must upgrade your weapon to the correct quality first!")
+			GAMEMODE:CenterNotify(COLOR_RED, translate.Get"r_not_correct_quality")
 			surface.PlaySound("buttons/button8.wav")
 
 			return
@@ -551,9 +551,9 @@ function GM:OpenRemantlerMenu(remantler)
 	local topspace = vgui.Create("DPanel", frame)
 	topspace:SetWide(wid - 16)
 
-	local title = EasyLabel(topspace, "Weapon Remantler", "ZSHUDFontSmall", COLOR_WHITE)
+	local title = EasyLabel(topspace, translate.Get"r_weapon_remantler_title", "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
-	local subtitle = EasyLabel(topspace, "Dismantle weapons into scrap and use scrap to upgrade weapons!", "ZSHUDFontTiny", COLOR_WHITE)
+	local subtitle = EasyLabel(topspace, translate.Get"r_weapon_remantler_title2", "ZSHUDFontTiny", COLOR_WHITE)
 	subtitle:CenterHorizontal()
 	subtitle:MoveBelow(title, 4)
 
@@ -565,12 +565,12 @@ function GM:OpenRemantlerMenu(remantler)
 	local bottomspace = vgui.Create("DPanel", frame)
 	bottomspace:SetWide(topspace:GetWide())
 
-	local pointslabel = EasyLabel(bottomspace, "Scrap for usage: 0", "ZSHUDFontTiny", COLOR_GREEN)
+	local pointslabel = EasyLabel(bottomspace, translate.Get"scrap_for_usage_0", "ZSHUDFontTiny", COLOR_GREEN)
 	pointslabel:AlignTop(4)
 	pointslabel:AlignLeft(8)
 	pointslabel.Think = ScrapLabelThink
 
-	local lab = EasyLabel(bottomspace, "Disassembling your weapons cannot be reversed!", "ZSHUDFontTiny")
+	local lab = EasyLabel(bottomspace, translate.Get"r_weapon_remantler_desc", "ZSHUDFontTiny")
 	lab:AlignTop(4)
 	lab:AlignRight(4)
 	frame.m_AdviceLabel = lab
@@ -591,20 +591,20 @@ function GM:OpenRemantlerMenu(remantler)
 	remprop:SetPadding(0)
 
 	local remantleframe = vgui.Create("DPanel", remprop)
-	local sheet = remprop:AddSheet("Remantling", remantleframe, "icon16/arrow_up.png", false, false)
+	local sheet = remprop:AddSheet(translate.Get"r_cat_remantle", remantleframe, "icon16/arrow_up.png", false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	remantleframe.Paint = function(me, w, h) surface.SetDrawColor(31, 33, 35, 255) surface.DrawRect(0, 0, w, h) end
 	remantleframe:SetSize(wid - 8, boty - topy - 8 - topspace:GetTall())
 
 	local trinketsframe = vgui.Create("DPanel")
-	sheet = remprop:AddSheet("Trinkets", trinketsframe, GAMEMODE.ItemCategoryIcons[ITEMCAT_TRINKETS], false, false)
+	sheet = remprop:AddSheet(translate.Get"r_cat_trinkets", trinketsframe, GAMEMODE.ItemCategoryIcons[ITEMCAT_TRINKETS], false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	trinketsframe:SetSize(wid - 8, boty - topy - 8 - topspace:GetTall())
 	trinketsframe:SetPaintBackground(false)
 	frame.TrinketsFrame = trinketsframe
 
 	local ammoframe = vgui.Create("DPanel")
-	sheet = remprop:AddSheet("Ammunition", ammoframe, GAMEMODE.ItemCategoryIcons[ITEMCAT_AMMO], false, false)
+	sheet = remprop:AddSheet(translate.Get"r_cat_ammunition", ammoframe, GAMEMODE.ItemCategoryIcons[ITEMCAT_AMMO], false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	ammoframe:SetSize(wid - 8, boty - topy - 8 - topspace:GetTall())
 	ammoframe:SetPaintBackground(true)
@@ -694,7 +694,7 @@ function GM:OpenRemantlerMenu(remantler)
 
 	self:ConfigureMenuTabs(tabs, tabhei)
 
-	local contents = EasyLabel(remantleframe, gtbl and gtbl.PrintName or "EMPTY", "ZSHUDFontSmall", COLOR_WHITE)
+	local contents = EasyLabel(remantleframe, gtbl and gtbl.PrintName or translate.Get"empty", "ZSHUDFontSmall", COLOR_WHITE)
 	contents:AlignTop(16 * screenscale)
 	contents:CenterHorizontal()
 	frame.m_ContentsLabel = contents
@@ -706,7 +706,7 @@ function GM:OpenRemantlerMenu(remantler)
 
 	frame.RemantlePath = vgui.Create("ZSRemantlePath", upgpathf)
 
-	local disabtn = EasyButton(remantleframe, "Dismantle Weapon", 8, 4)
+	local disabtn = EasyButton(remantleframe, translate.Get"r_dismantle_weapon", 8, 4)
 	disabtn:SetFont("ZSHUDFont")
 	disabtn:SizeToContents()
 	disabtn:MoveBelow(upgpathf, 32 * screenscale)
@@ -723,7 +723,7 @@ function GM:OpenRemantlerMenu(remantler)
 	local disscraptxt = ""
 	if gtbl then
 		local retscrap = self:GetDismantleScrap(gtbl, SelectedInv())
-		disscraptxt = gtbl.NoDismantle and "Cannot Dismantle" or "Dismantle for " .. retscrap .. " Scrap"
+		disscraptxt = gtbl.NoDismantle and translate.Get"r_cannot_dismantle" or translate.Format"r_dismantle_for_x", retscrap
 	end
 
 	local disscrap = EasyLabel(remantleframe, disscraptxt, "ZSHUDFontSmaller", COLOR_WHITE)

@@ -40,7 +40,7 @@ function GM:DrawTargetID(ent, fade)
 		if self.MedicalAura then
 			if ent:GetDTBool(DT_PLAYER_BOOL_FRAIL) then
 				util.ColorCopy(COLOR_LBLUE, colTemp)
-				draw.SimpleTextBlur("(FRAIL)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur(translate.Get"p_frail", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 
@@ -49,17 +49,17 @@ function GM:DrawTargetID(ent, fade)
 			local phant = ent:GetPhantomHealth()
 			if poison >= 1 then
 				util.ColorCopy(COLOR_LIMEGREEN, colTemp)
-				draw.SimpleTextBlur("(POISON - " .. math.floor(poison) ..")", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur(translate.Format"p_poison", math.floor(poison), "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 			if bleed >= 1 then
 				util.ColorCopy(COLOR_SOFTRED, colTemp)
-				draw.SimpleTextBlur("(BLEED - " .. math.floor(bleed) ..")", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur(translate.Format"p_bleeding", math.floor(bleed), "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 			if phant >= 1 then
 				util.ColorCopy(COLOR_MIDGRAY, colTemp)
-				draw.SimpleTextBlur("(BLOODLUST)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur(translate.Get"p_bloodlust", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 		end
@@ -88,9 +88,9 @@ function GM:DrawTargetID(ent, fade)
 		local remortlevel = ent:GetZSRemortLevel()
 		y = y + draw.GetFontHeight("ZSHUDFontTiny") + 4
 		if remortlevel >= 1 then
-			draw.SimpleTextBlur(string_format("LVL %d R.LVL %d", level, remortlevel), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlur(string_format(translate.Format"level_x_rlvl_x", level, remortlevel), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 		else
-			draw.SimpleTextBlur("LVL "..level, "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlur(translate.Format("level_x", level), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 		end
 	end
 end
@@ -105,10 +105,10 @@ function GM:DrawSigilTargetHint(ent, fade)
 	colTemp.a = fade * 128
 	util.ColorCopy(color_white, colTemp)
 
-	draw.SimpleTextBlur("Sigil", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+	draw.SimpleTextBlur(translate.Get"t_sigil", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 	y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 0
 
-	draw.SimpleTextBlur("Press E to teleport", "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+	draw.SimpleTextBlur(translate.Get"t_sigil_help", "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 end
 
 GM.TraceTarget = NULL
