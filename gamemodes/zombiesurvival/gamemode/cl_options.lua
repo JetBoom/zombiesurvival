@@ -25,14 +25,14 @@ GM.RemortColors = {
 }
 
 GM.SpeedToText = {
-	[SPEED_NORMAL] = "Normal",
-	[SPEED_SLOWEST] = "Very Slow",
-	[SPEED_SLOWER] = "Quite Slow",
-	[SPEED_SLOW] = "Slow",
-	[SPEED_FAST] = "Fast",
-	[SPEED_FASTER] = "Quite Fast",
-	[SPEED_FASTEST] = "Very Fast",
-	[-1] = "Ultra Slow",
+	[SPEED_NORMAL] = translate.Get"speed_normal",
+	[SPEED_SLOWEST] = translate.Get"speed_very_slow",
+	[SPEED_SLOWER] = translate.Get"speed_quite_slow",
+	[SPEED_SLOW] = translate.Get"speed_slow",
+	[SPEED_FAST] = translate.Get"speed_fast",
+	[SPEED_FASTER] = translate.Get"speed_quite_fast",
+	[SPEED_FASTEST] = translate.Get"speed_very_fast",
+	[-1] = translate.Get"speed_ultra_slow",
 }
 
 GM.AmmoToPurchaseNames = {
@@ -48,17 +48,17 @@ GM.AmmoToPurchaseNames = {
 }
 
 GM.WeaponStatBarVals = {
-	{"MeleeDamage", "Damage", 2, 140, false},
-	{"MeleeRange", "Range", 30, 100, false},
-	{"MeleeSize", "Size", 0.2, 3, false},
+	{"MeleeDamage", translate.Get"stat_damage", 2, 140, false},
+	{"MeleeRange", translate.Get"stat_range", 30, 100, false},
+	{"MeleeSize", translate.Get"stat_size", 0.2, 3, false},
 
-	{"Damage", "Damage", 1, 105, false, "Primary"},
-	{"Delay", "Attack Delay", 0.05, 2, true, "Primary"},
-	{"ClipSize", "Clip Size", 1, 35, false, "Primary"},
+	{"Damage", translate.Get"stat_damage", 1, 105, false, "Primary"},
+	{"Delay", translate.Get"stat_attack_delay", 0.05, 2, true, "Primary"},
+	{"ClipSize", translate.Get"stat_clip_size", 1, 35, false, "Primary"},
 
-	{"ConeMin", "Min Spread", 0, 5, true},
-	{"ConeMax", "Max Spread", 1.5, 7, true},
-	{"WalkSpeed", "Move Speed", 200, 250, false}
+	{"ConeMin", translate.Get"stat_minn_spread", 0, 5, true},
+	{"ConeMax", translate.Get"stat_maxx_spread", 1.5, 7, true},
+	{"WalkSpeed", translate.Get"stat_move_speed", 200, 250, false}
 }
 
 GM.LifeStatsLifeTime = 5

@@ -367,7 +367,7 @@ function MakepWorth()
 		end
 	end
 
-	local worthlab = EasyLabel(frame, translate.Get"worth_remaining"..tostring(remainingworth), "ZSHUDFontSmall", COLOR_LIMEGREEN)
+	local worthlab = EasyLabel(frame, translate.Format("worth_remaining_x", tostring(remainingworth)), "ZSHUDFontSmall", COLOR_LIMEGREEN)
 	worthlab:SetPos(8, frame:GetTall() - worthlab:GetTall() - 8)
 	frame.WorthLab = worthlab
 
@@ -536,7 +536,7 @@ function PANEL:SetWorthID(id)
 		self.PriceLabel:SetTextColor(COLOR_RED)
 		self.PriceLabel:SetText(GAMEMODE.Skills[tab.SkillRequirement].Name)
 	elseif tab.Price then
-		self.PriceLabel:SetText(tostring(tab.Price)..translate.Get"worth_cost")
+		self.PriceLabel:SetText(translate.Format("worth_cost_x", tostring(tab.Price)))
 	else
 		self.PriceLabel:SetText("")
 	end
@@ -626,7 +626,7 @@ function PANEL:DoClick(silent, force)
 		remainingworth = remainingworth - tab.Price
 	end
 
-	pWorth.WorthLab:SetText(translate.Get"worth_colored".. remainingworth)
+	pWorth.WorthLab:SetText(translate.Format("worth_colored_x", remainingworth))
 	if remainingworth <= 0 then
 		pWorth.WorthLab:SetTextColor(COLOR_RED)
 		pWorth.WorthLab:InvalidateLayout()

@@ -28,7 +28,7 @@ function MakepCredits()
 	frame:SetTitle(" ")
 	frame:SetKeyboardInputEnabled(false)
 
-	local label = EasyLabel(frame, translate.Format"credits_x", GAMEMODE.Name, "ZSHUDFontNS", color_white)
+	local label = EasyLabel(frame, translate.Format("credits_x", GAMEMODE.Name), "ZSHUDFontNS", color_white)
 	label:AlignTop(y)
 	label:CenterHorizontal()
 	y = y + label:GetTall() + 8

@@ -1673,18 +1673,18 @@ function GM:HumanMenu()
 
 	local hei = draw_GetFontHeight("ZSHUDFontSmall")
 
-	local selecteditemtitle = EasyLabel(panel, "Selected Item", "ZSHUDFontSmall", color_white)
+	local selecteditemtitle = EasyLabel(panel, translate.Get"alt_selected_item", "ZSHUDFontSmall", color_white)
 	selecteditemtitle:SetContentAlignment(5)
 	panel:AddItem(selecteditemtitle)
 
-	local selecteditemlabel = EasyLabel(panel, "Fists", "ZSHUDFontSmaller", color_white)
+	local selecteditemlabel = EasyLabel(panel, translate.Get"alt_selected_fists", "ZSHUDFontSmaller", color_white)
 	selecteditemlabel:SetContentAlignment(5)
 	panel:AddItem(selecteditemlabel)
 	panel.SelectedItemLabel = selecteditemlabel
 
 	local gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Give Item")
+	gwbtn:SetText(translate.Get"alt_give_item")
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = GiveWeapon
@@ -1692,7 +1692,7 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Give Item and 5 clips")
+	gwbtn:SetText(translate.Get"alt_give_item5")
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = GiveWeaponClip
@@ -1700,7 +1700,7 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Drop Item")
+	gwbtn:SetText(translate.Get"alt_drop_item")
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = DropWeapon
@@ -1708,7 +1708,7 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Empty Weapon Clip")
+	gwbtn:SetText(translate.Get"alt_empty_clip")
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = EmptyClip
@@ -1716,21 +1716,21 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Dismantle Item")
+	gwbtn:SetText(translate.Get"alt_dismantle_item")
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = DismantleWeapon
 	panel:AddItem(gwbtn)
 
-	panel:AddItem(EasyLabel(panel, "Resupply Ammo Selection", "DefaultFont", color_white))
+	panel:AddItem(EasyLabel(panel, translate.Get"alt_resupply_ammo", "DefaultFont", color_white))
 	local dropdown = vgui.Create("DComboBox", panel)
 	dropdown:SetMouseInputEnabled(true)
-	dropdown:AddChoice("Resupply Held Weapon")
+	dropdown:AddChoice(translate.Get"alt_resupply_held")
 	for k,v in pairs(self.AmmoResupply) do
 		dropdown:AddChoice(self.AmmoNames[k])
 	end
 	dropdown.OnSelect = function(me, index, value, data)
-		if value == "Resupply Held Weapon" then
+		if value == translate.Get"alt_resupply_held" then
 			MySelf.ResupplyChoice = nil
 			RunConsoleCommand("zs_resupplyammotype", "default")
 			return
@@ -1744,7 +1744,7 @@ function GM:HumanMenu()
 			end
 		end
 	end
-	dropdown:SetText("Resupply Held Weapon")
+	dropdown:SetText(translate.Get"alt_resupply_held")
 	dropdown:SetTextColor(color_black)
 	panel:AddItem(dropdown)
 

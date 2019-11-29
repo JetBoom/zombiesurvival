@@ -3,7 +3,7 @@ local function pointslabelThink(self)
 	if self.m_LastPoints ~= points then
 		self.m_LastPoints = points
 
-		self:SetText(translate.Format"points_to_spend_x", points)
+		self:SetText(translate.Format("points_to_spend_x", points))
 		self:SizeToContents()
 	end
 end
@@ -78,7 +78,7 @@ local function ItemPanelThink(self)
 			if stocks ~= self.m_LastStocks then
 				self.m_LastStocks = stocks
 
-				self.StockLabel:SetText(translate.Format"remaining_x", stocks)
+				self.StockLabel:SetText(translate.Format("remaining_x", stocks))
 				self.StockLabel:SizeToContents()
 				self.StockLabel:AlignRight(10)
 				self.StockLabel:SetTextColor(stocks > 0 and COLOR_GRAY or COLOR_RED)
@@ -138,16 +138,16 @@ function GM:ViewerStatBarUpdate(viewer, display, sweptable)
 		end
 
 		local statnum, stattext = statshow[6] and sweptable[statshow[6]][statshow[1]] or sweptable[statshow[1]]
-		if statshow[1] == translate.Get"stat_damage" and sweptable.Primary.NumShots and sweptable.Primary.NumShots > 1 then
+		if statshow[1] == "Damage" and sweptable.Primary.NumShots and sweptable.Primary.NumShots > 1 then
 			stattext = statnum .. " x " .. sweptable.Primary.NumShots-- .. " (" .. (statnum * sweptable.Primary.NumShots) .. ")"
-		elseif statshow[1] == translate.Get"stat_walk_speed" then
+		elseif statshow[1] == "WalkSpeed" then
 			stattext = speedtotext[SPEED_NORMAL]
 			if speedtotext[sweptable[statshow[1]]] then
 				stattext = speedtotext[sweptable[statshow[1]]]
 			elseif sweptable[statshow[1]] < SPEED_SLOWEST then
 				stattext = speedtotext[-1]
 			end
-		elseif statshow[1] == translate.Get"stat_clip_size2" then
+		elseif statshow[1] == "ClipSize" then
 			stattext = statnum / sweptable.RequiredClip
 		else
 			stattext = statnum
@@ -156,9 +156,9 @@ function GM:ViewerStatBarUpdate(viewer, display, sweptable)
 		viewer.ItemStats[i]:SetText(statshow[2])
 		viewer.ItemStatValues[i]:SetText(stattext)
 
-		if statshow[1] == translate.Get"stat_damage" then
+		if statshow[1] == "Damage" then
 			statnum = statnum * sweptable.Primary.NumShots
-		elseif statshow[1] == translate.Get"stat_clip_size2" then
+		elseif statshow[1] == "ClipSize" then
 			statnum = statnum / sweptable.RequiredClip
 		end
 
@@ -257,7 +257,7 @@ local function ItemPanelDoClick(self)
 
 	local ppurbl = viewer.m_PurchasePrice
 	local price = self.NoPoints and math.ceil(GAMEMODE:PointsToScrap(shoptbl.Worth)) or math.floor(shoptbl.Worth * (MySelf.ArsenalDiscount or 1))
-	ppurbl:SetText(price .. (self.NoPoints and translate.Get"ps_scrap" or translate.Get"ps_points"))
+	ppurbl:SetText(translate.Format("ps_scrap_x", price), (translate.Format("ps_points_xx", self.NoPoints)))
 	ppurbl:SizeToContents()
 	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
 	ppurbl:SetVisible(true)
@@ -276,7 +276,7 @@ local function ItemPanelDoClick(self)
 
 	ppurbl = viewer.m_AmmoPrice
 	price = math.floor(9 * (MySelf.ArsenalDiscount or 1))
-	ppurbl:SetText(translate.Format"ps_points_x", price)
+	ppurbl:SetText(translate.Format("ps_points_x", price))
 	ppurbl:SizeToContents()
 	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
 	ppurbl:SetVisible(canammo)
@@ -406,13 +406,13 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 		if nopointshop then
 			price = tostring(math.ceil(self:PointsToScrap(tab.Price)))
 		end
-		pricelabel:SetText(price..(nopointshop and " Scrap" or " Points"))
+		pricelabel:SetText(translate.Format("ps_scrap_x", price), (translate.Format("ps_points_xx", nopointshop)))
 	end
 	pricelabel:SizeToContents()
 	pricelabel:AlignRight(alignri)
 
 	if tab.MaxStock then
-		local stocklabel = EasyLabel(itempan, translate.Format"remaining_max_x", tab.MaxStock, "ZSHUDFontTiny")
+		local stocklabel = EasyLabel(itempan, translate.Format("remaining_max_x", tab.MaxStock), "ZSHUDFontTiny")
 		stocklabel:SizeToContents()
 		stocklabel:AlignRight(alignri)
 		stocklabel:SetPos(itempan:GetWide() - stocklabel:GetWide(), itempan:GetTall() * 0.45 - stocklabel:GetTall() * 0.5)
@@ -746,7 +746,7 @@ function GM:OpenArsenalMenu()
 					local ispacer = trinkets and ((i-1) % 3)+1 or i
 					local start = i == (catid == ITEMCAT_GUNS and 2 or ind)
 
-					tbn = EasyButton(tabpane, trinkets and subcats[i] or (translate.Format"tier_x" .. i), 2, 8)
+					tbn = EasyButton(tabpane, trinkets and subcats[i] or (translate.Format("tier_x", i)), 2, 8)
 					tbn:SetFont(trinkets and "ZSHUDFontSmallest" or "ZSHUDFontSmall")
 					tbn:SetAlpha(start and 255 or 70)
 					tbn:AlignRight((trinkets and -35 or -15) * screenscale -

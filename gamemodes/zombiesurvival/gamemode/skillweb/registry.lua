@@ -488,179 +488,179 @@ GM:AddSkill(SKILL_DISPERSION, translate.Get"skill_dispersion_name", GOOD..transl
 																0,			-4,					{}, TREE_SUPPORTTREE)
 
 -- Defence Tree
-GM:AddSkill(SKILL_HANDY1, "Handy I", GOOD.."+4% repair rate",
+GM:AddSkill(SKILL_HANDY1, translate.Get"skill_handy1_name", GOOD..translate.Get"skill_handy1_desc",
 																-5,			-6,					{SKILL_NONE, SKILL_HANDY2}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY2, "Handy II", GOOD.."+5% repair rate",
+GM:AddSkill(SKILL_HANDY2, translate.Get"skill_handy2_name", GOOD..translate.Get"skill_handy2_desc",
 																-5,			-4,					{SKILL_HANDY3, SKILL_U_BLASTTURRET, SKILL_LOADEDHULL}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY3, "Handy III", GOOD.."+6% repair rate",
+GM:AddSkill(SKILL_HANDY3, translate.Get"skill_handy3_name", GOOD..translate.Get"skill_handy3_desc",
 																-5,			-1,					{SKILL_TAUT, SKILL_HAMMERDISCIPLINE, SKILL_D_NOODLEARMS, SKILL_HANDY4}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY4, "Handy IV", GOOD.."+7% repair rate",
+GM:AddSkill(SKILL_HANDY4, translate.Get"skill_handy4_name", GOOD..translate.Get"skill_handy4_desc",
 																-3,			1,					{SKILL_HANDY5}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY5, "Handy V", GOOD.."+8% repair rate",
+GM:AddSkill(SKILL_HANDY5, translate.Get"skill_handy5_name", GOOD..translate.Get"skill_handy5_desc",
 																-3,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HAMMERDISCIPLINE, "Hammer Discipline", GOOD.."-20% swing delay with the Carpenter Hammer",
+GM:AddSkill(SKILL_HAMMERDISCIPLINE, translate.Get"skill_hammerdiscipline_name", GOOD..translate.Get"skill_hammerdiscipline_desc",
 																0,			1,					{SKILL_BARRICADEEXPERT}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_BARRICADEEXPERT, "Reinforcer", GOOD.."Props hit with a hammer in the last 2 seconds take 8% less damage\n"..GOOD.."Gain points from protected props\n"..BAD.."+30% swing delay with the Carpenter Hammer",
+GM:AddSkill(SKILL_BARRICADEEXPERT, translate.Get"skill_reinforcer_name", GOOD..translate.Get"skill_reinforcer_desc"..GOOD..translate.Get"skill_reinforcer_desc2"..BAD..translate.Get"skill_reinforcer_desc3",
 																0,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_LOADEDHULL, "Loaded Hull", GOOD.."Controllables explode when destroyed, dealing explosive damage\n"..BAD.."-10% Controllable health",
+GM:AddSkill(SKILL_LOADEDHULL, translate.Get"skill_loadedhull_name", GOOD..translate.Get"skill_loadedhull_desc"..BAD..translate.Get"skill_loadedhull_desc2",
 																-2,			-4,					{SKILL_REINFORCEDHULL, SKILL_REINFORCEDBLADES, SKILL_AVIATOR}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_REINFORCEDHULL, "Reinforced Hull", GOOD.."+25% Controllable health\n"..BAD.."-20% Controllable handling\n"..BAD.."-20% Controllable speed",
+GM:AddSkill(SKILL_REINFORCEDHULL, translate.Get"skill_reinforcedhull_name", GOOD..translate.Get"skill_reinforcedhull_desc"..BAD..translate.Get"skill_reinforcedhull_desc2"..BAD..translate.Get"skill_reinforcedhull_desc3",
 																-2,			-2,					{SKILL_STABLEHULL}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_STABLEHULL, "Stable Hull", GOOD.."Controllables are immune to high speed impacts\n"..BAD.."-20% Controllable speed",
+GM:AddSkill(SKILL_STABLEHULL, translate.Get"skill_stablehull_name", GOOD..translate.Get"skill_stablehull_desc"..BAD..translate.Get"skill_stablehull_desc2",
 																0,			-3,					{SKILL_U_DRONE}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_REINFORCEDBLADES, "Reinforced Blades", GOOD.."+25% Manhack damage\n"..BAD.."-15% Manhack health",
+GM:AddSkill(SKILL_REINFORCEDBLADES, translate.Get"skill_reinforcedblades_name", GOOD..translate.Get"skill_reinforcedblades_desc"..BAD..translate.Get"skill_reinforcedblades_desc2",
 																0,			-5,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_AVIATOR, "Aviator", GOOD.."+40% Controllable speed and handling\n"..BAD.."-25% Controllable health",
+GM:AddSkill(SKILL_AVIATOR, translate.Get"skill_aviator_name", GOOD..translate.Get"skill_aviator_desc"..BAD..translate.Get"skill_aviator_desc2",
 																-4,			-2,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_BLASTTURRET, "Unlock: Blast Turret", GOOD.."Unlocks purchasing the Blast Turret\nFires buckshot instead of SMG ammo\nDamage is higher close up\nCannot scan for targets far away",
+GM:AddSkill(SKILL_U_BLASTTURRET, translate.Get"skill_blastturret_name", GOOD..translate.Get"skill_blastturret_desc",
 																-8,			-4,					{SKILL_TURRETLOCK, SKILL_TWINVOLLEY, SKILL_TURRETOVERLOAD}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_TURRETLOCK, "Turret Lock", "-90% turret scan angle\n"..BAD.."-90% turret target lock angle",
+GM:AddSkill(SKILL_TURRETLOCK, translate.Get"skill_turretlock_name", translate.Get"skill_turretlock_desc"..BAD..translate.Get"skill_turretlock_desc2",
 																-6,			-2,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_TWINVOLLEY, "Twin Volley", GOOD.."Fire twice as many bullets in manual turret mode\n"..BAD.."+100% turret ammo usage in manual turret mode\n"..BAD.."+50% turret fire delay in manual turret mode",
+GM:AddSkill(SKILL_TWINVOLLEY, translate.Get"skill_twinvolley_name", GOOD..translate.Get"skill_twinvolley_desc"..BAD..translate.Get"skill_twinvolley_desc2"..BAD..translate.Get"skill_twinvolley_desc3",
 																-10,		-5,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_TURRETOVERLOAD, "Turret Overload", GOOD.." +100% Turret scan speed\n"..BAD.."-30% Turret range",
+GM:AddSkill(SKILL_TURRETOVERLOAD, translate.Get"skill_turretoberload_name", GOOD..translate.Get"skill_turretoberload_desc"..BAD..translate.Get"skill_turretoberload_desc2",
 																-8,			-2,					{SKILL_INSTRUMENTS}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_DRONE, "Unlock: Pulse Drone", GOOD.."Unlocks the Pulse Drone Variant\nFires short range pulse projectiles instead of bullets",
+GM:AddSkill(SKILL_U_DRONE, translate.Get"skill_drone_name", GOOD..translate.Get"skill_drone_desc",
 																2,			-3,					{SKILL_HAULMODULE, SKILL_U_ROLLERMINE}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_U_NANITECLOUD, "Unlock: Nanite Cloud Bomb", GOOD.."Unlocks purchasing the Nanite Cloud Bomb\nSlowly repairs all props and deployables inside the cloud",
+GM:AddSkill(SKILL_U_NANITECLOUD, translate.Get"skill_nanitecloud_name", GOOD..translate.Get"skill_nanitecloud_desc",
 																3,			1,					{SKILL_HAMMERDISCIPLINE}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_FIELDAMP, "Field Amplifier", GOOD.."-20% zapper and repair field delay\n"..BAD.."-40% zapper and repair field range",
+GM:AddSkill(SKILL_FIELDAMP, translate.Get"skill_fieldamp_name", GOOD..translate.Get"skill_fieldamp_desc"..BAD..translate.Get"skill_fieldamp_desc2",
 																6,			4,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_TECHNICIAN, "Field Technician", GOOD.." +3% zapper and repair field range\n"..GOOD.."-3% zapper and repair field delay",
+GM:AddSkill(SKILL_TECHNICIAN, translate.Get"skill_technician_name", GOOD..translate.Get"skill_technician_desc"..GOOD..translate.Get"skill_technician_desc2",
 																4,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_ROLLERMINE, "Unlock: Rollermine", GOOD.."Unlocks purchasing Rollermines\nRolls along the ground, shocking zombies and dealing damage",
+GM:AddSkill(SKILL_U_ROLLERMINE, translate.Get"skill_rollermine_name", GOOD..translate.Get"skill_rollermine_desc",
 																3,			-5,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HAULMODULE, "Unlock: Hauling Drone", GOOD.."Unlocks the Hauling Drone\nRapidly transports props and items but cannot attack",
+GM:AddSkill(SKILL_HAULMODULE, translate.Get"skill_haulmodule_name", GOOD..translate.Get"skill_haulmodule_desc",
 																2,			-1,					{SKILL_U_NANITECLOUD}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_LIGHTCONSTRUCT, "Light Construction", GOOD.."-25% deployable pack time\n"..BAD.."-25% deployable health",
+GM:AddSkill(SKILL_LIGHTCONSTRUCT, translate.Get"skill_lightconstruct_name", GOOD..translate.Get"skill_lightconstruct_desc"..BAD..translate.Get"skill_lightconstruct_desc2",
 																8,			-1,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_STOCKPILE, "Stockpiling", GOOD.."Collect twice as much from resupplies\n"..BAD.."2.12x resupply box delay",
+GM:AddSkill(SKILL_STOCKPILE, translate.Get"skill_stockpile_name", GOOD..translate.Get"skill_stockpile_desc"..BAD..translate.Get"skill_stockpile_desc2",
 																8,			-3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_ACUITY, "Supplier's Acuity", GOOD.."Locate nearby resupply boxes if behind walls\n"..GOOD.."Locate nearby unplaced resupply boxes on players through walls\n"..GOOD.."Locate nearby resupply packs through walls",
+GM:AddSkill(SKILL_ACUITY, translate.Get"skill_acuity_name", GOOD..translate.Get"skill_acuity_desc"..GOOD..translate.Get"skill_acuity_desc2"..GOOD..translate.Get"skill_acuity_desc3",
 																6,			-3,					{SKILL_INSIGHT, SKILL_STOCKPILE, SKILL_U_CRAFTINGPACK, SKILL_STOWAGE}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_VISION, "Refiner's Vision", GOOD.."Locate nearby remantlers if behind walls\n"..GOOD.."Locate nearby unplaced remantlers on players through walls",
+GM:AddSkill(SKILL_VISION, translate.Get"skill_vision_name", GOOD..translate.Get"skill_vision_desc"..GOOD..translate.Get"skill_vision_desc2",
 																6,			-6,					{SKILL_NONE, SKILL_ACUITY}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_ROCKETTURRET, "Unlock: Rocket Turret", GOOD.."Unlocks purchasing the Rocket Turret\nFires explosives instead of SMG ammo\nDeals damage in a radius\nHigh tier deployable",
+GM:AddSkill(SKILL_U_ROCKETTURRET, translate.Get"skill_rocketturret_name", GOOD..translate.Get"skill_rocketturret_desc",
 																-8,			-0,					{SKILL_TURRETOVERLOAD}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_INSIGHT, "Buyer's Insight", GOOD.."Locate nearby arsenal crates if behind walls\n"..GOOD.."Locate nearby unplaced arsenal crates on players through walls\n"..GOOD.."Locate nearby arsenal packs through walls",
+GM:AddSkill(SKILL_INSIGHT, translate.Get"skill_insight_name", GOOD..translate.Get"skill_insight_desc"..GOOD..translate.Get"skill_insight_desc2"..GOOD..translate.Get"skill_insight_desc3",
 																6,			-0,					{SKILL_U_NANITECLOUD, SKILL_U_ZAPPER_ARC, SKILL_LIGHTCONSTRUCT, SKILL_D_LATEBUYER}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_U_ZAPPER_ARC, "Unlock: Arc Zapper", GOOD.."Unlocks purchasing the Arc Zapper\nZaps zombies that get nearby, and jumps in an arc\nMid tier deployable and long cooldown\nRequires a steady upkeep of pulse ammo",
+GM:AddSkill(SKILL_U_ZAPPER_ARC, translate.Get"skill_zapperarc_name", GOOD..translate.Get"skill_zapperarc_desc",
 																6,			2,					{SKILL_FIELDAMP, SKILL_TECHNICIAN}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_D_LATEBUYER, "Debuff: Late Buyer", GOOD.."+20 starting Worth\n"..GOOD.."2% arsenal discount\n"..BAD.."Unable to use points at arsenal crates until the second half of the round",
+GM:AddSkill(SKILL_D_LATEBUYER, translate.Get"skill_latebuyer_name", GOOD..translate.Get"skill_latebuyer_desc"..GOOD..translate.Get"skill_latebuyer_desc2"..BAD..translate.Get"skill_latebuyer_desc3",
 																8,			1,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_CRAFTINGPACK, "Unlock: Crafting Pack", GOOD.."Unlocks purchasing the Sawblade component\n"..GOOD.."Unlocks purchasing the Electrobattery component\n"..GOOD.."Unlocks purchasing the CPU Parts component",
+GM:AddSkill(SKILL_U_CRAFTINGPACK, translate.Get"skill_craftingpack_name", GOOD..translate.Get"skill_craftingpack_desc"..GOOD..translate.Get"skill_craftingpack_desc2"..GOOD..translate.Get"skill_craftingpack_desc3",
 																4,			-1,					{}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_TAUT, "Taut", GOOD.."Damage does not make you drop props\n"..BAD.."+40% prop carrying slow down",
+GM:AddSkill(SKILL_TAUT, translate.Get"skill_taut_name", GOOD..translate.Get"skill_taut_desc"..BAD..translate.Get"skill_taut_desc2",
 																-5,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_D_NOODLEARMS, "Debuff: Noodle Arms", GOOD.."+5 starting Worth\n"..GOOD.."+1 starting scrap\n"..BAD.."Unable to pick up objects",
+GM:AddSkill(SKILL_D_NOODLEARMS, translate.Get"skill_noodlearms_name", GOOD..translate.Get"skill_noodlearms_desc"..GOOD..translate.Get"skill_noodlearms_desc2"..BAD..translate.Get"skill_noodlearms_desc3",
 																-7,			2,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_INSTRUMENTS, "Instruments", GOOD.."+5% turret range",
+GM:AddSkill(SKILL_INSTRUMENTS, translate.Get"skill_instruments_name", GOOD..translate.Get"skill_instruments_desc",
 																-10,		-3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_STOWAGE, 	"Stowage", GOOD.."Resupply usages build up when you're not there\n"..BAD.."+15% resupply delay",
+GM:AddSkill(SKILL_STOWAGE, 	translate.Get"skill_stowage_name", GOOD..translate.Get"skill_stowage_desc"..BAD..translate.Get"skill_stowage_desc2",
 																4,			-3,					{}, TREE_BUILDINGTREE)
 
 -- Gunnery Tree
-GM:AddSkill(SKILL_TRIGGER_DISCIPLINE1, "Trigger Discipline I", GOOD.."+2% weapon reload speed\n"..GOOD.."+2% weapon draw speed",
+GM:AddSkill(SKILL_TRIGGER_DISCIPLINE1, translate.Get"skill_trigger1_name", GOOD..translate.Get"skill_trigger1_desc"..GOOD..translate.Get"skill_trigger1_desc2",
 																-5,			6,					{SKILL_TRIGGER_DISCIPLINE2, SKILL_NONE}, TREE_GUNTREE)
-GM:AddSkill(SKILL_TRIGGER_DISCIPLINE2, "Trigger Discipline II", GOOD.."+3% weapon reload speed\n"..GOOD.."+3% weapon draw speed",
+GM:AddSkill(SKILL_TRIGGER_DISCIPLINE2, translate.Get"skill_trigger2_name", GOOD..translate.Get"skill_trigger2_desc"..GOOD..translate.Get"skill_trigger2_desc2",
 																-4,			3,					{SKILL_TRIGGER_DISCIPLINE3, SKILL_D_PALSY, SKILL_EQUIPPED}, TREE_GUNTREE)
-GM:AddSkill(SKILL_TRIGGER_DISCIPLINE3, "Trigger Discipline III", GOOD.."+4% weapon reload speed\n"..GOOD.."+4% weapon draw speed",
+GM:AddSkill(SKILL_TRIGGER_DISCIPLINE3, translate.Get"skill_trigger3_name", GOOD..translate.Get"skill_trigger3_desc"..GOOD..translate.Get"skill_trigger3_desc2",
 																-3,			0,					{SKILL_QUICKRELOAD, SKILL_QUICKDRAW, SKILL_WORTHINESS1, SKILL_EGOCENTRIC}, TREE_GUNTREE)
-GM:AddSkill(SKILL_D_PALSY, "Debuff: Palsy", GOOD.."+10 starting Worth\n"..GOOD.."-3% resupply delay\n"..BAD.."Aiming ability reduced when health is low",
+GM:AddSkill(SKILL_D_PALSY, translate.Get"skill_palsy_name", GOOD..translate.Get"skill_palsy_desc"..GOOD..translate.Get"skill_palsy_desc2"..BAD..translate.Get"skill_palsy_desc3",
 																0,			4,					{SKILL_LEVELHEADED}, TREE_GUNTREE)
-GM:AddSkill(SKILL_LEVELHEADED, "Level Headed", GOOD.."-5% reduced effect of aim shake effects",
+GM:AddSkill(SKILL_LEVELHEADED, translate.Get"skill_levelheaded_name", GOOD..translate.Get"skill_levelheaded_desc",
 																-2,			2,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_QUICKDRAW, "Quick Draw", GOOD.."+65% weapon draw speed\n"..BAD.."-15% weapon reload speed",
+GM:AddSkill(SKILL_QUICKDRAW, translate.Get"skill_quickdraw_name", GOOD..translate.Get"skill_quickdraw_desc"..BAD..translate.Get"skill_quickdraw_desc2",
 																0,			1,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_FOCUS, "Focus I", GOOD.."+3% tighter aiming reticule\n"..BAD.."-3% weapon reload speed",
+GM:AddSkill(SKILL_FOCUS, translate.Get"skill_focus1_name", GOOD..translate.Get"skill_focus1_desc"..BAD..translate.Get"skill_focus1_desc2",
 																5,			6,					{SKILL_NONE, SKILL_FOCUSII}, TREE_GUNTREE)
-GM:AddSkill(SKILL_FOCUSII, "Focus II", GOOD.."+4% tighter aiming reticule\n"..BAD.."-4% weapon reload speed",
+GM:AddSkill(SKILL_FOCUSII, translate.Get"skill_focus2_name", GOOD..translate.Get"skill_focus2_desc"..BAD..translate.Get"skill_focus2_desc2",
 																4,			3,					{SKILL_FOCUSIII, SKILL_SCAVENGER, SKILL_D_PALSY, SKILL_PITCHER}, TREE_GUNTREE)
-GM:AddSkill(SKILL_FOCUSIII, "Focus III", GOOD.."+5% tighter aiming reticule\n"..BAD.."-5% weapon reload speed",
+GM:AddSkill(SKILL_FOCUSIII, translate.Get"skill_focus3_name", GOOD..translate.Get"skill_focus3_desc"..BAD..translate.Get"skill_focus3_desc2",
 																3,			0,					{SKILL_EGOCENTRIC, SKILL_WOOISM, SKILL_ORPHICFOCUS, SKILL_SCOURER}, TREE_GUNTREE)
-GM:AddSkill(SKILL_QUICKRELOAD, "Quick Reload", GOOD.."+10% weapon reload speed\n"..BAD.."-25% weapon draw speed",
+GM:AddSkill(SKILL_QUICKRELOAD, translate.Get"skill_quickreload_name", GOOD..translate.Get"skill_quickreload_desc"..BAD..translate.Get"skill_quickreload_desc2",
 																-5,			1,					{SKILL_SLEIGHTOFHAND}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SLEIGHTOFHAND, "Sleight of Hand", GOOD.."+10% weapon reload speed\n"..BAD.."-5% tighter aiming reticule",
+GM:AddSkill(SKILL_SLEIGHTOFHAND, translate.Get"skill_sleightofhand_name", GOOD..translate.Get"skill_sleightofhand_desc"..BAD..translate.Get"skill_sleightofhand_desc2",
 																-5,			-1,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_U_CRYGASGREN, "Unlock: Cryo Gas Grenade", GOOD.."Unlocks purchasing the Cryo Gas Grenade\nVariant of the Corrosive Gas Grenade\nCryo gas deals a bit of damage over time\nZombies are slowed in the effect",
+GM:AddSkill(SKILL_U_CRYGASGREN, translate.Get"skill_cryogasgren_name", GOOD..translate.Get"skill_cryogasgren_desc",
 																2,			-3,					{SKILL_EGOCENTRIC}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SOFTDET, "Soft Detonation", GOOD.."-40% explosive damage taken\n"..BAD.."-10% explosive damage radius",
+GM:AddSkill(SKILL_SOFTDET, translate.Get"skill_softdet_name", GOOD..translate.Get"skill_softdet_desc"..BAD..translate.Get"skill_softdet_desc2",
 																0,			-5,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_ORPHICFOCUS, "Orphic Focus", GOOD.."90% spread while ironsighting\n"..GOOD.."+2% tighter aiming reticule\n"..BAD.."110% spread at any other time\n"..BAD.."-6% reload speed",
+GM:AddSkill(SKILL_ORPHICFOCUS, translate.Get"skill_orphicfocus_name", GOOD..translate.Get"skill_orphicfocus_desc"..GOOD..translate.Get"skill_orphicfocus_desc2"..BAD..translate.Get"skill_orphicfocus_desc3"..BAD..translate.Get"skill_orphicfocus_desc4",
 																5,			-1,					{SKILL_DELIBRATION}, TREE_GUNTREE)
-GM:AddSkill(SKILL_DELIBRATION, "Delibration", GOOD.."+1% tighter aiming reticule",
+GM:AddSkill(SKILL_DELIBRATION, translate.Get"skill_delibration_name", GOOD..translate.Get"skill_delibration_desc",
 																6,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_EGOCENTRIC, "Egocentric", GOOD.."-35% damage vs. yourself\n"..BAD.."-5 health",
+GM:AddSkill(SKILL_EGOCENTRIC, translate.Get"skill_egocentric_name", GOOD..translate.Get"skill_egocentric_desc"..BAD..translate.Get"skill_egocentric_desc2",
 																0,			-1,					{SKILL_BLASTPROOF}, TREE_GUNTREE)
-GM:AddSkill(SKILL_BLASTPROOF, "Blast Proof", GOOD.."-45% damage vs. yourself\n"..BAD.."-7% reload speed\n"..BAD.."-12% weapon draw speed",
+GM:AddSkill(SKILL_BLASTPROOF, translate.Get"skill_blastproof_name", GOOD..translate.Get"skill_blastproof_desc"..BAD..translate.Get"skill_blastproof_desc2"..BAD..translate.Get"skill_blastproof_desc3",
 																0,			-3,					{SKILL_SOFTDET, SKILL_CANNONBALL, SKILL_CONEFFECT}, TREE_GUNTREE)
-GM:AddSkill(SKILL_WOOISM, "Zeal", GOOD.."-50% speed reduction from being ironsighted\n"..BAD.."-25% accuracy bonus from ironsighting",
+GM:AddSkill(SKILL_WOOISM, translate.Get"skill_zeal_name", GOOD..translate.Get"skill_zeal_desc"..BAD..translate.Get"skill_zeal_desc2",
 																5,			1,					{SKILL_TRUEWOOISM}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SCAVENGER, "Scavenger's Eyes", GOOD.."See nearby weapons, ammo, and items through walls",
+GM:AddSkill(SKILL_SCAVENGER, translate.Get"skill_scavenger_name", GOOD..translate.Get"skill_scavenger_desc",
 																7,			4,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_PITCHER, "Pitcher", GOOD.."+10% object throw and thrown weapon velocity",
+GM:AddSkill(SKILL_PITCHER, translate.Get"skill_pitcher_name", GOOD..translate.Get"skill_pitcher_desc",
 																6,			2,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_EQUIPPED, "Alacrity", GOOD.."Your starting item can be a random special trinket",
+GM:AddSkill(SKILL_EQUIPPED, translate.Get"skill_alacrity_name", GOOD..translate.Get"skill_alacrity_desc",
 																-6,			2,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_WORTHINESS1, "Worthiness I", GOOD.."+5 starting worth\n"..BAD.."-3 starting points",
+GM:AddSkill(SKILL_WORTHINESS1, translate.Get"skill_worthiness1_name", GOOD..translate.Get"skill_worthiness1_desc"..BAD..translate.Get"skill_worthiness1_desc2",
 																-4,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_CANNONBALL, "Cannonball", "-25% projectile speed\n"..GOOD.."+3% projectile damage",
+GM:AddSkill(SKILL_CANNONBALL, translate.Get"skill_cannonball_name", translate.Get"skill_cannonball_desc"..GOOD..translate.Get"skill_cannonball_desc2",
 																-2,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SCOURER, "Scourer", GOOD.."Earn end of wave points as scrap\n"..BAD.."Earn no end of wave points",
+GM:AddSkill(SKILL_SCOURER, translate.Get"skill_scourer_name", GOOD..translate.Get"skill_scourer_desc"..BAD..translate.Get"skill_scourer_desc2",
 																4,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_CONEFFECT, "Concentrated Effect", GOOD.."+5% explosive damage\n"..BAD.."-20% explosive damage radius",
+GM:AddSkill(SKILL_CONEFFECT, translate.Get"skill_coneffect_name", GOOD..translate.Get"skill_coneffect_desc"..BAD..translate.Get"skill_coneffect_desc2",
 																2,			-5,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_TRUEWOOISM, "Wooism", GOOD.."No accuracy penalty from moving or jumping\n"..BAD.."No accuracy bonus from crouching or ironsighting",
+GM:AddSkill(SKILL_TRUEWOOISM, translate.Get"skill_wooism_name", GOOD..translate.Get"skill_wooism_desc"..BAD..translate.Get"skill_wooism_desc2",
 																7,			0,					{}, TREE_GUNTREE)
 
 -- Melee Tree
-GM:AddSkill(SKILL_WORTHINESS2, "Worthiness II", GOOD.."+5 starting worth\n"..BAD.."-3 starting points",
+GM:AddSkill(SKILL_WORTHINESS2, translate.Get"skill_worthiness2_name", GOOD..translate.Get"skill_worthiness2_desc"..BAD..translate.Get"skill_worthiness2_desc2",
 																4,			0,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER1, "Battler I", GOOD.."+4% melee damage",
+GM:AddSkill(SKILL_BATTLER1, translate.Get"skill_battler1_name", GOOD..translate.Get"skill_battler1_desc",
 																-6,			-6,					{SKILL_BATTLER2, SKILL_NONE}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER2, "Battler II", GOOD.."+5% melee damage",
+GM:AddSkill(SKILL_BATTLER2, translate.Get"skill_battler2_name", GOOD..translate.Get"skill_battler2_desc",
 																-6,			-4,					{SKILL_BATTLER3, SKILL_LIGHTWEIGHT}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER3, "Battler III", GOOD.."+5% melee damage",
+GM:AddSkill(SKILL_BATTLER3, translate.Get"skill_battler3_name", GOOD..translate.Get"skill_battler3_desc",
 																-4,			-2,					{SKILL_BATTLER4, SKILL_LANKY}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER4, "Battler IV", GOOD.."+6% melee damage",
+GM:AddSkill(SKILL_BATTLER4, translate.Get"skill_battler4_name", GOOD..translate.Get"skill_battler4_desc",
 																-2,			0,					{SKILL_BATTLER5, SKILL_MASTERCHEF, SKILL_D_CLUMSY}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER5, "Battler V", GOOD.."+7% melee damage",
+GM:AddSkill(SKILL_BATTLER5, translate.Get"skill_battler5_name", GOOD..translate.Get"skill_battler5_desc",
 																0,			2,					{SKILL_GLASSWEAPONS, SKILL_BLOODLUST}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LASTSTAND, "Last Stand", GOOD.."Double melee damage when below 25% health\n"..BAD.."0.85x melee weapon damage at any other time",
+GM:AddSkill(SKILL_LASTSTAND, translate.Get"skill_laststand_name", GOOD..translate.Get"skill_laststand_desc"..BAD..translate.Get"skill_laststand_desc2",
 																0,			6,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_GLASSWEAPONS, "Glass Weapons", GOOD.."3.5x melee weapon damage vs. zombies\n"..BAD.."Your melee weapons have a 50% chance to break when hitting a zombie",
+GM:AddSkill(SKILL_GLASSWEAPONS, translate.Get"skill_glassweapons_name", GOOD..translate.Get"skill_glassweapons_desc"..BAD..translate.Get"skill_glassweapons_desc2",
 																2,			4,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_D_CLUMSY, "Debuff: Clumsy", GOOD.."+20 starting Worth\n"..GOOD.."+5 starting points\n"..BAD.."Very easy to be knocked down",
+GM:AddSkill(SKILL_D_CLUMSY, translate.Get"skill_clumsy_name", GOOD..translate.Get"skill_clumsy_desc"..GOOD..translate.Get"skill_clumsy_desc2"..BAD..translate.Get"skill_clumsy_desc3",
 																-2,			2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_CHEAPKNUCKLE, "Cheap Tactics", GOOD.."Slow targets when striking with a melee weapon from behind\n"..BAD.."-10% melee range",
+GM:AddSkill(SKILL_CHEAPKNUCKLE, translate.Get"skill_cheapknuckle_name", GOOD..translate.Get"skill_cheapknuckle_desc"..BAD..translate.Get"skill_cheapknuckle_desc2",
 																4,			-2,					{SKILL_HEAVYSTRIKES, SKILL_WORTHINESS2}, TREE_MELEETREE)
-GM:AddSkill(SKILL_CRITICALKNUCKLE, "Critical Knuckle", GOOD.."Knockback when using unarmed strikes\n"..BAD.."-25% unarmed strike damage\n"..BAD.."+25% time before next unarmed strike",
+GM:AddSkill(SKILL_CRITICALKNUCKLE, translate.Get"skill_criticalknuckle_name", GOOD..translate.Get"skill_criticalknuckle_desc"..BAD..translate.Get"skill_criticalknuckle_desc2"..BAD..translate.Get"skill_criticalknuckle_desc3",
 																6,			-2,					{SKILL_BRASH}, TREE_MELEETREE)
-GM:AddSkill(SKILL_KNUCKLEMASTER, "Knuckle Master", GOOD.."+75% unarmed strike damage\n"..GOOD.."Movement speed is no longer slower when using unarmed strikes\n"..BAD.."+35% time before next unarmed strike",
+GM:AddSkill(SKILL_KNUCKLEMASTER, translate.Get"skill_knucklemaster_name", GOOD..translate.Get"skill_knucklemaster_desc"..GOOD..translate.Get"skill_knucklemaster_desc2"..BAD..translate.Get"skill_knucklemaster_desc3",
 																6,			-6,					{SKILL_NONE, SKILL_COMBOKNUCKLE}, TREE_MELEETREE)
-GM:AddSkill(SKILL_COMBOKNUCKLE, "Combo Knuckle", GOOD.."Next unarmed strike is 2x faster if hitting something\n"..BAD.."Next unarmed attack is 2x slower if not hitting something",
+GM:AddSkill(SKILL_COMBOKNUCKLE, translate.Get"skill_comboknuckle_name", GOOD..translate.Get"skill_comboknuckle_desc"..BAD..translate.Get"skill_comboknuckle_desc2",
 																6,			-4,					{SKILL_CHEAPKNUCKLE, SKILL_CRITICALKNUCKLE}, TREE_MELEETREE)
-GM:AddSkill(SKILL_HEAVYSTRIKES, "Heavy Strikes", GOOD.."+100% melee knockback\n"..BAD.."8% of melee damage dealt is reflected back to you\n"..BAD.."100% reflected if using unarmed strikes",
+GM:AddSkill(SKILL_HEAVYSTRIKES, translate.Get"skill_heavystrikes_name", GOOD..translate.Get"skill_heavystrikes_desc"..BAD..translate.Get"skill_heavystrikes_desc2"..BAD..translate.Get"skill_heavystrikes_desc3",
 																2,			0,					{SKILL_BATTLER5, SKILL_JOUSTER}, TREE_MELEETREE)
-GM:AddSkill(SKILL_JOUSTER, "Jouster", GOOD.."+10% melee damage\n"..BAD.."-100% melee knockback",
+GM:AddSkill(SKILL_JOUSTER, translate.Get"skill_jouster_name", GOOD..translate.Get"skill_jouster_desc"..BAD..translate.Get"skill_jouster_desc2",
 																2,			2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LANKY, "Lanky I", GOOD.."+10% melee range\n"..BAD.."-15% melee damage",
+GM:AddSkill(SKILL_LANKY, translate.Get"skill_lanky_name", GOOD..translate.Get"skill_lanky_desc"..BAD..translate.Get"skill_lanky_desc2",
 																-4,			0,					{SKILL_LANKYII}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LANKYII, "Lanky II", GOOD.."+10% melee range\n"..BAD.."-15% melee damage",
+GM:AddSkill(SKILL_LANKYII, translate.Get"skill_lanky2_name", GOOD..translate.Get"skill_lanky2_desc"..BAD..translate.Get"skill_lanky2_desc2",
 																-4,			2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_MASTERCHEF, "Master Chef", GOOD.."Zombies hit by culinary weapons in the past second have a chance to drop food items on death\n"..BAD.."-10% melee damage",
+GM:AddSkill(SKILL_MASTERCHEF, translate.Get"skill_masterchief_name", GOOD..translate.Get"skill_masterchief_desc"..BAD..translate.Get"skill_masterchief_desc2",
 																0,			-3,					{SKILL_BATTLER4}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LIGHTWEIGHT, "Lightweight", GOOD.."+6 movement speed with a melee weapon equipped\n"..BAD.."-20% melee damage",
+GM:AddSkill(SKILL_LIGHTWEIGHT, translate.Get"skill_lightweight_name", GOOD..translate.Get"skill_lightweight_desc"..BAD..translate.Get"skill_lightweight_desc2",
 																-6,			-2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BLOODLUST, "Bloodlust", "Gain phantom health equal to half the damage taken from zombies\nLose phantom health equal to any healing received\nPhantom health decreases by 5 per second\n"..GOOD.."Heal 25% of damage done with melee from remaining phantom health\n"..BAD.."-50% healing received",
+GM:AddSkill(SKILL_BLOODLUST, translate.Get"skill_bloodlust_name", translate.Get"skill_bloodlust_desc"..GOOD..translate.Get"skill_bloodlust_desc2"..BAD..translate.Get"skill_bloodlust_desc3",
 																-2,			4,					{SKILL_LASTSTAND}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BRASH, "Brash", GOOD.."-16% melee swing impact delay\n"..BAD.."-15 speed on melee kill for 10 seconds",
+GM:AddSkill(SKILL_BRASH, translate.Get"skill_brash_name", GOOD..translate.Get"skill_brash_desc"..BAD..translate.Get"skill_brash_desc2",
 																6,			0,					{}, TREE_MELEETREE)
 
 GM:SetSkillModifierFunction(SKILLMOD_SPEED, function(pl, amount)

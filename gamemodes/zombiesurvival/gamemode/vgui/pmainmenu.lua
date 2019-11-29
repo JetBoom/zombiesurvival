@@ -7,7 +7,7 @@ local pPlayerModel
 local function SwitchPlayerModel(self)
 	surface.PlaySound("buttons/button14.wav")
 	RunConsoleCommand("cl_playermodel", self.m_ModelName)
-	chat.AddText(COLOR_LIMEGREEN, "You've changed your desired player model to "..tostring(self.m_ModelName))
+	chat.AddText(COLOR_LIMEGREEN, translate.Format("playermodel_changed_msg", tostring(self.m_ModelName)))
 
 	pPlayerModel:Close()
 end

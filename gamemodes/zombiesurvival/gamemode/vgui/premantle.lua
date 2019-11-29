@@ -3,7 +3,7 @@ local function ScrapLabelThink(self)
 	if self.m_LastScrap ~= scrap then
 		self.m_LastScrap = scrap
 
-		self:SetText(translate.Format"scrap_for_usage_x", scrap)
+		self:SetText(translate.Format("scrap_for_usage_x", scrap))
 		self:SizeToContents()
 	end
 end
@@ -401,7 +401,7 @@ function PANEL:Paint(w, h)
 			self.QualityName:SetText(txt)
 			self.QualityName:SizeToContents()
 
-			self.ScrapCost:SetText(scost ~= "" and translate.Format"r_scrap_cost_x", scost or "")
+			self.ScrapCost:SetText(scost ~= "" and translate.Format("r_scrap_cost_x", scost) or "")
 			self.ScrapCost:SetTextColor(scost ~= "" and MySelf:GetAmmoCount("scrap") >= scost and COLOR_WHITE or COLOR_RED)
 			self.ScrapCost:SizeToContents()
 
@@ -723,7 +723,7 @@ function GM:OpenRemantlerMenu(remantler)
 	local disscraptxt = ""
 	if gtbl then
 		local retscrap = self:GetDismantleScrap(gtbl, SelectedInv())
-		disscraptxt = gtbl.NoDismantle and translate.Get"r_cannot_dismantle" or translate.Format"r_dismantle_for_x", retscrap
+		disscraptxt = gtbl.NoDismantle and translate.Get("r_cannot_dismantle") or translate.Format("r_dismantle_for_x", retscrap)
 	end
 
 	local disscrap = EasyLabel(remantleframe, disscraptxt, "ZSHUDFontSmaller", COLOR_WHITE)
