@@ -35,24 +35,24 @@ function MakepEndBoard(winner)
 	local heading
 	if localwin then
 		surface.PlaySound("beams/beamstart5.wav")
-		heading = EasyLabel(frame, "You have won!", "ZSHUDFontBig", COLOR_CYAN)
+		heading = EasyLabel(frame, translate.Get"end_won", "ZSHUDFontBig", COLOR_CYAN)
 	else
 		surface.PlaySound("ambient/levels/citadel/strange_talk"..math.random(3, 11)..".wav")
-		heading = EasyLabel(frame, "You have lost.", "ZSHUDFontBig", COLOR_RED)
+		heading = EasyLabel(frame, translate.Get"end_lost", "ZSHUDFontBig", COLOR_RED)
 	end
 	heading:SetPos(wid * 0.5 - heading:GetWide() * 0.5, y)
 	y = y + heading:GetTall() + 16
 
 	local subheading
 	if localwin then
-		subheading = EasyLabel(frame, "The humans have survived for now.", "ZSHUDFontSmaller", COLOR_WHITE)
+		subheading = EasyLabel(frame, translate.Get"end_humans_won", "ZSHUDFontSmaller", COLOR_WHITE)
 	else
-		subheading = EasyLabel(frame, "The undead army grows stronger.", "ZSHUDFontSmaller", COLOR_LIMEGREEN)
+		subheading = EasyLabel(frame, translate.Get"end_undead_won", "ZSHUDFontSmaller", COLOR_LIMEGREEN)
 	end
 	subheading:SetPos(wid * 0.5 - subheading:GetWide() * 0.5, y)
 	y = y + subheading:GetTall() + 2
 
-	local svpan = EasyLabel(frame, "Honorable Mentions", "ZSHUDFontSmall", COLOR_WHITE)
+	local svpan = EasyLabel(frame, translate.Get"end_honorable_mentions", "ZSHUDFontSmall", COLOR_WHITE)
 	svpan:SetPos(wid * 0.5 - svpan:GetWide() * 0.5, y)
 	y = y + svpan:GetTall() + 2
 
@@ -114,7 +114,7 @@ function PANEL:SetPlayer(pl, col, misc, misccol, overridename)
 		avatar:SetPos(2, 2)
 		avatar:SetSize(32, 32)
 		avatar:SetPlayer(pl)
-		avatar:SetTooltip("Click here to view their Steam Community profile.")
+		avatar:SetTooltip(translate.Get"end_profile_link")
 		self.m_pAvatar = avatar
 
 		local namelab = EasyLabel(self, name, "ZSHUDFontTiny", col)

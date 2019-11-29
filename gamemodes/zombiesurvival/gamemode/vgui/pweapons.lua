@@ -40,7 +40,7 @@ local function SetWeaponViewerSWEP(self, swep, category, comps)
 	viewer.m_VBG:SetVisible(true)
 
 	if sweptable.NoDismantle then
-		desctext = desctext .. "\nCannot be dismantled for scrap."
+		desctext = translate.Format("cannot_be_dismantled_for_x", desctext)
 	end
 
 	viewer.m_Desc:MoveBelow(viewer.m_VBG, 8)

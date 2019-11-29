@@ -50,7 +50,7 @@ function SWEP:DrawHUD()
 	end
 
 	local charges = self:GetPrimaryAmmoCount()
-	local chargetxt = "Mines: " .. c .. " / " .. self.MaxMines
+	local chargetxt = translate.Format("mines_x", c, self.MaxMines)
 	if charges > 0 then
 		draw.SimpleText(chargetxt, "ZSHUDFont", x + wid, texty, COLOR_CYAN, TEXT_ALIGN_RIGHT)
 	end

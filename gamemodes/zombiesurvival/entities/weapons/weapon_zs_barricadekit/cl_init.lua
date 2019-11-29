@@ -10,7 +10,7 @@ function SWEP:DrawHUD()
 	local texty = y - 4 - draw.GetFontHeight("ZSHUDFont")
 
 	local charges = self:GetPrimaryAmmoCount()
-	local chargetxt = "Boards: " .. charges
+	local chargetxt = translate.Format("boards_x", charges)
 	if charges > 0 then
 		draw.SimpleText(chargetxt, "ZSHUDFont", x + wid, texty, COLOR_GREEN, TEXT_ALIGN_RIGHT)
 	else

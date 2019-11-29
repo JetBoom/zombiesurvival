@@ -4,9 +4,9 @@ INVCAT_CONSUMABLES = 3
 
 GM.ZSInventoryItemData = {}
 GM.ZSInventoryCategories = {
-	[INVCAT_TRINKETS] = "Trinkets",
-	[INVCAT_COMPONENTS] = "Components",
-	[INVCAT_CONSUMABLES] = "Consumables"
+	[INVCAT_TRINKETS] = translate.Get"ccat_trinkets",
+	[INVCAT_COMPONENTS] = translate.Get"ccat_components",
+	[INVCAT_CONSUMABLES] = translate.Get"ccat_consumables"
 }
 GM.ZSInventoryPrefix = {
 	[INVCAT_TRINKETS] = "trin",
@@ -91,35 +91,35 @@ GM.Assemblies["trinket_projguide"]								= {"comp_cpuparts",			"trinket_targeti
 GM.Assemblies["trinket_projwei"]								= {"comp_busthead",			"trinket_projguide"}
 GM.Assemblies["trinket_controlplat"]							= {"comp_cpuparts",			"trinket_mainsuite"}
 
-GM:AddInventoryItemData("comp_modbarrel",		"Modular Barrel",			"A modular barrel suited for pairing up with another gun barrel.",								"models/props_c17/trappropeller_lever.mdl")
-GM:AddInventoryItemData("comp_burstmech",		"Burst Fire Mechanism",		"A mechanism that could be used to make a gun burst fire.",										"models/props_c17/trappropeller_lever.mdl")
-GM:AddInventoryItemData("comp_basicecore",		"Basic Energy Core",		"A small energy core. Needs a weapon with a cylinder mechanism to contain the energy output.",	"models/Items/combine_rifle_cartridge01.mdl")
-GM:AddInventoryItemData("comp_busthead",		"Bust Head",				"A bust head that could be fitted on to something handle shaped.",								"models/props_combine/breenbust.mdl")
-GM:AddInventoryItemData("comp_sawblade",		"Saw Blade",				"A sharp saw blade ready to be fitted onto fast moving objects.",								"models/props_junk/sawblade001a.mdl")
-GM:AddInventoryItemData("comp_propanecan",		"Propane Canister",			"A propane canister. With the correct setup, has the potential to ignite things.",				"models/props_junk/propane_tank001a.mdl")
-GM:AddInventoryItemData("comp_electrobattery",	"Electrobattery",			"An electrobattery. Could be used to improve repairing motions.",								"models/items/car_battery01.mdl")
---GM:AddInventoryItemData("comp_hungrytether",	"Hungry Tether",			"A hungry tether from a devourer that comes from a devourer rib.",								"models/gibs/HGIBS_rib.mdl")]]
-GM:AddInventoryItemData("comp_contaecore",		"Contained Energy Core",	"A contained energy core, that has an internal charging mechanism.",							"models/Items/combine_rifle_cartridge01.mdl")
-GM:AddInventoryItemData("comp_pumpaction",		"Pump Action Mechanism",	"A standard pump action mechanism from a blaster shotgun.",										"models/props_c17/trappropeller_lever.mdl")
-GM:AddInventoryItemData("comp_focusbarrel",		"Focused Barrel",			"A large focused barrel made from the barrels of the waraxe. Suitable for a handcannon.",		"models/props_c17/trappropeller_lever.mdl")
-GM:AddInventoryItemData("comp_gaussframe",		"Gauss Frame",				"A highly advanced gauss frame. It's almost alien in design, making it hard to use.",			"models/Items/combine_rifle_cartridge01.mdl")
-GM:AddInventoryItemData("comp_metalpole",		"Metal Pole",				"Long metal pole that could be used to attack things from a distance.",							"models/props_c17/signpole001.mdl")
-GM:AddInventoryItemData("comp_salleather",		"Salvaged Leather",			"Pieces of leather that are hard enough to make a nasty impact.",								"models/props_junk/shoe001.mdl")
-GM:AddInventoryItemData("comp_gyroscope",		"Gyroscope",				"A metal gyroscope used to calculate orientation.",												"models/maxofs2d/hover_rings.mdl")
-GM:AddInventoryItemData("comp_reciever",		"Reciever",					"A radio reciever. Could be used for automation and communication purposes.",					"models/props_lab/reciever01b.mdl")
-GM:AddInventoryItemData("comp_cpuparts",		"CPU Parts",				"Parts from a central processor.",																"models/props_lab/harddrive01.mdl")
-GM:AddInventoryItemData("comp_launcher",		"Launching Tube",			"A metal tube made to launch objects.",															"models/weapons/w_rocket_launcher.mdl")
-GM:AddInventoryItemData("comp_launcherh",		"Heavy Launching Tube",		"A heavy metal tube made to launch large objects.",												"models/weapons/w_rocket_launcher.mdl")
-GM:AddInventoryItemData("comp_shortblade",		"Short Blade",				"A short metal blade for cutting and stabbing.",												"models/weapons/w_knife_t.mdl")
-GM:AddInventoryItemData("comp_multibarrel",		"Multi-Bored Barrel",		"An unusual gun barrel which allows multiple bullets to pass through.",							"models/props_lab/pipesystem03a.mdl")
-GM:AddInventoryItemData("comp_holoscope",		"Holographic Scope",		"A holographic weapon sight with magnification.",												{
+GM:AddInventoryItemData("comp_modbarrel",		translate.Get"comp_mod_barrel",			translate.Get"comp_mod_barrel_desc",								"models/props_c17/trappropeller_lever.mdl")
+GM:AddInventoryItemData("comp_burstmech",		translate.Get"comp_burst_mech",		translate.Get"comp_burst_mech_desc",										"models/props_c17/trappropeller_lever.mdl")
+GM:AddInventoryItemData("comp_basicecore",		translate.Get"comp_basic_core",		translate.Get"comp_basic_core_desc",	"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_busthead",		translate.Get"comp_bust_head",				translate.Get"comp_bust_head_desc",								"models/props_combine/breenbust.mdl")
+GM:AddInventoryItemData("comp_sawblade",		translate.Get"comp_saw_blade",				translate.Get"comp_saw_blade_desc",								"models/props_junk/sawblade001a.mdl")
+GM:AddInventoryItemData("comp_propanecan",		translate.Get"comp_propane_can",			translate.Get"comp_propane_can_desc",				"models/props_junk/propane_tank001a.mdl")
+GM:AddInventoryItemData("comp_electrobattery",	translate.Get"comp_electro_battery",			translate.Get"comp_electro_battery_desc",								"models/items/car_battery01.mdl")
+--GM:AddInventoryItemData("comp_hungrytether",	translate.Get"comp_hungry_tether",			translate.Get"comp_hungry_tether_desc",								"models/gibs/HGIBS_rib.mdl")]]
+GM:AddInventoryItemData("comp_contaecore",		translate.Get"comp_contae_core",	translate.Get"comp_contae_core_desc",							"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_pumpaction",		translate.Get"comp_pump_action",	translate.Get"comp_pump_action_desc",										"models/props_c17/trappropeller_lever.mdl")
+GM:AddInventoryItemData("comp_focusbarrel",		translate.Get"comp_focus_barrel",			translate.Get"comp_focus_barrel_desc",		"models/props_c17/trappropeller_lever.mdl")
+GM:AddInventoryItemData("comp_gaussframe",		translate.Get"comp_gauss_frame",				translate.Get"comp_gauss_frame_desc",			"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_metalpole",		translate.Get"comp_metal_pole",				translate.Get"comp_metal_pole_desc",							"models/props_c17/signpole001.mdl")
+GM:AddInventoryItemData("comp_salleather",		translate.Get"comp_sal_leather",			translate.Get"comp_sal_leather_desc",								"models/props_junk/shoe001.mdl")
+GM:AddInventoryItemData("comp_gyroscope",		translate.Get"comp_gyroscope",				translate.Get"comp_gyroscope_desc",												"models/maxofs2d/hover_rings.mdl")
+GM:AddInventoryItemData("comp_reciever",		translate.Get"comp_reciever",					translate.Get"comp_reciever_desc",					"models/props_lab/reciever01b.mdl")
+GM:AddInventoryItemData("comp_cpuparts",		translate.Get"comp_cpu_parts",				translate.Get"comp_cpu_parts_desc",																"models/props_lab/harddrive01.mdl")
+GM:AddInventoryItemData("comp_launcher",		translate.Get"comp_launcher",			translate.Get"comp_launcher_desc",															"models/weapons/w_rocket_launcher.mdl")
+GM:AddInventoryItemData("comp_launcherh",		translate.Get"comp_launcher_h",		translate.Get"comp_launcher_h_desc",												"models/weapons/w_rocket_launcher.mdl")
+GM:AddInventoryItemData("comp_shortblade",		translate.Get"comp_short_blade",				translate.Get"comp_short_blade_desc",												"models/weapons/w_knife_t.mdl")
+GM:AddInventoryItemData("comp_multibarrel",		translate.Get"comp_multi_barrel",		translate.Get"comp_multi_barrel_desc",							"models/props_lab/pipesystem03a.mdl")
+GM:AddInventoryItemData("comp_holoscope",		translate.Get"comp_holo_scope",		translate.Get"comp_holo_scope_desc",												{
 	["base"] = { type = "Model", model = "models/props_c17/utilityconnecter005.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.273, 1.728, -0.843), angle = Angle(74.583, 180, 0), size = Vector(2.207, 0.105, 0.316), color = Color(50, 50, 66, 255), surpresslightning = false, material = "models/props_pipes/pipeset_metal02", skin = 0, bodygroup = {} },
 	["base+"] = { type = "Model", model = "models/props_combine/tprotato1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "base", pos = Vector(0.492, -1.03, 0), angle = Angle(0, -78.715, 90), size = Vector(0.03, 0.02, 0.032), color = Color(50, 50, 66, 255), surpresslightning = false, material = "models/props_pipes/pipeset_metal02", skin = 0, bodygroup = {} }
 })
-GM:AddInventoryItemData("comp_linearactuator",	"Linear Actuator",			"A linear actuator from a shell holder. Requires a heavy base to mount properly.",				"models/Items/combine_rifle_cartridge01.mdl")
-GM:AddInventoryItemData("comp_pulsespool",		"Pulse Spool",				"Used to inject more pulse power to a system. Could be used to stabilise something.",			"models/Items/combine_rifle_cartridge01.mdl")
-GM:AddInventoryItemData("comp_flak",			"Flak Chamber",				"An internal chamber for projecting heated scrap.",												"models/weapons/w_rocket_launcher.mdl")
-GM:AddInventoryItemData("comp_precision",		"Precision Chassis",		"A suite setup for rewarding precise shots on moving targets.",									"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_linearactuator",	translate.Get"comp_linear_actuator",			translate.Get"comp_linear_actuator_desc",				"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_pulsespool",		translate.Get"comp_pulse_spool",				translate.Get"comp_pulse_spool_desc",			"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_flak",			translate.Get"comp_flak",				translate.Get"comp_flak_desc",												"models/weapons/w_rocket_launcher.mdl")
+GM:AddInventoryItemData("comp_precision",		translate.Get"comp_precision",		translate.Get"comp_precision_desc",									"models/Items/combine_rifle_cartridge01.mdl")
 
 -- Trinkets
 local trinket, description, trinketwep
