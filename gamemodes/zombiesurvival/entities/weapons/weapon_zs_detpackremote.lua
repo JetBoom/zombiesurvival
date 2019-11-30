@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Detonation Pack Remote"
-SWEP.Description = "Allows the user to remotely detonate their detonation packs."
+SWEP.PrintName = translate.Get"other_detpackremote_name"
+SWEP.Description = translate.Get"other_detpackremote_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

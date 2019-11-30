@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Axe"
-SWEP.Description = "A simple axe, with balanced stats across the board in terms of damage, range and swing speed."
+SWEP.PrintName = translate.Get"wpn_axe_name"
+SWEP.Description = translate.Get"wpn_axe_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 55

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Sledgehammer"
-SWEP.Description = "A heavy, but powerful melee weapon. A target struck by the force of it will receive considerable knockback."
+SWEP.PrintName = translate.Get"wpn_sledgehammer_name"
+SWEP.Description = translate.Get"wpn_sledgehammer_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 75

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Gun Turret Controller"
-SWEP.Description = "Allows the user to manually take control of any turrets they own."
+SWEP.PrintName = translate.Get"dpl_gunturretcontrl_name"
+SWEP.Description = translate.Get"dpl_gunturretcontrl_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

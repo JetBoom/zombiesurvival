@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Corrupted Fragment"
-SWEP.Description = "An eerie stone which returns you to corrupted Sanity Sigils."
+SWEP.PrintName = translate.Get"other_corruptfrag_name"
+SWEP.Description = translate.Get"other_corruptfrag_desc"
 
 SWEP.Base = "weapon_zs_sigilfragment"
 

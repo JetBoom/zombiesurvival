@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Harpoon"
-SWEP.Description = "The harpoon has a very long range for a melee weapon. The harpoon can be thrown to impale into zombies, dealing damage over time."
+SWEP.PrintName = translate.Get"wpn_harpoon_name"
+SWEP.Description = translate.Get"wpn_harpoon_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 60

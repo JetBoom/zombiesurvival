@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Meat Tenderizer"
-SWEP.Description = "A slow swinging meat tenderizer with not much special about it apart from the fact it's a culinary tool."
+SWEP.PrintName = translate.Get"wpn_meattenderizer_name"
+SWEP.Description = translate.Get"wpn_meattenderizer_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 70

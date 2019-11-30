@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Executioner' Axe"
-SWEP.Description = "Instantly kills zombies brought bellow 10% of their max health."
+SWEP.PrintName = translate.Get"wpn_executioner_name"
+SWEP.Description = translate.Get"wpn_executioner_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 55

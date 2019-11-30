@@ -3,8 +3,8 @@ DEFINE_BASECLASS("weapon_zs_drone")
 
 SWEP.Base = "weapon_zs_drone"
 
-SWEP.PrintName = "Pulse Drone"
-SWEP.Description = "A deployable, remotely controlled device.\nIdeal for scouting, retrieval, and targeted attacks.\nUses projectiles instead of bullets."
+SWEP.PrintName = translate.Get"dpl_pulsedrone_name"
+SWEP.Description = translate.Get"dpl_pulsedrone_desc"
 
 SWEP.Primary.Ammo = "pulse_cutter"
 

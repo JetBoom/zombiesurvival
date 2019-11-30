@@ -1,5 +1,5 @@
-SWEP.PrintName = "Frotchet"
-SWEP.Description = "An axe made from frost. Secondary attack unleashes a powerful swing, creating an icy explosion when aimed at the ground. Slows zombie movement and attack speed."
+SWEP.PrintName = translate.Get"wpn_frotchet_name"
+SWEP.Description = translate.Get"wpn_frotchet_desc"
 
 SWEP.Base = "weapon_zs_basemelee"
 

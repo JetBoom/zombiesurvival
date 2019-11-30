@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_fists"
 
-SWEP.PrintName = "Power Fists"
-SWEP.Description = "A pair of power fists. They are slower than conventional fist combat, but pack a hefty pulse powered punch."
+SWEP.PrintName = translate.Get"wpn_powerfists_name"
+SWEP.Description = translate.Get"wpn_powerfists_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 65

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Rollermine"
-SWEP.Description = "A deployable, remotely controlled device.\nRolls along the ground, bouncing off zombies and dealing damage.\nCan jump with the JUMP key."
+SWEP.PrintName = translate.Get"dpl_rollermine_name"
+SWEP.Description = translate.Get"dpl_rollermine_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

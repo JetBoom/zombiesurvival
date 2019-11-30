@@ -1,8 +1,8 @@
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/props_c17/light_domelight02_off.mdl")
 
-SWEP.PrintName = "Camera"
-SWEP.Description = "Allows remote observation of other areas. Zombies cannot see the camera unless they are very close.\nPress PRIMARY ATTACK to deploy.\nPress USE on a deployed camera with no owner (blue light) to reclaim it."
+SWEP.PrintName = translate.Get"dpl_camera_name"
+SWEP.Description = translate.Get"dpl_camera_desc"
 
 SWEP.AmmoIfHas = true
 

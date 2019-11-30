@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Z9000' Pulse Pistol"
-SWEP.Description = "Although the Z9000 does not deal that much damage, the pulse shots it fires will slow targets."
+SWEP.PrintName = translate.Get"wpn_z9000_name"
+SWEP.Description = translate.Get"wpn_z9000_desc"
 SWEP.Slot = 1
 SWEP.SlotPos = 0
 

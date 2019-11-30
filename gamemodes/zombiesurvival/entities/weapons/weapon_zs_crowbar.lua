@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Crowbar"
-SWEP.Description = "An effective and fast swinging melee weapon, the crowbar also has the ability to instantly kill headcrabs."
+SWEP.PrintName = translate.Get"wpn_crowbar_name"
+SWEP.Description = translate.Get"wpn_crowbar_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 65

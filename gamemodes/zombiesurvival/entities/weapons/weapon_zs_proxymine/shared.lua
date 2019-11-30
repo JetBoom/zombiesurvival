@@ -1,5 +1,5 @@
-SWEP.PrintName = "Proximity Mine"
-SWEP.Description = "A proximity detection mine that jumps into the air then explodes, dealing explosive damage."
+SWEP.PrintName = translate.Get"other_proxymine_name"
+SWEP.Description = translate.Get"other_proxymine_desc"
 
 SWEP.Base = "weapon_zs_basethrown"
 

@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = "'Terminus' SCAR-L"
-SWEP.Description = "A powerful assault rifle that gets more accurate for every shot that hits in a clip."
+SWEP.PrintName = translate.Get"wpn_scar_name"
+SWEP.Description = translate.Get"wpn_scar_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0

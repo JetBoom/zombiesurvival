@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Lead Pipe"
-SWEP.Description = "The weight of a lead pipe carries enough force to shock a target's focus but has a lower swing speed than other melee weapons."
+SWEP.PrintName = translate.Get"wpn_pipe_name"
+SWEP.Description = translate.Get"wpn_pipe_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

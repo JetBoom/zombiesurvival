@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Crossfire' Glock 3"
-SWEP.Description = "Fires 3 shots at once. Not very accurate, but very damaging up close."
+SWEP.PrintName = translate.Get"wpn_glock3_name"
+SWEP.Description = translate.Get"wpn_glock3_desc"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 0
@@ -43,7 +43,7 @@ SWEP.IronSightsPos = Vector(-5.75, 10, 2.7)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.9, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.5, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but more accurate shots, higher base damage, and a chance to gain reaper stacks", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_glock3_variant_name", translate.Get"wpn_glock3_variant_desc", function(wept)
 	wept.Primary.NumShots = 2
 	wept.Primary.Damage = wept.Primary.Damage * 1.2
 	wept.ConeMin = wept.ConeMin * 0.65
@@ -59,7 +59,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but m
 		end
 	end
 end)
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Shroud' SOCOM Mark 23", "Fires 1 shot, hides your aura, deals less total damage but is more accurate", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, translate.Get"wpn_glock3_variant2_name", translate.Get"wpn_glock3_variant2_desc", function(wept)
 	wept.Primary.NumShots = 1
 	wept.Primary.Damage = wept.Primary.Damage * 2.3
 	wept.Primary.Delay = 0.2
@@ -94,5 +94,5 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Shroud' SOCOM Mark 23", 
 	end
 end)
 branch.Colors = {Color(170, 170, 170), Color(120, 120, 120), Color(70, 70, 70)}
-branch.NewNames = {"Cloaked", "Covert", "Silent"}
+branch.NewNames = {translate.Get"wpnq2_glock3_variant2_name", translate.Get"wpnq2_glock3_variant2_name2", translate.Get"wpnq2_glock3_variant2_name3"}
 branch.Killicon = "weapon_zs_shroud"

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Reaper' UMP"
-SWEP.Description = "A hard hitting SMG that provides a short duration stacking damage buff if you earn a kill."
+SWEP.PrintName = translate.Get"wpn_reaper_name"
+SWEP.Description = translate.Get"wpn_reaper_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0

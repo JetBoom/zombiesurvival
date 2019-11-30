@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Stone"
-SWEP.Description = "A simple stone found laying pretty much anywhere."
+SWEP.PrintName = translate.Get"other_stone_name"
+SWEP.Description = translate.Get"other_stone_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

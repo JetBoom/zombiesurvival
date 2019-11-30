@@ -1,5 +1,5 @@
-SWEP.PrintName = "Grave Shovel"
-SWEP.Description = "The Grave Digger's shovel. Instantly kills knocked down zombies and permanently gains damage when doing so."
+SWEP.PrintName = translate.Get"wpn_graveshovel_name"
+SWEP.Description = translate.Get"wpn_graveshovel_desc"
 
 SWEP.Base = "weapon_zs_basemelee"
 

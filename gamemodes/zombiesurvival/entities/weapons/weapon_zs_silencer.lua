@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Silencer' SMG"
-SWEP.Description = "Shrouds your aura and has very high burst DPS for an SMG, but poor accuracy."
+SWEP.PrintName = translate.Get"wpn_silencer_name"
+SWEP.Description = translate.Get"wpn_silencer_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0

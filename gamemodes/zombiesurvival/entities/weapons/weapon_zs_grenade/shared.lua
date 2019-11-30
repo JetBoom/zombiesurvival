@@ -1,5 +1,5 @@
-SWEP.PrintName = "Grenade"
-SWEP.Description = "A simple fragmentation grenade.\nWhen used in the right conditions, it can obliterate groups of zombies.\nDeals explosive damage."
+SWEP.PrintName = translate.Get"other_grenade_desc"
+SWEP.Description = translate.Get"other_grenade_desc"
 
 SWEP.Base = "weapon_zs_basethrown"
 

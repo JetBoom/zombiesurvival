@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Meat Hook"
-SWEP.Description = "Impales itself into zombies, dealing damage over time for a seconds. The hook can be recollected by the owner."
+SWEP.PrintName = translate.Get"wpn_hook_name"
+SWEP.Description = translate.Get"wpn_hook_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false
@@ -43,7 +43,7 @@ SWEP.AllowQualityWeapons = true
 SWEP.Weaken = false
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_IMPACT_DELAY, -0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Meat Grapple", "Deals less damage but zombies affected by it take more damage from any source", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_hook_variant_name", translate.Get"wpn_hook_variant_desc", function(wept)
 	wept.Weaken = true
 	wept.MeleeDamage = wept.MeleeDamage * 0.65
 end)

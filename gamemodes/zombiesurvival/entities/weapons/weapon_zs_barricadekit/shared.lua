@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Aegis' Barricade Kit"
-SWEP.Description = "A ready-to-go, all-in-one board deployer.\nIt automatically deploys the board and then firmly attaches it to almost any surface.\nUse PRIMARY FIRE to deploy boards.\nUse SECONADRY FIRE and RELOAD to rotate the board.\nA ghost of the board shows you if placement is valid or not."
+SWEP.PrintName = translate.Get"tool_barricadekit_name"
+SWEP.Description = translate.Get"tool_barricadekit_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

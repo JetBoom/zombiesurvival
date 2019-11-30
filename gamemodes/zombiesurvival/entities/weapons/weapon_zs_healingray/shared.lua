@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Rejuvenator' Healing Ray"
-SWEP.Description = "Locks on to humans and heals them to full, discharging medical ammo along a ray."
+SWEP.PrintName = translate.Get"tool_healingray_name"
+SWEP.Description = translate.Get"tool_healingray_desc"
 
 SWEP.Base = "weapon_zs_base"
 

@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Impaler' Crossbow"
-SWEP.Description = "This ancient weapon can easily skewer groups of zombies."
+SWEP.PrintName = translate.Get"wpn_impaler_name"
+SWEP.Description = translate.Get"wpn_impaler_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 

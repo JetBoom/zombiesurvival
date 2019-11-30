@@ -1,5 +1,5 @@
-SWEP.PrintName = "Remote Detonation Pack"
-SWEP.Description = "A pack of explosives that can be placed on surfaces and detonated remotely, to deal large explosive damage.\nPress PRIMARY ATTACK to deploy.\nPress PRIMARY ATTACK again to detonate.\nPress SPRINT on a deployed detonation pack to disarm and retrieve it."
+SWEP.PrintName = translate.Get"other_detpack_name"
+SWEP.Description = translate.Get"other_detpack_desc"
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/weapons/w_c4_planted.mdl")

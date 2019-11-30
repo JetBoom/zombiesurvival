@@ -1,5 +1,5 @@
-SWEP.PrintName = "Sigil Fragment"
-SWEP.Description = "A mysterious stone that holds some power over the world.\nReturns you to any uncorrupted Sanity Sigil that you're pointing towards."
+SWEP.PrintName = translate.Get"other_sigilfrag_name"
+SWEP.Description = translate.Get"other_sigilfrag_desc"
 
 SWEP.Base = "weapon_zs_basemelee"
 

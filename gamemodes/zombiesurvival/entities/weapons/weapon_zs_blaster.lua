@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_baseshotgun"
 
-SWEP.PrintName = "'Blaster' Shotgun"
-SWEP.Description = "A basic shotgun that can deal significant amounts of damage at close range."
+SWEP.PrintName = translate.Get"wpn_blaster_name"
+SWEP.Description = translate.Get"wpn_blaster_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false
@@ -43,7 +43,7 @@ SWEP.ReloadSound = Sound("Weapon_Shotgun.Reload")
 SWEP.PumpActivity = ACT_SHOTGUN_PUMP
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Blaster' Slug Gun", "Single accurate slug round, less total damage", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_blaster_variant_name", translate.Get"wpn_blaster_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 5.5
 	wept.Primary.NumShots = 1
 	wept.ConeMin = wept.ConeMin * 0.15

@@ -1,5 +1,5 @@
-SWEP.PrintName = "Mechanic's Wrench"
-SWEP.Description = "This tool can be used to repair deployables as long as they were not damaged recently."
+SWEP.PrintName = translate.Get"tool_wrench_name"
+SWEP.Description = translate.Get"tool_wrench_desc"
 
 SWEP.Base = "weapon_zs_basemelee"
 

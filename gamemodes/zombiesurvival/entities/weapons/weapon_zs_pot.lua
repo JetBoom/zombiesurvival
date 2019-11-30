@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Pot"
+SWEP.PrintName = translate.Get"wpn_pot_name"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

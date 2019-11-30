@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 --in memory of Gormaoife 1999-2016 rip
 
-SWEP.PrintName = "'Splinter' Sawed-Off Shotgun"
-SWEP.Description = "Can fire both rounds at once for higher burst damage."
+SWEP.PrintName = translate.Get"wpn_splinter_name"
+SWEP.Description = translate.Get"wpn_splinter_desc"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0
@@ -79,7 +79,7 @@ SWEP.DryFireSound = Sound("Weapon_Shotgun.Empty")
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -1.125, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -1.069, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Splinter' Slug Gun", "Single accurate slug round, less total damage", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_splinter_variant_name", translate.Get"wpn_splinter_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 5.5
 	wept.Primary.NumShots = 1
 	wept.ConeMin = wept.ConeMin * 0.15

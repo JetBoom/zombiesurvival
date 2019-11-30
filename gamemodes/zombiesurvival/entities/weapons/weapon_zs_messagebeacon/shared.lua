@@ -1,5 +1,5 @@
-SWEP.PrintName = "Message Beacon"
-SWEP.Description = "This beacon allows you to display messages to all other humans in range.\nPress SECONDARY ATTACK to select different messages.\nPress PRIMARY ATTACK to deploy.\nPress SPRINT on a deployed message beacon that you own to pick it up."
+SWEP.PrintName = translate.Get"dpl_messagebeacon_name"
+SWEP.Description = translate.Get"dpl_messagebeacon_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

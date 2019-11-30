@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Savior' Medic Gun"
-SWEP.Description = "Fires medical darts which can heal at a range, and grant a small speed boost. It can be fired rapidly and used at a range, but can miss the target."
+SWEP.PrintName = translate.Get"tool_medicgun_name"
+SWEP.Description = translate.Get"tool_medicgun_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

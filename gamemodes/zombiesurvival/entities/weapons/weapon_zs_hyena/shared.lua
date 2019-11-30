@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Hyena' Sticky Bomb Launcher"
-SWEP.Description = "Fires explosives that will stick to surfaces and enemies until detonated. Bombs take 3 seconds to reach maximum damage. Alt fire will remotely detonate bombs."
+SWEP.PrintName = translate.Get"wpn_hyena_name"
+SWEP.Description = translate.Get"wpn_hyena_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 
@@ -28,7 +28,7 @@ SWEP.Tier = 3
 SWEP.MaxBombs = 3
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Lynx' Cryo Sticky Launcher", "Fires cryo bombs that deal less damage but slow zombies", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_hyena_variant_name", translate.Get"wpn_hyena_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.8
 	if SERVER then
 		wept.EntModify = function(self, ent)

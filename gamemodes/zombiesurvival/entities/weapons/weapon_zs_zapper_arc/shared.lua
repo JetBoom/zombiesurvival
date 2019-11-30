@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Dynamo' Arc Zapper"
-SWEP.Description = "Zaps zombies that enter its range, and arcs between them. Has a very long recharge and uses pulse ammo.\nPress PRIMARY ATTACK to deploy the zapper.\nPress SECONDARY ATTACK and RELOAD to rotate the zapper."
+SWEP.PrintName = translate.Get"tool_zapperarc_name"
+SWEP.Description = translate.Get"tool_zapperarc_desc"
 
 SWEP.Base = "weapon_zs_zapper"
 

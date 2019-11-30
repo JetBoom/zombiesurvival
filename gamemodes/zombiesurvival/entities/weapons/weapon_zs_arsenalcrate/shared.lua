@@ -1,5 +1,5 @@
-SWEP.PrintName = "Arsenal Crate"
-SWEP.Description = "This crate is invaluable to survival. It allows people to purchase new weapons, tools, ammunition, etc.\nThe deployer gets a 5% commission on purchases not made by themselves.\nPress PRIMARY ATTACK to deploy the crate.\nPress SECONDARY ATTACK and RELOAD to rotate the crate."
+SWEP.PrintName = translate.Get"dpl_arsenalcrate_name"
+SWEP.Description = translate.Get"dpl_arsenalcrate_desc"
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/Items/item_item_crate.mdl")

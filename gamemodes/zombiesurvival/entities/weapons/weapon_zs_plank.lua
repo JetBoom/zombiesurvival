@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Plank"
-SWEP.Description = "A strip of wood of which repeated swings that connect with it build up momentum and overall damage output."
+SWEP.PrintName = translate.Get"wpn_plank_name"
+SWEP.Description = translate.Get"wpn_plank_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 55

@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_fists"
 
-SWEP.PrintName = "Brass Knuckles"
-SWEP.Description = "A pair of brass knuckles used to concentrate strikes from one's fists, increasing the damage done, while keeping their movement speed up."
+SWEP.PrintName = translate.Get"wpn_brass_name"
+SWEP.Description = translate.Get"wpn_brass_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 52

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Shovel"
-SWEP.Description = "A shovel instantly kills zombies that are knocked down, and it's an effective melee weapon even otherwise."
+SWEP.PrintName = translate.Get"wpn_shovel_name"
+SWEP.Description = translate.Get"wpn_shovel_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 60

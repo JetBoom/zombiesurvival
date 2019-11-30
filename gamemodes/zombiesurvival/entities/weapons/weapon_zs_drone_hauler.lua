@@ -3,8 +3,8 @@ DEFINE_BASECLASS("weapon_zs_drone")
 
 SWEP.Base = "weapon_zs_drone"
 
-SWEP.PrintName = "Hauler Drone"
-SWEP.Description = "A hauling drone.\nIdeal for scouting and retrieval.\nCarries props and items around at immense speeds, but cannot attack."
+SWEP.PrintName = translate.Get"dpl_haulerdrone_name"
+SWEP.Description = translate.Get"dpl_haulerdrone_desc"
 
 SWEP.Primary.Ammo = "drone_hauler"
 

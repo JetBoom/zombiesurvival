@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Knife"
-SWEP.Description = "A small bladed weapon that deals double damage to the back."
+SWEP.PrintName = translate.Get"wpn_knife_name"
+SWEP.Description = translate.Get"wpn_knife_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

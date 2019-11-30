@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Zeus' Voltaic Crossbow"
-SWEP.Description = "An electrified crossbow which nullifies zombie buffs and prevents healing or reviving. Has a low flight arc but does not headshot, and shoots a bolt as it travels."
+SWEP.PrintName = translate.Get"wpn_zeus_name"
+SWEP.Description = translate.Get"wpn_zeus_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 

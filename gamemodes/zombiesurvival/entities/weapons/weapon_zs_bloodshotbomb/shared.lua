@@ -1,5 +1,5 @@
-SWEP.PrintName = "Bloodshot Bomb"
-SWEP.Description = "A cloud of strength and defence boosting gas affecting all humans in the radius, also providing a small amount of blood armor."
+SWEP.PrintName = translate.Get"other_bloodshot_name"
+SWEP.Description = translate.Get"other_bloodshot_desc"
 
 SWEP.Base = "weapon_zs_basethrown"
 

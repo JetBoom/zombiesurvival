@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Stun Baton"
-SWEP.Description = "This baton has the ability to slow zombies with pulse slowing technology and it gains +25% extra points."
+SWEP.PrintName = translate.Get"wpn_baton_name"
+SWEP.Description = translate.Get"wpn_baton_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 50

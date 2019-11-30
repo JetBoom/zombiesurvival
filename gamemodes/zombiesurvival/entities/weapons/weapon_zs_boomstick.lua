@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_baseshotgun"
 
-SWEP.PrintName = "Boom Stick"
-SWEP.Description = "This shotgun allows you to load up to four shells in the chamber at once. Hold down reload for faster loading of each shell."
+SWEP.PrintName = translate.Get"wpn_boomstick_name"
+SWEP.Description = translate.Get"wpn_boomstick_desc"
 
 if CLIENT then
 	SWEP.HUD3DBone = "ValveBiped.Gun"
@@ -49,7 +49,7 @@ SWEP.ReloadSound = Sound("Weapon_Shotgun.Reload")
 
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.07)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Lithe Stick", "Decreased damage but faster reload, more knockback and more move speed", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_boomstick_variant_name", translate.Get"wpn_boomstick_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.75
 	wept.ReloadSpeed = wept.ReloadSpeed * 1.25
 	wept.Primary.Delay = wept.Primary.Delay * 0.5

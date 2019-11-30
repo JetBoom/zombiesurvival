@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Kongol Axe"
-SWEP.Description = "A very heavy greataxe with no other special properties other than sheer damage output."
+SWEP.PrintName = translate.Get"wpn_kongolaxe_name"
+SWEP.Description = translate.Get"wpn_kongolaxe_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 65

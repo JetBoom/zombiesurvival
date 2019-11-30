@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Owens' Handgun"
-SWEP.Description = "A somewhat less accurate pistol that fires two shots that deal respectable total damage."
+SWEP.PrintName = translate.Get"wpn_owens_name"
+SWEP.Description = translate.Get"wpn_owens_desc"
 
 SWEP.Slot = 1
 SWEP.SlotPos = 0

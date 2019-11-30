@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Rebar Mace"
-SWEP.Description = "Disorients zombies hit."
+SWEP.PrintName = translate.Get"wpn_rebar_name"
+SWEP.Description = translate.Get"wpn_rebar_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false
@@ -47,7 +47,7 @@ SWEP.Tier = 3
 SWEP.AllowQualityWeapons = true
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.15)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Rebar Ward Hammer", "Grants defence on kill, does not knockback zombie vision, faster but less damage and knockback", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_rebar_variant_name", translate.Get"wpn_rebar_variant_desc", function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 0.8
 	wept.MeleeDamage = wept.MeleeDamage * 0.75
 	wept.MeleeKnockBack = 200

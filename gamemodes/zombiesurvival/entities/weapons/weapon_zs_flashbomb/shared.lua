@@ -1,5 +1,5 @@
-SWEP.PrintName = "Flash Bomb"
-SWEP.Description = "Deals no damage but stuns all zombies around the flash, especially if they're looking at it."
+SWEP.PrintName = translate.Get"other_flashb_name"
+SWEP.Description = translate.Get"other_flashb_desc"
 
 SWEP.Base = "weapon_zs_basethrown"
 

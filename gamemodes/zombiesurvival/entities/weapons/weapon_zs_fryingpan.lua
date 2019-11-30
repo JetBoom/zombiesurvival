@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Frying Pan"
+SWEP.PrintName = translate.Get"wpn_pan_name"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

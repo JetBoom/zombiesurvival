@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Akbar' Assault Rifle"
-SWEP.Description = "Reliable assault rifle with a very fast reload speed. Not quite as accurate as other assault rifles, but still precise enough nonetheless."
+SWEP.PrintName = translate.Get"wpn_akbar_name"
+SWEP.Description = translate.Get"wpn_akbar_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0

@@ -1,5 +1,5 @@
-SWEP.PrintName = "Molotov Cocktail"
-SWEP.Description = "A highly flammable concoction.\nThrow at your own risk."
+SWEP.PrintName = translate.Get"other_molotov_name"
+SWEP.Description = translate.Get"other_molotov_desc"
 
 SWEP.Base = "weapon_zs_basethrown"
 

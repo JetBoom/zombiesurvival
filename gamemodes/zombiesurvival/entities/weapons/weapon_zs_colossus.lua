@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Colossus' Mass Driver"
-SWEP.Description = "Projects rifle ammo rounds at extremely high velocity, penetrating through multiple targets."
+SWEP.PrintName = translate.Get"wpn_colossus_name"
+SWEP.Description = translate.Get"wpn_colossus_desc"
 
 if CLIENT then
 	SWEP.Slot = 3

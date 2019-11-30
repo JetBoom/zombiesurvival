@@ -1,8 +1,8 @@
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/props_c17/tv_monitor01.mdl")
 
-SWEP.PrintName = "Camera TV"
-SWEP.Description = "Allows remote observation of other areas without owning a camera viewer."
+SWEP.PrintName = translate.Get"dpl_cameratv_name"
+SWEP.Description = translate.Get"dpl_cameratv_desc"
 
 SWEP.AmmoIfHas = true
 

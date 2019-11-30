@@ -1,5 +1,5 @@
-SWEP.PrintName = "Great Scythe"
-SWEP.Description = "A great scythe that can pierce and cut through multiple zombies. Has a 3 hit combo, the last hit deals extra damage."
+SWEP.PrintName = translate.Get"wpn_scythe_name"
+SWEP.Description = translate.Get"wpn_scythe_desc"
 
 SWEP.Base = "weapon_zs_basemelee"
 

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Butcher Knife"
-SWEP.Description = "A very fast swinging butcher knife, capable of mincing zombies very quickly up close."
+SWEP.PrintName = translate.Get"wpn_butcherknife_name"
+SWEP.Description = translate.Get"wpn_butcherknife_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 55
