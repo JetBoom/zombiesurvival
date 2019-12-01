@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"tool_medicalkit_name"
-SWEP.Description = translate.Get"tool_medicalkit_desc"
+SWEP.PrintName = ""..translate.Get"tool_medicalkit_name"
+SWEP.Description = ""..translate.Get"tool_medicalkit_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 
@@ -45,7 +45,7 @@ SWEP.HoldType = "slam"
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_HEALCOOLDOWN, -0.8)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALRANGE, 4, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALING, 1.5)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"tool_medicalkit_variant_name", translate.Get"tool_medicalkit_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"tool_medicalkit_variant_name", ""..translate.Get"tool_medicalkit_variant_desc", function(wept)
 	wept.FixUsage = true
 	wept.Primary.Delay = wept.Primary.Delay * 1.3
 end)

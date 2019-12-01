@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_uzi_name"
-SWEP.Description = translate.Get"wpn_uzi_desc"
+SWEP.PrintName = ""..translate.Get"wpn_uzi_name"
+SWEP.Description = ""..translate.Get"wpn_uzi_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0
@@ -52,7 +52,7 @@ SWEP.IronSightsAng = Vector(3, -3, -10)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.58, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.27, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 3, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_uzi_variant_name", translate.Get"wpn_uzi_variant_name_desk", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_uzi_variant_name", ""..translate.Get"wpn_uzi_variant_name_desk", function(wept)
 	wept.Primary.ClipSize = math.floor(wept.Primary.ClipSize * 0.53)
 	wept.Primary.Delay = 0.06
 

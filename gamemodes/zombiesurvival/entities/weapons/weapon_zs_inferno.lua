@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_inferno_name"
-SWEP.Description = translate.Get"wpn_inferno_desc"
+SWEP.PrintName = ""..translate.Get"wpn_inferno_name"
+SWEP.Description = ""..translate.Get"wpn_inferno_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0
@@ -49,7 +49,7 @@ SWEP.IronSightsAng = Vector(-1, -1, 0)
 SWEP.IronSightsPos = Vector(-3, 4, 3)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_inferno_variant_name", translate.Get"wpn_inferno_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_inferno_variant_name", ""..translate.Get"wpn_inferno_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.85
 
 	wept.BulletCallback = function(attacker, tr, dmginfo)

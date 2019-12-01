@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_hurricane_name"
-SWEP.Description = translate.Get"wpn_hurricane_desc"
+SWEP.PrintName = ""..translate.Get"wpn_hurricane_name"
+SWEP.Description = ""..translate.Get"wpn_hurricane_desc"
 
 if CLIENT then
 	SWEP.Slot = 2
@@ -83,7 +83,7 @@ SWEP.IronSightsPos = Vector(-6.425, 5, 1.02)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.5375, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.3125, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_hurricane_variant_name", translate.Get"wpn_hurricane_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_hurricane_variant_name", ""..translate.Get"wpn_hurricane_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.82
 	wept.Primary.Delay = wept.Primary.Delay * 2.3
 	wept.ConeMax = wept.ConeMax * 0.5

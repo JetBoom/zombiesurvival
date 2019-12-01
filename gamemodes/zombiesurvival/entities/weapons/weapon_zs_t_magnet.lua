@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basetrinket"
 
-SWEP.PrintName = translate.Get"trin_magnet"
+SWEP.PrintName = ""..translate.Get"trin_magnet"
 
 if CLIENT then
 	SWEP.VElements = {

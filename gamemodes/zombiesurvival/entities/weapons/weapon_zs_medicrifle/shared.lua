@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"tool_medicrifle_name"
-SWEP.Description = translate.Get"tool_medicrifle_desc"
+SWEP.PrintName = ""..translate.Get"tool_medicrifle_name"
+SWEP.Description = ""..translate.Get"tool_medicrifle_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 
@@ -42,7 +42,7 @@ SWEP.Heal = 10
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_BUFF_DURATION, 3)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALING, 1.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"tool_medicrifle_variant_name", translate.Get"tool_medicrifle_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"tool_medicrifle_variant_name", ""..translate.Get"tool_medicrifle_variant_desc", function(wept)
 	if SERVER then
 		wept.EntModify = function(self, ent)
 			local owner = self:GetOwner()

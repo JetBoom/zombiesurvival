@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_fists_name"
+SWEP.PrintName = ""..translate.Get"wpn_fists_name"
 
 SWEP.Base = "weapon_zs_basemelee"
 

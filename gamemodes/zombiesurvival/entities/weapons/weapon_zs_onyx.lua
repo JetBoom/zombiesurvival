@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = translate.Get"wpn_onyx_name"
-SWEP.Description = translate.Get"wpn_onyx_desc"
+SWEP.PrintName = ""..translate.Get"wpn_onyx_name"
+SWEP.Description = ""..translate.Get"wpn_onyx_desc"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0

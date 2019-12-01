@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_baseshotgun"
 
-SWEP.PrintName = translate.Get"wpnc_gladiator_name"
-SWEP.Description = translate.Get"wpnc_gladiator_desc"
+SWEP.PrintName = ""..translate.Get"wpnc_gladiator_name"
+SWEP.Description = ""..translate.Get"wpnc_gladiator_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

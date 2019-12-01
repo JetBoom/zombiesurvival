@@ -207,7 +207,7 @@ LANGUAGE.ran_out_of_ammo						 	= "Your %s has run out of ammo."
 LANGUAGE.trinket_recharged							= "Your %s has recharged and is ready to use again."
 LANGUAGE.evolves_in_to_x_on_wave_y					= "Evolves in to %s on wave %d."
 
--- TargetID
+-- Targetid (W.I.P)
 LANGUAGE.level_x                                    = "LVL %d"
 LANGUAGE.level_x_rlvl_x                             = "LVL %d R.LVL %d"
 LANGUAGE.p_hp_player                                = "%d HP"
@@ -1562,6 +1562,9 @@ LANGUAGE.wpn_broadside_variant_desc                 = "Rapidly fires miniature m
 LANGUAGE.wpn_smelter_name                           = "'Smelter' Flak Cannon"
 LANGUAGE.wpn_smelter_desc                           = "Launches a spray of hot shards of scrap in a flak pattern."
 
+-- Redeemer Gun
+LANGUAGE.wpn_redeemer_name                          = "'Redeemers' Dual Handguns"
+
 -- Craftable Weapons
 LANGUAGE.wpnc_waraxe_name                           = "'Waraxe' Handgun"
 LANGUAGE.wpnc_waraxe_variant_name                   = "'Halberd' Handgun"
@@ -1777,6 +1780,12 @@ LANGUAGE.tool_ffemiter_name                         = "Force Field Emitter"
 LANGUAGE.tool_ffemiter_desc                         = "Blocks zombie projectiles but will not stop humans or zombies from passing.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
 LANGUAGE.tool_barricadekit_name                     = "'Aegis' Barricade Kit"
 LANGUAGE.tool_barricadekit_desc                     = "A ready-to-go, all-in-one board deployer.\nIt automatically deploys the board and then firmly attaches it to almost any surface.\nUse PRIMARY FIRE to deploy boards.\nUse SECONADRY FIRE and RELOAD to rotate the board.\nA ghost of the board shows you if placement is valid or not."
+LANGUAGE.tool_junkpack_name                         = "Junk Pack"
+LANGUAGE.tool_junkpack_desc                         = "It's simply a pack of wooden junk kept together with some duct tape.\nVery useful for making barricades when no materials are around.\nNeeds something like a hammer and nails to keep the things in place."
+LANGUAGE.tool_spotlamp_name                         = "Spot Lamp"
+LANGUAGE.tool_spotlamp_desc                         = "This lamp is a watchful eye which illuminates an area.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
+LANGUAGE.dpl_craftingpack_name                      = "Crafting Pack"
+LANGUAGE.dpl_craftingpack_desc                      = "A pack of assorted items which seem to have greater use when combined with other things."
 
 -- Point Shop Other
 LANGUAGE.other_stone_name                           = "Stone"

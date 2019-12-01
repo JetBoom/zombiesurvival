@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"dpl_messagebeacon_name"
-SWEP.Description = translate.Get"dpl_messagebeacon_desc"
+SWEP.PrintName = ""..translate.Get"dpl_messagebeacon_name"
+SWEP.Description = ""..translate.Get"dpl_messagebeacon_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

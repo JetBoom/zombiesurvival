@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"wpn_barrage_name"
-SWEP.Description = translate.Get"wpn_barrage_desc"
+SWEP.PrintName = ""..translate.Get"wpn_barrage_name"
+SWEP.Description = ""..translate.Get"wpn_barrage_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 

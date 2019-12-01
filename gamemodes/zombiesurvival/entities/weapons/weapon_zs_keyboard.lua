@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_keyboard_name"
+SWEP.PrintName = ""..translate.Get"wpn_keyboard_name"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 55

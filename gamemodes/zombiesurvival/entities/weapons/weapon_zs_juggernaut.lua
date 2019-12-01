@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_juggernaut_name"
-SWEP.Description = translate.Get"wpn_juggernaut_desc"
+SWEP.PrintName = ""..translate.Get"wpn_juggernaut_name"
+SWEP.Description = ""..translate.Get"wpn_juggernaut_desc"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0

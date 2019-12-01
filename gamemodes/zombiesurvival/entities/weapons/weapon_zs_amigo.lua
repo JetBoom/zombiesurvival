@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = translate.Get"wpn_amigo_name"
-SWEP.Description = translate.Get"wpn_amigo_desc"
+SWEP.PrintName = ""..translate.Get"wpn_amigo_name"
+SWEP.Description = ""..translate.Get"wpn_amigo_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0
@@ -51,7 +51,7 @@ SWEP.IronSightsAng = Vector(0, 0, 0)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.01, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEADSHOT_MULTI, 0.07)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_amigo_variant_name", translate.Get"wpn_amigo_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_amigo_variant_name", ""..translate.Get"wpn_amigo_variant_desc", function(wept)
 	wept.ConeMax = wept.ConeMax * 1.5
 	wept.ConeMin = wept.ConeMin * 1.5
 	wept.Primary.Damage = wept.Primary.Damage * 0.8
@@ -96,7 +96,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_amigo_variant_name", tr
 		owner:LagCompensation(false)
 	end
 end)
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, translate.Get"wpn_amigo_variant2_name", translate.Get"wpn_amigo_variant2_desc", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, ""..translate.Get"wpn_amigo_variant2_name", ""..translate.Get"wpn_amigo_variant2_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.12
 	wept.Primary.Delay = wept.Primary.Delay * 6
 	wept.Primary.BurstShots = 3
@@ -196,7 +196,7 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, translate.Get"wpn_amigo_va
 	end
 end)
 branch.Colors = {Color(110, 160, 170), Color(90, 140, 150), Color(70, 120, 130)}
-branch.NewNames = {translate.Get"wpnq2_amigo_variant2_name", translate.Get"wpnq2_amigo_variant2_name2", translate.Get"wpnq2_amigo_variant2_name3"}
+branch.NewNames = {""..translate.Get"wpnq2_amigo_variant2_name", ""..translate.Get"wpnq2_amigo_variant2_name2", ""..translate.Get"wpnq2_amigo_variant2_name3"}
 branch.Killicon = "weapon_zs_battlerifle"
 
 function SWEP:IsScoped()

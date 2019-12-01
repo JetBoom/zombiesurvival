@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_hook_name"
-SWEP.Description = translate.Get"wpn_hook_desc"
+SWEP.PrintName = ""..translate.Get"wpn_hook_name"
+SWEP.Description = ""..translate.Get"wpn_hook_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false
@@ -43,7 +43,7 @@ SWEP.AllowQualityWeapons = true
 SWEP.Weaken = false
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_IMPACT_DELAY, -0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_hook_variant_name", translate.Get"wpn_hook_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_hook_variant_name", ""..translate.Get"wpn_hook_variant_desc", function(wept)
 	wept.Weaken = true
 	wept.MeleeDamage = wept.MeleeDamage * 0.65
 end)

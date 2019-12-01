@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"wpnc_eminence_name"
-SWEP.Description = translate.Get"wpnc_eminence_desc"
+SWEP.PrintName = ""..translate.Get"wpnc_eminence_name"
+SWEP.Description = ""..translate.Get"wpnc_eminence_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 

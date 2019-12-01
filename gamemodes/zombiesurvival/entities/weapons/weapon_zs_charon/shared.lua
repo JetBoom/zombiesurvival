@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"wpn_charon_name"
-SWEP.Description = translate.Get"wpn_charon_desc"
+SWEP.PrintName = ""..translate.Get"wpn_charon_name"
+SWEP.Description = ""..translate.Get"wpn_charon_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 
@@ -32,7 +32,7 @@ SWEP.ConeMin = 3.25
 SWEP.NextZoom = 0
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.03)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_charon_variant_name", translate.Get"wpn_charon_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_charon_variant_name", ""..translate.Get"wpn_charon_variant_desc", function(wept)
 	wept.Primary.ClipSize = math.floor(wept.Primary.ClipSize * 2)
 	wept.Primary.Delay = wept.Primary.Delay * 0.5
 	wept.Primary.Damage = wept.Primary.Damage * 0.78

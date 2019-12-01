@@ -1,8 +1,8 @@
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = "models/Combine_turrets/Floor_turret.mdl"
 
-SWEP.PrintName = translate.Get"dpl_gunturret_name"
-SWEP.Description = translate.Get"dpl_gunturret_desc"
+SWEP.PrintName = ""..translate.Get"dpl_gunturret_name"
+SWEP.Description = ""..translate.Get"dpl_gunturret_desc"
 
 SWEP.AmmoIfHas = true
 

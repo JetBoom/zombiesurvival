@@ -1,4 +1,4 @@
-SWEP.PrintName = translate.Get"wpnc_cinderrod_name"
+SWEP.PrintName = ""..translate.Get"wpnc_cinderrod_name"
 
 SWEP.Base = "weapon_zs_blareduct"
 

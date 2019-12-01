@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"tool_antidote_name"
-SWEP.Description = translate.Get"tool_antidote_desc"
+SWEP.PrintName = ""..translate.Get"tool_antidote_name"
+SWEP.Description = ""..translate.Get"tool_antidote_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

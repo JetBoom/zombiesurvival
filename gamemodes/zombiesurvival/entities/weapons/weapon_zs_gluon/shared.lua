@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"wpn_helios_name"
-SWEP.Description = translate.Get"wpn_helios_desc"
+SWEP.PrintName = ""..translate.Get"wpn_helios_name"
+SWEP.Description = ""..translate.Get"wpn_helios_desc"
 
 SWEP.Base = "weapon_zs_base"
 

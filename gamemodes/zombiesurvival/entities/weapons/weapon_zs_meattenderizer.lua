@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_meattenderizer_name"
-SWEP.Description = translate.Get"wpn_meattenderizer_desc"
+SWEP.PrintName = ""..translate.Get"wpn_meattenderizer_name"
+SWEP.Description = ""..translate.Get"wpn_meattenderizer_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 70

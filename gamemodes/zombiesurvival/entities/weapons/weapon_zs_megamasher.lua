@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpnc_megamasher_name"
+SWEP.PrintName = ""..translate.Get"wpnc_megamasher_name"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 75

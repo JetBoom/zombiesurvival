@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_boardpack"
 
-SWEP.PrintName = "Crafting Pack"
-SWEP.Description = "A pack of assorted items which seem to have greater use when combined with other things."
+SWEP.PrintName = ""..translate.Get"dpl_craftingpack_name"
+SWEP.Description = ""..translate.Get"dpl_craftingpack_desc"
 
 function SWEP:Initialize()
 	self.JunkModels = {

@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = translate.Get"wpn_adonis_name"
-SWEP.Description = translate.Get"wpn_adonis_desc"
+SWEP.PrintName = ""..translate.Get"wpn_adonis_name"
+SWEP.Description = ""..translate.Get"wpn_adonis_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0
@@ -55,7 +55,7 @@ SWEP.FireAnimSpeed = 0.4
 SWEP.LegDamage = 5.5
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.014, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_adonis_variant_name", translate.Get"wpn_adonis_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_adonis_variant_name", ""..translate.Get"wpn_adonis_variant_desc", function(wept)
 	wept.ConeMin = 2.25
 	wept.ConeMax = 3.75
 	wept.ReloadSpeed = 0.85

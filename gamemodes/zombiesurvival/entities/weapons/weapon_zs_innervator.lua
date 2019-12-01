@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = translate.Get"wpnc_innervator_name"
-SWEP.Description = translate.Get"wpnc_innervator_desc"
+SWEP.PrintName = ""..translate.Get"wpnc_innervator_name"
+SWEP.Description = ""..translate.Get"wpnc_innervator_desc"
 
 if CLIENT then
 	SWEP.Slot = 3

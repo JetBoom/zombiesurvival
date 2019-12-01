@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"dpl_drone_name"
-SWEP.Description = translate.Get"dpl_drone_desc"
+SWEP.PrintName = ""..translate.Get"dpl_drone_name"
+SWEP.Description = ""..translate.Get"dpl_drone_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

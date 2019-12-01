@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_hunter_name"
-SWEP.Description = translate.Get"wpn_hunter_desc"
+SWEP.PrintName = ""..translate.Get"wpn_hunter_name"
+SWEP.Description = ""..translate.Get"wpn_hunter_desc"
 SWEP.Slot = 3
 SWEP.SlotPos = 0
 
@@ -62,7 +62,7 @@ SWEP.Tier = 3
 SWEP.TracerName = "AR2Tracer"
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_hunter_variant_name", translate.Get"wpn_hunter_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_hunter_variant_name", ""..translate.Get"wpn_hunter_variant_desc", function(wept)
 	wept.Primary.ClipSize = 2
 	wept.RequiredClip = 2
 	wept.ReloadSpeed = 0.9

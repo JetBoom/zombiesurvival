@@ -1,7 +1,7 @@
 SWEP.Base = "weapon_zs_basemelee"
 
-SWEP.PrintName = "Junk Pack"
-SWEP.Description = "It's simply a pack of wooden junk kept together with some duct tape.\nVery useful for making barricades when no materials are around.\nNeeds something like a hammer and nails to keep the things in place."
+SWEP.PrintName = ""..translate.Get"tool_junkpack_name"
+SWEP.Description = ""..translate.Get"tool_junkpack_desc"
 
 SWEP.ViewModel = "models/weapons/c_aegiskit.mdl"
 SWEP.WorldModel = "models/props_debris/wood_board06a.mdl"

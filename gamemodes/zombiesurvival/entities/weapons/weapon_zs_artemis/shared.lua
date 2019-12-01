@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"wpn_artemis_name"
-SWEP.Description = translate.Get"wpn_artemis_desc"
+SWEP.PrintName = ""..translate.Get"wpn_artemis_name"
+SWEP.Description = ""..translate.Get"wpn_artemis_desc"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0
@@ -67,7 +67,7 @@ SWEP.DontScaleReloadSpeed = true
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_artemis_variant_name", translate.Get"wpn_artemis_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_artemis_variant_name", ""..translate.Get"wpn_artemis_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.75
 	wept.Primary.Projectile = "projectile_arrow_inq"
 	wept.EntModify = function(self, ent)

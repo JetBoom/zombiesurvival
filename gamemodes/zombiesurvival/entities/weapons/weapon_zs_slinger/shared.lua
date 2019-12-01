@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"wpn_slinger_name"
-SWEP.Description = translate.Get"wpn_slinger_desc"
+SWEP.PrintName = ""..translate.Get"wpn_slinger_name"
+SWEP.Description = ""..translate.Get"wpn_slinger_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 
@@ -33,7 +33,7 @@ SWEP.NextZoom = 0
 SWEP.ReloadSpeed = 0.59
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.07)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_slinger_variant_name", translate.Get"wpn_slinger_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_slinger_variant_name", ""..translate.Get"wpn_slinger_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.9
 	wept.Primary.ProjVelocity = 2300
 	if SERVER then
@@ -42,7 +42,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_slinger_variant_name", 
 		end
 	end
 end)
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, translate.Get"wpn_slinger_variant2_name", translate.Get"wpn_slinger_variant2_desc", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, ""..translate.Get"wpn_slinger_variant2_name", ""..translate.Get"wpn_slinger_variant2_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.75
 	wept.ConeMin = 0.3
 	if SERVER then
@@ -52,7 +52,7 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, translate.Get"wpn_slinger_
 	end
 end)
 branch.Colors = {Color(255, 160, 150), Color(215, 120, 150), Color(175, 100, 140)}
-branch.NewNames = {translate.Get"wpnq2_slinger_variant2_name", translate.Get"wpnq2_slinger_variant2_name2", translate.Get"wpnq2_slinger_variant2_name3"}
+branch.NewNames = {""..translate.Get"wpnq2_slinger_variant2_name", ""..translate.Get"wpnq2_slinger_variant2_name2", ""..translate.Get"wpnq2_slinger_variant2_name3"}
 
 function SWEP:SendReloadAnimation()
 	self:SendWeaponAnim(ACT_VM_DRAW)

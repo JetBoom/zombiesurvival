@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpnc_seditionist_name"
-SWEP.Description = translate.Get"wpnc_seditionist_desc"
+SWEP.PrintName = ""..translate.Get"wpnc_seditionist_name"
+SWEP.Description = ""..translate.Get"wpnc_seditionist_desc"
 SWEP.Slot = 1
 SWEP.SlotPos = 0
 

@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basetrinket"
 
-SWEP.PrintName = translate.Get"trin_night_vision"
-SWEP.Description = translate.Get"trin_night_vision_desc2"
+SWEP.PrintName = ""..translate.Get"trin_night_vision"
+SWEP.Description = ""..translate.Get"trin_night_vision_desc2"
 
 if CLIENT then
 	SWEP.VElements = {

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"dpl_dronecontrol_name"
-SWEP.Description = translate.Get"dpl_dronecontrol_desc"
+SWEP.PrintName = ""..translate.Get"dpl_dronecontrol_name"
+SWEP.Description = ""..translate.Get"dpl_dronecontrol_desc"
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

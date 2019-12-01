@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_fists"
 
-SWEP.PrintName = translate.Get"wpn_brass_name"
-SWEP.Description = translate.Get"wpn_brass_desc"
+SWEP.PrintName = ""..translate.Get"wpn_brass_name"
+SWEP.Description = ""..translate.Get"wpn_brass_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 52

@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"dpl_arsenalcrate_name"
-SWEP.Description = translate.Get"dpl_arsenalcrate_desc"
+SWEP.PrintName = ""..translate.Get"dpl_arsenalcrate_name"
+SWEP.Description = ""..translate.Get"dpl_arsenalcrate_desc"
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/Items/item_item_crate.mdl")

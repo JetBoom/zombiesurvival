@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"other_detpack_name"
-SWEP.Description = translate.Get"other_detpack_desc"
+SWEP.PrintName = ""..translate.Get"other_detpack_name"
+SWEP.Description = ""..translate.Get"other_detpack_desc"
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/weapons/w_c4_planted.mdl")

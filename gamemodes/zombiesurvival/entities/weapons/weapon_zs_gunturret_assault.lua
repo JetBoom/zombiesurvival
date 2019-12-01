@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_gunturret"
 
-SWEP.PrintName = translate.Get"dpl_assaultturret_name"
-SWEP.Description = translate.Get"dpl_assaultturret_desc"
+SWEP.PrintName = ""..translate.Get"dpl_assaultturret_name"
+SWEP.Description = ""..translate.Get"dpl_assaultturret_desc"
 
 SWEP.Primary.Damage = 22.5
 

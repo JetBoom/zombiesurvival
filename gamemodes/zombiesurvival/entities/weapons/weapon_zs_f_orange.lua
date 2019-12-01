@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basefood"
 
-SWEP.PrintName = translate.Get"f_orange"
+SWEP.PrintName = ""..translate.Get"f_orange"
 
 if CLIENT then
 	SWEP.VElements = {

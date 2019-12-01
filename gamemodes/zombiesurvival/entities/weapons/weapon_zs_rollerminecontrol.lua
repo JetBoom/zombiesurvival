@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"dpl_rollerminecontrol_name"
-SWEP.Description = translate.Get"dpl_rollerminecontrol_desc"
+SWEP.PrintName = ""..translate.Get"dpl_rollerminecontrol_name"
+SWEP.Description = ""..translate.Get"dpl_rollerminecontrol_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 50

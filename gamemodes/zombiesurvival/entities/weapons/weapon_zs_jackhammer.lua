@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_jackhammer_name"
-SWEP.Description = translate.Get"wpn_jackhammer_desc"
+SWEP.PrintName = ""..translate.Get"wpn_jackhammer_name"
+SWEP.Description = ""..translate.Get"wpn_jackhammer_desc"
 
 if CLIENT then
 	SWEP.Slot = 3
@@ -74,7 +74,7 @@ SWEP.MaxStock = 3
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -1.125)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.81)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_jackhammer_variant_name", translate.Get"wpn_jackhammer_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_jackhammer_variant_name", ""..translate.Get"wpn_jackhammer_variant_desc", function(wept)
 	wept.Primary.NumShots = wept.Primary.NumShots * 3
 	wept.Primary.Delay = wept.Primary.Delay * 3.3
 	wept.Primary.Damage = wept.Primary.Damage * 1.1

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"dpl_rollermine_name"
-SWEP.Description = translate.Get"dpl_rollermine_desc"
+SWEP.PrintName = ""..translate.Get"dpl_rollermine_name"
+SWEP.Description = ""..translate.Get"dpl_rollermine_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

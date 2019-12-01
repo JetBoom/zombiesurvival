@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"wpn_bulwark_name"
-SWEP.Description = translate.Get"wpn_bulwark_desc"
+SWEP.PrintName = ""..translate.Get"wpn_bulwark_name"
+SWEP.Description = ""..translate.Get"wpn_bulwark_desc"
 
 SWEP.Base = "weapon_zs_base"
 
@@ -32,7 +32,7 @@ SWEP.MaxStock = 2
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.769)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.656)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_bulwark_variant_name", translate.Get"wpn_bulwark_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_bulwark_variant_name", ""..translate.Get"wpn_bulwark_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 2.5
 	wept.ConeMin = wept.ConeMin * 0.5
 	wept.ConeMax = wept.ConeMax * 0.5

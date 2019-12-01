@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_colossus_name"
-SWEP.Description = translate.Get"wpn_colossus_desc"
+SWEP.PrintName = ""..translate.Get"wpn_colossus_name"
+SWEP.Description = ""..translate.Get"wpn_colossus_desc"
 
 if CLIENT then
 	SWEP.Slot = 3

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_crackler_name"
-SWEP.Description = translate.Get"wpn_crackler_desc"
+SWEP.PrintName = ""..translate.Get"wpn_crackler_name"
+SWEP.Description = ""..translate.Get"wpn_crackler_desc"
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0
@@ -45,7 +45,7 @@ SWEP.IronSightsPos = Vector(-3, 3, 2)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.375, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.2, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_crackler_variant_name", translate.Get"wpn_crackler_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_crackler_variant_name", ""..translate.Get"wpn_crackler_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.2
 	wept.Primary.Delay = wept.Primary.Delay * 2
 	wept.Primary.ClipSize = 15

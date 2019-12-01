@@ -1,5 +1,5 @@
-SWEP.PrintName = "Spot Lamp"
-SWEP.Description = "This lamp is a watchful eye which illuminates an area.\nPress PRIMARY ATTACK to deploy.\nPress SECONDARY ATTACK and RELOAD to rotate."
+SWEP.PrintName = ""..translate.Get"tool_spotlamp_name"
+SWEP.Description = ""..translate.Get"tool_spotlamp_desc"
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/props_combine/combine_light001a.mdl")

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_glassb_name"
-SWEP.Description = translate.Get"wpn_glassb_desc"
+SWEP.PrintName = ""..translate.Get"wpn_glassb_name"
+SWEP.Description = ""..translate.Get"wpn_glassb_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 70

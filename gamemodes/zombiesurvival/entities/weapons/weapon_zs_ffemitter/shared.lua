@@ -1,5 +1,5 @@
-SWEP.PrintName = translate.Get"tool_ffemiter_name"
-SWEP.Description = translate.Get"tool_ffemiter_desc"
+SWEP.PrintName = ""..translate.Get"tool_ffemiter_name"
+SWEP.Description = ""..translate.Get"tool_ffemiter_desc"
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/props_lab/lab_flourescentlight002b.mdl")

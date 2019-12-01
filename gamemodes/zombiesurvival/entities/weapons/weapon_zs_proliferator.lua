@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpnc_proliferator_name"
-SWEP.Description = translate.Get"wpnc_proliferator_desc"
+SWEP.PrintName = ""..translate.Get"wpnc_proliferator_name"
+SWEP.Description = ""..translate.Get"wpnc_proliferator_desc"
 SWEP.Slot = 2
 SWEP.SlotPos = 0
 

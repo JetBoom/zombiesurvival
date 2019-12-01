@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_kongolaxe_name"
-SWEP.Description = translate.Get"wpn_kongolaxe_desc"
+SWEP.PrintName = ""..translate.Get"wpn_kongolaxe_name"
+SWEP.Description = ""..translate.Get"wpn_kongolaxe_desc"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 65

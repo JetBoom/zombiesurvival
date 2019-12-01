@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = translate.Get"wpn_knife_name"
-SWEP.Description = translate.Get"wpn_knife_desc"
+SWEP.PrintName = ""..translate.Get"wpn_knife_name"
+SWEP.Description = ""..translate.Get"wpn_knife_desc"
 
 if CLIENT then
 	SWEP.ViewModelFlip = false
