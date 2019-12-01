@@ -459,7 +459,7 @@ net.Receive("zs_remantleconf", function()
 	ri.m_ContentsLabel:CenterHorizontal()
 
 	local retscrap = GAMEMODE:GetDismantleScrap(gtbl)
-	local disscraptxt = gtbl.NoDismantle and translate.Get"r_cannot_dismantle" or translate.Format"r_dismantle_for_x", retscrap
+	local disscraptxt = gtbl.NoDismantle and translate.Get"r_cannot_dismantle" or translate.Format("r_dismantle_for_x", retscrap)
 
 	ri.m_Dismantle:SetText(disscraptxt)
 	ri.m_Dismantle:SizeToContents()
