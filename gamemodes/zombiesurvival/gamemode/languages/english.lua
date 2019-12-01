@@ -207,7 +207,7 @@ LANGUAGE.ran_out_of_ammo						 	= "Your %s has run out of ammo."
 LANGUAGE.trinket_recharged							= "Your %s has recharged and is ready to use again."
 LANGUAGE.evolves_in_to_x_on_wave_y					= "Evolves in to %s on wave %d."
 
--- Targetid (W.I.P)
+-- TargetID
 LANGUAGE.level_x                                    = "LVL %d"
 LANGUAGE.level_x_rlvl_x                             = "LVL %d R.LVL %d"
 LANGUAGE.p_hp_player                                = "%d HP"
