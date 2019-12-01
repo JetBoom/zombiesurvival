@@ -40,17 +40,17 @@ ITEMSUBCAT_TRINKETS_SUPPORT = 5
 ITEMSUBCAT_TRINKETS_SPECIAL = 6
 
 GM.ItemCategories = {
-	[ITEMCAT_GUNS] = ""..translate.Get("cat_guns"),
-	[ITEMCAT_AMMO] = ""..translate.Get("cat_ammunition"),
-	[ITEMCAT_MELEE] = ""..translate.Get("cat_melee"),
-	[ITEMCAT_TOOLS] = ""..translate.Get("cat_tools"),
-	[ITEMCAT_DEPLOYABLES] = ""..translate.Get("cat_deploables"),
-	[ITEMCAT_TRINKETS] = ""..translate.Get("cat_trinkets"),
-	[ITEMCAT_OTHER] = ""..translate.Get("cat_other")
+	[ITEMCAT_GUNS] = ""..translate.Get"cat_guns",
+	[ITEMCAT_AMMO] = ""..translate.Get"cat_ammunition",
+	[ITEMCAT_MELEE] = ""..translate.Get"cat_melee",
+	[ITEMCAT_TOOLS] = ""..translate.Get"cat_tools",
+	[ITEMCAT_DEPLOYABLES] = ""..translate.Get"cat_deploables",
+	[ITEMCAT_TRINKETS] = ""..translate.Get"cat_trinkets",
+	[ITEMCAT_OTHER] = ""..translate.Get"cat_other"
 }
 
 GM.ItemSubCategories = {
-	[ITEMSUBCAT_TRINKETS_DEFENSIVE] = ""..translate.Get("cat_tdefensive"),
+	[ITEMSUBCAT_TRINKETS_DEFENSIVE] = ""..translate.Get"cat_tdefensive",
 	[ITEMSUBCAT_TRINKETS_OFFENSIVE] = ""..translate.Get"cat_toffensive",
 	[ITEMSUBCAT_TRINKETS_MELEE] = ""..translate.Get"cat_tmelee",
 	[ITEMSUBCAT_TRINKETS_PERFORMANCE] = ""..translate.Get"cat_tperfomance",
