@@ -31,10 +31,6 @@ local E_IsValid = M_Entity.IsValid
 local E_GetDTBool = M_Entity.GetDTBool
 local E_GetTable = M_Entity.GetTable
 
-function meta:LogID()
-	return "<"..self:SteamID().."> "..self:Name()
-end
-
 function meta:GetMaxHealthEx()
 	if P_Team(self) == TEAM_UNDEAD then
 		return self:GetMaxZombieHealth()

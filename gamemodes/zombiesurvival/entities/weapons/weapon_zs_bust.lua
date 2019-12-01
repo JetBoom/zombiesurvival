@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Bust-on-a-stick"
+SWEP.PrintName = translate.Get"wpnc_bust_name"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 70

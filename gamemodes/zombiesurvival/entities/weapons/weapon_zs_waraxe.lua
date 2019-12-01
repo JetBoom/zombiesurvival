@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Waraxe' Handgun"
+SWEP.PrintName = translate.Get"wpnc_waraxe_name"
 SWEP.Slot = 1
 SWEP.SlotPos = 0
 
@@ -53,7 +53,7 @@ SWEP.IronSightsPos = Vector(-5.75, 10, 2.7)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEADSHOT_MULTI, 0.07)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Halberd' Handgun", "Deals extra damage to zombies with full health, but less overall damage", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpnc_waraxe_variant_name", translate.Get"wpnc_waraxe_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.85
 
 	wept.BulletCallback = function(attacker, tr, dmginfo)

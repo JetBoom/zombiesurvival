@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Eminence' Particle Cannon"
-SWEP.Description = "Fires projectiles fire particle tracers whilst moving."
+SWEP.PrintName = translate.Get"wpnc_eminence_name"
+SWEP.Description = translate.Get"wpnc_eminence_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 

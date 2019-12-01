@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Nova Blaster' Pulse Revolver"
-SWEP.Description = "Combines the ricochet properties of the magnum into a bouncing pulse projectile, that slows zombies."
+SWEP.PrintName = translate.Get"wpnc_novablaster_name"
+SWEP.Description = translate.Get"wpnc_novablaster_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 
@@ -38,7 +38,7 @@ SWEP.Tier = 2
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.7, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.4, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.05, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Nova Helix' Pulse Revolver", "Fires two projectiles in a wavy formation", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpnc_novablaster_variant_name", translate.Get"wpnc_novablaster_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.6
 	wept.Primary.ProjVelocity = 450
 	wept.Primary.NumShots = 2

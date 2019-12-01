@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Seditionist' Handgun"
-SWEP.Description = "This high-powered handgun has the ability to pierce through multiple zombies."
+SWEP.PrintName = translate.Get"wpnc_seditionist_name"
+SWEP.Description = translate.Get"wpnc_seditionist_desc"
 SWEP.Slot = 1
 SWEP.SlotPos = 0
 

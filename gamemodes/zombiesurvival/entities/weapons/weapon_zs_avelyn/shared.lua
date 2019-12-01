@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Avelyn' Multi Crossbow"
-SWEP.Description = "A triple loaded crossbow. Slow to reload, but very high burst damage."
+SWEP.PrintName = translate.Get"wpnc_avelyn_name"
+SWEP.Description = translate.Get"wpnc_avelyn_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 DEFINE_BASECLASS("weapon_zs_baseproj")

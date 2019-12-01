@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Enkindler' Fire Mine Layer"
-SWEP.Description = "A mine layer that lays mines that ignite zombies."
+SWEP.PrintName = translate.Get"wpnc_enkindler_name"
+SWEP.Description = translate.Get"wpnc_enkindler_desc"
 
 SWEP.Slot = 4
 SWEP.SlotPos = 0

@@ -1,5 +1,5 @@
-SWEP.PrintName = "'Ripper' Discblade Launcher"
-SWEP.Description = "An unusual weapon capable of launching sharp discs which bounce and that can headshot zombies."
+SWEP.PrintName = translate.Get"wpnc_ripper_name"
+SWEP.Description = translate.Get"wpnc_ripper_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 

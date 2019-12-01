@@ -1,7 +1,7 @@
 DEFINE_BASECLASS("weapon_zs_base")
 local BaseClassMelee = baseclass.Get("weapon_zs_basemelee")
 
-SWEP.PrintName = "'Stabber' M1 Garand"
+SWEP.PrintName = translate.Get"wpnc_stabber_name"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0
@@ -46,7 +46,7 @@ SWEP.WalkSpeed = SPEED_SLOW
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.03, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.5, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Puncturer' M1 Garand", "Additional damage to targets stabbed with the bayonet recently, reduced bullet damage", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpnc_stabber_variant_name", translate.Get"wpnc_stabber_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.85
 	wept.BulletCallback = function(attacker, tr, dmginfo)
 		local ent = tr.Entity

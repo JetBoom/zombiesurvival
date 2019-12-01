@@ -1,7 +1,7 @@
 DEFINE_BASECLASS("weapon_zs_baseproj")
 
-SWEP.PrintName = "'Tithonus' Charged Shotgun"
-SWEP.Description = "Charges a up shotgun blast of pulse projectiles."
+SWEP.PrintName = translate.Get"wpnc_tithonus_name"
+SWEP.Description = translate.Get"wpnc_tithonus_desc"
 
 SWEP.Base = "weapon_zs_baseproj"
 
@@ -43,7 +43,7 @@ SWEP.MaxCharge = 3
 SWEP.ChargeTime = 0.6
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.02)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Triton' Charged Shotgun", "Focuses on firing quickly charged blasts, but reloads slower and has limited range", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpnc_tithonus_variant_name", translate.Get"wpnc_tithonus_variant_desc", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.3
 	wept.Primary.ProjVelocity = 1000
 	wept.Primary.NumShots = 3

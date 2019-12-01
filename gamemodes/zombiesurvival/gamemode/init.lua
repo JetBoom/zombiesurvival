@@ -2594,7 +2594,9 @@ function GM:PropBroken(ent, attacker)
 	if IsValid(ent) and IsValid(attacker) and not ent._PROPBROKEN and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
 		ent._PROPBROKEN = true
 
-		PrintMessage(HUD_PRINTCONSOLE, attacker:LogID().." broke "..ent:GetModel())
+		if attacker.LogID then --failsafe for local dev
+			PrintMessage(HUD_PRINTCONSOLE, attacker:LogID().." broke "..ent:GetModel())
+		end
 	end
 end
 

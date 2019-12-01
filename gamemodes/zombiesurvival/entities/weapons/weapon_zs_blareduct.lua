@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "'Blareduct' Zip Gun"
+SWEP.PrintName = translate.Get"wpnc_blareduct_name"
 SWEP.Slot = 3
 SWEP.SlotPos = 0
 
