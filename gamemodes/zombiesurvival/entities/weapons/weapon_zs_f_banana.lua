@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basefood"
 
-SWEP.PrintName = "Banana"
+SWEP.PrintName = translate.Get"f_banana"
 
 if CLIENT then
 	SWEP.ViewModelBoneMods = {

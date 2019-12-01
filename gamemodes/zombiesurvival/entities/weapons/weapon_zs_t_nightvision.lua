@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basetrinket"
 
-SWEP.PrintName = "Night Vision Goggles"
-SWEP.Description = "Allows you to see in the dark and reduce the intensity of dim vision."
+SWEP.PrintName = translate.Get"trin_night_vision"
+SWEP.Description = translate.Get"trin_night_vision_desc2"
 
 if CLIENT then
 	SWEP.VElements = {

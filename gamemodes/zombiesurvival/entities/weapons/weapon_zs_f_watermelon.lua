@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basefood"
 
-SWEP.PrintName = "Watermelon"
+SWEP.PrintName = translate.Get"f_watermelon"
 
 if CLIENT then
 	SWEP.ViewModelFOV = 80

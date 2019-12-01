@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basetrinket"
 
-SWEP.PrintName = "Resupply Pack"
-SWEP.Description = "Allows humans to resupply from you.\nPress LMB with the pack in your hand to resupply yourself."
+SWEP.PrintName = translate.Get"trin_resupply_pack"
+SWEP.Description = translate.Get"trin_resupply_pack_desc"
 
 if CLIENT then
 	SWEP.VElements = {

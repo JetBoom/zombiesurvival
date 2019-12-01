@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_basetrinket"
 
-SWEP.PrintName = "Doom Organ"
-SWEP.Description = "Reduces the duration of Dim Vision and allows you to cleanse harmful statuses every 20 seconds."
+SWEP.PrintName = translate.Get"trin_doom_organ"
+SWEP.Description = translate.Get"trin_doom_organ_desc"
 
 if CLIENT then
 	SWEP.VElements = {

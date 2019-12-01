@@ -587,10 +587,12 @@ LANGUAGE.trin_sharp_stone_desc                      = "+5% melee damage"
 -- Performance Trinkets
 LANGUAGE.trin_oxygen_tank                           = "Oxygen Tank"
 LANGUAGE.trin_oxygen_tank_desc                      = "10x breathing time underwater."
+LANGUAGE.trin_oxygen_tank_desc2                     = "Grants significantly more underwater breathing time to the user."
 LANGUAGE.trin_acrobat_frame                         = "Acrobat Frame"
 LANGUAGE.trin_acrobat_frame_desc                    = "+8% jump power."
 LANGUAGE.trin_night_vision                          = "Night Vision Goggles"
 LANGUAGE.trin_night_vision_desc                     = "-50% effect of dim vision and ability to see in the dark\n-40% effect of vision affecting effects\n-45% fright duration"
+LANGUAGE.trin_night_vision_desc2                    = "Allows you to see in the dark and reduce the intensity of dim vision."
 LANGUAGE.trin_portable_hole                         = "Portable Weapons Satchel"
 LANGUAGE.trin_portable_hole_desc                    = "+15% weapon switch speed\n+3% reload speed"
 LANGUAGE.trin_path_finder                           = "Agility Magnifier"
@@ -715,6 +717,12 @@ LANGUAGE.trin_welfare                               = "Welfare Shield"
 LANGUAGE.trin_welfare_desc                          = "-5% resupply delay\n-7% self damage taken"
 LANGUAGE.trin_chemistry                             = "Chemistry Set"
 LANGUAGE.trin_chemistry_desc                        = "+6% medic tool effectiveness\n+12% cloud bomb time"
+
+-- Other Trinkets
+LANGUAGE.trin_extintion_organ                       = "Extinction Organ"
+LANGUAGE.trin_extintion_organ_desc                  = "Increases healing received and allows you to cleanse harmful statuses every 20 seconds."
+LANGUAGE.trin_doom_organ                            = "Doom Organ"
+LANGUAGE.trin_doom_organ_desc                       = "Reduces the duration of Dim Vision and allows you to cleanse harmful statuses every 20 seconds."
 
 -- Floaters (Survivor)
 LANGUAGE.fs_point_x                                 = "%s point"
@@ -1799,6 +1807,15 @@ LANGUAGE.other_medbomb_name                         = "Medic Cloud Bomb"
 LANGUAGE.other_medbomb_desc                         = "Explodes in to a cloud of healing gas. Heals 2HP, every second, for 10 seconds."
 LANGUAGE.other_nanitebomb_name                      = "Nanite Cloud Bomb"
 LANGUAGE.other_nanitebomb_desc                      = "Explodes in to a cloud of nanites. Heals all props and deployables in the radius."
+
+-- Food Items
+LANGUAGE.f_watermelon                               = "Watermelon"
+LANGUAGE.f_water                                    = "Water"
+LANGUAGE.f_takeout                                  = "Chinese Takeout"
+LANGUAGE.f_soda                                     = "Soda"
+LANGUAGE.f_orange                                   = "Orange"
+LANGUAGE.f_milk                                     = "Milk"
+LANGUAGE.f_banana                                   = "Banana"
 
 -- Message beacon messages
 LANGUAGE.message_beacon_1							= "Meet up here"
