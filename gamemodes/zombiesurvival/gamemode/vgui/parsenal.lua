@@ -257,7 +257,7 @@ local function ItemPanelDoClick(self)
 
 	local ppurbl = viewer.m_PurchasePrice
 	local price = self.NoPoints and math.ceil(GAMEMODE:PointsToScrap(shoptbl.Worth)) or math.floor(shoptbl.Worth * (MySelf.ArsenalDiscount or 1))
-	ppurbl:SetText(translate.Format("ps_scrap_x", price), (translate.Format("ps_points_xx", self.NoPoints)))
+	ppurbl:SetText(price .. (self.NoPoints and translate.Get("ps_scrap") or translate.Get("ps_points")))
 	ppurbl:SizeToContents()
 	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
 	ppurbl:SetVisible(true)
@@ -406,7 +406,7 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 		if nopointshop then
 			price = tostring(math.ceil(self:PointsToScrap(tab.Price)))
 		end
-		pricelabel:SetText(translate.Format("ps_scrap_x", price), (translate.Format("ps_points_xx", nopointshop)))
+		pricelabel:SetText(price..(nopointshop and translate.Get("ps_scrap") or translate.Get("ps_points")))
 	end
 	pricelabel:SizeToContents()
 	pricelabel:AlignRight(alignri)
