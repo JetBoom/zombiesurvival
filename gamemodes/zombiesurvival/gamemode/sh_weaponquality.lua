@@ -157,7 +157,7 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 			wept.MeleeDamage = wept.MeleeDamage * quality[2]
 		end
 
-		table.insert(remantledescs, "+" .. ((quality[2]-1) * 100) .. "% " .. "Damage")
+		table.insert(remantledescs, "+" .. ((quality[2]-1) * 100) .. "% " .. ""..translate.Get"stat_damage")
 	end
 	if wept.AltRemantleModifiers then
 		for modifier, datatab in pairs(wept.AltRemantleModifiers) do
