@@ -40,7 +40,7 @@ function ENT:Explode(hitpos, hitnormal)
 		effectdata:SetOrigin(hitpos)
 		effectdata:SetNormal(hitnormal)
 	util.Effect("HelicopterMegaBomb", effectdata)
-	self:EmitSound(")weapons/explode3.wav", 80, 180)
+	self:EmitSound("weapons/explode3.wav", 80, 180)
 end
 
 function ENT:Think()
