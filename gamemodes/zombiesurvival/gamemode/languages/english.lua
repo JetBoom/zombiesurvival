@@ -150,6 +150,7 @@ LANGUAGE.integrity_x								= "Integrity: %d%%"
 LANGUAGE.empty										= "EMPTY"
 LANGUAGE.manual_control								= "MANUAL CONTROL"
 LANGUAGE.no_target                                  = "No Target"
+LANGUAGE.msgb_title                                 = "Select a message"
 LANGUAGE.venting                                    = "VENTING"
 LANGUAGE.heat                                       = "Heat"
 LANGUAGE.arsenal_crate								= "Arsenal Crate"
@@ -217,6 +218,7 @@ LANGUAGE.p_poison                                   = "(POISON - %d)"
 LANGUAGE.p_frail                                    = "(FRAIL)"
 LANGUAGE.p_bloodlust                                = "(BLOODLUST)"
 LANGUAGE.p_carrying                                 = "Carrying [%s]"
+LANGUAGE.cade_owner_dead                            = "(DEAD) %s"
 
 -- Arsenal Crate shop
 LANGUAGE.points_to_spend_x                          = "Points to spend: %s"
@@ -250,11 +252,6 @@ LANGUAGE.cat_tmelee                                 = "Melee"
 LANGUAGE.cat_tperfomance                            = "Performance"
 LANGUAGE.cat_tsupport                               = "Support"
 LANGUAGE.cat_tspecial                               = "Special"
-
--- Inventory Categories
-LANGUAGE.ccat_trinkets                              = "Trinkets"
-LANGUAGE.ccat_components                            = "Components"
-LANGUAGE.ccat_consumables                           = "Consumables"
 
 -- Weapon Database Category
 LANGUAGE.weapondata_weapons                         = "Weapons"
@@ -791,6 +788,11 @@ LANGUAGE.team_name_survivors                        = "Survivors"
 LANGUAGE.team_score                                 = "Score"
 LANGUAGE.team_rlvl                                  = "R.LVL"
 LANGUAGE.team_brains                                = "Brains"
+
+-- Scoreboard Tags
+LANGUAGE.sb_jetboom                                 = "JetBoom\nCreator of Zombie Survival!"
+LANGUAGE.sb_admin                                   = "Admin"
+LANGUAGE.sb_noxsupport                              = "Nox Supporter"
 
 -- Sigils point objectives
 LANGUAGE.sigil										= "Sanity Sigil"

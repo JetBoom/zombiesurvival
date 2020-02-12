@@ -4,9 +4,9 @@ INVCAT_CONSUMABLES = 3
 
 GM.ZSInventoryItemData = {}
 GM.ZSInventoryCategories = {
-	[INVCAT_TRINKETS] = translate.Get"ccat_trinkets",
-	[INVCAT_COMPONENTS] = translate.Get"ccat_components",
-	[INVCAT_CONSUMABLES] = translate.Get"ccat_consumables"
+	[INVCAT_TRINKETS] = "Trinkets",
+	[INVCAT_COMPONENTS] = "Components",
+	[INVCAT_CONSUMABLES] = "Consumables"
 }
 GM.ZSInventoryPrefix = {
 	[INVCAT_TRINKETS] = "trin",

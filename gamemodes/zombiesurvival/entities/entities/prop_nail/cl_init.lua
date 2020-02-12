@@ -123,7 +123,7 @@ function ENT:DrawTranslucent()
 						end
 					end
 				else
-					displayowner = "(DEAD) "..displayowner
+					displayowner = translate.Format("cade_owner_dead", displayowner)
 					redname = true
 				end
 			end

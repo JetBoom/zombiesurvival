@@ -819,13 +819,13 @@ function GM:IsSpecialPerson(pl, image)
 
 	if pl:SteamID() == "STEAM_0:1:3307510" then
 		img = "VGUI/steam/games/icon_sourcesdk"
-		tooltip = "JetBoom\nCreator of Zombie Survival!"
+		tooltip = translate.Get"sb_jetboom"
 	elseif pl:IsAdmin() then
 		img = "VGUI/servers/icon_robotron"
-		tooltip = "Admin"
+		tooltip = translate.Get"sb_admin"
 	elseif pl:IsNoxSupporter() then
 		img = "noxiousnet/noxicon.png"
-		tooltip = "Nox Supporter"
+		tooltip = translate.Get"sb_noxsupport"
 	end
 
 	if img then
