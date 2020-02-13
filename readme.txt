@@ -1,4 +1,6 @@
- ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+Latest Zombie Survival version, but with extra translateable text.
+
+ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 ZZZ                                  ZZZ
 ZZZ          ZOMBIE SURVIVAL         ZZZ
 ZZZ THE DEFINITIVE ZOMBIE EXPERIENCE ZZZ
