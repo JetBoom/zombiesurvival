@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpn_frotchet_name"
-SWEP.Description = ""..translate.Get"wpn_frotchet_desc"
+SWEP.PrintName = ""..translate.Get("wpn_frotchet_name")
+SWEP.Description = ""..translate.Get("wpn_frotchet_desc")
 
 SWEP.Base = "weapon_zs_basemelee"
 

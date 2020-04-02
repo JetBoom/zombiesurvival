@@ -1,6 +1,6 @@
 INC_CLIENT()
 
-SWEP.PrintName = "Chem Zombie"
+SWEP.PrintName = ""..translate.Get("wpnc_chemzombie_name")
 SWEP.DrawCrosshair = false
 
 function SWEP:Think()

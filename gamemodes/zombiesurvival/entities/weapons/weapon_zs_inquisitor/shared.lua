@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpn_inquisitor_name"
-SWEP.Description = ""..translate.Get"wpn_inquisitor_desc"
+SWEP.PrintName = ""..translate.Get("wpn_inquisitor_name")
+SWEP.Description = ""..translate.Get("wpn_inquisitor_desc")
 
 SWEP.Base = "weapon_zs_baseproj"
 
@@ -34,7 +34,7 @@ SWEP.Tier = 2
 
 SWEP.Primary.ProjVelocity = 1600
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.06)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_inquisitor_variant_name", ""..translate.Get"wpn_inquisitor_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_inquisitor_variant_name"), ""..translate.Get("wpn_inquisitor_variant_desc"), function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.2
 	wept.Primary.ProjVelocity = 2100
 	wept.Primary.Projectile = "projectile_arrow_cha"

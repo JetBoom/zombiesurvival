@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Tethered Harpoon"
+SWEP.PrintName = ""..translate.Get("wpn_tetheredharpoon_name")
 
 SWEP.Base = "weapon_zs_harpoon"
 

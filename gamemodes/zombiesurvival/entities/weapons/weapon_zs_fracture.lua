@@ -3,8 +3,8 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_baseshotgun"
 DEFINE_BASECLASS("weapon_zs_baseshotgun")
 
-SWEP.PrintName = ""..translate.Get"wpnc_fracture_name"
-SWEP.Description = ""..translate.Get"wpnc_fracture_desc"
+SWEP.PrintName = ""..translate.Get("wpnc_fracture_name")
+SWEP.Description = ""..translate.Get("wpnc_fracture_desc")
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

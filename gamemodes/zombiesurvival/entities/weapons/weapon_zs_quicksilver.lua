@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = ""..translate.Get"wpn_quicksilver_name"
-SWEP.Description = ""..translate.Get"wpn_quicksilver_desc"
+SWEP.PrintName = ""..translate.Get("wpn_quicksilver_name")
+SWEP.Description = ""..translate.Get("wpn_quicksilver_desc")
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0
@@ -49,7 +49,7 @@ SWEP.Tier = 4
 SWEP.MaxStock = 3
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.05)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_quicksilver_variant_name", ""..translate.Get"wpn_quicksilver_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_quicksilver_variant_name"), ""..translate.Get("wpn_quicksilver_variant_desc"), function(wept)
 	wept.Primary.Damage = wept.Primary.Damage / 5
 	wept.Primary.NumShots = 6
 	wept.ConeMin = 3

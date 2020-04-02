@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_gorechild"
 
-SWEP.PrintName = "Shadow Child"
+SWEP.PrintName = ""..translate.Get("class_shadow_gore_child")
 
 SWEP.MeleeDamage = 2
 

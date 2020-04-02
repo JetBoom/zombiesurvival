@@ -1,4 +1,4 @@
-SWEP.PrintName = "Cool Wisp"
+SWEP.PrintName = ""..translate.Get("class_coolwisp")
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1

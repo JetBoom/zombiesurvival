@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_peashooter_name"
-SWEP.Description = ""..translate.Get"wpn_peashooter_desc"
+SWEP.PrintName = ""..translate.Get("wpn_peashooter_name")
+SWEP.Description = ""..translate.Get("wpn_peashooter_desc")
 
 SWEP.Slot = 1
 SWEP.SlotPos = 0
@@ -39,7 +39,7 @@ SWEP.ConeMax = 4
 SWEP.ConeMin = 0.75
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_peashooter_variant_name", ""..translate.Get"wpn_peashooter_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_peashooter_variant_name"), ""..translate.Get("wpn_peashooter_variant_desc"), function(wept)
 	wept.Primary.Delay = 0.15
 	wept.Primary.Automatic = true
 	wept.Primary.ClipSize = math.floor(wept.Primary.ClipSize * 1.25)

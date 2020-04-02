@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpnc_hephaestus_name"
-SWEP.Description = ""..translate.Get"wpnc_hephaestus_desc"
+SWEP.PrintName = ""..translate.Get("wpnc_hephaestus_name")
+SWEP.Description = ""..translate.Get("wpnc_hephaestus_desc")
 
 SWEP.Base = "weapon_zs_base"
 
@@ -31,7 +31,7 @@ SWEP.ChargeDelay = 0.12
 SWEP.Tier = 5
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.01)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpnc_hephaestus_variant_name", ""..translate.Get"wpnc_hephaestus_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpnc_hephaestus_variant_name"), ""..translate.Get("wpnc_hephaestus_variant_desc"), function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 1.4
 	wept.Primary.Damage = wept.Primary.Damage * 1.2/3
 	wept.Primary.NumShots = 3

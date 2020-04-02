@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Puke Pus"
+SWEP.PrintName = ""..translate.Get("wpn_pukepus_name")
 
 SWEP.Primary.Delay = 3.5
 

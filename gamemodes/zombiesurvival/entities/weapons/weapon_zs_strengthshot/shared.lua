@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"tool_strenghtshot_name"
-SWEP.Description = ""..translate.Get"tool_strenghtshot_desc"
+SWEP.PrintName = ""..translate.Get("tool_strenghtshot_name")
+SWEP.Description = ""..translate.Get("tool_strenghtshot_desc")
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 
@@ -39,7 +39,7 @@ SWEP.AllowQualityWeapons = true
 
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 5)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_BUFF_DURATION, 2)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"tool_strenghtshot_variant_name", ""..translate.Get"tool_strenghtshot_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("tool_strenghtshot_variant_name"), ""..translate.Get("tool_strenghtshot_variant_desc"), function(wept)
 	if SERVER then
 		wept.EntModify = function(self, ent)
 			ent:SetDTBool(0, true)

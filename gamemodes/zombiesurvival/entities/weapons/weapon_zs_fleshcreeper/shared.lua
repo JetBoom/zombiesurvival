@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Flesh Creeper"
+SWEP.PrintName = ""..translate.Get("class_flesh_creeper")
 
 SWEP.MeleeDelay = 0.5
 SWEP.MeleeReach = 52

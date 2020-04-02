@@ -3,8 +3,8 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_basetrinket"
 SWEP.ModelScale = 0.5
 
-SWEP.PrintName = ""..translate.Get"trin_oxygen_tank"
-SWEP.Description = ""..translate.Get"trin_oxygen_tank_desc2"
+SWEP.PrintName = ""..translate.Get("trin_oxygen_tank")
+SWEP.Description = ""..translate.Get("trin_oxygen_tank_desc2")
 
 SWEP.WorldModel = "models/props_c17/canister01a.mdl"
 

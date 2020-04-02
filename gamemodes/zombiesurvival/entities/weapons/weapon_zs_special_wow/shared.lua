@@ -1,4 +1,4 @@
-SWEP.PrintName = "Will O' Wisp"
+SWEP.PrintName = ""..translate.Get("wpn_willowisp_name")
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1

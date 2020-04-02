@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpnc_galestorm_name"
-SWEP.Description = ""..translate.Get"wpnc_galestorm_desc"
+SWEP.PrintName = ""..translate.Get("wpnc_galestorm_name")
+SWEP.Description = ""..translate.Get("wpnc_galestorm_desc")
 SWEP.Slot = 2
 SWEP.SlotPos = 0
 
@@ -79,7 +79,7 @@ SWEP.IronSightsAng = Vector(3, -3, -10)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.7, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.4, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.01, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpnc_galestorm_variant_name", ""..translate.Get"wpnc_galestorm_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpnc_galestorm_variant_name"), ""..translate.Get("wpnc_galestorm_variant_desc"), function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 4
 	wept.Primary.Damage = wept.Primary.Damage * 4
 	wept.Primary.Ammo = "357"

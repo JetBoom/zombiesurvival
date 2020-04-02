@@ -73,11 +73,11 @@ function PANEL:Init()
 	self.m_ZombieHeading = vgui.Create("DTeamHeading", self)
 	self.m_ZombieHeading:SetTeam(TEAM_UNDEAD)
 
-	self.m_PointsLabel = EasyLabel(self, translate.Get"team_score", "ZSScoreBoardPlayer", COLOR_GRAY)
-	self.m_RemortCLabel = EasyLabel(self, translate.Get"team_rlvl", "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_PointsLabel = EasyLabel(self, translate.Get("team_score"), "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_RemortCLabel = EasyLabel(self, translate.Get("team_rlvl"), "ZSScoreBoardPlayer", COLOR_GRAY)
 
-	self.m_BrainsLabel = EasyLabel(self, translate.Get"team_brains", "ZSScoreBoardPlayer", COLOR_GRAY)
-	self.m_RemortCZLabel = EasyLabel(self, translate.Get"team_rlvl", "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_BrainsLabel = EasyLabel(self, translate.Get("team_brains"), "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_RemortCZLabel = EasyLabel(self, translate.Get("team_rlvl"), "ZSScoreBoardPlayer", COLOR_GRAY)
 
 	self.ZombieList = vgui.Create("DScrollPanel", self)
 	self.ZombieList.Team = TEAM_UNDEAD

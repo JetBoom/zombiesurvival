@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"dpl_gunturretcontrl_name"
-SWEP.Description = ""..translate.Get"dpl_gunturretcontrl_desc"
+SWEP.PrintName = ""..translate.Get("dpl_gunturretcontrl_name")
+SWEP.Description = ""..translate.Get("dpl_gunturretcontrl_desc")
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpnc_enkindler_name"
-SWEP.Description = ""..translate.Get"wpnc_enkindler_desc"
+SWEP.PrintName = ""..translate.Get("wpnc_enkindler_name")
+SWEP.Description = ""..translate.Get("wpnc_enkindler_desc")
 
 SWEP.Slot = 4
 SWEP.SlotPos = 0

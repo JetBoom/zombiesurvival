@@ -40,22 +40,22 @@ ITEMSUBCAT_TRINKETS_SUPPORT = 5
 ITEMSUBCAT_TRINKETS_SPECIAL = 6
 
 GM.ItemCategories = {
-	[ITEMCAT_GUNS] = ""..translate.Get"cat_guns",
-	[ITEMCAT_AMMO] = ""..translate.Get"cat_ammunition",
-	[ITEMCAT_MELEE] = ""..translate.Get"cat_melee",
-	[ITEMCAT_TOOLS] = ""..translate.Get"cat_tools",
-	[ITEMCAT_DEPLOYABLES] = ""..translate.Get"cat_deploables",
-	[ITEMCAT_TRINKETS] = ""..translate.Get"cat_trinkets",
-	[ITEMCAT_OTHER] = ""..translate.Get"cat_other"
+	[ITEMCAT_GUNS] = ""..translate.Get("cat_guns"),
+	[ITEMCAT_AMMO] = ""..translate.Get("cat_ammunition"),
+	[ITEMCAT_MELEE] = ""..translate.Get("cat_melee"),
+	[ITEMCAT_TOOLS] = ""..translate.Get("cat_tools"),
+	[ITEMCAT_DEPLOYABLES] = ""..translate.Get("cat_deploables"),
+	[ITEMCAT_TRINKETS] = ""..translate.Get("cat_trinkets"),
+	[ITEMCAT_OTHER] = ""..translate.Get("cat_other")
 }
 
 GM.ItemSubCategories = {
-	[ITEMSUBCAT_TRINKETS_DEFENSIVE] = ""..translate.Get"cat_tdefensive",
-	[ITEMSUBCAT_TRINKETS_OFFENSIVE] = ""..translate.Get"cat_toffensive",
-	[ITEMSUBCAT_TRINKETS_MELEE] = ""..translate.Get"cat_tmelee",
-	[ITEMSUBCAT_TRINKETS_PERFORMANCE] = ""..translate.Get"cat_tperfomance",
-	[ITEMSUBCAT_TRINKETS_SUPPORT] = ""..translate.Get"cat_tsupport",
-	[ITEMSUBCAT_TRINKETS_SPECIAL] = ""..translate.Get"cat_tspecial"
+	[ITEMSUBCAT_TRINKETS_DEFENSIVE] = ""..translate.Get("cat_tdefensive"),
+	[ITEMSUBCAT_TRINKETS_OFFENSIVE] = ""..translate.Get("cat_toffensive"),
+	[ITEMSUBCAT_TRINKETS_MELEE] = ""..translate.Get("cat_tmelee"),
+	[ITEMSUBCAT_TRINKETS_PERFORMANCE] = ""..translate.Get("cat_tperfomance"),
+	[ITEMSUBCAT_TRINKETS_SUPPORT] = ""..translate.Get("cat_tsupport"),
+	[ITEMSUBCAT_TRINKETS_SPECIAL] = ""..translate.Get("cat_tspecial")
 }
 
 --[[
@@ -145,26 +145,26 @@ GM:AddStartingItem("sling",				ITEMCAT_GUNS,			45,				"weapon_zs_slinger")
 GM:AddStartingItem("z9000",				ITEMCAT_GUNS,			45,				"weapon_zs_z9000")
 GM:AddStartingItem("minelayer",			ITEMCAT_GUNS,			60,				"weapon_zs_minelayer")
 
-GM:AddStartingItem("2pcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_pistol_ammo",				nil,		"ammo_pistol",			function(pl) pl:GiveAmmo(28, "pistol", true) end)
-GM:AddStartingItem("3pcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_pistol2_ammo",				nil,		"ammo_pistol",			function(pl) pl:GiveAmmo(42, "pistol", true) end)
-GM:AddStartingItem("2sgcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_buckshot_ammo",				nil,		"ammo_shotgun",			function(pl) pl:GiveAmmo(24, "buckshot", true) end)
-GM:AddStartingItem("3sgcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_buckshot2_ammo",				nil,		"ammo_shotgun",			function(pl) pl:GiveAmmo(36, "buckshot", true) end)
-GM:AddStartingItem("2smgcp",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_smg_ammo",					nil,		"ammo_smg",				function(pl) pl:GiveAmmo(72, "smg1", true) end)
-GM:AddStartingItem("3smgcp",			ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_smg2_ammo",					nil,		"ammo_smg",				function(pl) pl:GiveAmmo(108, "smg1", true) end)
-GM:AddStartingItem("2arcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_asr_ammo",		nil,		"ammo_assault",			function(pl) pl:GiveAmmo(64, "ar2", true) end)
-GM:AddStartingItem("3arcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_asr2_ammo",		nil,		"ammo_assault",			function(pl) pl:GiveAmmo(96, "ar2", true) end)
-GM:AddStartingItem("2rcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_rifle_ammo",				nil,		"ammo_rifle",			function(pl) pl:GiveAmmo(16, "357", true) end)
-GM:AddStartingItem("3rcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_rifle2_ammo",				nil,		"ammo_rifle",			function(pl) pl:GiveAmmo(24, "357", true) end)
-GM:AddStartingItem("2pls",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_pulse_ammo",				nil,		"ammo_pulse",			function(pl) pl:GiveAmmo(60, "pulse", true) end)
-GM:AddStartingItem("3pls",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_pulse2_ammo",				nil,		"ammo_pulse",			function(pl) pl:GiveAmmo(90, "pulse", true) end)
-GM:AddStartingItem("xbow1",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_bolts_ammo",			nil,		"ammo_bolts",			function(pl) pl:GiveAmmo(16, "XBowBolt", true) end)
-GM:AddStartingItem("xbow2",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_bolts2_ammo",			nil,		"ammo_bolts",			function(pl) pl:GiveAmmo(24, "XBowBolt", true) end)
-GM:AddStartingItem("4mines",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_explosive_ammo",					nil,		"ammo_explosive",		function(pl) pl:GiveAmmo(6, "impactmine", true) end)
-GM:AddStartingItem("6mines",			ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_explosive2_ammo",					nil,		"ammo_explosive",		function(pl) pl:GiveAmmo(9, "impactmine", true) end)
-GM:AddStartingItem("8nails",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_nails_ammo",						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(8, "GaussEnergy", true) end)
-GM:AddStartingItem("12nails",			ITEMCAT_AMMO,			20,				nil,			""..translate.Get"wm_nails2_ammo",						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(12, "GaussEnergy", true) end)
-GM:AddStartingItem("60mkit",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get"wm_meds_ammo",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(60, "Battery", true) end)
-GM:AddStartingItem("90mkit",			ITEMCAT_AMMO,			25,				nil,			""..translate.Get"wm_meds2_ammo",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(90, "Battery", true) end)
+GM:AddStartingItem("2pcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_pistol_ammo"),				nil,		"ammo_pistol",			function(pl) pl:GiveAmmo(28, "pistol", true) end)
+GM:AddStartingItem("3pcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_pistol2_ammo"),				nil,		"ammo_pistol",			function(pl) pl:GiveAmmo(42, "pistol", true) end)
+GM:AddStartingItem("2sgcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_buckshot_ammo"),				nil,		"ammo_shotgun",			function(pl) pl:GiveAmmo(24, "buckshot", true) end)
+GM:AddStartingItem("3sgcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_buckshot2_ammo"),				nil,		"ammo_shotgun",			function(pl) pl:GiveAmmo(36, "buckshot", true) end)
+GM:AddStartingItem("2smgcp",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_smg_ammo"),					nil,		"ammo_smg",				function(pl) pl:GiveAmmo(72, "smg1", true) end)
+GM:AddStartingItem("3smgcp",			ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_smg2_ammo"),					nil,		"ammo_smg",				function(pl) pl:GiveAmmo(108, "smg1", true) end)
+GM:AddStartingItem("2arcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_asr_ammo"),		nil,		"ammo_assault",			function(pl) pl:GiveAmmo(64, "ar2", true) end)
+GM:AddStartingItem("3arcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_asr2_ammo"),		nil,		"ammo_assault",			function(pl) pl:GiveAmmo(96, "ar2", true) end)
+GM:AddStartingItem("2rcp",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_rifle_ammo"),				nil,		"ammo_rifle",			function(pl) pl:GiveAmmo(16, "357", true) end)
+GM:AddStartingItem("3rcp",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_rifle2_ammo"),				nil,		"ammo_rifle",			function(pl) pl:GiveAmmo(24, "357", true) end)
+GM:AddStartingItem("2pls",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_pulse_ammo"),				nil,		"ammo_pulse",			function(pl) pl:GiveAmmo(60, "pulse", true) end)
+GM:AddStartingItem("3pls",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_pulse2_ammo"),				nil,		"ammo_pulse",			function(pl) pl:GiveAmmo(90, "pulse", true) end)
+GM:AddStartingItem("xbow1",				ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_bolts_ammo"),			nil,		"ammo_bolts",			function(pl) pl:GiveAmmo(16, "XBowBolt", true) end)
+GM:AddStartingItem("xbow2",				ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_bolts2_ammo"),			nil,		"ammo_bolts",			function(pl) pl:GiveAmmo(24, "XBowBolt", true) end)
+GM:AddStartingItem("4mines",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_explosive_ammo"),					nil,		"ammo_explosive",		function(pl) pl:GiveAmmo(6, "impactmine", true) end)
+GM:AddStartingItem("6mines",			ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_explosive2_ammo"),					nil,		"ammo_explosive",		function(pl) pl:GiveAmmo(9, "impactmine", true) end)
+GM:AddStartingItem("8nails",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_nails_ammo"),						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(8, "GaussEnergy", true) end)
+GM:AddStartingItem("12nails",			ITEMCAT_AMMO,			20,				nil,			""..translate.Get("wm_nails2_ammo"),						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(12, "GaussEnergy", true) end)
+GM:AddStartingItem("60mkit",			ITEMCAT_AMMO,			15,				nil,			""..translate.Get("wm_meds_ammo"),				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(60, "Battery", true) end)
+GM:AddStartingItem("90mkit",			ITEMCAT_AMMO,			25,				nil,			""..translate.Get("wm_meds2_ammo"),				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(90, "Battery", true) end)
 
 GM:AddStartingItem("brassknuckles",		ITEMCAT_MELEE,			20,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
 GM:AddStartingItem("zpaxe",				ITEMCAT_MELEE,			40,				"weapon_zs_axe")
@@ -358,20 +358,20 @@ GM:AddPointShopItem("spinfusor",		ITEMCAT_GUNS,			200,			"weapon_zs_spinfusor")
 GM:AddPointShopItem("broadside",		ITEMCAT_GUNS,			200,			"weapon_zs_broadside")
 GM:AddPointShopItem("smelter",			ITEMCAT_GUNS,			200,			"weapon_zs_smelter")
 
-GM:AddPointShopItem("pistolammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_pistol_ammo",				nil,									"ammo_pistol",						function(pl) pl:GiveAmmo(14, "pistol", true) end)
-GM:AddPointShopItem("shotgunammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_buckshot_ammo",				nil,									"ammo_shotgun",						function(pl) pl:GiveAmmo(12, "buckshot", true) end)
-GM:AddPointShopItem("smgammo",			ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_smg_ammo",					nil,									"ammo_smg",							function(pl) pl:GiveAmmo(36, "smg1", true) end)
-GM:AddPointShopItem("rifleammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_rifle_ammo",					nil,									"ammo_rifle",						function(pl) pl:GiveAmmo(8, "357", true) end)
-GM:AddPointShopItem("crossbowammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_bolts_ammo",				nil,									"ammo_bolts",						function(pl) pl:GiveAmmo(8,	"XBowBolt",	true) end)
-GM:AddPointShopItem("assaultrifleammo",	ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_asr_ammo",		nil,									"ammo_assault",						function(pl) pl:GiveAmmo(32, "ar2", true) end)
-GM:AddPointShopItem("pulseammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_pulse_ammo",				nil,									"ammo_pulse",						function(pl) pl:GiveAmmo(30, "pulse", true) end)
-GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_explosives_ammo",					nil,									"ammo_explosive",					function(pl) pl:GiveAmmo(3, "impactmine", true) end)
-GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			9,				nil,							""..translate.Get"ps_chem_ammo",			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(20, "chemical", true) end)
+GM:AddPointShopItem("pistolammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_pistol_ammo"),				nil,									"ammo_pistol",						function(pl) pl:GiveAmmo(14, "pistol", true) end)
+GM:AddPointShopItem("shotgunammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_buckshot_ammo"),				nil,									"ammo_shotgun",						function(pl) pl:GiveAmmo(12, "buckshot", true) end)
+GM:AddPointShopItem("smgammo",			ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_smg_ammo"),					nil,									"ammo_smg",							function(pl) pl:GiveAmmo(36, "smg1", true) end)
+GM:AddPointShopItem("rifleammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_rifle_ammo"),					nil,									"ammo_rifle",						function(pl) pl:GiveAmmo(8, "357", true) end)
+GM:AddPointShopItem("crossbowammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_bolts_ammo"),				nil,									"ammo_bolts",						function(pl) pl:GiveAmmo(8,	"XBowBolt",	true) end)
+GM:AddPointShopItem("assaultrifleammo",	ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_asr_ammo"),		nil,									"ammo_assault",						function(pl) pl:GiveAmmo(32, "ar2", true) end)
+GM:AddPointShopItem("pulseammo",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_pulse_ammo"),				nil,									"ammo_pulse",						function(pl) pl:GiveAmmo(30, "pulse", true) end)
+GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_explosives_ammo"),					nil,									"ammo_explosive",					function(pl) pl:GiveAmmo(3, "impactmine", true) end)
+GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			9,				nil,							""..translate.Get("ps_chem_ammo"),			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(20, "chemical", true) end)
 item =
-GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			15,				nil,							""..translate.Get"ps_meds_ammo",			""..translate.Get"ps_meds_desc",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
+GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			15,				nil,							""..translate.Get("ps_meds_ammo"),			""..translate.Get("ps_meds_desc"),	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
 item.CanMakeFromScrap = true
 item =
-GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							""..translate.Get"ps_nails_ammo",							""..translate.Get"ps_nails_desc",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end)
+GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							""..translate.Get("ps_nails_ammo"),							""..translate.Get("ps_nails_desc"),					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end)
 item.NoClassicMode = true
 item.CanMakeFromScrap = true
 -- Tier 1
@@ -635,26 +635,26 @@ function GM:AddDeployableInfo(class, name, wepclass)
 
 	return tab
 end
-GM:AddDeployableInfo("prop_arsenalcrate", 		translate.Get"d_arsenal_crate", 		"weapon_zs_arsenalcrate")
-GM:AddDeployableInfo("prop_resupplybox", 		translate.Get"d_resupply_box", 		"weapon_zs_resupplybox")
-GM:AddDeployableInfo("prop_remantler", 			translate.Get"d_weapon_remantler", 	"weapon_zs_remantler")
-GM:AddDeployableInfo("prop_messagebeacon", 		translate.Get"d_message_beacon", 		"weapon_zs_messagebeacon")
-GM:AddDeployableInfo("prop_camera", 			translate.Get"d_camera",	 			"weapon_zs_camera")
-GM:AddDeployableInfo("prop_gunturret", 			translate.Get"d_gun_turret",	 		"weapon_zs_gunturret")
-GM:AddDeployableInfo("prop_gunturret_assault", 	translate.Get"d_assault_turret",	 	"weapon_zs_gunturret_assault")
-GM:AddDeployableInfo("prop_gunturret_buckshot",	translate.Get"d_blast_turret",	 		"weapon_zs_gunturret_buckshot")
-GM:AddDeployableInfo("prop_gunturret_rocket",	translate.Get"d_rocket_turret",	 	"weapon_zs_gunturret_rocket")
-GM:AddDeployableInfo("prop_repairfield",		translate.Get"d_repair_field",	"weapon_zs_repairfield")
-GM:AddDeployableInfo("prop_zapper",				translate.Get"d_zapper",				"weapon_zs_zapper")
-GM:AddDeployableInfo("prop_zapper_arc",			translate.Get"d_arc_zapper",			"weapon_zs_zapper_arc")
-GM:AddDeployableInfo("prop_ffemitter",			translate.Get"d_field_emitter",	"weapon_zs_ffemitter")
-GM:AddDeployableInfo("prop_manhack",			translate.Get"d_manhack",				"weapon_zs_manhack")
-GM:AddDeployableInfo("prop_manhack_saw",		translate.Get"d_manhack_saw",		"weapon_zs_manhack_saw")
-GM:AddDeployableInfo("prop_drone",				translate.Get"d_drone",				"weapon_zs_drone")
-GM:AddDeployableInfo("prop_drone_pulse",		translate.Get"d_pulse_drone",			"weapon_zs_drone_pulse")
-GM:AddDeployableInfo("prop_drone_hauler",		translate.Get"d_drone_hauler",			"weapon_zs_drone_hauler")
-GM:AddDeployableInfo("prop_rollermine",			translate.Get"d_rollermine",			"weapon_zs_rollermine")
-GM:AddDeployableInfo("prop_tv",                   	 translate.Get"d_tv",                    	"weapon_zs_tv")
+GM:AddDeployableInfo("prop_arsenalcrate", 		translate.Get("d_arsenal_crate"), 		"weapon_zs_arsenalcrate")
+GM:AddDeployableInfo("prop_resupplybox", 		translate.Get("d_resupply_box"), 		"weapon_zs_resupplybox")
+GM:AddDeployableInfo("prop_remantler", 			translate.Get("d_weapon_remantler"), 	"weapon_zs_remantler")
+GM:AddDeployableInfo("prop_messagebeacon", 		translate.Get("d_message_beacon"), 		"weapon_zs_messagebeacon")
+GM:AddDeployableInfo("prop_camera", 			translate.Get("d_camera"),	 			"weapon_zs_camera")
+GM:AddDeployableInfo("prop_gunturret", 			translate.Get("d_gun_turret"),	 		"weapon_zs_gunturret")
+GM:AddDeployableInfo("prop_gunturret_assault", 	translate.Get("d_assault_turret"),	 	"weapon_zs_gunturret_assault")
+GM:AddDeployableInfo("prop_gunturret_buckshot",	translate.Get("d_blast_turret"),	 		"weapon_zs_gunturret_buckshot")
+GM:AddDeployableInfo("prop_gunturret_rocket",	translate.Get("d_rocket_turret"),	 	"weapon_zs_gunturret_rocket")
+GM:AddDeployableInfo("prop_repairfield",		translate.Get("d_repair_field"),	"weapon_zs_repairfield")
+GM:AddDeployableInfo("prop_zapper",				translate.Get("d_zapper"),				"weapon_zs_zapper")
+GM:AddDeployableInfo("prop_zapper_arc",			translate.Get("d_arc_zapper"),			"weapon_zs_zapper_arc")
+GM:AddDeployableInfo("prop_ffemitter",			translate.Get("d_field_emitter"),	"weapon_zs_ffemitter")
+GM:AddDeployableInfo("prop_manhack",			translate.Get("d_manhack"),				"weapon_zs_manhack")
+GM:AddDeployableInfo("prop_manhack_saw",		translate.Get("d_manhack_saw"),		"weapon_zs_manhack_saw")
+GM:AddDeployableInfo("prop_drone",				translate.Get("d_drone"),				"weapon_zs_drone")
+GM:AddDeployableInfo("prop_drone_pulse",		translate.Get("d_pulse_drone"),			"weapon_zs_drone_pulse")
+GM:AddDeployableInfo("prop_drone_hauler",		translate.Get("d_drone_hauler"),			"weapon_zs_drone_hauler")
+GM:AddDeployableInfo("prop_rollermine",			translate.Get("d_rollermine"),			"weapon_zs_rollermine")
+GM:AddDeployableInfo("prop_tv",                   	 translate.Get("d_tv"),                    	"weapon_zs_tv")
 
 GM.MaxSigils = 3
 

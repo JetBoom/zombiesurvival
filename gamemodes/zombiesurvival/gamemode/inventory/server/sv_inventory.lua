@@ -62,13 +62,13 @@ function meta:TryAssembleItem(component, heldclass)
 
 	if heldwepiitype then
 		if not self:HasInventoryItem(heldclass) then
-			self:CenterNotify(COLOR_RED, translate.ClientGet(self, "you_dont_have_the_item_craft"))
+			self:CenterNotify(COLOR_RED, "You don't have the item to craft this with.")
 			self:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
 			return
 		end
 	else
 		if not heldwep or not heldwep:IsValid() then
-			self:CenterNotify(COLOR_RED, translate.ClientGet(self, "you_dont_have_the_weapon_craft"))
+			self:CenterNotify(COLOR_RED, "You don't have the weapon to craft this with.")
 			self:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
 			return
 		end
@@ -83,7 +83,7 @@ function meta:TryAssembleItem(component, heldclass)
 	end
 
 	if not desiassembly then
-		self:CenterNotify(COLOR_RED, translate.ClientGet(self, "you_cant_make_anything_with_component"))
+		self:CenterNotify(COLOR_RED, "You can't make anything with this component and your currently held weapon.")
 		self:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
 		return
 	end

@@ -1,6 +1,6 @@
 INC_CLIENT()
 
-SWEP.PrintName = "Headcrab"
+SWEP.PrintName = ""..translate.Get("class_headcrab")
 SWEP.DrawCrosshair = false
 
 function SWEP:DrawHUD()

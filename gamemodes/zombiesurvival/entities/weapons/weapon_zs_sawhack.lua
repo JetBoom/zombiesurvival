@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpnc_sawhack_name"
+SWEP.PrintName = ""..translate.Get("wpnc_sawhack_name")
 
 if CLIENT then
 	SWEP.ViewModelFOV = 60
@@ -52,7 +52,7 @@ SWEP.AllowQualityWeapons = true
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.04, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_KNOCK, 10, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpnc_sawhack_variant_name", ""..translate.Get"wpnc_sawhack_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpnc_sawhack_variant_name"), ""..translate.Get("wpnc_sawhack_variant_desc"), function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 1.25
 	wept.OnMeleeHit = function(self, hitent, hitflesh, tr)
 		if self:GetOwner():GetBleedDamage() > 1 then

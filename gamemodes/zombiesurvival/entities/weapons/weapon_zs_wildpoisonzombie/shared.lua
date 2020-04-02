@@ -1,6 +1,6 @@
 DEFINE_BASECLASS("weapon_zs_poisonzombie")
 
-SWEP.PrintName = "Wild Poison Zombie"
+SWEP.PrintName = ""..translate.Get("class_wild_poison_zombie")
 
 SWEP.MeleeDamage = 45
 SWEP.PoisonThrowSpeed = 420

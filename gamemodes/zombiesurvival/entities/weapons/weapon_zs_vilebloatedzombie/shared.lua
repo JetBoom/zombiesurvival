@@ -1,4 +1,4 @@
-SWEP.PrintName = "Vile Bloated Zombie"
+SWEP.PrintName = ""..translate.Get("class_vile_bloated_zombie")
 
 SWEP.Base = "weapon_zs_zombie"
 

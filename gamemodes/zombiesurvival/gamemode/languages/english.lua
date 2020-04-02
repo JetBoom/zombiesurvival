@@ -111,6 +111,7 @@ LANGUAGE.x_turned_on_noclip							= "%s turned on noclip."
 LANGUAGE.x_turned_off_noclip						= "%s turned off noclip."
 LANGUAGE.unlocked_on_wave_x							= "Unlocked on wave %d"
 LANGUAGE.brains_eaten_x								= "Brains eaten: %s"
+--LANGUAGE.points_x									= "Points: %s" --not working.
 LANGUAGE.points_x_score_x					    	= "Points: %s Score: %s"
 LANGUAGE.next_wave_in_x								= "Next wave in %s"
 LANGUAGE.wave_ends_in_x								= "Wave ends in %s"
@@ -196,9 +197,6 @@ LANGUAGE.you_already_have_this_trinket				= "You already have this trinket in yo
 LANGUAGE.they_already_have_this_trinket				= "They already have this trinket in their inventory."
 LANGUAGE.you_cannot_carry_more_comps				= "You cannot carry more crafting components."
 LANGUAGE.they_cannot_carry_more_comps				= "They cannot carry more crafting components."
-LANGUAGE.you_dont_have_the_item_craft               = "You don't have the item to craft this with."
-LANGUAGE.you_dont_have_the_weapon_craft             = "You don't have the weapon to craft this with."
-LANGUAGE.you_cant_make_anything_with_component      = "You can't make anything with this component and your currently held weapon."
 LANGUAGE.obtained_inv_item_from_z					= "Obtained %s from %s added to inventory"
 LANGUAGE.deployable_lost							= "Your %s was lost."
 LANGUAGE.deployable_claimed							= "You've claimed a %s."
@@ -217,15 +215,15 @@ LANGUAGE.p_bleeding                                 = "(BLEED - %d)"
 LANGUAGE.p_poison                                   = "(POISON - %d)"
 LANGUAGE.p_frail                                    = "(FRAIL)"
 LANGUAGE.p_bloodlust                                = "(BLOODLUST)"
-LANGUAGE.p_carrying                                 = "Carrying [%s]"
-LANGUAGE.cade_owner_dead                            = "(DEAD) %s"
+LANGUAGE.p_carrying                                 = "Carrying [%s]" --Prop carrying
+LANGUAGE.cade_owner_dead                            = "(DEAD) %s" --Nailed prop's owner
 
 -- Arsenal Crate shop
 LANGUAGE.points_to_spend_x                          = "Points to spend: %s"
 LANGUAGE.points_to_spend_0                          = "Points to spend: 0"
 LANGUAGE.remaining_x                                = "%d remaining"
-LANGUAGE.ps_scrap                                   = " Scrap"
-LANGUAGE.ps_points                                  = " Points"
+LANGUAGE.ps_scrap                                   = " Scrap" --Item Cost "5 Scrap"
+LANGUAGE.ps_points                                  = " Points" --Item Cost "35 Points"
 LANGUAGE.ps_points_x                                = "%s Points"
 LANGUAGE.ps_buy                                     = "Buy"
 LANGUAGE.remaining_max_x                            = "%d remaining"
@@ -234,7 +232,7 @@ LANGUAGE.purchase_ammo                              = "Ammo"
 LANGUAGE.points_shop_title                          = "The Points Shop"
 LANGUAGE.points_shop_title2                         = "For all of your zombie apocalypse needs!"
 LANGUAGE.points_worth_menu                          = "Worth Menu"
-LANGUAGE.tier_x                                     = "Tier %s"
+LANGUAGE.tier_x                                     = "Tier %s" --max 7 characters
 
 -- Weapon Shop Categories
 LANGUAGE.cat_guns                                   = "Guns"
@@ -252,6 +250,43 @@ LANGUAGE.cat_tmelee                                 = "Melee"
 LANGUAGE.cat_tperfomance                            = "Performance"
 LANGUAGE.cat_tsupport                               = "Support"
 LANGUAGE.cat_tspecial                               = "Special"
+
+-- Worth Menu Ammo
+LANGUAGE.wm_pistol_ammo                             = "28 pistol ammo"
+LANGUAGE.wm_pistol2_ammo                            = "42 pistol ammo"
+LANGUAGE.wm_buckshot_ammo                           = "24 shotgun ammo"
+LANGUAGE.wm_buckshot2_ammo                          = "36 shotgun ammo"
+LANGUAGE.wm_smg_ammo                                = "72 SMG ammo"
+LANGUAGE.wm_smg2_ammo                               = "108 SMG ammo"
+LANGUAGE.wm_asr_ammo                                = "64 assault rifle ammo"
+LANGUAGE.wm_asr2_ammo                               = "96 assault rifle ammo"
+LANGUAGE.wm_rifle_ammo                              = "16 rifle ammo"
+LANGUAGE.wm_rifle2_ammo                             = "24 rifle ammo"
+LANGUAGE.wm_pulse_ammo                              = "60 pulse ammo"
+LANGUAGE.wm_pulse2_ammo                             = "90 pulse ammo"
+LANGUAGE.wm_bolts_ammo                              = "16 crossbow bolts"
+LANGUAGE.wm_bolts2_ammo                             = "24 crossbow bolts"
+LANGUAGE.wm_explosive_ammo                          = "6 explosives"
+LANGUAGE.wm_explosive2_ammo                         = "9 explosives"
+LANGUAGE.wm_nails_ammo                              = "8 nails"
+LANGUAGE.wm_nails2_ammo                             = "12 nails"
+LANGUAGE.wm_meds_ammo                               = "60 medical power"
+LANGUAGE.wm_meds2_ammo                              = "90 medical power"
+
+-- Point Shop Ammo
+LANGUAGE.ps_pistol_ammo                             = "14 pistol ammo"
+LANGUAGE.ps_buckshot_ammo                           = "12 shotgun ammo"
+LANGUAGE.ps_smg_ammo                                = "36 SMG ammo"
+LANGUAGE.ps_rifle_ammo                              = "8 rifle ammo"
+LANGUAGE.ps_bolts_ammo                              = "8 crossbow bolts"
+LANGUAGE.ps_asr_ammo                                = "32 assault rifle ammo"
+LANGUAGE.ps_pulse_ammo                              = "30 pulse ammo"
+LANGUAGE.ps_explosives_ammo                         = "3 explosives"
+LANGUAGE.ps_chem_ammo                               = "20 chemical vials"
+LANGUAGE.ps_meds_ammo                               = "25 Medical Kit power"
+LANGUAGE.ps_meds_desc                               = "25 extra power for the Medical Kit."
+LANGUAGE.ps_nails_ammo                              = "Nail"
+LANGUAGE.ps_nails_desc                              = "It's just one nail."
 
 -- Weapon Database Category
 LANGUAGE.weapondata_weapons                         = "Weapons"
@@ -274,8 +309,6 @@ LANGUAGE.r_weapon_remantler_title                   = "Weapon Remantler"
 LANGUAGE.r_weapon_remantler_title2                  = "Dismantle weapons into scrap and use scrap to upgrade weapons!"
 LANGUAGE.r_weapon_remantler_desc                    = "Disassembling your weapons cannot be reversed!"
 LANGUAGE.r_cat_remantle                             = "Remantling"
-LANGUAGE.r_cat_trinkets                             = "Trinkets"
-LANGUAGE.r_cat_ammunition                           = "Ammunition"
 LANGUAGE.r_dismantle_weapon                         = "Dismantle Weapon"
 LANGUAGE.cannot_be_dismantled_for_x                 = "%s\nCannot be dismantled for scrap."
 
@@ -366,7 +399,7 @@ LANGUAGE.playercolor_color                          = "Player color"
 LANGUAGE.playercolor_weapon                         = "Weapon color"
 
 -- Credits menu
-LANGUAGE.credits_x                                  = "%s Credits"
+LANGUAGE.credits_x                                  = "%s Credits" --Zombie Survival Credits
 
 -- Options Menu
 LANGUAGE.options_title                              = "Options"
@@ -448,8 +481,8 @@ LANGUAGE.comp_propane_can                           = "Propane Canister"
 LANGUAGE.comp_propane_can_desc                      = "A propane canister. With the correct setup, has the potential to ignite things."
 LANGUAGE.comp_electro_battery                       = "Electrobattery"
 LANGUAGE.comp_electro_battery_desc                  = "An electrobattery. Could be used to improve repairing motions."
---LANGUAGE.comp_hungry_tether                         = "Hungry Tether"                
---LANGUAGE.comp_hungry_tether_desc                    = "A hungry tether from a devourer that comes from a devourer rib."
+--LANGUAGE.comp_hungry_tether                         = "Hungry Tether"     --Unused trinket name           
+--LANGUAGE.comp_hungry_tether_desc                    = "A hungry tether from a devourer that comes from a devourer rib." --Unused trinket description
 LANGUAGE.comp_contae_core                           = "Contained Energy Core"
 LANGUAGE.comp_contae_core_desc                      = "A contained energy core, that has an internal charging mechanism."
 LANGUAGE.comp_pump_action                           = "Pump Action Mechanism"
@@ -724,8 +757,10 @@ LANGUAGE.trin_doom_organ_desc                       = "Reduces the duration of D
 LANGUAGE.fs_point_x                                 = "%s point"
 LANGUAGE.fs_s                                       = "s"
 LANGUAGE.fs_points_x                                = "%s points"
-LANGUAGE.fs_hp_x                                    = "%s HP"
-LANGUAGE.fs_hpr_x                                   = "%s HP"
+LANGUAGE.fs_hp_x                                    = "%s HP" --Player Heal HP
+LANGUAGE.fs_hpr_x                                   = "%s HP" --Repair HP
+LANGUAGE.fs_assist                                  = " (assist)"
+LANGUAGE.fs_assisted                                = " (assisted)"
 
 -- Floaters (Undead)
 LANGUAGE.fsz_munch                                  = "MUNCH!"
@@ -863,7 +898,7 @@ LANGUAGE.rlevel                                     = " // R.Level %s"
 LANGUAGE.level_max                                  = "Level MAX"
 LANGUAGE.level_x                                    = "Level %s"
 LANGUAGE.sp_x                                       = "%s SP"
-LANGUAGE.xp                                         = "%s / %s XP"
+LANGUAGE.xp_x                                       = "%s / %s XP"
 
 -- Skills
 LANGUAGE.skill_rem_name                             = "Remort"
@@ -1309,27 +1344,6 @@ LANGUAGE.skill_brash_name                           = "Brash"
 LANGUAGE.skill_brash_desc                           = "-16% melee swing impact delay\n"
 LANGUAGE.skill_brash_desc2                          = "-15 speed on melee kill for 10 seconds"
 
--- Worth Menu Ammo
-LANGUAGE.wm_pistol_ammo                             = "28 pistol ammo"
-LANGUAGE.wm_pistol2_ammo                            = "42 pistol ammo"
-LANGUAGE.wm_buckshot_ammo                           = "24 shotgun ammo"
-LANGUAGE.wm_buckshot2_ammo                          = "36 shotgun ammo"
-LANGUAGE.wm_smg_ammo                                = "72 SMG ammo"
-LANGUAGE.wm_smg2_ammo                               = "108 SMG ammo"
-LANGUAGE.wm_asr_ammo                                = "64 assault rifle ammo"
-LANGUAGE.wm_asr2_ammo                               = "96 assault rifle ammo"
-LANGUAGE.wm_rifle_ammo                              = "16 rifle ammo"
-LANGUAGE.wm_rifle2_ammo                             = "24 rifle ammo"
-LANGUAGE.wm_pulse_ammo                              = "60 pulse ammo"
-LANGUAGE.wm_pulse2_ammo                             = "90 pulse ammo"
-LANGUAGE.wm_bolts_ammo                              = "16 crossbow bolts"
-LANGUAGE.wm_bolts2_ammo                             = "24 crossbow bolts"
-LANGUAGE.wm_explosive_ammo                          = "6 explosives"
-LANGUAGE.wm_explosive2_ammo                         = "9 explosives"
-LANGUAGE.wm_nails_ammo                              = "8 nails"
-LANGUAGE.wm_nails2_ammo                             = "12 nails"
-LANGUAGE.wm_meds_ammo                               = "60 medical power"
-LANGUAGE.wm_meds2_ammo                              = "90 medical power"
 
 -- Point Shop Guns
 -- Tier 1
@@ -1621,21 +1635,6 @@ LANGUAGE.wpnc_enkindler_desc                        = "A mine layer that lays mi
 LANGUAGE.wpnc_proliferator_name                     = "'Proliferator' SMG"
 LANGUAGE.wpnc_proliferator_desc                     = "Hold right click to use the Storm firing mode: fire rate is reduced to 60% but a wider fan of bullets are fired."
 
--- Point Shop Ammo
-LANGUAGE.ps_pistol_ammo                             = "14 pistol ammo"
-LANGUAGE.ps_buckshot_ammo                           = "12 shotgun ammo"
-LANGUAGE.ps_smg_ammo                                = "36 SMG ammo"
-LANGUAGE.ps_rifle_ammo                              = "8 rifle ammo"
-LANGUAGE.ps_bolts_ammo                              = "8 crossbow bolts"
-LANGUAGE.ps_asr_ammo                                = "32 assault rifle ammo"
-LANGUAGE.ps_pulse_ammo                              = "30 pulse ammo"
-LANGUAGE.ps_explosives_ammo                         = "3 explosives"
-LANGUAGE.ps_chem_ammo                               = "20 chemical vials"
-LANGUAGE.ps_meds_ammo                               = "25 Medical Kit power"
-LANGUAGE.ps_meds_desc                               = "25 extra power for the Medical Kit."
-LANGUAGE.ps_nails_ammo                              = "Nail"
-LANGUAGE.ps_nails_desc                              = "It's just one nail."
-
 -- Point Shop Melee
 -- Tier 0
 LANGUAGE.wpn_fists_name                             = "Fists"
@@ -1706,6 +1705,9 @@ LANGUAGE.wpn_powerfists_desc                        = "A pair of power fists. Th
 -- Tier 5
 LANGUAGE.wpn_frotchet_name                          = "Frotchet"
 LANGUAGE.wpn_frotchet_desc                          = "An axe made from frost. Secondary attack unleashes a powerful swing, creating an icy explosion when aimed at the ground. Slows zombie movement and attack speed."
+
+--Hidden melee
+LANGUAGE.wpn_tetheredharpoon_name                   = "Tethered Harpoon"
 
 -- Point Shop Tools
 LANGUAGE.tool_hammer_name                           = "Carpenter's Hammer"
@@ -1826,6 +1828,18 @@ LANGUAGE.f_soda                                     = "Soda"
 LANGUAGE.f_orange                                   = "Orange"
 LANGUAGE.f_milk                                     = "Milk"
 LANGUAGE.f_banana                                   = "Banana"
+
+-- Admin Sweps
+LANGUAGE.wpnad_sigilplacer_name                     = "Sigil Placer"
+
+-- Zombie Weapons
+LANGUAGE.wpnc_asskicker_name                        = "Giant Zombie Kung Fu"
+LANGUAGE.wpnc_bonemesh_name                         = "Bone Mesh"
+LANGUAGE.wpnc_chemzombie_name                       = "Chem Zombie"
+LANGUAGE.wpn_pukepus_name                           = "Puke Pus"
+LANGUAGE.wpn_willowisp_name                         = "Will O' Wisp"
+LANGUAGE.wpn_fastzombielegs_name                    = "Fast Zombie Kung Fu"
+LANGUAGE.wpn_zombielegs_name                        = "Zombie Kung Fu"
 
 -- Message beacon messages
 LANGUAGE.message_beacon_1							= "Meet up here"

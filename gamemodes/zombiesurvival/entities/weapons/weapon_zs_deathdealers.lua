@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_deathdealers_name"
-SWEP.Description = ""..translate.Get"wpn_deathdealers_desc"
+SWEP.PrintName = ""..translate.Get("wpn_deathdealers_name")
+SWEP.Description = ""..translate.Get("wpn_deathdealers_desc")
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0

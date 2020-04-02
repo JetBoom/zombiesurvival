@@ -42,7 +42,7 @@ function SWEP:SecondaryAttack()
 	Menu = vgui.Create("DFrame")
 	Menu:SetDeleteOnClose(false)
 	Menu:SetSize(200, 100)
-	Menu:SetTitle(translate.Get"msgb_title")
+	Menu:SetTitle(translate.Get("msgb_title"))
 	Menu:Center()
 	Menu.Choice = 1
 
@@ -56,7 +56,7 @@ function SWEP:SecondaryAttack()
 	choice:Center()
 	choice.OnSelect = onselect
 
-	local ok = EasyButton(Menu, translate.Get"skills_misc_ok", 8, 4)
+	local ok = EasyButton(Menu, translate.Get("skills_misc_ok"), 8, 4)
 	ok:AlignBottom(8)
 	ok:CenterHorizontal()
 	ok.DoClick = okclick

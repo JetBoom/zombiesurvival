@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 DEFINE_BASECLASS("weapon_zs_zombie")
 
-SWEP.PrintName = "Charger"
+SWEP.PrintName = ""..translate.Get("class_lacerator_charging")
 
 SWEP.ViewModel = Model("models/weapons/v_pza.mdl")
 

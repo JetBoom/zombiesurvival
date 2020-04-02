@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Shade"
+SWEP.PrintName = ""..translate.Get("class_shade")
 
 SWEP.ViewModel = Model("models/weapons/v_fza.mdl")
 SWEP.WorldModel = Model("models/weapons/w_crowbar.mdl")

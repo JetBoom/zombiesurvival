@@ -351,316 +351,316 @@ local GOOD = "^"..COLORID_GREEN
 local BAD = "^"..COLORID_RED
 
 -- Health Tree
-GM:AddSkill(SKILL_STOIC1, translate.Get"skill_stoic1_name", GOOD..translate.Get"skill_stoic1_desc"..BAD..translate.Get"skill_stoic1_desc2",
+GM:AddSkill(SKILL_STOIC1, translate.Get("skill_stoic1_name"), GOOD..translate.Get("skill_stoic1_desc")..BAD..translate.Get("skill_stoic1_desc2"),
 																-4,			-6,					{SKILL_NONE, SKILL_STOIC2}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC2, translate.Get"skill_stoic2_name", GOOD..translate.Get"skill_stoic2_desc"..BAD..translate.Get"skill_stoic2_desc2",
+GM:AddSkill(SKILL_STOIC2, translate.Get("skill_stoic2_name"), GOOD..translate.Get("skill_stoic2_desc")..BAD..translate.Get("skill_stoic2_desc2"),
 																-4,			-4,					{SKILL_STOIC3, SKILL_VITALITY1, SKILL_REGENERATOR}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC3, translate.Get"skill_stoic3_name", GOOD..translate.Get"skill_stoic3_desc"..BAD..translate.Get"skill_stoic3_desc2",
+GM:AddSkill(SKILL_STOIC3, translate.Get("skill_stoic3_name"), GOOD..translate.Get("skill_stoic3_desc")..BAD..translate.Get("skill_stoic3_desc2"),
 																-3,			-2,					{SKILL_STOIC4}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC4, translate.Get"skill_stoic4_name", GOOD..translate.Get"skill_stoic4_desc"..BAD..translate.Get"skill_stoic4_desc2",
+GM:AddSkill(SKILL_STOIC4, translate.Get("skill_stoic4_name"), GOOD..translate.Get("skill_stoic4_desc")..BAD..translate.Get("skill_stoic4_desc2"),
 																-3,			0,					{SKILL_STOIC5}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_STOIC5, translate.Get"skill_stoic5_name", GOOD..translate.Get"skill_stoic5_desc"..BAD..translate.Get"skill_stoic5_desc2",
+GM:AddSkill(SKILL_STOIC5, translate.Get("skill_stoic5_name"), GOOD..translate.Get("skill_stoic5_desc")..BAD..translate.Get("skill_stoic5_desc2"),
 																-3,			2,					{SKILL_BLOODARMOR, SKILL_TANKER}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_D_HEMOPHILIA, translate.Get"skill_hemophilia_name", GOOD..translate.Get"skill_hemophilia_desc"..GOOD..translate.Get"skill_hemophilia_desc2"..BAD..translate.Get"skill_hemophilia_desc3",
+GM:AddSkill(SKILL_D_HEMOPHILIA, translate.Get("skill_hemophilia_name"), GOOD..translate.Get("skill_hemophilia_desc")..GOOD..translate.Get("skill_hemophilia_desc2")..BAD..translate.Get("skill_hemophilia_desc3"),
 																4,			2,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_GLUTTON, translate.Get"skill_glutton_name", GOOD..translate.Get"skill_glutton_desc"..GOOD..translate.Get"skill_glutton_desc2"..BAD..translate.Get"skill_glutton_desc3"..BAD..translate.Get"skill_glutton_desc4",
+GM:AddSkill(SKILL_GLUTTON, translate.Get("skill_glutton_name"), GOOD..translate.Get("skill_glutton_desc")..GOOD..translate.Get("skill_glutton_desc2")..BAD..translate.Get("skill_glutton_desc3")..BAD..translate.Get("skill_glutton_desc4"),
 																3,			-2,					{SKILL_GOURMET, SKILL_BLOODARMOR}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_PREPAREDNESS, translate.Get"skill_preparedness_name", GOOD..translate.Get"skill_preparedness_desc",
+GM:AddSkill(SKILL_PREPAREDNESS, translate.Get("skill_preparedness_name"), GOOD..translate.Get("skill_preparedness_desc"),
 																4,			-6,					{SKILL_NONE}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_GOURMET, translate.Get"skill_gourmet_name", GOOD..translate.Get"skill_gourmet_desc"..BAD..translate.Get"skill_gourmet_desc2",
+GM:AddSkill(SKILL_GOURMET, translate.Get("skill_gourmet_name"), GOOD..translate.Get("skill_gourmet_desc")..BAD..translate.Get("skill_gourmet_desc2"),
 																4,			-4,					{SKILL_PREPAREDNESS, SKILL_VITALITY1}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_HAEMOSTASIS, translate.Get"skill_haemostasis_name", GOOD..translate.Get"skill_haemostasis_desc"..BAD..translate.Get"skill_haemostasis_desc2"..BAD..translate.Get"skill_haemostasis_desc3",
+GM:AddSkill(SKILL_HAEMOSTASIS, translate.Get("skill_haemostasis_name"), GOOD..translate.Get("skill_haemostasis_desc")..BAD..translate.Get("skill_haemostasis_desc2")..BAD..translate.Get("skill_haemostasis_desc3"),
 																4,			6,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_BLOODLETTER, translate.Get"skill_bloodletter_name", GOOD..translate.Get"skill_bloodletter_desc"..BAD..translate.Get"skill_bloodletter_desc2",
+GM:AddSkill(SKILL_BLOODLETTER, translate.Get("skill_bloodletter_name"), GOOD..translate.Get("skill_bloodletter_desc")..BAD..translate.Get("skill_bloodletter_desc2"),
 																0,			4,					{SKILL_ANTIGEN}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_REGENERATOR, translate.Get"skill_regenerator_name", GOOD..translate.Get"skill_regenerator_desc"..BAD..translate.Get"skill_regenerator_desc2",
+GM:AddSkill(SKILL_REGENERATOR, translate.Get("skill_regenerator_name"), GOOD..translate.Get("skill_regenerator_desc")..BAD..translate.Get("skill_regenerator_desc2"),
 																-5,			-2,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_BLOODARMOR, translate.Get"skill_bloodarmor_name", GOOD..translate.Get"skill_bloodarmor_desc"..BAD..translate.Get"skill_bloodarmor_desc2",
+GM:AddSkill(SKILL_BLOODARMOR, translate.Get("skill_bloodarmor_name"), GOOD..translate.Get("skill_bloodarmor_desc")..BAD..translate.Get("skill_bloodarmor_desc2"),
 																2,			2,					{SKILL_IRONBLOOD, SKILL_BLOODLETTER, SKILL_D_HEMOPHILIA}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_IRONBLOOD, translate.Get"skill_ironblood_name", GOOD..translate.Get"skill_ironblood_desc"..GOOD..translate.Get"skill_ironblood_desc2"..BAD..translate.Get"skill_ironblood_desc3",
+GM:AddSkill(SKILL_IRONBLOOD, translate.Get("skill_ironblood_name"), GOOD..translate.Get("skill_ironblood_desc")..GOOD..translate.Get("skill_ironblood_desc2")..BAD..translate.Get("skill_ironblood_desc3"),
 																2,			4,					{SKILL_HAEMOSTASIS, SKILL_CIRCULATION}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_D_WEAKNESS, translate.Get"skill_weakness_name", GOOD..translate.Get"skill_weakness_desc"..GOOD..translate.Get"skill_weakness_desc2"..BAD..translate.Get"skill_weakness_desc3",
+GM:AddSkill(SKILL_D_WEAKNESS, translate.Get("skill_weakness_name"), GOOD..translate.Get("skill_weakness_desc")..GOOD..translate.Get("skill_weakness_desc2")..BAD..translate.Get("skill_weakness_desc3"),
 																1,			-1,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_VITALITY1, translate.Get"skill_vitality_name", GOOD..translate.Get"skill_vitality_desc",
+GM:AddSkill(SKILL_VITALITY1, translate.Get("skill_vitality_name"), GOOD..translate.Get("skill_vitality_desc"),
 																0,			-4,					{SKILL_VITALITY2}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_VITALITY2, translate.Get"skill_vitality2_name", GOOD..translate.Get"skill_vitality2_desc",
+GM:AddSkill(SKILL_VITALITY2, translate.Get("skill_vitality2_name"), GOOD..translate.Get("skill_vitality2_desc"),
 																0,			-2,					{SKILL_VITALITY3}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_VITALITY3, translate.Get"skill_vitality3_name", GOOD..translate.Get"skill_vitality3_desc",
+GM:AddSkill(SKILL_VITALITY3, translate.Get("skill_vitality3_name"), GOOD..translate.Get("skill_vitality3_desc"),
 																0,			-0,					{SKILL_D_WEAKNESS}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_TANKER, translate.Get"skill_tanker_name", GOOD..translate.Get"skill_tanker_desc"..BAD..translate.Get"skill_tanker_desc2",
+GM:AddSkill(SKILL_TANKER, translate.Get("skill_tanker_name"), GOOD..translate.Get("skill_tanker_desc")..BAD..translate.Get("skill_tanker_desc2"),
 																-5,			4,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_FORAGER, translate.Get"skill_forager_name", GOOD..translate.Get"skill_forager_desc"..BAD..translate.Get"skill_forager_desc2",
+GM:AddSkill(SKILL_FORAGER, translate.Get("skill_forager_name"), GOOD..translate.Get("skill_forager_desc")..BAD..translate.Get("skill_forager_desc2"),
 																5,			-2,					{SKILL_GOURMET}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_SUGARRUSH, translate.Get"skill_sugarrus_name", GOOD..translate.Get"skill_sugarrus_desc"..BAD..translate.Get"skill_sugarrus_desc2",
+GM:AddSkill(SKILL_SUGARRUSH, translate.Get("skill_sugarrus_name"), GOOD..translate.Get("skill_sugarrus_desc")..BAD..translate.Get("skill_sugarrus_desc2"),
 																4,			0,					{SKILL_GOURMET}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_CIRCULATION, translate.Get"skill_circulation_name", GOOD..translate.Get"skill_circulation_desc",
+GM:AddSkill(SKILL_CIRCULATION, translate.Get("skill_circulation_name"), GOOD..translate.Get("skill_circulation_desc"),
 																4,			4,					{SKILL_SANGUINE}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_SANGUINE, translate.Get"skill_sanguine_name", GOOD..translate.Get"skill_sanguine_desc"..BAD..translate.Get"skill_sanguine_desc2",
+GM:AddSkill(SKILL_SANGUINE, translate.Get("skill_sanguine_name"), GOOD..translate.Get("skill_sanguine_desc")..BAD..translate.Get("skill_sanguine_desc2"),
 																6,			2,					{}, TREE_HEALTHTREE)
-GM:AddSkill(SKILL_ANTIGEN, translate.Get"skill_antigen_name", GOOD..translate.Get"skill_antigen_desc"..BAD..translate.Get"skill_antigen_desc2",
+GM:AddSkill(SKILL_ANTIGEN, translate.Get("skill_antigen_name"), GOOD..translate.Get("skill_antigen_desc")..BAD..translate.Get("skill_antigen_desc2"),
 																-2,			4,					{}, TREE_HEALTHTREE)
 -- Speed Tree
-GM:AddSkill(SKILL_SPEED1, translate.Get"skill_speed1_name", GOOD..translate.Get"skill_speed1_desc"..BAD..translate.Get"skill_speed1_desc2",
+GM:AddSkill(SKILL_SPEED1, translate.Get("skill_speed1_name"), GOOD..translate.Get("skill_speed1_desc")..BAD..translate.Get("skill_speed1_desc2"),
 																-4,			6,					{SKILL_NONE, SKILL_SPEED2}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED2, translate.Get"skill_speed2_name", GOOD..translate.Get"skill_speed2_desc"..BAD..translate.Get"skill_speed2_desc2",
+GM:AddSkill(SKILL_SPEED2, translate.Get("skill_speed2_name"), GOOD..translate.Get("skill_speed2_desc")..BAD..translate.Get("skill_speed2_desc2"),
 																-4,			4,					{SKILL_SPEED3, SKILL_PHASER, SKILL_SPEED2, SKILL_U_CORRUPTEDFRAGMENT}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED3, translate.Get"skill_speed3_name", GOOD..translate.Get"skill_speed3_desc"..BAD..translate.Get"skill_speed3_desc2",
+GM:AddSkill(SKILL_SPEED3, translate.Get("skill_speed3_name"), GOOD..translate.Get("skill_speed3_desc")..BAD..translate.Get("skill_speed3_desc2"),
 																-4,			2,					{SKILL_SPEED4}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED4, translate.Get"skill_speed4_name", GOOD..translate.Get"skill_speed4_desc"..BAD..translate.Get"skill_speed4_desc2",
+GM:AddSkill(SKILL_SPEED4, translate.Get("skill_speed4_name"), GOOD..translate.Get("skill_speed4_desc")..BAD..translate.Get("skill_speed4_desc2"),
 																-4,			0,					{SKILL_SPEED5, SKILL_SAFEFALL}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SPEED5, translate.Get"skill_speed5_name", GOOD..translate.Get"skill_speed5_desc"..BAD..translate.Get"skill_speed5_desc2",
+GM:AddSkill(SKILL_SPEED5, translate.Get("skill_speed5_name"), GOOD..translate.Get("skill_speed5_desc")..BAD..translate.Get("skill_speed5_desc2"),
 																-4,			-2,					{SKILL_ULTRANIMBLE, SKILL_BACKPEDDLER, SKILL_MOTIONI, SKILL_CARDIOTONIC, SKILL_UNBOUND}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_AGILEI, translate.Get"skill_agile1_name", GOOD..translate.Get"skill_agile1_desc"..BAD..translate.Get"skill_agile1_desc2",
+GM:AddSkill(SKILL_AGILEI, translate.Get("skill_agile1_name"), GOOD..translate.Get("skill_agile1_desc")..BAD..translate.Get("skill_agile1_desc2"),
 																4,			6,					{SKILL_NONE, SKILL_AGILEII}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_AGILEII, translate.Get"skill_agile2_name", GOOD..translate.Get"skill_agile2_desc"..BAD..translate.Get"skill_agile2_desc2",
+GM:AddSkill(SKILL_AGILEII, translate.Get("skill_agile2_name"), GOOD..translate.Get("skill_agile2_desc")..BAD..translate.Get("skill_agile2_desc2"),
 																4,			2,					{SKILL_AGILEIII, SKILL_WORTHINESS3}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_AGILEIII, translate.Get"skill_agile3_name", GOOD..translate.Get"skill_agile3_desc"..BAD..translate.Get"skill_agile3_desc2",
+GM:AddSkill(SKILL_AGILEIII, translate.Get("skill_agile3_name"), GOOD..translate.Get("skill_agile3_desc")..BAD..translate.Get("skill_agile3_desc2"),
 																4,			-2,					{SKILL_SAFEFALL, SKILL_ULTRANIMBLE, SKILL_SURESTEP, SKILL_INTREPID}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_D_SLOW, translate.Get"skill_slow_name", GOOD..translate.Get"skill_slow_desc"..GOOD..translate.Get"skill_slow_desc2"..BAD..translate.Get"skill_slow_desc3",
+GM:AddSkill(SKILL_D_SLOW, translate.Get("skill_slow_name"), GOOD..translate.Get("skill_slow_desc")..GOOD..translate.Get("skill_slow_desc2")..BAD..translate.Get("skill_slow_desc3"),
 																0,			-4,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_MOTIONI, translate.Get"skill_motion1_name", GOOD..translate.Get"skill_motion1_desc",
+GM:AddSkill(SKILL_MOTIONI, translate.Get("skill_motion1_name"), GOOD..translate.Get("skill_motion1_desc"),
 																-2,			-2,					{SKILL_MOTIONII}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_MOTIONII, translate.Get"skill_motion2_name", GOOD..translate.Get"skill_motion2_desc",
+GM:AddSkill(SKILL_MOTIONII, translate.Get("skill_motion2_name"), GOOD..translate.Get("skill_motion2_desc"),
 																-1,			-1,					{SKILL_MOTIONIII}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_MOTIONIII, translate.Get"skill_motion3_name", GOOD..translate.Get"skill_motion3_desc",
+GM:AddSkill(SKILL_MOTIONIII, translate.Get("skill_motion3_name"), GOOD..translate.Get("skill_motion3_desc"),
 																0,			-2,					{SKILL_D_SLOW}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_BACKPEDDLER, translate.Get"skill_backpeddler_name", GOOD..translate.Get"skill_backpeddler_desc"..BAD..translate.Get"skill_backpeddler_desc2"..BAD..translate.Get"skill_backpeddler_desc3",
+GM:AddSkill(SKILL_BACKPEDDLER, translate.Get("skill_backpeddler_name"), GOOD..translate.Get("skill_backpeddler_desc")..BAD..translate.Get("skill_backpeddler_desc2")..BAD..translate.Get("skill_backpeddler_desc3"),
 																-6,			0,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_PHASER, translate.Get"skill_phaser_name", GOOD..translate.Get"skill_phaser_desc"..BAD..translate.Get"skill_phaser_desc2",
+GM:AddSkill(SKILL_PHASER, translate.Get("skill_phaser_name"), GOOD..translate.Get("skill_phaser_desc")..BAD..translate.Get("skill_phaser_desc2"),
 																-1,			4,					{SKILL_D_WIDELOAD, SKILL_DRIFT}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_DRIFT, translate.Get"skill_drift_name", GOOD..translate.Get"skill_drift_desc",
+GM:AddSkill(SKILL_DRIFT, translate.Get("skill_drift_name"), GOOD..translate.Get("skill_drift_desc"),
 																1,			3,					{SKILL_WARP}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_WARP, translate.Get"skill_warp_name", GOOD..translate.Get"skill_warp_desc",
+GM:AddSkill(SKILL_WARP, translate.Get("skill_warp_name"), GOOD..translate.Get("skill_warp_desc"),
 																2,			2,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SAFEFALL, translate.Get"skill_safefall_name", GOOD..translate.Get"skill_safefall_desc"..GOOD..translate.Get"skill_safefall_desc2"..BAD..translate.Get"skill_safefall_desc3",
+GM:AddSkill(SKILL_SAFEFALL, translate.Get("skill_safefall_name"), GOOD..translate.Get("skill_safefall_desc")..GOOD..translate.Get("skill_safefall_desc2")..BAD..translate.Get("skill_safefall_desc3"),
 																0,			0,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_D_WIDELOAD, translate.Get"skill_wideload_name", GOOD..translate.Get"skill_wideload_desc"..GOOD..translate.Get"skill_wideload_desc2"..BAD..translate.Get"skill_wideload_desc3",
+GM:AddSkill(SKILL_D_WIDELOAD, translate.Get("skill_wideload_name"), GOOD..translate.Get("skill_wideload_desc")..GOOD..translate.Get("skill_wideload_desc2")..BAD..translate.Get("skill_wideload_desc3"),
 																1,			1,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_U_CORRUPTEDFRAGMENT, translate.Get"skill_corruptedfrag_name", GOOD..translate.Get"skill_corruptedfrag_desc",
+GM:AddSkill(SKILL_U_CORRUPTEDFRAGMENT, translate.Get("skill_corruptedfrag_name"), GOOD..translate.Get("skill_corruptedfrag_desc"),
 																-2,			2,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_ULTRANIMBLE, translate.Get"skill_ultranimble_name", GOOD..translate.Get"skill_ultranimble_desc"..BAD..translate.Get"skill_ultranimble_desc2",
+GM:AddSkill(SKILL_ULTRANIMBLE, translate.Get("skill_ultranimble_name"), GOOD..translate.Get("skill_ultranimble_desc")..BAD..translate.Get("skill_ultranimble_desc2"),
 																0,			-6,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_WORTHINESS3, translate.Get"skill_worthiness3_name", GOOD..translate.Get"skill_worthiness3_desc"..BAD..translate.Get"skill_worthiness3_desc2",
+GM:AddSkill(SKILL_WORTHINESS3, translate.Get("skill_worthiness3_name"), GOOD..translate.Get("skill_worthiness3_desc")..BAD..translate.Get("skill_worthiness3_desc2"),
 																6,			2,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_SURESTEP, translate.Get"skill_surestep_name", GOOD..translate.Get"skill_surestep_desc"..BAD..translate.Get"skill_surestep_desc2",
+GM:AddSkill(SKILL_SURESTEP, translate.Get("skill_surestep_name"), GOOD..translate.Get("skill_surestep_desc")..BAD..translate.Get("skill_surestep_desc2"),
 																6,			0,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_INTREPID, translate.Get"skill_intrepid_name", GOOD..translate.Get"skill_intrepid_desc"..BAD..translate.Get"skill_intrepid_desc2",
+GM:AddSkill(SKILL_INTREPID, translate.Get("skill_intrepid_name"), GOOD..translate.Get("skill_intrepid_desc")..BAD..translate.Get("skill_intrepid_desc2"),
 																6,			-4,					{SKILL_ROBUST}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_ROBUST, translate.Get"skill_robust_name", GOOD..translate.Get"skill_robust_desc",
+GM:AddSkill(SKILL_ROBUST, translate.Get("skill_robust_name"), GOOD..translate.Get("skill_robust_desc"),
 																5,			-5,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_CARDIOTONIC, translate.Get"skill_cardiotonic_name", GOOD..translate.Get"skill_cardiotonic_desc"..BAD..translate.Get"skill_cardiotonic_desc2"..BAD..translate.Get"skill_cardiotonic_desc3",
+GM:AddSkill(SKILL_CARDIOTONIC, translate.Get("skill_cardiotonic_name"), GOOD..translate.Get("skill_cardiotonic_desc")..BAD..translate.Get("skill_cardiotonic_desc2")..BAD..translate.Get("skill_cardiotonic_desc3"),
 																-6,			-4,					{}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_UNBOUND, translate.Get"skill_unbound_name", GOOD..translate.Get"skill_unbound_desc"..BAD..translate.Get"skill_unbound_desc2",
+GM:AddSkill(SKILL_UNBOUND, translate.Get("skill_unbound_name"), GOOD..translate.Get("skill_unbound_desc")..BAD..translate.Get("skill_unbound_desc2"),
 																-4,			-4,					{}, TREE_SPEEDTREE)
 -- Medic Tree
-GM:AddSkill(SKILL_SURGEON1, translate.Get"skill_surgeon1_name", GOOD.."skill_surgeon1_desc",
+GM:AddSkill(SKILL_SURGEON1, translate.Get("skill_surgeon1_name"), GOOD..("skill_surgeon1_desc"),
 																-4,			6,					{SKILL_NONE, SKILL_SURGEON2}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_SURGEON2, translate.Get"skill_surgeon2_name", GOOD.."skill_surgeon2_desc",
+GM:AddSkill(SKILL_SURGEON2, translate.Get("skill_surgeon2_name"), GOOD..("skill_surgeon2_desc"),
 																-3,			3,					{SKILL_WORTHINESS4, SKILL_SURGEON3}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_SURGEON3, translate.Get"skill_surgeon3_name", GOOD.."skill_surgeon3_desc",
+GM:AddSkill(SKILL_SURGEON3, translate.Get("skill_surgeon3_name"), GOOD..("skill_surgeon3_desc"),
 																-2,			0,					{SKILL_U_MEDICCLOUD, SKILL_D_FRAIL, SKILL_SURGEONIV}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_SURGEONIV, translate.Get"skill_surgeon4_name", GOOD.."skill_surgeon4_desc",
+GM:AddSkill(SKILL_SURGEONIV, translate.Get("skill_surgeon4_name"), GOOD..("skill_surgeon4_desc"),
 																-2,			-3,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYI, translate.Get"skill_biology1_name", GOOD.."skill_biology1_desc",
+GM:AddSkill(SKILL_BIOLOGYI, translate.Get("skill_biology1_name"), GOOD..("skill_biology1_desc"),
 																4,			6,					{SKILL_NONE, SKILL_BIOLOGYII}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYII, translate.Get"skill_biology2_name", GOOD.."skill_biology2_desc",
+GM:AddSkill(SKILL_BIOLOGYII, translate.Get("skill_biology2_name"), GOOD..("skill_biology2_desc"),
 																3,			3,					{SKILL_BIOLOGYIII, SKILL_SMARTTARGETING}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYIII, translate.Get"skill_biology3_name", GOOD.."skill_biology3_desc",
+GM:AddSkill(SKILL_BIOLOGYIII, translate.Get("skill_biology3_name"), GOOD..("skill_biology3_desc"),
 																2,			0,					{SKILL_U_MEDICCLOUD, SKILL_U_ANTITODESHOT, SKILL_BIOLOGYIV}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_BIOLOGYIV, translate.Get"skill_biology4_name", GOOD.."skill_biology4_desc",
+GM:AddSkill(SKILL_BIOLOGYIV, translate.Get("skill_biology4_name"), GOOD..("skill_biology4_desc"),
 																2,			-3,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_D_FRAIL, translate.Get"skill_frail_name", GOOD..translate.Get"skill_frail_desc"..GOOD..translate.Get"skill_frail_desc2"..BAD..translate.Get"skill_frail_desc3",
+GM:AddSkill(SKILL_D_FRAIL, translate.Get("skill_frail_name"), GOOD..translate.Get("skill_frail_desc")..GOOD..translate.Get("skill_frail_desc2")..BAD..translate.Get("skill_frail_desc3"),
 																-4,			-2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_U_MEDICCLOUD, translate.Get"skill_u_mediccloud_name", GOOD..translate.Get"skill_u_mediccloud_desc",
+GM:AddSkill(SKILL_U_MEDICCLOUD, translate.Get("skill_u_mediccloud_name"), GOOD..translate.Get("skill_u_mediccloud_desc"),
 																0,			-2,					{SKILL_DISPERSION}, TREE_SUPPORTTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_SMARTTARGETING, translate.Get"skill_smart_targeting_name", GOOD..translate.Get"skill_smart_targeting_desc"..BAD..translate.Get"skill_smart_targeting_desc2"..BAD..translate.Get"skill_smart_targeting_desc3",
+GM:AddSkill(SKILL_SMARTTARGETING, translate.Get("skill_smart_targeting_name"), GOOD..translate.Get("skill_smart_targeting_desc")..BAD..translate.Get("skill_smart_targeting_desc2")..BAD..translate.Get("skill_smart_targeting_desc3"),
 																0,			2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_RECLAIMSOL, translate.Get"skill_recovablesol_name", GOOD..translate.Get"skill_recovablesol_desk"..BAD..translate.Get"skill_recovablesol_desk2"..BAD..translate.Get"skill_recovablesol_desk3"..BAD..translate.Get"skill_recovablesol_desk4",
+GM:AddSkill(SKILL_RECLAIMSOL, translate.Get("skill_recovablesol_name"), GOOD..translate.Get("skill_recovablesol_desk")..BAD..translate.Get("skill_recovablesol_desk2")..BAD..translate.Get("skill_recovablesol_desk3")..BAD..translate.Get("skill_recovablesol_desk4"),
 																0,			4,					{SKILL_SMARTTARGETING}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_U_STRENGTHSHOT, translate.Get"skill_u_strenghtshot_name", GOOD..translate.Get"skill_u_strenghtshot_desc",
+GM:AddSkill(SKILL_U_STRENGTHSHOT, translate.Get("skill_u_strenghtshot_name"), GOOD..translate.Get("skill_u_strenghtshot_desc"),
 																0,			0,					{SKILL_SMARTTARGETING}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_WORTHINESS4, translate.Get"skill_worthiness_name", GOOD..translate.Get"skill_worthiness_desc"..BAD..translate.Get"skill_worthiness_desc2",
+GM:AddSkill(SKILL_WORTHINESS4, translate.Get("skill_worthiness_name"), GOOD..translate.Get("skill_worthiness_desc")..BAD..translate.Get("skill_worthiness_desc2"),
 																-5,			2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_U_ANTITODESHOT, translate.Get"skill_u_antidoteshot_name", GOOD..translate.Get"skill_u_antidoteshot_desc",
+GM:AddSkill(SKILL_U_ANTITODESHOT, translate.Get("skill_u_antidoteshot_name"), GOOD..translate.Get("skill_u_antidoteshot_desc"),
 																4,			-2,					{}, TREE_SUPPORTTREE)
-GM:AddSkill(SKILL_DISPERSION, translate.Get"skill_dispersion_name", GOOD..translate.Get"skill_dispersion_desc"..BAD..translate.Get"skill_dispersion_desc2",
+GM:AddSkill(SKILL_DISPERSION, translate.Get("skill_dispersion_name"), GOOD..translate.Get("skill_dispersion_desc")..BAD..translate.Get("skill_dispersion_desc2"),
 																0,			-4,					{}, TREE_SUPPORTTREE)
 
 -- Defence Tree
-GM:AddSkill(SKILL_HANDY1, translate.Get"skill_handy1_name", GOOD..translate.Get"skill_handy1_desc",
+GM:AddSkill(SKILL_HANDY1, translate.Get("skill_handy1_name"), GOOD..translate.Get("skill_handy1_desc"),
 																-5,			-6,					{SKILL_NONE, SKILL_HANDY2}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY2, translate.Get"skill_handy2_name", GOOD..translate.Get"skill_handy2_desc",
+GM:AddSkill(SKILL_HANDY2, translate.Get("skill_handy2_name"), GOOD..translate.Get("skill_handy2_desc"),
 																-5,			-4,					{SKILL_HANDY3, SKILL_U_BLASTTURRET, SKILL_LOADEDHULL}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY3, translate.Get"skill_handy3_name", GOOD..translate.Get"skill_handy3_desc",
+GM:AddSkill(SKILL_HANDY3, translate.Get("skill_handy3_name"), GOOD..translate.Get("skill_handy3_desc"),
 																-5,			-1,					{SKILL_TAUT, SKILL_HAMMERDISCIPLINE, SKILL_D_NOODLEARMS, SKILL_HANDY4}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY4, translate.Get"skill_handy4_name", GOOD..translate.Get"skill_handy4_desc",
+GM:AddSkill(SKILL_HANDY4, translate.Get("skill_handy4_name"), GOOD..translate.Get("skill_handy4_desc"),
 																-3,			1,					{SKILL_HANDY5}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HANDY5, translate.Get"skill_handy5_name", GOOD..translate.Get"skill_handy5_desc",
+GM:AddSkill(SKILL_HANDY5, translate.Get("skill_handy5_name"), GOOD..translate.Get("skill_handy5_desc"),
 																-3,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HAMMERDISCIPLINE, translate.Get"skill_hammerdiscipline_name", GOOD..translate.Get"skill_hammerdiscipline_desc",
+GM:AddSkill(SKILL_HAMMERDISCIPLINE, translate.Get("skill_hammerdiscipline_name"), GOOD..translate.Get("skill_hammerdiscipline_desc"),
 																0,			1,					{SKILL_BARRICADEEXPERT}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_BARRICADEEXPERT, translate.Get"skill_reinforcer_name", GOOD..translate.Get"skill_reinforcer_desc"..GOOD..translate.Get"skill_reinforcer_desc2"..BAD..translate.Get"skill_reinforcer_desc3",
+GM:AddSkill(SKILL_BARRICADEEXPERT, translate.Get("skill_reinforcer_name"), GOOD..translate.Get("skill_reinforcer_desc")..GOOD..translate.Get("skill_reinforcer_desc2")..BAD..translate.Get("skill_reinforcer_desc3"),
 																0,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_LOADEDHULL, translate.Get"skill_loadedhull_name", GOOD..translate.Get"skill_loadedhull_desc"..BAD..translate.Get"skill_loadedhull_desc2",
+GM:AddSkill(SKILL_LOADEDHULL, translate.Get("skill_loadedhull_name"), GOOD..translate.Get("skill_loadedhull_desc")..BAD..translate.Get("skill_loadedhull_desc2"),
 																-2,			-4,					{SKILL_REINFORCEDHULL, SKILL_REINFORCEDBLADES, SKILL_AVIATOR}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_REINFORCEDHULL, translate.Get"skill_reinforcedhull_name", GOOD..translate.Get"skill_reinforcedhull_desc"..BAD..translate.Get"skill_reinforcedhull_desc2"..BAD..translate.Get"skill_reinforcedhull_desc3",
+GM:AddSkill(SKILL_REINFORCEDHULL, translate.Get("skill_reinforcedhull_name"), GOOD..translate.Get("skill_reinforcedhull_desc")..BAD..translate.Get("skill_reinforcedhull_desc2")..BAD..translate.Get("skill_reinforcedhull_desc3"),
 																-2,			-2,					{SKILL_STABLEHULL}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_STABLEHULL, translate.Get"skill_stablehull_name", GOOD..translate.Get"skill_stablehull_desc"..BAD..translate.Get"skill_stablehull_desc2",
+GM:AddSkill(SKILL_STABLEHULL, translate.Get("skill_stablehull_name"), GOOD..translate.Get("skill_stablehull_desc")..BAD..translate.Get("skill_stablehull_desc2"),
 																0,			-3,					{SKILL_U_DRONE}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_REINFORCEDBLADES, translate.Get"skill_reinforcedblades_name", GOOD..translate.Get"skill_reinforcedblades_desc"..BAD..translate.Get"skill_reinforcedblades_desc2",
+GM:AddSkill(SKILL_REINFORCEDBLADES, translate.Get("skill_reinforcedblades_name"), GOOD..translate.Get("skill_reinforcedblades_desc")..BAD..translate.Get("skill_reinforcedblades_desc2"),
 																0,			-5,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_AVIATOR, translate.Get"skill_aviator_name", GOOD..translate.Get"skill_aviator_desc"..BAD..translate.Get"skill_aviator_desc2",
+GM:AddSkill(SKILL_AVIATOR, translate.Get("skill_aviator_name"), GOOD..translate.Get("skill_aviator_desc")..BAD..translate.Get("skill_aviator_desc2"),
 																-4,			-2,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_BLASTTURRET, translate.Get"skill_blastturret_name", GOOD..translate.Get"skill_blastturret_desc",
+GM:AddSkill(SKILL_U_BLASTTURRET, translate.Get("skill_blastturret_name"), GOOD..translate.Get("skill_blastturret_desc"),
 																-8,			-4,					{SKILL_TURRETLOCK, SKILL_TWINVOLLEY, SKILL_TURRETOVERLOAD}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_TURRETLOCK, translate.Get"skill_turretlock_name", translate.Get"skill_turretlock_desc"..BAD..translate.Get"skill_turretlock_desc2",
+GM:AddSkill(SKILL_TURRETLOCK, translate.Get("skill_turretlock_name"), translate.Get("skill_turretlock_desc")..BAD..translate.Get("skill_turretlock_desc2"),
 																-6,			-2,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_TWINVOLLEY, translate.Get"skill_twinvolley_name", GOOD..translate.Get"skill_twinvolley_desc"..BAD..translate.Get"skill_twinvolley_desc2"..BAD..translate.Get"skill_twinvolley_desc3",
+GM:AddSkill(SKILL_TWINVOLLEY, translate.Get("skill_twinvolley_name"), GOOD..translate.Get("skill_twinvolley_desc")..BAD..translate.Get("skill_twinvolley_desc2")..BAD..translate.Get("skill_twinvolley_desc3"),
 																-10,		-5,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_TURRETOVERLOAD, translate.Get"skill_turretoberload_name", GOOD..translate.Get"skill_turretoberload_desc"..BAD..translate.Get"skill_turretoberload_desc2",
+GM:AddSkill(SKILL_TURRETOVERLOAD, translate.Get("skill_turretoberload_name"), GOOD..translate.Get("skill_turretoberload_desc")..BAD..translate.Get("skill_turretoberload_desc2"),
 																-8,			-2,					{SKILL_INSTRUMENTS}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_DRONE, translate.Get"skill_drone_name", GOOD..translate.Get"skill_drone_desc",
+GM:AddSkill(SKILL_U_DRONE, translate.Get("skill_drone_name"), GOOD..translate.Get("skill_drone_desc"),
 																2,			-3,					{SKILL_HAULMODULE, SKILL_U_ROLLERMINE}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_U_NANITECLOUD, translate.Get"skill_nanitecloud_name", GOOD..translate.Get"skill_nanitecloud_desc",
+GM:AddSkill(SKILL_U_NANITECLOUD, translate.Get("skill_nanitecloud_name"), GOOD..translate.Get("skill_nanitecloud_desc"),
 																3,			1,					{SKILL_HAMMERDISCIPLINE}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_FIELDAMP, translate.Get"skill_fieldamp_name", GOOD..translate.Get"skill_fieldamp_desc"..BAD..translate.Get"skill_fieldamp_desc2",
+GM:AddSkill(SKILL_FIELDAMP, translate.Get("skill_fieldamp_name"), GOOD..translate.Get("skill_fieldamp_desc")..BAD..translate.Get("skill_fieldamp_desc2"),
 																6,			4,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_TECHNICIAN, translate.Get"skill_technician_name", GOOD..translate.Get"skill_technician_desc"..GOOD..translate.Get"skill_technician_desc2",
+GM:AddSkill(SKILL_TECHNICIAN, translate.Get("skill_technician_name"), GOOD..translate.Get("skill_technician_desc")..GOOD..translate.Get("skill_technician_desc2"),
 																4,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_ROLLERMINE, translate.Get"skill_rollermine_name", GOOD..translate.Get"skill_rollermine_desc",
+GM:AddSkill(SKILL_U_ROLLERMINE, translate.Get("skill_rollermine_name"), GOOD..translate.Get("skill_rollermine_desc"),
 																3,			-5,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_HAULMODULE, translate.Get"skill_haulmodule_name", GOOD..translate.Get"skill_haulmodule_desc",
+GM:AddSkill(SKILL_HAULMODULE, translate.Get("skill_haulmodule_name"), GOOD..translate.Get("skill_haulmodule_desc"),
 																2,			-1,					{SKILL_U_NANITECLOUD}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_LIGHTCONSTRUCT, translate.Get"skill_lightconstruct_name", GOOD..translate.Get"skill_lightconstruct_desc"..BAD..translate.Get"skill_lightconstruct_desc2",
+GM:AddSkill(SKILL_LIGHTCONSTRUCT, translate.Get("skill_lightconstruct_name"), GOOD..translate.Get("skill_lightconstruct_desc")..BAD..translate.Get("skill_lightconstruct_desc2"),
 																8,			-1,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_STOCKPILE, translate.Get"skill_stockpile_name", GOOD..translate.Get"skill_stockpile_desc"..BAD..translate.Get"skill_stockpile_desc2",
+GM:AddSkill(SKILL_STOCKPILE, translate.Get("skill_stockpile_name"), GOOD..translate.Get("skill_stockpile_desc")..BAD..translate.Get("skill_stockpile_desc2"),
 																8,			-3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_ACUITY, translate.Get"skill_acuity_name", GOOD..translate.Get"skill_acuity_desc"..GOOD..translate.Get"skill_acuity_desc2"..GOOD..translate.Get"skill_acuity_desc3",
+GM:AddSkill(SKILL_ACUITY, translate.Get("skill_acuity_name"), GOOD..translate.Get("skill_acuity_desc")..GOOD..translate.Get("skill_acuity_desc2")..GOOD..translate.Get("skill_acuity_desc3"),
 																6,			-3,					{SKILL_INSIGHT, SKILL_STOCKPILE, SKILL_U_CRAFTINGPACK, SKILL_STOWAGE}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_VISION, translate.Get"skill_vision_name", GOOD..translate.Get"skill_vision_desc"..GOOD..translate.Get"skill_vision_desc2",
+GM:AddSkill(SKILL_VISION, translate.Get("skill_vision_name"), GOOD..translate.Get("skill_vision_desc")..GOOD..translate.Get("skill_vision_desc2"),
 																6,			-6,					{SKILL_NONE, SKILL_ACUITY}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_ROCKETTURRET, translate.Get"skill_rocketturret_name", GOOD..translate.Get"skill_rocketturret_desc",
+GM:AddSkill(SKILL_U_ROCKETTURRET, translate.Get("skill_rocketturret_name"), GOOD..translate.Get("skill_rocketturret_desc"),
 																-8,			-0,					{SKILL_TURRETOVERLOAD}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_INSIGHT, translate.Get"skill_insight_name", GOOD..translate.Get"skill_insight_desc"..GOOD..translate.Get"skill_insight_desc2"..GOOD..translate.Get"skill_insight_desc3",
+GM:AddSkill(SKILL_INSIGHT, translate.Get("skill_insight_name"), GOOD..translate.Get("skill_insight_desc")..GOOD..translate.Get("skill_insight_desc2")..GOOD..translate.Get("skill_insight_desc3"),
 																6,			-0,					{SKILL_U_NANITECLOUD, SKILL_U_ZAPPER_ARC, SKILL_LIGHTCONSTRUCT, SKILL_D_LATEBUYER}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_U_ZAPPER_ARC, translate.Get"skill_zapperarc_name", GOOD..translate.Get"skill_zapperarc_desc",
+GM:AddSkill(SKILL_U_ZAPPER_ARC, translate.Get("skill_zapperarc_name"), GOOD..translate.Get("skill_zapperarc_desc"),
 																6,			2,					{SKILL_FIELDAMP, SKILL_TECHNICIAN}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_D_LATEBUYER, translate.Get"skill_latebuyer_name", GOOD..translate.Get"skill_latebuyer_desc"..GOOD..translate.Get"skill_latebuyer_desc2"..BAD..translate.Get"skill_latebuyer_desc3",
+GM:AddSkill(SKILL_D_LATEBUYER, translate.Get("skill_latebuyer_name"), GOOD..translate.Get("skill_latebuyer_desc")..GOOD..translate.Get("skill_latebuyer_desc2")..BAD..translate.Get("skill_latebuyer_desc3"),
 																8,			1,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_U_CRAFTINGPACK, translate.Get"skill_craftingpack_name", GOOD..translate.Get"skill_craftingpack_desc"..GOOD..translate.Get"skill_craftingpack_desc2"..GOOD..translate.Get"skill_craftingpack_desc3",
+GM:AddSkill(SKILL_U_CRAFTINGPACK, translate.Get("skill_craftingpack_name"), GOOD..translate.Get("skill_craftingpack_desc")..GOOD..translate.Get("skill_craftingpack_desc2")..GOOD..translate.Get("skill_craftingpack_desc3"),
 																4,			-1,					{}, TREE_BUILDINGTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_TAUT, translate.Get"skill_taut_name", GOOD..translate.Get"skill_taut_desc"..BAD..translate.Get"skill_taut_desc2",
+GM:AddSkill(SKILL_TAUT, translate.Get("skill_taut_name"), GOOD..translate.Get("skill_taut_desc")..BAD..translate.Get("skill_taut_desc2"),
 																-5,			3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_D_NOODLEARMS, translate.Get"skill_noodlearms_name", GOOD..translate.Get"skill_noodlearms_desc"..GOOD..translate.Get"skill_noodlearms_desc2"..BAD..translate.Get"skill_noodlearms_desc3",
+GM:AddSkill(SKILL_D_NOODLEARMS, translate.Get("skill_noodlearms_name"), GOOD..translate.Get("skill_noodlearms_desc")..GOOD..translate.Get("skill_noodlearms_desc2")..BAD..translate.Get("skill_noodlearms_desc3"),
 																-7,			2,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_INSTRUMENTS, translate.Get"skill_instruments_name", GOOD..translate.Get"skill_instruments_desc",
+GM:AddSkill(SKILL_INSTRUMENTS, translate.Get("skill_instruments_name"), GOOD..translate.Get("skill_instruments_desc"),
 																-10,		-3,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_STOWAGE, 	translate.Get"skill_stowage_name", GOOD..translate.Get"skill_stowage_desc"..BAD..translate.Get"skill_stowage_desc2",
+GM:AddSkill(SKILL_STOWAGE, 	translate.Get("skill_stowage_name"), GOOD..translate.Get("skill_stowage_desc")..BAD..translate.Get("skill_stowage_desc2"),
 																4,			-3,					{}, TREE_BUILDINGTREE)
 
 -- Gunnery Tree
-GM:AddSkill(SKILL_TRIGGER_DISCIPLINE1, translate.Get"skill_trigger1_name", GOOD..translate.Get"skill_trigger1_desc"..GOOD..translate.Get"skill_trigger1_desc2",
+GM:AddSkill(SKILL_TRIGGER_DISCIPLINE1, translate.Get("skill_trigger1_name"), GOOD..translate.Get("skill_trigger1_desc")..GOOD..translate.Get("skill_trigger1_desc2"),
 																-5,			6,					{SKILL_TRIGGER_DISCIPLINE2, SKILL_NONE}, TREE_GUNTREE)
-GM:AddSkill(SKILL_TRIGGER_DISCIPLINE2, translate.Get"skill_trigger2_name", GOOD..translate.Get"skill_trigger2_desc"..GOOD..translate.Get"skill_trigger2_desc2",
+GM:AddSkill(SKILL_TRIGGER_DISCIPLINE2, translate.Get("skill_trigger2_name"), GOOD..translate.Get("skill_trigger2_desc")..GOOD..translate.Get("skill_trigger2_desc2"),
 																-4,			3,					{SKILL_TRIGGER_DISCIPLINE3, SKILL_D_PALSY, SKILL_EQUIPPED}, TREE_GUNTREE)
-GM:AddSkill(SKILL_TRIGGER_DISCIPLINE3, translate.Get"skill_trigger3_name", GOOD..translate.Get"skill_trigger3_desc"..GOOD..translate.Get"skill_trigger3_desc2",
+GM:AddSkill(SKILL_TRIGGER_DISCIPLINE3, translate.Get("skill_trigger3_name"), GOOD..translate.Get("skill_trigger3_desc")..GOOD..translate.Get("skill_trigger3_desc2"),
 																-3,			0,					{SKILL_QUICKRELOAD, SKILL_QUICKDRAW, SKILL_WORTHINESS1, SKILL_EGOCENTRIC}, TREE_GUNTREE)
-GM:AddSkill(SKILL_D_PALSY, translate.Get"skill_palsy_name", GOOD..translate.Get"skill_palsy_desc"..GOOD..translate.Get"skill_palsy_desc2"..BAD..translate.Get"skill_palsy_desc3",
+GM:AddSkill(SKILL_D_PALSY, translate.Get("skill_palsy_name"), GOOD..translate.Get("skill_palsy_desc")..GOOD..translate.Get("skill_palsy_desc2")..BAD..translate.Get("skill_palsy_desc3"),
 																0,			4,					{SKILL_LEVELHEADED}, TREE_GUNTREE)
-GM:AddSkill(SKILL_LEVELHEADED, translate.Get"skill_levelheaded_name", GOOD..translate.Get"skill_levelheaded_desc",
+GM:AddSkill(SKILL_LEVELHEADED, translate.Get("skill_levelheaded_name"), GOOD..translate.Get("skill_levelheaded_desc"),
 																-2,			2,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_QUICKDRAW, translate.Get"skill_quickdraw_name", GOOD..translate.Get"skill_quickdraw_desc"..BAD..translate.Get"skill_quickdraw_desc2",
+GM:AddSkill(SKILL_QUICKDRAW, translate.Get("skill_quickdraw_name"), GOOD..translate.Get("skill_quickdraw_desc")..BAD..translate.Get("skill_quickdraw_desc2"),
 																0,			1,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_FOCUS, translate.Get"skill_focus1_name", GOOD..translate.Get"skill_focus1_desc"..BAD..translate.Get"skill_focus1_desc2",
+GM:AddSkill(SKILL_FOCUS, translate.Get("skill_focus1_name"), GOOD..translate.Get("skill_focus1_desc")..BAD..translate.Get("skill_focus1_desc2"),
 																5,			6,					{SKILL_NONE, SKILL_FOCUSII}, TREE_GUNTREE)
-GM:AddSkill(SKILL_FOCUSII, translate.Get"skill_focus2_name", GOOD..translate.Get"skill_focus2_desc"..BAD..translate.Get"skill_focus2_desc2",
+GM:AddSkill(SKILL_FOCUSII, translate.Get("skill_focus2_name"), GOOD..translate.Get("skill_focus2_desc")..BAD..translate.Get("skill_focus2_desc2"),
 																4,			3,					{SKILL_FOCUSIII, SKILL_SCAVENGER, SKILL_D_PALSY, SKILL_PITCHER}, TREE_GUNTREE)
-GM:AddSkill(SKILL_FOCUSIII, translate.Get"skill_focus3_name", GOOD..translate.Get"skill_focus3_desc"..BAD..translate.Get"skill_focus3_desc2",
+GM:AddSkill(SKILL_FOCUSIII, translate.Get("skill_focus3_name"), GOOD..translate.Get("skill_focus3_desc")..BAD..translate.Get("skill_focus3_desc2"),
 																3,			0,					{SKILL_EGOCENTRIC, SKILL_WOOISM, SKILL_ORPHICFOCUS, SKILL_SCOURER}, TREE_GUNTREE)
-GM:AddSkill(SKILL_QUICKRELOAD, translate.Get"skill_quickreload_name", GOOD..translate.Get"skill_quickreload_desc"..BAD..translate.Get"skill_quickreload_desc2",
+GM:AddSkill(SKILL_QUICKRELOAD, translate.Get("skill_quickreload_name"), GOOD..translate.Get("skill_quickreload_desc")..BAD..translate.Get("skill_quickreload_desc2"),
 																-5,			1,					{SKILL_SLEIGHTOFHAND}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SLEIGHTOFHAND, translate.Get"skill_sleightofhand_name", GOOD..translate.Get"skill_sleightofhand_desc"..BAD..translate.Get"skill_sleightofhand_desc2",
+GM:AddSkill(SKILL_SLEIGHTOFHAND, translate.Get("skill_sleightofhand_name"), GOOD..translate.Get("skill_sleightofhand_desc")..BAD..translate.Get("skill_sleightofhand_desc2"),
 																-5,			-1,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_U_CRYGASGREN, translate.Get"skill_cryogasgren_name", GOOD..translate.Get"skill_cryogasgren_desc",
+GM:AddSkill(SKILL_U_CRYGASGREN, translate.Get("skill_cryogasgren_name"), GOOD..translate.Get("skill_cryogasgren_desc"),
 																2,			-3,					{SKILL_EGOCENTRIC}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SOFTDET, translate.Get"skill_softdet_name", GOOD..translate.Get"skill_softdet_desc"..BAD..translate.Get"skill_softdet_desc2",
+GM:AddSkill(SKILL_SOFTDET, translate.Get("skill_softdet_name"), GOOD..translate.Get("skill_softdet_desc")..BAD..translate.Get("skill_softdet_desc2"),
 																0,			-5,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_ORPHICFOCUS, translate.Get"skill_orphicfocus_name", GOOD..translate.Get"skill_orphicfocus_desc"..GOOD..translate.Get"skill_orphicfocus_desc2"..BAD..translate.Get"skill_orphicfocus_desc3"..BAD..translate.Get"skill_orphicfocus_desc4",
+GM:AddSkill(SKILL_ORPHICFOCUS, translate.Get("skill_orphicfocus_name"), GOOD..translate.Get("skill_orphicfocus_desc")..GOOD..translate.Get("skill_orphicfocus_desc2")..BAD..translate.Get("skill_orphicfocus_desc3")..BAD..translate.Get("skill_orphicfocus_desc4"),
 																5,			-1,					{SKILL_DELIBRATION}, TREE_GUNTREE)
-GM:AddSkill(SKILL_DELIBRATION, translate.Get"skill_delibration_name", GOOD..translate.Get"skill_delibration_desc",
+GM:AddSkill(SKILL_DELIBRATION, translate.Get("skill_delibration_name"), GOOD..translate.Get("skill_delibration_desc"),
 																6,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_EGOCENTRIC, translate.Get"skill_egocentric_name", GOOD..translate.Get"skill_egocentric_desc"..BAD..translate.Get"skill_egocentric_desc2",
+GM:AddSkill(SKILL_EGOCENTRIC, translate.Get("skill_egocentric_name"), GOOD..translate.Get("skill_egocentric_desc")..BAD..translate.Get("skill_egocentric_desc2"),
 																0,			-1,					{SKILL_BLASTPROOF}, TREE_GUNTREE)
-GM:AddSkill(SKILL_BLASTPROOF, translate.Get"skill_blastproof_name", GOOD..translate.Get"skill_blastproof_desc"..BAD..translate.Get"skill_blastproof_desc2"..BAD..translate.Get"skill_blastproof_desc3",
+GM:AddSkill(SKILL_BLASTPROOF, translate.Get("skill_blastproof_name"), GOOD..translate.Get("skill_blastproof_desc")..BAD..translate.Get("skill_blastproof_desc2")..BAD..translate.Get("skill_blastproof_desc3"),
 																0,			-3,					{SKILL_SOFTDET, SKILL_CANNONBALL, SKILL_CONEFFECT}, TREE_GUNTREE)
-GM:AddSkill(SKILL_WOOISM, translate.Get"skill_zeal_name", GOOD..translate.Get"skill_zeal_desc"..BAD..translate.Get"skill_zeal_desc2",
+GM:AddSkill(SKILL_WOOISM, translate.Get("skill_zeal_name"), GOOD..translate.Get("skill_zeal_desc")..BAD..translate.Get("skill_zeal_desc2"),
 																5,			1,					{SKILL_TRUEWOOISM}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SCAVENGER, translate.Get"skill_scavenger_name", GOOD..translate.Get"skill_scavenger_desc",
+GM:AddSkill(SKILL_SCAVENGER, translate.Get("skill_scavenger_name"), GOOD..translate.Get("skill_scavenger_desc"),
 																7,			4,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_PITCHER, translate.Get"skill_pitcher_name", GOOD..translate.Get"skill_pitcher_desc",
+GM:AddSkill(SKILL_PITCHER, translate.Get("skill_pitcher_name"), GOOD..translate.Get("skill_pitcher_desc"),
 																6,			2,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_EQUIPPED, translate.Get"skill_alacrity_name", GOOD..translate.Get"skill_alacrity_desc",
+GM:AddSkill(SKILL_EQUIPPED, translate.Get("skill_alacrity_name"), GOOD..translate.Get("skill_alacrity_desc"),
 																-6,			2,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_WORTHINESS1, translate.Get"skill_worthiness1_name", GOOD..translate.Get"skill_worthiness1_desc"..BAD..translate.Get"skill_worthiness1_desc2",
+GM:AddSkill(SKILL_WORTHINESS1, translate.Get("skill_worthiness1_name"), GOOD..translate.Get("skill_worthiness1_desc")..BAD..translate.Get("skill_worthiness1_desc2"),
 																-4,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_CANNONBALL, translate.Get"skill_cannonball_name", translate.Get"skill_cannonball_desc"..GOOD..translate.Get"skill_cannonball_desc2",
+GM:AddSkill(SKILL_CANNONBALL, translate.Get("skill_cannonball_name"), translate.Get("skill_cannonball_desc")..GOOD..translate.Get("skill_cannonball_desc2"),
 																-2,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_SCOURER, translate.Get"skill_scourer_name", GOOD..translate.Get"skill_scourer_desc"..BAD..translate.Get"skill_scourer_desc2",
+GM:AddSkill(SKILL_SCOURER, translate.Get("skill_scourer_name"), GOOD..translate.Get("skill_scourer_desc")..BAD..translate.Get("skill_scourer_desc2"),
 																4,			-3,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_CONEFFECT, translate.Get"skill_coneffect_name", GOOD..translate.Get"skill_coneffect_desc"..BAD..translate.Get"skill_coneffect_desc2",
+GM:AddSkill(SKILL_CONEFFECT, translate.Get("skill_coneffect_name"), GOOD..translate.Get("skill_coneffect_desc")..BAD..translate.Get("skill_coneffect_desc2"),
 																2,			-5,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_TRUEWOOISM, translate.Get"skill_wooism_name", GOOD..translate.Get"skill_wooism_desc"..BAD..translate.Get"skill_wooism_desc2",
+GM:AddSkill(SKILL_TRUEWOOISM, translate.Get("skill_wooism_name"), GOOD..translate.Get("skill_wooism_desc")..BAD..translate.Get("skill_wooism_desc2"),
 																7,			0,					{}, TREE_GUNTREE)
 
 -- Melee Tree
-GM:AddSkill(SKILL_WORTHINESS2, translate.Get"skill_worthiness2_name", GOOD..translate.Get"skill_worthiness2_desc"..BAD..translate.Get"skill_worthiness2_desc2",
+GM:AddSkill(SKILL_WORTHINESS2, translate.Get("skill_worthiness2_name"), GOOD..translate.Get("skill_worthiness2_desc")..BAD..translate.Get("skill_worthiness2_desc2"),
 																4,			0,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER1, translate.Get"skill_battler1_name", GOOD..translate.Get"skill_battler1_desc",
+GM:AddSkill(SKILL_BATTLER1, translate.Get("skill_battler1_name"), GOOD..translate.Get("skill_battler1_desc"),
 																-6,			-6,					{SKILL_BATTLER2, SKILL_NONE}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER2, translate.Get"skill_battler2_name", GOOD..translate.Get"skill_battler2_desc",
+GM:AddSkill(SKILL_BATTLER2, translate.Get("skill_battler2_name"), GOOD..translate.Get("skill_battler2_desc"),
 																-6,			-4,					{SKILL_BATTLER3, SKILL_LIGHTWEIGHT}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER3, translate.Get"skill_battler3_name", GOOD..translate.Get"skill_battler3_desc",
+GM:AddSkill(SKILL_BATTLER3, translate.Get("skill_battler3_name"), GOOD..translate.Get("skill_battler3_desc"),
 																-4,			-2,					{SKILL_BATTLER4, SKILL_LANKY}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER4, translate.Get"skill_battler4_name", GOOD..translate.Get"skill_battler4_desc",
+GM:AddSkill(SKILL_BATTLER4, translate.Get("skill_battler4_name"), GOOD..translate.Get("skill_battler4_desc"),
 																-2,			0,					{SKILL_BATTLER5, SKILL_MASTERCHEF, SKILL_D_CLUMSY}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BATTLER5, translate.Get"skill_battler5_name", GOOD..translate.Get"skill_battler5_desc",
+GM:AddSkill(SKILL_BATTLER5, translate.Get("skill_battler5_name"), GOOD..translate.Get("skill_battler5_desc"),
 																0,			2,					{SKILL_GLASSWEAPONS, SKILL_BLOODLUST}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LASTSTAND, translate.Get"skill_laststand_name", GOOD..translate.Get"skill_laststand_desc"..BAD..translate.Get"skill_laststand_desc2",
+GM:AddSkill(SKILL_LASTSTAND, translate.Get("skill_laststand_name"), GOOD..translate.Get("skill_laststand_desc")..BAD..translate.Get("skill_laststand_desc2"),
 																0,			6,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_GLASSWEAPONS, translate.Get"skill_glassweapons_name", GOOD..translate.Get"skill_glassweapons_desc"..BAD..translate.Get"skill_glassweapons_desc2",
+GM:AddSkill(SKILL_GLASSWEAPONS, translate.Get("skill_glassweapons_name"), GOOD..translate.Get("skill_glassweapons_desc")..BAD..translate.Get("skill_glassweapons_desc2"),
 																2,			4,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_D_CLUMSY, translate.Get"skill_clumsy_name", GOOD..translate.Get"skill_clumsy_desc"..GOOD..translate.Get"skill_clumsy_desc2"..BAD..translate.Get"skill_clumsy_desc3",
+GM:AddSkill(SKILL_D_CLUMSY, translate.Get("skill_clumsy_name"), GOOD..translate.Get("skill_clumsy_desc")..GOOD..translate.Get("skill_clumsy_desc2")..BAD..translate.Get("skill_clumsy_desc3"),
 																-2,			2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_CHEAPKNUCKLE, translate.Get"skill_cheapknuckle_name", GOOD..translate.Get"skill_cheapknuckle_desc"..BAD..translate.Get"skill_cheapknuckle_desc2",
+GM:AddSkill(SKILL_CHEAPKNUCKLE, translate.Get("skill_cheapknuckle_name"), GOOD..translate.Get("skill_cheapknuckle_desc")..BAD..translate.Get("skill_cheapknuckle_desc2"),
 																4,			-2,					{SKILL_HEAVYSTRIKES, SKILL_WORTHINESS2}, TREE_MELEETREE)
-GM:AddSkill(SKILL_CRITICALKNUCKLE, translate.Get"skill_criticalknuckle_name", GOOD..translate.Get"skill_criticalknuckle_desc"..BAD..translate.Get"skill_criticalknuckle_desc2"..BAD..translate.Get"skill_criticalknuckle_desc3",
+GM:AddSkill(SKILL_CRITICALKNUCKLE, translate.Get("skill_criticalknuckle_name"), GOOD..translate.Get("skill_criticalknuckle_desc")..BAD..translate.Get("skill_criticalknuckle_desc2")..BAD..translate.Get("skill_criticalknuckle_desc3"),
 																6,			-2,					{SKILL_BRASH}, TREE_MELEETREE)
-GM:AddSkill(SKILL_KNUCKLEMASTER, translate.Get"skill_knucklemaster_name", GOOD..translate.Get"skill_knucklemaster_desc"..GOOD..translate.Get"skill_knucklemaster_desc2"..BAD..translate.Get"skill_knucklemaster_desc3",
+GM:AddSkill(SKILL_KNUCKLEMASTER, translate.Get("skill_knucklemaster_name"), GOOD..translate.Get("skill_knucklemaster_desc")..GOOD..translate.Get("skill_knucklemaster_desc2")..BAD..translate.Get("skill_knucklemaster_desc3"),
 																6,			-6,					{SKILL_NONE, SKILL_COMBOKNUCKLE}, TREE_MELEETREE)
-GM:AddSkill(SKILL_COMBOKNUCKLE, translate.Get"skill_comboknuckle_name", GOOD..translate.Get"skill_comboknuckle_desc"..BAD..translate.Get"skill_comboknuckle_desc2",
+GM:AddSkill(SKILL_COMBOKNUCKLE, translate.Get("skill_comboknuckle_name"), GOOD..translate.Get("skill_comboknuckle_desc")..BAD..translate.Get("skill_comboknuckle_desc2"),
 																6,			-4,					{SKILL_CHEAPKNUCKLE, SKILL_CRITICALKNUCKLE}, TREE_MELEETREE)
-GM:AddSkill(SKILL_HEAVYSTRIKES, translate.Get"skill_heavystrikes_name", GOOD..translate.Get"skill_heavystrikes_desc"..BAD..translate.Get"skill_heavystrikes_desc2"..BAD..translate.Get"skill_heavystrikes_desc3",
+GM:AddSkill(SKILL_HEAVYSTRIKES, translate.Get("skill_heavystrikes_name"), GOOD..translate.Get("skill_heavystrikes_desc")..BAD..translate.Get("skill_heavystrikes_desc2")..BAD..translate.Get("skill_heavystrikes_desc3"),
 																2,			0,					{SKILL_BATTLER5, SKILL_JOUSTER}, TREE_MELEETREE)
-GM:AddSkill(SKILL_JOUSTER, translate.Get"skill_jouster_name", GOOD..translate.Get"skill_jouster_desc"..BAD..translate.Get"skill_jouster_desc2",
+GM:AddSkill(SKILL_JOUSTER, translate.Get("skill_jouster_name"), GOOD..translate.Get("skill_jouster_desc")..BAD..translate.Get("skill_jouster_desc2"),
 																2,			2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LANKY, translate.Get"skill_lanky_name", GOOD..translate.Get"skill_lanky_desc"..BAD..translate.Get"skill_lanky_desc2",
+GM:AddSkill(SKILL_LANKY, translate.Get("skill_lanky_name"), GOOD..translate.Get("skill_lanky_desc")..BAD..translate.Get("skill_lanky_desc2"),
 																-4,			0,					{SKILL_LANKYII}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LANKYII, translate.Get"skill_lanky2_name", GOOD..translate.Get"skill_lanky2_desc"..BAD..translate.Get"skill_lanky2_desc2",
+GM:AddSkill(SKILL_LANKYII, translate.Get("skill_lanky2_name"), GOOD..translate.Get("skill_lanky2_desc")..BAD..translate.Get("skill_lanky2_desc2"),
 																-4,			2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_MASTERCHEF, translate.Get"skill_masterchief_name", GOOD..translate.Get"skill_masterchief_desc"..BAD..translate.Get"skill_masterchief_desc2",
+GM:AddSkill(SKILL_MASTERCHEF, translate.Get("skill_masterchief_name"), GOOD..translate.Get("skill_masterchief_desc")..BAD..translate.Get("skill_masterchief_desc2"),
 																0,			-3,					{SKILL_BATTLER4}, TREE_MELEETREE)
-GM:AddSkill(SKILL_LIGHTWEIGHT, translate.Get"skill_lightweight_name", GOOD..translate.Get"skill_lightweight_desc"..BAD..translate.Get"skill_lightweight_desc2",
+GM:AddSkill(SKILL_LIGHTWEIGHT, translate.Get("skill_lightweight_name"), GOOD..translate.Get("skill_lightweight_desc")..BAD..translate.Get("skill_lightweight_desc2"),
 																-6,			-2,					{}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BLOODLUST, translate.Get"skill_bloodlust_name", translate.Get"skill_bloodlust_desc"..GOOD..translate.Get"skill_bloodlust_desc2"..BAD..translate.Get"skill_bloodlust_desc3",
+GM:AddSkill(SKILL_BLOODLUST, translate.Get("skill_bloodlust_name"), translate.Get("skill_bloodlust_desc")..GOOD..translate.Get("skill_bloodlust_desc2")..BAD..translate.Get("skill_bloodlust_desc3"),
 																-2,			4,					{SKILL_LASTSTAND}, TREE_MELEETREE)
-GM:AddSkill(SKILL_BRASH, translate.Get"skill_brash_name", GOOD..translate.Get"skill_brash_desc"..BAD..translate.Get"skill_brash_desc2",
+GM:AddSkill(SKILL_BRASH, translate.Get("skill_brash_name"), GOOD..translate.Get("skill_brash_desc")..BAD..translate.Get("skill_brash_desc2"),
 																6,			0,					{}, TREE_MELEETREE)
 
 GM:SetSkillModifierFunction(SKILLMOD_SPEED, function(pl, amount)

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 DEFINE_BASECLASS("weapon_zs_zombie")
 
-SWEP.PrintName = "Fast Zombie"
+SWEP.PrintName = ""..translate.Get("class_fast_zombie")
 
 SWEP.ViewModel = Model("models/weapons/v_fza.mdl")
 SWEP.WorldModel = ""

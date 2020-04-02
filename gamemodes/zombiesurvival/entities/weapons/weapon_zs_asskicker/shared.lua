@@ -1,4 +1,4 @@
-SWEP.PrintName = "Giant Zombie Kung Fu"
+SWEP.PrintName = ""..translate.Get("wpnc_asskicker_name")
 
 SWEP.Base = "weapon_zs_zombie"
 

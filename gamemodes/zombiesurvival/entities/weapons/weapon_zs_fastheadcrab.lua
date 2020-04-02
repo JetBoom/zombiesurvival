@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_headcrab"
 
-SWEP.PrintName = "Fast Headcrab"
+SWEP.PrintName = ""..translate.Get("class_fast_headcrab")
 
 SWEP.PounceDamage = 6
 

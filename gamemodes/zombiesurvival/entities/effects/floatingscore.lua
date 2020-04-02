@@ -55,7 +55,7 @@ function EFFECT:Render()
 				draw_SimpleText(amount, "ZS3D2DFont2Big", 0, 0, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
 				draw_SimpleText(amount, "ZS3D2DFont2Big", 0, 0, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-				draw_SimpleText(flag == FM_LOCALKILLOTHERASSIST and " (assisted)" or flag == FM_LOCALASSISTOTHERKILL and " (assist)" or "", "ZS3D2DFont2", 0, 0, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw_SimpleText(flag == FM_LOCALKILLOTHERASSIST and translate.Get("fs_assisted") or flag == FM_LOCALASSISTOTHERKILL and translate.Get("fs_assist") or "", "ZS3D2DFont2", 0, 0, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 		else
 			draw_SimpleText(flooramount, "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_RIGHT)
@@ -63,7 +63,7 @@ function EFFECT:Render()
 			if flag == 0 then
 				righttext = tostring(amount - flooramount):sub(2)
 			else
-				righttext = tostring(amount - flooramount):sub(2)..(flag == FM_LOCALKILLOTHERASSIST and " (assisted)" or flag == FM_LOCALASSISTOTHERKILL and " (assist)" or "")
+				righttext = tostring(amount - flooramount):sub(2)..(flag == FM_LOCALKILLOTHERASSIST and translate.Get("fs_assisted") or flag == FM_LOCALASSISTOTHERKILL and translate.Get("fs_assist") or "")
 			end
 			draw_SimpleText(righttext, "ZS3D2DFont2", 2, 8, col, TEXT_ALIGN_LEFT)
 		end

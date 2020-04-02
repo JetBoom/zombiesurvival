@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpn_broadside_name"
-SWEP.Description = ""..translate.Get"wpn_broadside_desc"
+SWEP.PrintName = ""..translate.Get("wpn_broadside_name")
+SWEP.Description = ""..translate.Get("wpn_broadside_desc")
 
 SWEP.UseHands = false
 
@@ -40,7 +40,7 @@ SWEP.Tier = 5
 SWEP.MaxStock = 2
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_broadside_variant_name", ""..translate.Get"wpn_broadside_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_broadside_variant_name"), ""..translate.Get("wpn_broadside_variant_desc"), function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 0.24
 	wept.Primary.Automatic = true
 	wept.Recoil = 0
