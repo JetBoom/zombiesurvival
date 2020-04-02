@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_reaper_name"
-SWEP.Description = ""..translate.Get"wpn_reaper_desc"
+SWEP.PrintName = ""..translate.Get("wpn_reaper_name")
+SWEP.Description = ""..translate.Get("wpn_reaper_desc")
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0

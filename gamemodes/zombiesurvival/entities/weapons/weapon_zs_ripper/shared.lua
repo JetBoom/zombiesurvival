@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpnc_ripper_name"
-SWEP.Description = ""..translate.Get"wpnc_ripper_desc"
+SWEP.PrintName = ""..translate.Get("wpnc_ripper_name")
+SWEP.Description = ""..translate.Get("wpnc_ripper_desc")
 
 SWEP.Base = "weapon_zs_baseproj"
 

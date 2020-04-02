@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombietorso"
 
-SWEP.PrintName = "Skeletal Crawler"
+SWEP.PrintName = ""..translate.Get("class_skeletal_lurker")
 
 SWEP.MeleeDelay = 0.25
 SWEP.MeleeDamage = 20

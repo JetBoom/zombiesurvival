@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_poisonheadcrab"
 
-SWEP.PrintName = "Barbed Headcrab"
+SWEP.PrintName = ""..translate.Get("class_barbed_headcrab")
 
 SWEP.PounceDamage = 36
 

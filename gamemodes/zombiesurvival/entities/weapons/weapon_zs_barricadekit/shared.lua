@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"tool_barricadekit_name"
-SWEP.Description = ""..translate.Get"tool_barricadekit_desc"
+SWEP.PrintName = ""..translate.Get("tool_barricadekit_name")
+SWEP.Description = ""..translate.Get("tool_barricadekit_desc")
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

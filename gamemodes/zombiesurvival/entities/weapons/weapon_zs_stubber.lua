@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = ""..translate.Get"wpn_stubber_name"
-SWEP.Description = ""..translate.Get"wpn_stubber_desc"
+SWEP.PrintName = ""..translate.Get("wpn_stubber_name")
+SWEP.Description = ""..translate.Get("wpn_stubber_desc")
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0
@@ -48,7 +48,7 @@ SWEP.IronSightsAng = Vector(0, 0, 0)
 SWEP.WalkSpeed = SPEED_SLOW
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_stubber_variant_name", ""..translate.Get"wpn_stubber_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_stubber_variant_name"), ""..translate.Get("wpn_stubber_variant_desc"), function(wept)
 	wept.HeadshotMulti = 2.2
 	wept.Primary.ClipSize = math.ceil(wept.Primary.ClipSize / 2)
 	wept.Primary.Delay = wept.Primary.Delay * 1.7

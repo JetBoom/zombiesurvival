@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_axe_name"
-SWEP.Description = ""..translate.Get"wpn_axe_desc"
+SWEP.PrintName = ""..translate.Get("wpn_axe_name")
+SWEP.Description = ""..translate.Get("wpn_axe_desc")
 
 if CLIENT then
 	SWEP.ViewModelFOV = 55

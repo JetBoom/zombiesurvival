@@ -1,7 +1,7 @@
 SWEP.ZombieOnly = true
 SWEP.IsMelee = true
 
-SWEP.PrintName = "Zombie"
+SWEP.PrintName = ""..translate.Get("class_zombie")
 
 SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")
 SWEP.WorldModel = ""

@@ -40,7 +40,7 @@ function GM:DrawTargetID(ent, fade)
 		if self.MedicalAura then
 			if ent:GetDTBool(DT_PLAYER_BOOL_FRAIL) then
 				util.ColorCopy(COLOR_LBLUE, colTemp)
-				draw.SimpleTextBlur(translate.Get"p_frail", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur(translate.Get("p_frail"), "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 
@@ -59,7 +59,7 @@ function GM:DrawTargetID(ent, fade)
 			end
 			if phant >= 1 then
 				util.ColorCopy(COLOR_MIDGRAY, colTemp)
-				draw.SimpleTextBlur(translate.Get"p_bloodlust", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur(translate.Get("p_bloodlust"), "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 		end
@@ -76,7 +76,7 @@ function GM:DrawTargetID(ent, fade)
 	else
 		local holding = ent:GetHolding()
 		if holding:IsValid() then
-			draw.SimpleTextBlur(string_format(translate.Get"p_carrying", string_match(holding:GetModel(), ".*/(.+)%.mdl") or "object"), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlur(string_format(translate.Get("p_carrying"), string_match(holding:GetModel(), ".*/(.+)%.mdl") or "object"), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 		else
 			local wep = ent:GetActiveWeapon()
 			if wep:IsValid() then
@@ -105,10 +105,10 @@ function GM:DrawSigilTargetHint(ent, fade)
 	colTemp.a = fade * 128
 	util.ColorCopy(color_white, colTemp)
 
-	draw.SimpleTextBlur(translate.Get"t_sigil", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+	draw.SimpleTextBlur(translate.Get("t_sigil"), "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 	y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 0
 
-	draw.SimpleTextBlur(translate.Get"t_sigil_help", "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+	draw.SimpleTextBlur(translate.Get("t_sigil_help"), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 end
 
 GM.TraceTarget = NULL

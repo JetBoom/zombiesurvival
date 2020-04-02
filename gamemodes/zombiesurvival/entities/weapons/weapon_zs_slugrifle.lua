@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_baseshotgun")
 
-SWEP.PrintName = ""..translate.Get"wpn_tiny_name"
-SWEP.Description = ""..translate.Get"wpn_tiny_desc"
+SWEP.PrintName = ""..translate.Get("wpn_tiny_name")
+SWEP.Description = ""..translate.Get("wpn_tiny_desc")
 SWEP.Slot = 3
 SWEP.SlotPos = 0
 

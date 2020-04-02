@@ -99,7 +99,7 @@ local function ItemPanelDoClick(self)
 		viewer.m_VBG:SetVisible(true)
 
 		if sweptable.NoDismantle then
-			desctext = translate.Format("cannot_be_dismantled_for_x", desctext)
+			desctext = desctext .. "\nCannot be dismantled for scrap."
 		end
 
 		viewer.m_Desc:MoveBelow(viewer.m_VBG, 8)
@@ -231,7 +231,7 @@ function GM:CreateInventoryInfoViewer()
 	end
 	viewer.m_CraftBtns = craftbtns
 
-	local craftwith = EasyLabel(viewer, translate.Get"inventory_craft_with", "ZSBodyTextFontBig", COLOR_WHITE)
+	local craftwith = EasyLabel(viewer, translate.Get("inventory_craft_with"), "ZSBodyTextFontBig", COLOR_WHITE)
 	craftwith:SetSize(viewer:GetWide() / 1.15, 27 * screenscale)
 	craftwith:SetVisible(false)
 	viewer.m_CraftWith = craftwith
@@ -344,7 +344,7 @@ function GM:OpenInventory()
 	local topspace = vgui.Create("DPanel", frame)
 	topspace:SetWide(wid - 16)
 
-	local title = EasyLabel(topspace, translate.Get"inventory_title", "ZSHUDFontSmall", COLOR_WHITE)
+	local title = EasyLabel(topspace, translate.Get("inventory_title"), "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
 
 	local _, y = title:GetPos()

@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpn_pollutor_name"
-SWEP.Description = ""..translate.Get"wpn_pollutor_desc"
+SWEP.PrintName = ""..translate.Get("wpn_pollutor_name")
+SWEP.Description = ""..translate.Get("wpn_pollutor_desc")
 
 SWEP.Base = "weapon_zs_baseproj"
 
@@ -31,7 +31,7 @@ SWEP.FireAnimSpeed = 0.4
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.05)
 
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_pollutor_variant_name", ""..translate.Get"wpn_pollutor_variant_desc", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_pollutor_variant_name"), ""..translate.Get("wpn_pollutor_variant_desc"), function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.86
 
 	if SERVER then
@@ -46,9 +46,9 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_poll
 	end
 end)
 branch.Colors = {Color(255, 160, 50), Color(215, 120, 50), Color(175, 100, 40)}
-branch.NewNames = {""..translate.Get"wpnq2_pollutor_variant_name", ""..translate.Get"wpnq2_pollutor_variant_name2", ""..translate.Get"wpnq2_pollutor_variant_name3"}
+branch.NewNames = {""..translate.Get("wpnq2_pollutor_variant_name"), ""..translate.Get("wpnq2_pollutor_variant_name2"), ""..translate.Get("wpnq2_pollutor_variant_name3")}
 
-branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, ""..translate.Get"wpn_pollutor_variant2_name", ""..translate.Get"wpn_pollutor_variant2_desc", function(wept)
+branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, ""..translate.Get("wpn_pollutor_variant2_name"), ""..translate.Get("wpn_pollutor_variant2_desc"), function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.77
 
 	if SERVER then
@@ -63,7 +63,7 @@ branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, ""..translate.Get"wpn_pollutor_v
 	end
 end)
 branch.Colors = {Color(50, 160, 255), Color(50, 130, 215), Color(40, 115, 175)}
-branch.NewNames = {""..translate.Get"wpnq2_pollutor_variant2_name", ""..translate.Get"wpnq2_pollutor_variant2_name2", ""..translate.Get"wpnq2_pollutor_variant2_name3"}
+branch.NewNames = {""..translate.Get("wpnq2_pollutor_variant2_name"), ""..translate.Get("wpnq2_pollutor_variant2_name2"), ""..translate.Get("wpnq2_pollutor_variant2_name3")}
 
 function SWEP:EmitFireSound()
 	self:EmitSound("^weapons/mortar/mortar_fire1.wav", 70, math.random(88, 92), 0.65)

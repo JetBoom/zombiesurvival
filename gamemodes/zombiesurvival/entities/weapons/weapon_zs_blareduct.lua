@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpnc_blareduct_name"
+SWEP.PrintName = ""..translate.Get("wpnc_blareduct_name")
 SWEP.Slot = 3
 SWEP.SlotPos = 0
 

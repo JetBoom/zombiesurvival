@@ -1,4 +1,4 @@
-SWEP.PrintName = "Sigil Placer"
+SWEP.PrintName = ""..translate.Get("wpnad_sigilplacer_name")
 
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"

@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_zombietorso"
 
-SWEP.PrintName = "Shadow Lurker"
+SWEP.PrintName = ""..translate.Get("class_shadow_lurker")
 
 SWEP.MeleeDelay = 0.25
 SWEP.MeleeDamage = 20

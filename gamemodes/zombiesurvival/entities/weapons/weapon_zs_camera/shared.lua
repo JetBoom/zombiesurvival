@@ -1,8 +1,8 @@
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/props_c17/light_domelight02_off.mdl")
 
-SWEP.PrintName = ""..translate.Get"dpl_camera_name"
-SWEP.Description = ""..translate.Get"dpl_camera_desc"
+SWEP.PrintName = ""..translate.Get("dpl_camera_name")
+SWEP.Description = ""..translate.Get("dpl_camera_desc")
 
 SWEP.AmmoIfHas = true
 

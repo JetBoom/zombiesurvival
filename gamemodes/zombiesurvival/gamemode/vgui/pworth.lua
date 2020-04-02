@@ -165,10 +165,10 @@ local function SaveCurrentCart(name)
 end
 
 local function SaveDoClick(self)
-	local frame = Derma_StringRequest(translate.Get"worth_save_cart", translate.Get"worth_enter_cart", translate.Get"worth_name",
+	local frame = Derma_StringRequest(translate.Get("worth_save_cart"), translate.Get("worth_enter_cart"), translate.Get("worth_name"),
 	function(strTextOut) SaveCurrentCart(strTextOut) end,
 	function(strTextOut) end,
-	translate.Get"skills_misc_ok", translate.Get"skills_misc_cancel")
+	translate.Get("skills_misc_ok"), translate.Get("skills_misc_cancel"))
 
 	frame:GetChildren()[5]:GetChildren()[2]:SetTextColor(Color(30, 30, 30))
 end
@@ -218,9 +218,9 @@ function MakepWorth()
 	topspace:SetWide(wid * 0.75)
 	topspace:SetPaintBackground(false)
 
-	local title = EasyLabel(topspace, translate.Get"worth_menu_title", "ZSHUDFontSmall", COLOR_WHITE)
+	local title = EasyLabel(topspace, translate.Get("worth_menu_title"), "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
-	local subtitle = EasyLabel(topspace, translate.Get"worth_menu_title2", "ZSHUDFontTiny", COLOR_WHITE)
+	local subtitle = EasyLabel(topspace, translate.Get("worth_menu_title2"), "ZSHUDFontTiny", COLOR_WHITE)
 	subtitle:CenterHorizontal()
 	subtitle:MoveBelow(title, 4)
 
@@ -253,14 +253,14 @@ function MakepWorth()
 	propertysheet.Paint = function() end
 
 	local list = vgui.Create("DPanelList", propertysheet)
-	local sheet = propertysheet:AddSheet(translate.Get"worth_cat_fav", list, "icon16/heart.png", false, false)
+	local sheet = propertysheet:AddSheet(translate.Get("worth_cat_fav"), list, "icon16/heart.png", false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	list:EnableVerticalScrollbar(true)
 	list:SetWide(propertysheet:GetWide() - 16)
 	list:SetSpacing(2)
 	list:SetPadding(2)
 
-	local savebutton = EasyButton(nil, translate.Get"worth_save_current_cart", 0, 10)
+	local savebutton = EasyButton(nil, translate.Get("worth_save_current_cart"), 0, 10)
 	savebutton.DoClick = SaveDoClick
 	savebutton:SetFont("ZSHUDFontTiny")
 	list:AddItem(savebutton)
@@ -286,7 +286,7 @@ function MakepWorth()
 			defimage:SizeToContents()
 			defimage:SetSize(16 * limitedscale, 16 * limitedscale)
 			defimage:SetMouseInputEnabled(true)
-			defimage:SetTooltip(translate.Get"worth_saved_cart_help")
+			defimage:SetTooltip(translate.Get("worth_saved_cart_help"))
 			defimage:SetPos(x, cartpan:GetTall() * 0.5 - defimage:GetTall() * 0.5)
 			x = x + defimage:GetWide() + 4
 		end
@@ -300,7 +300,7 @@ function MakepWorth()
 		checkbutton:SetImage("icon16/accept.png")
 		checkbutton:SizeToContents()
 		checkbutton:SetSize(16 * limitedscale, 16 * limitedscale)
-		checkbutton:SetTooltip(translate.Get"worth_saved_cart_purchase")
+		checkbutton:SetTooltip(translate.Get("worth_saved_cart_purchase"))
 		x = x - checkbutton:GetWide() - 8
 		checkbutton:SetPos(x, cartpan:GetTall() * 0.5 - checkbutton:GetTall() * 0.5)
 		checkbutton.ID = i
@@ -310,7 +310,7 @@ function MakepWorth()
 		loadbutton:SetImage("icon16/folder_go.png")
 		loadbutton:SizeToContents()
 		loadbutton:SetSize(16 * limitedscale, 16 * limitedscale)
-		loadbutton:SetTooltip(translate.Get"worth_saved_cart_load")
+		loadbutton:SetTooltip(translate.Get("worth_saved_cart_load"))
 		x = x - loadbutton:GetWide() - 8
 		loadbutton:SetPos(x, cartpan:GetTall() * 0.5 - loadbutton:GetTall() * 0.5)
 		loadbutton.ID = i
@@ -321,9 +321,9 @@ function MakepWorth()
 		defaultbutton:SizeToContents()
 		defaultbutton:SetSize(16 * limitedscale, 16 * limitedscale)
 		if cartname == defaultcart then
-			defaultbutton:SetTooltip(translate.Get"worth_saved_cart_remove")
+			defaultbutton:SetTooltip(translate.Get("worth_saved_cart_remove"))
 		else
-			defaultbutton:SetTooltip(translate.Get"worth_saved_cart_default")
+			defaultbutton:SetTooltip(translate.Get("worth_saved_cart_default"))
 		end
 		x = x - defaultbutton:GetWide() - 8
 		defaultbutton:SetPos(x, cartpan:GetTall() * 0.5 - defaultbutton:GetTall() * 0.5)
@@ -334,7 +334,7 @@ function MakepWorth()
 		deletebutton:SetImage("icon16/bin.png")
 		deletebutton:SizeToContents()
 		deletebutton:SetSize(16 * limitedscale, 16 * limitedscale)
-		deletebutton:SetTooltip(translate.Get"worth_saved_cart_delete")
+		deletebutton:SetTooltip(translate.Get("worth_saved_cart_delete"))
 		x = x - deletebutton:GetWide() - 8
 		deletebutton:SetPos(x, cartpan:GetTall() * 0.5 - loadbutton:GetTall() * 0.5)
 		deletebutton.ID = i
@@ -373,7 +373,7 @@ function MakepWorth()
 
 	local checkout = vgui.Create("DButton", frame)
 	checkout:SetFont("ZSHUDFontSmall")
-	checkout:SetText(translate.Get"worth_checkout")
+	checkout:SetText(translate.Get("worth_checkout"))
 	checkout:SizeToContents()
 	checkout:SetSize(130 * screenscale, 30 * screenscale)
 	checkout:AlignBottom(8)
@@ -382,7 +382,7 @@ function MakepWorth()
 
 	local randombutton = vgui.Create("DButton", frame)
 	randombutton:SetFont("ZSHUDFontTiny")
-	randombutton:SetText(translate.Get"worth_random")
+	randombutton:SetText(translate.Get("worth_random"))
 	randombutton:SetSize(64 * screenscale, 16 * screenscale)
 	randombutton:AlignBottom(8)
 	randombutton:AlignRight(8)
@@ -390,7 +390,7 @@ function MakepWorth()
 
 	local clearbutton = vgui.Create("DButton", frame)
 	clearbutton:SetFont("ZSHUDFontTiny")
-	clearbutton:SetText(translate.Get"worth_clear")
+	clearbutton:SetText(translate.Get("worth_clear"))
 	clearbutton:SetSize(64 * screenscale, 16 * screenscale)
 	clearbutton:AlignRight(8)
 	clearbutton:MoveAbove(randombutton, 8)

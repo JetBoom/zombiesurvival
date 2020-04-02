@@ -1076,7 +1076,7 @@ function GM:DrawCrateIndicators()
 			surface_SetDrawColor(255, 255, 255, alpha)
 			surface_DrawTexturedRect(-123, -113, 248, 228)
 
-			draw_SimpleTextBlurry(translate.Get"arsenal_crate", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("arsenal_crate"), "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
 			cam_IgnoreZ(false)
@@ -1150,7 +1150,7 @@ function GM:DrawRemantlerIndicators()
 			surface_SetDrawColor(255, 255, 255, alpha)
 			surface_DrawTexturedRect(-128, -128, 256, 256)
 
-			draw_SimpleTextBlurry(translate.Get"weapon_remantler_distance", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("weapon_remantler_distance"), "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
 			cam_IgnoreZ(false)
@@ -1184,7 +1184,7 @@ function GM:DrawNestIndicators()
 		surface_SetDrawColor(255, 255, 255, alpha)
 		surface_DrawTexturedRect(-128, -128, 256, 256)
 
-		draw_SimpleTextBlurry(translate.Get"nest_distance", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Get("nest_distance"), "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 		if distance < 80000 then
 			local nown = nest:GetNestOwner()
@@ -1673,18 +1673,18 @@ function GM:HumanMenu()
 
 	local hei = draw_GetFontHeight("ZSHUDFontSmall")
 
-	local selecteditemtitle = EasyLabel(panel, translate.Get"alt_selected_item", "ZSHUDFontSmall", color_white)
+	local selecteditemtitle = EasyLabel(panel, translate.Get("alt_selected_item"), "ZSHUDFontSmall", color_white)
 	selecteditemtitle:SetContentAlignment(5)
 	panel:AddItem(selecteditemtitle)
 
-	local selecteditemlabel = EasyLabel(panel, translate.Get"alt_selected_fists", "ZSHUDFontSmaller", color_white)
+	local selecteditemlabel = EasyLabel(panel, translate.Get("alt_selected_fists"), "ZSHUDFontSmaller", color_white)
 	selecteditemlabel:SetContentAlignment(5)
 	panel:AddItem(selecteditemlabel)
 	panel.SelectedItemLabel = selecteditemlabel
 
 	local gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText(translate.Get"alt_give_item")
+	gwbtn:SetText(translate.Get("alt_give_item"))
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = GiveWeapon
@@ -1692,7 +1692,7 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText(translate.Get"alt_give_item5")
+	gwbtn:SetText(translate.Get("alt_give_item5"))
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = GiveWeaponClip
@@ -1700,7 +1700,7 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText(translate.Get"alt_drop_item")
+	gwbtn:SetText(translate.Get("alt_drop_item"))
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = DropWeapon
@@ -1708,7 +1708,7 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText(translate.Get"alt_empty_clip")
+	gwbtn:SetText(translate.Get("alt_empty_clip"))
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = EmptyClip
@@ -1716,21 +1716,21 @@ function GM:HumanMenu()
 
 	gwbtn = vgui.Create("DButton")
 	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText(translate.Get"alt_dismantle_item")
+	gwbtn:SetText(translate.Get("alt_dismantle_item"))
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = DismantleWeapon
 	panel:AddItem(gwbtn)
 
-	panel:AddItem(EasyLabel(panel, translate.Get"alt_resupply_ammo", "DefaultFont", color_white))
+	panel:AddItem(EasyLabel(panel, translate.Get("alt_resupply_ammo"), "DefaultFont", color_white))
 	local dropdown = vgui.Create("DComboBox", panel)
 	dropdown:SetMouseInputEnabled(true)
-	dropdown:AddChoice(translate.Get"alt_resupply_held")
+	dropdown:AddChoice(translate.Get("alt_resupply_held"))
 	for k,v in pairs(self.AmmoResupply) do
 		dropdown:AddChoice(self.AmmoNames[k])
 	end
 	dropdown.OnSelect = function(me, index, value, data)
-		if value == translate.Get"alt_resupply_held" then
+		if value == translate.Get("alt_resupply_held") then
 			MySelf.ResupplyChoice = nil
 			RunConsoleCommand("zs_resupplyammotype", "default")
 			return
@@ -1744,7 +1744,7 @@ function GM:HumanMenu()
 			end
 		end
 	end
-	dropdown:SetText(translate.Get"alt_resupply_held")
+	dropdown:SetText(translate.Get("alt_resupply_held"))
 	dropdown:SetTextColor(color_black)
 	panel:AddItem(dropdown)
 

@@ -1,8 +1,8 @@
 GM.WeaponQualityModifiers = {}
 GM.WeaponQualities = {
-	{""..translate.Get"q_sturdy", 1.09, ""..translate.Get"q_tuned"},
-	{""..translate.Get"q_honed", 1.19, ""..translate.Get"q_modified"},
-	{""..translate.Get"q_perfected", 1.35, ""..translate.Get"q_reformed"}
+	{""..translate.Get("q_sturdy"), 1.09, ""..translate.Get("q_tuned")},
+	{""..translate.Get("q_honed"), 1.19, ""..translate.Get("q_modified")},
+	{""..translate.Get("q_perfected"), 1.35, ""..translate.Get("q_reformed")}
 }
 GM.WeaponQualityColors = {
 	{Color(235, 235, 115), Color(172, 219, 105)},
@@ -67,32 +67,32 @@ function GM:AddNewRemantleBranch(swep, no, printname, desc, branchfunc)
 	return datatab
 end
 
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MIN_SPREAD, 				""..translate.Get"stat_min_spread", 			false, 	{ConeMin = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_SPREAD,					""..translate.Get"stat_mix_spread", 			false, 	{ConeMax = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_FIRE_DELAY,					""..translate.Get"stat_fire_delay", 				false, 	{Delay = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RELOAD_SPEED,				""..translate.Get"stat_reload_speed",		 		false, 	{ReloadSpeed = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_CLIP_SIZE,					""..translate.Get"stat_clip_size", 				true, 	{ClipSize = true}).ReqClip = true
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_RANGE,				""..translate.Get"stat_melee_range", 				false, 	{MeleeRange = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_SIZE,					""..translate.Get"stat_melee_size", 				false, 	{MeleeSize = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_IMPACT_DELAY,			""..translate.Get"stat_melee_delay", 		false, 	{SwingTime = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_PROJECTILE_VELOCITY,		""..translate.Get"stat_projectile_velocity", 		false, 	{ProjVelocity = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHORT_TEAM_HEAT,			""..translate.Get"stat_short_heat", 			false, 	{HeatBuildShort = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHOT_COUNT,					""..translate.Get"stat_shot_count", 				true, 	{NumShots = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BULLET_PIERCES,				""..translate.Get"stat_bullet_pierces", 			true, 	{Pierces = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAXIMUM_MINES,				""..translate.Get"stat_max_mines", 			true, 	{MaxMines = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_DISTANCE,				""..translate.Get"stat_max_distance", 		false, 	{MaxDistance = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_AURA_RADIUS,				""..translate.Get"stat_aura_radius", 	false, 	{AuraRange = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RECOIL,						""..translate.Get"stat_recoil", 					false, 	{Recoil = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_DAMAGE,						""..translate.Get"stat_damage", 					false, 	{Damage = true, MeleeDamage = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALRANGE,					""..translate.Get"stat_heal_range", 				false, 	{HealRange = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALCOOLDOWN,				""..translate.Get"stat_heal_cooldown", 		false, 	{Delay = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BUFF_DURATION,				""..translate.Get"stat_buff_duration", 			false, 	{BuffDuration = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_LEG_DAMAGE,					""..translate.Get"stat_slow_strength", 			false, 	{LegDamage = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_REPAIR,						""..translate.Get"stat_repair_strength", 			false, 	{Repair = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_TURRET_SPREAD,				""..translate.Get"stat_turret_spread", 	false, 	{TurretSpread = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALING,					""..translate.Get"stat_healing_amount", 			false, 	{Heal = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEADSHOT_MULTI,				""..translate.Get"stat_headshot_multi", 	false, 	{HeadshotMulti = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_KNOCK,				""..translate.Get"stat_knockback", 				false, 	{MeleeKnockBack = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MIN_SPREAD, 				""..translate.Get("stat_min_spread"), 			false, 	{ConeMin = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_SPREAD,					""..translate.Get("stat_mix_spread"), 			false, 	{ConeMax = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_FIRE_DELAY,					""..translate.Get("stat_fire_delay"), 				false, 	{Delay = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RELOAD_SPEED,				""..translate.Get("stat_reload_speed"),		 		false, 	{ReloadSpeed = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_CLIP_SIZE,					""..translate.Get("stat_clip_size"), 				true, 	{ClipSize = true}).ReqClip = true
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_RANGE,				""..translate.Get("stat_melee_range"), 				false, 	{MeleeRange = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_SIZE,					""..translate.Get("stat_melee_size"), 				false, 	{MeleeSize = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_IMPACT_DELAY,			""..translate.Get("stat_melee_delay"), 		false, 	{SwingTime = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_PROJECTILE_VELOCITY,		""..translate.Get("stat_projectile_velocity"), 		false, 	{ProjVelocity = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHORT_TEAM_HEAT,			""..translate.Get("stat_short_heat"), 			false, 	{HeatBuildShort = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHOT_COUNT,					""..translate.Get("stat_shot_count"), 				true, 	{NumShots = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BULLET_PIERCES,				""..translate.Get("stat_bullet_pierces"), 			true, 	{Pierces = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAXIMUM_MINES,				""..translate.Get("stat_max_mines"), 			true, 	{MaxMines = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_DISTANCE,				""..translate.Get("stat_max_distance"), 		false, 	{MaxDistance = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_AURA_RADIUS,				""..translate.Get("stat_aura_radius"), 	false, 	{AuraRange = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RECOIL,						""..translate.Get("stat_recoil"), 					false, 	{Recoil = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_DAMAGE,						""..translate.Get("stat_damage"), 					false, 	{Damage = true, MeleeDamage = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALRANGE,					""..translate.Get("stat_heal_range"), 				false, 	{HealRange = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALCOOLDOWN,				""..translate.Get("stat_heal_cooldown"), 		false, 	{Delay = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BUFF_DURATION,				""..translate.Get("stat_buff_duration"), 			false, 	{BuffDuration = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_LEG_DAMAGE,					""..translate.Get("stat_slow_strength"), 			false, 	{LegDamage = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_REPAIR,						""..translate.Get("stat_repair_strength"), 			false, 	{Repair = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_TURRET_SPREAD,				""..translate.Get("stat_turret_spread"), 	false, 	{TurretSpread = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALING,					""..translate.Get("stat_healing_amount"), 			false, 	{Heal = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEADSHOT_MULTI,				""..translate.Get("stat_headshot_multi"), 	false, 	{HeadshotMulti = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_KNOCK,				""..translate.Get("stat_knockback"), 				false, 	{MeleeKnockBack = false})
 
 local function ApplyWeaponModifier(modinfo, wept, datatab, remantledescs, i)
 	local displayed = false
@@ -157,7 +157,7 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 			wept.MeleeDamage = wept.MeleeDamage * quality[2]
 		end
 
-		table.insert(remantledescs, "+" .. ((quality[2]-1) * 100) .. "% " .. ""..translate.Get"stat_damage")
+		table.insert(remantledescs, "+" .. ((quality[2]-1) * 100) .. "% " .. ""..translate.Get("stat_damage"))
 	end
 	if wept.AltRemantleModifiers then
 		for modifier, datatab in pairs(wept.AltRemantleModifiers) do

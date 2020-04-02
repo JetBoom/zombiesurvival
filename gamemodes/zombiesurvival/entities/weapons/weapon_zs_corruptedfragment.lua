@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"other_corruptfrag_name"
-SWEP.Description = ""..translate.Get"other_corruptfrag_desc"
+SWEP.PrintName = ""..translate.Get("other_corruptfrag_name")
+SWEP.Description = ""..translate.Get("other_corruptfrag_desc")
 
 SWEP.Base = "weapon_zs_sigilfragment"
 

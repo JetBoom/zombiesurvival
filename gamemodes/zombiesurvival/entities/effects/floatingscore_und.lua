@@ -19,7 +19,7 @@ function EFFECT:Init(data)
 
 	local amount = math.Round(data:GetMagnitude())
 	if amount > 1 then
-		self.Message = translate.Format("fsz_brains_x", amount)
+		self.Message = amount.." BRAINS!"
 	else
 		self.Message = messages[math.random(#messages)]
 	end

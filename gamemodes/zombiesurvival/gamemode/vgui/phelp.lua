@@ -88,7 +88,7 @@ function MakepHelp()
 	Window:SetCursor("pointer")
 	pHelp = Window
 
-	local label = EasyLabel(Window, translate.Get"main_help_title", "ZSHUDFont", color_white)
+	local label = EasyLabel(Window, translate.Get("main_help_title"), "ZSHUDFont", color_white)
 	label:CenterHorizontal()
 	label:AlignTop(8)
 
@@ -127,7 +127,7 @@ function MakepHelp()
 	Window:Center()
 	Window:MakePopup()
 
-	local button = EasyButton(Window, translate.Get"main_credits_title", 8, 4)
+	local button = EasyButton(Window, translate.Get("main_credits_title"), 8, 4)
 	button:SetPos(wide - button:GetWide() - 12, tall - button:GetTall() - 12)
 	button:SetText("Credits")
 	button.DoClick = function(btn) MakepCredits() end

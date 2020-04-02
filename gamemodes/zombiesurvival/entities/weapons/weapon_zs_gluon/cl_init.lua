@@ -77,7 +77,7 @@ local function DrawHeatBar(self, x, y, wid, hei, is3d)
 		if ((CurTime() * 4) % 2) > 1 then
 			colWhite.a = 0
 		else
-			draw.SimpleTextBlurry(translate.Get"venting", is3d and "ZS3D2DFontSmaller" or "ZSHUDFontSmaller", x + wid/2, bary + hei * 0.15, colRed, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlurry(translate.Get("venting"), is3d and "ZS3D2DFontSmaller" or "ZSHUDFontSmaller", x + wid/2, bary + hei * 0.15, colRed, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 end
@@ -95,7 +95,7 @@ function SWEP:Draw2DHUD()
 
 	draw.RoundedBox(16, x, y, wid, hei, colBG)
 	draw.SimpleTextBlurry(spare, spare >= 1000 and "ZSHUDFont" or "ZSHUDFontBig", x + wid * 0.5, y + hei * 0.5, spare == 0 and colRed or colWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.SimpleTextBlurry(translate.Get"heat", "ZSHUDFont", x + wid * 0.5, yy + hei * 0.45, colRed, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleTextBlurry(translate.Get("heat"), "ZSHUDFont", x + wid * 0.5, yy + hei * 0.45, colRed, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 function SWEP:Draw3DHUD(vm, pos, ang)
@@ -108,6 +108,6 @@ function SWEP:Draw3DHUD(vm, pos, ang)
 
 		draw.RoundedBoxEx(32, x, y, wid, hei, colBG, true, false, true, false)
 		draw.SimpleTextBlurry(spare, spare >= 1000 and "ZS3D2DFontSmall" or "ZS3D2DFont", x + wid * 0.5, y + hei * 0.5, spare == 0 and colRed or colWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleTextBlurry(translate.Get"heat", "ZS3D2DFontSmall", x + wid * 0.5, y - hei * 1, colRed, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleTextBlurry(translate.Get("heat"), "ZS3D2DFontSmall", x + wid * 0.5, y - hei * 1, colRed, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 end

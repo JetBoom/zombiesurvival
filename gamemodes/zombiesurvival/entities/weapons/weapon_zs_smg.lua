@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_shredder_name"
-SWEP.Description = ""..translate.Get"wpn_shredder_desc"
+SWEP.PrintName = ""..translate.Get("wpn_shredder_name")
+SWEP.Description = ""..translate.Get("wpn_shredder_desc")
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0
@@ -48,7 +48,7 @@ SWEP.IronSightsAng = Vector(0.8, 0, 0)
 SWEP.IronSightsPos = Vector(-5.33, 7, 1.8)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_shredder_variant_name", ""..translate.Get"wpn_shredder_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_shredder_variant_name"), ""..translate.Get("wpn_shredder_variant_desc"), function(wept)
 	wept.Primary.Delay = 0.15
 	wept.ReloadSpeed = 0.9
 

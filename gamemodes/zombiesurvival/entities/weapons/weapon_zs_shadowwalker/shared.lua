@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Shadow Walker"
+SWEP.PrintName = ""..translate.Get("class_shadow_walker")
 
 SWEP.MeleeDamage = 30
 

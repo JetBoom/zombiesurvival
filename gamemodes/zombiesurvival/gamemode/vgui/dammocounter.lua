@@ -27,13 +27,13 @@ function PANEL:Init()
 	self.m_DropButton = vgui.Create("DImageButton", self)
 	self.m_DropButton:SetImage("icon16/box.png")
 	self.m_DropButton:SizeToContents()
-	self.m_DropButton:SetTooltip(translate.Get"alt_drop_ammo")
+	self.m_DropButton:SetTooltip(translate.Get("alt_drop_ammo"))
 	self.m_DropButton.DoClick = DropDoClick
 
 	self.m_GiveButton = vgui.Create("DImageButton", self)
 	self.m_GiveButton:SetImage("icon16/user_go.png")
 	self.m_GiveButton:SizeToContents()
-	self.m_GiveButton:SetTooltip(translate.Get"alt_give_ammo")
+	self.m_GiveButton:SetTooltip(translate.Get("alt_give_ammo"))
 	self.m_GiveButton.DoClick = GiveDoClick
 
 	self:SetAmmoType("pistol")

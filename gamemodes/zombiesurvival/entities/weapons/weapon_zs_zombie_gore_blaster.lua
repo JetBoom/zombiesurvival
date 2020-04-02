@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Gore Blaster Zombie"
+SWEP.PrintName = ""..translate.Get("class_zombie_gore_blaster")
 
 SWEP.Base = "weapon_zs_zombie"
 

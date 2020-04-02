@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_crowbar_name"
-SWEP.Description = ""..translate.Get"wpn_crowbar_desc"
+SWEP.PrintName = ""..translate.Get("wpn_crowbar_name")
+SWEP.Description = ""..translate.Get("wpn_crowbar_desc")
 
 if CLIENT then
 	SWEP.ViewModelFOV = 65

@@ -1,7 +1,7 @@
 SWEP.Base = "weapon_zs_basemelee"
 
-SWEP.PrintName = ""..translate.Get"tool_junkpack_name"
-SWEP.Description = ""..translate.Get"tool_junkpack_desc"
+SWEP.PrintName = ""..translate.Get("tool_junkpack_name")
+SWEP.Description = ""..translate.Get("tool_junkpack_desc")
 
 SWEP.ViewModel = "models/weapons/c_aegiskit.mdl"
 SWEP.WorldModel = "models/props_debris/wood_board06a.mdl"

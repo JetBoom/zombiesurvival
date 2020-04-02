@@ -1,6 +1,6 @@
 INC_CLIENT()
 
-SWEP.PrintName = "Crow"
+SWEP.PrintName = ""..translate.Get("class_crow")
 SWEP.DrawCrosshair = false
 
 function SWEP:PrimaryAttack()

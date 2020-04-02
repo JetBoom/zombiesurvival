@@ -1,7 +1,7 @@
 SWEP.Base = "weapon_zs_wraith"
 DEFINE_BASECLASS("weapon_zs_wraith")
 
-SWEP.PrintName = "Tormented Wraith"
+SWEP.PrintName = ""..translate.Get("class_tormented_wraith")
 
 SWEP.MeleeDelay = 0.4
 SWEP.MeleeReach = 48

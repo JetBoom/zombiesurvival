@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_oberon_name"
-SWEP.Description = ""..translate.Get"wpn_oberon_desc"
+SWEP.PrintName = ""..translate.Get("wpn_oberon_name")
+SWEP.Description = ""..translate.Get("wpn_oberon_desc")
 
 if CLIENT then
 	SWEP.Slot = 3
@@ -79,7 +79,7 @@ SWEP.Tier = 3
 SWEP.PointsMultiplier = GAMEMODE.PulsePointsMultiplier
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_LEG_DAMAGE, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_oberon_variant_name", ""..translate.Get"wpn_oberon_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_oberon_variant_name"), ""..translate.Get("wpn_oberon_variant_desc"), function(wept)
 	wept.RequiredClip = 3
 	wept.Primary.ClipSize = 21
 	wept.Primary.Delay = 0.6

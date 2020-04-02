@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpn_helios_name"
-SWEP.Description = ""..translate.Get"wpn_helios_desc"
+SWEP.PrintName = ""..translate.Get("wpn_helios_name")
+SWEP.Description = ""..translate.Get("wpn_helios_desc")
 
 SWEP.Base = "weapon_zs_base"
 
@@ -44,7 +44,7 @@ SWEP.TracerName = "tracer_gluon"
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_SHORT_TEAM_HEAT, -0.01, 1)
 
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_helios_variant_name", translate.Get"wpn_helios_variant_desc", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get("wpn_helios_variant_name"), translate.Get("wpn_helios_variant_desc"), function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 10.5/12.5
 	wept.TracerName = "tracer_higgs"
 	wept.EmitStartFiringSound = function(self)
@@ -55,9 +55,9 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, translate.Get"wpn_helios_v
 	wept.LegDamage = true
 end)
 branch.Colors = {Color(160, 160, 160), Color(105, 105, 105), Color(50, 50, 50)}
-branch.NewNames = {translate.Get"wpnq_helios_variant_name", translate.Get"wpnq_helios_variant_name2", translate.Get"wpnq_helios_variant_name3"}
+branch.NewNames = {translate.Get("wpnq_helios_variant_name"), translate.Get("wpnq_helios_variant_name2"), translate.Get("wpnq_helios_variant_name3")}
 
-GAMEMODE:AddNewRemantleBranch(SWEP, 2, translate.Get"wpn_helios_variant2_name", translate.Get"wpn_helios_variant2_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 2, translate.Get("wpn_helios_variant2_name"), translate.Get("wpn_helios_variant2_desc"), function(wept)
 	wept.GluonDamage = function(self)
 		return wept.Primary.Damage + (self:GetShortHeat() * 0.25 * wept.Primary.Damage)
 	end

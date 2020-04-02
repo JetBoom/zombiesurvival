@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_gigagorechild"
 
-SWEP.PrintName = "Giga Shadow Child"
+SWEP.PrintName = ""..translate.Get("class_giga_shadow_child")
 
 SWEP.MeleeDamage = 24
 SWEP.MeleeForceScale = 1

@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"tool_spotlamp_name"
-SWEP.Description = ""..translate.Get"tool_spotlamp_desc"
+SWEP.PrintName = ""..translate.Get("tool_spotlamp_name")
+SWEP.Description = ""..translate.Get("tool_spotlamp_desc")
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/props_combine/combine_light001a.mdl")

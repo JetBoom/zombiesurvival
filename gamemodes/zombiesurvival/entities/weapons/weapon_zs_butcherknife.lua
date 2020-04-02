@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_butcherknife_name"
-SWEP.Description = ""..translate.Get"wpn_butcherknife_desc"
+SWEP.PrintName = ""..translate.Get("wpn_butcherknife_name")
+SWEP.Description = ""..translate.Get("wpn_butcherknife_desc")
 
 if CLIENT then
 	SWEP.ViewModelFOV = 55

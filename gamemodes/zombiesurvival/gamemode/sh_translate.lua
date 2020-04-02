@@ -11,18 +11,16 @@ local DefaultLanguage = "en"
 local CurrentLanguage = DefaultLanguage
 
 if CLIENT then
-    -- Need to make a new convar since gmod_language isn't sent to server.
-    CreateClientConVar("gmod_language_rep", "en", false, true)
+	-- Need to make a new convar since gmod_language isn't sent to server.
+	CreateClientConVar("gmod_language_rep", "en", false, true)
 
-    CurrentLanguage = GetConVarString("gmod_language")
-
-    timer.Create("checklanguagechange", 1, 0, function()
-        CurrentLanguage = GetConVarString("gmod_language")
-        if CurrentLanguage ~= GetConVarString("gmod_language_rep") then
-            -- Let server know our language changed.
-            RunConsoleCommand("gmod_language_rep", CurrentLanguage)
-        end
-    end)
+	timer.Create("checklanguagechange", 1, 0, function()
+		CurrentLanguage = GetConVar("gmod_language"):GetString()
+		if CurrentLanguage ~= GetConVar("gmod_language_rep"):GetString() then
+			-- Let server know our language changed.
+			RunConsoleCommand("gmod_language_rep", CurrentLanguage)
+		end
+	end)
 end
 
 function translate.GetLanguages()
@@ -49,35 +47,25 @@ function translate.AddTranslation(id, text)
 	Translations[AddingLanguage][id] = text
 end
 
-local function translateGet(id)
+function translate.Get(id)
 	return translate.GetTranslations(CurrentLanguage)[id] or translate.GetTranslations(DefaultLanguage)[id] or ("@"..id.."@")
 end
 
-local function translateFormat(id, ...)
-	return string.format(translateGet(id), ...)
+function translate.Format(id, ...)
+	return string.format(translate.Get(id), ...)
 end
 
 if SERVER then
-	function translate.Get(id)
-		CurrentLanguage = DefaultLanguage
-		return translateGet(id)
-	end
-	
 	function translate.ClientGet(pl, ...)
 		CurrentLanguage = pl:GetInfo("gmod_language_rep")
-		return translateGet(...)
+		return translate.Get(...)
 	end
-	
-	function translate.Format(id, ...)
-		CurrentLanguage = DefaultLanguage
-		return translateFormat(id, ...)
-	end
-	
+
 	function translate.ClientFormat(pl, ...)
 		CurrentLanguage = pl:GetInfo("gmod_language_rep")
-		return translateFormat(...)
+		return translate.Format(...)
 	end
-	
+
 	function PrintTranslatedMessage(printtype, str, ...)
 		for _, pl in pairs(player.GetAll()) do
 			pl:PrintMessage(printtype, translate.ClientFormat(pl, str, ...))
@@ -86,24 +74,15 @@ if SERVER then
 end
 
 if CLIENT then
-	function translate.Get(id)
-		return translateGet(id)
-	end
-	
 	function translate.ClientGet(_, ...)
-		return translateGet(...)
+		return translate.Get(...)
 	end
-	
-	function translate.Format(id, ...)
-		return translateFormat(id, ...)
-	end
-	
 	function translate.ClientFormat(_, ...)
-		return translateFormat(...)
+		return translate.Format(...)
 	end
 end
 
-for i, filename in pairs(file.Find(GM.FolderName.. "/gamemode/languages/*.lua", "LUA")) do
+for i, filename in pairs(file.Find(GM.FolderName.."/gamemode/languages/*.lua", "LUA")) do
 	LANGUAGE = {}
 	AddCSLuaFile("languages/"..filename)
 	include("languages/"..filename)

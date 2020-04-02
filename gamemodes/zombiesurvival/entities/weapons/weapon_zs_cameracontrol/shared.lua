@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_base"
 
-SWEP.PrintName = ""..translate.Get"dpl_cameraviever_name"
+SWEP.PrintName = ""..translate.Get("dpl_cameraviever_name")
 SWEP.Slot = 4
 SWEP.SlotPos = 0
 

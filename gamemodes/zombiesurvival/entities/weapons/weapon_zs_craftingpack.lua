@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_boardpack"
 
-SWEP.PrintName = ""..translate.Get"dpl_craftingpack_name"
-SWEP.Description = ""..translate.Get"dpl_craftingpack_desc"
+SWEP.PrintName = ""..translate.Get("dpl_craftingpack_name")
+SWEP.Description = ""..translate.Get("dpl_craftingpack_desc")
 
 function SWEP:Initialize()
 	self.JunkModels = {

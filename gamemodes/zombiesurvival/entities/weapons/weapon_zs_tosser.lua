@@ -1,8 +1,8 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("weapon_zs_base")
 
-SWEP.PrintName = ""..translate.Get"wpn_tosser_name"
-SWEP.Description = ""..translate.Get"wpn_tosser_desc"
+SWEP.PrintName = ""..translate.Get("wpn_tosser_name")
+SWEP.Description = ""..translate.Get("wpn_tosser_desc")
 
 SWEP.Slot = 2
 SWEP.SlotPos = 0
@@ -49,7 +49,7 @@ SWEP.ConeMin = 2.5
 SWEP.IronSightsPos = Vector(-6.425, 5, 1.02)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.015)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get"wpn_tosser_variant_name", ""..translate.Get"wpn_tosser_variant_desc", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, ""..translate.Get("wpn_tosser_variant_name"), ""..translate.Get("wpn_tosser_variant_desc"), function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.1
 	wept.Primary.Delay = wept.Primary.Delay * 3.9
 	wept.Primary.BurstShots = 3

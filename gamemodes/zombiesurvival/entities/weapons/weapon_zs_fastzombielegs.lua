@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Fast Zombie Kung Fu"
+SWEP.PrintName = ""..translate.Get("wpn_fastzombielegs_name")
 
 SWEP.Primary.Delay = 1
 

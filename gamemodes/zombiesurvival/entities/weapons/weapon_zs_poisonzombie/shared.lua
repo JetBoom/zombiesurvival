@@ -1,6 +1,6 @@
 DEFINE_BASECLASS("weapon_zs_zombie")
 
-SWEP.PrintName = "Poison Zombie"
+SWEP.PrintName = ""..translate.Get("class_poison_zombie")
 
 SWEP.MeleeReach = 48
 SWEP.MeleeDelay = 0.9

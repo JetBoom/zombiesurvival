@@ -52,7 +52,7 @@ net.Receive("zs_skill_is_unlocked", function(length, pl)
 	if skill and not pl:IsSkillUnlocked(skillid) and pl:GetZSSPRemaining() >= 1 and pl:SkillCanUnlock(skillid) and not skill.Disabled then
 		pl:SetSkillUnlocked(skillid, true)
 
-		PrintTranslatedMessage(HUD_PRINTTALK, "you_unlocked_skill", skill.Name)
+		local msg = PrintTranslatedMessage(HUD_PRINTTALK, ("you_unlocked_skill"), skill.Name)
 
 		if activate then
 			pl:SetSkillDesired(skillid, true)

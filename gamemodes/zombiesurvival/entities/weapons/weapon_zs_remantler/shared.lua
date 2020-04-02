@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"dpl_weaponremantler_name"
-SWEP.Description = ""..translate.Get"dpl_weaponremantler_desc"
+SWEP.PrintName = ""..translate.Get("dpl_weaponremantler_name")
+SWEP.Description = ""..translate.Get("dpl_weaponremantler_desc")
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/props_lab/powerbox01a.mdl")

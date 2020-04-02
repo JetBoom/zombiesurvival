@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Wraith"
+SWEP.PrintName = ""..translate.Get("class_wraith")
 
 SWEP.MeleeDelay = 0.8
 SWEP.MeleeReach = 48

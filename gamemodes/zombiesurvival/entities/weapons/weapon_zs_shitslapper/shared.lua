@@ -1,6 +1,6 @@
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Shit Slapper"
+SWEP.PrintName = ""..translate.Get("class_shitslapper")
 
 SWEP.MeleeDelay = 0.25
 SWEP.MeleeReach = 74

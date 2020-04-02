@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = ""..translate.Get"wpn_lamp_name"
+SWEP.PrintName = ""..translate.Get("wpn_lamp_name")
 
 if CLIENT then
 	SWEP.ViewModelFOV = 65

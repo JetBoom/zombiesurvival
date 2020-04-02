@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"wpnc_avelyn_name"
-SWEP.Description = ""..translate.Get"wpnc_avelyn_desc"
+SWEP.PrintName = ""..translate.Get("wpnc_avelyn_name")
+SWEP.Description = ""..translate.Get("wpnc_avelyn_desc")
 
 SWEP.Base = "weapon_zs_baseproj"
 DEFINE_BASECLASS("weapon_zs_baseproj")

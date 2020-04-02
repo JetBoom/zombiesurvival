@@ -1,4 +1,4 @@
-SWEP.PrintName = "Poison Headcrab"
+SWEP.PrintName = ""..translate.Get("class_poison_headcrab")
 
 SWEP.ZombieOnly = true
 SWEP.IsMelee = true

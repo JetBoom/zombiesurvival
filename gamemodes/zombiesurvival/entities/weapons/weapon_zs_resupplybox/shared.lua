@@ -1,5 +1,5 @@
-SWEP.PrintName = ""..translate.Get"dpl_resupplybox_name"
-SWEP.Description = ""..translate.Get"dpl_resupplybox_desc"
+SWEP.PrintName = ""..translate.Get("dpl_resupplybox_name")
+SWEP.Description = ""..translate.Get("dpl_resupplybox_desc")
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
 SWEP.WorldModel = Model("models/Items/ammocrate_ar2.mdl")
