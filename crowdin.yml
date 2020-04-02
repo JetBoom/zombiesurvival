@@ -1,0 +1,4 @@
+files:
+  - source: gamemodes/zombiesurvival/gamemode/languages_crowdin/english.properties
+    translation: >-
+      gamemodes/zombiesurvival/gamemode/languages_crowdin/%two_letters_code%/%original_file_name%
