@@ -9,6 +9,26 @@ function SWEP:SendMessage(msg, friendly)
 	end
 end
 
+local nest_path_bot
+local nest_path_follower
+local function GetPathLength(pos1, pos2)
+	if not IsValid(nest_path_bot) then
+		nest_path_bot = ents.Create("zsbotnb")
+		nest_path_bot:Spawn()
+		nest_path_follower = Path("Follow")
+
+	end
+
+	nest_path_bot:SetPos(pos2)
+	nest_path_follower:Compute( nest_path_bot, pos1 )
+
+	if nest_path_follower:IsValid() then
+		return nest_path_follower:GetLength()
+	end
+	
+	return 0/0
+end
+
 function SWEP:BuildingThink()
 	local owner = self:GetOwner()
 	local allzombies = team.GetPlayers(TEAM_UNDEAD)
@@ -104,6 +124,8 @@ function SWEP:BuildingThink()
 		if ent.Disabled then continue end
 
 		if util.SkewedDistance(ent:GetPos(), hitpos, 1.5) < GAMEMODE.CreeperNestDistBuildZSpawn then
+			if GetPathLength(ent:GetPos(), hitpos) > GAMEMODE.CreeperNestDistBuildZSpawn then continue end
+
 			self:SendMessage("too_close_to_a_spawn")
 			return
 		end
@@ -112,6 +134,8 @@ function SWEP:BuildingThink()
 	-- See if there's a nest nearby.
 	for _, ent in pairs(ents.FindByClass("prop_creepernest")) do
 		if util.SkewedDistance(ent:GetPos(), hitpos, 1.5) <= GAMEMODE.CreeperNestDistBuildNest then
+			if GetPathLength(ent:GetPos(), hitpos) > GAMEMODE.CreeperNestDistBuildNest then continue end
+
 			self:SendMessage("too_close_to_another_nest")
 			return
 		end
@@ -121,6 +145,8 @@ function SWEP:BuildingThink()
 		if sigil:GetSigilCorrupted() then continue end
 
 		if util.SkewedDistance(sigil:GetPos(), hitpos, 1.5) <= GAMEMODE.CreeperNestDistBuildNest then
+			if GetPathLength(sigil:GetPos(), hitpos) > GAMEMODE.CreeperNestDistBuildNest then continue end
+
 			self:SendMessage("too_close_to_uncorrupt")
 			return
 		end
@@ -128,6 +154,8 @@ function SWEP:BuildingThink()
 
 	for _, human in pairs(team.GetPlayers(TEAM_HUMAN)) do
 		if util.SkewedDistance(human:GetPos(), hitpos, 1.5) <= GAMEMODE.CreeperNestDistBuild then
+			if GetPathLength(human:GetPos(), hitpos) > GAMEMODE.CreeperNestDistBuildNest then continue end
+
 			self:SendMessage("too_close_to_a_human")
 			return
 		end
