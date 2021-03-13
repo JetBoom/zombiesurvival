@@ -5,7 +5,7 @@ ENT.NoNails = true
 
 ENT.CanPackUp = true
 
-ENT.IsBarricadeObject = false
+ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
 
 function ENT:SetObjectHealth(health)
