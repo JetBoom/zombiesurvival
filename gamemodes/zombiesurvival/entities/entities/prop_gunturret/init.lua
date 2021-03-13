@@ -61,7 +61,7 @@ function ENT:SetupPlayerSkills()
 
 	if owner:IsValid() then
 		scanspeed = scanspeed * (owner.TurretScanSpeedMul or 1)
-		scanangle = scanangle * (owner.TurretScanAngleMul or 1)
+		scanangle = scanangle * (0.1)
 	end
 
 	self:SetScanSpeed(scanspeed)

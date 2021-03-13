@@ -919,31 +919,22 @@ function meta:Resupply(owner, obj)
 	if GAMEMODE:GetWave() <= 0 then return end
 
 	local stockpiling = self:IsSkillActive(SKILL_STOCKPILE)
-	local stowage = self:IsSkillActive(SKILL_STOWAGE)
-
-	if (stowage and (self.StowageCaches or 0) <= 0) or (not stowage and CurTime() < (self.NextResupplyUse or 0)) then
+	
+	if ((self.StowageCaches or 0) <= 0) then
 		self:CenterNotify(COLOR_RED, translate.ClientGet(self, "no_ammo_here"))
 		return
 	end
 
-	if not stowage then
-		self.NextResupplyUse = CurTime() + GAMEMODE.ResupplyBoxCooldown * (self.ResupplyDelayMul or 1) * (stockpiling and 2.12 or 1)
+	self.StowageCaches = self.StowageCaches - 1
 
-		net.Start("zs_nextresupplyuse")
-			net.WriteFloat(self.NextResupplyUse)
-		net.Send(self)
-	else
-		self.StowageCaches = self.StowageCaches - 1
-
-		net.Start("zs_stowagecaches")
-			net.WriteInt(self.StowageCaches, 8)
-		net.Send(self)
-	end
+	net.Start("zs_stowagecaches")
+		net.WriteInt(self.StowageCaches, 8)
+	net.Send(self)
 
 	local ammotype = self:GetResupplyAmmoType()
 	local amount = GAMEMODE.AmmoCache[ammotype]
 
-	for i = 1, stockpiling and not stowage and 2 or 1 do
+	for i = 1, stockpiling and 2 or 1 do
 		net.Start("zs_ammopickup")
 			net.WriteUInt(amount, 16)
 			net.WriteString(ammotype)

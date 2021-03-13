@@ -4,7 +4,6 @@ function SWEP:Reload()
 	if CurTime() < self:GetNextPrimaryFire() then return end
 
 	local owner = self:GetOwner()
-	if owner:GetBarricadeGhosting() then return end
 
 	local tr = owner:CompensatedMeleeTrace(self.MeleeRange, self.MeleeSize)
 	local trent = tr.Entity
@@ -94,7 +93,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 end
 
 function SWEP:SecondaryAttack()
-	if self:GetPrimaryAmmoCount() <= 0 or CurTime() < self:GetNextPrimaryFire() or self:GetOwner():GetBarricadeGhosting() then return end
+	if self:GetPrimaryAmmoCount() <= 0 or CurTime() < self:GetNextPrimaryFire() then return end
 
 	local owner = self:GetOwner()
 
@@ -139,7 +138,7 @@ function SWEP:SecondaryAttack()
 	end
 
 	for _, nail in pairs(ents.FindByClass("prop_nail")) do
-		if nail:GetParent() == trent and nail:GetActualPos():DistToSqr(tr.HitPos) <= 81 then
+		if nail:GetParent() == trent and nail:GetActualPos():DistToSqr(tr.HitPos) <= 8 then
 			owner:PrintTranslatedMessage(HUD_PRINTCENTER, "too_close_to_another_nail")
 			return
 		end

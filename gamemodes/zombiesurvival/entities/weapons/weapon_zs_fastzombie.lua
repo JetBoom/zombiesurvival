@@ -12,24 +12,24 @@ if CLIENT then
 end
 
 SWEP.MeleeDelay = 0
-SWEP.MeleeReach = 42
-SWEP.MeleeDamage = 7 --8
+SWEP.MeleeReach = 48 --42
+SWEP.MeleeDamage = 16 --8
 SWEP.MeleeForceScale = 0.1
-SWEP.MeleeSize = 4.5 --1.5
+SWEP.MeleeSize = 4.5 --4.5
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.Primary.Delay = 0.32
 
 SWEP.SlowMeleeDelay = 0.8
-SWEP.SlowMeleeDamage = 18
+SWEP.SlowMeleeDamage = 16
 
-SWEP.PounceDamage = 20
+SWEP.PounceDamage = 16
 SWEP.PounceDamageVsPlayerMul = 0.2
 SWEP.PounceDamageType = DMG_IMPACT
-SWEP.PounceReach = 26
-SWEP.PounceSize = 12
-SWEP.PounceStartDelay = 0.5
-SWEP.PounceDelay = 1.25
-SWEP.PounceVelocity = 700
+SWEP.PounceReach = 32
+SWEP.PounceSize = 16
+SWEP.PounceStartDelay = 0.25
+SWEP.PounceDelay = .75
+SWEP.PounceVelocity = 660
 
 SWEP.RoarTime = 1.6
 

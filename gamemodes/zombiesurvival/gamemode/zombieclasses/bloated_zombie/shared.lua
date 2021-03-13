@@ -3,12 +3,12 @@ CLASS.TranslationName = "class_bloated_zombie"
 CLASS.Description = "description_bloated_zombie"
 CLASS.Help = "controls_bloated_zombie"
 
-CLASS.BetterVersion = "Vile Bloated Zombie"
+--CLASS.BetterVersion = "Vile Bloated Zombie"
 
-CLASS.Wave = 2 / 6
+CLASS.Wave = 3 / 6
 
-CLASS.Health = 325
-CLASS.Speed = 125
+CLASS.Health = 250
+CLASS.Speed = 190
 --CLASS.JumpPower = DEFAULT_JUMP_POWER * 0.811
 CLASS.Mass = DEFAULT_MASS * 2
 

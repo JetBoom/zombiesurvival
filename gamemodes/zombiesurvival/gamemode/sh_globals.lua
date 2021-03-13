@@ -120,21 +120,21 @@ GM.NumberOfWaves = 6
 GM.PulsePointsMultiplier = 1.25
 
 -- The amount of damage you need to inflict to a zombie type to get a point
-GM.HumanoidZombiePointRatio = 45
-GM.PoisonZombiePointRatio = 60 -- Has an enormous head hitbox
-GM.HeadcrabZombiePointRatio = 30
-GM.NoHeadboxZombiePointRatio = 38
-GM.TorsoZombiePointRatio = 42
-GM.LegsZombiePointRatio = 37.5
-GM.SkeletonPointRatio = GM.HumanoidZombiePointRatio/3
+GM.HumanoidZombiePointRatio = 32
+GM.PoisonZombiePointRatio = 32 -- Has an enormous head hitbox
+GM.HeadcrabZombiePointRatio = 32
+GM.NoHeadboxZombiePointRatio = 32
+GM.TorsoZombiePointRatio = 32
+GM.LegsZombiePointRatio = 32
+GM.SkeletonPointRatio = 32
 
-SPEED_NORMAL = 225
-SPEED_SLOWEST = SPEED_NORMAL - 20
-SPEED_SLOWER = SPEED_NORMAL - 14
-SPEED_SLOW = SPEED_NORMAL - 7
-SPEED_FAST = SPEED_NORMAL + 7
-SPEED_FASTER = SPEED_NORMAL + 14
-SPEED_FASTEST = SPEED_NORMAL + 20
+SPEED_NORMAL = 250
+SPEED_SLOWEST = SPEED_NORMAL - 32
+SPEED_SLOWER = SPEED_NORMAL - 24
+SPEED_SLOW = SPEED_NORMAL - 16
+SPEED_FAST = SPEED_NORMAL + 16
+SPEED_FASTER = SPEED_NORMAL + 24
+SPEED_FASTEST = SPEED_NORMAL + 32
 
 SPEED_ZOMBIEESCAPE_SLOWEST = 220
 SPEED_ZOMBIEESCAPE_SLOWER = 230
@@ -152,7 +152,7 @@ GM.BarricadeHealthMassFactor = 3 * 0.85
 GM.BarricadeHealthVolumeFactor = 4 * 0.85
 GM.BarricadeRepairCapacity = 1.25
 
-GM.BossZombiePlayersRequired = 8
+GM.BossZombiePlayersRequired = 16 --8 (counts bots also so set to 16 for ~ the correct amount of player humans)
 
 GM.HumanGibs = {
 Model("models/gibs/HGIBS.mdl"),

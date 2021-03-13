@@ -10,8 +10,8 @@ CLASS.Model = Model("models/zombie/fast_torso.mdl")
 
 CLASS.SWEP = "weapon_zs_fastzombietorso"
 
-CLASS.Health = 75
-CLASS.Speed = 150
+CLASS.Health = 35
+CLASS.Speed = 250
 CLASS.JumpPower = 130
 
 CLASS.Points = CLASS.Health/GM.TorsoZombiePointRatio

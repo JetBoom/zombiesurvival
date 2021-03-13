@@ -54,3 +54,7 @@ function ENT:CanBeDamagedByTeam(teamid)
 
 	return teamid == TEAM_UNDEAD
 end
+
+function ENT:ShouldNotCollide(ent)
+	return ent:IsPlayer() and ent:Team() == TEAM_HUMAN
+end

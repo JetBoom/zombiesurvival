@@ -17,6 +17,7 @@ function ENT:Initialize()
 	self:SetModel("models/props_lab/powerbox01a.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
+	self:SetCollisionGroup(COLLISION_GROUP_WORLD) -- I decided to make them not collide.
 
 	self:CollisionRulesChanged()
 

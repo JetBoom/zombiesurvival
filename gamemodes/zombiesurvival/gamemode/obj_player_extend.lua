@@ -235,6 +235,7 @@ function meta:NearArsenalCrate()
 	if self.ArsenalZone and self.ArsenalZone:IsValid() then return true end
 
 	local arseents = {}
+	table.Add(arseents, ents.FindByClass("prop_obj_sigil"))
 	table.Add(arseents, ents.FindByClass("prop_arsenalcrate"))
 	table.Add(arseents, ents.FindByClass("status_arsenalpack"))
 

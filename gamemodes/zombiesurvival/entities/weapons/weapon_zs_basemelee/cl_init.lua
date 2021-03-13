@@ -75,7 +75,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		ang:RotateAroundAxis(ang:Forward(), rot.roll * power)
 	end
 
-	if owner:GetBarricadeGhosting() then
+	if self:IsOwnerBarricadeGhosting() then
 		ghostlerp = math.min(1, ghostlerp + FrameTime() * 4)
 	elseif ghostlerp > 0 then
 		ghostlerp = math.max(0, ghostlerp - FrameTime() * 5)

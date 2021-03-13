@@ -3,15 +3,15 @@ CLASS.TranslationName = "class_zombie"
 CLASS.Description = "description_zombie"
 CLASS.Help = "controls_zombie"
 
-CLASS.BetterVersion = "Eradicator"
+--CLASS.BetterVersion = "Eradicator"
 
 CLASS.Wave = 0
 CLASS.Unlocked = true
 CLASS.IsDefault = true
 CLASS.Order = 0
 
-CLASS.Health = 225
-CLASS.Speed = 175
+CLASS.Health = 130
+CLASS.Speed = 250
 CLASS.Revives = true
 
 CLASS.CanTaunt = true
@@ -151,7 +151,7 @@ function CLASS:CalcMainActivity(pl, velocity)
 		return ACT_HL2MP_WALK_CROUCH_ZOMBIE_01 - 1 + math_ceil((CurTime() / 4 + pl:EntIndex()) % 3), -1
 	end
 
-	return ACT_HL2MP_WALK_ZOMBIE_01 - 1 + math_ceil((CurTime() / 3 + pl:EntIndex()) % 3), -1
+	return ACT_HL2MP_RUN_ZOMBIE, -1
 end
 
 function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)

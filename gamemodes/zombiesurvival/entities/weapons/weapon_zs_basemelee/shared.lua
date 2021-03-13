@@ -95,7 +95,7 @@ function SWEP:Reload()
 end
 
 function SWEP:CanPrimaryAttack()
-	if self:GetOwner():IsHolding() or self:GetOwner():GetBarricadeGhosting() then return false end
+	if self:GetOwner():IsHolding() or self:IsOwnerBarricadeGhosting() then return false end
 
 	return self:GetNextPrimaryFire() <= CurTime() and not self:IsSwinging()
 end
@@ -196,6 +196,10 @@ function SWEP:MeleeSwing()
 	local hitent = tr.Entity
 	local hitflesh = tr.MatType == MAT_FLESH or tr.MatType == MAT_BLOODYFLESH or tr.MatType == MAT_ANTLION or tr.MatType == MAT_ALIENFLESH
 
+	if hitent:GetClass() == "prop_door_rotating" then
+			damagemultiplier = damagemultiplier * 10
+	end
+	
 	if self.HitAnim then
 		self:SendWeaponAnim(self.HitAnim)
 	end
@@ -427,4 +431,8 @@ function SWEP:TranslateActivity( act )
 	end
 
 	return self.ActivityTranslate and self.ActivityTranslate[act] or -1
+end
+
+function SWEP:IsOwnerBarricadeGhosting()
+	return self:GetOwner():GetBarricadeGhosting()
 end

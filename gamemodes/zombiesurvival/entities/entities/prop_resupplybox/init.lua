@@ -15,6 +15,7 @@ function ENT:Initialize()
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
 	self:SetPlaybackRate(1)
+	self:SetCollisionGroup(COLLISION_GROUP_WORLD) -- I decided to make them not collide.
 
 	self:CollisionRulesChanged()
 
@@ -38,7 +39,7 @@ function ENT:KeyValue(key, value)
 		value = tonumber(value)
 		if not value then return end
 
-		self:SetObjectHealth(value)
+		local caches = MySelf.StowageCaches
 	end
 end
 

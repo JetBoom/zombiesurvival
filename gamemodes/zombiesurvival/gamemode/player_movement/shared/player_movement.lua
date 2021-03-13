@@ -39,16 +39,6 @@ function GM:Move(pl, move)
 			-- Use 7, because friction will amount this to a velocity of 1 roughly.
 			phase = pt.NoGhosting and E_GetDTFloat(pl, DT_PLAYER_FLOAT_WIDELOAD) > curtime()
 			M_SetMaxClientSpeed(move, math_min(M_GetMaxClientSpeed(move), phase and 7 or (36 * (pt.BarricadePhaseSpeedMul or 1))))
-		elseif not pt.NoBWSpeedPenalty then
-			fw = M_GetForwardSpeed(move)
-			if fw < 0 then
-				sd = M_GetSideSpeed(move)
-				if sd < 0 then sd = -sd end
-
-				if sd > fw then
-					M_SetMaxClientSpeed(move, M_GetMaxClientSpeed(move) * (P_GetActiveWeapon(pl).IsMelee and 0.75 or 0.5))
-				end
-			end
 		end
 	else
 		if pt.SpawnProtection then

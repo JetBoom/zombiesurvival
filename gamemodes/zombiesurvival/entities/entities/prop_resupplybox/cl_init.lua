@@ -38,15 +38,20 @@ function ENT:RenderInfo(pos, ang, owner)
 	cam.Start3D2D(pos, ang, 0.075)
 		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, -130, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-		local caches = MySelf.Stowage and MySelf.StowageCaches
+		local caches = MySelf.StowageCaches
 
 		local timeremain = math.ceil(math.max(0, (MySelf.NextUse or 0) - CurTime()))
 		if MySelf.NextUse then
 			draw.SimpleText(timeremain > 0 and timeremain or translate.Get("ready"), "ZS3D2DFont2", 0, -60, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		if caches then
-			draw.SimpleText(caches .. " Uses Left", "ZS3D2DFont2Small", 0, 0, caches > 0 and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		end
+			local suffix = " Use Left"
+			if caches > 1 then
+				suffix = " Uses Left"
+			else
+
+			end
+			draw.SimpleText(caches .. suffix, "ZS3D2DFont2Small", 0, 0, caches > 0 and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)		end
 
 		self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1), nil, 190)
 

@@ -4,7 +4,7 @@ SWEP.PrintName = "Shit Slapper"
 
 SWEP.MeleeDelay = 0.25
 SWEP.MeleeReach = 74
-SWEP.MeleeDamage = 38
+SWEP.MeleeDamage = 128
 SWEP.MeleeSize = 16
 SWEP.SwingAnimSpeed = 2.82
 

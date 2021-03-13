@@ -106,9 +106,13 @@ function GM:DrawSigilTargetHint(ent, fade)
 	util.ColorCopy(color_white, colTemp)
 
 	draw.SimpleTextBlur("Sigil", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
-	y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 0
+	local fontHeight = draw.GetFontHeight("ZSHUDFontSmaller")
 
-	draw.SimpleTextBlur("Press E to teleport", "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+	draw.SimpleTextBlur("Press E to teleport", "ZSHUDFontTiny", x, y + fontHeight, colTemp, TEXT_ALIGN_CENTER)
+
+	if self:PlayerCanPurchase(MySelf) then
+		draw.SimpleTextBlur(translate.Get("press_f2_for_the_points_shop"), "ZSHUDFontTiny", x, y + fontHeight * 1.5, colTemp, TEXT_ALIGN_CENTER)
+	end
 end
 
 GM.TraceTarget = NULL

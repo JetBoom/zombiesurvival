@@ -458,7 +458,7 @@ function PANEL:Init()
 	reset:Dock(TOP)
 	reset.DoClick = function(me)
 		Derma_Query(
-			"Reset all skills and refund SP?\nYou can only do this once per week.",
+			"Reset all skills and refund SP?",
 			"Warning",
 			"OK",
 			function() net.Start("zs_skills_reset") net.SendToServer() end,

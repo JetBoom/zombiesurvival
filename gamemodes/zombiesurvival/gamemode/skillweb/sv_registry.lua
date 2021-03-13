@@ -71,9 +71,9 @@ GM:SetSkillModifierFunction(SKILLMOD_TURRET_SCANSPEED_MUL, function(pl, amount)
 	pl.TurretScanSpeedMul = math.Clamp(amount + 1.0, 0, 10.0)
 end)
 
-GM:SetSkillModifierFunction(SKILLMOD_TURRET_SCANANGLE_MUL, function(pl, amount)
-	pl.TurretScanAngleMul = math.Clamp(amount + 1.0, 0, 2.0)
-end)
+--GM:SetSkillModifierFunction(SKILLMOD_TURRET_SCANANGLE_MUL, function(pl, amount)
+--	pl.TurretScanAngleMul = math.Clamp(amount + 1.0, 0, 2.0)
+--end)
 
 GM:SetSkillModifierFunction(SKILLMOD_DEPLOYABLE_HEALTH_MUL, function(pl, amount)
 	pl.DeployableHealthMul = math.Clamp(amount + 1.0, 0.01, 10.0)
@@ -97,7 +97,7 @@ end)
 
 GM:AddSkillModifier(SKILL_TURRETOVERLOAD, SKILLMOD_TURRET_SCANSPEED_MUL, 1.0)
 
-GM:AddSkillModifier(SKILL_TURRETLOCK, SKILLMOD_TURRET_SCANANGLE_MUL, -0.9)
+--GM:AddSkillModifier(SKILL_TURRETLOCK, SKILLMOD_TURRET_SCANANGLE_MUL, -0.9)
 
 GM:AddSkillModifier(SKILL_WORTHINESS1, SKILLMOD_POINTS, -3)
 GM:AddSkillModifier(SKILL_WORTHINESS2, SKILLMOD_POINTS, -3)
