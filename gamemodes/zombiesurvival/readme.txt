@@ -1,8 +1,3 @@
-Experimental Zombie Re-Balance Build 2.00
-3/13/2020
-
-Edit: Johnny Moe
-
  ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 ZZZ                                  ZZZ
 ZZZ          ZOMBIE SURVIVAL         ZZZ
