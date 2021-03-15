@@ -386,14 +386,16 @@ GM:AddPointShopItem("chemical2",			ITEMCAT_AMMO,			10,				nil,							"40 chemica
 item =
 GM:AddPointShopItem("25mkit",				ITEMCAT_AMMO,			5,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
 GM:AddPointShopItem("50mkit",				ITEMCAT_AMMO,			10,				nil,							"50 Medical Kit power",			"50 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(50, "Battery", true) end)
-GM:AddPointShopItem("scrap",				ITEMCAT_AMMO,			5,				nil,							"5 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(5, "scrap", true) end)
-GM:AddPointShopItem("scrap2",				ITEMCAT_AMMO,			10,				nil,							"10 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(10, "scrap", true) end)
 item.CanMakeFromScrap = true
 item =
 GM:AddPointShopItem("nail",					ITEMCAT_AMMO,			5,				nil,							"Nail",							"5 nails.",					"ammo_nail",						function(pl) pl:GiveAmmo(5, "GaussEnergy", true) end)
 GM:AddPointShopItem("nail2",				ITEMCAT_AMMO,			10,				nil,							"Nail",							"10 nails.",				"ammo_nail",						function(pl) pl:GiveAmmo(10, "GaussEnergy", true) end)
 item.NoClassicMode = true
 item.CanMakeFromScrap = true
+item =
+GM:AddPointShopItem("scrap",				ITEMCAT_AMMO,			5,				nil,							"5 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(5, "scrap", true) end)
+GM:AddPointShopItem("scrap2",				ITEMCAT_AMMO,			10,				nil,							"10 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(10, "scrap", true) end)
+item.CanMakeFromScrap = false
 -- Tier 1
 GM:AddPointShopItem("brassknuckles",	ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
 GM:AddPointShopItem("knife",			ITEMCAT_MELEE,			10,				"weapon_zs_swissarmyknife")
