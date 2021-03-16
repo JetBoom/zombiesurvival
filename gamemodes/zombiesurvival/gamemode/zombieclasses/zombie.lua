@@ -3,7 +3,7 @@ CLASS.TranslationName = "class_zombie"
 CLASS.Description = "description_zombie"
 CLASS.Help = "controls_zombie"
 
---CLASS.BetterVersion = "Eradicator"
+CLASS.BetterVersion = "Eradicator"
 
 CLASS.Wave = 0
 CLASS.Unlocked = true

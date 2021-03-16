@@ -10,8 +10,8 @@ CLASS.Model = Model("models/player/zombie_lacerator2.mdl")
 
 CLASS.Wave = 4 / 6
 
-CLASS.Health = 225
-CLASS.Speed = 270
+CLASS.Health = 110 --225
+CLASS.Speed = 330 --270
 CLASS.SWEP = "weapon_zs_lacerator"
 
 CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 58)}

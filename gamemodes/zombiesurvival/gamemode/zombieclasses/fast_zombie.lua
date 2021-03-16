@@ -3,7 +3,7 @@ CLASS.TranslationName = "class_fast_zombie"
 CLASS.Description = "description_fast_zombie"
 CLASS.Help = "controls_fast_zombie"
 
---CLASS.BetterVersion = "Lacerator"
+CLASS.BetterVersion = "Lacerator"
 
 CLASS.Model = Model("models/player/zombie_fast.mdl")
 
@@ -11,8 +11,8 @@ CLASS.Wave = 2 / 6
 --CLASS.Infliction = 0.5 -- We auto-unlock this class if 50% of humans are dead regardless of what wave it is.
 CLASS.Revives = true
 
-CLASS.Health = 70
-CLASS.Speed = 330
+CLASS.Health = 70 --originally 150
+CLASS.Speed = 330 --originally 255
 CLASS.SWEP = "weapon_zs_fastzombie"
 
 CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
