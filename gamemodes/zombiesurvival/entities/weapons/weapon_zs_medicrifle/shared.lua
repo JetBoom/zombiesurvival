@@ -99,11 +99,13 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:SetSeekedPlayer(ent)
-	self:SetDTEntity(6, ent)
+    if IsValid( ent ) and IsEntity( ent ) then
+        self:SetDTEntity(6, ent)
+    end
 end
 
 function SWEP:GetSeekedPlayer()
-	return self:GetDTEntity(6)
+    return self:GetDTEntity(6)
 end
 
 function SWEP:Deploy()
