@@ -3,7 +3,7 @@ CLASS.TranslationName = "class_bloated_zombie"
 CLASS.Description = "description_bloated_zombie"
 CLASS.Help = "controls_bloated_zombie"
 
---CLASS.BetterVersion = "Vile Bloated Zombie"
+CLASS.BetterVersion = "Eradicator"
 
 CLASS.Wave = 3 / 6
 

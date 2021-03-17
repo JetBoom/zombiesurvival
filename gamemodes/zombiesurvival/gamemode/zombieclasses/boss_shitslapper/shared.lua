@@ -19,7 +19,7 @@ CLASS.Health = 2000
 CLASS.Speed = 190
 CLASS.JumpPower = 200
 
-CLASS.ModelScale = 2
+CLASS.ModelScale = 1.8 --2
 CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 64)}
 CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 35)}
 CLASS.ViewOffset = Vector(0, 0, 14 * CLASS.ModelScale)
