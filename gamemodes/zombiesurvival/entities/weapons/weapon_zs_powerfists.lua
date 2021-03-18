@@ -27,7 +27,7 @@ if CLIENT then
 	}
 end
 
-SWEP.WalkSpeed = SPEED_FAST
+SWEP.WalkSpeed = SPEED_NORMAL
 SWEP.UseHands = true
 
 SWEP.ViewModel = "models/weapons/c_arms_hev.mdl"
