@@ -7,7 +7,7 @@ SWEP.Base = "weapon_zs_zombie"
 SWEP.MeleeDamage = 16
 SWEP.BleedDamage = 16
 SWEP.SlowDownScale = 5.4
-SWEP.MeleeDamageVsProps = 40
+SWEP.MeleeDamageVsProps = 32
 SWEP.EnfeebleDurationMul = 10 / SWEP.MeleeDamage
 
 function SWEP:Reload()

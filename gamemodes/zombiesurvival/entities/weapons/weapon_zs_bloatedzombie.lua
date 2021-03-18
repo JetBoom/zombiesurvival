@@ -4,11 +4,6 @@ SWEP.PrintName = "Bloated Zombie"
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.MeleeDamage = 32
-SWEP.MeleeForceScale = 1.25
-
-SWEP.Primary.Delay = 1.4
-
 function SWEP:Reload()
 	self.BaseClass.SecondaryAttack(self)
 end
