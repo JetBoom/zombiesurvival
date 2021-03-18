@@ -15,7 +15,7 @@ CLASS.Points = 40
 
 CLASS.SWEP = "weapon_zs_shitslapper"
 
-CLASS.Health = 2000
+CLASS.Health = 4000
 CLASS.Speed = 190
 CLASS.JumpPower = 200
 
