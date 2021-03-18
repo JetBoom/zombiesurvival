@@ -23,14 +23,14 @@ if CLIENT then
 	}
 end
 
-SWEP.WalkSpeed = SPEED_FASTEST
+SWEP.WalkSpeed = SPEED_NORMAL
 
 SWEP.ViewModel = "models/weapons/c_arms_citizen.mdl"
 SWEP.WorldModel	= "models/weapons/w_grenade.mdl"
 
 SWEP.Weight = 4
 
-SWEP.MeleeDamage = 22.5
+SWEP.MeleeDamage = 24
 
 SWEP.Unarmed = false
 
