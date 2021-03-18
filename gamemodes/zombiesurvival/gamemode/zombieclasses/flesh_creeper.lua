@@ -11,7 +11,7 @@ CLASS.NotRandomStart = true
 CLASS.Health = 80
 CLASS.SWEP = "weapon_zs_fleshcreeper"
 CLASS.Model = Model("models/antlion.mdl")
-CLASS.Speed = 250
+CLASS.Speed = 190
 CLASS.JumpPower = 250
 
 CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
