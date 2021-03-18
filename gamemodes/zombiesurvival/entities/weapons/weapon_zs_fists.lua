@@ -13,7 +13,7 @@ SWEP.HoldType = "fist"
 SWEP.WalkSpeed = SPEED_NORMAL
 SWEP.OldWalkSpeed = 0
 
-SWEP.MeleeDamage = 15
+SWEP.MeleeDamage = 16
 SWEP.DamageType = DMG_CLUB
 SWEP.UppercutDamageMultiplier = 3
 SWEP.HitDistance = 40
@@ -64,13 +64,13 @@ function SWEP:PrimaryAttack(right)
 	local owner = self:GetOwner()
 	local time = CurTime()
 
-	self:SetNextIdleHoldType(time + 1.5)
-	owner:SetAnimation(PLAYER_ATTACK1)
-	self.OldWalkSpeed = math.max(self.OldWalkSpeed, self.WalkSpeed)
-	if not owner:IsSkillActive(SKILL_KNUCKLEMASTER) and self.Unarmed then
-		self.WalkSpeed = 165
-		owner:ResetSpeed()
-	end
+	--self:SetNextIdleHoldType(time + 1.5)
+	--owner:SetAnimation(PLAYER_ATTACK1)
+	--self.OldWalkSpeed = math.max(self.OldWalkSpeed, self.WalkSpeed)
+	--if not owner:IsSkillActive(SKILL_KNUCKLEMASTER) and self.Unarmed then
+		--self.WalkSpeed = 165
+		--owner:ResetSpeed()
+	--end
 
 	local anim = "fists_left"
 	if ( right ) then anim = "fists_right" end
