@@ -196,39 +196,39 @@ GM:AddStartingItem("resupplybox",		ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_resu
 .Countables = "prop_resupplybox"
 GM:AddStartingItem("remantler",			ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_remantler")
 .Countables = "prop_remantler"
-item =
-GM:AddStartingItem("infturret",			ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_gunturret",			nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_gunturret") pl:GiveAmmo(1, "thumper") pl:GiveAmmo(125, "smg1") end)
-item.Countables = "prop_gunturret"
-item.NoClassicMode = true
-item =
-GM:AddStartingItem("blastturret",		ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_gunturret_buckshot",	nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_gunturret_buckshot") pl:GiveAmmo(1, "turret_buckshot") pl:GiveAmmo(30, "buckshot") end)
-item.Countables = "prop_gunturret_buckshot"
-item.NoClassicMode = true
+--item =
+--GM:AddStartingItem("infturret",			ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_gunturret",			nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_gunturret") pl:GiveAmmo(1, "thumper") pl:GiveAmmo(125, "smg1") end)
+--item.Countables = "prop_gunturret"
+--item.NoClassicMode = true
+-- item =
+-- GM:AddStartingItem("blastturret",		ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_gunturret_buckshot",	nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_gunturret_buckshot") pl:GiveAmmo(1, "turret_buckshot") pl:GiveAmmo(30, "buckshot") end)
+-- item.Countables = "prop_gunturret_buckshot"
+-- item.NoClassicMode = true
 --item.SkillRequirement = SKILL_U_BLASTTURRET
 item =
 GM:AddStartingItem("repairfield",		ITEMCAT_DEPLOYABLES,			55,				"weapon_zs_repairfield",		nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_repairfield") pl:GiveAmmo(1, "repairfield") pl:GiveAmmo(50, "pulse") end)
 item.Countables = "prop_repairfield"
 item.NoClassicMode = true
-item =
-GM:AddStartingItem("zapper",			ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_zapper",				nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_zapper") pl:GiveAmmo(1, "zapper") pl:GiveAmmo(50, "pulse") end)
-item.Countables = "prop_zapper"
-item.NoClassicMode = true
+-- item =
+-- GM:AddStartingItem("zapper",			ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_zapper",				nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_zapper") pl:GiveAmmo(1, "zapper") pl:GiveAmmo(50, "pulse") end)
+-- item.Countables = "prop_zapper"
+-- item.NoClassicMode = true
 
-GM:AddStartingItem("manhack",			ITEMCAT_DEPLOYABLES,			30,				"weapon_zs_manhack").Countables = "prop_manhack"
-item =
-GM:AddStartingItem("drone",				ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_drone",				nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_drone") pl:GiveAmmo(1, "drone") pl:GiveAmmo(60, "smg1") end)
-item.Countables = "prop_drone"
-item =
-GM:AddStartingItem("pulsedrone",		ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_drone_pulse",		nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_drone_pulse") pl:GiveAmmo(1, "pulse_cutter") pl:GiveAmmo(60, "pulse") end)
-item.Countables = "prop_drone_pulse"
+-- GM:AddStartingItem("manhack",			ITEMCAT_DEPLOYABLES,			30,				"weapon_zs_manhack").Countables = "prop_manhack"
+-- item =
+-- GM:AddStartingItem("drone",				ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_drone",				nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_drone") pl:GiveAmmo(1, "drone") pl:GiveAmmo(60, "smg1") end)
+-- item.Countables = "prop_drone"
+-- item =
+-- GM:AddStartingItem("pulsedrone",		ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_drone_pulse",		nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_drone_pulse") pl:GiveAmmo(1, "pulse_cutter") pl:GiveAmmo(60, "pulse") end)
+-- item.Countables = "prop_drone_pulse"
 --item.SkillRequirement = SKILL_U_DRONE
 item =
 GM:AddStartingItem("hauldrone",			ITEMCAT_DEPLOYABLES,			15,				"weapon_zs_drone_hauler",		nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_drone_hauler") pl:GiveAmmo(1, "drone_hauler") end)
 item.Countables = "prop_drone_hauler"
 --item.SkillRequirement = SKILL_HAULMODULE
-item =
-GM:AddStartingItem("rollermine",		ITEMCAT_DEPLOYABLES,			35,				"weapon_zs_rollermine",			nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_rollermine") pl:GiveAmmo(1, "rollermine") end)
-item.Countables = "prop_rollermine"
+-- item =
+-- GM:AddStartingItem("rollermine",		ITEMCAT_DEPLOYABLES,			35,				"weapon_zs_rollermine",			nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_rollermine") pl:GiveAmmo(1, "rollermine") end)
+-- item.Countables = "prop_rollermine"
 --item.SkillRequirement = SKILL_U_ROLLERMINE
 
 GM:AddStartingItem("wrench",			ITEMCAT_TOOLS,			20,				"weapon_zs_wrench").NoClassicMode = true
