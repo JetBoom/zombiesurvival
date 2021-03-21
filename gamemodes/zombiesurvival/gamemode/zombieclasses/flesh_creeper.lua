@@ -25,11 +25,11 @@ CLASS.ModelScale = .75
 --[[CLASS.ModelScale = 0.6324555
 CLASS.ClientsideModelScale = 0.4 / CLASS.ModelScale]]
 
-CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 36)}
-CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 36)}
+CLASS.Hull = {Vector(-22, -22, 0), Vector(22, 22, 44)}
+CLASS.HullDuck = {Vector(-22, -22, 0), Vector(22, 22, 44)}
 
-CLASS.ViewOffset = Vector(0, 0, 35.5)
-CLASS.ViewOffsetDucked = Vector(0, 0, 35.5)
+CLASS.ViewOffset = Vector(0, 0, 44)
+CLASS.ViewOffsetDucked = Vector(0, 0, 44)
 
 local CurTime = CurTime
 local math_random = math.random
