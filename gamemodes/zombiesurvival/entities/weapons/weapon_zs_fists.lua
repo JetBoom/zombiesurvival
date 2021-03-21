@@ -11,7 +11,7 @@ SWEP.UseHands = true
 SWEP.HoldType = "fist"
 
 SWEP.WalkSpeed = SPEED_NORMAL
-SWEP.OldWalkSpeed = 0
+--SWEP.OldWalkSpeed = 0
 
 SWEP.MeleeDamage = 16
 SWEP.DamageType = DMG_CLUB
@@ -69,7 +69,7 @@ function SWEP:PrimaryAttack(right)
 	--self.OldWalkSpeed = math.max(self.OldWalkSpeed, self.WalkSpeed)
 	--if not owner:IsSkillActive(SKILL_KNUCKLEMASTER) and self.Unarmed then
 		--self.WalkSpeed = 165
-		--owner:ResetSpeed()
+	owner:ResetSpeed()
 	--end
 
 	local anim = "fists_left"
