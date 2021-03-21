@@ -64,8 +64,8 @@ function SWEP:PrimaryAttack(right)
 	local owner = self:GetOwner()
 	local time = CurTime()
 
-	--self:SetNextIdleHoldType(time + 1.5)
-	--owner:SetAnimation(PLAYER_ATTACK1)
+	self:SetNextIdleHoldType(time + 1.5)
+	owner:SetAnimation(PLAYER_ATTACK1)
 	--self.OldWalkSpeed = math.max(self.OldWalkSpeed, self.WalkSpeed)
 	--if not owner:IsSkillActive(SKILL_KNUCKLEMASTER) and self.Unarmed then
 		--self.WalkSpeed = 165
