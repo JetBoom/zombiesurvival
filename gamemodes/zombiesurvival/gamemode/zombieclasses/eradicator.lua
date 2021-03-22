@@ -14,8 +14,8 @@ CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 
 CLASS.SWEP = "weapon_zs_eradicator"
 
-CLASS.Model = Model("models/player/zombie_classic_hbfix.mdl")
-CLASS.OverrideModel = Model("models/Zombie/Poison.mdl")
+CLASS.Model = Model("models/hlvr/zombie/blind/zombie_blind_player.mdl")
+--CLASS.OverrideModel = Model("models/Zombie/Poison.mdl")
 
 CLASS.VoicePitch = 0.6
 
