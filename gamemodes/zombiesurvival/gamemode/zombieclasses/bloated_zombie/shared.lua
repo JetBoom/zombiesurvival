@@ -18,7 +18,7 @@ CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 
 CLASS.SWEP = "weapon_zs_bloatedzombie"
 
-CLASS.Model = Model("models/player/fatty/fatty.mdl")
+CLASS.Model = Model("models/hlvr/human/corpse/corpse_worker_1_player.mdl")
 
 CLASS.DeathSounds = {"npc/ichthyosaur/water_growl5.wav"}
 
