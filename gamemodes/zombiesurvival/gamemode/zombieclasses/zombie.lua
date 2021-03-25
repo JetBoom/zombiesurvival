@@ -11,7 +11,7 @@ CLASS.IsDefault = true
 CLASS.Order = 0
 
 CLASS.Health = 130
-CLASS.Speed = 250
+CLASS.Speed = 190
 CLASS.Revives = true
 
 CLASS.CanTaunt = true
