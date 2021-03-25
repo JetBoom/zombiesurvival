@@ -12,7 +12,7 @@ CLASS.Wave = 2 / 6
 CLASS.Revives = true
 
 CLASS.Health = 80 --originally 150
-CLASS.Speed = 330 --originally 255
+CLASS.Speed = 250 --originally 255
 CLASS.SWEP = "weapon_zs_fastzombie"
 
 CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
