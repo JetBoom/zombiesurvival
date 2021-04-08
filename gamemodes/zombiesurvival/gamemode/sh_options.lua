@@ -167,8 +167,8 @@ GM:AddStartingItem("8nails",			ITEMCAT_AMMO,			5,				nil,			"4 nails",						nil,
 GM:AddStartingItem("12nails",			ITEMCAT_AMMO,			10,				nil,			"8 nails",						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(8, "GaussEnergy", true) end)
 GM:AddStartingItem("60mkit",			ITEMCAT_AMMO,			5,				nil,			"64 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(64, "Battery", true) end)
 GM:AddStartingItem("90mkit",			ITEMCAT_AMMO,			10,				nil,			"128 medical power",			nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(128, "Battery", true) end)
-GM:AddStartingItem("scrap",				ITEMCAT_AMMO,			5,				nil,			"8 scrap",						nil,		"ammo_scrap",			function(pl) pl:GiveAmmo(8, "scrap", true) end)
-GM:AddStartingItem("scrap2",			ITEMCAT_AMMO,			10,				nil,			"16 scrap",						nil,		"ammo_scrap",			function(pl) pl:GiveAmmo(16, "scrap", true) end)
+GM:AddStartingItem("scrap",				ITEMCAT_AMMO,			5,				nil,			"4 scrap",						nil,		"ammo_scrap",			function(pl) pl:GiveAmmo(4, "scrap", true) end)
+GM:AddStartingItem("scrap2",			ITEMCAT_AMMO,			10,				nil,			"8 scrap",						nil,		"ammo_scrap",			function(pl) pl:GiveAmmo(8, "scrap", true) end)
 
 GM:AddStartingItem("brassknuckles",		ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
 GM:AddStartingItem("zpaxe",				ITEMCAT_MELEE,			15,				"weapon_zs_axe")
@@ -406,9 +406,9 @@ GM:AddPointShopItem("nail3",				ITEMCAT_AMMO,			20,				nil,							"16 nails",			
 item.NoClassicMode = true
 item.CanMakeFromScrap = true
 item =
-GM:AddPointShopItem("scrap",				ITEMCAT_AMMO,			5,				nil,							"8 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(8, "scrap", true) end)
-GM:AddPointShopItem("scrap2",				ITEMCAT_AMMO,			10,				nil,							"16 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(16, "scrap", true) end)
-GM:AddPointShopItem("scrap3",				ITEMCAT_AMMO,			20,				nil,							"32 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(32, "scrap", true) end)
+GM:AddPointShopItem("scrap",				ITEMCAT_AMMO,			5,				nil,							"4 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(4, "scrap", true) end)
+GM:AddPointShopItem("scrap2",				ITEMCAT_AMMO,			10,				nil,							"8 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(8, "scrap", true) end)
+GM:AddPointShopItem("scrap3",				ITEMCAT_AMMO,			20,				nil,							"16 scrap",						nil,									"ammo_scrap",					function(pl) pl:GiveAmmo(16, "scrap", true) end)
 item.CanMakeFromScrap = false
 -- Tier 1
 GM:AddPointShopItem("brassknuckles",	ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
