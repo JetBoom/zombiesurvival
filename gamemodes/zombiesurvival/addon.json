@@ -1,0 +1,24 @@
+{
+	"title": "Zombie Survival",
+	"description": "A gamemode about surviving and killing zombies.",
+	"type": "gamemode",
+	"tags":
+	[
+		"fun",
+		"build"
+	],
+	"ignore":
+	[
+		"*.js",
+		"*.bat",
+		"*.git*",
+
+		"*readme.txt*",
+		"*workshop512.jpg*",
+		"LICENSE",
+
+		"*Abandonned_Building.lua*",
+		"*Zm_Toxa_West_v2.lua*",
+		"*zm_FireWaLL_aftershock_v1b.lua*"
+	]
+}

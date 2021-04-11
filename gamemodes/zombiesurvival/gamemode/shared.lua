@@ -65,6 +65,8 @@ include("vault/shared.lua")
 
 include("workshopfix.lua")
 
+include("sh_crafting_recipes.lua")
+
 include_library("perf")
 include_library("player_movement")
 include_library("inventory")

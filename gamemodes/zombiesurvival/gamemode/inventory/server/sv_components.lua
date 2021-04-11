@@ -15,9 +15,11 @@ function GM:AddWorldPropConversionRecipe(model, result)
 	self.WorldConversions[#self.WorldConversions + 1] = datatab
 end
 
-GM:AddWorldPropConversionRecipe("models/props_combine/breenbust.mdl", 		"comp_busthead")
-GM:AddWorldPropConversionRecipe("models/props_junk/sawblade001a.mdl", 		"comp_sawblade")
-GM:AddWorldPropConversionRecipe("models/props_junk/propane_tank001a.mdl", 	"comp_propanecan")
-GM:AddWorldPropConversionRecipe("models/items/car_battery01.mdl", 			"comp_electrobattery")
-GM:AddWorldPropConversionRecipe("models/props_lab/reciever01b.mdl", 		"comp_reciever")
-GM:AddWorldPropConversionRecipe("models/props_lab/harddrive01.mdl", 		"comp_cpuparts")
+GM:AddWorldPropConversionRecipe("models/props_combine/breenbust.mdl", 				"comp_busthead")
+GM:AddWorldPropConversionRecipe("models/props_junk/sawblade001a.mdl", 				"comp_sawblade")
+GM:AddWorldPropConversionRecipe("models/props_junk/propane_tank001a.mdl", 			"comp_propanecan")
+GM:AddWorldPropConversionRecipe("models/items/car_battery01.mdl", 					"comp_electrobattery")
+GM:AddWorldPropConversionRecipe("models/props_lab/reciever01b.mdl", 				"comp_reciever")
+GM:AddWorldPropConversionRecipe("models/props_lab/harddrive01.mdl", 				"comp_cpuparts")
+GM:AddWorldPropConversionRecipe("models/props_lab/tpplugholder_single.mdl", 		"comp_plug")
+GM:AddWorldPropConversionRecipe("models/props_junk/metal_paintcan001a.mdl", 		"comp_adhesive")

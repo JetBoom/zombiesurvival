@@ -197,6 +197,8 @@ GM:AddStartingItem("resupplybox",		ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_resu
 .Countables = "prop_resupplybox"
 GM:AddStartingItem("remantler",			ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_remantler")
 .Countables = "prop_remantler"
+GM:AddStartingItem("crafttbl",			ITEMCAT_DEPLOYABLES,			30,				"weapon_zs_craftstation")
+.Countables = "prop_craftstation"
 --item =
 --GM:AddStartingItem("infturret",			ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_gunturret",			nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_gunturret") pl:GiveAmmo(1, "thumper") pl:GiveAmmo(125, "smg1") end)
 --item.Countables = "prop_gunturret"
@@ -444,6 +446,7 @@ GM:AddPointShopItem("frotchet",			ITEMCAT_MELEE,			150,			"weapon_zs_frotchet")
 GM:AddPointShopItem("crphmr",			ITEMCAT_TOOLS,			25,				"weapon_zs_hammer",			nil,							nil,									nil,											function(pl) pl:GiveEmptyWeapon("weapon_zs_hammer") pl:GiveAmmo(5, "GaussEnergy") end)
 GM:AddPointShopItem("wrench",			ITEMCAT_TOOLS,			20,				"weapon_zs_wrench").NoClassicMode = true
 GM:AddPointShopItem("arsenalcrate",		ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_arsenalcrate").Countables = "prop_arsenalcrate"
+GM:AddPointShopItem("craftstation",		ITEMCAT_DEPLOYABLES,			30,				"weapon_zs_craftstation").Countables = "prop_craftstation"
 GM:AddPointShopItem("resupplybox",		ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_resupplybox").Countables = "prop_resupplybox"
 GM:AddPointShopItem("remantler",		ITEMCAT_DEPLOYABLES,			40,				"weapon_zs_remantler").Countables = "prop_remantler"
 GM:AddPointShopItem("msgbeacon",		ITEMCAT_DEPLOYABLES,			10,				"weapon_zs_messagebeacon").Countables = "prop_messagebeacon"
@@ -505,6 +508,8 @@ GM:AddPointShopItem("busthead",			ITEMCAT_TOOLS,			25,				"comp_busthead")
 GM:AddPointShopItem("sawblade",			ITEMCAT_TOOLS,			30,				"comp_sawblade")--.SkillRequirement = SKILL_U_CRAFTINGPACK
 GM:AddPointShopItem("cpuparts",			ITEMCAT_TOOLS,			30,				"comp_cpuparts")--.SkillRequirement = SKILL_U_CRAFTINGPACK
 GM:AddPointShopItem("electrobattery",	ITEMCAT_TOOLS,			40,				"comp_electrobattery")--.SkillRequirement = SKILL_U_CRAFTINGPACK
+GM:AddPointShopItem("plug",				ITEMCAT_TOOLS,			35,				"comp_plug")
+GM:AddPointShopItem("adhesive",			ITEMCAT_TOOLS,			35,				"comp_adhesive")
 GM:AddPointShopItem("barricadekit",		ITEMCAT_DEPLOYABLES,	85,				"weapon_zs_barricadekit")
 GM:AddPointShopItem("medkit",			ITEMCAT_TOOLS,			30,				"weapon_zs_medicalkit")
 GM:AddPointShopItem("medgun",			ITEMCAT_TOOLS,			30,				"weapon_zs_medicgun")
@@ -672,6 +677,7 @@ function GM:AddDeployableInfo(class, name, wepclass)
 	return tab
 end
 GM:AddDeployableInfo("prop_arsenalcrate", 		"Arsenal Crate", 		"weapon_zs_arsenalcrate")
+GM:AddDeployableInfo("prop_craftstation", 		"Craft Station", 		"weapon_zs_craftstation")
 GM:AddDeployableInfo("prop_resupplybox", 		"Resupply Box", 		"weapon_zs_resupplybox")
 GM:AddDeployableInfo("prop_remantler", 			"Weapon Remantler", 	"weapon_zs_remantler")
 GM:AddDeployableInfo("prop_messagebeacon", 		"Message Beacon", 		"weapon_zs_messagebeacon")

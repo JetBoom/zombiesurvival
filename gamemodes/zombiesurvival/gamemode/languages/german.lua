@@ -107,6 +107,7 @@ LANGUAGE.integrity_x								= "Unversehrtheit: %d%%"
 LANGUAGE.empty										= "LEER"
 LANGUAGE.manual_control								= "MANUELLE KONTROLLE"
 LANGUAGE.arsenal_crate								= "Arsenal Crate"
+LANGUAGE.craft_station								= "Fertigungsstation"
 
 -- Exit point objectives
 LANGUAGE.exit_destroyed								= "Die Untoten haben einen Ausgang zerstört!"

@@ -332,6 +332,21 @@ function meta:NearestArsenalCrateOwnedByOther()
 	end
 end
 
+function meta:NearestCraftingStationOwnedByOther()
+	local pos = self:EyePos()
+
+	local crafting = {}
+	table.Add(crafting, ents.FindByClass("prop_craftstation"))
+
+	for _, ent in pairs(crafting) do
+		local nearest = ent:NearestPoint(pos)
+		local owner = ent.GetObjectOwner and ent:GetObjectOwner() or ent:GetOwner()
+		if owner ~= self and owner:IsValidHuman() and pos:DistToSqr(nearest) <= 10000 and (WorldVisible(pos, nearest) or self:TraceLine(100).Entity == ent) then
+			return ent
+		end
+	end
+end
+
 local OldLastHitGroup = meta.LastHitGroup
 function meta:LastHitGroup()
 	return self.m_LastHitGroupUnset and CurTime() <= self.m_LastHitGroupUnset and self.m_LastHitGroup or OldLastHitGroup(self)

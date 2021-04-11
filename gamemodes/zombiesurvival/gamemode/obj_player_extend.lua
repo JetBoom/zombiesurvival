@@ -265,6 +265,21 @@ function meta:NearRemantler()
 	return false
 end
 
+function meta:NearCraftStation()
+	local pos = self:EyePos()
+
+	local stations = ents.FindByClass("prop_craftstation")
+
+	for _, ent in pairs(stations) do
+		local nearest = ent:NearestPoint(pos)
+		if pos:DistToSqr(nearest) <= 10000 and (WorldVisible(pos, nearest) or self:TraceLine(100).Entity == ent) then -- 80^2
+			return true
+		end
+	end
+
+	return false
+end
+
 function meta:GetResupplyAmmoType()
 	local ammotype
 	if not self.ResupplyChoice then
