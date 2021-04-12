@@ -43,34 +43,10 @@ net.Receive("zs_wipeinventory", function()
 	MySelf:ApplyTrinkets()
 end)
 
-function CanCraftWithComponent(craftIndex, curInv)
-	local curWeapon = LocalPlayer():GetActiveWeapon():GetClass()
-	local craftTbl = {}
-	craftTbl = table.Copy(curInv)
-	
-	if not table.IsEmpty(craftTbl) then table.Empty(craftTbl) end
-	
-	for item, count in pairs(curInv) do
-		if count > 0 then
-			
-			if GAMEMODE.Assemblies[craftIndex]["Weapon"] and 
-			not string.find(GAMEMODE.Assemblies[craftIndex]["Weapon"], curWeapon) then return false end
-			
-			for k, i in pairs(GAMEMODE.Assemblies[craftIndex]["Recipes"]) do
-				if string.find(item, k) and count >= i then
-					craftTbl[k] = nil
-				end
-				if table.IsEmpty(craftTbl) then return true end
-			end
-			
-		end
-	end
-	return false
-end
-
-function TryCraftWithComponent(me)
+local function TryCraftWithComponent(me)
 	net.Start("zs_trycraft")
-		net.WriteTable(me)
+		net.WriteString(me.Item)
+		net.WriteString(me.WeaponCraft)
 	net.SendToServer()
 end
 
@@ -163,13 +139,13 @@ local function ItemPanelDoClick(self)
 		cral:SetVisible(false)
 	end
 
-	--local assembles = {}
-	--for k,v in pairs(GAMEMODE.Assemblies) do
-	--	if v[1] == item then
-	--		assembles[v[2]] = k
-	--	end
-	--end
-	--[[
+	local assembles = {}
+	for k,v in pairs(GAMEMODE.Assemblies) do
+		if v[1] == item then
+			assembles[v[2]] = k
+		end
+	end
+
 	local count = 0
 	for k,v in pairs(assembles) do
 		count = count + 1
@@ -179,6 +155,7 @@ local function ItemPanelDoClick(self)
 
 		crab.Item = item
 		crab.WeaponCraft = k
+		crab.DoClick = TryCraftWithComponent
 		crab:SetPos(viewer:GetWide() / 2 - crab:GetWide() / 2, (viewer:GetTall() - 33 * screenscale) - (count - 1) * 33 * screenscale)
 		crab:SetVisible(true)
 
@@ -195,7 +172,6 @@ local function ItemPanelDoClick(self)
 	else
 		viewer.m_CraftWith:SetVisible(false)
 	end
-	--]]
 end
 
 local categorycolors = {
@@ -255,7 +231,7 @@ function GM:CreateInventoryInfoViewer()
 	end
 	viewer.m_CraftBtns = craftbtns
 
-	local craftwith = EasyLabel(viewer, "Craft with...", "ZSBodyTextFontBig", COLOR_WHITE)
+	local craftwith = EasyLabel(viewer, "Craft With...", "ZSBodyTextFontBig", COLOR_WHITE)
 	craftwith:SetSize(viewer:GetWide() / 1.15, 27 * screenscale)
 	craftwith:SetVisible(false)
 	viewer.m_CraftWith = craftwith
@@ -401,99 +377,3 @@ function GM:OpenInventory()
 
 	frame:MakePopup()
 end
-
-
-function GM:OpenCraftMenu()
-	if self.CraftInterface and self.CraftInterface:IsValid() then
-		self.CraftInterface:SetVisible(true)
-		return
-	end
-
-	local screenscale = BetterScreenScale()
-	local wid, hei = math.min(ScrW(), 900) * screenscale, math.min(ScrH(), 800) * screenscale
-	local tabhei = 18 * screenscale
-
-	local frame = vgui.Create("DFrame")
-	frame:SetSize(wid, hei)
-	frame:Center()
-	frame:SetDeleteOnClose(false)
-	frame:SetTitle(" ")
-	frame:SetDraggable(false)
-	if frame.btnClose and frame.btnClose:IsValid() then frame.btnClose:SetVisible(false) end
-	if frame.btnMinim and frame.btnMinim:IsValid() then frame.btnMinim:SetVisible(false) end
-	if frame.btnMaxim and frame.btnMaxim:IsValid() then frame.btnMaxim:SetVisible(false) end
-	frame.CenterMouse = ArsenalMenuCenterMouse
-	frame.Think = CraftMenuThink
-	self.CraftInterface = frame
-
-	local topspace = vgui.Create("DPanel", frame)
-	topspace:SetWide(wid - 16)
-
-	local title = EasyLabel(topspace, "Crafting Station", "ZSHUDFontSmall", COLOR_WHITE)
-	title:CenterHorizontal()
-	local subtitle = EasyLabel(topspace, "Be Creative!", "ZSHUDFontTiny", COLOR_WHITE)
-	subtitle:CenterHorizontal()
-	subtitle:MoveBelow(title, 4)
-
-	local _, y = subtitle:GetPos()
-	topspace:SetTall(y + subtitle:GetTall() + 4)
-	topspace:AlignTop(8)
-	topspace:CenterHorizontal()
-	
-	local invListPanel = vgui.Create("DScrollPanel", frame)
-	invListPanel:Dock( FILL )
-	local sbar = invListPanel:GetVBar()
-	sbar.Enabled = true
-	invListPanel:DockMargin(0, topspace:GetTall() + 8, 0, 0)
-	invListPanel:InvalidateParent(true)
-	
-	local itemLayout = vgui.Create("DIconLayout", invListPanel)
-	itemLayout:SetPos(0, 0)
-	itemLayout:SetSize(450, 450)
-	itemLayout:SetSpaceY(5)
-	itemLayout:SetSpaceX(3)
-
-	local crftIndex = 0
-	for k, v in pairs(GAMEMODE.Assemblies) do
-		crftIndex = crftIndex + 1
-		local craftBtn = itemLayout:Add("DImageButton")
-		craftBtn:SetImage(v["Icon"])
-		craftBtn:SetSize(78, 64)
-		craftBtn:SetToolTip(v["Desc"])
-		craftBtn.index = crftIndex
-		
-		craftBtn.Think = function(pnl)
-			if CanCraftWithComponent(pnl.index, self.ZSInventory) then
-				craftBtn:SetAlpha(255)
-			else
-				craftBtn:SetAlpha(25)
-			end
-		end
-		
-		craftBtn.DoClick = function(pnl)
-		
-			if not CanCraftWithComponent(pnl.index, self.ZSInventory) then
-				self:CenterNotify(COLOR_RED, "You are missing 1 or more crafting materials")
-				surface.PlaySound("buttons/button10.wav")
-				return 
-			end
-
-			local me = {}
-			for p, l in pairs(GAMEMODE.Assemblies[pnl.index]["Recipes"]) do
-				table.insert(me, p)
-			end
-			
-			if v["Weapon"] then
-				me.Weapon = LocalPlayer():GetActiveWeapon():GetClass()
-			end
-			
-			if v["Reward"] then
-				me.Reward = v["Reward"]
-			end
-			
-			TryCraftWithComponent(me)
-		end
-	end
-	frame:MakePopup()
-end
-

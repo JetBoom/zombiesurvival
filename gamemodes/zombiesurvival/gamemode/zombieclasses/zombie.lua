@@ -20,7 +20,7 @@ CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 
 CLASS.SWEP = "weapon_zs_zombie"
 
-CLASS.Model = Model("models/hlvr/human/corpse/corpse_worker_1_player.mdl")
+CLASS.Model = Model("models/hlvr/human/corpse/zombie/zombie_common_1_player.mdl")
 
 CLASS.PainSounds = {"npc/zombie/zombie_pain1.wav", "npc/zombie/zombie_pain2.wav", "npc/zombie/zombie_pain3.wav", "npc/zombie/zombie_pain4.wav", "npc/zombie/zombie_pain5.wav", "npc/zombie/zombie_pain6.wav"}
 CLASS.DeathSounds = {"npc/zombie/zombie_die1.wav", "npc/zombie/zombie_die2.wav", "npc/zombie/zombie_die3.wav"}

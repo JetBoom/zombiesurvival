@@ -14,7 +14,7 @@ GM.ZSInventoryPrefix = {
 	[INVCAT_CONSUMABLES] = "cons"
 }
 
---GM.Assemblies = {}
+GM.Assemblies = {}
 GM.Breakdowns = {}
 
 function GM:GetInventoryItemType(item)
@@ -61,9 +61,7 @@ GM:AddWeaponBreakdownRecipe("weapon_zs_minelayer",							"comp_launcher")
 GM:AddWeaponBreakdownRecipe("weapon_zs_fracture",							"comp_linearactuator")
 GM:AddWeaponBreakdownRecipe("weapon_zs_harpoon",							"comp_metalpole")
 
-
 -- Assemblies (Assembly, Component, Weapon)
---[[ NOT NEEDED DUE TO NEW CRAFTING SYSTEM
 GM.Assemblies["weapon_zs_waraxe"] 								= {"comp_modbarrel", 		"weapon_zs_glock3"}
 GM.Assemblies["weapon_zs_bust"] 								= {"comp_busthead", 		"weapon_zs_plank"}
 GM.Assemblies["weapon_zs_sawhack"] 								= {"comp_sawblade", 		"weapon_zs_axe"}
@@ -92,7 +90,6 @@ GM.Assemblies["trinket_electromagnet"]							= {"comp_electrobattery",	"trinket_
 GM.Assemblies["trinket_projguide"]								= {"comp_cpuparts",			"trinket_targetingvisori"}
 GM.Assemblies["trinket_projwei"]								= {"comp_busthead",			"trinket_projguide"}
 GM.Assemblies["trinket_controlplat"]							= {"comp_cpuparts",			"trinket_mainsuite"}
---]]
 
 GM:AddInventoryItemData("comp_modbarrel",		"Modular Barrel",			"A modular barrel suited for pairing up with another gun barrel.",								"models/props_c17/trappropeller_lever.mdl")
 GM:AddInventoryItemData("comp_burstmech",		"Burst Fire Mechanism",		"A mechanism that could be used to make a gun burst fire.",										"models/props_c17/trappropeller_lever.mdl")
@@ -101,8 +98,6 @@ GM:AddInventoryItemData("comp_busthead",		"Bust Head",				"A bust head that coul
 GM:AddInventoryItemData("comp_sawblade",		"Saw Blade",				"A sharp saw blade ready to be fitted onto fast moving objects.",								"models/props_junk/sawblade001a.mdl")
 GM:AddInventoryItemData("comp_propanecan",		"Propane Canister",			"A propane canister. With the correct setup, has the potential to ignite things.",				"models/props_junk/propane_tank001a.mdl")
 GM:AddInventoryItemData("comp_electrobattery",	"Electrobattery",			"An electrobattery. Could be used to improve repairing motions.",								"models/items/car_battery01.mdl")
-GM:AddInventoryItemData("comp_plug",			"Electrical Plug",			"A basic plug. Where's the cable for it?",														"models/props_lab/tpplugholder_single.mdl")
-GM:AddInventoryItemData("comp_adhesive",		"Strong Adhesive",			"This stuff is quite sticky, don't get caught in it",											"models/props_junk/metal_paintcan001a.mdl")
 --GM:AddInventoryItemData("comp_hungrytether",	"Hungry Tether",			"A hungry tether from a devourer that comes from a devourer rib.",								"models/gibs/HGIBS_rib.mdl")]]
 GM:AddInventoryItemData("comp_contaecore",		"Contained Energy Core",	"A contained energy core, that has an internal charging mechanism.",							"models/Items/combine_rifle_cartridge01.mdl")
 GM:AddInventoryItemData("comp_pumpaction",		"Pump Action Mechanism",	"A standard pump action mechanism from a blaster shotgun.",										"models/props_c17/trappropeller_lever.mdl")

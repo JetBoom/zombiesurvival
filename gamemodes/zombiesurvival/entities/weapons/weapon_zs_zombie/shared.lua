@@ -3,7 +3,7 @@ SWEP.IsMelee = true
 
 SWEP.PrintName = "Zombie"
 
-SWEP.ViewModel = Model("models/weapons/v_zombiearms_update.mdl")
+SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")
 SWEP.WorldModel = ""
 
 SWEP.MeleeDelay = 0.74

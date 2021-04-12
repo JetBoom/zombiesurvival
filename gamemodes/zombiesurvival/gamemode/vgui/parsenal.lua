@@ -19,24 +19,7 @@ hook.Add("Think", "ArsenalMenuThink", function()
 	end
 end)
 
-hook.Add("Think", "CraftMenuThink", function()
-	local pan = GAMEMODE.CraftInterface
-	if pan and pan:IsValid() and pan:IsVisible() then
-		local mx, my = gui.MousePos()
-		local x, y = pan:GetPos()
-		if mx < x - 18 or my < y - 18 or mx > x + pan:GetWide() + 18 or my > y + pan:GetTall() + 18 then
-			pan:SetVisible(false)
-		end
-	end
-end)
-
 local function ArsenalMenuCenterMouse(self)
-	local x, y = self:GetPos()
-	local w, h = self:GetSize()
-	gui.SetMousePos(x + w / 2, y + h / 2)
-end
-
-local function CraftMenuCenterMouse(self)
 	local x, y = self:GetPos()
 	local w, h = self:GetSize()
 	gui.SetMousePos(x + w / 2, y + h / 2)
@@ -670,7 +653,7 @@ function GM:OpenArsenalMenu()
 	if frame.btnClose and frame.btnClose:IsValid() then frame.btnClose:SetVisible(false) end
 	if frame.btnMinim and frame.btnMinim:IsValid() then frame.btnMinim:SetVisible(false) end
 	if frame.btnMaxim and frame.btnMaxim:IsValid() then frame.btnMaxim:SetVisible(false) end
-	frame.CenterMouse = CraftMenuCenterMouse
+	frame.CenterMouse = ArsenalMenuCenterMouse
 	frame.Think = ArsenalMenuThink
 	self.ArsenalInterface = frame
 
