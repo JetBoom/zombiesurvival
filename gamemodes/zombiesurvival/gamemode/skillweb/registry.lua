@@ -200,6 +200,7 @@ SKILL_SOFTDET = 100
 SKILL_STOCKPILE = 101
 SKILL_ACUITY = 102
 SKILL_VISION = 103
+SKILL_SIGHT = 104
 --SKILL_U_ROCKETTURRET = 104
 SKILL_RECLAIMSOL = 105
 SKILL_ORPHICFOCUS = 106
@@ -537,7 +538,9 @@ GM:AddSkill(SKILL_LIGHTCONSTRUCT, "Light Construction", GOOD.."-25% deployable p
 GM:AddSkill(SKILL_ACUITY, "Supplier's Acuity", GOOD.."Locate nearby resupply boxes if behind walls\n"..GOOD.."Locate nearby unplaced resupply boxes on players through walls\n"..GOOD.."Locate nearby resupply packs through walls",
 																6,			-3,					{SKILL_INSIGHT}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_VISION, "Refiner's Vision", GOOD.."Locate nearby remantlers if behind walls\n"..GOOD.."Locate nearby unplaced remantlers on players through walls",
-																6,			-6,					{SKILL_NONE, SKILL_ACUITY}, TREE_BUILDINGTREE)
+																6,			-7,					{SKILL_NONE, SKILL_SIGHT}, TREE_BUILDINGTREE)																
+GM:AddSkill(SKILL_SIGHT, "Crafter's Sight", GOOD.."Locate nearby crafting stations if behind walls\n"..GOOD.."Locate nearby unplaced crafting stations on players through walls",
+																6,			-5,					{SKILL_VISION, SKILL_ACUITY}, TREE_BUILDINGTREE)
 --GM:AddSkill(SKILL_U_ROCKETTURRET, "Unlock: Rocket Turret", GOOD.."Unlocks purchasing the Rocket Turret\nFires explosives instead of SMG ammo\nDeals damage in a radius\nHigh tier deployable",
 --																-8,			-0,					{SKILL_TURRETOVERLOAD}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_INSIGHT, "Buyer's Insight", GOOD.."Locate nearby arsenal crates if behind walls\n"..GOOD.."Locate nearby unplaced arsenal crates on players through walls\n"..GOOD.."Locate nearby arsenal packs through walls",

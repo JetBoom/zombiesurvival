@@ -1043,6 +1043,7 @@ function GM:_PostDrawTranslucentRenderables()
 		self:DrawCrateIndicators()
 		self:DrawResupplyIndicators()
 		self:DrawRemantlerIndicators()
+		self:DrawCraftStationIndicators()
 		self:DrawHumanIndicators()
 		self:DrawNestIndicators()
 	end
@@ -1151,6 +1152,42 @@ function GM:DrawRemantlerIndicators()
 			surface_DrawTexturedRect(-128, -128, 256, 256)
 
 			draw_SimpleTextBlurry("Weapon Remantler", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+
+			cam_End3D2D()
+			cam_IgnoreZ(false)
+		end
+	end
+end
+
+function GM:DrawCraftStationIndicators()
+	if P_Team(MySelf) ~= TEAM_HUMAN or not MySelf:IsSkillActive(SKILL_SIGHT) then return end
+
+	local pos, distance, ang, deployable, alpha
+	local eyepos = EyePos()
+
+	surface_SetMaterial(matRemantler)
+
+	for i, craft in pairs(GAMEMODE.CachedCraftEntities) do
+		if not craft:IsValid() then continue end
+		deployable = craft.GetObjectOwner
+
+		pos = craft:GetPos()
+		pos.z = pos.z + (craft:IsPlayer() and 32 or (deployable and 12 or -8))
+		distance = eyepos:DistToSqr(pos)
+
+		if (distance >= 6400 and distance <= 1048576) and (not deployable or not WorldVisible(eyepos, pos)) then -- Limited to Scavenger's Eyes distance.
+			ang = (eyepos - pos):Angle()
+			ang:RotateAroundAxis(ang:Right(), 270)
+			ang:RotateAroundAxis(ang:Up(), 90)
+			alpha = math.min(220, math.sqrt(distance / 4))
+
+			cam_IgnoreZ(true)
+			cam_Start3D2D(pos, ang, math.max(250, math.sqrt(distance)) / 5000)
+
+			surface_SetDrawColor(255, 255, 255, alpha)
+			surface_DrawTexturedRect(-128, -128, 256, 256)
+
+			draw_SimpleTextBlurry("Craft Station", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
 			cam_IgnoreZ(false)
