@@ -17,6 +17,8 @@ SWEP.WalkSpeed = SPEED_NORMAL
 
 SWEP.IsMelee = false
 
+SWEP.ShowBaseModel = true
+
 SWEP.HoldType = "slam"
 
 SWEP.DroppedColorModulation = Color(1, 0.5, 0)
