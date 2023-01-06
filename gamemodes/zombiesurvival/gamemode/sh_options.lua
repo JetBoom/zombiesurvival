@@ -380,7 +380,7 @@ GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							"Nail",							"I
 item.NoClassicMode = true
 item.CanMakeFromScrap = true
 item =
-GM:AddPointShopItem("sniperround",		ITEMCAT_AMMO,			20,				nil,							"Board",						"A board for aegis and prop packs.",	"ammo_sniperround",					function(pl) pl:GiveAmmo(1, "SniperRound", true) pl:PrintMessage(HUD_PRINTTALK, "STOP BUYING THIS.") pl:Kill() end)
+GM:AddPointShopItem("sniperround",		ITEMCAT_AMMO,			20,				nil,							"Board",						"A board for aegis and prop packs.",	"ammo_sniperround",					function(pl) pl:GiveAmmo(1, "SniperRound", true) end)
 item.CanMakeFromScrap = true
 -- Tier 1
 GM:AddPointShopItem("brassknuckles",	ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
@@ -704,19 +704,19 @@ end)
 -- Static values that don't need convars...
 
 -- Initial length for wave 1.
-GM.WaveOneLength = 135
+GM.WaveOneLength = 210 --220
 
 -- Add this many seconds for each additional wave.
 GM.TimeAddedPerWave = 15
 
 -- New players are put on the zombie team if the current wave is this or higher. Also makes them still able to use worth menu before this wave. Do not put it lower than 1 or you'll break the game.
-GM.NoNewHumansWave = 3
+GM.NoNewHumansWave = 3 --2
 
 -- Humans can not commit suicide if the current wave is this or lower.
 GM.NoSuicideWave = 0
 
 -- How long 'wave 0' should last in seconds. This is the time you should give for new players to join and get ready. (There is extra 25 seconds on first round of map for players to load)
-GM.WaveZeroLength = 220
+GM.WaveZeroLength = 180 --150
 
 -- Time humans have between waves to do stuff without NEW zombies spawning. Any dead zombies will be in spectator (crow) view and any living ones will still be living.
 GM.WaveIntermissionLength = 60
@@ -781,7 +781,7 @@ GM.EndWavePointsBonusPerWave = 1
 GM.NeedArsenalToBuyItems = true
 
 -- Overall XP Multiplier for all players (for both teams, does not include xp gaining from redeeming)
-GM.PlayerXPGainMulti = 1.5
+GM.PlayerXPGainMulti = 1
 
 -- For Humans
 GM.HumanXPGainMulti = 1
