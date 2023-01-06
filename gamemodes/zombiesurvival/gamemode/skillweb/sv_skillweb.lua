@@ -49,7 +49,7 @@ net.Receive("zs_skill_is_unlocked", function(length, pl)
 	local activate = net.ReadBool()
 	local skill = GAMEMODE.Skills[skillid]
 
-	if skill and not pl:IsSkillUnlocked(skillid) and pl:GetZSSPRemaining() >= 1 and pl:SkillCanUnlock(skillid) and not skill.Disabled then
+	if skill and (skill.RemortReq or 0) <= math.max(0, pl:GetZSRemortLevel()) and not pl:IsSkillUnlocked(skillid) and pl:GetZSSPRemaining() >= 1 and pl:SkillCanUnlock(skillid) and not skill.Disabled then
 		pl:SetSkillUnlocked(skillid, true)
 
 		local msg = "You've unlocked a skill: "..skill.Name
@@ -70,30 +70,37 @@ end)
 
 net.Receive("zs_skills_reset", function(length, pl)
 	if pl:GetZSLevel() < 10 then
-		pl:SkillNotify("You must be level 10 to reset your skills.")
+		pl:SkillNotify("You must be level 10 to reset your skills.", Color(255,255,255))
 		return
 	end
 
 	local time = os.time()
 	if pl.NextSkillReset and time < pl.NextSkillReset then
-		pl:SkillNotify("You must wait before resetting your skills again.")
+		pl:SkillNotify("You must wait before resetting your skills again.", Color(255,205,255))
 		return
 	end
 
 	pl:SkillsReset()
 
-	net.Start("zs_skills_nextreset")
-		net.WriteUInt(pl.NextSkillReset - time, 32)
-	net.Send(pl)
+	GAMEMODE:UpdatePlayerSkillsNextReset(pl)
 end)
 
 net.Receive("zs_skills_refunded", function(length, pl)
 	if pl.SkillsRefunded then
-		pl:SkillNotify("The skill tree has changed and your skills have been refunded.")
+		pl:SkillNotify("The skill tree has changed and your skills have been refunded.", Color(155,255,155))
 	end
 
 	pl.SkillsRefunded = false
 end)
+
+function GM:UpdatePlayerSkillsNextReset(pl)
+	local time = os.time()
+
+	if time > (pl.NextSkillReset or 0) then return end
+	net.Start("zs_skills_nextreset")
+	net.WriteUInt(pl.NextSkillReset - time, 32)
+	net.Send(pl)
+end
 
 function GM:WriteSkillBits(t)
 	t = table.ToAssoc(t)
@@ -110,10 +117,10 @@ end
 local meta = FindMetaTable("Player")
 if not meta then return end
 
-function meta:SkillNotify(message, green)
+function meta:SkillNotify(message, color)
 	net.Start("zs_skills_notify")
 	net.WriteString(message)
-	net.WriteBool(not not green)
+	net.WriteColor(IsColor(color) and color or Color(255,255,255))
 	net.Send(self)
 end
 
@@ -169,6 +176,18 @@ end
 function meta:AddZSXP(xp)
 	-- TODO: Level change checking. Cache the "XP for next level" in the vault load and compare it here instead of checking every add.
 	self:SetZSXP(self:GetZSXP() + xp)
+end
+
+-- Added this function due to new XP Gaining Multiplier, more accurate and will be used 
+function meta:GainZSXP(xp, ignoreendround)
+	if not ignoreendround and GAMEMODE.RoundEnded then return end
+	xp = xp * (GAMEMODE.PlayerXPGainMulti or 0)
+	xp = self:Team() == TEAM_HUMAN and xp * (GAMEMODE.HumanXPGainMulti or 1) or self:Team() == TEAM_UNDEAD and xp * (GAMEMODE.ZombixpMulti or 1) or xp 
+	self.XPRemainder = self.XPRemainder + (xp * (self.XPGainMul or 1))
+	local exp = self.XPRemainder
+	local gainxp = math.floor(exp)
+	self:AddZSXP(math.floor(exp))
+	self.XPRemainder = exp - math.floor(self.XPRemainder)
 end
 
 -- Done on team switch to anything except human.
@@ -240,6 +259,7 @@ function meta:SkillsRemort()
 	self:SetUnlockedSkills({})
 	self:SetDesiredActiveSkills({})
 	self.NextSkillReset = nil
+	self.XPRemainder = 0
 
 	self:CenterNotify(COLOR_CYAN, translate.ClientFormat(self, "you_have_remorted_now_rl_x", rl))
 	self:CenterNotify(COLOR_YELLOW, translate.ClientFormat(self, "you_now_have_x_extra_sp", rl))
@@ -257,7 +277,7 @@ end
 function meta:SkillsReset()
 	self:SetUnlockedSkills({})
 	self:SetDesiredActiveSkills({})
-	self.NextSkillReset = os.time() + 604800 -- 1 week
+	self.NextSkillReset = os.time() + (8 * 3600) -- 28400 seconds, 1 hour = 3600 seconds
 
 	self:CenterNotify(COLOR_CYAN, translate.ClientGet(self, "you_have_reset_all"))
 end

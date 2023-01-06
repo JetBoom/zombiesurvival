@@ -89,6 +89,7 @@ CreateClientConVar("zs_alwaysvolunteer", "0", true, true)
 CreateClientConVar("zs_nobosspick", "0", true, true)
 CreateClientConVar("zs_nousetodeposit", "0", true, true)
 CreateClientConVar("zs_nopickupprops", "0", true, true)
+CreateClientConVar("zs_noautocheckout", "0", true, true, "Disables automatic worth checkout. Worth is automatically checked out by the time when humans who join on later waves become zombies.")
 
 GM.DisableScopes = CreateClientConVar("zs_disablescopes", "0", true, false):GetBool()
 cvars.AddChangeCallback("zs_disablescopes", function(cvar, oldvalue, newvalue)
@@ -179,7 +180,7 @@ cvars.AddChangeCallback("zs_interfacesize", function(cvar, oldvalue, newvalue)
 	GAMEMODE.HealthHUD:InvalidateLayout()
 
 	GAMEMODE.GameStatePanel:InvalidateLayout()
-	GAMEMODE.GameStatePanel:SetSize(screenscale * 420, screenscale * 80)
+	GAMEMODE.GameStatePanel:SetSize(screenscale * 420, screenscale * 100)
 
 	GAMEMODE.TopNotificationHUD:InvalidateLayout()
 	GAMEMODE.CenterNotificationHUD:InvalidateLayout()
@@ -273,6 +274,31 @@ end)
 GM.AlwaysDrawFriend = CreateClientConVar("zs_showfriends", "0", true, false):GetBool()
 cvars.AddChangeCallback("zs_showfriends", function(cvar, oldvalue, newvalue)
 	GAMEMODE.AlwaysDrawFriend = tonumber(newvalue) == 1
+end)
+
+GM.PlayLoseMusic = CreateClientConVar("zs_playlosemusic", "1", true, true):GetBool()
+cvars.AddChangeCallback("zs_playlosemusic", function(cvar, oldvalue, newvalue)
+	GAMEMODE.PlayLoseMusic = tonumber(newvalue) == 1
+end)
+
+GM.PlayWinMusic = CreateClientConVar("zs_playwinmusic", "1", true, true):GetBool()
+cvars.AddChangeCallback("zs_playwinmusic", function(cvar, oldvalue, newvalue)
+	GAMEMODE.PlayWinMusic = tonumber(newvalue) == 1
+end)
+
+GM.PlayDrawMusic = CreateClientConVar("zs_playdrawmusic", "1", true, true):GetBool()
+cvars.AddChangeCallback("zs_playdrawmusic", function(cvar, oldvalue, newvalue)
+	GAMEMODE.PlayDrawMusic = tonumber(newvalue) == 1
+end)
+
+GM.OneClickSkillActivate = CreateClientConVar("zs_oneclickonskill", "0", true, false, "Activate skill with only 1 click instead of 2"):GetBool()
+cvars.AddChangeCallback("zs_oneclickonskill", function(cvar, oldvalue, newvalue)
+	GAMEMODE.OneClickSkillActivate = tonumber(newvalue) == 1
+end)
+
+GM.FearMeterDrawingEnabled = CreateClientConVar("zs_drawfearmeter", "1", true, false):GetBool()
+cvars.AddChangeCallback("zs_drawfearmeter", function(cvar, oldvalue, newvalue)
+	GAMEMODE.FearMeterDrawingEnabled = tonumber(newvalue) == 1
 end)
 
 CreateConVar( "cl_playercolor", "0.24 0.34 0.41", { FCVAR_ARCHIVE, FCVAR_USERINFO }, "The value is a Vector - so between 0-1 - not between 0-255" )

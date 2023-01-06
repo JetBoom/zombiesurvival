@@ -9,6 +9,7 @@ CLASS.Name = "Classic Zombie"
 CLASS.TranslationName = "class_classic_zombie"
 
 CLASS.Health = 150
+CLASS.DynamicHealth = 10
 CLASS.Speed = 200
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 

@@ -6,8 +6,8 @@ CLASS.Name = "Super Zombie"
 CLASS.TranslationName = "class_super_zombie"
 
 CLASS.Health = 1500
-CLASS.Speed = SPEED_ZOMBIEESCAPE_ZOMBIE
-CLASS.Points = 5
+CLASS.Speed = 300
+CLASS.Points = 8
 
 CLASS.SWEP = "weapon_zs_superzombie"
 

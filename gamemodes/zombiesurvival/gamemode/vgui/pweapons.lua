@@ -197,7 +197,7 @@ function MakepWeapons(silent)
 		end
 		wepnode.SWEP = wep
 		wepnode.DoClick = WeaponButtonDoClick
-		wepnode.Category = enttab.RequiredClip and ITEMCAT_GUNS or (enttab.Primary.Ammo == "none" and enttab.MeleeRange) and ITEMCAT_MELEE or ITEMCAT_TOOLS
+		wepnode.Category = enttab.RequiredClip and ITEMCAT_GUNS or (enttab.Primary.Ammo == "none" and (enttab.MeleeRange or enttab.HitDistance)) and ITEMCAT_MELEE or ITEMCAT_TOOLS
 		wepnode.Comps = GAMEMODE.Assemblies[wep]
 	end
 

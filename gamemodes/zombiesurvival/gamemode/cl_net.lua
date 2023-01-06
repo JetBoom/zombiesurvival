@@ -13,7 +13,8 @@ local function AltSelItemUpd()
 	if not activeweapon or not activeweapon:IsValid() then return end
 
 	local actwclass = activeweapon:GetClass()
-	GAMEMODE.HumanMenuPanel.SelectedItemLabel:SetText(weapons.Get(actwclass).PrintName)
+	local weapon = weapons.Get(actwclass)
+	GAMEMODE.HumanMenuPanel.SelectedItemLabel:SetText(weapon and weapon.PrintName or Format("#%s", actwclass))
 end
 
 net.Receive("zs_legdamage", function(length)
@@ -120,7 +121,7 @@ net.Receive("zs_wavestart", function(length)
 
 	if GAMEMODE.ZombieEscape then
 		GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Get("escape_from_the_zombies"))
-	elseif wave == GAMEMODE:GetNumberOfWaves() then
+	elseif not GAMEMODE:IsEndlessMode() and wave == GAMEMODE:GetNumberOfWaves() then
 		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Get("final_wave"), {killicon = "default"})
 		GAMEMODE:CenterNotify(translate.Get("final_wave_sub"))
 	else
@@ -144,7 +145,7 @@ net.Receive("zs_waveend", function(length)
 
 	gamemode.Call("SetWaveStart", time)
 
-	if wave < GAMEMODE:GetNumberOfWaves() and wave > 0 then
+	if wave > 0 then
 		GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Format("wave_x_is_over", wave))
 		GAMEMODE:CenterNotify(translate.Get("wave_x_is_over_sub"))
 
@@ -466,3 +467,22 @@ net.Receive("zs_nestbuilt", function(length)
 		GAMEMODE.ZSpawnMenu:RefreshContents()
 	end
 end)
+
+net.Receive("zs_achievementsprogress", function()
+	GAMEMODE.AchievementsProgress = util.JSONToTable(net.ReadString())
+
+	-- Clamp progress
+	for id, progress in pairs(GAMEMODE.AchievementsProgress) do
+		if isnumber(progress) then
+			GAMEMODE.AchievementsProgress[id] = math.Clamp(progress, 0, GAMEMODE.Achievements[id].Goal)
+		end
+	end
+end)
+
+net.Receive("zs_achievementgained", function()
+	local ply = net.ReadEntity()
+	local id = net.ReadString()
+	chat.AddText(COLOR_WHITE, "[", Color(125, 255, 125), "ZS", COLOR_WHITE, "] ", ply, COLOR_WHITE, " has earned ", Color(125, 255, 125), GAMEMODE.Achievements[id].Name, COLOR_WHITE, ".")
+
+end)
+

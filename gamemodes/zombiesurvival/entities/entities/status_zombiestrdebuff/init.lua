@@ -24,7 +24,8 @@ function ENT:PlayerHurt(victim, attacker, healthleft, damage)
 			victim.DamagedBy[applier] = (victim.DamagedBy[applier] or 0) + attributeddamage
 
 			local points = attributeddamage / victim:GetMaxHealth() * victim:GetZombieClassTable().Points
-			applier.PointQueue = applier.PointQueue + points
+			applier.PointQueue = applier.PointQueue + (points * (applier.PointsGainMul or 1))
+			applier:GainZSXP(points * 0.8)
 
 			local pos = victim:GetPos()
 			pos.z = pos.z + 32

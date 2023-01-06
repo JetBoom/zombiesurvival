@@ -18,7 +18,7 @@ if CLIENT then
 end
 
 SWEP.Primary.Automatic = false
-SWEP.Primary.Delay = 1
+SWEP.Primary.Delay = 0
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end

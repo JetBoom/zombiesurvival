@@ -21,7 +21,7 @@ function GM:ProgressForXP(xp)
 	return (xp - current_level_xp) / (next_level_xp - current_level_xp)
 end
 
-GM.MaxLevel = 50
+GM.MaxLevel = 35
 GM.MaxXP = GM:XPForLevel(GM.MaxLevel)
 
 -- Makes sure all skill connections are double linked
@@ -163,7 +163,7 @@ function meta:ApplySkills(override)
 	if SERVER and self.ExtraStartingWorth ~= self.LastSentESW then
 		self.LastSentESW = self.ExtraStartingWorth
 		net.Start("zs_extrastartingworth")
-			net.WriteUInt(self.ExtraStartingWorth, 16)
+		net.WriteInt(self.ExtraStartingWorth or 0, 16)
 		net.Send(self)
 	end
 end

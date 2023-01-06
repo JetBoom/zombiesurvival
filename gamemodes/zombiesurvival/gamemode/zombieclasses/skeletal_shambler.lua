@@ -3,9 +3,10 @@ CLASS.TranslationName = "class_skeletal_shambler"
 CLASS.Description = "description_skeletal_shambler"
 CLASS.Help = "controls_skeletal_shambler"
 
-CLASS.Wave = 5 / 6
+CLASS.Wave = 5 / GM.NumberOfWaves
 
 CLASS.Health = 180
+CLASS.DynamicHealth = 4
 CLASS.Speed = 155
 
 CLASS.CanTaunt = true

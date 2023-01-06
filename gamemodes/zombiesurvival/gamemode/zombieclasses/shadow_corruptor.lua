@@ -7,7 +7,7 @@ CLASS.TranslationName = "class_shadow_corruptor"
 CLASS.Description = "description_shadow_corruptor"
 CLASS.Help = "controls_shadow_corruptor"
 
-CLASS.Wave = 6 / 6
+CLASS.Wave = 6 / GM.NumberOfWaves
 
 CLASS.Health = 100
 CLASS.Speed = 150

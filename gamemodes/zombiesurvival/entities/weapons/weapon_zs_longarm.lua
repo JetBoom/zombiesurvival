@@ -62,10 +62,10 @@ SWEP.WallDivide = 6
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.468)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.206)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.075, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Gunslinger' Handgun", "Fires rapidly, larger clip, but deals less damage and less damage on bounce", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Gunslinger' Handgun", "Fires rapidly, +6 clip size, but -30% less damage and less damage on bounce", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.7
 	wept.Primary.Delay = wept.Primary.Delay * 0.68
-	wept.Primary.ClipSize = 16
+	wept.Primary.ClipSize = wept.Primary.ClipSize + 6
 	wept.WallDivide = 8
 end)
 

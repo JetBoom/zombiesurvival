@@ -8,7 +8,8 @@ GM.ZombieEscapeWeaponsPrimary = {
 	"weapon_zs_zesilencer",
 	"weapon_zs_zequicksilver",
 	"weapon_zs_zeamigo",
-	"weapon_zs_zem4"
+	"weapon_zs_zem4",
+	"weapon_zs_zescar"
 }
 
 GM.ZombieEscapeWeaponsSecondary = {
@@ -21,7 +22,7 @@ GM.ZombieEscapeWeaponsSecondary = {
 
 -- Change this if you plan to alter the cost of items or you severely change how Worth works.
 -- Having separate cart files allows people to have separate loadouts for different servers.
-GM.CartFile = "zscarts.txt"
+GM.CartFile = "zscarts_alt.txt" --"zscarts.txt"
 GM.SkillLoadoutsFile = "zsskloadouts.txt"
 
 ITEMCAT_GUNS = 1
@@ -358,6 +359,10 @@ GM:AddPointShopItem("spinfusor",		ITEMCAT_GUNS,			200,			"weapon_zs_spinfusor")
 GM:AddPointShopItem("broadside",		ITEMCAT_GUNS,			200,			"weapon_zs_broadside")
 GM:AddPointShopItem("smelter",			ITEMCAT_GUNS,			200,			"weapon_zs_smelter")
 
+-- Tier 6?
+GM:AddPointShopItem("doomstick",		ITEMCAT_GUNS,			300,			"weapon_zs_doomstick")
+
+
 GM:AddPointShopItem("pistolammo",		ITEMCAT_AMMO,			9,				nil,							"14 pistol ammo",				nil,									"ammo_pistol",						function(pl) pl:GiveAmmo(14, "pistol", true) end)
 GM:AddPointShopItem("shotgunammo",		ITEMCAT_AMMO,			9,				nil,							"12 shotgun ammo",				nil,									"ammo_shotgun",						function(pl) pl:GiveAmmo(12, "buckshot", true) end)
 GM:AddPointShopItem("smgammo",			ITEMCAT_AMMO,			9,				nil,							"36 SMG ammo",					nil,									"ammo_smg",							function(pl) pl:GiveAmmo(36, "smg1", true) end)
@@ -368,11 +373,14 @@ GM:AddPointShopItem("pulseammo",		ITEMCAT_AMMO,			9,				nil,							"30 pulse amm
 GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			9,				nil,							"3 explosives",					nil,									"ammo_explosive",					function(pl) pl:GiveAmmo(3, "impactmine", true) end)
 GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			9,				nil,							"20 chemical vials",			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(20, "chemical", true) end)
 item =
-GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			15,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
+GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			12,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
 item.CanMakeFromScrap = true
 item =
 GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							"Nail",							"It's just one nail.",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end)
 item.NoClassicMode = true
+item.CanMakeFromScrap = true
+item =
+GM:AddPointShopItem("sniperround",		ITEMCAT_AMMO,			20,				nil,							"Board",						"A board for aegis and prop packs.",	"ammo_sniperround",					function(pl) pl:GiveAmmo(1, "SniperRound", true) pl:PrintMessage(HUD_PRINTTALK, "STOP BUYING THIS.") pl:Kill() end)
 item.CanMakeFromScrap = true
 -- Tier 1
 GM:AddPointShopItem("brassknuckles",	ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
@@ -658,7 +666,7 @@ GM:AddDeployableInfo("prop_tv",                   	 "TV",                    	"w
 
 GM.MaxSigils = 3
 
-GM.DefaultRedeem = CreateConVar("zs_redeem", "4", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "The amount of kills a zombie needs to do in order to redeem. Set to 0 to disable."):GetInt()
+GM.DefaultRedeem = CreateConVar("zs_redeem", "3", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "The amount of kills a zombie needs to do in order to redeem. Set to 0 to disable."):GetInt()
 cvars.AddChangeCallback("zs_redeem", function(cvar, oldvalue, newvalue)
 	GAMEMODE.DefaultRedeem = math.max(0, tonumber(newvalue) or 0)
 end)
@@ -696,25 +704,28 @@ end)
 -- Static values that don't need convars...
 
 -- Initial length for wave 1.
-GM.WaveOneLength = 220
+GM.WaveOneLength = 135
 
 -- Add this many seconds for each additional wave.
 GM.TimeAddedPerWave = 15
 
--- New players are put on the zombie team if the current wave is this or higher. Do not put it lower than 1 or you'll break the game.
-GM.NoNewHumansWave = 2
+-- New players are put on the zombie team if the current wave is this or higher. Also makes them still able to use worth menu before this wave. Do not put it lower than 1 or you'll break the game.
+GM.NoNewHumansWave = 3
 
 -- Humans can not commit suicide if the current wave is this or lower.
-GM.NoSuicideWave = 1
+GM.NoSuicideWave = 0
 
--- How long 'wave 0' should last in seconds. This is the time you should give for new players to join and get ready.
-GM.WaveZeroLength = 150
+-- How long 'wave 0' should last in seconds. This is the time you should give for new players to join and get ready. (There is extra 25 seconds on first round of map for players to load)
+GM.WaveZeroLength = 220
 
 -- Time humans have between waves to do stuff without NEW zombies spawning. Any dead zombies will be in spectator (crow) view and any living ones will still be living.
 GM.WaveIntermissionLength = 60
 
 -- Time in seconds between end round and next map.
-GM.EndGameTime = 45
+GM.EndGameTime = 35
+
+-- Same as above but for ZE
+GM.ZEEndGameTime = 10
 
 -- How many clips of ammo guns from the Worth menu start with. Some guns such as shotguns and sniper rifles have multipliers on this.
 GM.SurvivalClips = 4 --2
@@ -725,11 +736,14 @@ GM.ResupplyBoxCooldown = 60
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
 GM.LastHumanSound = Sound("zombiesurvival/lasthuman.ogg")
 
--- Sound played when humans all die.
-GM.AllLoseSound = Sound("zombiesurvival/music_lose.ogg")
+-- Sound played when humans all die. (NEW: Now supports table values for those below, where it chooses sound randomly)
+GM.AllLoseSound = {Sound("zombiesurvival/music_lose.ogg")}
 
 -- Sound played when humans survive.
 GM.HumanWinSound = Sound("zombiesurvival/music_win.ogg")
+
+-- Sound played when round ends in draw.
+GM.RoundDrawSound = Sound("zombiesurvival/music_draw.ogg")
 
 -- Sound played to a person when they die as a human.
 GM.DeathSound = Sound("zombiesurvival/human_death_stinger.ogg")
@@ -754,11 +768,29 @@ GM.WaveOneLengthClassic = 120
 GM.TimeAddedPerWaveClassic = 10
 
 -- Max amount of damage left to tick on these. Any more pending damage is ignored.
-GM.MaxPoisonDamage = 50
-GM.MaxBleedDamage = 50
+GM.MaxPoisonDamage = 60
+GM.MaxBleedDamage = 55
 
 -- Give humans this many points when the wave ends.
 GM.EndWavePointsBonus = 5
 
 -- Also give humans this many points when the wave ends, multiplied by (wave - 1)
 GM.EndWavePointsBonusPerWave = 1
+
+-- Should humans need to be near arsenal crates to buy items
+GM.NeedArsenalToBuyItems = true
+
+-- Overall XP Multiplier for all players (for both teams, does not include xp gaining from redeeming)
+GM.PlayerXPGainMulti = 1.5
+
+-- For Humans
+GM.HumanXPGainMulti = 1
+
+-- And as well as for zombies
+GM.ZombieXPGainMulti = 1
+
+-- Use the zombie class for classic mode
+GM.ClassicZombieClass = "Classic Zombie"
+
+-- Enable or disable difficulty
+GM.DifficultyEnabledByDefault = true

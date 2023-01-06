@@ -3,6 +3,8 @@ CLASS.TranslationName = "class_fresh_dead"
 CLASS.Description = "description_fresh_dead"
 CLASS.Help = "controls_fresh_dead"
 
+CLASS.BetterVersion = "Infected Citizen"
+
 CLASS.Wave = 0
 CLASS.Unlocked = true
 CLASS.Hidden = true

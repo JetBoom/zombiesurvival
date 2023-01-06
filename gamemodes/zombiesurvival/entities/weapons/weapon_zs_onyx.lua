@@ -86,7 +86,7 @@ SWEP.Tier = 3
 
 SWEP.FireAnimSpeed = 0.6
 
-GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.1, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.08, 1)
 
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 77, 75, 1)

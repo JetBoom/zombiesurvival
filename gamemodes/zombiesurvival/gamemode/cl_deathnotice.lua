@@ -480,6 +480,34 @@ net.Receive("zs_pl_kill_self", function(length)
 	end
 end)
 
+net.Receive("zs_pl_kill_npc", function(length)
+	local victim = net.ReadEntity()
+	local attacker = net.ReadEntity()
+
+	local inflictor = net.ReadString()
+
+	local victimteam = net.ReadUInt(8)
+	local attackerteam = net.ReadUInt(8)
+
+	local headshot = net.ReadBit() == 1
+	local victimname
+
+	if victim:IsValid() and attacker:IsValid() then
+		local attackername = attacker:Name()
+		victimname = Format("#%s", victim:GetClass())
+
+		if attacker == MySelf then
+			if attacker:Team() == TEAM_UNDEAD then
+				gamemode.Call("FloatingScore", victim, "floatingscore_und", 1, 0)
+			end
+		end
+
+--		victim:CallZombieFunction5("OnKilled", attacker, attacker, attacker == victim, headshot, DamageInfo()) --bugged
+
+		GAMEMODE:TopNotify(attacker, " ", {killicon = inflictor, headshot = headshot}, " ", --[[team.GetColor(victimteam)]] Color(255,255,0), victimname)
+	end
+end)
+
 net.Receive("zs_playerredeemed", function(length)
 	local pl = net.ReadEntity()
 

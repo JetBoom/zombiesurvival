@@ -10,6 +10,7 @@ SWEP.MeleeDelay = 0.74
 SWEP.MeleeReach = 48
 SWEP.MeleeSize = 4.5 --1.5
 SWEP.MeleeDamage = 35
+SWEP.MeleeDamageVsProps = nil -- because
 SWEP.MeleeForceScale = 1
 SWEP.MeleeDamageType = DMG_SLASH
 
@@ -191,6 +192,7 @@ function SWEP:MeleeHit(ent, trace, damage, forcescale)
 	if ent:IsPlayer() then
 		self:MeleeHitPlayer(ent, trace, damage, forcescale)
 	else
+		damage = self.MeleeDamageVsProps or damage
 		self:MeleeHitEntity(ent, trace, damage, forcescale)
 	end
 

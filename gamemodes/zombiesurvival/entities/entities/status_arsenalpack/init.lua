@@ -2,7 +2,8 @@ INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
-	self:SetModelScale(0.4, 0)
+	self:SetNotSolid(true)
+	self:SetModelScale(0.4, 0) -- 0.4x model scale before
 
 	self:SetModel("models/Items/item_item_crate.mdl")
 	self:SetMoveType(MOVETYPE_NONE)

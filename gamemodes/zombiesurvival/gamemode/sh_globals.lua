@@ -39,6 +39,7 @@ DT_PLAYER_INT_REMORTLEVEL = 5
 DT_PLAYER_INT_XP = 6
 DT_PLAYER_INT_BLOODARMOR = 7
 DT_PLAYER_INT_VOICESET = 8
+DT_PLAYER_INT_BANKXP = 9
 DT_PLAYER_BOOL_BARRICADEEXPERT = 6
 DT_PLAYER_BOOL_NECRO = 7
 DT_PLAYER_BOOL_FRAIL = 8
@@ -111,13 +112,13 @@ GM.ArsenalCrateCommission = 0.04
 
 GM.BaseDeploySpeed = 1 -- Put this back to 1 to increase the value of it
 
-GM.ExtraHealthPerExtraNail = 75
+GM.ExtraHealthPerExtraNail = 105
 GM.MaxNails = 4
 
 -- Moved from options to globals because the game is now balanced around it being static. The gamemode will BREAK if this is not 6!!
 GM.NumberOfWaves = 6
 
-GM.PulsePointsMultiplier = 1.25
+GM.PulsePointsMultiplier = 1.2
 
 -- The amount of damage you need to inflict to a zombie type to get a point
 GM.HumanoidZombiePointRatio = 45
@@ -126,7 +127,10 @@ GM.HeadcrabZombiePointRatio = 30
 GM.NoHeadboxZombiePointRatio = 38
 GM.TorsoZombiePointRatio = 42
 GM.LegsZombiePointRatio = 37.5
-GM.SkeletonPointRatio = GM.HumanoidZombiePointRatio/3
+GM.SkeletonPointRatio = GM.HumanoidZombiePointRatio / 3
+
+GM.NPCZombiePointRatio = 67.5 -- for NPC's
+
 
 SPEED_NORMAL = 225
 SPEED_SLOWEST = SPEED_NORMAL - 20
@@ -140,35 +144,40 @@ SPEED_ZOMBIEESCAPE_SLOWEST = 220
 SPEED_ZOMBIEESCAPE_SLOWER = 230
 SPEED_ZOMBIEESCAPE_SLOW = 240
 SPEED_ZOMBIEESCAPE_NORMAL = 250
-SPEED_ZOMBIEESCAPE_ZOMBIE = 280
+SPEED_ZOMBIEESCAPE_ZOMBIE = 260
 
-ZE_KNOCKBACKSCALE = 0.1
+ZE_KNOCKBACKSCALE = 0.09
 
 MASK_HOVER = bit.bor(CONTENTS_SOLID, CONTENTS_WATER, CONTENTS_SLIME, CONTENTS_GRATE, CONTENTS_WINDOW, CONTENTS_HITBOX)
 
-GM.BarricadeHealthMin = 50
-GM.BarricadeHealthMax = 1100 * 0.85
-GM.BarricadeHealthMassFactor = 3 * 0.85
-GM.BarricadeHealthVolumeFactor = 4 * 0.85
-GM.BarricadeRepairCapacity = 1.25
+GM.BarricadeHealthMin = 160
+GM.BarricadeHealthMax = 2500 * 0.85
+GM.BarricadeHealthMassFactor = 3.75 * 0.85 --3.5 * 0.85
+GM.BarricadeHealthVolumeFactor = 4.25 * 0.85 --4 * 0.85
+GM.BarricadeRepairCapacity = 1.55
 
+-- Amount of players needed for the boss to spawn. (player bots count too)
 GM.BossZombiePlayersRequired = 8
 
-GM.HumanGibs = {
-Model("models/gibs/HGIBS.mdl"),
-Model("models/gibs/HGIBS_spine.mdl"),
+-- Amount (in seconds) for the boss to spawn in before wave starts
+GM.BossZombieSpawnBeforeWaveStart = 3
 
-Model("models/gibs/HGIBS_rib.mdl"),
-Model("models/gibs/HGIBS_scapula.mdl"),
-Model("models/gibs/antlion_gib_medium_2.mdl"),
-Model("models/gibs/Antlion_gib_Large_1.mdl"),
-Model("models/gibs/Strider_Gib4.mdl")
+GM.HumanGibs = {
+	Model("models/gibs/HGIBS.mdl"),
+	Model("models/gibs/HGIBS_spine.mdl"),
+
+	Model("models/gibs/HGIBS_rib.mdl"),
+	Model("models/gibs/HGIBS_scapula.mdl"),
+	Model("models/gibs/antlion_gib_medium_2.mdl"),
+	Model("models/gibs/Antlion_gib_Large_1.mdl"),
+	Model("models/gibs/Strider_Gib4.mdl")
 }
 
 GM.BannedProps = {
 }
 
 GM.PropHealthMultipliers = {
+	[Model("models/props_c17/door01_left.mdl")] = 1.5,
 }
 
 GM.CleanupFilter = {
@@ -276,6 +285,7 @@ GM.AmmoIcons["pulse"] = "ammo_pulse"
 GM.AmmoIcons["impactmine"] = "ammo_explosive"
 GM.AmmoIcons["chemical"] = "ammo_chemical"
 GM.AmmoIcons["scrap"] = "ammo_scrap"
+GM.AmmoIcons["sniperround"] = "ammo_sniperround"
 
 GM.ResistableStatuses = {
 	"sickness",
@@ -296,7 +306,7 @@ GM.ScrapValsTrinkets = {
 }
 
 GM.DismantleMultipliers = {
-	1, 2, 4, 7
+	1, 2, 4, 7, 11
 }
 
 -- Handled in languages file.

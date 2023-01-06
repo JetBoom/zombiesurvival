@@ -288,6 +288,15 @@ function util.ToMinutesSecondsCD(seconds)
 	return string.format("%02d:%02d", minutes, seconds)
 end
 
+function util.ToMinutesSecondsDeciseconds(seconds)
+	local minutes = math.floor(seconds / 60)
+	seconds = seconds - minutes * 60
+
+	local deciseconds = math.floor(seconds % 1 * 10)
+
+	return string.format("%02d:%02d.%01d", minutes, math.floor(seconds), deciseconds)
+end
+
 function util.ToMinutesSecondsMilliseconds(seconds)
 	local minutes = math.floor(seconds / 60)
 	seconds = seconds - minutes * 60

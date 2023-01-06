@@ -3,7 +3,7 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_baseshotgun"
 
 SWEP.PrintName = "'Gladiator' Super Shotgun"
-SWEP.Description = "A pump super shotgun."
+SWEP.Description = "A pump super shotgun. Uses 2 ammo per shot."
 
 if CLIENT then
 	SWEP.ViewModelFlip = false

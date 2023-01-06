@@ -88,9 +88,10 @@ function ENT:Touch(ent)
 
 		gamemode.Call("OnPlayerWin", ent)
 
-		--ent:PrintMessage(HUD_PRINTTALK, "You've managed to survive! Waiting for other survivors...")
+--		ent:CenterNotify(COLOR_CYAN, "You've managed to survive! Waiting for other survivors...")
+
 		net.Start("zs_survivor")
-			net.WriteEntity(ent)
+		net.WriteEntity(ent)
 		net.Broadcast()
 	end
 end

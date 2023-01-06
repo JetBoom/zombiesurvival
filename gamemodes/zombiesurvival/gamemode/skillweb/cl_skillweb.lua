@@ -8,7 +8,7 @@ local render_SuppressEngineLighting = render.SuppressEngineLighting
 
 net.Receive("zs_skills_notify", function(length)
 	if GAMEMODE.SkillWeb then
-		GAMEMODE.SkillWeb:DisplayMessage(net.ReadString(), net.ReadBool() and COLOR_RED or COLOR_GREEN)
+		GAMEMODE.SkillWeb:DisplayMessage(net.ReadString(), net.ReadColor() or COLOR_WHITE)
 	end
 end)
 
@@ -119,10 +119,10 @@ net.Receive("zs_skills_nextreset", function(length)
 	GAMEMODE.NextSkillReset = net.ReadUInt(32)
 
 	if GAMEMODE.SkillWeb and GAMEMODE.SkillWeb:IsValid() then
-		local days = math.floor(GAMEMODE.NextSkillReset / 86400)
+		local hours = math.floor(GAMEMODE.NextSkillReset / 3600)
 		local btn = GAMEMODE.SkillWeb.Reset
 
-		btn:SetText(GAMEMODE.NextSkillReset <= 0 and "Reset" or (days .. " days left"))
+		btn:SetText(GAMEMODE.NextSkillReset <= 0 and "Reset" or (hours .. " hours left"))
 		btn:SetDisabled(GAMEMODE.NextSkillReset > 0)
 	end
 end)
@@ -201,7 +201,7 @@ end
 
 local hoveredskill
 
-local REMORT_SKILL = {Name = "Remort", Description = "Go even further beyond.\nLose all skills, experience, skill points, and levels.\nStart at level 1 but with 1 extra skill point.\nCan remort multiple times for multiple extra skill points."}
+local REMORT_SKILL = {Name = "Remort", Description = "Go even further beyond.\nLose all skills, experience, skill points, and levels.\nStart at level 1 once again, but with an extra SP.\nCan remort multiple times for multiple extra skill points.\n(1 remort = 1 extra skill point)"}
 
 local PANEL = {}
 
@@ -219,13 +219,45 @@ PANEL.ShadeAlpha = 0
 PANEL.ShadeVelocity = 0
 
 local offsets = {
-	[TREE_HEALTHTREE] = {0, 16},
-	[TREE_SPEEDTREE] = {0, -12},
-	[TREE_GUNTREE] = {13, -7},
-	[TREE_MELEETREE] = {13, 8},
-	[TREE_BUILDINGTREE] = {-14, 8},
-	[TREE_SUPPORTTREE] = {-13, -7}
+	[TREE_HEALTHTREE] = {0, 20},
+	[TREE_SPEEDTREE] = {0, -16},
+	[TREE_GUNTREE] = {15, -9},
+	[TREE_MELEETREE] = {15, 10},
+	[TREE_BUILDINGTREE] = {-16, 10},
+	[TREE_SUPPORTTREE] = {-15, -9},
+	[TREE_TORMENTTREE] = {21,1},
+	[TREE_REMORTTREE] = {0,0}
 }
+
+local function ActivateSkill(self, skillid)
+	local name = GAMEMODE.Skills[skillid].Name
+	net.Start("zs_skill_is_desired")
+	net.WriteUInt(skillid, 16)
+	net.WriteBool(true)
+	net.SendToServer()
+
+	self:DisplayMessage(name.." activated.", COLOR_DARKGREEN)
+end
+
+local function DeactivateSkill(self, skillid)
+	local name = GAMEMODE.Skills[skillid].Name
+	net.Start("zs_skill_is_desired")
+	net.WriteUInt(skillid, 16)
+	net.WriteBool(false)
+	net.SendToServer()
+
+	self:DisplayMessage(name.." deactivated.")
+end
+
+local function UnlockSkill(self, skillid)
+	local name = GAMEMODE.Skills[skillid].Name
+	net.Start("zs_skill_is_unlocked")
+	net.WriteUInt(skillid, 16)
+	net.WriteBool(true)
+	net.SendToServer()
+
+	self:DisplayMessage(name.." unlocked and activated!", COLOR_GREEN)
+end
 
 function PANEL:Init()
 	local allskills = GAMEMODE.Skills
@@ -307,7 +339,7 @@ function PANEL:Init()
 	bottomleftup:SetSize(190 * screenscale, 120 * screenscale)
 
 	local quickstats = {}
-	for i=1,3 do
+	for i=1,4 do
 		local hpstat = vgui.Create("DLabel", bottomleftup)
 		hpstat:SetFont("ZSHUDFontSmaller")
 		hpstat:SetTextColor(COLOR_WHITE)
@@ -437,7 +469,7 @@ function PANEL:Init()
 		if #MySelf:GetUnlockedSkills() == 0 then
 			self:DisplayMessage("You have no skills to deactivate!", COLOR_RED)
 		else
-			self:DisplayMessage("All unlocked skills deactivated.", COLOR_RED)
+			self:DisplayMessage("All unlocked skills deactivated.", COLOR_RORANGE)
 		end
 
 		net.Start("zs_skills_all_desired")
@@ -446,11 +478,11 @@ function PANEL:Init()
 	end
 
 	local resettime = GAMEMODE.NextSkillReset or 0
-	local days = math.floor(resettime / 86400)
+	local hours = math.floor(resettime / 3600)
 
 	local reset = vgui.Create("DButton", bottomlefttop)
 	reset:SetFont("ZSHUDFontSmaller")
-	reset:SetText(resettime <= 0 and "Reset" or (days .. " days left"))
+	reset:SetText(resettime <= 0 and "Reset" or (hours .. " hours left"))
 	reset:SetDisabled(resettime > 0)
 	reset:SizeToContents()
 	reset:SetTall(reset:GetTall())
@@ -458,7 +490,7 @@ function PANEL:Init()
 	reset:Dock(TOP)
 	reset.DoClick = function(me)
 		Derma_Query(
-			"Reset all skills and refund SP?\nYou can only do this once per week.",
+			"Reset all skills and refund SP?\nYou can only do this once per 8 hours.",
 			"Warning",
 			"OK",
 			function() net.Start("zs_skills_reset") net.SendToServer() end,
@@ -513,33 +545,18 @@ function PANEL:Init()
 	button:SetText("Activate")
 	button:SetFont("ZSHUDFontSmall")
 	button:SetDisabled(false)
-	button:SetSize(128 * screenscale, 32 * screenscale)
+	button:SetSize(128 * screenscale, 40 * screenscale)
 	button:AlignTop()
 	button:CenterHorizontal()
 	button.DoClick = function(me)
 		local skillid = contextmenu.SkillID
 		local name = allskills[skillid].Name
 		if MySelf:IsSkillDesired(skillid) then
-			net.Start("zs_skill_is_desired")
-				net.WriteUInt(skillid, 16)
-				net.WriteBool(false)
-			net.SendToServer()
-
-			self:DisplayMessage(name.." deactivated.")
+			DeactivateSkill(self, skillid)
 		elseif MySelf:IsSkillUnlocked(skillid) then
-			net.Start("zs_skill_is_desired")
-				net.WriteUInt(skillid, 16)
-				net.WriteBool(true)
-			net.SendToServer()
-
-			self:DisplayMessage(name.." activated.", COLOR_DARKGREEN)
+			ActivateSkill(self, skillid)
 		else
-			net.Start("zs_skill_is_unlocked")
-				net.WriteUInt(skillid, 16)
-				net.WriteBool(true)
-			net.SendToServer()
-
-			self:DisplayMessage(name.." unlocked and activated!", COLOR_GREEN)
+			UnlockSkill(self, skillid)
 		end
 
 		contextmenu:SetVisible(false)
@@ -628,9 +645,10 @@ function PANEL:UpdateQuickStats()
 		end
 	end
 
-	for i=1,3 do
-		local prefix = i == 1 and "Health" or i == 2 and "Speed" or "Worth"
-		local val = i == 2 and SPEED_NORMAL or 100
+	for i=1,4 do
+		local prefix = i == 1 and "Health" or i == 2 and "Blood Armor" or i == 3 and "Speed" or "Worth"
+		local val = i == 1 and 100 or i == 2 and 20 or i == 3 and SPEED_NORMAL or GAMEMODE.StartingWorth
+
 		self.QuickStats[i]:SetText(prefix .. " : " .. (val + (skillmodifiers[i] or 0)))
 	end
 end
@@ -680,10 +698,10 @@ end
 function PANEL:GenerateParticles()
 	local particles = {}
 	local particle
-	for i=1, 140 do
+	for i=1, 180 do
 		-- struct: Position, Roll, Roll rate, Size, Alpha
 		particle = {}
-		particle[1] = Vector(math.Rand(-1524, -32), math.Rand(-610, 610), math.Rand(-610, 610))
+		particle[1] = Vector(math.Rand(-1724, -32), math.Rand(-810, 810), math.Rand(-810, 810))
 		particle[2] = math.Rand(0, 360)
 		particle[3] = math.Rand(-5, 5)
 		particle[4] = math.Rand(180, 240)
@@ -790,8 +808,8 @@ function PANEL:DoEdgeScroll(deltatime)
 
 	if camera_velocity.y ~= 0 or camera_velocity.z ~= 0 then
 		campos = campos + deltatime * edge * 12 * camera_velocity
-		campos.y = math.Clamp(campos.y, -262, 262)
-		campos.z = math.Clamp(campos.z, -262, 310)
+		campos.y = math.Clamp(campos.y, -412, 412)
+		campos.z = math.Clamp(campos.z, -412, 412)
 
 		self:SetCamPos(campos)
 		self.vLookatPos:Set(campos)
@@ -805,7 +823,9 @@ local nodecolors = {
 	[TREE_SUPPORTTREE] = {3, 1.5, 6},
 	[TREE_BUILDINGTREE] = {2, 6, 3},
 	[TREE_MELEETREE] = {1.5, 7, 7},
-	[TREE_GUNTREE] = {5, 2, 2}
+	[TREE_GUNTREE] = {5, 2, 2},
+	[TREE_TORMENTTREE] = {9.5, 4, 8},
+	[TREE_REMORTTREE] = {0, 0, 0}
 }
 
 local matBeam = Material("effects/laser1")
@@ -816,6 +836,7 @@ local colBeam = Color(0, 0, 0)
 local colBeam2 = Color(255, 255, 255)
 local colSmoke = Color(140, 160, 185, 160)
 local colGlow = Color(0, 0, 0)
+
 function PANEL:Paint(w, h)
 	local realtime = RealTime()
 	local lifetime = realtime - self.CreationTime
@@ -834,7 +855,7 @@ function PANEL:Paint(w, h)
 	campos.x = math.Approach(campos.x, self.DesiredZoom, dt * 13500)
 	self:SetCamPos(campos)
 
-	surface.SetDrawColor(0, 0, 0, 252)
+	surface.SetDrawColor(0, 0, 0, 235)
 	surface.DrawRect(0, 0, w, h)
 
 	ang = self.aLookAngle
@@ -901,7 +922,7 @@ function PANEL:Paint(w, h)
 								colBeam.r = 32
 								colBeam.g = 128
 								colBeam.b = 255
-							elseif MySelf:SkillCanUnlock(node.SkillID) or MySelf:SkillCanUnlock(connectid) then
+							elseif (GAMEMODE.Skills[node.SkillID].RemortReq or 0) <= math.max(0, MySelf:GetZSRemortLevel()) and MySelf:SkillCanUnlock(node.SkillID) or (skill.RemortReq or 0) <= math.max(0, MySelf:GetZSRemortLevel()) and MySelf:SkillCanUnlock(connectid) then
 								colBeam.r = 255
 								colBeam.g = 192
 								colBeam.b = 0
@@ -995,7 +1016,7 @@ function PANEL:Paint(w, h)
 				render_SetColorModulation(sat / 4, sat / 4, sat / 2)
 			elseif MySelf:IsSkillUnlocked(skillid) then
 				render_SetColorModulation(sat, sat, sat)
-			elseif MySelf:SkillCanUnlock(skillid) then
+			elseif (skill.RemortReq or 0) <= math.max(0, MySelf:GetZSRemortLevel()) and MySelf:SkillCanUnlock(skillid) then
 				render_SetColorModulation(sat, sat / 1.25, sat / 4)
 			else
 				render_SetColorModulation(sat / divs[1] / 1.25, sat / divs[2] / 1.25, sat / divs[3] / 1.25)
@@ -1014,8 +1035,21 @@ function PANEL:Paint(w, h)
 
 			if self.DesiredZoom < 9500 then
 				local colo = skill.Disabled and COLOR_DARKGRAY or selected and color_white or notunlockable and COLOR_MIDGRAY or COLOR_GRAY
+				local colo2 = COLOR_GRAY
 
 				draw_SimpleText(skill.Name, skillid <= -1 and "ZS3D2DFont2Big" or "ZS3D2DFont2", 0, 0, colo, TEXT_ALIGN_CENTER)
+
+				local y_pos = 58
+				if skill.AlwaysActive then
+					draw_SimpleText(translate.Get("s_always_active"), "ZSHUDFont", 0, y_pos, colo2, TEXT_ALIGN_CENTER)
+					y_pos = y_pos + 32
+				end
+
+				if skill.RemortReq then
+					draw_SimpleText(translate.Format("s_remort_req", skill.RemortReq), "ZSHUDFont", 0, y_pos, colo2, TEXT_ALIGN_CENTER)
+					y_pos = y_pos + 32
+				end
+
 			end
 
 			DisableClipping(false)
@@ -1033,7 +1067,7 @@ function PANEL:Paint(w, h)
 					colGlow.r = colGlow.r / 4
 					colGlow.g = colGlow.g / 4
 				elseif not MySelf:IsSkillUnlocked(skillid) then
-					if MySelf:SkillCanUnlock(skillid) then
+					if (skill.RemortReq or 0) <= math.max(0, MySelf:GetZSRemortLevel()) and MySelf:SkillCanUnlock(skillid) then
 						colGlow.g = colGlow.g / 1.5
 						colGlow.b = 0
 					else
@@ -1124,7 +1158,7 @@ function PANEL:OnMousePressed(mc)
 
 				return
 			elseif hoveredskill == -1 then
-				self:DisplayMessage("You need to be level 50 to remort!", COLOR_RED)
+				self:DisplayMessage(Format("You need to be level %d to remort!", GAMEMODE.MaxLevel), COLOR_RED)
 				surface.PlaySound("buttons/button8.wav")
 
 				return
@@ -1136,12 +1170,22 @@ function PANEL:OnMousePressed(mc)
 					return
 				end
 
+				if GAMEMODE.OneClickSkillActivate then DeactivateSkill(self, hoveredskill) return end
 				contextmenu.Button:SetText("Deactivate")
 			elseif MySelf:IsSkillUnlocked(hoveredskill) then
+				if GAMEMODE.OneClickSkillActivate then ActivateSkill(self, hoveredskill) return end
 				contextmenu.Button:SetText("Activate")
 			elseif MySelf:SkillCanUnlock(hoveredskill) then
-				if MySelf:GetZSSPRemaining() >= 1 then
+				if (GAMEMODE.Skills[hoveredskill].RemortReq or 0) <= math.max(0, MySelf:GetZSRemortLevel()) and MySelf:GetZSSPRemaining() >= 1 then
+					if GAMEMODE.OneClickSkillActivate then UnlockSkill(self, hoveredskill) return end
 					contextmenu.Button:SetText("Unlock")
+				elseif MySelf:GetZSSPRemaining() >= 1 then
+--					if GAMEMODE.OneClickSkillActivate then UnlockSkill(self, hoveredskill) return end
+--					contextmenu.Button:SetText("Unlock")
+					self:DisplayMessage(Format("You need to have at least remort level %d to unlock this skill!", GAMEMODE.Skills[hoveredskill].RemortReq or 0), COLOR_RED)
+					surface.PlaySound("buttons/button8.wav")
+
+					return
 				else
 					self:DisplayMessage("You need SP to unlock this skill!", COLOR_RED)
 					surface.PlaySound("buttons/button8.wav")
@@ -1257,7 +1301,7 @@ end
 local matGradientLeft = CreateMaterial("gradient-l", "UnlitGeneric", {["$basetexture"] = "vgui/gradient-l", ["$vertexalpha"] = "1", ["$vertexcolor"] = "1", ["$ignorez"] = "1", ["$nomip"] = "1"})
 local colFlash = Color(255, 255, 255)
 function PANEL:Paint(w, h)
-	surface.SetDrawColor(0, 0, 0, 180)
+	surface.SetDrawColor(0, 0, 0, 160)
 	surface.DrawRect(0, 0, w * 0.4, h)
 	surface.SetMaterial(matGradientLeft)
 	surface.DrawTexturedRect(w * 0.4, 0, w * 0.6, h)

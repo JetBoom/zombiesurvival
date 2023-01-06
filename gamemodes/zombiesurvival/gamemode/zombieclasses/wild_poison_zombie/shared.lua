@@ -5,9 +5,10 @@ CLASS.TranslationName = "class_wild_poison_zombie"
 CLASS.Description = "description_wild_poison_zombie"
 CLASS.Help = "controls_poison_zombie"
 
-CLASS.Wave = 5 / 6
+CLASS.Wave = 5 / GM.NumberOfWaves
 
 CLASS.Health = 460
+CLASS.DynamicHealth = 6
 CLASS.SWEP = "weapon_zs_wildpoisonzombie"
 
 CLASS.Points = CLASS.Health/GM.PoisonZombiePointRatio

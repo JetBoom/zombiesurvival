@@ -45,9 +45,9 @@ SWEP.HoldType = "slam"
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_HEALCOOLDOWN, -0.8)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALRANGE, 4, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALING, 1.5)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Restoration Kit", "Always uses the same amount of ammo, increased cooldown", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Restoration Kit", "Limits amount of used ammo, +35% medical kit cooldown", function(wept)
 	wept.FixUsage = true
-	wept.Primary.Delay = wept.Primary.Delay * 1.3
+	wept.Primary.Delay = wept.Primary.Delay * 1.35
 end)
 
 function SWEP:Initialize()
@@ -83,7 +83,8 @@ function SWEP:PrimaryAttack()
 	local multiplier = self.MedicHealMul or 1
 	local cooldownmultiplier = self.MedicCooldownMul or 1
 	local healed = owner:HealPlayer(ent, math.min(self:GetCombinedPrimaryAmmo(), self.Heal))
-	local totake = self.FixUsage and 15 or math.ceil(healed / multiplier)
+	local heal = math.ceil(healed / multiplier)
+	local totake = self.FixUsage and math.min(heal, 15) or heal
 
 	if totake > 0 then
 		self:SetNextCharge(CurTime() + self.Primary.Delay * math.min(1, healed / self.Heal) * cooldownmultiplier)
@@ -107,7 +108,8 @@ function SWEP:SecondaryAttack()
 	local multiplier = self.MedicHealMul or 1
 	local cooldownmultiplier = self.MedicCooldownMul or 1
 	local healed = owner:HealPlayer(owner, math.min(self:GetCombinedPrimaryAmmo(), self.Heal * self.Secondary.HealMul))
-	local totake = self.FixUsage and 10 or math.ceil(healed / multiplier)
+	local heal = math.ceil(healed / multiplier)
+	local totake = self.FixUsage and math.min(heal, 10) or heal
 
 	if totake > 0 then
 		self:SetNextCharge(CurTime() + self.Primary.Delay * self.Secondary.DelayMul * math.min(1, healed / self.Heal * self.Secondary.HealMul) * cooldownmultiplier)

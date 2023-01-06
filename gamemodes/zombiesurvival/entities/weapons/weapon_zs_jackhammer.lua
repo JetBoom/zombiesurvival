@@ -74,7 +74,7 @@ SWEP.MaxStock = 3
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -1.125)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.81)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Anvil' Drum Shotgun", "Uses 3 shells at once, slightly more damage, reduced accuracy", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Anvil' Drum Shotgun", "Uses 3 shells at once, +10% more damage, reduced accuracy", function(wept)
 	wept.Primary.NumShots = wept.Primary.NumShots * 3
 	wept.Primary.Delay = wept.Primary.Delay * 3.3
 	wept.Primary.Damage = wept.Primary.Damage * 1.1

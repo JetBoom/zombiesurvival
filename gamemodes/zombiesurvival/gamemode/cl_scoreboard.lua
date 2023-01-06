@@ -107,7 +107,7 @@ function PANEL:PerformLayout()
 	self.m_PointsLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
 
 	self.m_RemortCLabel:SizeToContents()
-	self.m_RemortCLabel:SetPos((self:GetWide() / 2 - 24) * 0.71 - self.m_RemortCLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
+	self.m_RemortCLabel:SetPos((self:GetWide() / 2 - 12) * 0.71 - self.m_RemortCLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
 	self.m_RemortCLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
 
 	self.m_BrainsLabel:SizeToContents()
@@ -115,7 +115,7 @@ function PANEL:PerformLayout()
 	self.m_BrainsLabel:MoveBelow(self.m_ZombieHeading, 1 * screenscale)
 
 	self.m_RemortCZLabel:SizeToContents()
-	self.m_RemortCZLabel:SetPos(self:GetWide() / 2 + 3 * screenscale + (self:GetWide() / 2 - 24) * 0.71 - self.m_RemortCZLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
+	self.m_RemortCZLabel:SetPos(self:GetWide() / 2 + 3 * screenscale + (self:GetWide() / 2) * 0.71 - self.m_RemortCZLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
 	self.m_RemortCZLabel:MoveBelow(self.m_ZombieHeading, 1 * screenscale)
 
 	self.HumanList:SetSize(self:GetWide() / 2 - 24, self:GetTall() - 150 * screenscale)
@@ -361,7 +361,7 @@ function PANEL:PerformLayout()
 	self.m_SpecialImage:CenterVertical()
 
 	self.m_ClassImage:SetSize(self:GetTall(), self:GetTall())
-	self.m_ClassImage:SetPos(self:GetWide() * 0.75 - self.m_ClassImage:GetWide() * 0.5, 0)
+	self.m_ClassImage:SetPos(self:GetWide() * 0.77 - self.m_ClassImage:GetWide() * 0.5, 0)
 	self.m_ClassImage:CenterVertical()
 
 	local pingsize = self:GetTall() - 4
@@ -397,7 +397,7 @@ function PANEL:RefreshPlayer()
 	self.m_PlayerLabel:SetText(name)
 	self.m_PlayerLabel:SetAlpha(240)
 
-	self.m_ScoreLabel:SetText(pl:Frags())
+	self.m_ScoreLabel:SetText(pl:GetMScore())
 	self.m_ScoreLabel:SetAlpha(240)
 
 	local rlvl = pl:GetZSRemortLevel()
@@ -418,6 +418,7 @@ function PANEL:RefreshPlayer()
 		self.m_ClassImage:SetVisible(true)
 		self.m_ClassImage:SetImage(pl:GetZombieClassTable().Icon)
 		self.m_ClassImage:SetImageColor(pl:GetZombieClassTable().IconColor or color_white)
+		self.m_RemortLabel:SetTooltip(translate.Get(pl:GetZombieClassTable().TranslationName))
 	else
 		self.m_ClassImage:SetVisible(false)
 	end
@@ -436,7 +437,7 @@ function PANEL:RefreshPlayer()
 		self.m_Friend:SetImage(GAMEMODE.ZSFriends[pl:SteamID()] and "icon16/heart_delete.png" or "icon16/heart.png")
 	end
 
-	self:SetZPos(-pl:Frags())
+	self:SetZPos(-pl:GetMScore())
 
 	if pl:Team() ~= self._LastTeam then
 		self._LastTeam = pl:Team()

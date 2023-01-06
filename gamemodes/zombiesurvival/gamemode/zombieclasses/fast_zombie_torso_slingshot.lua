@@ -14,6 +14,7 @@ CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 28)}
 CLASS.SWEP = "weapon_zs_fastzombietorso_slingshot"
 
 CLASS.Health = 140
+CLASS.DynamicHealth = 1
 CLASS.Speed = 160
 CLASS.JumpPower = 130
 

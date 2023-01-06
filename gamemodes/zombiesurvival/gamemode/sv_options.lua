@@ -15,7 +15,7 @@ GM.StartLoadouts = {
 }
 
 
-GM.BossZombies = CreateConVar("zs_bosszombies", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Summon a boss zombie in the middle of each wave break."):GetBool()
+GM.BossZombies = CreateConVar("zs_bosszombies", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Summon a boss zombie just before another wave starts."):GetBool()
 cvars.AddChangeCallback("zs_bosszombies", function(cvar, oldvalue, newvalue)
 	GAMEMODE.BossZombies = tonumber(newvalue) == 1
 end)
@@ -33,6 +33,11 @@ end)
 GM.ClassicMode = CreateConVar("zs_classicmode", "0", FCVAR_ARCHIVE + FCVAR_NOTIFY, "No nails, no class selection, final destination."):GetBool()
 cvars.AddChangeCallback("zs_classicmode", function(cvar, oldvalue, newvalue)
 	GAMEMODE:SetClassicMode(tonumber(newvalue) == 1)
+end)
+
+GM.EndlessMode = CreateConVar("zs_endlessmode", "0", FCVAR_ARCHIVE + FCVAR_NOTIFY, "There is no end to the waves. Let some classes be also unlocked."):GetBool()
+cvars.AddChangeCallback("zs_endlessmode", function(cvar, oldvalue, newvalue)
+	GAMEMODE:SetEndlessMode(tonumber(newvalue) == 1)
 end)
 
 GM.BabyMode = CreateConVar("zs_babymode", "0", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Babby mode."):GetBool()
@@ -100,10 +105,20 @@ cvars.AddChangeCallback("zs_medkitpointsperhealth", function(cvar, oldvalue, new
 	GAMEMODE.MedkitPointsPerHealth = tonumber(newvalue) or 1
 end)]]
 
-GM.RepairPointsPerHealth = CreateConVar("zs_repairpointsperhealth", "35", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Specifies the amount of repairing for players to be given a point. For use with nails and such."):GetInt()
+GM.RepairPointsPerHealth = CreateConVar("zs_repairpointsperhealth", "40", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Specifies the amount of repairing for players to be given a point. For use with nails and such."):GetInt()
 cvars.AddChangeCallback("zs_repairpointsperhealth", function(cvar, oldvalue, newvalue)
 	GAMEMODE.RepairPointsPerHealth = tonumber(newvalue) or 1
 end)
+
+GM.UnlockAchievements = CreateConVar("zs_achievements", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enables unlocking achievements."):GetBool()
+cvars.AddChangeCallback("zs_achievements", function(cvar, oldvalue, newvalue)
+	GAMEMODE.UnlockAchievements = tonumber(newvalue) == 1
+end)
+
+
+-- honorable mentions
+
+
 
 local function GetMostKey(key, top)
 	top = top or 0

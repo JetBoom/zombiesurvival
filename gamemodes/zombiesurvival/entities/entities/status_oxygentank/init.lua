@@ -2,6 +2,7 @@ INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
+	self:SetNotSolid(true)
 	self:SetModelScale(0.5, 0)
 
 	self:SetModel("models/props_c17/canister01a.mdl")

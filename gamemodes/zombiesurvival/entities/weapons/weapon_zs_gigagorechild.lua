@@ -81,7 +81,7 @@ function SWEP:SecondaryAttack()
 	self:SetThrowTime(CurTime() + self.ThrowDelay)
 	self:GetOwner():DoReloadEvent() -- Handled in the class file. Fires the throwing anim.
 
-	self:SetNextSecondaryAttack(CurTime() + self.Secondary.Delay)
+	self:SetNextSecondaryAttack(math.max(self:GetNextSecondaryAttack(), CurTime() + self.Secondary.Delay))
 end
 
 function SWEP:CheckThrow()
@@ -127,7 +127,7 @@ function SWEP:Reload()
 
 	self:SetCryTime(CurTime() + self.CryImpactDelay)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:SetNextSecondaryAttack(CurTime() + self.CryDelay)
+	self:SetNextSecondaryAttack(math.max(self:GetNextSecondaryAttack(), CurTime() + self.CryDelay))
 end
 
 function SWEP:CheckCry()

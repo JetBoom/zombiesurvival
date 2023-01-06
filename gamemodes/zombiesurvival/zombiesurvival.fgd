@@ -2,6 +2,8 @@
 // NoXiousNet Zombie Survival FGD                                               //
 //////////////////////////////////////////////////////////////////////////////////
 
+// i don't think this does anything though
+
 @include "base.fgd"
 @include "halflife2.fgd"
 @include "hl2mp.fgd"

@@ -1,6 +1,6 @@
 CLASS.Base = "elder_ghoul"
 
-CLASS.Wave = 4 / 6
+CLASS.Wave = 4 / GM.NumberOfWaves
 
 CLASS.Name = "Noxious Ghoul"
 CLASS.TranslationName = "class_noxiousghoul"
@@ -8,6 +8,7 @@ CLASS.Description = "description_noxiousghoul"
 CLASS.Help = "controls_noxiousghoul"
 
 CLASS.Health = 320
+CLASS.DynamicHealth = 4
 CLASS.Speed = 185
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

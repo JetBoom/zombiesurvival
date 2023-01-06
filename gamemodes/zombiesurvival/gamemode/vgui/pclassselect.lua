@@ -52,6 +52,20 @@ function PANEL:Init()
 	self.CloseButton:SizeToContents()
 	self.CloseButton.DoClick = function() Window:Remove() end
 
+	if MySelf:Frags() >= GAMEMODE:GetRedeemBrains() then
+		self.RedeemButton = EasyButton(nil, "Redeem", 8, 4)
+		self.RedeemButton:SetToolTip(Format("This only works if you have killed at least %d humans and if currently not a boss zombie", 3))
+		self.RedeemButton:SetFont("ZSHUDFontSmall")
+		self.RedeemButton:SizeToContents()
+		self.RedeemButton.DoClick = function() net.Start("zs_redeembutton") net.SendToServer() Window:Remove() end
+	end
+
+	if not (self.ObjectiveMap and self.ZombieEscape) and #team.GetPlayers(TEAM_UNDEAD) < 4 then
+		self.LowZombieCountLabel = EasyLabel(nil, "Zombies have +20% health boost", "ZSHUDFontSmaller", color_white)
+		self.LowZombieCountLabel:SetToolTip("If there are less than 4 players in zombie team, zombies get +20% health boost")
+		self.LowZombieCountLabel:SizeToContents()
+	end
+
 	self.ButtonGrid = vgui.Create("DGrid", self)
 	self.ButtonGrid:SetContentAlignment(5)
 	self.ButtonGrid:Dock(FILL)
@@ -94,6 +108,8 @@ end
 
 function PANEL:PerformLayout()
 	if #self.ClassButtons < 8 then self.Rows = 1 end
+	if #self.ClassButtons >= 28 then self.Rows = 3 end
+	if #self.ClassButtons >= 60 then self.Rows = 4 end
 
 	local cols = math.ceil(#self.ClassButtons / self.Rows)
 	local cell_size = ScrW() / cols
@@ -103,20 +119,48 @@ function PANEL:PerformLayout()
 	self:CenterHorizontal()
 	self:CenterVertical(0.35)
 
-	self.ClassTypeButton:MoveAbove(self, 16)
-	self.ClassTypeButton:CenterHorizontal()
+	local button = self.ClassTypeButton
 
-	self.CloseButton:MoveAbove(self, 16)
-	self.CloseButton:CenterHorizontal(0.9)
+	if IsValid(button) then
+		button:MoveAbove(self, 16)
+		button:CenterHorizontal()
+	end
 
-	self.ButtonGrid:SetCols(cols)
-	self.ButtonGrid:SetColWide(cell_size)
-	self.ButtonGrid:SetRowHeight(cell_size)
+	button = self.CloseButton
+	if IsValid(button) then
+		button:MoveAbove(self, 16)
+		button:CenterHorizontal(0.9)
+	end
+
+	button = self.RedeemButton
+	if IsValid(button) then
+	
+		button:MoveAbove(self, 16)
+		button:CenterHorizontal(0.1)
+	end
+
+	button = self.LowZombieCountLabel
+	if IsValid(button) then
+
+		button:MoveAbove(self, 16)
+		button:CenterHorizontal(0.3)
+	end
+
+	button = self.ButtonGrid
+	button:SetCols(cols)
+	button:SetColWide(cell_size)
+	button:SetRowHeight(cell_size)
 end
 
 function PANEL:OnRemove()
-	self.ClassTypeButton:Remove()
-	self.CloseButton:Remove()
+	local button = self.ClassTypeButton
+	if IsValid(button) then button:Remove() end
+	button = self.CloseButton
+	if IsValid(button) then button:Remove() end
+	button = self.RedeemButton
+	if IsValid(button) then button:Remove() end
+	button = self.LowZombieCountLabel
+	if IsValid(button) then button:Remove() end
 end
 
 local texUpEdge = surface.GetTextureID("gui/gradient_up")
@@ -310,6 +354,13 @@ function PANEL:CreateDescLabels()
 		table.insert(lines, " ")
 		table.Add(lines, string.Explode("\n", translate.Get(classtable.Help)))
 	end
+
+	table.insert(lines, " ")
+	local hp = (classtable.Health or 0) + ((classtable.DynamicHealth or 0) * GAMEMODE:GetWave())
+	table.Add(lines, string.Explode("\n", Format("Health: %d (Default HP: %d, +%d HP per every wave)", hp, classtable.Health or 0, classtable.DynamicHealth or 0)))
+	table.Add(lines, string.Explode("\n", Format("Speed: %d", classtable.Speed or 0)))
+	local wep = weapons.Get(classtable.SWEP)
+	table.Add(lines, string.Explode("\n", Format("Damage per hit: %s (To props: %s)", wep.MeleeDamage or wep.PounceDamage or 0, wep.MeleeDamageVsProps or wep.MeleeDamage or wep.PounceDamage or 0)))
 
 	for i, line in ipairs(lines) do
 		local label = vgui.Create("DLabel", self)

@@ -28,6 +28,8 @@ function MakepEndBoard(winner)
 	frame:SetDeleteOnClose(false)
 	frame:SetCursor("pointer")
 	frame:SetTitle(" ")
+	frame:SetAlpha(0)
+	frame:AlphaTo(255, 2.25, 0)
 	pEndBoard = frame
 
 	local y = 8
@@ -36,18 +38,31 @@ function MakepEndBoard(winner)
 	if localwin then
 		surface.PlaySound("beams/beamstart5.wav")
 		heading = EasyLabel(frame, "You have won!", "ZSHUDFontBig", COLOR_CYAN)
-	else
+	elseif winner == TEAM_HUMAN or winner == TEAM_UNDEAD then
 		surface.PlaySound("ambient/levels/citadel/strange_talk"..math.random(3, 11)..".wav")
 		heading = EasyLabel(frame, "You have lost.", "ZSHUDFontBig", COLOR_RED)
+	else
+		surface.PlaySound("ambient/levels/citadel/strange_talk"..math.random(3, 11)..".wav")
+		heading = EasyLabel(frame, "Round ended with a draw...", "ZSHUDFont", COLOR_GRAY)
 	end
 	heading:SetPos(wid * 0.5 - heading:GetWide() * 0.5, y)
 	y = y + heading:GetTall() + 16
 
 	local subheading
-	if localwin then
-		subheading = EasyLabel(frame, "The humans have survived for now.", "ZSHUDFontSmaller", COLOR_WHITE)
+	if winner == TEAM_HUMAN then
+		if GAMEMODE.ZombieEscape then
+			subheading = EasyLabel(frame, "The humans have won!", "ZSHUDFontSmaller", COLOR_CYAN)
+		else
+			if MySelf:Team() == TEAM_HUMAN then
+				subheading = EasyLabel(frame, "The humans have survived for now.", "ZSHUDFontSmaller", COLOR_WHITE)
+			else
+				subheading = EasyLabel(frame, "The humans have survived!", "ZSHUDFontSmaller", COLOR_MIDGRAY)
+			end
+		end
+	elseif winner == TEAM_UNDEAD then
+		subheading = EasyLabel(frame, GAMEMODE.ZombieEscape and "Zombies have won." or Format("The undead army grows stronger.\nHumans survived on wave %d.", GAMEMODE:GetWave()), "ZSHUDFontSmaller", COLOR_LIMEGREEN)
 	else
-		subheading = EasyLabel(frame, "The undead army grows stronger.", "ZSHUDFontSmaller", COLOR_LIMEGREEN)
+		subheading = EasyLabel(frame, "Everyone has lost.", "ZSHUDFontSmaller", COLOR_RORANGE)
 	end
 	subheading:SetPos(wid * 0.5 - subheading:GetWide() * 0.5, y)
 	y = y + subheading:GetTall() + 2

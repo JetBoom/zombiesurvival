@@ -5,6 +5,7 @@ SWEP.Base = "weapon_zs_zombie"
 SWEP.PrintName = "Super Zombie"
 
 SWEP.MeleeDamage = 45
+SWEP.MeleeDamageVsProps = 50
 
 function SWEP:Reload()
 	self.BaseClass.SecondaryAttack(self)

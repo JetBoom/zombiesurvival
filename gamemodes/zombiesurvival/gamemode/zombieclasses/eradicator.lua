@@ -3,9 +3,12 @@ CLASS.TranslationName = "class_eradicator"
 CLASS.Description = "description_eradicator"
 CLASS.Help = "controls_eradicator"
 
-CLASS.Wave = 6 / 6
+CLASS.BetterVersion = "Eradicator II"
+
+CLASS.Wave = 6 / GM.NumberOfWaves
 
 CLASS.Health = 410
+CLASS.DynamicHealth = 6
 CLASS.Speed = 150
 
 CLASS.CanTaunt = true

@@ -196,9 +196,9 @@ function PANEL:Paint(w, h)
 	local size, ang
 
 	local campos = self.vCamPos
-	campos.x = 1600
-	campos.y = math.Clamp(campos.y, -262, 262)
-	campos.z = math.Clamp(campos.z, -262, 262)
+	campos.x = 2200
+	campos.y = math.Clamp(campos.y, -322, 322)
+	campos.z = math.Clamp(campos.z, -322, 322)
 
 	self:SetCamPos(campos)
 	self.vLookatPos:Set(campos)

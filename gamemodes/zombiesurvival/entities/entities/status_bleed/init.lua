@@ -22,7 +22,7 @@ function ENT:Think()
 	util.Blood(owner:WorldSpaceCenter(), 3, dir, 32)
 
 	local moving = owner:GetVelocity():LengthSqr() >= 19600 --140^2
-	local ticktime = (moving and 0.65 or 1.3)/(owner.BleedSpeedMul or 1)
+	local ticktime = (moving and 0.65 or 1.9)/(owner.BleedSpeedMul or 1)
 	self:NextThink(CurTime() + ticktime)
 	return true
 end

@@ -76,7 +76,7 @@ function ENT:Draw()
 
 	cam.Start3D2D(self:LocalToWorld(vOffsetEE), ang, 0.01)
 
-		draw.SimpleText("ur a faget", "ZS3D2DFont2", 0, 0, color_white, TEXT_ALIGN_CENTER)
+		draw.SimpleText("you are jooking", "ZS3D2DFont2Small", 0, 0, color_white, TEXT_ALIGN_CENTER)
 
 	cam.End3D2D()
 end
@@ -86,5 +86,5 @@ net.Receive("zs_nextresupplyuse", function(length)
 end)
 
 net.Receive("zs_stowagecaches", function(length)
-	MySelf.StowageCaches = net.ReadInt(8)
+	MySelf.StowageCaches = net.ReadInt(12)
 end)

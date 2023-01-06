@@ -31,10 +31,6 @@ local E_IsValid = M_Entity.IsValid
 local E_GetDTBool = M_Entity.GetDTBool
 local E_GetTable = M_Entity.GetTable
 
-function meta:LogID()
-	return "<"..self:SteamID().."> "..self:Name()
-end
-
 function meta:GetMaxHealthEx()
 	if P_Team(self) == TEAM_UNDEAD then
 		return self:GetMaxZombieHealth()
@@ -234,11 +230,11 @@ function meta:NearArsenalCrate()
 
 	if self.ArsenalZone and self.ArsenalZone:IsValid() then return true end
 
-	local arseents = {}
-	table.Add(arseents, ents.FindByClass("prop_arsenalcrate"))
-	table.Add(arseents, ents.FindByClass("status_arsenalpack"))
+	local ars_ents = {}
+	table.Add(ars_ents, ents.FindByClass("prop_arsenalcrate"))
+	table.Add(ars_ents, ents.FindByClass("status_arsenalpack"))
 
-	for _, ent in pairs(arseents) do
+	for _, ent in pairs(ars_ents) do
 		local nearest = ent:NearestPoint(pos)
 		if pos:DistToSqr(nearest) <= 10000 and (WorldVisible(pos, nearest) or self:TraceLine(100).Entity == ent) then -- 80^2
 			return true
@@ -611,6 +607,7 @@ function meta:SetBarricadeGhosting(b, fullspeed)
 
 	if fullspeed == nil then fullspeed = false end
 
+	if not self:IsValid() then return end
 	self:SetDTBool(0, b)
 	self:SetDTBool(1, b and fullspeed)
 	--self:SetCustomCollisionCheck(b)
@@ -949,7 +946,7 @@ function meta:NearestRemantler()
 end
 
 function meta:GetMaxZombieHealth()
-	return self:GetZombieClassTable().Health
+	return self:GetNWInt("zs_zombiehealth", self:GetZombieClassTable().Health + (GAMEMODE:GetWave() * tonumber(self:GetZombieClassTable().DynamicHealth or 0)))
 end
 
 local oldmaxhealth = FindMetaTable("Entity").GetMaxHealth
@@ -1003,4 +1000,16 @@ end
 
 function meta:GetPhantomHealth()
 	return self:GetDTFloat(DT_PLAYER_FLOAT_PHANTOMHEALTH)
+end
+
+function meta:GetMScore()
+	return self:GetNWInt("metascore", 0)
+end
+
+function meta:AddMScore(metascore)
+	self:SetNWInt("metascore", self:GetNWInt("metascore") + tonumber(metascore))
+end
+
+function meta:SetMScore(metascore)
+	self:SetNWInt("metascore", metascore)
 end

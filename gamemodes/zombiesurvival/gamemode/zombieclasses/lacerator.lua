@@ -6,11 +6,14 @@ CLASS.TranslationName = "class_lacerator"
 CLASS.Description = "description_lacerator"
 CLASS.Help = "controls_lacerator"
 
+CLASS.BetterVersion = "Mutated Lacerator"
+
 CLASS.Model = Model("models/player/zombie_lacerator2.mdl")
 
-CLASS.Wave = 4 / 6
+CLASS.Wave = 4 / GM.NumberOfWaves
 
 CLASS.Health = 225
+CLASS.DynamicHealth = 3
 CLASS.Speed = 270
 CLASS.SWEP = "weapon_zs_lacerator"
 

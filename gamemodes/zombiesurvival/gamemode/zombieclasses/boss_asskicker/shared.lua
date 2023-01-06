@@ -16,6 +16,7 @@ CLASS.Points = 40
 CLASS.SWEP = "weapon_zs_asskicker"
 
 CLASS.Health = 2500
+CLASS.DynamicHealth = 120
 CLASS.Speed = 240
 CLASS.JumpPower = 260
 

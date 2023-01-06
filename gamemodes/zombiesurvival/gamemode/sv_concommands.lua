@@ -13,7 +13,7 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 		return
 	end
 
-	if usescrap and not sender:NearRemantler() or not usescrap and not sender:NearArsenalCrate() then
+	if usescrap and not sender:NearRemantler() or not usescrap and not sender:NearArsenalCrate() and GAMEMODE.NeedArsenalToBuyItems then
 		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, usescrap and "need_to_be_near_remantler" or "need_to_be_near_arsenal_crate"))
 		return
 	end
@@ -173,6 +173,11 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 	local contents, wtbl = active:GetClass()
 	if not invitem then
 		wtbl = weapons.Get(contents)
+		if not wtbl and active:IsValid() then
+			GAMEMODE:ConCommandErrorMessage(sender, "NO.")
+			return
+		end
+		
 		if wtbl.NoDismantle or not (wtbl.AllowQualityWeapons or wtbl.PermitDismantle) then
 			GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "cannot_dismantle"))
 			return
@@ -570,6 +575,8 @@ concommand.Add("zs_resupplyammotype", function(sender, command, arguments)
 	sender.ResupplyChoice = ammotype ~= "default" and ammotype or nil
 end)
 
+-- admin commands?
+
 concommand.Add("zs_shitmap_check", function(sender, command, arguments)
 	if not sender:IsAdmin() then return end
 
@@ -624,4 +631,39 @@ concommand.Add("zs_shitmap_tomover", function(sender, command, arguments)
 	if ent then
 		sender:SetPos(ent:WorldSpaceCenter())
 	end
+end)
+
+concommand.Add("zs_admin_setdifficulty", function(pl, cmd, args)
+	if not pl:IsSuperAdmin() then return end
+
+	local value = tonumber(args[1])
+	if not value then return end
+	GAMEMODE:SetDifficulty(value)
+	print(Format("Set difficulty to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
+end)
+
+concommand.Add("zs_admin_enabledifficulty", function(pl, cmd, args)
+	if not pl:IsSuperAdmin() then return end
+
+	local value = args[1] == "1"
+	GAMEMODE:EnableDifficultyScaling(value)
+	print(Format("Set difficulty enabled to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
+end, nil, "Use \"1\" in argument #1 to enable difficulty scaling, any other = disable")
+
+concommand.Add("zs_admin_resetskills", function(pl, cmd, args)
+	if not pl:IsSuperAdmin() then return end
+
+	local nextreset = pl.NextSkillReset
+	pl:SkillsReset()
+	pl.NextSkillReset = nextreset
+	print(Format("Reset skills for %s", Format("%s [%s]", pl:Name(), pl:SteamID())) )
+end)
+
+concommand.Add("zs_admin_setmaxwave", function(pl, cmd, args)
+	if not pl:IsSuperAdmin() then return end
+
+	local value = tonumber(args[1] or GAMEMODE.NumberOfWaves)
+
+	SetGlobalInt("numwaves", value)
+	print(Format("Set max waves count to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
 end)

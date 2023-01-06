@@ -10,6 +10,7 @@ CLASS.Boss = true
 CLASS.SWEP = "weapon_zs_coolwisp"
 
 CLASS.Health = 900
+CLASS.DynamicHealth = 35
 
 CLASS.Points = 20
 

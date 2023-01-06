@@ -1,13 +1,15 @@
 GM.WeaponQualityModifiers = {}
 GM.WeaponQualities = {
-	{"Sturdy", 1.09, "Tuned"},
-	{"Honed", 1.19, "Modified"},
-	{"Perfected", 1.35, "Reformed"}
+	{"Sturdy", 1.08, "Tuned"},
+	{"Honed", 1.17, "Modified"},
+	{"Perfected", 1.29, "Reformed"},
+	{"Qualitized", 1.45, "Improved"}
 }
 GM.WeaponQualityColors = {
 	{Color(235, 235, 115), Color(172, 219, 105)},
 	{Color(50, 90, 175), Color(35, 110, 145)},
-	{Color(160, 95, 235), Color(252, 100, 100)}
+	{Color(160, 95, 235), Color(252, 100, 100)},
+	{Color(150, 50, 75), Color(200, 65, 185)}
 }
 
 WEAPON_MODIFIER_MIN_SPREAD = 1

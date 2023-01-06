@@ -31,7 +31,7 @@ function ENT:Use(activator, caller)
 end
 
 function ENT:GiveToActivator(activator, caller)
-	if  not activator:IsPlayer()
+	if not activator:IsPlayer()
 		or not activator:Alive()
 		or activator:Team() ~= TEAM_HUMAN
 		or self.Removing

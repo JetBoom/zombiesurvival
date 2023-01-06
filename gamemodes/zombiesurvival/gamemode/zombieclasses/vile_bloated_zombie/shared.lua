@@ -7,9 +7,10 @@ CLASS.Help = "controls_vile_bloated_zombie"
 
 CLASS.BetterVersion = "Poison Zombie"
 
-CLASS.Wave = 3 / 6
+CLASS.Wave = 3 / GM.NumberOfWaves
 
 CLASS.Health = 350
+CLASS.DynamicHealth = 4
 CLASS.Speed = 135
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

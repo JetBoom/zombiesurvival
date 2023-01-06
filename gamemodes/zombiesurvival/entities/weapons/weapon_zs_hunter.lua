@@ -62,7 +62,7 @@ SWEP.Tier = 3
 SWEP.TracerName = "AR2Tracer"
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hunter' Explosive Rifle", "Uses twice as much ammo, reloads slowly, but overkill damage is dealt as an explosion", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hunter' Explosive Rifle", "Uses twice as much ammo, -10% reload speed, but overkill damage is dealt as an explosion", function(wept)
 	wept.Primary.ClipSize = 2
 	wept.RequiredClip = 2
 	wept.ReloadSpeed = 0.9

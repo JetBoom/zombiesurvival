@@ -31,7 +31,7 @@ function ENT:AcceptInput(name, activator, caller, arg)
 		if ent and ent:IsValidLivingPlayer() and WorldVisible(vPos, ent:WorldSpaceCenter()) then
 			if ent:Team() == TEAM_UNDEAD then
 				if CurTime() >= (ent.LastRangedAttack or 0) + 3 then
-					ent:GiveStatus("zombiespawnbuff", self.TickTime + 0.1)
+					ent:GiveStatus("zombiespawnbuff", self.TickTime + 0.1 + 0.5)
 				end
 			elseif GAMEMODE:GetWave() ~= 0 then
 				ent:GiveStatus("spawnslow", self.TickTime + 0.1)

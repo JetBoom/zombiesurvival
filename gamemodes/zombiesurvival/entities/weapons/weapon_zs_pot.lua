@@ -41,7 +41,7 @@ SWEP.SwingHoldType = "grenade"
 SWEP.AllowQualityWeapons = true
 SWEP.Culinary = true
 
-GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.09)
 
 function SWEP:PlayHitSound()
 	self:EmitSound("weapons/melee/frying_pan/pan_hit-0"..math.random(4)..".ogg")

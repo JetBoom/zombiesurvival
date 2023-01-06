@@ -3,9 +3,10 @@ CLASS.TranslationName = "class_skeletal_walker"
 CLASS.Description = "description_skeletal_walker"
 CLASS.Help = "controls_skeletal_walker"
 
-CLASS.Wave = 2 / 6
+CLASS.Wave = 2 / GM.NumberOfWaves
 
 CLASS.Health = 100
+CLASS.DynamicHealth = 2
 CLASS.Speed = 150
 
 CLASS.CanTaunt = true

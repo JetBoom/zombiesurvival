@@ -1,3 +1,5 @@
+local pOptions
+
 function MakepOptions()
 	PlayMenuOpenSound()
 
@@ -14,7 +16,7 @@ function MakepOptions()
 	local tall = math.min(ScrH(), 800)
 	Window:SetSize(wide, tall)
 	Window:Center()
-	Window:SetTitle(" ")
+	Window:SetTitle("")
 	Window:SetDeleteOnClose(false)
 	pOptions = Window
 
@@ -34,15 +36,12 @@ function MakepOptions()
 
 	gamemode.Call("AddExtraOptions", list, Window)
 
-	local check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Always display nail health")
-	check:SetConVar("zs_alwaysshownails")
-	check:SizeToContents()
-	list:AddItem(check)
+	list:AddItem(EasyLabel(Window, "Gameplay options", "DefaultFontSmall", color_white))
 
-	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Always third person knockdown camera")
-	check:SetConVar("zs_thirdpersonknockdown")
+	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Activate skill on 1 click")
+	check:SetTooltip("Unlocks/Activates/Deactivates skill with just 1 click")
+	check:SetConVar("zs_oneclickonskill")
 	check:SizeToContents()
 	list:AddItem(check)
 
@@ -82,6 +81,20 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
+	list:AddItem(EasyLabel(Window, "HUD/VGUI options", "DefaultFontSmall", color_white))
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Always display nail health")
+	check:SetConVar("zs_alwaysshownails")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Always third person knockdown camera")
+	check:SetConVar("zs_thirdpersonknockdown")
+	check:SizeToContents()
+	list:AddItem(check)
+
 	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Disable iron sights view model translation")
 	check:SetConVar("zs_noironsights")
@@ -106,6 +119,16 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
+
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Draw crosshair in ironsights.")
+	check:SetConVar("zs_ironsightscrosshair")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	list:AddItem(EasyLabel(Window, "Display options", "DefaultFontSmall", color_white))
+
 	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Don't show point floaters")
 	check:SetConVar("zs_nofloatingscore")
@@ -124,11 +147,7 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
-	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Draw crosshair in ironsights.")
-	check:SetConVar("zs_ironsightscrosshair")
-	check:SizeToContents()
-	list:AddItem(check)
+	list:AddItem(EasyLabel(Window, "Sound options", "DefaultFontSmall", color_white))
 
 	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Enable ambient music")
@@ -354,7 +373,7 @@ function MakepOptions()
 
 	slider = vgui.Create("DNumSlider", Window)
 	slider:SetDecimals(1)
-	slider:SetMinMax(0.7, 1.6)
+	slider:SetMinMax(0.7, 1.5)
 	slider:SetConVar("zs_interfacesize")
 	slider:SetText("Interface/HUD scale")
 	slider:SizeToContents()

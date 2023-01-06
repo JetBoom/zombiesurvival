@@ -28,7 +28,7 @@ function SWEP:Reload()
 	local nailowner = ent:GetOwner()
 	if nailowner:IsValid() and nailowner:IsPlayer() and nailowner ~= owner and nailowner:Team() == TEAM_HUMAN and not gamemode.Call("CanRemoveOthersNail", owner, nailowner, ent) then return end
 
-	self:SetNextPrimaryFire(CurTime() + (#trent.Nails > 2 and 0.5 or 1))
+	self:SetNextPrimaryFire(CurTime() + (#trent.Nails > 2 and 0.375 or 0.75))
 
 	ent.m_PryingOut = true -- Prevents infinite loops
 
@@ -69,7 +69,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 
 	if hitent:IsNailed() then
 		if owner:IsSkillActive(SKILL_BARRICADEEXPERT) then
-			hitent.ReinforceEnd = CurTime() + 2
+			hitent.ReinforceEnd = CurTime() + self.ReinforceDuration
 			hitent.ReinforceApplier = owner
 		end
 

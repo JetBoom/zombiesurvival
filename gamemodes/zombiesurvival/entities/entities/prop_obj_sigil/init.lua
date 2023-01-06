@@ -61,7 +61,9 @@ function ENT:OnTakeDamage(dmginfo)
 			if attacker:Team() == TEAM_HUMAN then
 				local dmgtype = dmginfo:GetDamageType()
 				if bit.band(dmgtype, DMG_SLASH) ~= 0 or bit.band(dmgtype, DMG_CLUB) ~= 0 then
-					dmginfo:SetDamage(dmginfo:GetDamage() * 1.6)
+					dmginfo:SetDamage(dmginfo:GetDamage() * 1.6 * (attacker:IsSkillActive(SKILL_UNCORRUPTOR) and 0.85 or 1))
+				elseif attacker:IsSkillActive(SKILL_UNCORRUPTOR) then
+					dmginfo:SetDamage(dmginfo:GetDamage() * 1.28 * 0.85)
 				else
 					dmginfo:SetDamage(0)
 					return
@@ -79,6 +81,7 @@ function ENT:OnTakeDamage(dmginfo)
 					self:SetSigilHealthBase(self.MaxHealth)
 					self:SetSigilLastDamaged(0)
 					gamemode.Call("OnSigilUncorrupted", self, dmginfo)
+					attacker:GiveAchievementProgress("sigil_uncorruptor", 1)
 				else
 					gamemode.Call("PreOnSigilCorrupted", self, dmginfo)
 					self:SetSigilCorrupted(true)

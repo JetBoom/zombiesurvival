@@ -355,6 +355,11 @@ function meta:ResetLastBarricadeAttacker(attacker, dmginfo)
 			attacker.BarricadeDamage = attacker.BarricadeDamage + dmg
 			if attacker.LifeBarricadeDamage ~= nil then
 				attacker:AddLifeBarricadeDamage(dmg)
+				if not GAMEMODE.RoundEnded then
+					local xp = dmg / 180
+					xp = (GAMEMODE.InitialVolunteers[attacker:UniqueID()] and xp * 1.35 or xp)
+					attacker:GainZSXP(xp)
+				end
 				GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_ZOMBIECLASS, attacker:GetZombieClassTable().Name, "BarricadeDamage", dmg)
 			end
 		end
@@ -412,6 +417,7 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 
 		applier.PropDef = (applier.PropDef or 0) + dmgbefore
 		applier:AddPoints(points)
+		applier:GainZSXP(points * 0.8)
 	end
 
 	if gamemode.Call("IsEscapeDoorOpen") then
@@ -442,7 +448,7 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 	end
 
 	-- No points for repairing damage from fire, trigger_hurt, etc.
-	if not attacker:IsZombie() then
+	if not attacker:IsZombie() and not (attacker:IsNPC() or attacker:IsNextBot()) then
 		self:AddUselessDamage(damage)
 	end
 
@@ -748,6 +754,64 @@ function meta:ProjectileTraceAhead(phys)
 			end
 		end
 	end
+end
+
+function meta:ProcessNPCDamage(dmginfo)
+	if not self:IsNPC() then return false end
+
+	local attacker, inflictor, dmgtype = dmginfo:GetAttacker(), dmginfo:GetInflictor(), dmginfo:GetDamageType()
+
+	local dmgbypass = bit.band(dmgtype, DMG_DIRECT) ~= 0
+
+	if self.DamageVulnerability and not dmgbypass then
+		dmginfo:SetDamage(dmginfo:GetDamage() * self.DamageVulnerability)
+	end
+
+	if attacker.AttackerForward and attacker.AttackerForward:IsValid() then
+		dmginfo:SetAttacker(attacker.AttackerForward)
+		attacker = attacker.AttackerForward
+	end
+
+	if attacker:IsPlayer() and attacker:Team() == TEAM_UNDEAD then
+		dmginfo:SetDamage(0)
+	end
+
+	if attacker.PBAttacker and attacker.PBAttacker:IsValid() then
+		attacker = attacker.PBAttacker
+	end
+
+	local corrosion = self.Corrosion and self.Corrosion + 2 > CurTime()
+	if self ~= attacker and not corrosion and not dmgbypass then
+		dmginfo:SetDamage(dmginfo:GetDamage() * GAMEMODE:GetZombieDamageScale(dmginfo:GetDamagePosition(), self))
+	end
+
+	if attacker:IsValidLivingHuman() and inflictor:IsValid() and inflictor == attacker:GetActiveWeapon() then
+		local damage = dmginfo:GetDamage()
+		local wep = attacker:GetActiveWeapon()
+		local attackermaxhp = math.floor(attacker:GetMaxHealth() * (attacker:IsSkillActive(SKILL_D_FRAIL) and 0.25 or 1))
+
+		if wep.IsMelee then
+			if attacker.MeleeDamageToBloodArmorMul and attacker.MeleeDamageToBloodArmorMul > 0 and attacker:GetBloodArmor() < attacker.MaxBloodArmor then
+				attacker:SetBloodArmor(math.min(attacker.MaxBloodArmor, attacker:GetBloodArmor() + math.min(damage, self:Health()) * attacker.MeleeDamageToBloodArmorMul * attacker.BloodarmorGainMul * 0.2))
+			end
+
+			if attacker:IsSkillActive(SKILL_HEAVYSTRIKES) and not self:GetZombieClassTable().Boss and (wep.IsFistWeapon and attacker:IsSkillActive(SKILL_CRITICALKNUCKLE) or wep.MeleeKnockBack > 0) then
+				attacker:TakeSpecialDamage(math.Clamp(damage * (wep.Unarmed and 0.07 or 0.012), 0, 20), DMG_SLASH, self, self:GetActiveWeapon())
+			end
+
+			if attacker:IsSkillActive(SKILL_BLOODLUST) and attacker:GetPhantomHealth() > 0 and attacker:Health() < attackermaxhp then
+				local toheal = math.min(attacker:GetPhantomHealth(), math.min(self:Health(), damage * 0.05))
+				attacker:SetHealth(math.min(attacker:Health() + toheal, attackermaxhp))
+				attacker:SetPhantomHealth(attacker:GetPhantomHealth() - toheal)
+			end
+
+			if attacker:HasTrinket("sharpkit") then
+				dmginfo:SetDamage(dmginfo:GetDamage() * (1 + self:GetFlatLegDamage()/75))
+			end
+		end
+	end
+
+	return dmgbypass
 end
 
 -- Cache invisible entities every so often, for TrueVisible functions. Fixes a few issues and improves performance.

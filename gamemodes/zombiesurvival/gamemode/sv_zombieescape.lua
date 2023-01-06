@@ -171,7 +171,7 @@ hook.Add("DoPlayerDeath", "zombieescape", function(pl, attacker, dmginfo)
 		elseif GAMEMODE.RoundEnded then
 			pl.NextSpawnTime = CurTime() + 9999
 		else
-			pl.NextSpawnTime = CurTime() + 5
+			pl.NextSpawnTime = CurTime() + 20
 		end
 	end
 end)

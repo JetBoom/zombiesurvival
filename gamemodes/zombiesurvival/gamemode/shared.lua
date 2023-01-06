@@ -1,11 +1,13 @@
-GM.Name		=	"Zombie Survival"
-GM.Author	=	"William \"JetBoom\" Moodhe"
+GM.Name		=	"ZS Improved"
+GM.Author	=	"Uklejamini (Original Creator: William \"JetBoom\" Moodhe)"
 GM.Email	=	"williammoodhe@gmail.com"
-GM.Website	=	"http://www.noxiousnet.com"
+GM.Website	=	"https://www.noxiousnet.com"
+GM.Version	=	"1.0"
 
 -- No, adding a gun doesn't make your name worth being here.
 GM.Credits = {
-	{"William \"JetBoom\" Moodhe", "williammoodhe@gmail.com (www.noxiousnet.com)", "Creator / Programmer"},
+	{"William \"JetBoom\" Moodhe", "williammoodhe@gmail.com (www.noxiousnet.com)", "Original ZS Creator"},
+	{"Uklejamini", "", "ZS Improved Creator"},
 	{"11k", "tjd113@gmail.com", "Zombie view models"},
 	{"Eisiger", "k2deseve@gmail.com", "Zombie kill icons"},
 	{"Austin \"Little Nemo\" Killey", "austin_odyssey@yahoo.com", "Ambient music"},
@@ -58,6 +60,7 @@ include("sh_animations.lua")
 include("sh_sigils.lua")
 include("sh_channel.lua")
 include("sh_weaponquality.lua")
+include("sh_achievements.lua")
 
 include("noxapi/noxapi.lua")
 
@@ -73,6 +76,8 @@ include_library("ammoexpand")
 ----------------------
 
 GM.EndRound = false
+GM.StartingPlayerHealth = 100
+GM.StartingPlayerSpeed = 225
 GM.StartingWorth = 100
 GM.ZombieVolunteers = {}
 
@@ -579,7 +584,7 @@ function GM:PlayerCanPurchase(pl)
 	if CLIENT and self.CanPurchaseCacheTime and self.CanPurchaseCacheTime >= CurTime() then
 		return self.CanPurchaseCache
 	end
-	local canpurchase = PTeam(pl) == TEAM_HUMAN and self:GetWave() > 0 and pl:Alive() and pl:NearArsenalCrate()
+	local canpurchase = PTeam(pl) == TEAM_HUMAN and self:GetWave() > 0 and pl:Alive() and (not self.NeedArsenalToBuyItems or pl:NearArsenalCrate())
 
 	if CLIENT then
 		self.CanPurchaseCache = canpurchase
@@ -820,6 +825,12 @@ function GM:IsSpecialPerson(pl, image)
 	if pl:SteamID() == "STEAM_0:1:3307510" then
 		img = "VGUI/steam/games/icon_sourcesdk"
 		tooltip = "JetBoom\nCreator of Zombie Survival!"
+	elseif pl:SteamID() == "BOT" then
+		img = "noxiousnet/arsenalcrate.png"
+		tooltip = "I AM A BOT\nI WILL KILL YOU"
+	elseif pl:IsSuperAdmin() then
+		img = "VGUI/servers/icon_robotron"
+		tooltip = "Super Admin"
 	elseif pl:IsAdmin() then
 		img = "VGUI/servers/icon_robotron"
 		tooltip = "Admin"
@@ -861,8 +872,8 @@ function GM:GetWave()
 end
 
 if GM:GetWave() == 0 then
-	GM:SetWaveStart(GM.WaveZeroLength)
-	GM:SetWaveEnd(GM.WaveZeroLength + GM:GetWaveOneLength())
+	GM:SetWaveStart(GM.WaveZeroLength + 25)
+	GM:SetWaveEnd(GM.WaveZeroLength + GM:GetWaveOneLength() + 25)
 end
 
 function GM:GetWaveActive()
@@ -882,22 +893,39 @@ function GM:SetWaveActive(active)
 end
 
 if not FixedSoundDuration then
-FixedSoundDuration = true
-local OldSoundDuration = SoundDuration
-function SoundDuration(snd)
-	if snd then
-		local ft = string.sub(snd, -4)
-		if ft == ".mp3" then
-			return OldSoundDuration(snd) * 2.25
+	FixedSoundDuration = true
+	local OldSoundDuration = SoundDuration
+	function SoundDuration(snd)
+		if snd then
+			local ft = string.sub(snd, -4)
+			if ft == ".mp3" then
+				return OldSoundDuration(snd) * 2.25
+			end
+			if ft == ".ogg" then
+				return OldSoundDuration(snd) * 3
+			end
 		end
-		if ft == ".ogg" then
-			return OldSoundDuration(snd) * 3
-		end
-	end
 
-	return OldSoundDuration(snd)
-end
+		return OldSoundDuration(snd)
+	end
 end
 
 function GM:VehicleMove()
+end
+
+function GM:GetDifficultyScalingEnabled()
+	return GetGlobalBool("zs_difficulty_scaling_enabled", self.DifficultyEnabledByDefault)
+end
+
+function GM:GetDifficulty()
+	if not self:GetDifficultyScalingEnabled() then return 1 end
+	return math.max(0, GetGlobalFloat("zs_difficulty", 1))
+end
+
+function GM:SetDifficulty(value)
+	SetGlobalFloat("zs_difficulty", value or self:GetDifficulty())
+end
+
+function GM:EnableDifficultyScaling(value)
+	SetGlobalBool("zs_difficulty_scaling_enabled", value)
 end

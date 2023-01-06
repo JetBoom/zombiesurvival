@@ -219,7 +219,7 @@ LANGUAGE.you_ascended_to_level_x					= "You have ascended to level %d!"
 LANGUAGE.you_have_remorted_now_rl_x					= "You have remorted and ascended to remort level %d!"
 LANGUAGE.you_now_have_x_extra_sp					= "You now have %d extra skill points!"
 LANGUAGE.x_has_remorted_to_rl_y						= "%s has remorted to remort level %d!!"
-LANGUAGE.you_have_reset_all							= "All of your skills, XP, and skill points have been reset."
+LANGUAGE.you_have_reset_all							= "All of your skills are reset and your SP has been refunded." --"All of your skills, XP, and skill points have been reset."
 
 -- Message beacon messages
 LANGUAGE.message_beacon_1							= "Meet up here"
@@ -537,3 +537,16 @@ LANGUAGE.help_cont_being_a_zombie					= [[<p>Tips for this section:
 ]]
 
 -- Place any custom stuff below here...
+
+LANGUAGE.humans_lost                      = "Humans have lost on wave %d!"
+LANGUAGE.wave_x                           = "Wave %d"
+LANGUAGE.class_eradicator_ii							= "Eradicator II"
+LANGUAGE.class_eradicator_iii							= "Eradicator III"
+LANGUAGE.description_eradicator_ii        = "A mutated variant of Eradicator being stronger and more destructive.\nHas more health and slightly increased damage."
+LANGUAGE.description_eradicator_iii       = "An even stronger version of Eradicator, becoming even more destructive.\nHas way better durability and increased damage, especially to props."
+LANGUAGE.class_infected_citizen		 				= "Infected Citizen"
+LANGUAGE.description_infected_citizen		  = "These are the zombie variants from the city being mutated due to zombie outbreak.\nIt is also believed to be more resillient and are faster."
+LANGUAGE.class_mutated_lacerator		 			= "Mutated Lacerator"
+LANGUAGE.description_mutated_lacerator		= "Lacerators are identical to Fast Zombies in almost every way.\nDespite their similarities, they are even deadlier and do not share their counterpart's fragility"
+LANGUAGE.s_always_active                  = "Always Active"
+LANGUAGE.s_remort_req                     = "Remort required: %d"

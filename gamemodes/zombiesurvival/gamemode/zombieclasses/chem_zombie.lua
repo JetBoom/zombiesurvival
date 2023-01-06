@@ -7,16 +7,22 @@ CLASS.TranslationName = "class_chem_zombie"
 CLASS.Description = "description_chem_zombie"
 CLASS.Help = "controls_chem_zombie"
 
-CLASS.Wave = 6 / 6
+CLASS.Wave = 6 / GM.NumberOfWaves
 --CLASS.Sanity = 2 / 3
 CLASS.Health = 100
+CLASS.DynamicHealth = 2
 CLASS.SWEP = "weapon_zs_chemzombie"
 CLASS.Model = Model("models/Zombie/Poison.mdl")
 CLASS.Speed = 160
 
 CLASS.Points = 3
 
-CLASS.PainSounds = {Sound("npc/metropolice/knockout2.wav"), Sound("npc/metropolice/pain1.wav"), Sound("npc/metropolice/pain2.wav"), Sound("npc/metropolice/pain3.wav"), Sound("npc/metropolice/pain4.wav")}
+CLASS.PainSounds = {Sound("npc/metropolice/knockout2.wav"),
+	Sound("npc/metropolice/pain1.wav"),
+	Sound("npc/metropolice/pain2.wav"),
+	Sound("npc/metropolice/pain3.wav"),
+	Sound("npc/metropolice/pain4.wav")
+}
 CLASS.DeathSounds = {Sound("ambient/fire/gascan_ignite1.wav")}
 CLASS.VoicePitch = 0.65
 

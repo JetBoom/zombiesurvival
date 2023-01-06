@@ -8,13 +8,14 @@ CLASS.Boss = true
 CLASS.KnockbackScale = 0
 
 CLASS.Health = 1750
+CLASS.DynamicHealth = 85
 CLASS.Speed = 150
 
 CLASS.FearPerInstance = 1
 
 CLASS.CanTaunt = true
 
-CLASS.Points = 30
+CLASS.Points = 34
 
 CLASS.SWEP = "weapon_zs_ticklemonster"
 

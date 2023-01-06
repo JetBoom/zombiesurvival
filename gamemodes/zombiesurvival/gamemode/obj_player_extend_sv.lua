@@ -58,7 +58,7 @@ function meta:ProcessDamage(dmginfo)
 				end
 
 				if attacker:IsSkillActive(SKILL_HEAVYSTRIKES) and not self:GetZombieClassTable().Boss and (wep.IsFistWeapon and attacker:IsSkillActive(SKILL_CRITICALKNUCKLE) or wep.MeleeKnockBack > 0) then
-					attacker:TakeSpecialDamage(damage * (wep.Unarmed and 1 or 0.08), DMG_SLASH, self, self:GetActiveWeapon())
+					attacker:TakeSpecialDamage(math.Clamp(damage * (wep.Unarmed and 0.35 or 0.06), 0, 20), DMG_SLASH, self, self:GetActiveWeapon())
 				end
 
 				if attacker:IsSkillActive(SKILL_BLOODLUST) and attacker:GetPhantomHealth() > 0 and attacker:Health() < attackermaxhp then
@@ -228,6 +228,8 @@ function meta:ProcessDamage(dmginfo)
 
 				if myteam == TEAM_UNDEAD and otherteam == TEAM_HUMAN then
 					attacker:AddLifeHumanDamage(absorb)
+					local xp = absorb / 55
+					attacker:GainZSXP(GAMEMODE.InitialVolunteers[attacker:UniqueID()] and xp * 1.35 or xp)
 				end
 			end
 
@@ -251,7 +253,7 @@ end
 GM.TrinketRecharges = {
 	reactiveflasher = {"ReactiveFlashMessage", "LastReactiveFlash", "Reactive Flasher", 75},
 	bleaksoul = {"BleakSoulMessage", "LastBleakSoul", "Bleak Soul", 35},
-	biocleanser = {"BioCleanserMessage", "LastBioCleanser", "Bio Cleanser", 20},
+	biocleanser = {"BioCleanserMessage", "LastBioCleanser", "Bio Cleanser", 25},
 	iceburst = {"IceBurstMessage", "LastIceBurst", "Iceburst Shield", 40}
 }
 
@@ -742,9 +744,16 @@ function meta:GiveStatus(sType, fDie)
 		return
 	end
 
-	if resistable and self:HasTrinket("biocleanser") and (not self.LastBioCleanser or self.LastBioCleanser + 20 < CurTime()) then
+	if resistable and self.LastBioCleanserStatus == sType and (not self.LastBioCleanser or self.LastBioCleanser + 1 > CurTime()) then
+		return
+	end
+
+	if resistable and self:HasTrinket("biocleanser") and (not self.LastBioCleanser or self.LastBioCleanser + 25 < CurTime()) then
 		self.LastBioCleanser = CurTime()
+		self.LastBioCleanserStatus = sType
 		self.BioCleanserMessage = nil
+		self:CenterNotify(COLOR_ORANGE, Format("Bio cleanser has blocked \"%s\" status effect!", sType))
+		return
 	end
 
 	local cur = self:GetStatus(sType)
@@ -936,7 +945,7 @@ function meta:Resupply(owner, obj)
 		self.StowageCaches = self.StowageCaches - 1
 
 		net.Start("zs_stowagecaches")
-			net.WriteInt(self.StowageCaches, 8)
+			net.WriteInt(self.StowageCaches, 12)
 		net.Send(self)
 	end
 
@@ -960,12 +969,16 @@ function meta:Resupply(owner, obj)
 				owner.ResupplyBoxUsedByOthers = owner.ResupplyBoxUsedByOthers + 1
 			end
 
-			owner:AddPoints(0.15, nil, nil, true)
+			local points = 0.15
+			local pointgain = points * (owner.PointsGainMul or 1)
+
+			owner:AddPoints(pointgain, nil, nil, true)
+			owner:GainZSXP(points)
 
 			net.Start("zs_commission")
-				net.WriteEntity(obj)
-				net.WriteEntity(self)
-				net.WriteFloat(0.15)
+			net.WriteEntity(obj)
+			net.WriteEntity(self)
+			net.WriteFloat(pointgain)
 			net.Send(owner)
 		end
 	end
@@ -1017,7 +1030,11 @@ function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 	end
 
 	self:AddFrags(wholepoints)
+	self:AddMScore(wholepoints)
 	self:SetPoints(self:GetPoints() + wholepoints)
+	self:GiveAchievementProgress("pointfarmer_1", wholepoints)
+	self:GiveAchievementProgress("pointfarmer_2", wholepoints)
+	self:GiveAchievementProgress("pointfarmer_3", wholepoints)
 
 	if self.PointsVault then
 		self.PointsVault = self.PointsVault + wholepoints * GAMEMODE.PointSaving
@@ -1027,6 +1044,7 @@ function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 		self:FloatingScore(floatingscoreobject, "floatingscore", wholepoints, fmtype or FM_NONE)
 	end
 
+/*
 	local xp = wholepoints
 	if GAMEMODE.HumanXPMulti and GAMEMODE.HumanXPMulti >= 0 then
 		xp = xp * GAMEMODE.HumanXPMulti
@@ -1040,7 +1058,8 @@ function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 		end
 	end
 
-	self:AddZSXP(xp * (self.RedeemBonus and 1.15 or 1))
+	self:GainZSXP(xp * (self.RedeemBonus and 1.15 or 1), true)
+*/
 
 	gamemode.Call("PlayerPointsAdded", self, wholepoints)
 end
@@ -1240,11 +1259,12 @@ function meta:Redeem(silent, noequip)
 
 	self:KillSilent()
 
+	local initialvolunteer = GAMEMODE.InitialVolunteers[self:UniqueID()]
+
 	self:ChangeTeam(TEAM_HUMAN)
-	if not GAMEMODE.InitialVolunteers[self:UniqueID()] then
-		self:AddZSXP(50 * (GAMEMODE.ZombieXPMulti or 1))
-		self.RedeemBonus = true
-	end
+	self:AddZSXP(initialvolunteer and 20 * (GAMEMODE.ZombieXPMulti or 1) or 50 * (GAMEMODE.ZombieXPMulti or 1))
+	self.RedeemBonus = initialvolunteer
+
 	if not noequip then self.m_PreRedeem = true end
 
 	self:Spawn()
@@ -1255,8 +1275,10 @@ function meta:Redeem(silent, noequip)
 	local frags = self:Frags()
 	if frags < 0 then
 		self:SetFrags(frags * 5)
+		self:SetMScore(frags * 5)
 	else
 		self:SetFrags(0)
+		self:SetMScore(0)
 	end
 	self:SetDeaths(0)
 
@@ -1268,7 +1290,7 @@ function meta:Redeem(silent, noequip)
 
 	if not silent then
 		net.Start("zs_playerredeemed")
-			net.WriteEntity(self)
+		net.WriteEntity(self)
 		net.Broadcast()
 	end
 
@@ -1299,11 +1321,13 @@ end
 
 function meta:TakeBrains(amount)
 	self:AddFrags(-amount)
+	self:AddMScore(-amount)
 	self.BrainsEaten = self.BrainsEaten - 1
 end
 
 function meta:AddBrains(amount)
 	self:AddFrags(amount)
+	self:AddMScore(amount)
 	self.BrainsEaten = self.BrainsEaten + 1
 	self:CheckRedeem()
 end
@@ -1348,6 +1372,7 @@ end
 
 function meta:GivePointPenalty(amount)
 	self:SetFrags(self:Frags() - amount)
+	self:SetMScore(self:GetMScore() - amount)
 
 	net.Start("zs_penalty")
 		net.WriteUInt(amount, 16)

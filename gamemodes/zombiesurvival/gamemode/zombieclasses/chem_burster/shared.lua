@@ -3,9 +3,10 @@ CLASS.TranslationName = "class_chem_burster"
 CLASS.Description = "description_chem_burster"
 CLASS.Help = "controls_chem_burster"
 
-CLASS.Wave = 6 / 6
+CLASS.Wave = 6 / GM.NumberOfWaves
 
 CLASS.Health = 125
+CLASS.DynamicHealth = 3
 CLASS.Speed = 170
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

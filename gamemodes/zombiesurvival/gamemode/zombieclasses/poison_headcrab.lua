@@ -7,12 +7,13 @@ CLASS.BetterVersion = "Barbed Headcrab"
 
 CLASS.Model = Model("models/headcrabblack.mdl")
 
-CLASS.Wave = 3 / 6
+CLASS.Wave = 3 / GM.NumberOfWaves
 CLASS.Threshold = 0.6
 
 CLASS.SWEP = "weapon_zs_poisonheadcrab"
 
 CLASS.Health = 85
+CLASS.DynamicHealth = 1
 CLASS.Speed = 145
 CLASS.JumpPower = 100
 

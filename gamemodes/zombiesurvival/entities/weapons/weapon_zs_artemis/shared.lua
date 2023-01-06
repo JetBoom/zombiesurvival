@@ -67,7 +67,7 @@ SWEP.DontScaleReloadSpeed = true
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Actaeon' Dual Crossbows", "Bolts pierce slightly instead of exploding, and inflict damage vulnerability, less damage", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Actaeon' Dual Crossbows", "Bolts pierce slightly instead of exploding, and inflict damage vulnerability, -25% damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.75
 	wept.Primary.Projectile = "projectile_arrow_inq"
 	wept.EntModify = function(self, ent)

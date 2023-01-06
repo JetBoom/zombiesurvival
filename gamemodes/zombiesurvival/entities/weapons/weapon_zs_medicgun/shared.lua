@@ -70,10 +70,11 @@ function SWEP:SecondaryAttack()
 	local targetent = owner:CompensatedMeleeTrace(2048, 2, nil, nil, true).Entity
 	local locked = targetent and targetent:IsValidLivingHuman() and gamemode.Call("PlayerCanBeHealed", targetent)
 
+	print(targetent, locked)
 	if CLIENT then
 		self:EmitSound(locked and "npc/scanner/combat_scan4.wav" or "npc/scanner/scanner_scan5.wav", 65, locked and 75 or 200)
 	end
-	self:SetSeekedPlayer(locked and targetent)
+	self:SetSeekedPlayer(locked and targetent or self:GetSeekedPlayer())
 end
 
 function SWEP:SetSeekedPlayer(ent)

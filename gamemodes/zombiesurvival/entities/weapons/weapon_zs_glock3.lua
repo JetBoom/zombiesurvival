@@ -43,7 +43,7 @@ SWEP.IronSightsPos = Vector(-5.75, 10, 2.7)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.9, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.5, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but more accurate shots, higher base damage, and a chance to gain reaper stacks", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but more accurate shots, +20% increased damage, and a 5% chance to gain reaper stacks", function(wept)
 	wept.Primary.NumShots = 2
 	wept.Primary.Damage = wept.Primary.Damage * 1.2
 	wept.ConeMin = wept.ConeMin * 0.65
@@ -59,7 +59,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but m
 		end
 	end
 end)
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Shroud' SOCOM Mark 23", "Fires 1 shot, hides your aura, deals less total damage but is more accurate", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Shroud' SOCOM Mark 23", "Fires 1 shot, hides your aura, increased firerate, deals less damage but more accuracy", function(wept)
 	wept.Primary.NumShots = 1
 	wept.Primary.Damage = wept.Primary.Damage * 2.3
 	wept.Primary.Delay = 0.2

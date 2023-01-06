@@ -188,6 +188,24 @@ function GM:ShowHelp()
 
 	but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")
+	but:SetText("Worth Menu")
+	but:SetTall(buttonhei)
+	but:DockMargin(0, 0, 0, 12)
+	but:DockPadding(0, 12, 0, 12)
+	but:Dock(TOP)
+	but.DoClick = function() MakepWorth() menu:Remove() end
+
+	but = vgui.Create("DButton", menu)
+	but:SetFont("ZSHUDFontSmaller")
+	but:SetText("Achievements")
+	but:SetTall(buttonhei)
+	but:DockMargin(0, 0, 0, 12)
+	but:DockPadding(0, 12, 0, 12)
+	but:Dock(TOP)
+	but.DoClick = function() self:DoAchievementsPanel() menu:Remove() end
+
+	but = vgui.Create("DButton", menu)
+	but:SetFont("ZSHUDFontSmaller")
 	but:SetText("Credits")
 	but:SetTall(buttonhei)
 	but:DockMargin(0, 0, 0, 12)

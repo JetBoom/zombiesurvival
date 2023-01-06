@@ -8,6 +8,7 @@ CLASS.Help = "controls_gravedigger"
 CLASS.Boss = true
 
 CLASS.Health = 1600
+CLASS.DynamicHealth = 80
 CLASS.Speed = 200
 
 CLASS.CanTaunt = true

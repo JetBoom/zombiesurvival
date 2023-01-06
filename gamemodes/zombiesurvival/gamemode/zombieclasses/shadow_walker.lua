@@ -12,9 +12,10 @@ CLASS.CanTaunt = true
 
 CLASS.SWEP = "weapon_zs_shadowwalker"
 
-CLASS.Wave = 2 / 6
+CLASS.Wave = 2 / GM.NumberOfWaves
 
 CLASS.Health = 220
+CLASS.DynamicHealth = 3
 CLASS.Speed = 180
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio

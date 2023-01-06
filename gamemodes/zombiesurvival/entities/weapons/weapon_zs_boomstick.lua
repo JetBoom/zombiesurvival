@@ -47,9 +47,9 @@ SWEP.PumpActivity = ACT_SHOTGUN_PUMP
 SWEP.PumpSound = Sound("Weapon_Shotgun.Special1")
 SWEP.ReloadSound = Sound("Weapon_Shotgun.Reload")
 
-GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.07)
-GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Lithe Stick", "Decreased damage but faster reload, more knockback and more move speed", function(wept)
+GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.06)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 2)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Lithe Stick", "-25% damage but faster reload, more knockback and more move speed", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.75
 	wept.ReloadSpeed = wept.ReloadSpeed * 1.25
 	wept.Primary.Delay = wept.Primary.Delay * 0.5

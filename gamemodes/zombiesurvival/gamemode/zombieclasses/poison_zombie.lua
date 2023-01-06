@@ -7,9 +7,10 @@ CLASS.BetterVersion = "Wild Poison Zombie"
 
 CLASS.Model = Model("models/Zombie/Poison.mdl")
 
-CLASS.Wave = 4 / 6
+CLASS.Wave = 4 / GM.NumberOfWaves
 
 CLASS.Health = 440
+CLASS.DynamicHealth = 5
 CLASS.Speed = 150
 CLASS.JumpPower = DEFAULT_JUMP_POWER * 1.081
 CLASS.SWEP = "weapon_zs_poisonzombie"

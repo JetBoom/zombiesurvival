@@ -19,7 +19,7 @@ function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
 		local killer = self:GetOwner()
 
 		if killer:IsValid() then
-			killer.GraveShovelDamage = killer.GraveShovelDamage and killer.GraveShovelDamage + 5 or 5
+			killer.GraveShovelDamage = killer.GraveShovelDamage and killer.GraveShovelDamage + 4 or 4
 			killer:EmitSound("hl1/ambience/particle_suck1.wav", 65, 250, 0.65)
 		end
 

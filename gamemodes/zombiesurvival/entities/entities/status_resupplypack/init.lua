@@ -2,7 +2,8 @@ INC_SERVER()
 
 function ENT:Initialize()
 	self:DrawShadow(false)
-	self:SetModelScale(0.35, 0)
+	self:SetNotSolid(true)
+	self:SetModelScale(0.35, 0) --0.35x model scale before
 
 	self:SetModel("models/Items/ammocrate_ar2.mdl")
 	self:SetMoveType(MOVETYPE_NONE)

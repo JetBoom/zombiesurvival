@@ -5,9 +5,10 @@ CLASS.Help = "controls_bloated_zombie"
 
 CLASS.BetterVersion = "Vile Bloated Zombie"
 
-CLASS.Wave = 2 / 6
+CLASS.Wave = 2 / GM.NumberOfWaves
 
 CLASS.Health = 325
+CLASS.DynamicHealth = 3
 CLASS.Speed = 125
 --CLASS.JumpPower = DEFAULT_JUMP_POWER * 0.811
 CLASS.Mass = DEFAULT_MASS * 2

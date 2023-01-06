@@ -5,7 +5,7 @@ CLASS.TranslationName = "class_bloodsucker_headcrab"
 CLASS.Description = "description_bloodsucker_headcrab"
 CLASS.Help = "controls_bloodsucker_headcrab"
 
-CLASS.Wave = 3 / 6
+CLASS.Wave = 3 / GM.NumberOfWaves
 
 CLASS.Model = Model("models/headcrab.mdl")
 

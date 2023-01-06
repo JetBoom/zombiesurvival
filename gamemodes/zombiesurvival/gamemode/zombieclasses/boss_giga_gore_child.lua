@@ -8,6 +8,7 @@ CLASS.Boss = true
 CLASS.KnockbackScale = 0
 
 CLASS.Health = 2500
+CLASS.DynamicHealth = 125
 CLASS.Speed = 230
 
 CLASS.Points = 40

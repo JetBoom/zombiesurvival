@@ -1,7 +1,7 @@
 function statusValueFunction(statusname)
 	return function(self, lp)
 		local status = lp:GetStatus(statusname)
-		if status and status:IsValid() then
+		if status and status.GetStartTime and status.GetDuration and status:IsValid() then
 			return math.max(status:GetStartTime() + status:GetDuration() - CurTime(), 0)
 		end
 
@@ -10,129 +10,151 @@ function statusValueFunction(statusname)
 end
 
 local statusdisplays = {
-{
-	Color = Color(180, 200, 0),
-	Name = "POISON!",
-	ValFunc = function(self, lp)
-		return lp:GetPoisonDamage()
-	end,
-	Max = GM.MaxPoisonDamage or 50,
-	Icon = Material("zombiesurvival/poison.png")
-},
-{
-	Color = Color(220, 0, 0),
-	Name = "BLEED!",
-	ValFunc = function(self, lp)
-		return lp:GetBleedDamage()
-	end,
-	Max = GM.MaxBleedDamage or 50,
-	Icon = Material("zombiesurvival/bleed.png")
-},
-{
-	Color = Color(255, 50, 50),
-	Name = "ENFEEBLE!",
-	ValFunc = statusValueFunction("enfeeble"),
-	Max = 10,
-	Icon = Material("zombiesurvival/infeeble.png")
-},
-{
-	Color = Color(90, 90, 90),
-	Name = "DIM VISION!",
-	ValFunc = statusValueFunction("dimvision"),
-	Max = 10,
-	Icon = Material("zombiesurvival/dim_vision.png")
-},
-{
-	Color = Color(75, 140, 75),
-	Name = "SLOW!",
-	ValFunc = statusValueFunction("slow"),
-	Max = 8,
-	Icon = Material("zombiesurvival/slow.png")
-},
-{
-	Color = Color(0, 135, 255),
-	Name = "FROST!",
-	ValFunc = statusValueFunction("frost"),
-	Max = 9,
-	Icon = Material("zombiesurvival/frost.png")
-},
-{
-	Color = Color(155, 0, 255),
-	Name = "TREMOR!",
-	ValFunc = statusValueFunction("frightened"),
-	Max = 10,
-	Icon = Material("zombiesurvival/tremors.png")
-},
-{
-	Color = Color(255, 120, 0),
-	Name = "SICKNESS!",
-	ValFunc = statusValueFunction("sickness"),
-	Max = 15,
-	Icon = Material("zombiesurvival/sickness.png")
-},
-{
-	Color = Color(157, 75, 20),
-	Name = "KNOCK DOWN!",
-	ValFunc = statusValueFunction("knockdown"),
-	Max = 5,
-	Icon = Material("zombiesurvival/knock_down.png")
-},
-{
-	Color = Color(200, 100, 90),
-	Name = "STRENGTH!",
-	ValFunc = statusValueFunction("strengthdartboost"),
-	Max = 10,
-	Icon = Material("zombiesurvival/strength_shot.png")
-},
-{
-	Color = Color(170, 200, 120),
-	Name = "ADRENALINE!",
-	ValFunc = statusValueFunction("adrenalineamp"),
-	Max = 10,
-	Icon = Material("zombiesurvival/speed_up.png")
-},
-{
-	Color = Color(130, 220, 110),
-	Name = "SPEED!",
-	ValFunc = statusValueFunction("healdartboost"),
-	Max = 10,
-	Icon = Material("zombiesurvival/speed_up.png")
-},
-{
-	Color = Color(90, 120, 220),
-	Name = "DEFENCE!",
-	ValFunc = statusValueFunction("medrifledefboost"),
-	Max = 10,
-	Icon = Material("zombiesurvival/defense.png")
-},
-{
-	Color = Color(130, 30, 140),
-	Name = "REAPER!",
-	ValFunc = statusValueFunction("reaper"),
-	Max = 14,
-	Icon = Material("zombiesurvival/reaper.png")
-},
-{
-	Color = Color(235, 160, 40),
-	Name = "Renegade!",
-	ValFunc = statusValueFunction("renegade"),
-	Max = 14,
-	Icon = Material("zombiesurvival/headshot_stacks.png")
-}
-}
+	{
+		Color = Color(180, 200, 0),
+		Name = "POISON!",
+		ValFunc = function(self, lp)
+			return lp:GetPoisonDamage()
+		end,
+		Max = GM.MaxPoisonDamage or 50,
+		Icon = Material("zombiesurvival/poison.png")
+	},
 
+	{
+		Color = Color(220, 0, 0),
+		Name = "BLEED!",
+		ValFunc = function(self, lp)
+			return lp:GetBleedDamage()
+		end,
+		Icon = Material("zombiesurvival/bleed.png"),
+		Max = GM.MaxBleedDamage or 50,
+	},
+
+	{
+		Color = Color(255, 50, 50),
+		Name = "ENFEEBLE!",
+		ValFunc = statusValueFunction("enfeeble"),
+		Max = 10,
+		Icon = Material("zombiesurvival/infeeble.png")
+	},
+
+	{
+		Color = Color(90, 90, 90),
+		Name = "DIM VISION!",
+		ValFunc = statusValueFunction("dimvision"),
+		Max = 10,
+		Icon = Material("zombiesurvival/dim_vision.png")
+	},
+
+	{
+		Color = Color(75, 140, 75),
+		Name = "SLOW!",
+		ValFunc = statusValueFunction("slow"),
+		Max = 8,
+		Icon = Material("zombiesurvival/slow.png")
+	},
+
+	{
+		Color = Color(0, 135, 255),
+		Name = "FROST!",
+		ValFunc = statusValueFunction("frost"),
+		Max = 9,
+		Icon = Material("zombiesurvival/frost.png")
+	},
+
+	{
+		Color = Color(155, 0, 255),
+		Name = "TREMOR!",
+		ValFunc = statusValueFunction("frightened"),
+		Max = 10,
+		Icon = Material("zombiesurvival/tremors.png")
+	},
+
+	{
+		Color = Color(255, 120, 0),
+		Name = "SICKNESS!",
+		ValFunc = statusValueFunction("sickness"),
+		Max = 15,
+		Icon = Material("zombiesurvival/sickness.png")
+	},
+
+	{
+		Color = Color(157, 75, 20),
+		Name = "KNOCK DOWN!",
+		ValFunc = statusValueFunction("knockdown"),
+		Max = 5,
+		Icon = Material("zombiesurvival/knock_down.png")
+	},
+
+	{
+		Color = Color(200, 100, 90),
+		Name = "STRENGTH!",
+		ValFunc = statusValueFunction("strengthdartboost"),
+		Max = 10,
+		Icon = Material("zombiesurvival/strength_shot.png")
+	},
+
+	{
+		Color = Color(170, 200, 120),
+		Name = "ADRENALINE!",
+		ValFunc = statusValueFunction("adrenalineamp"),
+		Max = 10,
+		Icon = Material("zombiesurvival/speed_up.png")
+	},
+
+	{
+		Color = Color(130, 220, 110),
+		Name = "SPEED!",
+		ValFunc = statusValueFunction("healdartboost"),
+		Max = 10,
+		Icon = Material("zombiesurvival/speed_up.png")
+	},
+
+	{
+		Color = Color(90, 120, 220),
+		Name = "DEFENCE!",
+		ValFunc = statusValueFunction("medrifledefboost"),
+		Max = 10,
+		Icon = Material("zombiesurvival/defense.png")
+	},
+
+	{
+		Color = Color(130, 30, 140),
+		Name = "REAPER!",
+		ValFunc = statusValueFunction("reaper"),
+		Max = 14,
+		Icon = Material("zombiesurvival/reaper.png")
+	},
+
+	{
+		Color = Color(235, 160, 40),
+		Name = "Renegade!",
+		ValFunc = statusValueFunction("renegade"),
+		Max = 14,
+		Icon = Material("zombiesurvival/headshot_stacks.png")
+	},
+
+	{
+		Color = Color(245, 105, 35),
+		Name = "BATTLECRY!",
+		ValFunc = statusValueFunction("zombie_battlecry"),
+		Max = 10,
+		Icon = Material("zombiesurvival/headshot_stacks.png")
+	}
+}
 local PANEL = {}
 
 PANEL.StatusPanels = {}
 
 function PANEL:Init()
-	self:DockMargin(0, 0, 0, 0)
+self:DockMargin(0, 0, 0, 0)
+
 	self:DockPadding(0, 0, 0, 0)
-
 	self.StatusPanels = {}
-
+	
 	for _, statusdisp in pairs(statusdisplays) do
-		status = vgui.Create("ZSStatus", self)
+	status = vgui.Create("ZSStatus", self)
+
 		status:SetAlpha(240)
 		status:SetColor(statusdisp.Color)
 		status:SetMemberName(statusdisp.Name)
@@ -140,16 +162,16 @@ function PANEL:Init()
 		status.MemberMaxValue = statusdisp.Max
 		status.Icon = statusdisp.Icon
 		status:Dock(LEFT)
-
 		table.insert(self.StatusPanels, status)
-	end
 
+	end
 	self:ParentToHUD()
 	self:InvalidateLayout()
-end
 
+end
 function PANEL:PerformLayout()
-	local w = 0
+local w = 0
+
 	for _, child in pairs(self:GetChildren()) do
 		w = w + child:GetWide()
 	end

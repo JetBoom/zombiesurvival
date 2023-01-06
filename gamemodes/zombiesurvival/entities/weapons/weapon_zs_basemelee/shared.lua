@@ -236,12 +236,13 @@ end
 
 function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
 	if owner.MeleePowerAttackMul and owner.MeleePowerAttackMul > 1 then
+		
+		damage = damage + damage * (owner.MeleePowerAttackMul - 1) * (self:GetPowerCombo() / 4)
+		dmginfo:SetDamage(damage)
+		
 		self:SetPowerCombo(self:GetPowerCombo() + 1)
 
-		damage = damage + damage * (owner.MeleePowerAttackMul - 1) * (self:GetPowerCombo()/4)
-		dmginfo:SetDamage(damage)
-
-		if self:GetPowerCombo() >= 4 then
+		if self:GetPowerCombo() > 4 then
 			self:SetPowerCombo(0)
 			if SERVER then
 				local pitch = math.Clamp(math.random(90, 110) + 15 * (1 - damage/45), 50 , 200)
@@ -306,8 +307,9 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 	local owner = self:GetOwner()
 
 	if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
-		damagemultiplier = damagemultiplier * 3.5
-		owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
+		damagemultiplier = damagemultiplier * 3.23
+		self.GlassWeaponHits = (self.GlassWeaponHits or 0) + 1
+		owner.GlassWeaponShouldBreak = math.Rand(0,1) < 0.35
 	end
 
 	local damage = self.MeleeDamage * damagemultiplier

@@ -72,6 +72,10 @@ function GM:LoadVault(pl)
 					pl.SkillsRefunded = true
 				end
 
+				if contents.Achievements then
+					pl.Achs = contents.Achievements
+				end
+
 				pl.SkillVersion = self.SkillTreeVersion
 			end
 		end
@@ -109,6 +113,8 @@ function GM:PlayerReadyVault(pl)
 			net.Send(pl)
 		end
 	end
+
+	pl:ProcessAchievements()
 end
 
 function GM:SaveVault(pl)
@@ -120,7 +126,8 @@ function GM:SaveVault(pl)
 		RemortLevel = pl:GetZSRemortLevel(),
 		DesiredActiveSkills = util.CompressBitTable(pl:GetDesiredActiveSkills()),
 		UnlockedSkills = util.CompressBitTable(pl:GetUnlockedSkills()),
-		Version = pl.SkillVersion or self.SkillTreeVersion
+		Version = pl.SkillVersion or self.SkillTreeVersion,
+		Achievements = pl.Achs or {}
 	}
 
 	if pl.NextSkillReset and os.time() < pl.NextSkillReset then

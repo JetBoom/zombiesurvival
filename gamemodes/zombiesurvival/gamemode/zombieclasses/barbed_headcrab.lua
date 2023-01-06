@@ -9,7 +9,7 @@ CLASS.Health = 100
 CLASS.Points = CLASS.Health/GM.HeadcrabZombiePointRatio
 CLASS.Speed = 160
 
-CLASS.Wave = 4 / 6
+CLASS.Wave = 4 / GM.NumberOfWaves
 
 CLASS.SWEP = "weapon_zs_barbedheadcrab"
 

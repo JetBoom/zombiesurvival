@@ -8,6 +8,7 @@ CLASS.Help = "controls_frostshade"
 CLASS.Boss = true
 
 CLASS.Health = 1500
+CLASS.DynamicHealth = 75
 CLASS.Speed = 170
 
 CLASS.Points = 30

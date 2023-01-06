@@ -45,7 +45,7 @@ SWEP.IronSightsPos = Vector(-5.95, 0, 2.5)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEADSHOT_MULTI, 0.07)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Cleanser' Tactical Pistol", "Less reload speed, accuracy and headshot multiplier but gains increased damage per wave", function(wept)
+GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Cleanser' Tactical Pistol", "Less reload speed, accuracy and -10% headshot multiplier but gains +15% damage per each wave", function(wept)
 	wept.ConeMax = wept.ConeMax * 1.7
 	wept.ConeMin = wept.ConeMin * 2.1
 	wept.ReloadSpeed = wept.ReloadSpeed * 0.7

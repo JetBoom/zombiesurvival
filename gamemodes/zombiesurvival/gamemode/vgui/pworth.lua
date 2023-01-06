@@ -23,7 +23,7 @@ local function GetStartingWorth()
 end
 
 net.Receive("zs_extrastartingworth", function(len)
-	ExtraStartingWorth = net.ReadUInt(16)
+	ExtraStartingWorth = net.ReadInt(16)
 end)
 
 local cvarDefaultCart = CreateClientConVar("zs_defaultcart", "", true, false)
@@ -66,6 +66,7 @@ local function CheckoutDoClick(self)
 	end
 
 	if remainingworth >= 0 then
+		if MySelf:Team() ~= TEAM_HUMAN then pWorth:Close() return end
 		Checkout(tobuy)
 	else
 		surface.PlaySound("buttons/button8.wav")
@@ -189,9 +190,9 @@ local function QuickCheckDoClick(self)
 end
 
 local function WorthThink(self)
-	if MySelf:Team() ~= TEAM_HUMAN then
-		self:Close()
-	end
+--	if MySelf:Team() ~= TEAM_HUMAN then
+--		self:Close()
+--	end
 end
 
 function MakepWorth()
@@ -266,7 +267,7 @@ function MakepWorth()
 	list:AddItem(savebutton)
 
 	local panfont = "ZSHUDFontSmall"
-	local panhei = 40 * screenscale
+	local panhei = 50 * screenscale
 
 	local defaultcart = cvarDefaultCart:GetString()
 
@@ -275,10 +276,41 @@ function MakepWorth()
 		cartpan:SetCursor("pointer")
 		cartpan:SetSize(list:GetWide(), panhei)
 
+		local priceall = 0
+		local names = ""
+		for k, v in ipairs(savetab) do
+			if type(v) == "table" then
+				for _, name in pairs(v) do
+					local item = FindStartingItem(name)
+					if not item then continue end
+					priceall = item.Worth + priceall
+					if #savetab == _ + 1 then
+						names = "\""..(item.Name or weapons.Get(item).PrintName or "?").."\" "..names
+					else
+						names = "\""..(item.Name or weapons.Get(item).PrintName or "?").."\", "..names
+					end
+				end
+			end
+		end
+		--local priceall = translate.Get("w_cost")..priceall
+		names = string.sub(names,0, string.len(names)-1)
+
 		local cartname = savetab[1]
 
 		local x = 8
 		local limitedscale = math.Clamp(screenscale, 1, 1.5)
+		local worthreq = priceall
+
+		if worthreq > GetStartingWorth() then
+			local overimage = vgui.Create("DImage", cartpan)
+			overimage:SetImage("icon16/exclamation.png")
+			overimage:SizeToContents()
+			overimage:SetSize(16 * limitedscale, 16 * limitedscale)
+			overimage:SetMouseInputEnabled(true)
+			overimage:SetTooltip("This cart costs more than your starting worth.\nIt's recommended to load this cart and unselect some items.")
+			overimage:SetPos(x, cartpan:GetTall() * 0.5 - overimage:GetTall() * 0.5)
+			x = x + overimage:GetWide() + 4
+		end
 
 		if defaultcart == cartname then
 			local defimage = vgui.Create("DImage", cartpan)
@@ -292,7 +324,13 @@ function MakepWorth()
 		end
 
 		local cartnamelabel = EasyLabel(cartpan, cartname, panfont)
-		cartnamelabel:SetPos(x, cartpan:GetTall() * 0.5 - cartnamelabel:GetTall() * 0.5)
+		cartnamelabel:SetPos(x, cartpan:GetTall() * 0.35 - cartnamelabel:GetTall() * 0.5)
+
+		local cartworthlabel = EasyLabel(cartpan, Format("Worth needed: %d", worthreq), "ZSHUDFontTiny")
+		cartworthlabel:SetPos(x, 30)
+		cartworthlabel:SetTextColor(worthreq > GetStartingWorth() and Color(235,35,35) or worthreq >= GetStartingWorth() and Color(235,235,65) or Color(235,115,95))
+
+--		cartworthlabel:SetTooltip(Format("Worth needed: %d", 0))
 
 		x = cartpan:GetWide()
 
@@ -300,7 +338,7 @@ function MakepWorth()
 		checkbutton:SetImage("icon16/accept.png")
 		checkbutton:SizeToContents()
 		checkbutton:SetSize(16 * limitedscale, 16 * limitedscale)
-		checkbutton:SetTooltip("Purchase this saved cart.")
+		checkbutton:SetTooltip(Format("Purchase this saved cart.\n\nItems in this cart: \n%s", names))
 		x = x - checkbutton:GetWide() - 8
 		checkbutton:SetPos(x, cartpan:GetTall() * 0.5 - checkbutton:GetTall() * 0.5)
 		checkbutton.ID = i
@@ -310,18 +348,19 @@ function MakepWorth()
 		loadbutton:SetImage("icon16/folder_go.png")
 		loadbutton:SizeToContents()
 		loadbutton:SetSize(16 * limitedscale, 16 * limitedscale)
-		loadbutton:SetTooltip("Load this saved cart.")
+		loadbutton:SetTooltip(Format("Load this saved cart.\n\nItems in this cart: \n%s", names))
 		x = x - loadbutton:GetWide() - 8
 		loadbutton:SetPos(x, cartpan:GetTall() * 0.5 - loadbutton:GetTall() * 0.5)
 		loadbutton.ID = i
 		loadbutton.DoClick = LoadDoClick
 
 		local defaultbutton = vgui.Create("DImageButton", cartpan)
-		defaultbutton:SetImage("icon16/heart.png")
 		defaultbutton:SizeToContents()
+		defaultbutton:SetImage("icon16/heart.png")
 		defaultbutton:SetSize(16 * limitedscale, 16 * limitedscale)
 		if cartname == defaultcart then
 			defaultbutton:SetTooltip("Remove this cart as your default.")
+			defaultbutton:SetImage("icon16/heart_delete.png")
 		else
 			defaultbutton:SetTooltip("Make this cart your default.")
 		end
