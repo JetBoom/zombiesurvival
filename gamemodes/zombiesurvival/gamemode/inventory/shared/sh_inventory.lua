@@ -171,9 +171,9 @@ local supweles = {
 }
 
 -- Health Trinkets
-trinket, trinketwep = GM:AddTrinket("Health Package", "vitpackagei", false, hpveles, hpweles, 2, "+10 maximum health\n+5% healing received")
+trinket, trinketwep = GM:AddTrinket("Health Package", "vitpackagei", false, hpveles, hpweles, 2, "+10 maximum health\n+4% healing received")
 GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 10)
-GM:AddSkillModifier(trinket, SKILLMOD_HEALING_RECEIVED, 0.05)
+GM:AddSkillModifier(trinket, SKILLMOD_HEALING_RECEIVED, 0.04)
 trinketwep.PermitDismantle = true
 
 trinket = GM:AddTrinket("Vitality Bank", "vitpackageii", false, hpveles, hpweles, 4, "+21 maximum health\n+6% healing received")
@@ -187,20 +187,20 @@ trinket, trinketwep = GM:AddTrinket("Blood Package", "cardpackagei", false, hpve
 GM:AddSkillModifier(trinket, SKILLMOD_BLOODARMOR, 10)
 trinketwep.PermitDismantle = true
 
-GM:AddSkillModifier(GM:AddTrinket("Blood Bank", "cardpackageii", false, hpveles, hpweles, 4, "+30 maximum blood armor"), SKILLMOD_BLOODARMOR, 30)
+GM:AddSkillModifier(GM:AddTrinket("Blood Bank", "cardpackageii", false, hpveles, hpweles, 4, "+26 maximum blood armor"), SKILLMOD_BLOODARMOR, 26)
 
 GM:AddTrinket("Regeneration Implant", "regenimplant", false, hpveles, hpweles, 3, "Heals 1 health every 10 seconds provided no damage was taken recently")
 
 trinket, trinketwep = GM:AddTrinket("Bio Cleanser", "biocleanser", false, hpveles, hpweles, 2, "Blocks one harmful status effect every 25 seconds and gives 1 second immunity to the given status")
 trinketwep.PermitDismantle = true
 
-GM:AddSkillModifier(GM:AddTrinket("Cutlery Set", "cutlery", false, hpveles, hpweles, nil, "-80% time to eat food"), SKILLMOD_FOODEATTIME_MUL, -0.8)
+GM:AddSkillModifier(GM:AddTrinket("Cutlery Set", "cutlery", false, hpveles, hpweles, nil, "-70% time to eat food"), SKILLMOD_FOODEATTIME_MUL, -0.7)
 
 -- Melee Trinkets
 
-description = "5 hits from fist weapons applies significant leg and arm damage\n-15% time before next unarmed strike"
+description = "5 hits from fist weapons applies significant leg and arm damage\n-17% time before next unarmed strike"
 trinket = GM:AddTrinket("Boxing Training Manual", "boxingtraining", false, mveles, mweles, nil, description)
-GM:AddSkillModifier(trinket, SKILLMOD_UNARMED_SWING_DELAY_MUL, -0.15)
+GM:AddSkillModifier(trinket, SKILLMOD_UNARMED_SWING_DELAY_MUL, -0.17)
 GM:AddSkillFunction(trinket, function(pl, active) pl.BoxingTraining = active end)
 
 trinket, trinketwep = GM:AddTrinket("Momentum Support", "momentumsupsysii", false, mveles, mweles, 2, "-13% melee swing impact delay\n+10% melee knockback")
@@ -227,17 +227,20 @@ GM:AddTrinket("Finesse Kit", "sharpkit", false, mveles, mweles, 2, "Deal up to +
 trinket = GM:AddTrinket("Sharp Stone", "sharpstone", false, mveles, mweles, 3, "+7% melee damage")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_DAMAGE_MUL, 0.07)
 
+trinket = GM:AddTrinket("Long Grip", "longgrip", false, mveles, mweles, 3, "+2.5 melee range")
+GM:AddSkillModifier(trinket, SKILLMOD_MELEE_RANGE_ADD, 2.5)
+
 -- Performance Trinkets
 GM:AddTrinket("Oxygen Tank", "oxygentank", true, nil, {
 	["base"] = { type = "Model", model = "models/props_c17/canister01a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4, 3, -1), angle = Angle(180, 0, 0), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }, nil, "10x breathing time underwater.", "oxygentank")
 
-GM:AddSkillModifier(GM:AddTrinket("Acrobat Frame", "acrobatframe", false, pveles, pweles, nil, "+8% jump power."), SKILLMOD_JUMPPOWER_MUL, 0.08)
+GM:AddSkillModifier(GM:AddTrinket("Acrobat Frame", "acrobatframe", false, pveles, pweles, nil, "+7% jump power."), SKILLMOD_JUMPPOWER_MUL, 0.07)
 
-trinket = GM:AddTrinket("Night Vision Goggles", "nightvision", true, pveles, pweles, 2, "-50% effect of dim vision and ability to see in the dark\n-40% effect of vision affecting effects\n-45% fright duration")
-GM:AddSkillModifier(trinket, SKILLMOD_DIMVISION_EFF_MUL, -0.5)
-GM:AddSkillModifier(trinket, SKILLMOD_FRIGHT_DURATION_MUL, -0.45)
-GM:AddSkillModifier(trinket, SKILLMOD_VISION_ALTER_DURATION_MUL, -0.4)
+trinket = GM:AddTrinket("Night Vision Goggles", "nightvision", true, pveles, pweles, 2, "-40% effect of dim vision and ability to see in the dark\n-35% effect of vision affecting effects\n-35% fright duration")
+GM:AddSkillModifier(trinket, SKILLMOD_DIMVISION_EFF_MUL, -0.4)
+GM:AddSkillModifier(trinket, SKILLMOD_FRIGHT_DURATION_MUL, -0.35)
+GM:AddSkillModifier(trinket, SKILLMOD_VISION_ALTER_DURATION_MUL, -0.35)
 GM:AddSkillFunction(trinket, function(pl, active)
 	if CLIENT and pl == MySelf and GAMEMODE.m_NightVision and not active then
 		surface.PlaySound("items/nvg_off.wav")
@@ -250,15 +253,15 @@ trinket = GM:AddTrinket("Portable Weapons Satchel", "portablehole", false, pvele
 GM:AddSkillModifier(trinket, SKILLMOD_DEPLOYSPEED_MUL, 0.15)
 GM:AddSkillModifier(trinket, SKILLMOD_RELOADSPEED_MUL, 0.03)
 
-trinket = GM:AddTrinket("Agility Magnifier", "pathfinder", false, pveles, pweles, 2, "+40% barricade phasing movement speed\n-45% sigil teleportation time\n+13% jump power")
+trinket = GM:AddTrinket("Agility Magnifier", "pathfinder", false, pveles, pweles, 2, "+40% barricade phasing movement speed\n-45% sigil teleportation time\n+10% jump power")
 GM:AddSkillModifier(trinket, SKILLMOD_BARRICADE_PHASE_SPEED_MUL, 0.4)
 GM:AddSkillModifier(trinket, SKILLMOD_SIGIL_TELEPORT_MUL, -0.45)
-GM:AddSkillModifier(trinket, SKILLMOD_JUMPPOWER_MUL, 0.13)
+GM:AddSkillModifier(trinket, SKILLMOD_JUMPPOWER_MUL, 0.1)
 
-trinket = GM:AddTrinket("Galvanizer Implant", "analgestic", false, pveles, pweles, 3, "-50% low health slow intensity\n-50% slow vulnerability\n-50% knockdown time\n-66% duration of pulling attacks\n+25% weapon switch speed")
+trinket = GM:AddTrinket("Galvanizer Implant", "analgestic", false, pveles, pweles, 3, "-40% low health slow intensity\n-50% slow vulnerability\n-40% knockdown time\n+25% weapon switch speed")
 GM:AddSkillModifier(trinket, SKILLMOD_SLOW_EFF_TAKEN_MUL, -0.50)
-GM:AddSkillModifier(trinket, SKILLMOD_LOW_HEALTH_SLOW_MUL, -0.50)
-GM:AddSkillModifier(trinket, SKILLMOD_KNOCKDOWN_RECOVERY_MUL, -0.5)
+GM:AddSkillModifier(trinket, SKILLMOD_LOW_HEALTH_SLOW_MUL, -0.40)
+GM:AddSkillModifier(trinket, SKILLMOD_KNOCKDOWN_RECOVERY_MUL, -0.4)
 GM:AddSkillModifier(trinket, SKILLMOD_DEPLOYSPEED_MUL, 0.25)
 
 GM:AddSkillModifier(GM:AddTrinket("Ammo Vest", "ammovestii", false, ammoveles, ammoweles, 2, "+5% reload speed"), SKILLMOD_RELOADSPEED_MUL, 0.05)
@@ -273,9 +276,9 @@ GM:AddSkillModifier(GM:AddTrinket("Targeting Unifier", "targetingvisoriii", fals
 
 GM:AddTrinket("Refined Subscope", "refinedsub", false, oveles, oweles, 4, "-27% weapon aim spread with tier 3 or lower weapons")
 
-trinket = GM:AddTrinket("Aim Compensator", "aimcomp", false, oveles, oweles, 3, "-52% reduced effect of aim shake effects\n-5% weapon aim spread\nZombies you look at have an indicator showing their health")
+trinket = GM:AddTrinket("Aim Compensator", "aimcomp", false, oveles, oweles, 3, "-46% effect of aim shake effects\n-5% weapon aim spread\nZombies you look at have an indicator showing their health")
 GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.05)
-GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.52)
+GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.46)
 GM:AddSkillFunction(trinket, function(pl, active) pl.TargetLocus = active end)
 
 GM:AddSkillModifier(GM:AddTrinket("Pulse Booster", "pulseampi", false, oveles, oweles, nil, "+14% slow from pulse weapons and stun batons"), SKILLMOD_PULSE_WEAPON_SLOW_MUL, 0.14)
@@ -287,7 +290,7 @@ GM:AddSkillModifier(trinket, SKILLMOD_EXP_DAMAGE_RADIUS, 0.07)
 trinket = GM:AddTrinket("Resonance Cascade Device", "resonance", false, oveles, oweles, 4, "Dealing enough pulse damage will cause a pulse explosion\n-25% slow from pulse weapons and stun batons")
 GM:AddSkillModifier(trinket, SKILLMOD_PULSE_WEAPON_SLOW_MUL, -0.25)
 
-trinket = GM:AddTrinket("Cryogenic Inductor", "cryoindu", false, oveles, oweles, 4, "Ice based weapons have a chance to shatter zombies based on how much health they have")
+trinket = GM:AddTrinket("Cryogenic Inductor", "cryoindu", false, oveles, oweles, 4, "Ice based weapons have a chance to shatter zombies based on how much health they have\nMax explosion damage is 100")
 
 trinket = GM:AddTrinket("Extended Magazine", "extendedmag", false, oveles, oweles, 3, "Increases the clip size of weapons with 8 or more clip size by +15%")
 
@@ -300,10 +303,11 @@ GM:AddSkillModifier(trinket, SKILLMOD_FALLDAMAGE_SLOWDOWN_MUL, -0.25)
 
 GM:AddTrinket("Superior Assembly", "supasm", false, oveles, oweles, 5, "Increases to weapon damage via remantling affect reload speed on tier 2 or lower weapons")
 
-trinket = GM:AddTrinket("Olympian Frame", "olympianframe", false, oveles, oweles, 2, "+100% object throwing strength\n-25% prop carrying slow down\n-35% movement speed reduction with heavy weapons")
-GM:AddSkillModifier(trinket, SKILLMOD_PROP_THROW_STRENGTH_MUL, 1)
-GM:AddSkillModifier(trinket, SKILLMOD_PROP_CARRY_SLOW_MUL, -0.25)
-GM:AddSkillModifier(trinket, SKILLMOD_WEAPON_WEIGHT_SLOW_MUL, -0.35)
+trinket = GM:AddTrinket("Olympian Frame", "olympianframe", false, oveles, oweles, 2, "+35% object throwing strength\n-20% prop carrying slow down\n-30% movement speed reduction with heavy weapons\n+10% prop carrying weight limit")
+GM:AddSkillModifier(trinket, SKILLMOD_PROP_THROW_STRENGTH_MUL, 0.35)
+GM:AddSkillModifier(trinket, SKILLMOD_PROP_CARRY_SLOW_MUL, -0.2)
+GM:AddSkillModifier(trinket, SKILLMOD_WEAPON_WEIGHT_SLOW_MUL, -0.3)
+GM:AddSkillModifier(trinket, SKILLMOD_PROP_CARRY_CAPACITY_MASS_MUL, 0.1)
 
 -- Defensive Trinkets
 trinket, trinketwep = GM:AddTrinket("Kevlar Underlay", "kevlar", false, develes, deweles, 2, "-11% melee damage taken\n-11% projectile damage taken")
@@ -311,9 +315,9 @@ GM:AddSkillModifier(trinket, SKILLMOD_MELEE_DAMAGE_TAKEN_MUL, -0.11)
 GM:AddSkillModifier(trinket, SKILLMOD_PROJECTILE_DAMAGE_TAKEN_MUL, -0.11)
 trinketwep.PermitDismantle = true
 
-trinket = GM:AddTrinket("Barbed Armor", "barbedarmor", false, develes, deweles, 3, "100% of melee damage taken reflected back to melee attackers\nAdditional 14 damage reflected back to melee attackers\nMelee attackers take 14 arm damage\n-4% melee damage taken")
+trinket = GM:AddTrinket("Barbed Armor", "barbedarmor", false, develes, deweles, 3, "75% of melee damage taken reflected back to melee attackers\nAdditional 14 damage reflected back to melee attackers\nMelee attackers take 14 arm damage\n-4% melee damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_ATTACKER_DMG_REFLECT, 14)
-GM:AddSkillModifier(trinket, SKILLMOD_MELEE_ATTACKER_DMG_REFLECT_PERCENT, 1)
+GM:AddSkillModifier(trinket, SKILLMOD_MELEE_ATTACKER_DMG_REFLECT_PERCENT, 0.75)
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_DAMAGE_TAKEN_MUL, -0.04)
 
 trinket = GM:AddTrinket("Antitoxin Package", "antitoxinpack", false, develes, deweles, 2, "-17% poison damage taken\n-40% poison damage over time speed")
@@ -324,15 +328,15 @@ trinket = GM:AddTrinket("Hemostasis Implant", "hemostasis", false, develes, dewe
 GM:AddSkillModifier(trinket, SKILLMOD_BLEED_DAMAGE_TAKEN_MUL, -0.25)
 GM:AddSkillModifier(trinket, SKILLMOD_BLEED_SPEED_MUL, -0.4)
 
-trinket = GM:AddTrinket("EOD Vest", "eodvest", false, develes, deweles, 4, "-35% explosive damage taken\n-50% fire damage taken\n-5% self damage taken")
+trinket = GM:AddTrinket("EOD Vest", "eodvest", false, develes, deweles, 4, "-35% explosive damage taken\n-40% fire damage taken\n-6% self damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_EXP_DAMAGE_TAKEN_MUL, -0.35)
-GM:AddSkillModifier(trinket, SKILLMOD_FIRE_DAMAGE_TAKEN_MUL, -0.50)
-GM:AddSkillModifier(trinket, SKILLMOD_SELF_DAMAGE_MUL, -0.05)
+GM:AddSkillModifier(trinket, SKILLMOD_FIRE_DAMAGE_TAKEN_MUL, -0.40)
+GM:AddSkillModifier(trinket, SKILLMOD_SELF_DAMAGE_MUL, -0.06)
 
-trinket = GM:AddTrinket("Feather Fall Frame", "featherfallframe", false, develes, deweles, 3, "-35% fall damage taken\n+30% fall damage threshold\n-65% slow down from landing or fall damage")
+trinket = GM:AddTrinket("Feather Fall Frame", "featherfallframe", false, develes, deweles, 3, "-35% fall damage taken\n+30% fall damage threshold\n-55% slow down from landing or fall damage")
 GM:AddSkillModifier(trinket, SKILLMOD_FALLDAMAGE_DAMAGE_MUL, -0.35)
 GM:AddSkillModifier(trinket, SKILLMOD_FALLDAMAGE_THRESHOLD_MUL, 0.30)
-GM:AddSkillModifier(trinket, SKILLMOD_FALLDAMAGE_SLOWDOWN_MUL, -0.65)
+GM:AddSkillModifier(trinket, SKILLMOD_FALLDAMAGE_SLOWDOWN_MUL, -0.55)
 
 local eicev = {
 	["base"] = { type = "Model", model = "models/gibs/glass_shard04.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(2.339, 2.697, -2.309), angle = Angle(4.558, -34.502, -72.395), size = Vector(0.5, 0.5, 0.5), color = Color(0, 137, 255, 255), surpresslightning = true, material = "models/shiny", skin = 0, bodygroup = {} }
@@ -430,32 +434,44 @@ GM:AddSkillModifier(trinket, SKILLMOD_FIELD_DELAY_MUL, -0.13)
 GM:AddSkillModifier(trinket, SKILLMOD_TURRET_RANGE_MUL, 0.15)
 
 GM:AddSkillModifier(GM:AddTrinket("Acquisitions Manifest", "acqmanifest", false, supveles, supweles, 2, "-6% resupply delay time"), SKILLMOD_RESUPPLY_DELAY_MUL, -0.06)
-GM:AddSkillModifier(GM:AddTrinket("Procurement Manifest", "promanifest", false, supveles, supweles, 4, "-9% resupply delay time"), SKILLMOD_RESUPPLY_DELAY_MUL, -0.09)
+GM:AddSkillModifier(GM:AddTrinket("Procurement Manifest", "promanifest", false, supveles, supweles, 4, "-10% resupply delay time"), SKILLMOD_RESUPPLY_DELAY_MUL, -0.1)
 
 -- Boss Trinkets
 
-local blcorev = {
+local core_v = {
 	["black_core_2+"] = { type = "Sprite", sprite = "effects/splashwake1", bone = "ValveBiped.Bip01_Spine4", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 10, y = 10 }, color = Color(0, 0, 0, 255), nocull = false, additive = false, vertexalpha = true, vertexcolor = true, ignorez = true},
 	["black_core"] = { type = "Model", model = "models/dav0r/hoverball.mdl", bone = "ValveBiped.Grenade_body", rel = "", pos = Vector(0, 0.5, -1.701), angle = Angle(0, 0, 0), size = Vector(0.349, 0.349, 0.349), color = Color(20, 20, 20, 255), surpresslightning = false, material = "models/shiny", skin = 0, bodygroup = {} },
 	["black_core_2"] = { type = "Sprite", sprite = "effects/splashwake3", bone = "ValveBiped.Bip01_Spine4", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 7.697, y = 7.697 }, color = Color(0, 0, 0, 255), nocull = false, additive = false, vertexalpha = true, vertexcolor = true, ignorez = true}
 }
 
-local blcorew = {
+local core_w = {
 	["black_core_2"] = { type = "Sprite", sprite = "effects/splashwake3", bone = "ValveBiped.Bip01_R_Hand", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 7.697, y = 7.697 }, color = Color(0, 0, 0, 255), nocull = false, additive = false, vertexalpha = true, vertexcolor = true, ignorez = false},
 	["black_core_2+"] = { type = "Sprite", sprite = "effects/splashwake1", bone = "ValveBiped.Bip01_R_Hand", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 10, y = 10 }, color = Color(0, 0, 0, 255), nocull = false, additive = false, vertexalpha = true, vertexcolor = true, ignorez = false},
 	["black_core"] = { type = "Model", model = "models/dav0r/hoverball.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4, 2, 0), angle = Angle(0, 0, 0), size = Vector(0.349, 0.349, 0.349), color = Color(20, 20, 20, 255), surpresslightning = false, material = "models/shiny", skin = 0, bodygroup = {} }
 }
 
-GM:AddTrinket("Bleak Soul", "bleaksoul", false, blcorev, blcorew, nil, "Blinds and knocks zombies away when attacked\nRecharges every 35 seconds")
+GM:AddTrinket("Bleak Soul", "bleaksoul", false, core_v, core_w, nil, "Blinds and knocks zombies away when attacked\nRecharges every 35 seconds")
 
-trinket = GM:AddTrinket("Spirit Essence", "spiritess", false, nil, {
+core_w = {
 	["black_core_2"] = { type = "Sprite", sprite = "effects/splashwake3", bone = "ValveBiped.Bip01_R_Hand", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 7.697, y = 7.697 }, color = Color(255, 255, 255, 255), nocull = false, additive = true, vertexalpha = true, vertexcolor = true, ignorez = false},
 	["black_core_2+"] = { type = "Sprite", sprite = "effects/splashwake1", bone = "ValveBiped.Bip01_R_Hand", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 10, y = 10 }, color = Color(255, 255, 255, 255), nocull = false, additive = true, vertexalpha = true, vertexcolor = true, ignorez = false},
 	["black_core"] = { type = "Model", model = "models/dav0r/hoverball.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4, 2, 0), angle = Angle(0, 0, 0), size = Vector(0.349, 0.349, 0.349), color = Color(255, 255, 255, 255), surpresslightning = true, material = "models/shiny", skin = 0, bodygroup = {} }
-}, nil, "+13% jump height.")
+}
+
+trinket = GM:AddTrinket("Jumper Spirit Essence", "spiritess", false, nil, core_w, nil, "+13% jump height.")
 GM:AddSkillModifier(trinket, SKILLMOD_JUMPPOWER_MUL, 0.13)
 
--- Starter Trinkets
+core_w = {
+	["black_core_2"] = { type = "Sprite", sprite = "effects/splashwake3", bone = "ValveBiped.Bip01_R_Hand", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 7.697, y = 7.697 }, color = Color(0, 255, 255, 255), nocull = false, additive = true, vertexalpha = true, vertexcolor = true, ignorez = false},
+	["black_core_2+"] = { type = "Sprite", sprite = "effects/splashwake1", bone = "ValveBiped.Bip01_R_Hand", rel = "black_core", pos = Vector(0, 0.1, -0.201), size = { x = 10, y = 10 }, color = Color(0, 255, 255, 255), nocull = false, additive = true, vertexalpha = true, vertexcolor = true, ignorez = false},
+	["black_core"] = { type = "Model", model = "models/dav0r/hoverball.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4, 2, 0), angle = Angle(0, 0, 0), size = Vector(0.349, 0.349, 0.349), color = Color(0, 255, 255, 255), surpresslightning = true, material = "models/shiny", skin = 0, bodygroup = {} }
+}
+
+trinket = GM:AddTrinket("Speeder Spirit Essence", "speedspirit", false, nil, core_w, nil, "+5 movement speed")
+GM:AddSkillModifier(trinket, SKILLMOD_SPEED, 5)
+
+
+-- Starter Trinkets (from Alacrity)
 
 trinket, trinketwep = GM:AddTrinket("Armband", "armband", false, mveles, mweles, nil, "-10% melee swing impact delay\n-6% melee damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_SWING_DELAY_MUL, -0.1)
@@ -472,9 +488,9 @@ GM:AddSkillModifier(trinket, SKILLMOD_BARRICADE_PHASE_SPEED_MUL, 0.20)
 GM:AddSkillModifier(trinket, SKILLMOD_LOW_HEALTH_SLOW_MUL, -0.12)
 trinketwep.PermitDismantle = true
 
-trinket, trinketwep = GM:AddTrinket("Aiming Aid", "aimaid", false, develes, deweles, nil, "-5% weapon aim spread\n-7% reduced effect of aim shake effects")
+trinket, trinketwep = GM:AddTrinket("Aiming Aid", "aimaid", false, develes, deweles, nil, "-5% weapon aim spread\n-8% effect of aim shake effects")
 GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.05)
-GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.06)
+GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.08)
 trinketwep.PermitDismantle = true
 
 trinket, trinketwep = GM:AddTrinket("Vitamin Capsules", "vitamins", false, hpveles, hpweles, nil, "+5 maximum health\n-12% poison damage taken")

@@ -1,8 +1,8 @@
-GM.Name		=	"ZS Improved"
+GM.Name		=	"Zombie Survival Improved"
 GM.Author	=	"Uklejamini (Original Creator: William \"JetBoom\" Moodhe)"
-GM.Email	=	"williammoodhe@gmail.com"
+GM.Email	=	"" --"williammoodhe@gmail.com"
 GM.Website	=	"https://www.noxiousnet.com"
-GM.Version	=	"1.0"
+GM.Version	=	"1.1.0"
 
 -- No, adding a gun doesn't make your name worth being here.
 GM.Credits = {
@@ -115,7 +115,11 @@ GM.SoundDuration = {
 	["zombiesurvival/beats/defaultzombiev2/7.ogg"] = 6.038,
 	["zombiesurvival/beats/defaultzombiev2/8.ogg"] = 6.038,
 	["zombiesurvival/beats/defaultzombiev2/9.ogg"] = 6.038,
-	["zombiesurvival/beats/defaultzombiev2/10.ogg"] = 6.038
+	["zombiesurvival/beats/defaultzombiev2/10.ogg"] = 6.038,
+	
+	-- Custom
+
+	["lasthuman_songs/black ops - zombies.mp3"] = 255.780,
 }
 
 local SERVER = SERVER
@@ -584,13 +588,17 @@ function GM:PlayerCanPurchase(pl)
 	if CLIENT and self.CanPurchaseCacheTime and self.CanPurchaseCacheTime >= CurTime() then
 		return self.CanPurchaseCache
 	end
-	local canpurchase = PTeam(pl) == TEAM_HUMAN and self:GetWave() > 0 and pl:Alive() and (not self.NeedArsenalToBuyItems or pl:NearArsenalCrate())
+	local canpurchase = PTeam(pl) == TEAM_HUMAN and self:GetWave() > 0 and pl:Alive() and (not self:GetArsenalRequiredToBuyItems() or pl:NearArsenalCrate())
 
 	if CLIENT then
 		self.CanPurchaseCache = canpurchase
 		self.CanPurchaseCacheTime = CurTime() + 0.5
 	end
 	return canpurchase
+end
+
+function GM:ZombieCanPurchase(pl)
+	return pl:Team() == TEAM_UNDEAD and self:GetWave() > 0 and not self.RoundEnded
 end
 
 -- This is actually only called by the engine on the server but it's here in case the client wants to know.
@@ -825,6 +833,9 @@ function GM:IsSpecialPerson(pl, image)
 	if pl:SteamID() == "STEAM_0:1:3307510" then
 		img = "VGUI/steam/games/icon_sourcesdk"
 		tooltip = "JetBoom\nCreator of Zombie Survival!"
+	elseif pl:SteamID() == "STEAM_0:1:157024537" then
+		img = "icon16/star.png"
+		tooltip = "Creator of ZS Improved"
 	elseif pl:SteamID() == "BOT" then
 		img = "noxiousnet/arsenalcrate.png"
 		tooltip = "I AM A BOT\nI WILL KILL YOU"
@@ -872,8 +883,8 @@ function GM:GetWave()
 end
 
 if GM:GetWave() == 0 then
-	GM:SetWaveStart(GM.WaveZeroLength + 25)
-	GM:SetWaveEnd(GM.WaveZeroLength + GM:GetWaveOneLength() + 25)
+	GM:SetWaveStart(GM.WaveZeroLength + 40)
+	GM:SetWaveEnd(GM.WaveZeroLength + GM:GetWaveOneLength() + 40)
 end
 
 function GM:GetWaveActive()
@@ -928,4 +939,22 @@ end
 
 function GM:EnableDifficultyScaling(value)
 	SetGlobalBool("zs_difficulty_scaling_enabled", value)
+end
+
+function GM:SetArsenalRequiredToBuyItems(value)
+	SetGlobalBool("zs_arsenalenabled", tobool(value))
+end
+
+function GM:GetArsenalRequiredToBuyItems()
+	return GetGlobalBool("zs_arsenalenabled", self.NeedArsenalToBuyItems)
+end
+
+function GM:CanRedeem(pl)
+	if not pl:IsValid() or self:GetRedeemBrains() <= 0 or self.NoRedeeming or pl.NoRedeeming or self:GetWave() >= self:GetNumberOfWaves() or LASTHUMAN or self.RoundEnded or self.ZombieEscape then return false end
+	return true
+end
+
+function GM:CanSelfRedeem(pl)
+	if not pl:IsValid() or self:GetRedeemBrains() <= 0 or self:GetWave() > self.MaxSelfRedeemWave or self:GetWave() >= self:GetNumberOfWaves() or self.NoRedeeming or pl.NoRedeeming or LASTHUMAN or self.RoundEnded or self.ZombieEscape then return false end
+	return true
 end

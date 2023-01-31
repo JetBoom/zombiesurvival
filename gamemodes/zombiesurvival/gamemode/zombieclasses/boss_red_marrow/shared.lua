@@ -103,9 +103,8 @@ function CLASS:ProcessDamage(pl, dmginfo)
 	local hp = pl:Health()
 
 	if pl:GetStatus("redmarrow") and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
-		dmginfo:SetDamage(0)
-		dmginfo:ScaleDamage(0)
-		dmg = 0
+		dmginfo:SetDamage(dmginfo:GetDamage() * 0.05)
+		dmg = dmginfo:GetDamage()
 	end
 
 	local numthreshold = math_Clamp(math_ceil(hp / 200), 1, 9)

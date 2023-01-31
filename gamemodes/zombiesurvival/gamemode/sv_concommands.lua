@@ -13,7 +13,7 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 		return
 	end
 
-	if usescrap and not sender:NearRemantler() or not usescrap and not sender:NearArsenalCrate() and GAMEMODE.NeedArsenalToBuyItems then
+	if usescrap and not sender:NearRemantler() or not usescrap and not sender:NearArsenalCrate() and GAMEMODE:GetArsenalRequiredToBuyItems() then
 		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, usescrap and "need_to_be_near_remantler" or "need_to_be_near_arsenal_crate"))
 		return
 	end
@@ -633,37 +633,87 @@ concommand.Add("zs_shitmap_tomover", function(sender, command, arguments)
 	end
 end)
 
-concommand.Add("zs_admin_setdifficulty", function(pl, cmd, args)
-	if not pl:IsSuperAdmin() then return end
-
-	local value = tonumber(args[1])
-	if not value then return end
-	GAMEMODE:SetDifficulty(value)
-	print(Format("Set difficulty to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
+concommand.Add("zs_mutationshop_buy", function(sender, command, arguments)
+	gamemode.Call("BuyZombieMutation", sender, arguments[1])
 end)
 
+--------
+
+local function IsPlayerValidSuperAdmin(pl)
+	return not pl:IsValid() or pl:IsValid() and not pl:IsSuperAdmin()
+end
+
+local text = ""
+
+concommand.Add("zs_admin_setdifficulty", function(pl, cmd, args)
+	if IsPlayerValidSuperAdmin(pl) then return end
+
+	if not args[1] then return end
+	local value = tonumber(args[1])
+	GAMEMODE:SetDifficulty(value)
+	print(Format("Set difficulty to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
+end, nil, text)
+
+local text = "Use \"1\" in argument #1 to enable difficulty scaling, any other = disable"
+
 concommand.Add("zs_admin_enabledifficulty", function(pl, cmd, args)
-	if not pl:IsSuperAdmin() then return end
+	if IsPlayerValidSuperAdmin(pl) then return end
+
+	if not args[1] then
+		pl:PrintMessage(HUD_PRINTTALK, text)
+		return
+	end
 
 	local value = args[1] == "1"
 	GAMEMODE:EnableDifficultyScaling(value)
-	print(Format("Set difficulty enabled to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
-end, nil, "Use \"1\" in argument #1 to enable difficulty scaling, any other = disable")
+	print(Format("\"Difficulty scaling enabled\" value set to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
+end, nil, text)
+
+local text = "Reset skills for yourself. Use \"1\" in argument #1 to reset skills."
 
 concommand.Add("zs_admin_resetskills", function(pl, cmd, args)
-	if not pl:IsSuperAdmin() then return end
+	if IsPlayerValidSuperAdmin(pl) then return end
+
+	if not args[1] then
+		pl:PrintMessage(HUD_PRINTTALK, text)
+		return
+	end
 
 	local nextreset = pl.NextSkillReset
 	pl:SkillsReset()
 	pl.NextSkillReset = nextreset
 	print(Format("Reset skills for %s", Format("%s [%s]", pl:Name(), pl:SteamID())) )
-end)
+end, nil, text)
+
+local text = "Set the max amount of waves."
 
 concommand.Add("zs_admin_setmaxwave", function(pl, cmd, args)
-	if not pl:IsSuperAdmin() then return end
+	if IsPlayerValidSuperAdmin(pl) then return end
 
-	local value = tonumber(args[1] or GAMEMODE.NumberOfWaves)
+	if not args[1] then
+		pl:PrintMessage(HUD_PRINTTALK, text)
+		return
+	end
+
+	local value = math.floor(tonumber(args[1] or GAMEMODE.NumberOfWaves))
 
 	SetGlobalInt("numwaves", value)
 	print(Format("Set max waves count to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
-end)
+end, nil, text)
+
+local text = "Usage: Use value \"1\" to enable value \"Arsenal Crate required to Purchase Items\". Any other value disables it. If no value, it is toggled."
+
+concommand.Add("zs_admin_enablearsenal", function(pl, cmd, args)
+	if IsPlayerValidSuperAdmin(pl) then return end
+	local value
+	if not args[1] then
+		value = not GAMEMODE:GetArsenalRequiredToBuyItems()
+		pl:PrintMessage(HUD_PRINTTALK, value and "\"Arsenal Crate required to Purchase Items\" enabled." or "\"Arsenal Crate required to Purchase Items\" disabled.")
+		pl:PrintMessage(HUD_PRINTCONSOLE, text)
+	else
+		value = args[1] == "1"
+	end
+
+	GAMEMODE:SetArsenalRequiredToBuyItems(value)
+	print(Format("\"Arsenal Crate required to Purchase Items\" value set to %s (Command received by %s)", value, Format("%s [%s]", pl:Name(), pl:SteamID())) )
+end, nil, text)

@@ -198,9 +198,9 @@ LANGUAGE.evolves_in_to_x_on_wave_y					= "Evolves in to %s on wave %d."
 -- Sigils point objectives
 LANGUAGE.sigil										= "Sanity Sigil"
 --LANGUAGE.sigil_destroyed							= "A Sanity Sigil has been destroyed. The Undead grow stronger!"
-LANGUAGE.sigil_corrupted							= "A Sanity Sigil has been corrupted. The Undead grow more resilient."
+LANGUAGE.sigil_corrupted							= "A Sanity Sigil %s has been corrupted. The Undead grow more resilient." -- "A Sanity Sigil has been corrupted. The Undead grow more resilient."
 LANGUAGE.sigil_corrupted_last						= "The last Sanity Sigil has been corrupted! The Undead grow very resilient!"
-LANGUAGE.sigil_uncorrupted							= "A Sanity Sigil has been uncorrupted, the Undead have weakened!"
+LANGUAGE.sigil_uncorrupted							= "A Sanity Sigil %s has been uncorrupted, the Undead have weakened!" --"A Sanity Sigil has been uncorrupted, the Undead have weakened!"
 --[[LANGUAGE.sigil_destroyed_only_one_remain_h		= "Only one Sanity Sigil remains!"
 LANGUAGE.sigil_destroyed_only_one_remain_z			= "Only one Sanity Sigil remains!"
 LANGUAGE.sigil_destroyed_x_remain					= "%d remaining."]]
@@ -538,15 +538,151 @@ LANGUAGE.help_cont_being_a_zombie					= [[<p>Tips for this section:
 
 -- Place any custom stuff below here...
 
-LANGUAGE.humans_lost                      = "Humans have lost on wave %d!"
-LANGUAGE.wave_x                           = "Wave %d"
+-- Skill modifiers
+
+LANGUAGE.skillmod_n1 = "%s maximum health"
+LANGUAGE.skillmod_n2 = "%s maximum blood armor"
+LANGUAGE.skillmod_n3 = "%s movement speed"
+LANGUAGE.skillmod_n4 = "%s starting worth"
+LANGUAGE.skillmod_n5 = "%s melee damage"
+LANGUAGE.skillmod_n6 = "%s melee range multiplier"
+LANGUAGE.skillmod_n7 = "%s melee range"
+LANGUAGE.skillmod_n8 = "%s melee knockback"
+LANGUAGE.skillmod_n9 = "%s melee swing impact delay"
+LANGUAGE.skillmod_n10 = "%s melee attack delay"
+LANGUAGE.skillmod_n11 = "%s melee damage converted to blood armor"
+LANGUAGE.skillmod_n12 = "%s speed on melee kill for 10 seconds"
+LANGUAGE.skillmod_n13 = "%s melee power attack"
+LANGUAGE.skillmod_n14 = "%s melee leg damage dealt"
+LANGUAGE.skillmod_n15 = "%s melee damage taken"
+LANGUAGE.skillmod_n16 = "%s poison damage taken"
+LANGUAGE.skillmod_n17 = "%s bleed damage taken"
+LANGUAGE.skillmod_n18 = "%s explosive damage taken"
+LANGUAGE.skillmod_n19 = "%s fire damage taken"
+LANGUAGE.skillmod_n20 = "%s physics impact damage taken"
+LANGUAGE.skillmod_n21 = "%s projectile damage taken"
+LANGUAGE.skillmod_n22 = "%s melee damage taken reflected to melee attackers"
+LANGUAGE.skillmod_n23 = "%s additional damage reflected to melee attackers"
+LANGUAGE.skillmod_n24 = "%s blood armor damage absorption"
+LANGUAGE.skillmod_n25 = "%s maximum blood armor"
+LANGUAGE.skillmod_n26 = "%s blood armor generated"
+LANGUAGE.skillmod_n27 = "%s jump power"
+LANGUAGE.skillmod_n28 = "%s bullet damage"
+LANGUAGE.skillmod_n29 = "%s weapon fire delay"
+LANGUAGE.skillmod_n30 = "%s weapon reload speed"
+LANGUAGE.skillmod_n31 = "%s weapon draw speed"
+LANGUAGE.skillmod_n32 = "%s weapon aim spread"
+LANGUAGE.skillmod_n33 = "%s effectivness of slows"
+LANGUAGE.skillmod_n34 = "%s movement speed reduction with heavy weapons"
+LANGUAGE.skillmod_n35 = "%s low health slow intensity"
+LANGUAGE.skillmod_n36 = "%s fall damage taken"
+LANGUAGE.skillmod_n37 = "%s fall damage threshold"
+LANGUAGE.skillmod_n38 = "%s fall damage knockdown duration"
+LANGUAGE.skillmod_n39 = "%s fall damage slowdown"
+LANGUAGE.skillmod_n40 = "%s recovery from food"
+LANGUAGE.skillmod_n41 = "%s time to eat food"
+LANGUAGE.skillmod_n42 = "%s unarmed strike damage"
+LANGUAGE.skillmod_n43 = "%s time before next unarmed strike"
+LANGUAGE.skillmod_n44 = "%s swing delay with the Carpenter Hammer"
+LANGUAGE.skillmod_n45 = "%s Controllable Health"
+LANGUAGE.skillmod_n46 = "%s Controllable Speed"
+LANGUAGE.skillmod_n47 = "%s Controllable Handling"
+LANGUAGE.skillmod_n48 = "%s Manhack Damage"
+LANGUAGE.skillmod_n49 = "%s Manhack Health"
+LANGUAGE.skillmod_n50 = "%s barricade phasing movement speed"
+LANGUAGE.skillmod_n51 = "%s medical kit cooldown"
+LANGUAGE.skillmod_n52 = "%s medic tool effectivness"
+LANGUAGE.skillmod_n53 = "%s repair rate"
+LANGUAGE.skillmod_n54 = "%s Turret health"
+LANGUAGE.skillmod_n55 = "%s Turret scan speed"
+LANGUAGE.skillmod_n56 = "%s turret angle scan"
+LANGUAGE.skillmod_n57 = "%s damage vs. yourself"
+LANGUAGE.skillmod_n58 = "%s starting points"
+LANGUAGE.skillmod_n59 = "%s point multiplier"
+LANGUAGE.skillmod_n60 = "%s XP multiplier"
+LANGUAGE.skillmod_n61 = "%s deployable health"
+LANGUAGE.skillmod_n62 = "%s deployable pack time"
+LANGUAGE.skillmod_n63 = "%s drone speed"
+LANGUAGE.skillmod_n64 = "%s drone carry mass"
+LANGUAGE.skillmod_n65 = "%s drone gun range"
+LANGUAGE.skillmod_n66 = "%s medic tool fire delay"
+LANGUAGE.skillmod_n67 = "%s resupply delay"
+LANGUAGE.skillmod_n68 = "%s zapper and repair field range"
+LANGUAGE.skillmod_n69 = "%s zapper and repair field delay"
+LANGUAGE.skillmod_n70 = "%s healing received"
+LANGUAGE.skillmod_n71 = "%s slow from pulse weapons and stun batons"
+LANGUAGE.skillmod_n72 = "%s knockdown time"
+LANGUAGE.skillmod_n73 = "%s prop carrying max weight limit"
+LANGUAGE.skillmod_n74 = "%s prop carrying max volume limit"
+LANGUAGE.skillmod_n75 = "%s prop carrying slow down"
+LANGUAGE.skillmod_n76 = "%s object throwing strength"
+LANGUAGE.skillmod_n77 = "%s effect of vision affecting effects"
+LANGUAGE.skillmod_n78 = "%s effect of dim vision and ability to see in dark"
+LANGUAGE.skillmod_n79 = "%s bleeding speed"
+LANGUAGE.skillmod_n80 = "%s poison damage over time speed"
+LANGUAGE.skillmod_n81 = "%s sigil teleportation time"
+LANGUAGE.skillmod_n82 = "%s explosive damage radius"
+LANGUAGE.skillmod_n83 = "%s medic tool reload speed"
+LANGUAGE.skillmod_n84 = "%s fright duration"
+LANGUAGE.skillmod_n85 = "%s accuracy bonus from ironsighting"
+LANGUAGE.skillmod_n86 = "%s projectile speed"
+LANGUAGE.skillmod_n87 = "%s starting scrap"
+LANGUAGE.skillmod_n88 = "%s end of wave points"
+LANGUAGE.skillmod_n89 = "%s arsenal items cost"
+LANGUAGE.skillmod_n90 = "%s cloud bomb radius"
+LANGUAGE.skillmod_n91 = "%s cloud bomb time"
+LANGUAGE.skillmod_n92 = "%s projectile damage"
+LANGUAGE.skillmod_n93 = "%s explosive damage"
+LANGUAGE.skillmod_n94 = "%s Turret range"
+LANGUAGE.skillmod_n95 = "%s effect of aim shake effects"
+LANGUAGE.skillmod_n96 = "%s healing effectiveness on medical darts"
+LANGUAGE.skillmod_n97 = "%s Reload Speed (Pistol)"
+LANGUAGE.skillmod_n98 = "%s Reload Speed (SMG)"
+LANGUAGE.skillmod_n99 = "%s Reload Speed (Assault)"
+LANGUAGE.skillmod_n100 = "%s Reload Speed (Shotgun)"
+LANGUAGE.skillmod_n101 = "%s Reload Speed (Rifle)"
+LANGUAGE.skillmod_n102 = "%s Reload Speed (Bolts)"
+LANGUAGE.skillmod_n103 = "%s Reload Speed (Pulse)"
+LANGUAGE.skillmod_n104 = "%s Reload Speed (Explosive)"
+
+-- Even more help?
+
+LANGUAGE.help_cat_zsimproved					= "ZS Improved Update"
+LANGUAGE.help_cont_zsimproved						= [[<p>
+ZS Improved adds new features and is quite different than Original Zombie Survival. Go see how they work!
+
+<ul>
+<li>Mutation shop. For some zombie tokens, you can buy mutations, granting you additional health, damage to barricades and more!</li>
+<li>Possibility to use skills in Zombie Escape mode. Some skills can be used in Zombie Escape mode, others not. There is text if it's possible to use that skill in Zombie Escape mode.</li>
+(only if the current mode is Zombie Escape)
+<li>Achievements! See what you need to do to complete achievements. Completing them rewards you with XP, being placed in XP Bank. To withdraw XP placed in bank, open skills menu.</li>
+<li>Character Stats. Press F1 menu and see what are your current stats.</li>
+(does not work as zombie)
+<li>Remort requirement for skill. Some skills need remort that match your remort level. Otherwise, you won't be able to unlock the skill!</li>
+<li>Worth cost for carts. Check it out in worth menu.</li>
+<li>Built-in self-redeeming system. Like in D3bot, but works differently and is more configurable!</li>
+<li>Fixed, Rebalanced & Reworked skills and trinkets.</li>
+</ul>
+</p>
+
+]]
+
+-- Custom zombie classes
+
 LANGUAGE.class_eradicator_ii							= "Eradicator II"
-LANGUAGE.class_eradicator_iii							= "Eradicator III"
 LANGUAGE.description_eradicator_ii        = "A mutated variant of Eradicator being stronger and more destructive.\nHas more health and slightly increased damage."
+LANGUAGE.class_eradicator_iii							= "Eradicator III"
 LANGUAGE.description_eradicator_iii       = "An even stronger version of Eradicator, becoming even more destructive.\nHas way better durability and increased damage, especially to props."
 LANGUAGE.class_infected_citizen		 				= "Infected Citizen"
 LANGUAGE.description_infected_citizen		  = "These are the zombie variants from the city being mutated due to zombie outbreak.\nIt is also believed to be more resillient and are faster."
 LANGUAGE.class_mutated_lacerator		 			= "Mutated Lacerator"
 LANGUAGE.description_mutated_lacerator		= "Lacerators are identical to Fast Zombies in almost every way.\nDespite their similarities, they are even deadlier and do not share their counterpart's fragility"
+LANGUAGE.class_undead_fast_zombie         = "Undead Fast Zombie"
+LANGUAGE.description_undead_fast_zombie   = "The Fast Zombie that has been mutated in the past, inflicting only destruction.\nThese will only arrive after humans have been losing to fight against zombies."
+
+-- Other
+
+LANGUAGE.humans_lost                      = "Humans have lost on wave %d!"
+LANGUAGE.wave_x                           = "Wave %d"
 LANGUAGE.s_always_active                  = "Always Active"
 LANGUAGE.s_remort_req                     = "Remort required: %d"

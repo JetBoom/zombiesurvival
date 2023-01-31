@@ -61,7 +61,7 @@ function meta:HealPlayer(pl, amount, pointmul, nobymsg, poisononly)
 end
 
 local healthpropscalar = {
-	["models/props_c17/door01_left.mdl"] = 0.7
+	["models/props_c17/door01_left.mdl"] = 1.1
 }
 
 function meta:GetDefaultBarricadeHealth()
@@ -351,14 +351,13 @@ function meta:ResetLastBarricadeAttacker(attacker, dmginfo)
 		self.m_LastDamagedByZombie = CurTime()
 
 		if self:HumanNearby() then
-			local dmg = math.ceil(dmginfo:GetDamage())
+			local dmg = math.ceil(math.min(dmginfo:GetDamage(), self:GetBarricadeHealth()))
 			attacker.BarricadeDamage = attacker.BarricadeDamage + dmg
 			if attacker.LifeBarricadeDamage ~= nil then
 				attacker:AddLifeBarricadeDamage(dmg)
 				if not GAMEMODE.RoundEnded then
-					local xp = dmg / 180
-					xp = (GAMEMODE.InitialVolunteers[attacker:UniqueID()] and xp * 1.35 or xp)
-					attacker:GainZSXP(xp)
+					attacker:GainZSXP(GAMEMODE.InitialVolunteers[attacker:UniqueID()] and dmg / 90 or dmg / 150)
+					attacker:AddZombieTokens(dmg / 9)
 				end
 				GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_ZOMBIECLASS, attacker:GetZombieClassTable().Name, "BarricadeDamage", dmg)
 			end
@@ -413,7 +412,7 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 		local points = dmgbefore / 8
 
 		dmginfo:SetDamage(dmginfo:GetDamage() * multi)
-		damage = damage * multi
+		damage = dmginfo:GetDamage()
 
 		applier.PropDef = (applier.PropDef or 0) + dmgbefore
 		applier:AddPoints(points)
@@ -425,6 +424,12 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 
 		dmginfo:SetDamage(dmginfo:GetDamage() * multi)
 		damage = damage * multi
+	end
+
+	if attacker:IsPlayer() then
+		damage = dmginfo:GetDamage() * (1 + attacker.MutationModifiers["barricade_damage"])
+
+		dmginfo:SetDamage(damage)
 	end
 
 	self:ResetLastBarricadeAttacker(attacker, dmginfo)
@@ -454,7 +459,9 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 
 	attacker.LastBarricadeHit = CurTime()
 
-	if dmginfo then dmginfo:SetDamage(0) end
+	if dmginfo then
+		dmginfo:SetDamage(0)
+	end
 
 	if self:GetBarricadeHealth() <= 0 then
 		if self:GetModel() ~= "" and self:GetModel() ~= "models/error.mdl" then
@@ -470,9 +477,17 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 			end
 		end
 
+		local nails_amount = #nails
+
 		for _, nail in pairs(nails) do
 			self:RemoveNail(nail, nil, nil, true)
 		end
+
+		if nails_amount >= 2 then
+			self:SetMoveType(MOVETYPE_NONE)
+		end
+
+--		self:TakeDamage(1000000)
 	end
 
 	return true

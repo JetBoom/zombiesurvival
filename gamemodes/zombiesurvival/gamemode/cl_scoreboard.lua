@@ -50,10 +50,13 @@ function PANEL:Init()
 	self.m_TitleLabel.Font = "ZSScoreBoardTitle"
 	self.m_TitleLabel:SetFont(self.m_TitleLabel.Font)
 	self.m_TitleLabel:SetText(GAMEMODE.Name)
-	self.m_TitleLabel:SetTextColor(COLOR_GRAY)
+--	self.m_TitleLabel:SetTextColor(COLOR_GRAY)
 	self.m_TitleLabel:SizeToContents()
 	self.m_TitleLabel:NoClipping(true)
 	self.m_TitleLabel.Paint = BlurPaint
+	self.m_TitleLabel.Think = function()
+		self.m_TitleLabel:SetTextColor(HSVToColor(RealTime() * -60 % 360, 1, 1)) --Color(math.abs(math.sin(rt)) * 384, -math.sin(rt) * 384, math.sin(rt) * 384)
+	end
 
 	self.m_ServerNameLabel = vgui.Create("DLabel", self)
 	self.m_ServerNameLabel.Font = "ZSScoreBoardSubTitle"
@@ -342,6 +345,7 @@ end
 function PANEL:DoClick()
 	local pl = self:GetPlayer()
 	if pl:IsValid() then
+
 		gamemode.Call("ClickedPlayerButton", pl, self)
 	end
 end

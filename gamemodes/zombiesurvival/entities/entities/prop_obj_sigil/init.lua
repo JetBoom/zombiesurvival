@@ -1,6 +1,7 @@
 INC_SERVER()
 
 ENT.HealthLock = 0
+ENT.AttackMessageCooldown = 20
 
 function ENT:Initialize()
 	self:DrawShadow(false)
@@ -58,27 +59,45 @@ function ENT:OnTakeDamage(dmginfo)
 	local attacker = dmginfo:GetAttacker()
 	if attacker:IsValid() and attacker:IsPlayer() and dmginfo:GetDamage() > 2 and CurTime() >= self.HealthLock then
 		if self:CanBeDamagedByTeam(attacker:Team()) then
+			local damagemul = math.Clamp(tonumber(8 + #player.GetAll() / #player.GetAll() * 1.4), 0.8, 3)
 			if attacker:Team() == TEAM_HUMAN then
 				local dmgtype = dmginfo:GetDamageType()
 				if bit.band(dmgtype, DMG_SLASH) ~= 0 or bit.band(dmgtype, DMG_CLUB) ~= 0 then
-					dmginfo:SetDamage(dmginfo:GetDamage() * 1.6 * (attacker:IsSkillActive(SKILL_UNCORRUPTOR) and 0.85 or 1))
+					dmginfo:SetDamage(dmginfo:GetDamage() * 1.6 * (attacker:IsSkillActive(SKILL_UNCORRUPTOR) and 0.85 or 1) * damagemul)
 				elseif attacker:IsSkillActive(SKILL_UNCORRUPTOR) then
-					dmginfo:SetDamage(dmginfo:GetDamage() * 1.28 * 0.85)
+					dmginfo:SetDamage(dmginfo:GetDamage() * 1.28 * 0.85 * damagemul)
 				else
 					dmginfo:SetDamage(0)
 					return
 				end
+			elseif attacker:Team() == TEAM_UNDEAD then
+				dmginfo:SetDamage(dmginfo:GetDamage() * damagemul)
 			end
 
 			local oldhealth = self:GetSigilHealth()
 			self:SetSigilLastDamaged(CurTime())
 			self:SetSigilHealthBase(oldhealth - dmginfo:GetDamage())
 
+			if (self.LastAttackTime or 0) + self.AttackMessageCooldown < CurTime() and not self:GetSigilCorrupted() then
+				local letter = "?"
+				for i, sigil in pairs(ents.FindByClass("prop_obj_sigil")) do
+					if self == sigil then
+						letter = string.char(64 + i)
+						break
+					end
+				end
+				self.LastAttackTime = CurTime()
+
+				for _,pl in pairs(team.GetPlayers(TEAM_HUMAN)) do
+					pl:CenterNotify(COLOR_WHITE, Format("Sigil %s is under attack!", letter))
+				end
+			end 
+
 			if self:GetSigilHealth() <= 0 then
 				if self:GetSigilCorrupted() then
 					gamemode.Call("PreOnSigilUncorrupted", self, dmginfo)
 					self:SetSigilCorrupted(false)
-					self:SetSigilHealthBase(self.MaxHealth)
+					self:SetSigilHealthBase(self.MaxHealth * 0.5)
 					self:SetSigilLastDamaged(0)
 					gamemode.Call("OnSigilUncorrupted", self, dmginfo)
 					attacker:GiveAchievementProgress("sigil_uncorruptor", 1)

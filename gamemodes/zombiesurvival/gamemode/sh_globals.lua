@@ -40,6 +40,8 @@ DT_PLAYER_INT_XP = 6
 DT_PLAYER_INT_BLOODARMOR = 7
 DT_PLAYER_INT_VOICESET = 8
 DT_PLAYER_INT_BANKXP = 9
+DT_PLAYER_INT_ZOMBIE_TOKENS = 10
+
 DT_PLAYER_BOOL_BARRICADEEXPERT = 6
 DT_PLAYER_BOOL_NECRO = 7
 DT_PLAYER_BOOL_FRAIL = 8
@@ -110,7 +112,7 @@ GM.MenuKey = IN_WALK -- I would use the spawn menu but it has no IN_ key assignm
 
 GM.ArsenalCrateCommission = 0.04
 
-GM.BaseDeploySpeed = 1 -- Put this back to 1 to increase the value of it
+GM.BaseDeploySpeed = 1 -- Put this back to 1 to increase the value of it (but for what??)
 
 GM.ExtraHealthPerExtraNail = 85 --75
 GM.MaxNails = 4
@@ -150,11 +152,11 @@ ZE_KNOCKBACKSCALE = 0.09
 
 MASK_HOVER = bit.bor(CONTENTS_SOLID, CONTENTS_WATER, CONTENTS_SLIME, CONTENTS_GRATE, CONTENTS_WINDOW, CONTENTS_HITBOX)
 
-GM.BarricadeHealthMin = 160 --50
-GM.BarricadeHealthMax = 2500 * 0.85 --1100 * 0.85
-GM.BarricadeHealthMassFactor = 3.75 * 0.85 --3.5 * 0.85
-GM.BarricadeHealthVolumeFactor = 4.25 * 0.85 --4 * 0.85
-GM.BarricadeRepairCapacity = 1.55 --1.25
+GM.BarricadeHealthMin = 75 --50
+GM.BarricadeHealthMax = 1300 * 0.85 --1100 * 0.85
+GM.BarricadeHealthMassFactor = 3.625 * 0.85 --3.5 * 0.85
+GM.BarricadeHealthVolumeFactor = 4.125 * 0.85 --4 * 0.85
+GM.BarricadeRepairCapacity = 1.35 --1.25
 
 -- Amount of players needed for the boss to spawn. (player bots count too)
 GM.BossZombiePlayersRequired = 8
@@ -176,8 +178,14 @@ GM.HumanGibs = {
 GM.BannedProps = {
 }
 
+-- Quite bugged.
 GM.PropHealthMultipliers = {
-	[Model("models/props_c17/door01_left.mdl")] = 1.5,
+	["models/props_c17/door01_left.mdl"] = 1.5,
+}
+
+-- Does not ignore max barricade health.
+GM.BarricadePropHealthMultipliers = {
+	["models/props_c17/door01_left.mdl"] = 1
 }
 
 GM.CleanupFilter = {

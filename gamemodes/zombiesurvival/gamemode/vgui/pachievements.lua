@@ -1,4 +1,3 @@
-
 function GM:DoAchievementsPanel()
     if IsValid(self.AchievementsPanel) then self.AchievementsPanel:Remove() end
     self.AchievementsPanel = vgui.Create("ZSAchievementsPanel")

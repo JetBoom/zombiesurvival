@@ -52,16 +52,17 @@ function PANEL:Init()
 	self.CloseButton:SizeToContents()
 	self.CloseButton.DoClick = function() Window:Remove() end
 
-	if MySelf:Frags() >= GAMEMODE:GetRedeemBrains() then
+	if GAMEMODE:CanRedeem(MySelf) and MySelf:Frags() >= GAMEMODE:GetRedeemBrains() or GAMEMODE:CanSelfRedeem(MySelf) then
 		self.RedeemButton = EasyButton(nil, "Redeem", 8, 4)
-		self.RedeemButton:SetToolTip(Format("This only works if you have killed at least %d humans and if currently not a boss zombie", 3))
 		self.RedeemButton:SetFont("ZSHUDFontSmall")
 		self.RedeemButton:SizeToContents()
 		self.RedeemButton.DoClick = function() net.Start("zs_redeembutton") net.SendToServer() Window:Remove() end
 	end
 
-	if not (self.ObjectiveMap and self.ZombieEscape) and #team.GetPlayers(TEAM_UNDEAD) < 4 then
-		self.LowZombieCountLabel = EasyLabel(nil, "Zombies have +20% health boost", "ZSHUDFontSmaller", color_white)
+	local lowundead = team.NumPlayers(TEAM_UNDEAD) * 2 < team.NumPlayers(TEAM_HUMAN)
+	
+	if lowundead then
+		self.LowZombieCountLabel = EasyLabel(nil, (self.ObjectiveMap or self.ZombieEscape) and "Zombies have +25% health boost" or "Zombies have +20% health boost", "ZSHUDFontSmallest", color_white)
 		self.LowZombieCountLabel:SetToolTip("If there are less than 4 players in zombie team, zombies get +20% health boost")
 		self.LowZombieCountLabel:SizeToContents()
 	end
@@ -74,6 +75,8 @@ function PANEL:Init()
 	local use_better_versions = GAMEMODE:ShouldUseBetterVersionSystem()
 
 	for i=1, #GAMEMODE.ZombieClasses do
+		if GAMEMODE.ClassicMode then break end
+
 		local classtab = GAMEMODE.ZombieClasses[GAMEMODE:GetBestAvailableZombieClass(i)]
 
 		if classtab and not classtab.Disabled and not already_added[classtab.Index] then
@@ -339,6 +342,9 @@ function PANEL:CreateDescLabels()
 	if classtable.Wave and classtable.Wave > 0 then
 		table.insert(lines, translate.Format("unlocked_on_wave_x", classtable.Wave))
 	end
+	if classtable.Infliction and classtable.Infliction > 0 then
+		table.insert(lines, Format("Unlocked on %d%% infliction", (classtable.Infliction or 0) * 100))
+	end
 
 	if classtable.BetterVersion then
 		local betterclasstable = GAMEMODE.ZombieClasses[classtable.BetterVersion]
@@ -356,19 +362,23 @@ function PANEL:CreateDescLabels()
 	end
 
 	table.insert(lines, " ")
-	local hp = (classtable.Health or 0) + ((classtable.DynamicHealth or 0) * GAMEMODE:GetWave())
+	local hp = (classtable.Health or 0) + ((classtable.DynamicHealth or 0) * math.max(0, GAMEMODE:GetWave() - 1))
 	table.Add(lines, string.Explode("\n", Format("Health: %d (Default HP: %d, +%d HP per every wave)", hp, classtable.Health or 0, classtable.DynamicHealth or 0)))
 	table.Add(lines, string.Explode("\n", Format("Speed: %d", classtable.Speed or 0)))
 	local wep = weapons.Get(classtable.SWEP)
 	table.Add(lines, string.Explode("\n", Format("Damage per hit: %s (To props: %s)", wep.MeleeDamage or wep.PounceDamage or 0, wep.MeleeDamageVsProps or wep.MeleeDamage or wep.PounceDamage or 0)))
+	table.Add(lines, string.Explode("\n", Format("Points gained on killing class (on full health): %s", math.Round(classtable.Points or 0, 2))))
 
 	for i, line in ipairs(lines) do
 		local label = vgui.Create("DLabel", self)
 		local notwaveone = classtable.Wave and classtable.Wave > 0
 
 		label:SetText(line)
-		if i == (notwaveone and 2 or 1) and classtable.BetterVersion then
+		if i == (notwaveone and classtable.Infliction and classtable.Infliction > 0 and 3 or notwaveone and 2 or 1) and classtable.BetterVersion then
 			label:SetColor(COLOR_RORANGE)
+		end
+		if i == (notwaveone and 2 or 1) and classtable.Infliction and classtable.Infliction > 0 then
+			label:SetColor(COLOR_DARKRED)
 		end
 		label:SetFont(i == 1 and notwaveone and "ZSBodyTextFontBig" or "ZSBodyTextFont")
 		label:SizeToContents()

@@ -12,13 +12,11 @@ function PANEL:Init()
 	self.m_Text1 = vgui.Create("DLabel", self)
 	self.m_Text2 = vgui.Create("DLabel", self)
 	self.m_Text3 = vgui.Create("DLabel", self)
-	self.m_Text4 = vgui.Create("DLabel", self)
-	self:SetTextFont("ZSHUDFontSmallest")
+	self:SetTextFont("ZSHUDFontSmaller")
 
 	self.m_Text1.Paint = self.Text1Paint
 	self.m_Text2.Paint = self.Text2Paint
 	self.m_Text3.Paint = self.Text3Paint
-	self.m_Text4.Paint = self.Text4Paint
 
 	self:InvalidateLayout()
 end
@@ -30,8 +28,6 @@ function PANEL:SetTextFont(font)
 	self.m_Text2:SetFont(font)
 	self.m_Text3.Font = font
 	self.m_Text3:SetFont(font)
-	self.m_Text4.Font = font
-	self.m_Text4:SetFont(font)
 
 	self:InvalidateLayout()
 end
@@ -45,22 +41,17 @@ function PANEL:PerformLayout()
 	self.m_Text1:SetWide(self:GetWide())
 	self.m_Text1:SizeToContentsY()
 	self.m_Text1:MoveRightOf(self.m_HumanCount, 12)
-	self.m_Text1:AlignTop(2)
+	self.m_Text1:AlignTop(4)
 
 	self.m_Text2:SetWide(self:GetWide())
 	self.m_Text2:SizeToContentsY()
 	self.m_Text2:MoveRightOf(self.m_HumanCount, 12)
-	self.m_Text2:AlignTop(self:GetTall() * 0.25)
+	self.m_Text2:CenterVertical()
 
 	self.m_Text3:SetWide(self:GetWide())
 	self.m_Text3:SizeToContentsY()
 	self.m_Text3:MoveRightOf(self.m_HumanCount, 12)
-	self.m_Text3:AlignBottom(self:GetTall() * 0.25)
-
-	self.m_Text4:SetWide(self:GetWide())
-	self.m_Text4:SizeToContentsY()
-	self.m_Text4:MoveRightOf(self.m_HumanCount, 12)
-	self.m_Text4:AlignBottom(2)
+	self.m_Text3:AlignBottom(4)
 end
 
 function PANEL:Text1Paint()
@@ -68,8 +59,9 @@ function PANEL:Text1Paint()
 	local override = MySelf:IsValid() and GetGlobalString("hudoverride"..MySelf:Team(), "")
 
 	if override and #override > 0 then
-		text = (GAMEMODE:IsEndlessMode() and override.." ("..translate.Format("wave_x", GAMEMODE:GetWave())..")"
-		or override.." ("..translate.Format("wave_x_of_y", GAMEMODE:GetWave(), GAMEMODE:GetNumberOfWaves())..")")
+		text = override
+--		(GAMEMODE:IsEndlessMode() and override.." ("..translate.Format("wave_x", GAMEMODE:GetWave())..")"
+--		or override.." ("..translate.Format("wave_x_of_y", GAMEMODE:GetWave(), GAMEMODE:GetNumberOfWaves())..")")
 	else
 		local wave = GAMEMODE:GetWave()
 		if GAMEMODE:IsEscapeSequence() then
@@ -134,25 +126,20 @@ function PANEL:Text2Paint()
 end
 
 function PANEL:Text3Paint()
-	if MySelf:IsValid() then
-		if MySelf:Team() == TEAM_UNDEAD then
-			local toredeem = GAMEMODE:GetRedeemBrains()
-			if toredeem > 0 then
-				draw.SimpleText(translate.Format("brains_eaten_x", MySelf:Frags().." / "..toredeem), self.Font, 0, 0, COLOR_SOFTRED)
-			else
-				draw.SimpleText(translate.Format("brains_eaten_x", MySelf:Frags()), self.Font, 0, 0, COLOR_SOFTRED)
-			end
-		else
-			--draw.SimpleText(translate.Format("points_x", MySelf:GetPoints().." / "..MySelf:Frags()), self.Font, 0, 0, COLOR_DARKRED)
-			draw.SimpleText("Points: "..MySelf:GetPoints().."  Score: "..MySelf:GetMScore(), self.Font, 0, 0, COLOR_SOFTRED)
-		end
+	local text
+	if GAMEMODE:CanSelfRedeem(MySelf) then
+		draw.SimpleText("Can self redeem", self.Font, 0, 0, COLOR_GREEN)
+	elseif GAMEMODE:CanRedeem(MySelf) then
+		draw.SimpleText("Can redeem", self.Font, 0, 0, MySelf:Team() == TEAM_UNDEAD and MySelf:Frags() >= GAMEMODE:GetRedeemBrains() and COLOR_GREEN or COLOR_GRAY)
+	else
+		draw.SimpleText("Cannot redeem", self.Font, 0, 0, COLOR_RED)
 	end
-
-	return true
-end
-
-function PANEL:Text4Paint()
-	draw.SimpleText(not GAMEMODE:GetDifficultyScalingEnabled() and "" or Format("Difficulty: %s", math.Round(GAMEMODE:GetDifficulty(), 2)), self.Font, 0, 0, COLOR_GRAY)
+/*
+	local text = MySelf:IsValid() and GetGlobalString("hudoverride"..MySelf:Team(), "")
+	if text and #text > 0 then
+		draw.SimpleText(text, self.Font, 0, 0, COLOR_GRAY)
+	end
+*/
 	return true
 end
 
@@ -171,3 +158,103 @@ function PANEL:Paint(w, h)
 end
 
 vgui.Register("ZSGameState", PANEL, "DPanel")
+
+
+PANEL = {}
+
+function PANEL:Init()
+	self.m_Text1 = vgui.Create("DLabel", self)
+	self.m_Text2 = vgui.Create("DLabel", self)
+	self.m_Text3 = vgui.Create("DLabel", self)
+	self:SetTextFont("ZSHUDFontSmallest")
+
+	self.m_Text1.Paint = self.Text1Paint
+	self.m_Text2.Paint = self.Text2Paint
+	self.m_Text3.Paint = self.Text3Paint
+
+	self:InvalidateLayout()
+end
+
+function PANEL:SetTextFont(font)
+	self.m_Text1.Font = font
+	self.m_Text1:SetFont(font)
+	self.m_Text2.Font = font
+	self.m_Text2:SetFont(font)
+	self.m_Text3.Font = font
+	self.m_Text3:SetFont(font)
+
+	self:InvalidateLayout()
+end
+
+function PANEL:PerformLayout()
+	local hs = self:GetTall() * 0.5
+
+	self.m_Text1:SetWide(self:GetWide())
+	self.m_Text1:SizeToContentsY()
+	self.m_Text1:AlignLeft(8)
+	self.m_Text1:AlignTop(2)
+
+	self.m_Text2:SetWide(self:GetWide())
+	self.m_Text2:SizeToContentsY()
+	self.m_Text2:AlignLeft(8)
+	self.m_Text2:CenterVertical()
+
+	self.m_Text3:SetWide(self:GetWide())
+	self.m_Text3:SizeToContentsY()
+	self.m_Text3:AlignLeft(8)
+	self.m_Text3:AlignBottom(2)
+
+end
+
+function PANEL:Text1Paint()
+	if MySelf:IsValid() then
+		if MySelf:Team() == TEAM_UNDEAD then
+			local toredeem = GAMEMODE:GetRedeemBrains()
+			if toredeem > 0 and GAMEMODE:CanRedeem(MySelf) then
+				draw.SimpleText(translate.Format("brains_eaten_x", MySelf:Frags().." / "..toredeem), self.Font, 0, 0, COLOR_SOFTRED)
+			else
+				draw.SimpleText(translate.Format("brains_eaten_x", MySelf:Frags()), self.Font, 0, 0, COLOR_SOFTRED)
+			end
+		else
+			--draw.SimpleText(translate.Format("points_x", MySelf:GetPoints().." / "..MySelf:Frags()), self.Font, 0, 0, COLOR_GRAY)
+			draw.SimpleText("Points: "..MySelf:GetPoints().." / Score: "..MySelf:GetMScore(), self.Font, 0, 0, COLOR_GRAY)
+		end
+	end
+
+	return true
+end
+
+function PANEL:Text2Paint()
+	if MySelf:IsValid() and MySelf:Team() == TEAM_HUMAN then
+		if not GAMEMODE.ZombieEscape then
+			local resupplyready = CurTime() >= (MySelf.NextUse or 0)
+			draw.SimpleText(MySelf.Stowage and Format("Resupply usages: %s", MySelf.StowageCaches or 0) or resupplyready and "Resupply cache is ready!" or Format("Next resupply: %ss", math.ceil(MySelf.NextUse - CurTime())), self.Font, 0, 0, (MySelf.Stowage and (MySelf.StowageCaches or 0) > 0 or resupplyready) and COLOR_GREEN or COLOR_GRAY)
+		end
+	elseif MySelf:IsValid() and MySelf:Team() == TEAM_UNDEAD then
+		draw.SimpleText(Format("Zombie Tokens: %s", MySelf:GetZombieTokens()), self.Font, 0, 0, COLOR_SOFTRED)
+	end
+
+	return true
+end
+
+function PANEL:Text3Paint()
+	draw.SimpleText(not GAMEMODE:GetDifficultyScalingEnabled() and "" or Format("Difficulty: %s", math.Round(GAMEMODE:GetDifficulty(), 2)), self.Font, 0, 0, COLOR_GRAY)
+	return true
+end
+
+
+local matGradientLeft = CreateMaterial("gradient-l", "UnlitGeneric", {["$basetexture"] = "vgui/gradient-l", ["$vertexalpha"] = "1", ["$vertexcolor"] = "1", ["$ignorez"] = "1", ["$nomip"] = "1"})
+function PANEL:Paint(w, h)
+	surface.SetDrawColor(0, 0, 0, 90)
+	surface.DrawRect(0, 0, w * 0.4, h)
+	surface.SetMaterial(matGradientLeft)
+	surface.DrawTexturedRect(w * 0.4, 0, w * 0.6, h)
+	--surface.DrawLine(0, h - 1, w, h - 1)
+	surface.SetDrawColor(0, 0, 0, 125)
+	surface.SetMaterial(matGradientLeft)
+	surface.DrawTexturedRect(0, h - 1, w, 1)
+
+	return true
+end
+
+vgui.Register("ZSGameState2", PANEL, "DPanel")

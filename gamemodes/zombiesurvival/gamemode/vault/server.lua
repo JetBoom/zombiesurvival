@@ -76,6 +76,10 @@ function GM:LoadVault(pl)
 					pl.Achs = contents.Achievements
 				end
 
+				if contents.BankXP then
+					pl:SetZSBankXP(contents.BankXP)
+				end
+
 				pl.SkillVersion = self.SkillTreeVersion
 			end
 		end
@@ -127,7 +131,8 @@ function GM:SaveVault(pl)
 		DesiredActiveSkills = util.CompressBitTable(pl:GetDesiredActiveSkills()),
 		UnlockedSkills = util.CompressBitTable(pl:GetUnlockedSkills()),
 		Version = pl.SkillVersion or self.SkillTreeVersion,
-		Achievements = pl.Achs or {}
+		Achievements = pl.Achs or {},
+		BankXP = pl:GetZSBankXP()
 	}
 
 	if pl.NextSkillReset and os.time() < pl.NextSkillReset then

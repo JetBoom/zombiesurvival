@@ -65,8 +65,8 @@ SWEP.DryFireSound = Sound("Weapon_Artemis_Empty.Single")
 
 SWEP.DontScaleReloadSpeed = true
 
-GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1, 1)
-GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.07, 1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 2)
 GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Actaeon' Dual Crossbows", "Bolts pierce slightly instead of exploding, and inflict damage vulnerability, -25% damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.75
 	wept.Primary.Projectile = "projectile_arrow_inq"

@@ -47,6 +47,8 @@ include("vgui/pendboard.lua")
 include("vgui/pworth.lua")
 include("vgui/parsenal.lua")
 include("vgui/premantle.lua")
+include("vgui/pmutations.lua")
+include("vgui/pskillstats.lua")
 include("vgui/dpingmeter.lua")
 include("vgui/dsidemenu.lua")
 include("vgui/dspawnmenu.lua")
@@ -205,6 +207,25 @@ GM.FogGreen = 30
 GM.FogBlue = 30
 
 function GM:ClickedPlayerButton(pl, button)
+	surface.PlaySound("buttons/button15.wav")
+
+	local menu = DermaMenu(true, self)
+	menu:AddOption(Format("Name: %s", pl:GetName()), function() end)
+	if not pl:IsBot() then
+		menu:AddOption("View Player Steam Profile", function() pl:ShowProfile() end)
+	end
+	if pl:Team() == TEAM_HUMAN then
+		menu:AddOption(Format("Points: %s", pl:GetPoints()), function() end)
+	else
+		if MySelf:Team() == TEAM_UNDEAD then
+			menu:AddOption(Format("Zombie class: %s", translate.Get(pl:GetZombieClassTable().TranslationName)), function() end)
+			menu:AddOption(Format("Zombie tokens: %s", pl:GetZombieTokens()), function() end)
+		end
+	end
+	menu:AddOption(Format("XP: %s / %s (Max: %s)", pl:GetZSXP(), self:XPForLevel(pl:GetZSLevel() + 1), self.MaxXP), function() end)
+	menu:AddOption(Format("Level: %s", pl:GetZSLevel()), function() end)
+	menu:AddOption(Format("Remort: %s", pl:GetZSRemortLevel()), function() end)
+	menu:Open()
 end
 
 function GM:ClickedEndBoardPlayerButton(pl, button)
@@ -579,7 +600,7 @@ function GM:DrawFearMeter(power, screenscale)
 
 		local sigils = GAMEMODE.CachedSigils
 		local corruptsigils = 0
-		for i=1, self.MaxSigils do
+		for i=1, self.MaxSigils do --math.min(5, #self:GetSigils())
 			sigil = sigils[i]
 			health = 0
 			maxhealth = 0
@@ -744,6 +765,22 @@ function GM:_Think()
 			MySelf:BarricadeGhostingThink()
 		end
 		thirdperson = self.OverTheShoulder
+
+/*----
+		local nextuse = MySelf.NextUse or 0
+
+		if self.ResupplyDinged then
+			if CurTime() < nextuse then
+				self.ResupplyDinged = false
+			end
+		elseif CurTime() >= nextuse then
+			self.ResupplyDinged = true
+
+			if not (MySelf.Stowage and MySelf.StowageCaches) then
+				self:CenterNotify(COLOR_WHITE, "Resupply cache is ready!")
+			end
+		end
+----*/
 	else
 		self.HeartBeatTime = self.HeartBeatTime + (6 + self:CachedFearPower() * 5) * FrameTime()
 		thirdperson = self.ZombieThirdPerson
@@ -789,8 +826,9 @@ function GM:PlayBeats(teamid, fear)
 
 	--if (LASTHUMAN or self:GetAllSigilsDestroyed()) and cv_ShouldPlayMusic:GetBool() then
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
-		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + SoundDuration(self.LastHumanSound) - 0.025
+		local lasthumanmusic = istable(self.LastHumanSound) and table.Random(self.LastHumanSound) or tostring(self.LastHumanSound)
+		MySelf:EmitSound(lasthumanmusic, 0, 100, self.BeatsVolume)
+		NextBeat = RealTime() + (self.SoundDuration[lasthumanmusic] or SoundDuration(lasthumanmusic)) - 0.025
 		return
 	end
 
@@ -941,7 +979,19 @@ function GM:HumanHUD(screenscale)
 	end
 
 	if gamemode.Call("PlayerCanPurchase", MySelf) then
-		draw_SimpleTextBlurry(translate.Get("press_f2_for_the_points_shop"), "ZSHUDFontSmall", w * 0.5, screenscale * 135, COLOR_GRAY, TEXT_ALIGN_CENTER)
+/*
+		local str = translate.Get("press_f2_for_the_points_shop")
+		local font = "ZSHUDFontSmall"
+		surface.SetFont(font)
+		surface.SetTextPos(w * 0.5, screenscale * 135)
+		
+		for i = 1, #str do
+			local col = HSVToColor( i * (RealTime() * 30) % 360, 1, 1 )
+			draw_SimpleTextBlurry(string.sub( str, i, i ), font, w * 0.5 - #str * 12 + i * 12, screenscale * 135, Color(col.r, col.g, col.b), TEXT_ALIGN_CENTER)
+		end
+*/
+		local col = HSVToColor(RealTime() * 40 % 360, 1, 1)
+		draw_SimpleTextBlurry(translate.Get("press_f2_for_the_points_shop"), "ZSHUDFontSmall", w * 0.5, screenscale * 135, self.RainbowF2PointShopText and col or COLOR_GRAY, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -1052,13 +1102,13 @@ function GM:ZombieHUD()
 	end
 
 	if not self:GetWaveActive() and self:GetWave() ~= 0 then
-		local pl = GAMEMODE.NextBossZombie
-		if pl and pl:IsValid() then
+		local pl = self.NextBossZombie
+		if pl and pl:IsValid() and (self.BossZombiePlayersRequired <= 0 or #player.GetAll() >= self.BossZombiePlayersRequired) then
 			local x, y = ScrW() / 2, ScrH() * 0.3 + draw_GetFontHeight("ZSHUDFont")
 			if pl == MySelf then
-				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", GAMEMODE.NextBossZombieClass), "ZSHUDFont", x, y, Color(255, 50, 50), TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", self.NextBossZombieClass), "ZSHUDFont", x, y, Color(255, 50, 50), TEXT_ALIGN_CENTER)
 			else
-				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), GAMEMODE.NextBossZombieClass), "ZSHUDFont", x, y, COLOR_GRAY, TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), self.NextBossZombieClass), "ZSHUDFont", x, y, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -1301,6 +1351,7 @@ function GM:RestartRound()
 	self.TheLastHuman = nil
 	self.RoundEnded = nil
 	LASTHUMAN = nil
+	NextBeat = RealTime()
 
 	if pEndBoard and pEndBoard:IsValid() then
 		pEndBoard:Remove()
@@ -1488,8 +1539,16 @@ function GM:CreateVGUI()
 	self.GameStatePanel = vgui.Create("ZSGameState")
 	self.GameStatePanel:SetTextFont("ZSHUDFontSmaller")
 	self.GameStatePanel:SetAlpha(220)
-	self.GameStatePanel:SetSize(screenscale * 420, screenscale * 100)
+	self.GameStatePanel:SetSize(screenscale * 420, screenscale * 80)
 	self.GameStatePanel:ParentToHUD()
+
+	if IsValid(self.GameStatePanel2) then self.GameStatePanel2:Remove() end
+	self.GameStatePanel2 = vgui.Create("ZSGameState2")
+	self.GameStatePanel2:SetTextFont("ZSHUDFontSmallest")
+	self.GameStatePanel2:SetAlpha(200)
+	self.GameStatePanel2:SetPos(0, screenscale * 80)
+	self.GameStatePanel2:SetSize(screenscale * 320, screenscale * 75)
+	self.GameStatePanel2:ParentToHUD()
 
 	if IsValid(self.TopNotificationHUD) then self.TopNotificationHUD:Remove() end
 	self.TopNotificationHUD = vgui.Create("DEXNotificationsList")
@@ -1548,6 +1607,7 @@ function GM:Initialize()
 	RunConsoleCommand("r_dynamic", "0")
 
 	self.AchievementsProgress = {}
+	self.UsedMutations = {}
 
 	self:RefreshMapIsObjective()
 end
@@ -1854,9 +1914,56 @@ function GM:PlayerBindPress(pl, bind, wasin)
 			self:ToggleOTSCamera()
 		end
 	elseif bind == "impulse 100" then
-		if P_Team(pl) == TEAM_UNDEAD and pl:Alive() then
+		if P_Team(pl) == TEAM_UNDEAD then
 			self:ToggleZombieVision()
 		end
+	elseif bind == "gm_showhelp" then
+		self:ShowHelp()
+	elseif bind == "gm_showteam" then
+		if pl:Team() == TEAM_HUMAN then
+			if self.ZombieEscape then
+				local menu = DermaMenu()
+				menu:AddOption("Buy ZE Grenade (30 points)", function()
+					net.Start("zs_zebuy")
+					net.WriteString("zegrenade")
+					net.SendToServer()
+				end)
+				menu:AddOption("Buy 25% health (10 points)", function()
+					net.Start("zs_zebuy")
+					net.WriteString("health")
+					net.SendToServer()
+				end)
+/*
+				menu:AddOption("Buy blood armor (10 points)", function()
+					net.Start("zs_zebuy")
+					net.WriteString("bloodarmor")
+					net.SendToServer()
+				end)
+*/
+				menu:Open()
+				menu:SetPos(gui.MousePos())
+			else
+				if self:GetWave() > 0 then
+					self:OpenArsenalMenu()
+				else
+					MakepWorth()
+				end
+			end
+		elseif self:GetWave() > 0 and not self.RoundEnded then
+			MakepMutationShop()
+		end
+	elseif bind == "gm_showspare1" then
+		if not pl:KeyDown(IN_DUCK) and pl:Team() == TEAM_UNDEAD then
+			if not self.ClassicMode and self:ShouldUseAlternateDynamicSpawn() then
+				self:CenterNotify(COLOR_RED, translate.ClientGet(pl, "no_class_switch_in_this_mode"))
+			else
+				self:OpenClassSelect()
+			end
+		elseif pl:KeyDown(IN_DUCK) or pl:Team() == TEAM_HUMAN then
+			self:ToggleSkillWeb()
+		end	
+	elseif bind == "gm_showspare2" then
+		MakepOptions()
 	end
 end
 
@@ -2106,7 +2213,7 @@ end
 
 function GM:HUDPaintBackgroundEndRound()
 	local x, y = ScrW() / 2, ScrH() * 0.8
-	local timleft = math.max(0, self.EndTime + (self.ZombieEscape and self.ZEEndGameTime or self.EndGameTime) - CurTime())
+	local timleft = math.max(0, self.EndTime + self.EndGameTime - CurTime())
 
 	if timleft <= 0 then
 		draw_SimpleTextBlur(translate.Get("loading"), "ZSHUDFont", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER)
@@ -2126,7 +2233,7 @@ function GM:DrawBarricadeHUD(ent)
 end
 
 local function EndRoundCalcView(pl, origin, angles, fov, znear, zfar)
-	if GAMEMODE.EndTime and CurTime() < GAMEMODE.EndTime + 5 then
+	if GAMEMODE.EndTime and CurTime() < GAMEMODE.EndTime + (GAMEMODE.ZombieEscape and 3 or 5) then
 		local endposition = GAMEMODE.LastHumanPosition
 		local override = GetGlobalVector("endcamerapos", vector_origin)
 		if override ~= vector_origin then
@@ -2147,7 +2254,7 @@ local function EndRoundCalcView(pl, origin, angles, fov, znear, zfar)
 end
 
 local function EndRoundShouldDrawLocalPlayer(pl)
-	if GAMEMODE.EndTime and CurTime() < GAMEMODE.EndTime + 5 then
+	if GAMEMODE.EndTime and CurTime() < GAMEMODE.EndTime + (GAMEMODE.ZombieEscape and 3 or 5) then
 		return true
 	end
 
@@ -2188,16 +2295,16 @@ function GM:EndRound(winner, nextmap)
 	end
 
 	if snd then
-		timer.Simple(0.45, function()
-			if not GAMEMODE.PlayWinMusic and winner == TEAM_HUMAN and snd == GetGlobalString("winmusic", dvar) or
-			not GAMEMODE.PlayLoseMusic and winner == TEAM_UNDEAD and snd == GetGlobalString("losemusic", dvar) or
-			not GAMEMODE.PlayDrawMusic and (winner ~= TEAM_UNDEAD and winner ~= TEAM_HUMAN) then return end
+		timer.Simple(self.ZombieEscape and 0.05 or 0.45, function()
+			if not self.PlayWinMusic and winner == TEAM_HUMAN and snd == GetGlobalString("winmusic", dvar) or
+			not self.PlayLoseMusic and winner == TEAM_UNDEAD and snd == GetGlobalString("losemusic", dvar) or
+			not self.PlayDrawMusic and (winner ~= TEAM_UNDEAD and winner ~= TEAM_HUMAN) then return end
 
 			surface_PlaySound(snd)
 		end)
 	end
 
-	timer.Simple(1, function()
+	timer.Simple(self.ZombieEscape and 0 or 1, function()
 		if not (pEndBoard and pEndBoard:IsValid()) then
 			MakepEndBoard(winner)
 		end
@@ -2211,7 +2318,7 @@ end
 function GM:LocalPlayerDied(attackername)
 	LASTDEATH = RealTime()
 
-	surface_PlaySound(self.DeathSound)
+	surface_PlaySound(istable(self.DeathSound) and table.Random(self.DeathSound) or self.DeathSound)
 	if attackername then
 		self:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Get("you_have_died"))
 		self:CenterNotify(COLOR_RED, translate.Format(self.PantsMode and "you_were_kicked_by_x" or "you_were_killed_by_x", tostring(attackername)))

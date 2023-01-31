@@ -277,6 +277,7 @@ function SWEP:CanPrimaryAttack()
 
 	if self:Clip1() < self.RequiredClip then
 		self:EmitSound(self.DryFireSound)
+		self:Reload()
 		self:SetNextPrimaryFire(CurTime() + math.max(0.25, self.Primary.Delay))
 		return false
 	end
@@ -321,7 +322,7 @@ end
 
 function SWEP:GetFireDelay()
 	local owner = self:GetOwner()
-	return self.Primary.Delay / (owner:GetStatus("frost") and 0.7 or 1)
+	return self.Primary.Delay * (owner.WeaponFireDelayMul or 1) / (owner:GetStatus("frost") and 0.7 or 1)
 end
 
 function SWEP:ShootBullets(dmg, numbul, cone)
@@ -338,7 +339,7 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 	end
 
 	owner:LagCompensation(true)
-	owner:FireBulletsLua(owner:GetShootPos(), owner:GetAimVector(), cone, numbul, dmg, nil, self.Primary.KnockbackScale, self.TracerName, self.BulletCallback, self.Primary.HullSize, nil, self.Primary.MaxDistance, nil, self)
+	owner:FireBulletsLua(owner:GetShootPos(), owner:GetAimVector(), cone, numbul, dmg * (self:GetOwner().WeaponBulletDamageMul or 1), nil, self.Primary.KnockbackScale, self.TracerName, self.BulletCallback, self.Primary.HullSize, nil, self.Primary.MaxDistance, nil, self)
 	owner:LagCompensation(false)
 
 	if self.PointsMultiplier then

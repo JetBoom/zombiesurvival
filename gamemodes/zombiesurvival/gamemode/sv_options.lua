@@ -110,10 +110,25 @@ cvars.AddChangeCallback("zs_repairpointsperhealth", function(cvar, oldvalue, new
 	GAMEMODE.RepairPointsPerHealth = tonumber(newvalue) or 1
 end)
 
+-- more
+
 GM.UnlockAchievements = CreateConVar("zs_achievements", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enables unlocking achievements."):GetBool()
 cvars.AddChangeCallback("zs_achievements", function(cvar, oldvalue, newvalue)
 	GAMEMODE.UnlockAchievements = tonumber(newvalue) == 1
 end)
+
+-- XP multplier gain for Humans
+GM.HumanXPGainMulti = CreateConVar("zs_xpgainmul_human", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "XP gain multiplier for humans."):GetFloat()
+cvars.AddChangeCallback("zs_xpgainmul_human", function(cvar, oldvalue, newvalue)
+	GAMEMODE.HumanXPGainMulti = tonumber(newvalue) or 1
+end)
+
+-- XP gaining mul for Zombies
+GM.ZombieXPMulti = CreateConVar("zs_xpgainmul_zombie", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "XP gain multiplier for zombies."):GetFloat()
+cvars.AddChangeCallback("zs_xpgainmul_zombie", function(cvar, oldvalue, newvalue)
+	GAMEMODE.ZombieXPMulti = tonumber(newvalue) or 1
+end)
+
 
 
 -- honorable mentions

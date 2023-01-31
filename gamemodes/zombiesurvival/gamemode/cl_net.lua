@@ -41,7 +41,7 @@ net.Receive("zs_zvols", function(length)
 end)
 
 net.Receive("zs_dmg", function(length)
-	local damage = net.ReadUInt(16)
+	local damage = net.ReadFloat()
 	local pos = net.ReadVector()
 
 	if DamageFloaters then
@@ -54,17 +54,32 @@ net.Receive("zs_dmg", function(length)
 end)
 
 net.Receive("zs_dmg_prop", function(length)
-	local damage = net.ReadUInt(16)
+	local damage = net.ReadFloat()
 	local pos = net.ReadVector()
 
 	if DamageFloaters then
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pos)
 			effectdata:SetMagnitude(damage)
-			effectdata:SetScale(1)
+			effectdata:SetScale(-1)
 		util.Effect("damagenumber", effectdata)
 	end
 end)
+
+net.Receive("zs_dmg_type", function(length)
+	local damage = net.ReadFloat()
+	local dmgtype = net.ReadUInt(8)
+	local pos = net.ReadVector()
+
+	if DamageFloaters then
+		local effectdata = EffectData()
+			effectdata:SetOrigin(pos)
+			effectdata:SetMagnitude(damage)
+			effectdata:SetScale(dmgtype)
+		util.Effect("damagenumber", effectdata)
+	end
+end)
+
 
 net.Receive("zs_lifestats", function(length)
 	local barricadedamage = net.ReadUInt(16)
@@ -197,6 +212,9 @@ net.Receive("zs_boss_spawned", function(length)
 	if MySelf:IsValid() then
 		MySelf:EmitSound(string.format("npc/zombie_poison/pz_alert%d.wav", math.random(1, 2)), 0, math.random(95, 105))
 	end
+
+	GAMEMODE.NextBossZombie = nil
+	GAMEMODE.NextBossZombieClass = nil
 end)
 net.Receive("zs_boss_slain", function(length)
 	local ent = net.ReadEntity()
@@ -285,6 +303,7 @@ end)
 
 net.Receive("zs_sigilcorrupted", function(length)
 	local corrupted = net.ReadUInt(8)
+	local ent = net.ReadEntity()
 
 	LastSigilCorrupted = CurTime()
 
@@ -303,17 +322,26 @@ net.Receive("zs_sigilcorrupted", function(length)
 			MySelf:EmitSound("zombiesurvival/eyeflash.ogg", 75, 100)
 		end)
 
+		local letter = "?"
+		for i, sigil in pairs(ents.FindByClass("prop_obj_sigil")) do
+			if ent == sigil then
+				letter = string.char(64 + i)
+				break
+			end
+		end
+
 		if corrupted == maxsigils then
 			GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFontSmall"}, COLOR_RED, translate.Get("sigil_corrupted_last"), {killicon = "default"})
 		else
-			GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFontSmall"}, translate.Get("sigil_corrupted"))
-			--GAMEMODE:CenterNotify(COLOR_RED, translate.Format("sigil_corrupted_x_remain", maxsigils - corrupted))
+			GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFontSmall"}, translate.Format("sigil_corrupted", letter))
+			GAMEMODE:CenterNotify(COLOR_RED, translate.Format("sigil_corrupted_x_remain", maxsigils - corrupted))
 		end
 	end
 end)
 
 net.Receive("zs_sigiluncorrupted", function(length)
-	--local corrupted = net.ReadUInt(8)
+	local corrupted = net.ReadUInt(8)
+	local ent = net.ReadEntity()
 
 	LastSigilUncorrupted = CurTime()
 
@@ -323,7 +351,16 @@ net.Receive("zs_sigiluncorrupted", function(length)
 		timer.Simple(1.25, function()
 			MySelf:EmitSound("ambient/machines/teleport1.wav", 75, 60, 0.3)
 		end)
-		GAMEMODE:CenterNotify(COLOR_GREEN, {font = "ZSHUDFontSmall"}, translate.Get("sigil_uncorrupted"))
+
+		local letter = "?"
+		for i, sigil in pairs(ents.FindByClass("prop_obj_sigil")) do
+			if ent == sigil then
+				letter = string.char(64 + i)
+				break
+			end
+		end
+
+		GAMEMODE:CenterNotify(COLOR_GREEN, {font = "ZSHUDFontSmall"}, translate.Format("sigil_uncorrupted", letter))
 	end
 end)
 
@@ -483,6 +520,11 @@ net.Receive("zs_achievementgained", function()
 	local ply = net.ReadEntity()
 	local id = net.ReadString()
 	chat.AddText(COLOR_WHITE, "[", Color(125, 255, 125), "ZS", COLOR_WHITE, "] ", ply, COLOR_WHITE, " has earned ", Color(125, 255, 125), GAMEMODE.Achievements[id].Name, COLOR_WHITE, ".")
-
 end)
 
+net.Receive("zs_mutations_table", function(len)
+	local mutationstable = net.ReadTable()
+	if mutationstable then
+		GAMEMODE.UsedMutations = mutationstable
+	end
+end)

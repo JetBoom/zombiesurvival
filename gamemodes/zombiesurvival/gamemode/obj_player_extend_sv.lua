@@ -12,7 +12,7 @@ function meta:ProcessDamage(dmginfo)
 	local dmgbypass = bit.band(dmgtype, DMG_DIRECT) ~= 0
 
 	if self.DamageVulnerability and not dmgbypass then
-		dmginfo:SetDamage(dmginfo:GetDamage() * self.DamageVulnerability)
+		dmginfo:ScaleDamage(self.DamageVulnerability)
 	end
 
 	if attacker.AttackerForward and attacker.AttackerForward:IsValid() then
@@ -38,7 +38,7 @@ function meta:ProcessDamage(dmginfo)
 
 		local corrosion = self.Corrosion and self.Corrosion + 2 > CurTime()
 		if self ~= attacker and not corrosion and not dmgbypass then
-			dmginfo:SetDamage(dmginfo:GetDamage() * GAMEMODE:GetZombieDamageScale(dmginfo:GetDamagePosition(), self))
+			dmginfo:ScaleDamage(GAMEMODE:GetZombieDamageScale(dmginfo:GetDamagePosition(), self))
 		end
 
 		self.ShouldFlinch = true
@@ -58,7 +58,7 @@ function meta:ProcessDamage(dmginfo)
 				end
 
 				if attacker:IsSkillActive(SKILL_HEAVYSTRIKES) and not self:GetZombieClassTable().Boss and (wep.IsFistWeapon and attacker:IsSkillActive(SKILL_CRITICALKNUCKLE) or wep.MeleeKnockBack > 0) then
-					attacker:TakeSpecialDamage(math.Clamp(damage * (wep.Unarmed and 0.35 or 0.06), 0, 20), DMG_SLASH, self, self:GetActiveWeapon())
+					attacker:TakeSpecialDamage(math.Clamp(damage * (wep.Unarmed and 0.25 or 0.06), 0, 20), DMG_SLASH, self, self:GetActiveWeapon())
 				end
 
 				if attacker:IsSkillActive(SKILL_BLOODLUST) and attacker:GetPhantomHealth() > 0 and attacker:Health() < attackermaxhp then
@@ -68,7 +68,7 @@ function meta:ProcessDamage(dmginfo)
 				end
 
 				if attacker:HasTrinket("sharpkit") then
-					dmginfo:SetDamage(dmginfo:GetDamage() * (1 + self:GetFlatLegDamage()/75))
+--					dmginfo:ScaleDamage(1 + self:GetFlatLegDamage()/75) -- useless??
 				end
 
 				if wep.Culinary and attacker:IsSkillActive(SKILL_MASTERCHEF) and math.random(9) == 1 then
@@ -83,13 +83,13 @@ function meta:ProcessDamage(dmginfo)
 
 	-- Opted for multiplicative.
 	if attacker == self and dmgtype ~= DMG_CRUSH and dmgtype ~= DMG_FALL and self.SelfDamageMul then
-		dmginfo:SetDamage(dmginfo:GetDamage() * self.SelfDamageMul)
+		dmginfo:ScaleDamage(self.SelfDamageMul)
 	end
 	if bit.band(dmgtype, DMG_ALWAYSGIB) ~= 0 and self.ExplosiveDamageTakenMul then
-		dmginfo:SetDamage(dmginfo:GetDamage() * self.ExplosiveDamageTakenMul)
+		dmginfo:ScaleDamage(self.ExplosiveDamageTakenMul)
 	end
 	if bit.band(dmgtype, DMG_BURN) ~= 0 and self.FireDamageTakenMul then
-		dmginfo:SetDamage(dmginfo:GetDamage() * self.FireDamageTakenMul)
+		dmginfo:ScaleDamage(self.FireDamageTakenMul)
 	end
 
 	if inflictor:IsValid() and (inflictor:IsPhysicsModel() or inflictor.IsPhysbox) and self:IsValidLivingHuman() then
@@ -172,17 +172,25 @@ function meta:ProcessDamage(dmginfo)
 					attacker:AddLegDamageExt(17, attacker, attacker, SLOWTYPE_COLD)
 
 					local effectdata = EffectData()
-						effectdata:SetOrigin(self:GetPos())
+					effectdata:SetOrigin(self:GetPos())
 					util.Effect("explosion_cold", effectdata)
 
 					self.LastIceBurst = CurTime()
 					self.IceBurstMessage = nil
 				end
 
-				if self.MeleeDamageTakenMul and not dmgbypass then
-					dmginfo:SetDamage(dmginfo:GetDamage() * self.MeleeDamageTakenMul)
+				if not dmgbypass then
+					local damagemul = (self:IsSkillActive(SKILL_LASTSTAND) and self:Health() <= self:GetMaxHealth() * 0.25 and -0.1 or 0)
+					+ (self.IsFragility and 0.04 * math.max(0, GAMEMODE:GetWave() - 1) or 0)
+					-- 2.5% melee damage taken max since we don't want player to be fully immune from melee
+					damagemul = math.max(0.025, (self.MeleeDamageTakenMul or 1) + damagemul)
+					dmginfo:ScaleDamage(damagemul)
 				end
-
+/*
+				if self:IsSkillActive(SKILL_LASTSTAND) and self:Health() <= self:GetMaxHealth() * 0.25 then
+					dmginfo:ScaleDamage(0.9)
+				end
+*/
 				if self:IsSkillActive(SKILL_BACKPEDDLER) then
 					self:AddLegDamage(8)
 				end
@@ -199,7 +207,7 @@ function meta:ProcessDamage(dmginfo)
 			end
 		elseif inflictor:IsProjectile() then
 			if self.ProjDamageTakenMul and not dmgbypass then
-				dmginfo:SetDamage(dmginfo:GetDamage() * self.ProjDamageTakenMul)
+				dmginfo:ScaleDamage(self.ProjDamageTakenMul)
 			end
 		end
 	end
@@ -216,24 +224,27 @@ function meta:ProcessDamage(dmginfo)
 				end
 			end
 
-			local ratio = 0.5 + self.BloodArmorDamageReductionAdd + (self:IsSkillActive(SKILL_IRONBLOOD) and self:Health() <= self:GetMaxHealth() * 0.5 and 0.25 or 0)
+			local ratio = math.min(0.5 + self.BloodArmorDamageReductionAdd + (self:IsSkillActive(SKILL_IRONBLOOD) and self:Health() <= self:GetMaxHealth() * 0.5 and 0.25 or 0), 1)
 			local absorb = math.min(self:GetBloodArmor(), damage * ratio)
+			local absorbed = absorb * (1 + attacker.MutationModifiers["bloodarmor_damage"])
 			dmginfo:SetDamage(damage - absorb)
-			self:SetBloodArmor(self:GetBloodArmor() - absorb)
+			self:SetBloodArmor(self:GetBloodArmor() - absorbed)
 
 			if attacker:IsValid() and attacker:IsPlayer() then
 				local myteam = attacker:Team()
 				local otherteam = P_Team(self)
-				attacker.DamageDealt[myteam] = attacker.DamageDealt[myteam] + absorb
+				attacker.DamageDealt[myteam] = attacker.DamageDealt[myteam] + absorbed
 
 				if myteam == TEAM_UNDEAD and otherteam == TEAM_HUMAN then
-					attacker:AddLifeHumanDamage(absorb)
-					local xp = absorb / 55
-					attacker:GainZSXP(GAMEMODE.InitialVolunteers[attacker:UniqueID()] and xp * 1.35 or xp)
+					attacker:AddLifeHumanDamage(absorbed)
+					attacker:GainZSXP(GAMEMODE.InitialVolunteers[attacker:UniqueID()] and absorbed / 45 or absorbed / 75)
+					attacker:AddZombieTokens(absorbed / 7.5)
 				end
+				
+				GAMEMODE:DamageFloaterAlt(attacker, self, dmginfo:GetDamagePosition(), absorbed, 1)
 			end
 
-			if damage > 20 and damage - absorb <= 0 then
+			if damage > 20 and damage - absorbed <= 0 then
 				self:EmitSound("physics/flesh/flesh_strider_impact_bullet3.wav", 55)
 			end
 		end
@@ -356,6 +367,10 @@ function meta:SetPoints(points)
 	self:SetDTInt(1, points)
 end
 
+function meta:SetZombieTokens(tokens)
+	self:SetDTInt(DT_PLAYER_INT_ZOMBIE_TOKENS, tokens)
+end
+
 function meta:SetBloodArmor(armor)
 	self:SetDTInt(DT_PLAYER_INT_BLOODARMOR, armor)
 end
@@ -431,9 +446,9 @@ function meta:SendLifeStats()
 	self.LifeStatSend = CurTime() + 0.33
 
 	net.Start("zs_lifestats")
-		net.WriteUInt(math.ceil(self.LifeBarricadeDamage or 0), 16)
-		net.WriteUInt(math.ceil(self.LifeHumanDamage or 0), 16)
-		net.WriteUInt(self.LifeBrainsEaten or 0, 8)
+	net.WriteUInt(math.ceil(self.LifeBarricadeDamage or 0), 16)
+	net.WriteUInt(math.ceil(self.LifeHumanDamage or 0), 16)
+	net.WriteUInt(self.LifeBrainsEaten or 0, 8)
 	net.Send(self)
 end
 
@@ -506,17 +521,17 @@ end
 function meta:FloatingScore(victimorpos, effectname, frags, flags)
 	if type(victimorpos) == "Vector" then
 		net.Start("zs_floatscore_vec")
-			net.WriteVector(victimorpos)
-			net.WriteString(effectname)
-			net.WriteInt(frags, 24)
-			net.WriteUInt(flags, 8)
+		net.WriteVector(victimorpos)
+		net.WriteString(effectname)
+		net.WriteInt(frags, 24)
+		net.WriteUInt(flags, 8)
 		net.Send(self)
 	else
 		net.Start("zs_floatscore")
-			net.WriteEntity(victimorpos)
-			net.WriteString(effectname)
-			net.WriteInt(frags, 24)
-			net.WriteUInt(flags, 8)
+		net.WriteEntity(victimorpos)
+		net.WriteString(effectname)
+		net.WriteInt(frags, 24)
+		net.WriteUInt(flags, 8)
 		net.Send(self)
 	end
 end
@@ -554,13 +569,13 @@ end
 
 function meta:CenterNotify(...)
 	net.Start("zs_centernotify")
-		net.WriteTable({...})
+	net.WriteTable({...})
 	net.Send(self)
 end
 
 function meta:TopNotify(...)
 	net.Start("zs_topnotify")
-		net.WriteTable({...})
+	net.WriteTable({...})
 	net.Send(self)
 end
 
@@ -671,13 +686,13 @@ end
 
 function meta:UpdateLegDamage()
 	net.Start("zs_legdamage")
-		net.WriteFloat(self.LegDamage)
+	net.WriteFloat(self.LegDamage)
 	net.Send(self)
 end
 
 function meta:UpdateArmDamage()
 	net.Start("zs_armdamage")
-		net.WriteFloat(self.ArmDamage)
+	net.WriteFloat(self.ArmDamage)
 	net.Send(self)
 end
 
@@ -939,13 +954,13 @@ function meta:Resupply(owner, obj)
 		self.NextResupplyUse = CurTime() + GAMEMODE.ResupplyBoxCooldown * (self.ResupplyDelayMul or 1) * (stockpiling and 2.12 or 1)
 
 		net.Start("zs_nextresupplyuse")
-			net.WriteFloat(self.NextResupplyUse)
+		net.WriteFloat(self.NextResupplyUse)
 		net.Send(self)
 	else
 		self.StowageCaches = self.StowageCaches - 1
 
 		net.Start("zs_stowagecaches")
-			net.WriteInt(self.StowageCaches, 12)
+		net.WriteInt(self.StowageCaches, 12)
 		net.Send(self)
 	end
 
@@ -954,8 +969,8 @@ function meta:Resupply(owner, obj)
 
 	for i = 1, stockpiling and not stowage and 2 or 1 do
 		net.Start("zs_ammopickup")
-			net.WriteUInt(amount, 16)
-			net.WriteString(ammotype)
+		net.WriteUInt(amount, 16)
+		net.WriteString(ammotype)
 		net.Send(self)
 
 		self:GiveAmmo(amount, ammotype)
@@ -1005,11 +1020,11 @@ end
 
 function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 	if gamemode.Call("IsEscapeDoorOpen") then return end
-
+/*
 	if points > 0 and not nomul and self.PointIncomeMul then
 		points = points * self.PointIncomeMul
 	end
-
+*/
 	-- This lets us add partial amounts of points (floats)
 	local wholepoints = math.floor(points)
 	local remainder = points - wholepoints
@@ -1032,9 +1047,11 @@ function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 	self:AddFrags(wholepoints)
 	self:AddMScore(wholepoints)
 	self:SetPoints(self:GetPoints() + wholepoints)
-	self:GiveAchievementProgress("pointfarmer_1", wholepoints)
-	self:GiveAchievementProgress("pointfarmer_2", wholepoints)
-	self:GiveAchievementProgress("pointfarmer_3", wholepoints)
+	for i=1,3 do
+		self:GiveAchievementProgress("pointfarmer_"..i, wholepoints)
+--	self:GiveAchievementProgress("pointfarmer_2", wholepoints)
+--	self:GiveAchievementProgress("pointfarmer_3", wholepoints)
+	end
 
 	if self.PointsVault then
 		self.PointsVault = self.PointsVault + wholepoints * GAMEMODE.PointSaving
@@ -1072,14 +1089,53 @@ function meta:TakePoints(points)
 	end
 end
 
+-- Alternative to adding value pl.PointQueue (Work in progress.)
+function meta:AddQueuePoints(points, pointgaintype)
+	if not isnumber(points) then return end
+	local allpoints = pointgaintype == "all"
+	if pointgaintype ~= "none" then
+
+		-- maybe next update.
+/*
+		if allpoints or pointgaintype == "damage" then
+--			points = points * 1
+		elseif allpoints or pointgaintype == "repair" then
+--			points = points * 1
+		elseif allpoints or pointgaintype == "playerboost" then
+--			points = points * 1
+		elseif allpoints or pointgaintype == "barricadeboost" then
+--			points = points * 1
+		elseif allpoints or pointgaintype == "heal" then
+--			points = points * 1
+		elseif allpoints or pointgaintype == "other" then
+--			points = points * 1
+		end
+*/
+		points = points * (self.PointsGainMul or 1)
+	end
+
+	self.PointQueue = self.PointQueue + points
+end
+
+function meta:AddZombieTokens(tokens)
+	self.ZombieTokensRemainder = self.ZombieTokensRemainder + tokens
+	self:SetZombieTokens(self:GetZombieTokens() + math.floor(self.ZombieTokensRemainder))
+	self.ZombieTokensRemainder = self.ZombieTokensRemainder - math.floor(self.ZombieTokensRemainder)
+
+end
+
+function meta:TakeZombieTokens(tokens)
+	self:SetZombieTokens(self:GetZombieTokens() - tokens)
+end
+
 function meta:UpdateAllZombieClasses()
 	for _, pl in pairs(player.GetAll()) do
 		if pl ~= self and pl:Team() == TEAM_UNDEAD then
 			local id = pl:GetZombieClass()
 			if id and 0 < id then
 				net.Start("zs_zclass")
-					net.WriteEntity(pl)
-					net.WriteUInt(id, 8)
+				net.WriteEntity(pl)
+				net.WriteUInt(id, 8)
 				net.Send(self)
 			end
 		end
@@ -1106,8 +1162,8 @@ end
 function meta:SetZombieClass(cl, onlyupdate, filter)
 	if onlyupdate then
 		net.Start("zs_zclass")
-			net.WriteEntity(self)
-			net.WriteUInt(cl, 8)
+		net.WriteEntity(self)
+		net.WriteUInt(cl, 8)
 		if filter then
 			net.Send(filter)
 		else
@@ -1128,8 +1184,8 @@ function meta:SetZombieClass(cl, onlyupdate, filter)
 		self:CallZombieFunction0("SwitchedTo")
 
 		net.Start("zs_zclass")
-			net.WriteEntity(self)
-			net.WriteUInt(cl, 8)
+		net.WriteEntity(self)
+		net.WriteUInt(cl, 8)
 		if filter then
 			net.Send(filter)
 		else
@@ -1232,9 +1288,9 @@ function meta:DoHulls(classid, teamid)
 	end
 
 	net.Start("zs_dohulls")
-		net.WriteEntity(self)
-		net.WriteUInt(classid, 8)
-		net.WriteBool(teamid == TEAM_UNDEAD)
+	net.WriteEntity(self)
+	net.WriteUInt(classid, 8)
+	net.WriteBool(teamid == TEAM_UNDEAD)
 	net.Broadcast()
 
 	self:CollisionRulesChanged()
@@ -1297,6 +1353,48 @@ function meta:Redeem(silent, noequip)
 	gamemode.Call("PostPlayerRedeemed", self)
 end
 
+function meta:SelfRedeem(silent, noequip)
+	if gamemode.Call("PrePlayerSelfRedeemed", self) then return end
+
+	self:RemoveStatus("overridemodel", false, true)
+
+	self:KillSilent()
+
+	self:ChangeTeam(TEAM_HUMAN)
+
+	if not noequip then self.m_PreSelfRedeem = true end
+
+	self:Spawn()
+
+	self.SelfRedeemedOnce = true
+	self.m_PreSelfRedeem = nil
+	self:DoHulls()
+
+	local frags = self:Frags()
+	if frags < 0 then
+		self:SetFrags(frags * 5)
+		self:SetMScore(frags * 5)
+	else
+		self:SetFrags(0)
+		self:SetMScore(0)
+	end
+	self:SetDeaths(0)
+
+	--[[self.DeathClass = nil
+	self:SetZombieClass(GAMEMODE.DefaultZombieClass)]]
+	self.DeathClass = GAMEMODE.DefaultZombieClass
+
+	self.SpawnedTime = CurTime()
+
+	if not silent then
+		net.Start("zs_playerredeemed")
+		net.WriteEntity(self)
+		net.Broadcast()
+	end
+
+	gamemode.Call("PostPlayerSelfRedeemed", self)
+end
+
 function meta:RedeemNextFrame()
 	timer.Simple(0, function()
 		if IsValid(self) then
@@ -1335,16 +1433,13 @@ end
 meta.GetBrains = meta.Frags
 
 function meta:CheckRedeem(instant)
-	if not self:IsValid() or P_Team(self) ~= TEAM_UNDEAD
-	or GAMEMODE:GetRedeemBrains() <= 0 or self:GetBrains() < GAMEMODE:GetRedeemBrains()
-	or GAMEMODE.NoRedeeming or self.NoRedeeming or self:GetZombieClassTable().Boss then return end
+	if not GAMEMODE:CanRedeem(self) or self:Team() ~= TEAM_UNDEAD then return end
+	if self:GetBrains() < GAMEMODE:GetRedeemBrains() or (self:Alive() and self:GetZombieClassTable().Boss) then return end
 
-	if GAMEMODE:GetWave() ~= GAMEMODE:GetNumberOfWaves() or not GAMEMODE.ObjectiveMap and GAMEMODE:GetNumberOfWaves() == 1 and CurTime() < GAMEMODE:GetWaveEnd() - 300 then
-		if instant then
-			self:Redeem()
-		else
-			self:RedeemNextFrame()
-		end
+	if instant then
+		self:Redeem()
+	else
+		self:RedeemNextFrame()
 	end
 end
 
@@ -1375,7 +1470,7 @@ function meta:GivePointPenalty(amount)
 	self:SetMScore(self:GetMScore() - amount)
 
 	net.Start("zs_penalty")
-		net.WriteUInt(amount, 16)
+	net.WriteUInt(amount, 16)
 	net.Send(self)
 end
 
@@ -1404,15 +1499,15 @@ function meta:GiveWeaponByType(weapon, plyr, ammo)
 				plyr:GiveAmmo(desiredgive, ammotype)
 
 				net.Start("zs_ammogive")
-					net.WriteUInt(desiredgive, 16)
-					net.WriteString(ammotype)
-					net.WriteEntity(plyr)
+				net.WriteUInt(desiredgive, 16)
+				net.WriteString(ammotype)
+				net.WriteEntity(plyr)
 				net.Send(self)
 
 				net.Start("zs_ammogiven")
-					net.WriteUInt(desiredgive, 16)
-					net.WriteString(ammotype)
-					net.WriteEntity(self)
+				net.WriteUInt(desiredgive, 16)
+				net.WriteString(ammotype)
+				net.WriteEntity(self)
 				net.Send(plyr)
 
 				self:PlayGiveAmmoSound()
@@ -1635,7 +1730,8 @@ end
 
 local bossdrops = {
 	"trinket_bleaksoul",
-	"trinket_spiritess"
+	"trinket_spiritess",
+	"trinket_speedspirit"
 }
 
 function meta:MakeBossDrop()
@@ -1673,8 +1769,8 @@ function meta:SendDeployableLostMessage(deployable)
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
 	net.Start("zs_deployablelost")
-		net.WriteString(deployableinfo.Name)
-		net.WriteString(deployableinfo.WepClass)
+	net.WriteString(deployableinfo.Name)
+	net.WriteString(deployableinfo.WepClass)
 	net.Send(self)
 end
 
@@ -1683,8 +1779,8 @@ function meta:SendDeployableClaimedMessage(deployable)
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
 	net.Start("zs_deployableclaim")
-		net.WriteString(deployableinfo.Name)
-		net.WriteString(deployableinfo.WepClass)
+	net.WriteString(deployableinfo.Name)
+	net.WriteString(deployableinfo.WepClass)
 	net.Send(self)
 end
 
@@ -1693,8 +1789,8 @@ function meta:SendDeployableOutOfAmmoMessage(deployable)
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
 	net.Start("zs_deployableout")
-		net.WriteString(deployableinfo.Name)
-		net.WriteString(deployableinfo.WepClass)
+	net.WriteString(deployableinfo.Name)
+	net.WriteString(deployableinfo.WepClass)
 	net.Send(self)
 end
 
@@ -1753,7 +1849,7 @@ function meta:CryogenicInduction(attacker, inflictor, damage)
 		self:TakeSpecialDamage(self:Health() + 90, DMG_DIRECT, attacker, inflictor, pos)
 
 		if attacker:IsValidLivingHuman() then
-			util.BlastDamagePlayer(inflictor, attacker, pos, 100, self:GetMaxHealthEx() * 0.12, DMG_DROWN, 0.95)
+			util.BlastDamagePlayer(inflictor, attacker, pos, 100, math.min(self:GetMaxHealthEx() * 0.12, 100), DMG_DROWN, 0.95)
 			for _, ent in pairs(util.BlastAlloc(inflictor, attacker, pos, 100 * (attacker.ExpDamageRadiusMul or 1))) do
 				if ent:IsValidLivingPlayer() and gamemode.Call("PlayerShouldTakeDamage", ent, attacker) then
 					ent:AddLegDamageExt(6, attacker, inflictor, SLOWTYPE_COLD)

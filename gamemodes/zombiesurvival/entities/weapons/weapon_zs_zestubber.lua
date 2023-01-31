@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_stubber"
 
-SWEP.Primary.Damage = 700
+SWEP.Primary.Damage = 705
 SWEP.Primary.ClipSize = 5
 SWEP.Primary.Delay = 1.5
 

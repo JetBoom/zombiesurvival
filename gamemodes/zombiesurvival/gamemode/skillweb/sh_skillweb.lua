@@ -21,7 +21,7 @@ function GM:ProgressForXP(xp)
 	return (xp - current_level_xp) / (next_level_xp - current_level_xp)
 end
 
-GM.MaxLevel = 35
+GM.MaxLevel = 45
 GM.MaxXP = GM:XPForLevel(GM.MaxLevel)
 
 -- Makes sure all skill connections are double linked
@@ -120,8 +120,6 @@ end
 
 -- These are done on human spawn.
 function meta:ApplySkills(override)
-	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
-
 	local allskills = GAMEMODE.Skills
 	local desired = override or self:Alive() and self:Team() == TEAM_HUMAN and self:GetDesiredActiveSkills() or {}
 	local current_active = self:GetActiveSkills()
@@ -130,7 +128,8 @@ function meta:ApplySkills(override)
 	-- Do we even have these skills unlocked?
 	if not override then
 		for skillid in pairs(desired_assoc) do
-			if not self:IsSkillUnlocked(skillid) or allskills[skillid] and allskills[skillid].Disabled then
+			if not self:IsSkillUnlocked(skillid) or allskills[skillid] and allskills[skillid].Disabled or
+			GAMEMODE.ZombieEscape and not allskills[skillid].CanUseInZE or GAMEMODE.ClassicMode and not allskills[skillid].CanUseInClassicMode then
 				desired_assoc[skillid] = nil
 			end
 		end
@@ -246,6 +245,10 @@ end
 
 function meta:GetZSXP()
 	return self:GetDTInt(DT_PLAYER_INT_XP)
+end
+
+function meta:GetZSBankXP()
+	return self:GetDTInt(DT_PLAYER_INT_BANKXP)
 end
 
 function meta:GetZSSPUsed()

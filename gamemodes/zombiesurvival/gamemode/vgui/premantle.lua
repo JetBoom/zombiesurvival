@@ -678,7 +678,7 @@ function GM:OpenRemantlerMenu(remantler)
 			list:SetTall(ammoframe:GetTall() - 32)
 
 			for j, tab in ipairs(GAMEMODE.Items) do
-				if tab.PointShop and tab.Category == ITEMCAT_AMMO or tab.CanMakeFromScrap then
+				if tab.PointShop and tab.Category == ITEMCAT_AMMO and not tab.NoCraftWithScrap or tab.CanMakeFromScrap then
 					self:AddShopItem(list, j, tab, false, true)
 				end
 			end
@@ -738,6 +738,13 @@ function GM:OpenRemantlerMenu(remantler)
 	compdisl:MoveBelow(disscrap, 4 * screenscale)
 	compdisl:CenterHorizontal()
 	frame.m_ComponentDis = compdisl
+
+	local arsquickbuy = vgui.Create("DCheckBoxLabel", frame)
+	arsquickbuy:SetText("Quick buy items")
+	arsquickbuy:SetConVar("zs_alwaysquickbuy")
+	arsquickbuy:SizeToContents()
+	arsquickbuy:AlignTop(16)
+	arsquickbuy:AlignLeft(16)
 
 	frame:MakePopup()
 	frame:CenterMouse()

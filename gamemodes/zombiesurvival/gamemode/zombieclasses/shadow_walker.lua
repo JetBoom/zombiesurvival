@@ -142,15 +142,15 @@ function CLASS:DoesntGiveFear(pl)
 end
 
 if SERVER then
-function CLASS:AltUse(pl)
-	pl:StartFeignDeath()
-end
-
-function CLASS:ProcessDamage(pl, dmginfo)
-	if dmginfo:GetInflictor().IsMelee then
-		dmginfo:SetDamage(dmginfo:GetDamage() / 2)
+	function CLASS:AltUse(pl)
+		pl:StartFeignDeath()
 	end
-end
+
+	function CLASS:ProcessDamage(pl, dmginfo)
+		if dmginfo:GetInflictor().IsMelee then
+			dmginfo:SetDamage(dmginfo:GetDamage() / 2)
+		end
+	end
 end
 
 if not CLIENT then return end

@@ -13,11 +13,12 @@ local ammonames = {
 	["ar2"] = "assaultrifleammo",
 	["357"] = "rifleammo",
 	["pulse"] = "pulseammo",
-	["battery"] = "50mkit",
+	["battery"] = "medammo",
 	["xbowbolt"] = "crossbowammo",
 	["impactmine"] = "impactmine",
 	["chemical"] = "chemical",
-	["gaussenergy"] = "nail"
+	["gaussenergy"] = "nail",
+	["scrap"] = "scrap",
 }
 
 concommand.Add("zs_quickbuyammo", function()

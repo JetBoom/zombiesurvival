@@ -31,6 +31,26 @@ function FindItem(id)
 	return GAMEMODE.Items[id]
 end
 
+function FindMutation(id)
+	if not id then return end
+
+	local t
+
+	local num = tonumber(id)
+	if num then
+		t = GAMEMODE.Mutations[num]
+	else
+		for i, tab in pairs(GAMEMODE.Mutations) do
+			if tab.Signature == id then
+				t = tab
+				break
+			end
+		end
+	end
+
+	if t and t.MutationShop then return t end
+end
+
 -- DEPRECATED behavior. CachedInvisibleEntities and filter tables is nonsense. Move to using functions.
 local TrueVisibleTrace = {mask = MASK_SHOT}
 function TrueVisible(posa, posb, filter)

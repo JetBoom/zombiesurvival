@@ -14,14 +14,14 @@ end
 function SWEP:ServerMeleePostHitEntity(tr, hitent, damagemultiplier)
 	local owner = self:GetOwner()
 
-	if owner.GlassWeaponShouldBreak and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) and owner.GlassWeaponShouldBreak and (self.GlassWeaponHits or 0) > 2 then
+	if owner.GlassWeaponShouldBreak and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) and owner.GlassWeaponShouldBreak and (self.GlassWeaponHits or 0) > 0 then
 		local effectdata = EffectData()
 		effectdata:SetOrigin(owner:EyePos())
 		effectdata:SetEntity(owner)
 		util.Effect("weapon_shattered", effectdata, true, true)
 
 		owner:StripWeapon(self:GetClass())
-		print("[ZS] Weapon broke!", owner, self.GlassWeaponHits)
+--		print("[ZS] Weapon broke!", owner, self.GlassWeaponHits)
 	end
 end
 

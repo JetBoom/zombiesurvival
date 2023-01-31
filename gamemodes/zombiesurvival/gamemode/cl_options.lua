@@ -180,7 +180,11 @@ cvars.AddChangeCallback("zs_interfacesize", function(cvar, oldvalue, newvalue)
 	GAMEMODE.HealthHUD:InvalidateLayout()
 
 	GAMEMODE.GameStatePanel:InvalidateLayout()
-	GAMEMODE.GameStatePanel:SetSize(screenscale * 420, screenscale * 100)
+	GAMEMODE.GameStatePanel:SetSize(screenscale * 420, screenscale * 80)
+
+	GAMEMODE.GameStatePanel2:SetPos(0, screenscale * 80)
+	GAMEMODE.GameStatePanel2:SetSize(screenscale * 320, screenscale * 75)
+	GAMEMODE.GameStatePanel2:InvalidateLayout()
 
 	GAMEMODE.TopNotificationHUD:InvalidateLayout()
 	GAMEMODE.CenterNotificationHUD:InvalidateLayout()
@@ -299,6 +303,26 @@ end)
 GM.FearMeterDrawingEnabled = CreateClientConVar("zs_drawfearmeter", "1", true, false):GetBool()
 cvars.AddChangeCallback("zs_drawfearmeter", function(cvar, oldvalue, newvalue)
 	GAMEMODE.FearMeterDrawingEnabled = tonumber(newvalue) == 1
+end)
+
+GM.ResupplyNoDingSound = CreateClientConVar("zs_noresupplydingsound", "0", true, false):GetBool()
+cvars.AddChangeCallback("zs_noresupplydingsound", function(cvar, oldvalue, newvalue)
+	GAMEMODE.ResupplyNoDingSound = tonumber(newvalue) == 1
+end)
+
+GM.RainbowF2PointShopText = CreateClientConVar("zs_rainbowf2text", "0", true, false):GetBool()
+cvars.AddChangeCallback("zs_rainbowf2text", function(cvar, oldvalue, newvalue)
+	GAMEMODE.RainbowF2PointShopText = tonumber(newvalue) == 1
+end)
+
+GM.AddSkillDescriptions = CreateClientConVar("zs_addskilldesc", "0", true, false):GetBool()
+cvars.AddChangeCallback("zs_addskilldesc", function(cvar, oldvalue, newvalue)
+	GAMEMODE.AddSkillDescriptions = tonumber(newvalue) == 1
+end)
+
+GM.ZombieNightVisionSound = CreateClientConVar("zs_zombienvsound", "1", true, false):GetBool()
+cvars.AddChangeCallback("zs_zombienvsound", function(cvar, oldvalue, newvalue)
+	GAMEMODE.ZombieNightVisionSound = tonumber(newvalue) == 1
 end)
 
 CreateConVar( "cl_playercolor", "0.24 0.34 0.41", { FCVAR_ARCHIVE, FCVAR_USERINFO }, "The value is a Vector - so between 0-1 - not between 0-255" )

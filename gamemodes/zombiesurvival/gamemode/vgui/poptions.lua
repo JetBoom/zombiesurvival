@@ -81,6 +81,12 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Prevent being picked as a boss zombie")
+	check:SetConVar("zs_nobosspick")
+	check:SizeToContents()
+	list:AddItem(check)
+
 	list:AddItem(EasyLabel(Window, "HUD/VGUI options", "DefaultFontSmall", color_white))
 
 	check = vgui.Create("DCheckBoxLabel", Window)
@@ -119,11 +125,15 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
-
-
 	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Draw crosshair in ironsights.")
 	check:SetConVar("zs_ironsightscrosshair")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Film Mode (disable most of the HUD)")
+	check:SetConVar("zs_filmmode")
 	check:SizeToContents()
 	list:AddItem(check)
 
@@ -144,20 +154,6 @@ function MakepOptions()
 	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Don't hide friends via transparency")
 	check:SetConVar("zs_showfriends")
-	check:SizeToContents()
-	list:AddItem(check)
-
-	list:AddItem(EasyLabel(Window, "Sound options", "DefaultFontSmall", color_white))
-
-	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Enable ambient music")
-	check:SetConVar("zs_beats")
-	check:SizeToContents()
-	list:AddItem(check)
-
-	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Enable last human music")
-	check:SetConVar("zs_playmusic")
 	check:SizeToContents()
 	list:AddItem(check)
 
@@ -204,6 +200,64 @@ function MakepOptions()
 	list:AddItem(check)
 
 	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Hide view models")
+	check:SetConVar("zs_hideviewmodels")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Display rainbow text (hover for more info)")
+	check:SetToolTip("Displays \"Press F2 for the Points Shop!\" text in colored color instead of gray")
+	check:SetConVar("zs_rainbowf2text")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	
+
+	list:AddItem(EasyLabel(Window, "Sound options", "DefaultFontSmall", color_white))
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Enable ambient music")
+	check:SetConVar("zs_beats")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Enable last human music")
+	check:SetConVar("zs_playmusic")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Disable resupply ding sound")
+	check:SetToolTip("Disables resupply \"ding\" sound when they are ready to collect")
+	check:SetConVar("zs_noresupplydingsound")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Play win music sound")
+	check:SetConVar("zs_playwinmusic")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Play lose music sound")
+	check:SetConVar("zs_playdrawmusic")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Play draw music sound")
+	check:SetConVar("zs_playlosemusic")
+	check:SizeToContents()
+	list:AddItem(check)
+
+	
+
+	list:AddItem(EasyLabel(Window, "Other options", "DefaultFontSmall", color_white))
+
+	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Enable movement view roll")
 	check:SetConVar("zs_movementviewroll")
 	check:SizeToContents()
@@ -216,26 +270,14 @@ function MakepOptions()
 	list:AddItem(check)
 
 	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Film Mode (disable most of the HUD)")
-	check:SetConVar("zs_filmmode")
-	check:SizeToContents()
-	list:AddItem(check)
-
-	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Hide view models")
-	check:SetConVar("zs_hideviewmodels")
-	check:SizeToContents()
-	list:AddItem(check)
-
-	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Prevent being picked as a boss zombie")
-	check:SetConVar("zs_nobosspick")
-	check:SizeToContents()
-	list:AddItem(check)
-
-	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Show damage indicators through walls")
 	check:SetConVar("zs_damagefloaterswalls")
+	check:SizeToContents()
+	list:AddItem(check)
+	
+	check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText("Show skill descriptions")
+	check:SetConVar("zs_addskilldesc")
 	check:SizeToContents()
 	list:AddItem(check)
 
@@ -257,10 +299,11 @@ function MakepOptions()
 	dropdown:SetMouseInputEnabled(true)
 	dropdown:AddChoice("% of health")
 	dropdown:AddChoice("Health amount")
+	dropdown:AddChoice("Health / Max Health")
 	dropdown.OnSelect = function(me, index, value, data)
-		RunConsoleCommand("zs_healthtargetdisplay", value == "Health amount" and 1 or 0)
+		RunConsoleCommand("zs_healthtargetdisplay", value == "Health / Max Health" and 2 or value == "Health amount" and 1 or 0)
 	end
-	dropdown:SetText(GAMEMODE.HealthTargetDisplay == 1 and "Health amount" or "% of health")
+	dropdown:SetText(GAMEMODE.HealthTargetDisplay == 2 and "Health / Max Health" or GAMEMODE.HealthTargetDisplay == 1 and "Health amount" or "% of health")
 	dropdown:SetTextColor(color_black)
 	list:AddItem(dropdown)
 

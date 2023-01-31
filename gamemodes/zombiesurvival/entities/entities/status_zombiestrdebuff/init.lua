@@ -12,7 +12,7 @@ end
 function ENT:PlayerHurt(victim, attacker, healthleft, damage)
 	local applier = self.Applier
 	if applier and applier:IsValidLivingHuman() and applier ~= attacker and victim:IsValidLivingZombie() then
-		local attributeddamage = damage
+		local attributeddamage = math.min(damage, victim:Health())
 		if healthleft < 0 then
 			attributeddamage = attributeddamage + healthleft
 		end
@@ -24,7 +24,7 @@ function ENT:PlayerHurt(victim, attacker, healthleft, damage)
 			victim.DamagedBy[applier] = (victim.DamagedBy[applier] or 0) + attributeddamage
 
 			local points = attributeddamage / victim:GetMaxHealth() * victim:GetZombieClassTable().Points
-			applier.PointQueue = applier.PointQueue + (points * (applier.PointsGainMul or 1))
+			applier:AddQueuePoints(points, "playerboost")
 			applier:GainZSXP(points * 0.8)
 
 			local pos = victim:GetPos()

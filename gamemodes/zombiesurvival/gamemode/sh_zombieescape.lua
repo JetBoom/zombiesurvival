@@ -2,7 +2,7 @@ if string.sub(string.lower(game.GetMap()), 1, 3) ~= "ze_" then return end
 
 GM.ZombieEscape = true
 GM.WaveZeroLength = 90
-GM.EndGameTime = 35
+GM.EndGameTime = 7.5
 GM.ZE_FreezeTime = 20
 GM.ZE_TimeLimit = 60 * 16
 

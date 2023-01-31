@@ -12,7 +12,10 @@ Content = "help_cont_barricading"},
 Content = "help_cont_upgrades"},
 
 {Name = "help_cat_being_a_zombie",
-Content = "help_cont_being_a_zombie"}
+Content = "help_cont_being_a_zombie"},
+
+{Name = "help_cat_zsimproved",
+Content = "help_cont_zsimproved"}
 }
 
 function MakepCredits()

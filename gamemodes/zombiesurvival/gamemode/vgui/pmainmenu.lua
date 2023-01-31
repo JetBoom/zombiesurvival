@@ -120,15 +120,18 @@ function GM:ShowHelp()
 
 	local screenscale = BetterScreenScale()
 	local menu = vgui.Create("Panel")
-	menu:SetSize(screenscale * 420, ScrH())
+	menu:SetSize(screenscale * 450, ScrH())
 	menu:Center()
 	menu.Paint = HelpMenuPaint
 	menu.Created = SysTime()
 
 	local header = EasyLabel(menu, self.Name, "ZSHUDFont")
 	header:SetContentAlignment(8)
-	header:DockMargin(0, ScrH() * 0.25, 0, 64)
+	header:DockMargin(0, ScrH() * 0.2, 0, 64)
 	header:Dock(TOP)
+	header.Think = function()
+		header:SetTextColor(HSVToColor(RealTime() * -60 % 360, 1, 1))
+	end
 
 	local buttonhei = 32 * screenscale
 
@@ -203,6 +206,15 @@ function GM:ShowHelp()
 	but:DockPadding(0, 12, 0, 12)
 	but:Dock(TOP)
 	but.DoClick = function() self:DoAchievementsPanel() menu:Remove() end
+
+	but = vgui.Create("DButton", menu)
+	but:SetFont("ZSHUDFontSmaller")
+	but:SetText("Character Stats")
+	but:SetTall(buttonhei)
+	but:DockMargin(0, 0, 0, 12)
+	but:DockPadding(0, 12, 0, 12)
+	but:Dock(TOP)
+	but.DoClick = function() MakepStats() menu:Remove() end
 
 	but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")

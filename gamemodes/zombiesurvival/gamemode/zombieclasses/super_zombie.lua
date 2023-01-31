@@ -7,7 +7,7 @@ CLASS.TranslationName = "class_super_zombie"
 
 CLASS.Health = 1500
 CLASS.Speed = 300
-CLASS.Points = 8
+CLASS.Points = 10
 
 CLASS.SWEP = "weapon_zs_superzombie"
 
@@ -64,3 +64,4 @@ end
 if not CLIENT then return end
 
 CLASS.Icon = "zombiesurvival/killicons/fresh_dead"
+CLASS.IconColor = Color(127, 255, 127)

@@ -16,7 +16,7 @@ SWEP.OldWalkSpeed = 0
 SWEP.MeleeDamage = 15
 SWEP.DamageType = DMG_CLUB
 SWEP.UppercutDamageMultiplier = 3
-SWEP.HitDistance = 40
+SWEP.MeleeRange = 40
 SWEP.MeleeKnockBack = 0
 
 SWEP.ViewModelFOV = 52
@@ -126,7 +126,7 @@ function SWEP:DealDamage()
 	local anim = self:GetSequenceName(owner:GetViewModel():GetSequence())
 	local time = CurTime()
 
-	local tr = owner:CompensatedMeleeTrace(self.HitDistance * (owner.MeleeRangeMul or 1), 3)
+	local tr = owner:CompensatedMeleeTrace(self.MeleeRange * (owner.MeleeRangeMul or 1) + (owner.MeleeRangeAdd or 0), 3)
 
 	local hitent = tr.Entity
 
@@ -162,17 +162,23 @@ function SWEP:DealDamage()
 		local damagemultiplier = owner:GetTotalAdditiveModifier("UnarmedDamageMul", "MeleeDamageMultiplier")
 		if owner:IsSkillActive(SKILL_LASTSTAND) then
 			if owner:Health() <= owner:GetMaxHealth() * 0.25 then
-				damagemultiplier = damagemultiplier * 2
+				damagemultiplier = damagemultiplier * 1.85
 			else
-				damagemultiplier = damagemultiplier * 0.85
+				damagemultiplier = damagemultiplier * 0.8
 			end
 		end
 
 		if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
+			damagemultiplier = damagemultiplier * 3.23
+			self.GlassWeaponHits = (self.GlassWeaponHits or 0) + 1
+			owner.GlassWeaponShouldBreak = math.Rand(0,1) < 0.35
+		end
+/*
+		if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
 			damagemultiplier = damagemultiplier * 3.5
 			owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
 		end
-
+*/
 		if anim == "fists_uppercut" then
 			damagemultiplier = damagemultiplier * self.UppercutDamageMultiplier
 		end

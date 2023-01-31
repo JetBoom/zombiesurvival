@@ -69,7 +69,7 @@ function PLAYER:GiveAchievement(id)
     print(string.format("[ZS] Player %s (%s) earned achievement %s (%s)", self:Name(), self:SteamID(), GAMEMODE.Achievements[id].Name, id))
 
     GAMEMODE:PlayerNotifyAchievement(self, id)
-    self:AddZSXP(GAMEMODE.Achievements[id].Reward or 0)
+    self:AddZSBankXP(GAMEMODE.Achievements[id].Reward or 0)
     PrintMessage(HUD_PRINTTALK, Format("%s has earned \"%s\" achievement!", self:Name(), GAMEMODE.Achievements[id].Name))--translate.Format("ach_trans", self:Name(), self:SteamID(), GAMEMODE.Achievements[id].Name, id)
 
     hook.Run("HASAchievementEarned", self, id)
@@ -97,8 +97,9 @@ function PLAYER:GiveAchievementProgress(id, count)
 --  print(string.format("[ZS] Player %s (%s) has new achievement progress on %s (%s): %s/%s", self:Name(), self:SteamID(), GAMEMODE.Achievements[id].Name, id, self.Achs[id], GAMEMODE.Achievements[id].Goal))
 
     if self.Achs[id] >= GAMEMODE.Achievements[id].Goal then
+        print(string.format("[ZS] Player %s (%s) earned achievement %s (%s)", self:Name(), self:SteamID(), GAMEMODE.Achievements[id].Name, id))
         GAMEMODE:PlayerNotifyAchievement(self, id)
-        self:AddZSXP(GAMEMODE.Achievements[id].Reward or 200, true)
+        self:AddZSBankXP(GAMEMODE.Achievements[id].Reward or 200, true)
         PrintMessage(HUD_PRINTTALK, Format("%s has earned \"%s\" achievement!", self:Name(), GAMEMODE.Achievements[id].Name))--translate.Format("ach_trans", self:Name(), self:SteamID(), GAMEMODE.Achievements[id].Name, id)
 
         hook.Run("HASAchievementEarned", self, id)

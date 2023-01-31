@@ -128,7 +128,7 @@ end
 
 function SWEP:SetNextAttack()
 	local owner = self:GetOwner()
-	local armdelay = owner:GetMeleeSpeedMul()
+	local armdelay = owner:GetMeleeSpeedMul() * (owner.MeleeAttackDelayMul or 1)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay * armdelay)
 end
 
@@ -166,7 +166,7 @@ function SWEP:MeleeSwing()
 
 	self:DoMeleeAttackAnim()
 
-	local tr = owner:CompensatedMeleeTrace(self.MeleeRange * (owner.MeleeRangeMul or 1), self.MeleeSize)
+	local tr = owner:CompensatedMeleeTrace(self.MeleeRange * (owner.MeleeRangeMul or 1) + (owner.MeleeRangeAdd or 0), self.MeleeSize)
 
 	if not tr.Hit then
 		if self.MissAnim then
@@ -187,9 +187,9 @@ function SWEP:MeleeSwing()
 	local damagemultiplier = owner:Team() == TEAM_HUMAN and owner.MeleeDamageMultiplier or 1 --(owner.BuffMuscular and owner:Team()==TEAM_HUMAN) and 1.2 or 1
 	if owner:IsSkillActive(SKILL_LASTSTAND) then
 		if owner:Health() <= owner:GetMaxHealth() * 0.25 then
-			damagemultiplier = damagemultiplier * 2
+			damagemultiplier = damagemultiplier * 1.85
 		else
-			damagemultiplier = damagemultiplier * 0.85
+			damagemultiplier = damagemultiplier * 0.8
 		end
 	end
 

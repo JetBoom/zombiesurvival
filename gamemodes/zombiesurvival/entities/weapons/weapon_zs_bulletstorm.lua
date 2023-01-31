@@ -47,7 +47,7 @@ SWEP.MaxStock = 3
 SWEP.IronSightsPos = Vector(-2, 6, 3)
 SWEP.IronSightsAng = Vector(0, 2, 0)
 
-GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.07)
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end

@@ -31,12 +31,12 @@ local E_IsValid = M_Entity.IsValid
 local E_GetDTBool = M_Entity.GetDTBool
 local E_GetTable = M_Entity.GetTable
 
-function meta:GetMaxHealthEx()
+function meta:GetMaxHealthEx(dynamic_health)
 	if P_Team(self) == TEAM_UNDEAD then
-		return self:GetMaxZombieHealth()
+		return self:GetMaxZombieHealth(dynamic_health)
 	end
 
-	return self:GetMaxHealth()
+	return self:GetMaxHealth(dynamic_health)
 end
 
 function meta:Dismember(dismembermenttype)
@@ -288,6 +288,10 @@ function meta:GetPoints()
 	return self:GetDTInt(1)
 end
 
+function meta:GetZombieTokens(tokens)
+	return self:GetDTInt(DT_PLAYER_INT_ZOMBIE_TOKENS)
+end
+
 function meta:GetBloodArmor()
 	return self:GetDTInt(DT_PLAYER_INT_BLOODARMOR)
 end
@@ -517,7 +521,7 @@ function meta:ResetSpeed(noset, health)
 	if not self:IsValid() then return end
 
 	if P_Team(self) == TEAM_UNDEAD then
-		local speed = math.max(140, self:GetZombieClassTable().Speed * GAMEMODE.ZombieSpeedMultiplier - (GAMEMODE.ObjectiveMap and 20 or 0))
+		local speed = math.max(110, self:GetZombieClassTable().Speed * GAMEMODE.ZombieSpeedMultiplier - (GAMEMODE.ObjectiveMap and 15 or 0))
 
 		self:SetSpeed(speed)
 		return speed
@@ -543,7 +547,7 @@ function meta:ResetSpeed(noset, health)
 	end
 
 	if self:IsSkillActive(SKILL_LIGHTWEIGHT) and wep:IsValid() and wep.IsMelee then
-		speed = speed + 6
+		speed = speed + 6.75
 	end
 
 	speed = math.max(1, speed)
@@ -945,14 +949,15 @@ function meta:NearestRemantler()
 	return remantler
 end
 
-function meta:GetMaxZombieHealth()
-	return self:GetNWInt("zs_zombiehealth", self:GetZombieClassTable().Health + (GAMEMODE:GetWave() * tonumber(self:GetZombieClassTable().DynamicHealth or 0)))
+function meta:GetMaxZombieHealth(dynamic_health)
+	return dynamic_health and self:GetNWInt("zs_zombiedynhealth", self:GetZombieClassTable().Health + (GAMEMODE:GetWave() * tonumber(self:GetZombieClassTable().DynamicHealth or 0)))
+	or self:GetNWInt("zs_zombiehealth", self:GetZombieClassTable().Health)
 end
 
 local oldmaxhealth = FindMetaTable("Entity").GetMaxHealth
-function meta:GetMaxHealth()
+function meta:GetMaxHealth(dynamic_health)
 	if P_Team(self) == TEAM_UNDEAD then
-		return self:GetMaxZombieHealth()
+		return self:GetMaxZombieHealth(dynamic_health)
 	end
 
 	return oldmaxhealth(self)

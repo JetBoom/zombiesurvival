@@ -150,19 +150,18 @@ GM.Achievements = {
     },
 
     ["repair_man_1"] = {
-        Name = "Repairman",
+        Name = "Repairman I",
         Desc = "Repair 15000 barricade points in total.",
         Reward = 485,
         Goal = 15000,
     },
 
     ["repair_man_2"] = {
-        Name = "Trust me, I'm an engineer!",
+        Name = "Repairman II",
         Desc = "Repair 100,000 barricade points in total",
         Reward = 1675,
         Goal = 100000,
     },
-
 
 }
 

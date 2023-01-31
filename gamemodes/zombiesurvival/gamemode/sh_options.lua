@@ -33,6 +33,10 @@ ITEMCAT_DEPLOYABLES = 5
 ITEMCAT_TRINKETS = 6
 ITEMCAT_OTHER = 7
 
+CATEGORY_MUTATIONS = 1
+CATEGORY_BOSSMUTATIONS = 2
+CATEGORY_MISCMUTATIONS = 3
+
 ITEMSUBCAT_TRINKETS_DEFENSIVE = 1
 ITEMSUBCAT_TRINKETS_OFFENSIVE = 2
 ITEMSUBCAT_TRINKETS_MELEE = 3
@@ -48,6 +52,12 @@ GM.ItemCategories = {
 	[ITEMCAT_DEPLOYABLES] = "Deployables",
 	[ITEMCAT_TRINKETS] = "Trinkets",
 	[ITEMCAT_OTHER] = "Other"
+}
+
+GM.MutationCategories = {
+	[CATEGORY_MUTATIONS] = "Mutations",
+	[CATEGORY_BOSSMUTATIONS] = "Boss Mutations",
+	[CATEGORY_MISCMUTATIONS] = "Miscellaneous"
 }
 
 GM.ItemSubCategories = {
@@ -93,6 +103,30 @@ function GM:AddPointShopItem(signature, category, price, swep, name, desc, model
 	return item
 end
 
+GM.Mutations = {}
+
+function GM:AddMutation(signature, name, desc, mutcategory, worth, callback, bots, rebuyable, maxpurchases)
+	local tab = {
+		Signature = signature,
+		Name = name,
+		Description = desc,
+		MutCategory = mutcategory,
+		Worth = worth or 0,
+		Callback = callback,
+		MutationShop = true,
+		Bots = bots,
+		Rebuyable = rebuyable, -- can be rebuyable and add tokens cost per purchase
+		MaxPurchases = maxpurchases -- amount of times the mutation can be purchased
+	}
+	self.Mutations[#self.Mutations + 1] = tab
+
+	return tab
+end
+
+function GM:AddMutationItem(signature, name, desc, mutcategory, worth, callback, bots, rebuyable, maxpurchases)
+	return self:AddMutation(signature, name, desc, mutcategory, worth, callback, bots, rebuyable, maxpurchases)
+end
+
 -- How much ammo is considered one 'clip' of ammo? For use with setting up weapon defaults. Works directly with zs_survivalclips
 GM.AmmoCache = {}
 GM.AmmoCache["ar2"]							= 32		-- Assault rifles.
@@ -112,7 +146,7 @@ GM.AmmoCache["grenade"]						= 1			-- Grenades.
 GM.AmmoCache["thumper"]						= 1			-- Gun turret.
 GM.AmmoCache["gravity"]						= 1			-- Unused.
 GM.AmmoCache["battery"]						= 23		-- Used with the Medical Kit.
-GM.AmmoCache["gaussenergy"]					= 2			-- Nails used with the Carpenter's Hammer.
+GM.AmmoCache["gaussenergy"]					= 3			-- Nails used with the Carpenter's Hammer.
 GM.AmmoCache["combinecannon"]				= 1			-- Not used.
 GM.AmmoCache["airboatgun"]					= 1			-- Arsenal crates.
 GM.AmmoCache["striderminigun"]				= 1			-- Message beacons.
@@ -129,7 +163,20 @@ GM.AmmoCache["turret_buckshot"]				= 1
 GM.AmmoCache["turret_assault"]				= 1
 GM.AmmoCache["scrap"]						= 3
 
-GM.AmmoResupply = table.ToAssoc({"ar2", "pistol", "smg1", "357", "xbowbolt", "buckshot", "battery", "pulse", "impactmine", "chemical", "gaussenergy", "scrap"})
+GM.AmmoResupply = table.ToAssoc({
+	"ar2",
+	"pistol",
+	"smg1",
+	"357",
+	"xbowbolt",
+	"buckshot",
+	"battery",
+	"pulse",
+	"impactmine",
+	"chemical",
+	"gaussenergy",
+	"scrap"
+})
 
 -----------
 -- Worth --
@@ -360,7 +407,7 @@ GM:AddPointShopItem("broadside",		ITEMCAT_GUNS,			200,			"weapon_zs_broadside")
 GM:AddPointShopItem("smelter",			ITEMCAT_GUNS,			200,			"weapon_zs_smelter")
 
 -- Tier 6?
-GM:AddPointShopItem("doomstick",		ITEMCAT_GUNS,			300,			"weapon_zs_doomstick")
+GM:AddPointShopItem("doomstick",		ITEMCAT_GUNS,			300,			"weapon_zs_doomstick").SkillRequirement = SKILL_U_DOOMSTICK
 
 
 GM:AddPointShopItem("pistolammo",		ITEMCAT_AMMO,			9,				nil,							"14 pistol ammo",				nil,									"ammo_pistol",						function(pl) pl:GiveAmmo(14, "pistol", true) end)
@@ -373,15 +420,20 @@ GM:AddPointShopItem("pulseammo",		ITEMCAT_AMMO,			9,				nil,							"30 pulse amm
 GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			9,				nil,							"3 explosives",					nil,									"ammo_explosive",					function(pl) pl:GiveAmmo(3, "impactmine", true) end)
 GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			9,				nil,							"20 chemical vials",			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(20, "chemical", true) end)
 item =
-GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			12,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
+GM:AddPointShopItem("medammo",			ITEMCAT_AMMO,			12,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
 item.CanMakeFromScrap = true
 item =
-GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							"Nail",							"It's just one nail.",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end)
+GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			3,				nil,							"Nail",							"It's just one nail.",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end)
 item.NoClassicMode = true
 item.CanMakeFromScrap = true
 item =
-GM:AddPointShopItem("sniperround",		ITEMCAT_AMMO,			20,				nil,							"Board",						"A board for aegis and prop packs.",	"ammo_sniperround",					function(pl) pl:GiveAmmo(1, "SniperRound", true) end)
-item.CanMakeFromScrap = true
+GM:AddPointShopItem("board",			ITEMCAT_AMMO,			20,				nil,							"Board",						"A board for aegis and prop packs.",	"ammo_sniperround",					function(pl) pl:GiveAmmo(1, "SniperRound", true) end)
+item.CanMakeFromScrap = false
+item.NoCraftWithScrap = true
+item =
+GM:AddPointShopItem("scrap",			ITEMCAT_AMMO,			9,				nil,							"3 Scrap",						"Scrap used in remantler.",				"ammo_scrap",				function(pl) pl:GiveAmmo(3, "scrap", true) end)
+item.CanMakeFromScrap = false
+item.NoCraftWithScrap = true
 -- Tier 1
 GM:AddPointShopItem("brassknuckles",	ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
 GM:AddPointShopItem("knife",			ITEMCAT_MELEE,			10,				"weapon_zs_swissarmyknife")
@@ -531,6 +583,7 @@ GM:AddPointShopItem("momentumsupsysiii",ITEMCAT_TRINKETS,		30,				"trinket_momen
 GM:AddPointShopItem("powergauntlet",	ITEMCAT_TRINKETS,		30,				"trinket_powergauntlet").SubCategory =							ITEMSUBCAT_TRINKETS_MELEE
 GM:AddPointShopItem("hemoadrenalii",	ITEMCAT_TRINKETS,		30,				"trinket_hemoadrenalii").SubCategory =							ITEMSUBCAT_TRINKETS_MELEE
 GM:AddPointShopItem("sharpstone",		ITEMCAT_TRINKETS,		30,				"trinket_sharpstone").SubCategory =								ITEMSUBCAT_TRINKETS_MELEE
+GM:AddPointShopItem("longgrip",			ITEMCAT_TRINKETS,		30,				"trinket_longgrip").SubCategory =								ITEMSUBCAT_TRINKETS_MELEE
 GM:AddPointShopItem("analgestic",		ITEMCAT_TRINKETS,		30,				"trinket_analgestic").SubCategory =								ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddPointShopItem("feathfallframe",	ITEMCAT_TRINKETS,		30,				"trinket_featherfallframe").SubCategory =						ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddPointShopItem("aimcomp",			ITEMCAT_TRINKETS,		30,				"trinket_aimcomp").SubCategory =								ITEMSUBCAT_TRINKETS_OFFENSIVE
@@ -581,6 +634,54 @@ item.SkillRequirement = SKILL_U_MEDICCLOUD
 item =
 GM:AddPointShopItem("nanitecloud",		ITEMCAT_OTHER,			40,				"weapon_zs_nanitecloudbomb")
 item.SkillRequirement = SKILL_U_NANITECLOUD
+
+-- ZS Mutations
+GM:AddMutationItem("m_zombie_health", "Zombie Health Upgrade", "Increases health by 6.5%.", CATEGORY_MUTATIONS, 100, function(pl)
+	pl.MutationModifiers["zombie_health"] = pl.MutationModifiers["zombie_health"] + 0.065
+	return true
+end, true, 50, 4)
+
+GM:AddMutationItem("m_zombie_barricadedamage1", "Barricade Damage Upgrade I", "Increases damage to barricades by 4%", CATEGORY_MUTATIONS, 200, function(pl)
+	pl.MutationModifiers["barricade_damage"] = pl.MutationModifiers["barricade_damage"] + 0.04
+	return true
+end, true, false, 1)
+
+GM:AddMutationItem("m_zombie_barricadedamage2", "Barricade Damage Upgrade II", "Increases damage to barricades by 6%", CATEGORY_MUTATIONS, 325, function(pl)
+	pl.MutationModifiers["barricade_damage"] = pl.MutationModifiers["barricade_damage"] + 0.06
+	return true
+end, true, false, 1)
+
+
+GM:AddMutationItem("m_zombie_bloodarmordamage1", "Blood Armor Destroyer I", "Increases damage vs blood armor by 6%", CATEGORY_MUTATIONS, 275, function(pl)
+	pl.MutationModifiers["bloodarmor_damage"] = pl.MutationModifiers["bloodarmor_damage"] + 0.06
+	return true
+end, true, false, 1)
+
+
+GM:AddMutationItem("m_zombie_bloodarmordamage2", "Blood Armor Destroyer II", "Increases damage vs blood armor by 9%", CATEGORY_MUTATIONS, 450, function(pl)
+	pl.MutationModifiers["bloodarmor_damage"] = pl.MutationModifiers["bloodarmor_damage"] + 0.09
+	return true
+end, true, false, 1)
+
+GM:AddMutationItem("m_token_converter", "Token Converter", "Convert Zombie tokens to 15XP.", CATEGORY_MISCMUTATIONS, 150, function(pl)
+	pl:AddZSXP(15)
+	return true
+end, false, 65, 5)
+
+GM:AddMutationItem("m_spawn_as_a_boss", "Boss Zombie", "Spawn as a boss zombie.", CATEGORY_MISCMUTATIONS, 800, function(pl)
+	if pl:GetZombieClassTable().Boss then
+		GAMEMODE:ConCommandErrorMessage(pl, "You are already a boss zombie!")
+		return false
+	elseif not GAMEMODE:GetWaveActive() then
+		GAMEMODE:ConCommandErrorMessage(pl, "Wave is currently not active!")
+		return false
+	end
+
+	local lastbosswave = GAMEMODE.LastBossZombieSpawned
+	GAMEMODE:SpawnBossZombie(pl)
+	GAMEMODE.LastBossZombieSpawned = lastbosswave --prevent from next wave boss not being able to spawn
+	return true
+end, true, 50)
 
 -- These are the honorable mentions that come at the end of the round.
 
@@ -715,17 +816,20 @@ GM.NoNewHumansWave = 3 --2
 -- Humans can not commit suicide if the current wave is this or lower.
 GM.NoSuicideWave = 0
 
--- How long 'wave 0' should last in seconds. This is the time you should give for new players to join and get ready. (There is extra 25 seconds on first round of map for players to load)
-GM.WaveZeroLength = 180 --150
+-- How long 'wave 0' should last in seconds. This is the time you should give for new players to join and get ready. (There is extra 40 seconds on first round of map for players to load)
+GM.WaveZeroLength = 170 --150
 
 -- Time humans have between waves to do stuff without NEW zombies spawning. Any dead zombies will be in spectator (crow) view and any living ones will still be living.
-GM.WaveIntermissionLength = 60
+GM.WaveIntermissionLength = 45
+
+-- Added wave intermission length per wave.
+GM.TimeAddedPerWaveIntermission = 7.5
+
+-- Max wave intermission length. Useful for endless mode.
+GM.WaveIntermissionLengthMax = 75
 
 -- Time in seconds between end round and next map.
 GM.EndGameTime = 35
-
--- Same as above but for ZE
-GM.ZEEndGameTime = 10
 
 -- How many clips of ammo guns from the Worth menu start with. Some guns such as shotguns and sniper rifles have multipliers on this.
 GM.SurvivalClips = 4 --2
@@ -734,19 +838,37 @@ GM.SurvivalClips = 4 --2
 GM.ResupplyBoxCooldown = 60
 
 -- Put your unoriginal, 5MB Rob Zombie and Metallica music here.
-GM.LastHumanSound = Sound("zombiesurvival/lasthuman.ogg")
+GM.LastHumanSound = {
+	Sound("zombiesurvival/lasthuman.ogg"),
+	Sound("zombiesurvival/lasthuman.ogg"),
 
--- Sound played when humans all die. (NEW: Now supports table values for those below, where it chooses sound randomly)
-GM.AllLoseSound = {Sound("zombiesurvival/music_lose.ogg")}
+	Sound("lasthuman_songs/black ops - zombies.mp3")
+}
+
+-- Sound played when humans all die. (NEW: Now supports table values for those below, choosing sound randomly)
+GM.AllLoseSound = {
+	Sound("zombiesurvival/music_lose.ogg"),
+
+}
 
 -- Sound played when humans survive.
-GM.HumanWinSound = Sound("zombiesurvival/music_win.ogg")
+GM.HumanWinSound = {
+	Sound("zombiesurvival/music_win.ogg"),
+
+--	Sound("zombiesurvival/won_theme.wav")
+}
 
 -- Sound played when round ends in draw.
-GM.RoundDrawSound = Sound("zombiesurvival/music_draw.ogg")
+GM.RoundDrawSound = {
+	Sound("zombiesurvival/music_draw.ogg")
+}
 
 -- Sound played to a person when they die as a human.
-GM.DeathSound = Sound("zombiesurvival/human_death_stinger.ogg")
+GM.DeathSound = {
+	Sound("zombiesurvival/human_death_stinger.ogg"),
+
+--	Sound("zombiesurvival/death_soundtrack.wav")
+}
 
 -- Fetch map profiles and node profiles from noxiousnet database?
 GM.UseOnlineProfiles = true
@@ -766,6 +888,8 @@ GM.PointSavingLimit = 0
 GM.WaveIntermissionLengthClassic = 20
 GM.WaveOneLengthClassic = 120
 GM.TimeAddedPerWaveClassic = 10
+GM.TimeAddedPerWaveIntermissionClassic = 1
+GM.WaveIntermissionLengthMaxClassic = 25
 
 -- Max amount of damage left to tick on these. Any more pending damage is ignored.
 GM.MaxPoisonDamage = 60
@@ -780,17 +904,29 @@ GM.EndWavePointsBonusPerWave = 1
 -- Should humans need to be near arsenal crates to buy items
 GM.NeedArsenalToBuyItems = true
 
--- Overall XP Multiplier for all players (for both teams, does not include xp gaining from redeeming)
-GM.PlayerXPGainMulti = 1
-
--- For Humans
-GM.HumanXPGainMulti = 1
-
--- And as well as for zombies
-GM.ZombieXPGainMulti = 1
-
 -- Use the zombie class for classic mode
 GM.ClassicZombieClass = "Classic Zombie"
 
--- Enable or disable difficulty
+-- Enable or disable difficulty by default
 GM.DifficultyEnabledByDefault = true
+
+-- Below is the options for self-redeeming. It is MORE configurable than D3Bot's self-redeeming system.
+-- NOTE: Using D3bot's self-redeeming system may conflict with the current  self-redeeming system.
+
+-- Enable self-redeeming. HIGHLY RECOMMENDED TO USE WHEN USING BOTS, ELSE IT'S NOT RECOMMENDED!
+GM.CanSelfRedeem = false
+
+-- Max wave to being able to self-redeem.
+GM.MaxSelfRedeemWave = GM.NoNewHumansWave - 1 --2
+
+-- Amount of times players can self-redeem per round. Set to 0 to disable limit
+GM.SelfRedeemMaxTimes = 2
+
+-- Cooldown before next self-redeem after first self-redeem. (in seconds)
+GM.SelfRedeemFirstCooldown = 60
+
+-- Cooldown add after self-redeeming.
+GM.AddSelfRedeemCooldown = 90
+
+-- Max cooldown for self-redeeming.
+GM.MaxSelfRedeemCooldown = 150

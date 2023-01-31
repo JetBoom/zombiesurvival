@@ -28,20 +28,27 @@ function GM:DrawTargetID(ent, fade)
 	draw.SimpleTextBlur(name, "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 	y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 3
 
-	local healthfraction = math_max(ent:Health() / (ent:Team() == TEAM_UNDEAD and ent:GetMaxZombieHealth() or ent:GetMaxHealth()), 0)
+	local healthfraction = math_max(ent:Health() / (ent:Team() == TEAM_UNDEAD and ent:GetMaxZombieHealth(true) or ent:GetMaxHealth()), 0)
 	if healthfraction ~= 1 then
 		util.ColorCopy(0.75 <= healthfraction and COLOR_HEALTHY or 0.5 <= healthfraction and COLOR_SCRATCHED or 0.25 <= healthfraction and COLOR_HURT or COLOR_CRITICAL, colTemp)
 
-		local hptxt = self.HealthTargetDisplay == 1 and math_ceil(ent:Health()).." HP" or math_ceil(healthfraction * 100).."%"
+		local hptxt = self.HealthTargetDisplay == 2 and Format("%d/%d HP", ent:Health(), ent:Team() == TEAM_UNDEAD and ent:GetMaxZombieHealth(true) or ent:GetMaxHealth()) or self.HealthTargetDisplay == 1 and math_ceil(ent:Health()).." HP" or math_ceil(healthfraction * 100).."%"
 
-		draw.SimpleTextBlur(hptxt, "ZSHUDFont", x, y, colTemp, TEXT_ALIGN_CENTER)
-		y = y + draw.GetFontHeight("ZSHUDFont") + 3
+		draw.SimpleTextBlur(hptxt, "ZSHUDFontSmall", x, y, colTemp, TEXT_ALIGN_CENTER)
+		y = y + draw.GetFontHeight("ZSHUDFontSmall") + 3
+
+		if ent:Team() == TEAM_HUMAN then
+			local batxt = math_ceil(ent:GetBloodArmor()).." Blood Armor"
+
+			draw.SimpleTextBlur(batxt, "ZSHUDFontSmaller", x, y, Color(255, 45, 45), TEXT_ALIGN_CENTER)
+			y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 3
+		end
 
 		if self.MedicalAura then
 			if ent:GetDTBool(DT_PLAYER_BOOL_FRAIL) then
 				util.ColorCopy(COLOR_LBLUE, colTemp)
-				draw.SimpleTextBlur("(FRAIL)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
-				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
+				draw.SimpleTextBlur("(FRAIL)", "ZSHUDFontSmallest", x, y, colTemp, TEXT_ALIGN_CENTER)
+				y = y + draw.GetFontHeight("ZSHUDFontSmallest") + 2
 			end
 
 			local poison = ent:GetPoisonDamage()
@@ -49,18 +56,18 @@ function GM:DrawTargetID(ent, fade)
 			local phant = ent:GetPhantomHealth()
 			if poison >= 1 then
 				util.ColorCopy(COLOR_LIMEGREEN, colTemp)
-				draw.SimpleTextBlur("(POISON - " .. math.floor(poison) ..")", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
-				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
+				draw.SimpleTextBlur("(POISON - " .. math.floor(poison) ..")", "ZSHUDFontSmallest", x, y, colTemp, TEXT_ALIGN_CENTER)
+				y = y + draw.GetFontHeight("ZSHUDFontSmallest") + 2
 			end
 			if bleed >= 1 then
 				util.ColorCopy(COLOR_SOFTRED, colTemp)
-				draw.SimpleTextBlur("(BLEED - " .. math.floor(bleed) ..")", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
-				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
+				draw.SimpleTextBlur("(BLEED - " .. math.floor(bleed) ..")", "ZSHUDFontSmallest", x, y, colTemp, TEXT_ALIGN_CENTER)
+				y = y + draw.GetFontHeight("ZSHUDFontSmallest") + 2
 			end
 			if phant >= 1 then
 				util.ColorCopy(COLOR_MIDGRAY, colTemp)
-				draw.SimpleTextBlur("(BLOODLUST)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
-				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
+				draw.SimpleTextBlur("(BLOODLUST)", "ZSHUDFontSmallest", x, y, colTemp, TEXT_ALIGN_CENTER)
+				y = y + draw.GetFontHeight("ZSHUDFontSmallest") + 2
 			end
 		end
 	end
@@ -83,15 +90,15 @@ function GM:DrawTargetID(ent, fade)
 				draw.SimpleTextBlur(wep:GetPrintName(), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 			end
 		end
+	end
 
-		local level = ent:GetZSLevel()
-		local remortlevel = ent:GetZSRemortLevel()
-		y = y + draw.GetFontHeight("ZSHUDFontTiny") + 4
-		if remortlevel >= 1 then
-			draw.SimpleTextBlur(string_format("LVL %d R.LVL %d", level, remortlevel), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
-		else
-			draw.SimpleTextBlur("LVL "..level, "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
-		end
+	local level = ent:GetZSLevel()
+	local remortlevel = ent:GetZSRemortLevel()
+	y = y + draw.GetFontHeight("ZSHUDFontTiny") + 4
+	if remortlevel >= 1 then
+		draw.SimpleTextBlur(string_format("LVL %d / R.LVL %d", level, remortlevel), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
+	else
+		draw.SimpleTextBlur("LVL "..level, "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 	end
 end
 

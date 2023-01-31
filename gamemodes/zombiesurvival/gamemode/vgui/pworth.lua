@@ -19,7 +19,18 @@ end)
 
 local ExtraStartingWorth = 0
 local function GetStartingWorth()
-	return GAMEMODE.StartingWorth + ExtraStartingWorth
+	local skillmodifiers = {}
+	local gm_modifiers = GAMEMODE.SkillModifiers
+	for skillid in pairs(table.ToAssoc(MySelf:GetDesiredActiveSkills())) do
+		local modifiers = gm_modifiers[skillid]
+		if modifiers then
+			for modid, amount in pairs(modifiers) do
+				skillmodifiers[modid] = (skillmodifiers[modid] or 0) + amount
+			end
+		end
+	end
+
+	return MySelf:Team() == TEAM_UNDEAD and GAMEMODE.StartingWorth + (skillmodifiers[SKILLMOD_WORTH] or 0) or GAMEMODE.StartingWorth + ExtraStartingWorth
 end
 
 net.Receive("zs_extrastartingworth", function(len)
@@ -196,7 +207,8 @@ local function WorthThink(self)
 end
 
 function MakepWorth()
-	if pWorth and pWorth:IsValid() then
+	local panelexisted = pWorth and pWorth:IsValid()
+	if panelexisted then
 		pWorth:Remove()
 		pWorth = nil
 	end
@@ -436,7 +448,7 @@ function MakepWorth()
 	clearbutton.DoClick = ClearCartDoClick
 
 	frame:Center()
-	frame:SetAlpha(0)
+	frame:SetAlpha(panelexisted and 255 or 0)
 	frame:AlphaTo(255, 0.15, 0)
 	frame:MakePopup()
 

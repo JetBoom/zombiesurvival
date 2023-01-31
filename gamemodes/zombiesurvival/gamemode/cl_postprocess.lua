@@ -252,11 +252,15 @@ function GM:ToggleZombieVision(onoff)
 	if onoff then
 		if not self.m_ZombieVision then
 			self.m_ZombieVision = true
-			MySelf:EmitSound("npc/stalker/breathing3.wav", 0, 230)
+			if self.ZombieNightVisionSound then
+				MySelf:EmitSound("npc/stalker/breathing3.wav", 0, 230)
+			end
 		end
 	elseif self.m_ZombieVision then
 		self.m_ZombieVision = nil
-		MySelf:EmitSound("npc/zombie/zombie_pain6.wav", 0, 110)
+		if self.ZombieNightVisionSound then
+			MySelf:EmitSound("npc/zombie/zombie_pain6.wav", 0, 110)
+		end
 	end
 end
 

@@ -17,7 +17,9 @@ function ENT:Think()
 		elseif CurTime() >= nextuse then
 			self.Dinged = true
 
-			self:EmitSound("zombiesurvival/ding.ogg")
+			if not GAMEMODE.ResupplyNoDingSound then
+				self:EmitSound("zombiesurvival/ding.ogg")
+			end
 		end
 	end
 

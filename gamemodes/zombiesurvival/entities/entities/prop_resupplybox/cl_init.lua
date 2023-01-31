@@ -26,7 +26,9 @@ function ENT:Think()
 		elseif CurTime() >= nextuse then
 			self.Dinged = true
 
-			self:EmitSound("zombiesurvival/ding.ogg")
+			if not GAMEMODE.ResupplyNoDingSound then
+				self:EmitSound("zombiesurvival/ding.ogg")
+			end
 		end
 	end
 
@@ -45,7 +47,7 @@ function ENT:RenderInfo(pos, ang, owner)
 			draw.SimpleText(timeremain > 0 and timeremain or translate.Get("ready"), "ZS3D2DFont2", 0, -60, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		if caches then
-			draw.SimpleText(caches .. " Uses Left", "ZS3D2DFont2Small", 0, 0, caches > 0 and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(caches .. " uses left", "ZS3D2DFont2Small", 0, 0, caches > 0 and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1), nil, 190)
@@ -75,9 +77,7 @@ function ENT:Draw()
 	self:RenderInfo(self:LocalToWorld(vOffset2), self:LocalToWorldAngles(aOffset2), owner)
 
 	cam.Start3D2D(self:LocalToWorld(vOffsetEE), ang, 0.01)
-
-		draw.SimpleText("you are jooking", "ZS3D2DFont2Small", 0, 0, color_white, TEXT_ALIGN_CENTER)
-
+	draw.SimpleText("you are jooking", "ZS3D2DFont2Small", 0, 0, color_white, TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 end
 

@@ -1,11 +1,11 @@
-net.Receive("zs_skill_is_desired", function(length, pl)
+net.Receive("zs_skill_is_desired", function(len, pl)
 	local skillid = net.ReadUInt(16)
 	local desired = net.ReadBool()
 
 	pl:SetSkillDesired(skillid, desired)
 end)
 
-net.Receive("zs_skills_desired", function(length, pl)
+net.Receive("zs_skills_desired", function(len, pl)
 	local desired = {}
 
 	for skillid in pairs(GAMEMODE.Skills) do
@@ -16,7 +16,7 @@ net.Receive("zs_skills_desired", function(length, pl)
 	pl:SetDesiredActiveSkills(desired)
 end)
 
-net.Receive("zs_skills_all_desired", function(length, pl)
+net.Receive("zs_skills_all_desired", function(len, pl)
 	if net.ReadBool() then
 		pl:SetDesiredActiveSkills(table.Copy(pl:GetUnlockedSkills()))
 	else
@@ -31,7 +31,7 @@ net.Receive("zs_skills_all_desired", function(length, pl)
 	end
 end)
 
-net.Receive("zs_skill_set_desired", function(length, pl)
+net.Receive("zs_skill_set_desired", function(len, pl)
 	local skillset = net.ReadTable()
 	local assoc = table.ToAssoc(skillset)
 
@@ -44,7 +44,7 @@ net.Receive("zs_skill_set_desired", function(length, pl)
 	pl:SetDesiredActiveSkills(desired)
 end)
 
-net.Receive("zs_skill_is_unlocked", function(length, pl)
+net.Receive("zs_skill_is_unlocked", function(len, pl)
 	local skillid = net.ReadUInt(16)
 	local activate = net.ReadBool()
 	local skill = GAMEMODE.Skills[skillid]
@@ -62,13 +62,13 @@ net.Receive("zs_skill_is_unlocked", function(length, pl)
 	end
 end)
 
-net.Receive("zs_skills_remort", function(length, pl)
+net.Receive("zs_skills_remort", function(len, pl)
 	if pl:CanSkillsRemort() then
 		pl:SkillsRemort()
 	end
 end)
 
-net.Receive("zs_skills_reset", function(length, pl)
+net.Receive("zs_skills_reset", function(len, pl)
 	if pl:GetZSLevel() < 10 then
 		pl:SkillNotify("You must be level 10 to reset your skills.", Color(255,255,255))
 		return
@@ -85,12 +85,27 @@ net.Receive("zs_skills_reset", function(length, pl)
 	GAMEMODE:UpdatePlayerSkillsNextReset(pl)
 end)
 
-net.Receive("zs_skills_refunded", function(length, pl)
+net.Receive("zs_skills_refunded", function(len, pl)
 	if pl.SkillsRefunded then
 		pl:SkillNotify("The skill tree has changed and your skills have been refunded.", Color(155,255,155))
 	end
 
 	pl.SkillsRefunded = false
+end)
+
+net.Receive("zs_bankxp", function(len, pl)
+	local xp = net.ReadUInt(32)
+	if pl:GetZSBankXP() < xp then
+		pl:SkillNotify("Not enough bank XP.", COLOR_SOFTRED)
+		return
+	end
+
+	xp = math.min(xp, pl:GetZSBankXP(), GAMEMODE.MaxXP - pl:GetZSXP())
+	if xp <= 0 then return end
+
+	pl:AddZSBankXP(-xp)
+	pl:AddZSXP(xp)
+	pl:SkillNotify(Format("Added %d XP.", xp), COLOR_WHITE)
 end)
 
 function GM:UpdatePlayerSkillsNextReset(pl)
@@ -173,21 +188,27 @@ function meta:SetZSXP(xp)
 	self:SetDTInt(DT_PLAYER_INT_XP, math.Clamp(xp, 0, GAMEMODE.MaxXP))
 end
 
+function meta:SetZSBankXP(xp)
+	self:SetDTInt(DT_PLAYER_INT_BANKXP, xp)
+end
+
 function meta:AddZSXP(xp)
 	-- TODO: Level change checking. Cache the "XP for next level" in the vault load and compare it here instead of checking every add.
 	self:SetZSXP(self:GetZSXP() + xp)
 end
 
+function meta:AddZSBankXP(xp)
+	self:SetZSBankXP(self:GetZSBankXP() + xp)
+end
+
 -- Added this function due to new XP Gaining Multiplier, more accurate and will be used 
 function meta:GainZSXP(xp, ignoreendround)
 	if not ignoreendround and GAMEMODE.RoundEnded then return end
-	xp = xp * (GAMEMODE.PlayerXPGainMulti or 0)
-	xp = self:Team() == TEAM_HUMAN and xp * (GAMEMODE.HumanXPGainMulti or 1) or self:Team() == TEAM_UNDEAD and xp * (GAMEMODE.ZombixpMulti or 1) or xp 
+	xp = xp * (GAMEMODE.PlayerXPGainMulti or 1)
+	xp = self:Team() == TEAM_HUMAN and xp * (GAMEMODE.HumanXPGainMulti or 1) or self:Team() == TEAM_UNDEAD and xp * (GAMEMODE.ZombieXPMulti or 1) or xp 
 	self.XPRemainder = self.XPRemainder + (xp * (self.XPGainMul or 1))
-	local exp = self.XPRemainder
-	local gainxp = math.floor(exp)
-	self:AddZSXP(math.floor(exp))
-	self.XPRemainder = exp - math.floor(self.XPRemainder)
+	self:AddZSXP(math.floor(self.XPRemainder))
+	self.XPRemainder = self.XPRemainder - math.floor(self.XPRemainder)
 end
 
 -- Done on team switch to anything except human.

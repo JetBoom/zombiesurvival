@@ -64,3 +64,4 @@ end
 if not CLIENT then return end
 
 CLASS.Icon = "zombiesurvival/killicons/fresh_dead"
+CLASS.IconColor = Color(127, 255, 127)

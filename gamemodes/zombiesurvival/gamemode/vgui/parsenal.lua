@@ -345,6 +345,7 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 
 	local itempan = vgui.Create("DButton")
 	itempan:SetText("")
+	itempan:SetToolTip(tab.Description)
 	itempan:SetSize(wid * screenscale, (nottrinkets and 100 or 60) * screenscale)
 	itempan.ID = tab.Signature or i
 	itempan.NoPoints = nopointshop
@@ -670,6 +671,28 @@ function GM:OpenArsenalMenu()
 	topspace:SetTall(y + subtitle:GetTall() + 4)
 	topspace:AlignTop(8)
 	topspace:CenterHorizontal()
+
+	local arsquickbuy = vgui.Create("DCheckBoxLabel", frame)
+	arsquickbuy:SetText("Quick buy items")
+	arsquickbuy:SetConVar("zs_alwaysquickbuy")
+	arsquickbuy:SizeToContents()
+	arsquickbuy:AlignTop(16)
+	arsquickbuy:AlignLeft(16)
+	
+/*
+	local arsquickbuy = vgui.Create("FlatCheckBox", frame)
+	arsquickbuy:SetText("Quick buy items")
+	arsquickbuy:SetConVar("zs_alwaysquickbuy")
+	arsquickbuy:SizeToContents()
+	arsquickbuy:AlignTop(16)
+	arsquickbuy:AlignLeft(16)
+	arsquickbuy:SetChecked(GAMEMODE.AlwaysQuickBuy)
+	arsquickbuy.OnChange = function()
+		arsquickbuy:SetChecked(GAMEMODE.AlwaysQuickBuy)
+	end
+
+*/
+
 
 	local wsb = EasyButton(topspace, "Worth Menu", 8, 4)
 	wsb:SetFont("ZSHUDFontSmaller")

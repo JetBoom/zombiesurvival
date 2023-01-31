@@ -3,9 +3,14 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_zombie"
 
 SWEP.ChargeTime = 2.1
+SWEP.ChargeDelay = 1
+
+function SWEP:Initialize()
+	self.CreateTime = CurTime()
+end
 
 function SWEP:PrimaryAttack()
-	if self:GetChargeStart() == 0 then
+	if self:GetChargeStart() == 0 and (self.CreateTime or 0) + self.ChargeDelay < CurTime() then
 		self:SetChargeStart(CurTime())
 
 		self.m_ViewAngles = self:GetOwner():EyeAngles()

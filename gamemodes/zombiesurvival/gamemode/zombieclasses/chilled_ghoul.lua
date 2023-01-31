@@ -7,8 +7,7 @@ CLASS.Help = "controls_chilled_ghoul"
 
 CLASS.BetterVersion = "Frigid Revenant"
 
-CLASS.Wave = 0
-CLASS.Unlocked = true
+CLASS.Wave = 2 / GM.NumberOfWaves
 
 CLASS.Health = 220
 CLASS.DynamicHealth = 3

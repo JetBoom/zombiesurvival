@@ -9,6 +9,7 @@ local Particles = {}
 
 local col = Color(220, 0, 0)
 local colprop = Color(220, 220, 0)
+local bloodarmorcol = Color(0, 0, 220)
 hook.Add("PostDrawTranslucentRenderables", "DrawDamage", function()
 	if #Particles == 0 then return end
 
@@ -25,14 +26,14 @@ hook.Add("PostDrawTranslucentRenderables", "DrawDamage", function()
 
 	for _, particle in pairs(Particles) do
 		if particle and curtime < particle.DieTime then
-			local c = particle.Type == 1 and colprop or col
+			local c = particle.Type == -1 and colprop or particle.Type == 1 and bloodarmorcol or col
 
 			done = false
 
 			c.a = math.Clamp(particle.DieTime - curtime, 0, 1) * 220
 
-			cam.Start3D2D(particle:GetPos(), ang, 0.1 * GAMEMODE.DamageNumberScale)
-				draw.SimpleText(particle.Amount, "ZS3D2DFont2", 0, 0, c, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+			cam.Start3D2D(particle:GetPos(), ang, 0.1 * GAMEMODE.DamageNumberScale * (particle.Type == 1 and 0.7 or 1))
+				draw.SimpleText(math.Round(particle.Amount, 1), "ZS3D2DFont2", 0, 0, c, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
 			cam.End3D2D()
 		end
 	end

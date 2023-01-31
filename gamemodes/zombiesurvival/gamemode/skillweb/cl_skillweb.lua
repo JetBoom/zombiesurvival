@@ -226,7 +226,7 @@ local offsets = {
 	[TREE_BUILDINGTREE] = {-16, 10},
 	[TREE_SUPPORTTREE] = {-15, -9},
 	[TREE_TORMENTTREE] = {21,1},
-	[TREE_REMORTTREE] = {0,0}
+	[TREE_REMORTTREE] = {0,0.5}
 }
 
 local function ActivateSkill(self, skillid)
@@ -319,9 +319,9 @@ function PANEL:Init()
 	skillname:Dock(TOP)
 
 	local desc = {}
-	for i=1, 5 do
+	for i=1, 6 do
 		local skilldesc = vgui.Create("DLabel", top)
-		skilldesc:SetFont("ZSHUDFontSmall")
+		skilldesc:SetFont("ZSHUDFontSmaller") --"ZSHUDFontSmall"
 		skilldesc:SetTextColor(COLOR_GRAY)
 		skilldesc:SetContentAlignment(8)
 		skilldesc:Dock(TOP)
@@ -341,7 +341,7 @@ function PANEL:Init()
 	local quickstats = {}
 	for i=1,4 do
 		local hpstat = vgui.Create("DLabel", bottomleftup)
-		hpstat:SetFont("ZSHUDFontSmaller")
+		hpstat:SetFont("ZSHUDFontTiny") --"ZSHUDFontSmaller"
 		hpstat:SetTextColor(COLOR_WHITE)
 		hpstat:SetContentAlignment(8)
 		hpstat:Dock(TOP)
@@ -590,6 +590,101 @@ function PANEL:Init()
 	warningtext:SetKeyboardInputEnabled(false)
 	warningtext:SetMouseInputEnabled(false)
 
+	local panel_
+	local bankxptext
+	local bankxpbutton
+	
+	if MySelf:GetZSBankXP() > 0 then
+		bankxptext = vgui.Create("DLabel", self)
+		bankxptext:SetTextColor(COLOR_GRAY)
+		bankxptext:SetFont("ZSHUDFontSmall")
+		bankxptext:SetText(Format("XP in bank: %d", MySelf:GetZSBankXP()))
+		bankxptext:SizeToContents()
+		bankxptext:SetKeyboardInputEnabled(false)
+		bankxptext:SetMouseInputEnabled(false)
+		bankxptext.Think = function()
+			bankxptext:SetText(Format("XP in bank: %d", MySelf:GetZSBankXP()))
+		end
+
+		bankxpbutton = vgui.Create("DButton", self)
+		bankxpbutton:SetText("Withdraw XP")
+		bankxpbutton:SetFont("ZSHUDFontSmaller")
+		bankxpbutton:SetDisabled(false)
+		bankxpbutton:SizeToContents()
+		bankxpbutton:SetTall(40)
+		bankxpbutton:AlignTop()
+		bankxpbutton:CenterHorizontal()
+		bankxpbutton.DoClick = function(me)
+			if MySelf:GetZSXP() >= GAMEMODE.MaxXP then
+				self:DisplayMessage("You are at max level! Remort, if you want to withdraw more XP!", COLOR_RED)
+				surface.PlaySound("buttons/button8.wav")
+				return
+			end
+
+			if panel_ and panel_:IsValid() then panel_:Remove() end
+			panel_ = vgui.Create("DFrame", self)
+			panel_:SetTitle("Add XP")
+			panel_:SetSize(400, 200)
+			panel_:SetDraggable(false)
+			panel_:SetAlpha(55)
+			panel_:AlphaTo(255, 0.3, 0)
+			panel_:Center()
+			panel_.Paint = function()
+				surface.SetDrawColor(Color(125,125,125,165))
+				surface.DrawOutlinedRect(0, 0, panel_:GetWide(), panel_:GetTall())
+				surface.SetDrawColor(Color(60,60,60,65))
+				surface.DrawRect(0, 0, panel_:GetWide(), panel_:GetTall())
+			end
+			panel_:MakePopup()
+
+			local text1 = EasyLabel(panel_, "NOTE: Value must be higher than 1.", "ZSHUDFontTiny")
+			text1:SetPos(10, 40)
+
+			local value = vgui.Create("DNumberWang", panel_)
+			value:SetPos(10, 80)
+			value:SetSize(120, 30)
+			value:SetValue(1)
+			value:SetMin(1)
+			value:SetMax(MySelf:GetZSBankXP())
+			value.Think = function()
+				value:SetMax(math.min(GAMEMODE.MaxXP - MySelf:GetZSXP(), MySelf:GetZSBankXP()))
+				value:SetValue(math.min(value:GetValue(), value:GetMax()))
+			end
+
+			local button = EasyButton(panel_, "Withdraw XP!")
+			button:SetPos(10, 120)
+			button:SetSize(120, 30)
+			button.Paint = function()
+				surface.SetDrawColor(Color(125,125,125,165))
+				surface.DrawOutlinedRect(0, 0, button:GetWide(), button:GetTall())
+				surface.SetDrawColor(Color(60,60,60,65))
+				surface.DrawRect(0, 0, button:GetWide(), button:GetTall())
+			end
+			button.DoClick = function()
+				net.Start("zs_bankxp")
+				net.WriteUInt(math.min(2147483647, value:GetValue()), 32)
+				net.SendToServer()
+				panel_:Close()
+			end
+
+/*
+			local frame = Derma_StringRequest("Add XP from bank", Format("Enter amount of XP to add from bank. Value must be a number! Max value: %s", MySelf:GetZSBankXP()), "0",
+			function(strTextOut)
+				if not strTextOut then self:DisplayMessage("Value must be a number!", COLOR_RED) return end
+				if tonumber(strTextOut or 0) then self:DisplayMessage("Value must be at least \"1\" or more!", COLOR_RED) return end
+
+				net.Start("zs_bankxp")
+				net.WriteUInt(32, tonumber(strTextOut or 0))
+				net.SendToServer()
+			end,
+			function(strTextOut) end,
+			"OK", "Cancel")
+
+			frame:GetChildren()[5]:GetChildren()[2]:SetTextColor(Color(30, 30, 30))
+*/
+		end
+	end
+
 	self:GenerateParticles()
 
 	self.Top = top
@@ -605,6 +700,13 @@ function PANEL:Init()
 	self.MessageBox = messagebox
 	self.MessageText = messagetext
 	self.WarningText = warningtext
+	if bankxptext then
+		self.BankXPText = bankxptext
+	end
+	if bankxpbutton then
+		self.BankXPButton = bankxpbutton
+	end
+
 	self.LoadoutsDrop = dropdown
 	self.Reset = reset
 
@@ -646,7 +748,7 @@ function PANEL:UpdateQuickStats()
 	end
 
 	for i=1,4 do
-		local prefix = i == 1 and "Health" or i == 2 and "Blood Armor" or i == 3 and "Speed" or "Worth"
+		local prefix = i == SKILLMOD_HEALTH and "Health" or i == SKILLMOD_BLOODARMOR and "Blood Armor" or i == SKILLMOD_SPEED and "Speed" or i == SKILLMOD_WORTH and "Worth"
 		local val = i == 1 and 100 or i == 2 and 20 or i == 3 and SPEED_NORMAL or GAMEMODE.StartingWorth
 
 		self.QuickStats[i]:SetText(prefix .. " : " .. (val + (skillmodifiers[i] or 0)))
@@ -670,6 +772,7 @@ function PANEL:Think()
 		self.AmbientSound:PlayEx(0.66, 60 + CurTime() % 0.1)
 	end
 
+	-- there's bug where using trinkets can set warning text to visible, but screw it
 	if time < self.NextWarningThink then return end
 	self.NextWarningThink = time + 0.1
 
@@ -698,10 +801,10 @@ end
 function PANEL:GenerateParticles()
 	local particles = {}
 	local particle
-	for i=1, 180 do
+	for i=1, 200 do
 		-- struct: Position, Roll, Roll rate, Size, Alpha
 		particle = {}
-		particle[1] = Vector(math.Rand(-1724, -32), math.Rand(-810, 810), math.Rand(-810, 810))
+		particle[1] = Vector(math.Rand(-1724, -32), math.Rand(-910, 910), math.Rand(-910, 910))
 		particle[2] = math.Rand(0, 360)
 		particle[3] = math.Rand(-5, 5)
 		particle[4] = math.Rand(180, 240)
@@ -769,8 +872,18 @@ function PANEL:PerformLayout()
 	self.MessageBox:CenterHorizontal()
 	self.MessageBox:AlignTop(ScrH() * 0.65)
 
-	self.WarningText:AlignTop(32)
-	self.WarningText:AlignLeft(32)
+	self.WarningText:AlignBottom(32)
+	self.WarningText:AlignRight(32)
+
+	if self.BankXPText and self.BankXPText:IsValid() then
+		self.BankXPText:AlignTop(32)
+		self.BankXPText:AlignLeft(32)
+	end
+
+	if self.BankXPButton and self.BankXPButton:IsValid() then
+		self.BankXPButton:AlignTop(64)
+		self.BankXPButton:AlignLeft(32)
+	end
 end
 
 function PANEL:SetDirectionalLight(iDirection, color)
@@ -808,8 +921,8 @@ function PANEL:DoEdgeScroll(deltatime)
 
 	if camera_velocity.y ~= 0 or camera_velocity.z ~= 0 then
 		campos = campos + deltatime * edge * 12 * camera_velocity
-		campos.y = math.Clamp(campos.y, -412, 412)
-		campos.z = math.Clamp(campos.z, -412, 412)
+		campos.y = math.Clamp(campos.y, -452, 452)
+		campos.z = math.Clamp(campos.z, -452, 452)
 
 		self:SetCamPos(campos)
 		self.vLookatPos:Set(campos)
@@ -824,8 +937,8 @@ local nodecolors = {
 	[TREE_BUILDINGTREE] = {2, 6, 3},
 	[TREE_MELEETREE] = {1.5, 7, 7},
 	[TREE_GUNTREE] = {5, 2, 2},
-	[TREE_TORMENTTREE] = {9.5, 4, 8},
-	[TREE_REMORTTREE] = {0, 0, 0}
+	[TREE_TORMENTTREE] = {2, 2, 2},
+	[TREE_REMORTTREE] = {3.5, 3.5, 3.5}
 }
 
 local matBeam = Material("effects/laser1")
@@ -1037,19 +1150,64 @@ function PANEL:Paint(w, h)
 				local colo = skill.Disabled and COLOR_DARKGRAY or selected and color_white or notunlockable and COLOR_MIDGRAY or COLOR_GRAY
 				local colo2 = COLOR_GRAY
 
-				draw_SimpleText(skill.Name, skillid <= -1 and "ZS3D2DFont2Big" or "ZS3D2DFont2", 0, 0, colo, TEXT_ALIGN_CENTER)
+				draw_SimpleText(skill.Name, skillid <= -1 and "ZS3D2DFont2" or "ZS3D2DFont2Small", 0, 0, colo, TEXT_ALIGN_CENTER) -- "ZS3D2DFont2Big" "ZS3D2DFont2"
 
-				local y_pos = 58
-				if skill.AlwaysActive then
-					draw_SimpleText(translate.Get("s_always_active"), "ZSHUDFont", 0, y_pos, colo2, TEXT_ALIGN_CENTER)
-					y_pos = y_pos + 32
+				if hoveredskill == skillid and self.DesiredZoom < 7000 then
+					local font = "ZSHUDFontSmall" --"ZSHUDFont"
+					local y_pos = 42 --58
+					local y_pos_add = 26 --32
+					if skill.AlwaysActive then
+						draw_SimpleText(translate.Get("s_always_active"), font, 0, y_pos, colo2, TEXT_ALIGN_CENTER)
+						y_pos = y_pos + y_pos_add
+					end
+
+					if /*GAMEMODE.ZombieEscape and*/ skill.CanUseInZE then
+						draw_SimpleText("Can use in Zombie Escape", font, 0, y_pos, colo2, TEXT_ALIGN_CENTER)
+						y_pos = y_pos + y_pos_add
+					end
+
+					if /*GAMEMODE.ClassicMode and*/ skill.CanUseInClassicMode then
+						draw_SimpleText("Can use in Classic Mode", font, 0, y_pos, colo2, TEXT_ALIGN_CENTER)
+						y_pos = y_pos + y_pos_add
+					end
+
+					if skill.RemortReq then
+						draw_SimpleText(translate.Format("s_remort_req", skill.RemortReq), font, 0, y_pos, colo2, TEXT_ALIGN_CENTER)
+						y_pos = y_pos + y_pos_add
+					end
+
+					local colo = skill.Disabled and COLOR_DARKGRAY or selected and color_white or notunlockable and COLOR_MIDGRAY or COLOR_GRAY
+
+					-- Allows to show skill modifier text, to see if there is any error in balancing.
+					if self.DesiredZoom < 5000 and GAMEMODE.AddSkillDescriptions then
+						--local c = string.Explode("\n", skill.Description)
+						if (type(GAMEMODE.SkillModifiers[skillid]) == "table" and table.Count(GAMEMODE.SkillModifiers[skillid]) or 0) > 0 then
+							for k,v in pairs(GAMEMODE.SkillModifiers[skillid]) do
+								local i = v or 1
+
+								if !table.HasValue(GAMEMODE.SkillModifiersNonMulOnly, k) then
+									i = (i*100).."%"
+								end
+
+								if (v or 0) > 0 then
+									i = "+"..i
+								end
+								local colorred = table.HasValue(GAMEMODE.SkillModifiersBadOnly, k) and Color(71,231,119) or Color(238,37,37)
+								local colorgreen = table.HasValue(GAMEMODE.SkillModifiersBadOnly, k) and Color(238,37,37) or Color(71,231,119)
+								--translate.Format("skillmod_n"..i,c)
+								if (v or 0) < 0 then
+									col = colorred
+								elseif (v or 0) > 0 then
+									col = colorgreen
+								else
+									col = Color(255,255,255)
+								end
+								draw_SimpleText(translate.Format("skillmod_n"..k,i), font, 0, y_pos, col, TEXT_ALIGN_CENTER)
+								y_pos = y_pos + y_pos_add
+							end
+						end
+					end
 				end
-
-				if skill.RemortReq then
-					draw_SimpleText(translate.Format("s_remort_req", skill.RemortReq), "ZSHUDFont", 0, y_pos, colo2, TEXT_ALIGN_CENTER)
-					y_pos = y_pos + 32
-				end
-
 			end
 
 			DisableClipping(false)
@@ -1104,7 +1262,7 @@ function PANEL:Paint(w, h)
 
 			desc = string.Explode("\n", skill.Description)
 			local txt, colid
-			for i=1, 5 do
+			for i=1, 6 do
 				txt = desc[i] or " "
 				if txt:sub(1, 1) == "^" then
 					colid = tonumber(txt:sub(2, 2)) or 0
@@ -1275,7 +1433,9 @@ function PANEL:PerformLayout()
 	local screenscale = BetterScreenScale()
 
 	self:SetSize(350 * screenscale, 36 * screenscale)
-	if GAMEMODE.GameStatePanel and GAMEMODE.GameStatePanel:IsValid() then
+	if GAMEMODE.GameStatePanel2 and GAMEMODE.GameStatePanel2:IsValid() then
+		self:MoveBelow(GAMEMODE.GameStatePanel2, screenscale * 32)
+	elseif GAMEMODE.GameStatePanel and GAMEMODE.GameStatePanel:IsValid() then
 		self:MoveBelow(GAMEMODE.GameStatePanel, screenscale * 32)
 	else
 		self:AlignTop(400)

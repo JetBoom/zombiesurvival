@@ -16,7 +16,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 	if attacker ~= self:GetOwner() then return end
 
 	if attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN --[[and inflictor == wep and wep.IsMelee]] then
-		local dmg = dmginfo:GetDamage()
+		local dmg = math.min(dmginfo:GetDamage(), ent:Health())
 		local extradamage = dmg * 0.25
 		dmginfo:SetDamage(dmg + extradamage)
 
@@ -26,8 +26,8 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 			ent.DamagedBy[applier] = (ent.DamagedBy[applier] or 0) + extradamage
 			applier.StrengthBoostDamage = (applier.StrengthBoostDamage or 0) + extradamage
 			local points = extradamage / ent:GetMaxHealth() * ent:GetZombieClassTable().Points
-			applier.PointQueue = applier.PointQueue + (points * 1.5 * (applier.PointsGainMul or 1))
-			applier:GainZSXP(points)
+			applier:AddQueuePoints(points * 1.5, "playerboost")
+			applier:GainZSXP(points * 1.2)
 
 			local pos = ent:GetPos()
 			pos.z = pos.z + 32
