@@ -142,6 +142,7 @@ local player_GetAll = player.GetAll
 local P_GetPhantomHealth = M_Player.GetPhantomHealth
 
 function GM:WorldHint(hint, pos, ent, lifetime, filter)
+	util.AddNetworkString("zs_worldhint")
 	net.Start("zs_worldhint")
 		net.WriteString(hint)
 		net.WriteVector(pos or ent and ent:IsValid() and ent:GetPos() or vector_origin)
@@ -529,6 +530,7 @@ function GM:IsBabyMode()
 end
 
 function GM:CenterNotifyAll(...)
+	util.AddNetworkString("zs_centernotify")
 	net.Start("zs_centernotify")
 		net.WriteTable({...})
 	net.Broadcast()
@@ -536,6 +538,7 @@ end
 GM.CenterNotify = GM.CenterNotifyAll
 
 function GM:TopNotifyAll(...)
+	util.AddNetworkString("zs_topnotify")
 	net.Start("zs_topnotify")
 		net.WriteTable({...})
 	net.Broadcast()
@@ -1067,6 +1070,7 @@ function GM:SpawnBossZombie(bossplayer, silent, bossindex, triggerboss)
 	bossplayer.BossHealRemaining = 750
 
 	if not silent then
+		util.AddNetworkString("zs_boss_spawned")
 		net.Start("zs_boss_spawned")
 			net.WriteEntity(bossplayer)
 			net.WriteUInt(bossindex, 8)
@@ -1076,7 +1080,7 @@ end
 
 function GM:SendZombieVolunteers(pl, nonemptyonly)
 	if nonemptyonly and #self.ZombieVolunteers == 0 then return end
-
+	util.AddNetworkString("zs_zvols")
 	net.Start("zs_zvols")
 		net.WriteUInt(#self.ZombieVolunteers, 8)
 		for _, p in ipairs(self.ZombieVolunteers) do
@@ -1307,10 +1311,12 @@ function GM:Think()
 					pl.NextResupplyUse = time + self.ResupplyBoxCooldown * (pl.ResupplyDelayMul or 1) * (stockpiling and 2.12 or 1)
 					pl.StowageCaches = (pl.StowageCaches or 0) + (stockpiling and 2 or 1)
 
+					util.AddNetworkString("zs_nextresupplyuse")
 					net.Start("zs_nextresupplyuse")
 						net.WriteFloat(pl.NextResupplyUse)
 					net.Send(pl)
 
+					util.AddNetworkString("zs_stowagecaches")
 					net.Start("zs_stowagecaches")
 						net.WriteInt(pl.StowageCaches, 8)
 					net.Send(pl)
@@ -1376,6 +1382,7 @@ function GM:CalculateNextBoss()
 		self.LastCalculatedBoss = newboss
 		self.LastCalculatedBossTime = CurTime()
 
+		util.AddNetworkString("zs_nextboss")
 		net.Start("zs_nextboss")
 		if newboss and newboss:IsValid() then
 			net.WriteEntity(newboss)
@@ -1451,6 +1458,7 @@ function GM:CalculateInfliction(victim, attacker)
 				end
 
 				if not self.PantsMode and not self:IsClassicMode() and not self:IsBabyMode() and not self.ZombieEscape and not v.Locked then
+					util.AddNetworkString("zs_classunlockstate")
 					net.Start("zs_classunlockstate")
 					net.WriteInt(k, 8)
 					net.WriteBool(v.Unlocked)
@@ -1480,6 +1488,7 @@ end
 
 function GM:LastHuman(pl)
 	if not LASTHUMAN then
+		util.AddNetworkString("zs_lasthuman")
 		net.Start("zs_lasthuman")
 			net.WriteEntity(pl or NULL)
 		net.Broadcast()
@@ -1509,6 +1518,7 @@ function GM:PlayerHealedTeamMember(pl, other, health, wep, pointmul, nobymsg, fl
 		pl:AddPoints(points)
 	end
 
+	util.AddNetworkString("zs_healother")
 	net.Start("zs_healother")
 		net.WriteBool(not floater)
 		net.WriteEntity(other)
@@ -1516,6 +1526,7 @@ function GM:PlayerHealedTeamMember(pl, other, health, wep, pointmul, nobymsg, fl
 	net.Send(pl)
 
 	if not nobymsg then
+		util.AddNetworkString("zs_healby")
 		net.Start("zs_healby")
 			net.WriteFloat(health)
 			net.WriteEntity(pl)
@@ -1539,6 +1550,7 @@ function GM:PlayerRepairedObject(pl, other, health, wep)
 
 	pl:AddPoints(points)
 
+	util.AddNetworkString("zs_repairobject")
 	net.Start("zs_repairobject")
 		net.WriteEntity(other)
 		net.WriteFloat(health)
@@ -1566,6 +1578,7 @@ function GM:DoHonorableMentions(filter)
 	self:CacheHonorableMentions()
 
 	for i, tab in pairs(self.CachedHMs) do
+		util.AddNetworkString("zs_honmention")
 		net.Start("zs_honmention")
 			net.WriteEntity(tab[1])
 			net.WriteUInt(tab[2], 8)
@@ -1638,6 +1651,7 @@ GM.CurrentRound = 1
 function GM:RestartRound()
 	self.CurrentRound = self.CurrentRound + 1
 
+	util.AddNetworkString("zs_currentround")
 	net.Start("zs_currentround")
 		net.WriteUInt(self.CurrentRound, 6)
 	net.Broadcast()
@@ -1645,6 +1659,7 @@ function GM:RestartRound()
 	self:RestartLua()
 	self:RestartGame()
 
+	util.AddNetworkString("zs_gamemodecall")
 	net.Start("zs_gamemodecall")
 		net.WriteString("RestartRound")
 	net.Broadcast()
@@ -1928,6 +1943,7 @@ function GM:EndRound(winner)
 		end
 	end
 
+	util.AddNetworkString("zs_endround")
 	net.Start("zs_endround")
 		net.WriteUInt(winner or -1, 8)
 		net.WriteString(game.GetMapNext())
@@ -2381,6 +2397,7 @@ function GM:OnNailRemoved(nail, ent1, ent2, remover)
 			deployername = deployer:Name()
 
 			if deployer ~= remover then
+				util.AddNetworkString("zs_nailremoved")
 				net.Start("zs_nailremoved")
 					net.WriteEntity(remover)
 				net.Send(deployer)
@@ -2954,6 +2971,7 @@ function GM:DamageFloater(attacker, victim, dmgpos, dmg, definiteply)
 	if attacker == victim then return end
 	if dmgpos == vector_origin then dmgpos = victim:NearestPoint(attacker:EyePos()) end
 
+	util.AddNetworkString("zs_dmg_or_dmg_prop")
 	net.Start((definiteply or victim:IsPlayer()) and "zs_dmg" or "zs_dmg_prop")
 		if INFDAMAGEFLOATER then
 			INFDAMAGEFLOATER = nil
@@ -3230,6 +3248,7 @@ function GM:PlayerHurt(victim, attacker, healthremaining, damage)
 			victim:SetBloodArmor(math.min(victim:GetBloodArmor() + (20 * victim.BloodarmorGainMul), victim.MaxBloodArmor + (20 * victim.MaxBloodArmorMul)))
 			victim:TakeInventoryItem("trinket_bloodpack")
 
+			util.AddNetworkString("zs_trinketconsumed")
 			net.Start("zs_trinketconsumed")
 				net.WriteString("Blood Transfusion Pack")
 			net.Send(victim)
@@ -3612,6 +3631,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 		pl:PlayZombieDeathSound()
 
 		if classtable.Boss and not self.ObjectiveMap and pl.BossDeathNotification then
+			util.AddNetworkString("zs_boss_slain")
 			net.Start("zs_boss_slain")
 				net.WriteEntity(pl)
 				net.WriteUInt(classtable.Index, 8)
@@ -3687,6 +3707,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 		if team.NumPlayers(TEAM_HUMAN) <= 1 then
 			self.LastHumanPosition = pl:WorldSpaceCenter()
 
+			util.AddNetworkString("zs_lasthumanpos")
 			net.Start("zs_lasthumanpos")
 				net.WriteVector(self.LastHumanPosition)
 			net.Broadcast()
@@ -3701,12 +3722,14 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 	if revive or pl:CallZombieFunction2("NoDeathMessage", attacker, dmginfo) or pl:IsSpectator() then return end
 
 	if attacker == pl then
+		util.AddNetworkString("zs_pl_kill_self")
 		net.Start("zs_pl_kill_self")
 			net.WriteEntity(pl)
 			net.WriteUInt(plteam, 8)
 		net.Broadcast()
 	elseif attacker:IsPlayer() then
 		if assistpl then
+			util.AddNetworkString("zs_pls_kill_pl")
 			net.Start("zs_pls_kill_pl")
 				net.WriteEntity(pl)
 				net.WriteEntity(attacker)
@@ -3719,6 +3742,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 
 			gamemode.Call("PlayerKilledByPlayer", pl, assistpl, inflictor, headshot, dmginfo, true)
 		else
+			util.AddNetworkString("zs_pl_kill_pl")
 			net.Start("zs_pl_kill_pl")
 				net.WriteEntity(pl)
 				net.WriteEntity(attacker)
@@ -3731,6 +3755,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 
 		gamemode.Call("PlayerKilledByPlayer", pl, attacker, inflictor, headshot, dmginfo)
 	else
+		util.AddNetworkString("zs_death")
 		net.Start("zs_death")
 			net.WriteEntity(pl)
 			net.WriteString(inflictor:GetClass())
@@ -4077,6 +4102,7 @@ function GM:SetWave(wave)
 				end
 			end
 
+			util.AddNetworkString("zs_classunlockstate")
 			net.Start("zs_classunlockstate")
 				net.WriteInt(classid, 8)
 				net.WriteBool(classtab.Unlocked)
@@ -4092,6 +4118,7 @@ function GM:SetWave(wave)
 
 				table.insert(classnames, translate.ClientGet(pl, classtbl.TranslationName))
 			end
+			util.AddNetworkString("zs_classunlock")
 			net.Start("zs_classunlock")
 				net.WriteString(string.AndSeparate(classnames))
 			net.Send(pl)
@@ -4159,6 +4186,7 @@ function GM:WaveStateChanged(newstate)
 			gamemode.Call("SetWaveEnd", self:GetWaveStart() + self:GetWaveOneLength() + (self:GetWave() - 1) * (GetGlobalBool("classicmode") and self.TimeAddedPerWaveClassic or self.TimeAddedPerWave))
 		end
 
+		util.AddNetworkString("zs_wavestart")
 		net.Start("zs_wavestart")
 			net.WriteInt(self:GetWave(), 16)
 			net.WriteFloat(self:GetWaveEnd())
@@ -4254,6 +4282,7 @@ function GM:WaveStateChanged(newstate)
 	else
 		gamemode.Call("SetWaveStart", CurTime() + (GetGlobalBool("classicmode") and self.WaveIntermissionLengthClassic or self.WaveIntermissionLength))
 
+		util.AddNetworkString("zs_waveend")
 		net.Start("zs_waveend")
 			net.WriteInt(self:GetWave(), 16)
 			net.WriteFloat(self:GetWaveStart())
@@ -4357,6 +4386,7 @@ net.Receive("zs_zsfriend", function(len, sender)
 	local isfriend = net:ReadBool()
 	sender.ZSFriends[zsfriendent] = isfriend
 
+	util.AddNetworkString("zs_zsfriendadded")
 	net.Start("zs_zsfriendadded")
 		net.WriteEntity(sender)
 		net.WriteBool(isfriend)

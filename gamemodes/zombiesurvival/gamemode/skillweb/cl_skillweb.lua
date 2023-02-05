@@ -393,6 +393,7 @@ function PANEL:Init()
 
 		if not newloadout then return end
 
+		util.AddNetworkString("zs_skill_set_desired")
 		net.Start("zs_skill_set_desired")
 			net.WriteTable(newloadout)
 		net.SendToServer()
@@ -419,6 +420,7 @@ function PANEL:Init()
 			self:DisplayMessage("All unlocked skills activated.", COLOR_GREEN)
 		end
 
+		util.AddNetworkString("zs_skills_all_desired")
 		net.Start("zs_skills_all_desired")
 			net.WriteBool(true)
 		net.SendToServer()
@@ -440,6 +442,7 @@ function PANEL:Init()
 			self:DisplayMessage("All unlocked skills deactivated.", COLOR_RED)
 		end
 
+		util.AddNetworkString("zs_skills_all_desired")
 		net.Start("zs_skills_all_desired")
 			net.WriteBool(false)
 		net.SendToServer()
@@ -461,7 +464,7 @@ function PANEL:Init()
 			"Reset all skills and refund SP?\nYou can only do this once per week.",
 			"Warning",
 			"OK",
-			function() net.Start("zs_skills_reset") net.SendToServer() end,
+			function() util.AddNetworkString("zs_skills_reset") net.Start("zs_skills_reset") net.SendToServer() end,
 			"Cancel",
 			function() end
 		)
@@ -520,6 +523,7 @@ function PANEL:Init()
 		local skillid = contextmenu.SkillID
 		local name = allskills[skillid].Name
 		if MySelf:IsSkillDesired(skillid) then
+			util.AddNetworkString("zs_skill_is_desired")
 			net.Start("zs_skill_is_desired")
 				net.WriteUInt(skillid, 16)
 				net.WriteBool(false)
@@ -527,6 +531,7 @@ function PANEL:Init()
 
 			self:DisplayMessage(name.." deactivated.")
 		elseif MySelf:IsSkillUnlocked(skillid) then
+			util.AddNetworkString("zs_skill_is_desired")
 			net.Start("zs_skill_is_desired")
 				net.WriteUInt(skillid, 16)
 				net.WriteBool(true)
@@ -534,6 +539,7 @@ function PANEL:Init()
 
 			self:DisplayMessage(name.." activated.", COLOR_DARKGREEN)
 		else
+			util.AddNetworkString("zs_skill_is_unlocked")
 			net.Start("zs_skill_is_unlocked")
 				net.WriteUInt(skillid, 16)
 				net.WriteBool(true)
@@ -612,6 +618,7 @@ function PANEL:Init()
 
 	self:UpdateQuickStats()
 
+	util.AddNetworkString("zs_skills_refunded")
 	net.Start("zs_skills_refunded")
 	net.SendToServer()
 end
@@ -1117,7 +1124,7 @@ function PANEL:OnMousePressed(mc)
 					"Are you ABSOLUTELY sure you want to remort?\nYou will revert to level 1, lose all skills, but have 1 extra SP.\nThis cannot be undone!",
 					"Warning",
 					"OK",
-					function() net.Start("zs_skills_remort") net.SendToServer() end,
+					function() util.AddNetworkString("zs_skills_remort") net.Start("zs_skills_remort") net.SendToServer() end,
 					"Cancel",
 					function() end
 				)

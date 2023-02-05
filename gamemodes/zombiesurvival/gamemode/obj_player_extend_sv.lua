@@ -428,6 +428,7 @@ function meta:SendLifeStats()
 	if self.LifeStatSend and self.LifeStatSend > CurTime() then return end
 	self.LifeStatSend = CurTime() + 0.33
 
+	util.AddNetworkString("zs_lifestats")
 	net.Start("zs_lifestats")
 		net.WriteUInt(math.ceil(self.LifeBarricadeDamage or 0), 16)
 		net.WriteUInt(math.ceil(self.LifeHumanDamage or 0), 16)
@@ -503,6 +504,7 @@ end
 
 function meta:FloatingScore(victimorpos, effectname, frags, flags)
 	if type(victimorpos) == "Vector" then
+		util.AddNetworkString("zs_floatscore_vec")
 		net.Start("zs_floatscore_vec")
 			net.WriteVector(victimorpos)
 			net.WriteString(effectname)
@@ -510,6 +512,7 @@ function meta:FloatingScore(victimorpos, effectname, frags, flags)
 			net.WriteUInt(flags, 8)
 		net.Send(self)
 	else
+		util.AddNetworkString("zs_floatscore")
 		net.Start("zs_floatscore")
 			net.WriteEntity(victimorpos)
 			net.WriteString(effectname)
@@ -551,12 +554,14 @@ function meta:MarkAsBadProfile()
 end
 
 function meta:CenterNotify(...)
+	util.AddNetworkString("zs_centernotify")
 	net.Start("zs_centernotify")
 		net.WriteTable({...})
 	net.Send(self)
 end
 
 function meta:TopNotify(...)
+	util.AddNetworkString("zs_topnotify")
 	net.Start("zs_topnotify")
 		net.WriteTable({...})
 	net.Send(self)
@@ -675,6 +680,7 @@ function meta:UpdateLegDamage()
 end
 
 function meta:UpdateArmDamage()
+	util.AddNetworkString("zs_armdamage")
 	net.Start("zs_armdamage")
 		net.WriteFloat(self.ArmDamage)
 	net.Send(self)
@@ -930,12 +936,14 @@ function meta:Resupply(owner, obj)
 	if not stowage then
 		self.NextResupplyUse = CurTime() + GAMEMODE.ResupplyBoxCooldown * (self.ResupplyDelayMul or 1) * (stockpiling and 2.12 or 1)
 
+		util.AddNetworkString("zs_nextresupplyuse")
 		net.Start("zs_nextresupplyuse")
 			net.WriteFloat(self.NextResupplyUse)
 		net.Send(self)
 	else
 		self.StowageCaches = self.StowageCaches - 1
 
+		util.AddNetworkString("zs_stowagecaches")
 		net.Start("zs_stowagecaches")
 			net.WriteInt(self.StowageCaches, 8)
 		net.Send(self)
@@ -945,6 +953,7 @@ function meta:Resupply(owner, obj)
 	local amount = GAMEMODE.AmmoCache[ammotype]
 
 	for i = 1, stockpiling and not stowage and 2 or 1 do
+		util.AddNetworkString("zs_ammopickup")
 		net.Start("zs_ammopickup")
 			net.WriteUInt(amount, 16)
 			net.WriteString(ammotype)
@@ -963,6 +972,7 @@ function meta:Resupply(owner, obj)
 
 			owner:AddPoints(0.15, nil, nil, true)
 
+			util.AddNetworkString("zs_commission")
 			net.Start("zs_commission")
 				net.WriteEntity(obj)
 				net.WriteEntity(self)
@@ -1059,6 +1069,7 @@ function meta:UpdateAllZombieClasses()
 		if pl ~= self and pl:Team() == TEAM_UNDEAD then
 			local id = pl:GetZombieClass()
 			if id and 0 < id then
+				util.AddNetworkString("zs_zclass")
 				net.Start("zs_zclass")
 					net.WriteEntity(pl)
 					net.WriteUInt(id, 8)
@@ -1215,6 +1226,7 @@ function meta:DoHulls(classid, teamid)
 		end
 	end
 
+	util.AddNetworkString("zs_dohulls")
 	net.Start("zs_dohulls")
 		net.WriteEntity(self)
 		net.WriteUInt(classid, 8)
@@ -1270,6 +1282,7 @@ function meta:Redeem(silent, noequip)
 	self.SpawnedTime = CurTime()
 
 	if not silent then
+		util.AddNetworkString("zs_playerredeemed")
 		net.Start("zs_playerredeemed")
 			net.WriteEntity(self)
 		net.Broadcast()
@@ -1352,6 +1365,7 @@ end
 function meta:GivePointPenalty(amount)
 	self:SetFrags(self:Frags() - amount)
 
+	util.AddNetworkString("zs_penalty")
 	net.Start("zs_penalty")
 		net.WriteUInt(amount, 16)
 	net.Send(self)
@@ -1381,12 +1395,14 @@ function meta:GiveWeaponByType(weapon, plyr, ammo)
 				wep:TakeCombinedPrimaryAmmo(desiredgive)
 				plyr:GiveAmmo(desiredgive, ammotype)
 
+				util.AddNetworkString("zs_ammogive")
 				net.Start("zs_ammogive")
 					net.WriteUInt(desiredgive, 16)
 					net.WriteString(ammotype)
 					net.WriteEntity(plyr)
 				net.Send(self)
 
+				util.AddNetworkString("zs_ammogiven")
 				net.Start("zs_ammogiven")
 					net.WriteUInt(desiredgive, 16)
 					net.WriteString(ammotype)
@@ -1506,6 +1522,7 @@ end
 function meta:PlayEyePainSound()
 	local rf = RecipientFilter()
 	rf:AddPAS(self:GetPos())
+	util.AddNetworkString("voice_eyepain")
 	net.Start("voice_eyepain")
 	net.WriteEntity(self)
 	net.Send(rf)
@@ -1514,6 +1531,7 @@ end
 function meta:PlayGiveAmmoSound()
 	local rf = RecipientFilter()
 	rf:AddPAS(self:GetPos())
+	util.AddNetworkString("voice_giveammo")
 	net.Start("voice_giveammo")
 	net.WriteEntity(self)
 	net.Send(rf)
@@ -1522,6 +1540,7 @@ end
 function meta:PlayDeathSound()
 	local rf = RecipientFilter()
 	rf:AddPAS(self:GetPos())
+	util.AddNetworkString("voice_death")
 	net.Start("voice_death")
 	net.WriteEntity(self)
 	net.Send(rf)
@@ -1530,6 +1549,7 @@ end
 function meta:PlayZombieDeathSound()
 	local rf = RecipientFilter()
 	rf:AddPAS(self:GetPos())
+	util.AddNetworkString("voice_zombiedeath")
 	net.Start("voice_zombiedeath")
 	net.WriteEntity(self)
 	net.Send(rf)
@@ -1541,6 +1561,7 @@ function meta:PlayPainSound()
 
 	local rf = RecipientFilter()
 	rf:AddPAS(self:GetPos())
+	util.AddNetworkString("voice_pain")
 	net.Start("voice_pain")
 	net.WriteEntity(self)
 	net.WriteUInt(math.ceil(self:Health() / 25), 4)
@@ -1553,6 +1574,7 @@ function meta:PlayZombiePainSound()
 
 	local rf = RecipientFilter()
 	rf:AddPAS(self:GetPos())
+	util.AddNetworkString("voice_zombiepain")
 	net.Start("voice_zombiepain")
 	net.WriteEntity(self)
 	net.Send(rf)
@@ -1642,6 +1664,7 @@ function meta:MakeBossDrop()
 end
 
 function meta:UpdateAltSelectedWeapon()
+	util.AddNetworkString("zs_updatealtselwep")
 	net.Start("zs_updatealtselwep")
 	net.Send(self)
 end
@@ -1650,6 +1673,7 @@ function meta:SendDeployableLostMessage(deployable)
 	local deployableclass = deployable:GetClass()
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
+	util.AddNetworkString("zs_deployablelost")
 	net.Start("zs_deployablelost")
 		net.WriteString(deployableinfo.Name)
 		net.WriteString(deployableinfo.WepClass)
@@ -1660,6 +1684,7 @@ function meta:SendDeployableClaimedMessage(deployable)
 	local deployableclass = deployable:GetClass()
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
+	util.AddNetworkString("zs_deployableclaim")
 	net.Start("zs_deployableclaim")
 		net.WriteString(deployableinfo.Name)
 		net.WriteString(deployableinfo.WepClass)
@@ -1670,6 +1695,7 @@ function meta:SendDeployableOutOfAmmoMessage(deployable)
 	local deployableclass = deployable:GetClass()
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
+	util.AddNetworkString("zs_deployableout")
 	net.Start("zs_deployableout")
 		net.WriteString(deployableinfo.Name)
 		net.WriteString(deployableinfo.WepClass)

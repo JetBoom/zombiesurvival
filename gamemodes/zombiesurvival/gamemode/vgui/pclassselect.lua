@@ -188,6 +188,7 @@ function PANEL:DoClick()
 			RunConsoleCommand("zs_bossclass", self.ClassTable.Name)
 			GAMEMODE:CenterNotify(translate.Format("boss_class_select", self.ClassTable.Name))
 		else
+			util.AddNetworkString("zs_changeclass")
 			net.Start("zs_changeclass")
 				net.WriteString(self.ClassTable.Name)
 				net.WriteBool(GAMEMODE.SuicideOnChangeClass)
