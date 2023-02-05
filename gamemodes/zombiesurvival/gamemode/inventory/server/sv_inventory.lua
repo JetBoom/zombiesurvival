@@ -9,6 +9,7 @@ function meta:AddInventoryItem(item)
 		self:ApplyTrinkets()
 	end
 
+	util.AddNetworkString("zs_inventoryitem")
 	net.Start("zs_inventoryitem")
 		net.WriteString(item)
 		net.WriteInt(self.ZSInventory[item], 5)

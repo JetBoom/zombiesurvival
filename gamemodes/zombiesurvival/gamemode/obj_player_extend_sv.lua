@@ -668,6 +668,7 @@ function meta:StartFeignDeath(force)
 end
 
 function meta:UpdateLegDamage()
+	util.AddNetworkString("zs_legdamage")
 	net.Start("zs_legdamage")
 		net.WriteFloat(self.LegDamage)
 	net.Send(self)
@@ -1086,6 +1087,7 @@ end
 
 function meta:SetZombieClass(cl, onlyupdate, filter)
 	if onlyupdate then
+		util.AddNetworkString("zs_zclass")
 		net.Start("zs_zclass")
 			net.WriteEntity(self)
 			net.WriteUInt(cl, 8)
@@ -1108,6 +1110,7 @@ function meta:SetZombieClass(cl, onlyupdate, filter)
 		end
 		self:CallZombieFunction0("SwitchedTo")
 
+		util.AddNetworkString("zs_zclass")
 		net.Start("zs_zclass")
 			net.WriteEntity(self)
 			net.WriteUInt(cl, 8)

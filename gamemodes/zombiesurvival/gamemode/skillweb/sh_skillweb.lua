@@ -162,6 +162,7 @@ function meta:ApplySkills(override)
 
 	if SERVER and self.ExtraStartingWorth ~= self.LastSentESW then
 		self.LastSentESW = self.ExtraStartingWorth
+		util.AddNetworkString("zs_extrastartingworth")
 		net.Start("zs_extrastartingworth")
 			net.WriteUInt(self.ExtraStartingWorth, 16)
 		net.Send(self)

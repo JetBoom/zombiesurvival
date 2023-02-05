@@ -85,6 +85,7 @@ function GM:PlayerReadyVault(pl)
 	local desired = pl:GetDesiredActiveSkills()
 	local active = pl:GetActiveSkills()
 
+	util.AddNetworkString("zs_skills_init")
 	net.Start("zs_skills_init")
 	self:WriteSkillBits(unlocked)
 	self:WriteSkillBits(desired)

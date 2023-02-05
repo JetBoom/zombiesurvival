@@ -2018,6 +2018,7 @@ function GM:PlayerReadyRound(pl)
 		end
 	end
 
+	util.AddNetworkString("zs_currentround")
 	net.Start("zs_currentround")
 		net.WriteUInt(self.CurrentRound, 6)
 	net.Send(pl)
@@ -2046,6 +2047,7 @@ function GM:PlayerReadyRound(pl)
 end
 
 function GM:FullGameUpdate(pl)
+	util.AddNetworkString("zs_gamestate")
 	net.Start("zs_gamestate")
 		net.WriteInt(self:GetWave(), 16)
 		net.WriteFloat(self:GetWaveStart())
@@ -3987,6 +3989,7 @@ function GM:PlayerSpawn(pl)
 
 		pl.StowageCaches = 0
 
+		util.AddNetworkString("zs_stowagecaches")
 		net.Start("zs_stowagecaches")
 			net.WriteInt(pl.StowageCaches, 8)
 		net.Send(pl)
