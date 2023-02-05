@@ -23,6 +23,7 @@ function GM:RefreshItemStocks(pl)
 end
 
 function GM:SendItemStocks(itemid, pl)
+	util.AddNetworkString("zs_itemstock")
 	net.Start("zs_itemstock")
 		net.WriteString(tostring(itemid))
 		net.WriteInt(self:GetItemStocks(itemid), 16)

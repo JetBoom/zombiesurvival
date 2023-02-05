@@ -105,6 +105,7 @@ function GM:PlayerReadyVault(pl)
 	if pl.NextSkillReset then
 		local time = os.time()
 		if time < pl.NextSkillReset then
+			util.AddNetworkString("zs_skills_nextreset")
 			net.Start("zs_skills_nextreset")
 			net.WriteUInt(pl.NextSkillReset - time, 32)
 			net.Send(pl)
