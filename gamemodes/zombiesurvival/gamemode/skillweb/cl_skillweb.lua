@@ -618,7 +618,8 @@ function PANEL:Init()
 
 	self:UpdateQuickStats()
 
-	util.AddNetworkString("zs_skills_refunded")
+	-- MUSTFIX: Adding the below line did not work, it is "nil"..
+	-- util.AddNetworkString("zs_skills_refunded")
 	net.Start("zs_skills_refunded")
 	net.SendToServer()
 end

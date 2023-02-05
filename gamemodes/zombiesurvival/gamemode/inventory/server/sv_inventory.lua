@@ -32,6 +32,7 @@ function meta:TakeInventoryItem(item)
 		self:ApplyTrinkets()
 	end
 
+	util.AddNetworkString("zs_inventoryitem")
 	net.Start("zs_inventoryitem")
 		net.WriteString(item)
 		net.WriteInt(self.ZSInventory[item] or 0, 5)
@@ -46,6 +47,7 @@ function meta:WipePlayerInventory()
 	self.ZSInventory = {}
 	self:ApplyTrinkets()
 
+	util.AddNetworkString("zs_wipeinventory")
 	net.Start("zs_wipeinventory")
 	net.Send(self)
 end
@@ -174,6 +176,7 @@ function meta:GiveInventoryItemByType(itype, plyr)
 	self:TakeInventoryItem(itype)
 	self:UpdateAltSelectedWeapon()
 
+	util.AddNetworkString("zs_invgiven")
 	net.Start("zs_invgiven")
 		net.WriteString(itype)
 		net.WriteEntity(self)

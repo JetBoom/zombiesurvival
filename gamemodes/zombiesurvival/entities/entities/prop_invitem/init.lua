@@ -54,6 +54,7 @@ function ENT:GiveToActivator(activator, caller)
 
 	activator:AddInventoryItem(itype)
 
+	util.AddNetworkString("zs_invitem")
 	net.Start("zs_invitem")
 		net.WriteString(itype)
 	net.Send(activator)

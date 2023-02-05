@@ -19,6 +19,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 				v.Locked = true
 				v.Unlocked = false
 
+				util.AddNetworkString("zs_classunlockstate")
 				net.Start("zs_classunlockstate")
 					net.WriteInt(k, 8)
 					net.WriteBool(v.Unlocked)
@@ -45,6 +46,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 				v.Unlocked = true
 				v.Locked = false
 
+				util.AddNetworkString("zs_classunlockstate")
 				net.Start("zs_classunlockstate")
 					net.WriteInt(k, 8)
 					net.WriteBool(v.Unlocked)

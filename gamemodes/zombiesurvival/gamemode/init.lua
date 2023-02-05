@@ -1080,6 +1080,7 @@ end
 
 function GM:SendZombieVolunteers(pl, nonemptyonly)
 	if nonemptyonly and #self.ZombieVolunteers == 0 then return end
+
 	util.AddNetworkString("zs_zvols")
 	net.Start("zs_zvols")
 		net.WriteUInt(#self.ZombieVolunteers, 8)
@@ -2971,7 +2972,7 @@ function GM:DamageFloater(attacker, victim, dmgpos, dmg, definiteply)
 	if attacker == victim then return end
 	if dmgpos == vector_origin then dmgpos = victim:NearestPoint(attacker:EyePos()) end
 
-	util.AddNetworkString("zs_dmg_or_dmg_prop")
+	util.AddNetworkString((definiteply or victim:IsPlayer()) and "zs_dmg" or "zs_dmg_prop")
 	net.Start((definiteply or victim:IsPlayer()) and "zs_dmg" or "zs_dmg_prop")
 		if INFDAMAGEFLOATER then
 			INFDAMAGEFLOATER = nil

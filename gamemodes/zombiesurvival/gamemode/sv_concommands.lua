@@ -148,6 +148,7 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 				if commission > 0 then
 					owner:AddPoints(commission, nil, nil, true)
 
+					util.AddNetworkString("zs_commission")
 					net.Start("zs_commission")
 						net.WriteEntity(nearest)
 						net.WriteEntity(sender)
@@ -195,6 +196,7 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 	end
 
 	local scrap = GAMEMODE:GetDismantleScrap(wtbl or GAMEMODE.ZSInventoryItemData[invitem], invitem)
+	util.AddNetworkString("zs_ammopickup")
 	net.Start("zs_ammopickup")
 		net.WriteUInt(scrap, 16)
 		net.WriteString("scrap")
@@ -219,6 +221,7 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 	if potinv and potinv.Result then
 		sender:AddInventoryItem(potinv.Result)
 
+		util.AddNetworkString("zs_invitem")
 		net.Start("zs_invitem")
 			net.WriteString(potinv.Result)
 		net.Send(sender)
@@ -287,6 +290,7 @@ concommand.Add("zs_upgrade", function(sender, command, arguments)
 			sender:GiveAmmo(1, wep.Primary.Ammo)
 		end
 
+		util.AddNetworkString("zs_remantleconf")
 		net.Start("zs_remantleconf")
 		net.Send(sender)
 
@@ -465,12 +469,14 @@ concommand.Add("zsgiveammo", function(sender, command, arguments)
 
 			sender:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
 
+			util.AddNetworkString("zs_ammogive")
 			net.Start("zs_ammogive")
 				net.WriteUInt(desiredgive, 16)
 				net.WriteString(ammotype)
 				net.WriteEntity(ent)
 			net.Send(sender)
 
+			util.AddNetworkString("zs_ammogiven")
 			net.Start("zs_ammogiven")
 				net.WriteUInt(desiredgive, 16)
 				net.WriteString(ammotype)

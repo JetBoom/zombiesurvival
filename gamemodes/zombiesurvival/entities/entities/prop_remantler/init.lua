@@ -110,6 +110,7 @@ function ENT:Use(activator, caller)
 		local amount = self:GetScraps()
 		self:SetScraps(0)
 
+		util.AddNetworkString("zs_ammopickup")
 		net.Start("zs_ammopickup")
 			net.WriteUInt(amount, 16)
 			net.WriteString("scrap")

@@ -53,6 +53,7 @@ function ENT:Explode(hitpos, hitnormal)
 				local defstatus = ent:GiveStatus("medrifledefboost", 12 * (owner.CloudTime or 1))
 				defstatus.Applier = owner
 
+				util.AddNetworkString("zs_buffby")
 				net.Start("zs_buffby")
 					net.WriteEntity(owner)
 					net.WriteString("Bloodshot Bomb")

@@ -72,6 +72,7 @@ function ENT:GiveToActivator(activator, caller)
 
 			activator:GiveAmmo(self:GetAmmo(), self:GetAmmoType())
 
+			util.AddNetworkString("zs_ammopickup")
 			net.Start("zs_ammopickup")
 				net.WriteUInt(self:GetAmmo(), 16)
 				net.WriteString(self:GetAmmoType())

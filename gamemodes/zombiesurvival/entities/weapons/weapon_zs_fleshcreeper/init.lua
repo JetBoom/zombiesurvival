@@ -176,6 +176,7 @@ function SWEP:BuildNest(ent)
 			pl:CenterNotify(COLOR_GREEN, translate.ClientFormat(pl, "nest_built_by_x", name))
 		end
 
+		util.AddNetworkString("zs_nestbuilt")
 		net.Start("zs_nestbuilt")
 		net.Broadcast()
 	end

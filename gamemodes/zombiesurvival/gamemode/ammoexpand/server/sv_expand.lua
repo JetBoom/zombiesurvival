@@ -80,6 +80,7 @@ function M_Player:RemoveAllAmmo()
 	self.ca = nil
 	old_Player_RemoveAllAmmo(self)
 
+	util.AddNetworkString("cusammo_removeall")
 	net.Start("cusammo_removeall")
 	net.Send(self)
 end
@@ -89,11 +90,13 @@ function M_Player:StripAmmo()
 	self.ca = nil
 	old_Player_StripAmmo(self)
 
+	util.AddNetworkString("cusammo_removeall")
 	net.Start("cusammo_removeall")
 	net.Send(self)
 end
 
 function M_Player:UpdateCustomAmmoCount(index)
+	util.AddNetworkString("cusammo")
 	net.Start("cusammo")
 	net.WriteUInt(index - 128, 6)
 	net.WriteUInt(self.ca and self.ca[index] or 0, 10)
