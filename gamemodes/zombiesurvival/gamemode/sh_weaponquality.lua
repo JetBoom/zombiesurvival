@@ -135,6 +135,7 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 	-- TODO: Refactor me to not use the full weapon class once all self.BaseClass calls have been removed
 
 	local wept = weapons.Get(classname)
+	wept.ClassName = newclass
 	local remantledescs = orig.RemantleDescs[branch and branch.No or 0][i]
 
 	wept.BaseQuality = classname
@@ -179,7 +180,6 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 
 	local regscriptent = function(class, cbk, prefix)
 		local newent = self:GetWeaponClassOfQuality(class, i)
-		print("NEWENT IS: ", newent)
 		local afent = scripted_ents.Get((prefix or "") .. class)
 		if cbk then cbk(afent, newent) end
 
@@ -263,12 +263,6 @@ function GM:CreateWeaponQualities()
 end
 
 function GM:GetWeaponClassOfQuality(classname, quality, branch)
-	if (not string.gmatch(classname, "_q1$") and (not string.gmatch(classname, "_q1_q2$"))) then
-		return classname.."_"..string.char(113 + (branch or 0))..quality
-	end
-	print("\nORIG CLASSNAME IS: ", classname.."_"..string.char(113 + (branch or 0))..quality)
-	print("BRANCH IS: ", (branch or 0))
-	print("QUALITY IS: ", (quality or 0))
 	return classname.."_"..string.char(113 + (branch or 0))..quality
 end
 
