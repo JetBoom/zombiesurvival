@@ -179,6 +179,7 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 
 	local regscriptent = function(class, cbk, prefix)
 		local newent = self:GetWeaponClassOfQuality(class, i)
+		print("NEWENT IS: ", newent)
 		local afent = scripted_ents.Get((prefix or "") .. class)
 		if cbk then cbk(afent, newent) end
 
@@ -262,6 +263,12 @@ function GM:CreateWeaponQualities()
 end
 
 function GM:GetWeaponClassOfQuality(classname, quality, branch)
+	if (not string.gmatch(classname, "_q1$") and (not string.gmatch(classname, "_q1_q2$"))) then
+		return classname.."_"..string.char(113 + (branch or 0))..quality
+	end
+	print("\nORIG CLASSNAME IS: ", classname.."_"..string.char(113 + (branch or 0))..quality)
+	print("BRANCH IS: ", (branch or 0))
+	print("QUALITY IS: ", (quality or 0))
 	return classname.."_"..string.char(113 + (branch or 0))..quality
 end
 
