@@ -612,7 +612,6 @@ function PANEL:Init()
 
 	self:UpdateQuickStats()
 
-	-- MUSTFIX: Adding the below line did not work, it is "nil"..
 	net.Start("zs_skills_refunded")
 	net.SendToServer()
 end
