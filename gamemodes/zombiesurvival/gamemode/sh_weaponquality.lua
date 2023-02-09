@@ -135,7 +135,6 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 	-- TODO: Refactor me to not use the full weapon class once all self.BaseClass calls have been removed
 
 	local wept = weapons.Get(classname)
-	wept.ClassName = newclass
 	local remantledescs = orig.RemantleDescs[branch and branch.No or 0][i]
 
 	wept.BaseQuality = classname

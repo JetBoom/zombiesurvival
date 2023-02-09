@@ -1212,7 +1212,6 @@ function meta:DoHulls(classid, teamid)
 		end
 	end
 
-	util.AddNetworkString("zs_dohulls")
 	net.Start("zs_dohulls")
 		net.WriteEntity(self)
 		net.WriteUInt(classid, 8)

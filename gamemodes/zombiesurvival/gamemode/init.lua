@@ -1483,7 +1483,6 @@ end
 
 function GM:LastHuman(pl)
 	if not LASTHUMAN then
-		util.AddNetworkString("zs_lasthuman")
 		net.Start("zs_lasthuman")
 			net.WriteEntity(pl or NULL)
 		net.Broadcast()
@@ -1931,7 +1930,6 @@ function GM:EndRound(winner)
 		end
 	end
 
-	util.AddNetworkString("zs_endround")
 	net.Start("zs_endround")
 		net.WriteUInt(winner or -1, 8)
 		net.WriteString(game.GetMapNext())
