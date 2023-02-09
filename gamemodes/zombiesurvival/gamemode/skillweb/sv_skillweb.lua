@@ -82,7 +82,6 @@ net.Receive("zs_skills_reset", function(length, pl)
 
 	pl:SkillsReset()
 
-	util.AddNetworkString("zs_skills_nextreset")
 	net.Start("zs_skills_nextreset")
 		net.WriteUInt(pl.NextSkillReset - time, 32)
 	net.Send(pl)
@@ -112,7 +111,6 @@ local meta = FindMetaTable("Player")
 if not meta then return end
 
 function meta:SkillNotify(message, green)
-	util.AddNetworkString("zs_skills_notify")
 	net.Start("zs_skills_notify")
 	net.WriteString(message)
 	net.WriteBool(not not green)
@@ -190,7 +188,6 @@ function meta:RemoveSkills()
 end
 
 function meta:SendSkillDesired(skillid, desired)
-	util.AddNetworkString("zs_skill_is_desired")
 	net.Start("zs_skill_is_desired")
 		net.WriteUInt(skillid, 16)
 		net.WriteBool(desired)
@@ -198,7 +195,6 @@ function meta:SendSkillDesired(skillid, desired)
 end
 
 function meta:SendSkillUnlocked(skillid, unlocked)
-	util.AddNetworkString("zs_skill_is_unlocked")
 	net.Start("zs_skill_is_unlocked")
 		net.WriteUInt(skillid, 16)
 		net.WriteBool(unlocked)
@@ -209,7 +205,6 @@ function meta:SetDesiredActiveSkills(skills, nosend)
 	self.DesiredActiveSkills = table.ToKeyValues(skills)
 
 	if not nosend then
-		util.AddNetworkString("zs_skills_desired")
 		net.Start("zs_skills_desired")
 		GAMEMODE:WriteSkillBits(skills)
 		net.Send(self)
@@ -220,7 +215,6 @@ function meta:SetActiveSkills(skills, nosend)
 	self.ActiveSkills = table.ToAssoc(skills) -- Active skills are hash tables for O(1) access.
 
 	if not nosend then
-		util.AddNetworkString("zs_skills_active")
 		net.Start("zs_skills_active")
 		GAMEMODE:WriteSkillBits(skills)
 		net.Send(self)
@@ -231,7 +225,6 @@ function meta:SetUnlockedSkills(skills, nosend)
 	self.UnlockedSkills = table.ToKeyValues(skills)
 
 	if not nosend then
-		util.AddNetworkString("zs_skills_unlocked")
 		net.Start("zs_skills_unlocked")
 		GAMEMODE:WriteSkillBits(skills)
 		net.Send(self)

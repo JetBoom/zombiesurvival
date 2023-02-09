@@ -247,7 +247,6 @@ local function ToggleZSFriend(self)
 
 		self:GetParent().NextRefresh = RealTime()
 
-		util.AddNetworkString("zs_zsfriend")
 		net.Start("zs_zsfriend")
 			net.WriteString(pl:SteamID())
 			net.WriteBool(GAMEMODE.ZSFriends[pl:SteamID()])

@@ -120,7 +120,6 @@ function ENT:Use(activator, caller)
 			AddOriginToPVS(activator.Camera:WorldSpaceCenter())
 		end)
 
-		util.AddNetworkString("zs_tvcamera")
 		net.Start("zs_tvcamera")
 			net.WriteEntity(activator.Camera)
 		net.Send(activator)

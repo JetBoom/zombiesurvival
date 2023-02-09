@@ -44,7 +44,6 @@ net.Receive("zs_wipeinventory", function()
 end)
 
 local function TryCraftWithComponent(me)
-	util.AddNetworkString("zs_trycraft")
 	net.Start("zs_trycraft")
 		net.WriteString(me.Item)
 		net.WriteString(me.WeaponCraft)

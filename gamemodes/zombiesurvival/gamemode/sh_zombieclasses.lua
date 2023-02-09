@@ -22,7 +22,6 @@ end
 
 function GM:ClassUnlocksUpdate(pl)
 	for k,v in ipairs(GAMEMODE.ZombieClasses) do
-		util.AddNetworkString("zs_classunlockstate")
 		net.Start("zs_classunlockstate")
 			net.WriteInt(k, 8)
 			net.WriteBool(v.Unlocked)

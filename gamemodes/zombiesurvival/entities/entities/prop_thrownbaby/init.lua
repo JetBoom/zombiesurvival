@@ -29,7 +29,6 @@ function ENT:Think()
 		self:SetSettled(true)
 		self:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
 
-		util.AddNetworkString("zs_nestbuilt")
 		net.Start("zs_nestbuilt")
 		net.Broadcast()
 	end

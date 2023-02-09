@@ -2,7 +2,6 @@ function GM:PreOnSigilCorrupted(ent, dmginfo)
 end
 
 function GM:OnSigilCorrupted(ent, dmginfo)
-	util.AddNetworkString("zs_sigilcorrupted")
 	net.Start("zs_sigilcorrupted")
 		net.WriteUInt(self:NumCorruptedSigils(), 8)
 	net.Broadcast()
@@ -12,7 +11,6 @@ function GM:PreOnSigilUncorrupted(ent, dmginfo)
 end
 
 function GM:OnSigilUncorrupted(ent, dmginfo)
-	util.AddNetworkString("zs_sigiluncorrupted")
 	net.Start("zs_sigiluncorrupted")
 		--net.WriteUInt(self:NumCorruptedSigils(), 8)
 	net.Broadcast()
