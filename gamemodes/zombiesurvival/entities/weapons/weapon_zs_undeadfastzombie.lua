@@ -210,7 +210,7 @@ function SWEP:MeleeHitPlayer(ent, trace, damage)
 
 	local bleed = ent:GiveStatus("bleed")
 	if bleed and bleed:IsValid() then
-		bleed:AddDamage(damage / 0.6)
+		bleed:AddDamage(damage * 0.2)
 		bleed.Damager = self:GetOwner()
 	end
 end

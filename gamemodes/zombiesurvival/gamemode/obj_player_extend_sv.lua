@@ -226,7 +226,7 @@ function meta:ProcessDamage(dmginfo)
 
 			local ratio = math.min(0.5 + self.BloodArmorDamageReductionAdd + (self:IsSkillActive(SKILL_IRONBLOOD) and self:Health() <= self:GetMaxHealth() * 0.5 and 0.25 or 0), 1)
 			local absorb = math.min(self:GetBloodArmor(), damage * ratio)
-			local absorbed = absorb * (1 + attacker.MutationModifiers["bloodarmor_damage"])
+			local absorbed = absorb * (1 + (attacker.MutationModifiers and attacker.MutationModifiers["bloodarmor_damage"] or 0))
 			dmginfo:SetDamage(damage - absorb)
 			self:SetBloodArmor(self:GetBloodArmor() - absorbed)
 

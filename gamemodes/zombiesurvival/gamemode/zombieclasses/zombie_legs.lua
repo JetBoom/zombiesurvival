@@ -69,11 +69,11 @@ end
 		return true
 	end
 end]]
-
+/*
 function CLASS:ShouldDrawLocalPlayer(pl)
 	return true
 end
-
+*/
 local StepSounds = {
 	"npc/zombie/foot1.wav",
 	"npc/zombie/foot2.wav",

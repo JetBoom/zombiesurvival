@@ -17,6 +17,7 @@ CLASS.NoFallDamage = true
 
 local ACT_ZOMBIE_CLIMB_UP = ACT_ZOMBIE_CLIMB_UP
 local math_Clamp = math.Clamp
+local bit_band = bit.band
 
 if SERVER then
 	function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo) end
@@ -61,7 +62,14 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 	return self.BaseClass.UpdateAnimation(self, pl, velocity, maxseqgroundspeed)
 end
 
-if not CLIENT then return end
+if SERVER then
+	function CLASS:ProcessDamage(pl, dmginfo)
+		if bit_band(dmginfo:GetDamageType(), DMG_BULLET) ~= 0 then
+			pl:SetVelocity(dmginfo:GetAttacker():GetAimVector() * dmginfo:GetDamage() * ZE_KNOCKBACKSCALE)
+		end
+	end
+	return
+end
 
 CLASS.Icon = "zombiesurvival/killicons/fresh_dead"
 CLASS.IconColor = Color(127, 255, 127)

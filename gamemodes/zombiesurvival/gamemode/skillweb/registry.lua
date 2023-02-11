@@ -481,11 +481,11 @@ s = GM:AddSkill(SKILL_REGENERATOR, "Regenerator", GOOD.."Regenerate 1 health eve
 s.CanUseInZE = true
 GM:AddSkillModifier(SKILL_REGENERATOR, SKILLMOD_HEALTH, -6)
 
-s = GM:AddSkill(SKILL_BLOODARMOR, "Blood Armor", GOOD.."Regenerate 1 blood armor every 8 seconds upto your blood armor max\nBase blood armor maximum is 20\nBase blood armor damage absorption is 50%\n"..BAD.."-13 maximum health",
+s = GM:AddSkill(SKILL_BLOODARMOR, "Blood Armor", GOOD.."Regenerate 1 blood armor every 8 seconds upto your blood armor max\nBase maximum blood armor = 20\nBase blood armor damage absorption = 50%\n"..BAD.."-13 maximum health",
 2, 2, {SKILL_IRONBLOOD, SKILL_BLOODLETTER, SKILL_D_HEMOPHILIA}, TREE_HEALTHTREE)
 GM:AddSkillModifier(SKILL_BLOODARMOR, SKILLMOD_HEALTH, -13)
 
-s = GM:AddSkill(SKILL_IRONBLOOD, "Iron Blood", GOOD.."+25% damage reduction from blood armor\n"..GOOD.."Bonus doubled when health is 50% or less\n"..BAD.."-50% maximum blood armor",
+s = GM:AddSkill(SKILL_IRONBLOOD, "Iron Blood", GOOD.."+25% blood armor damage absorption\n"..GOOD.."+25% additional blood armor damage absorption\nOnly if health is 50% or less\n"..BAD.."-50% maximum blood armor",
 2, 4, {SKILL_HAEMOSTASIS, SKILL_CIRCULATION}, TREE_HEALTHTREE)
 GM:AddSkillModifier(SKILL_IRONBLOOD, SKILLMOD_BLOODARMOR_DMG_REDUCTION, 0.25)
 GM:AddSkillModifier(SKILL_IRONBLOOD, SKILLMOD_BLOODARMOR_MUL, -0.5)

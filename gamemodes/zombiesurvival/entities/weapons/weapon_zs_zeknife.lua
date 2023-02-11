@@ -15,7 +15,7 @@ SWEP.ViewModel = "models/weapons/cstrike/c_knife_t.mdl"
 SWEP.WorldModel = "models/weapons/w_knife_t.mdl"
 SWEP.UseHands = true
 
-SWEP.MeleeDamage = 50
+SWEP.MeleeDamage = 75
 SWEP.MeleeRange = 62
 SWEP.MeleeSize = 0.875
 

@@ -16,7 +16,9 @@ CLASS.DynamicHealth = 0
 CLASS.Speed = 285
 CLASS.SWEP = "weapon_zs_undeadfastzombie"
 
-CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
+CLASS.Points = (CLASS.Health/GM.NoHeadboxZombiePointRatio) * 0.6
+CLASS.XP = CLASS.Health/GM.NoHeadboxZombiePointRatio
+CLASS.XP = 30
 
 CLASS.CanTaunt = true
 

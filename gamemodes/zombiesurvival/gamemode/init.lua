@@ -2922,6 +2922,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 							ent.DamagedBy[attacker] = (ent.DamagedBy[attacker] or 0) + damage
 							if time >= ent.m_LastWaveStartSpawn + 3.5 and time >= ent.m_LastGasHeal + 2 then
 								local points = damage / ent:GetMaxHealth() * ent:GetZombieClassTable().Points
+								local xp = damage / ent:GetMaxHealth() * (ent:GetZombieClassTable().XP or ent:GetZombieClassTable().Points)
+
 								if POINTSMULTIPLIER then
 									points = points * POINTSMULTIPLIER
 								end
@@ -2930,7 +2932,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 								end
 
 								attacker:AddQueuePoints(points, "damage")
-								attacker:GainZSXP(points * math.Clamp(1 + (self:GetDifficulty() / 2), 0.85, 1.2))
+								attacker:GainZSXP(xp * math.Clamp(0.5 + (self:GetDifficulty() / 2), 0.85, 1.2))
+								print(xp * math.Clamp(0.5 + (self:GetDifficulty() / 2), 0.85, 1.2), xp, math.Clamp(0.5 + (self:GetDifficulty() / 2), 0.85, 1.2))
 
 								GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "PointsEarned", points)
 								GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "Damage", damage)
@@ -2974,7 +2977,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 						end
 
 						attacker:AddQueuePoints(points, "damage")
-						attacker:GainZSXP(points * math.Clamp(1 + (self:GetDifficulty() / 2), 0.85, 1.2) * 0.75)
+						attacker:GainZSXP((damage / GAMEMODE.NPCZombiePointRatio) * math.Clamp(0.5 + (self:GetDifficulty() / 2), 0.85, 1.2) * 0.75)
 
 						GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "PointsEarned", points)
 						GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "Damage", damage)
@@ -3214,6 +3217,9 @@ function GM:EntityTakeDamage(ent, dmginfo)
 			attacker:CollectDamageNumberSession(dmg, dmgpos, ent:IsPlayer())
 		end
 	end
+end
+
+function GM:OnDamagedByExplosion(pl, dmginfo)
 end
 
 function GM:DamageFloater(attacker, victim, dmgpos, dmg, definiteply)

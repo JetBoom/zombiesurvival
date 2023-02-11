@@ -125,7 +125,7 @@ function GM:ShowHelp()
 	menu.Paint = HelpMenuPaint
 	menu.Created = SysTime()
 
-	local header = EasyLabel(menu, self.Name, "ZSHUDFont")
+	local header = EasyLabel(menu, self.Name, "ZSHUDFontSmall")
 	header:SetContentAlignment(8)
 	header:DockMargin(0, ScrH() * 0.2, 0, 64)
 	header:Dock(TOP)

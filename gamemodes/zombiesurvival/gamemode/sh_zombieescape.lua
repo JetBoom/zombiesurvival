@@ -6,7 +6,7 @@ GM.EndGameTime = 7.5
 GM.ZE_FreezeTime = 20
 GM.ZE_TimeLimit = 60 * 16
 
-GM.DefaultZombieClass = GM.ZombieClasses["Super Zombie"].Index
+GM.DefaultZombieClass = GM.ZombieClasses["ZE Super Zombie"].Index
 
 DEFAULT_JUMP_POWER = 195
 
