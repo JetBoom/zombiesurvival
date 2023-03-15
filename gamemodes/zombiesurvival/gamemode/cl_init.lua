@@ -222,7 +222,7 @@ function GM:TopNotify(...)
 end
 
 function GM:_InputMouseApply(cmd, x, y, ang)
-	if MySelf:KeyDown(IN_WALK) and MySelf:IsHolding() then
+	if MySelf:KeyDown(GAMEMODE.PropRotKey) and MySelf:IsHolding() then
 		self.InputMouseX = math.NormalizeAngle(self.InputMouseX - x * 0.02 * GAMEMODE.PropRotationSensitivity)
 		self.InputMouseY = math.NormalizeAngle(self.InputMouseY - y * 0.02 * GAMEMODE.PropRotationSensitivity)
 

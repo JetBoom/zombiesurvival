@@ -259,7 +259,7 @@ function ENT:Think()
 			if owner:KeyPressed(IN_SPEED) then
 				self.ObjectAngles = object:GetAngles()
 			end
-		elseif owner:KeyDown(IN_WALK) then
+		elseif owner:KeyDown(GAMEMODE.PropRotKey) then
 			local xdiff = math.NormalizeAngle(self.StartX - (owner.InputMouseX or 0))
 			local ydiff = math.NormalizeAngle(self.StartY - (owner.InputMouseY or 0))
 			local sxdiff = xdiff * FrameTime() * 8
