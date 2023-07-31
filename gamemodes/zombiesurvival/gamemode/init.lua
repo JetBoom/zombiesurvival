@@ -2210,8 +2210,10 @@ function GM:PlayerInitialSpawnRound(pl)
 		pl:ChangeTeam(TEAM_HUMAN)
 		if self.DynamicSpawning then
 			timer.Simple(1, function()
-				GAMEMODE:AttemptHumanDynamicSpawn(pl)
-				pl:SetBarricadeGhosting(true, true)
+				if IsValid(pl) and pl:Team() == TEAM_HUMAN then
+					GAMEMODE:AttemptHumanDynamicSpawn(pl)
+					pl:SetBarricadeGhosting(true, true)
+				end
 			end)
 		end
 	elseif self:GetNumberOfWaves() == -1 or self.NoNewHumansWave <= self:GetWave() or team.NumPlayers(TEAM_UNDEAD) == 0 and 1 <= team.NumPlayers(TEAM_HUMAN) then -- Joined during game, no zombies, some humans or joined past the deadline.
@@ -2222,8 +2224,10 @@ function GM:PlayerInitialSpawnRound(pl)
 		pl:ChangeTeam(TEAM_HUMAN)
 		if self.DynamicSpawning then
 			timer.Simple(0, function()
-				GAMEMODE:AttemptHumanDynamicSpawn(pl)
-				pl:SetBarricadeGhosting(true, true)
+				if IsValid(pl) and pl:Team() == TEAM_HUMAN then
+					GAMEMODE:AttemptHumanDynamicSpawn(pl)
+					pl:SetBarricadeGhosting(true, true)
+				end
 			end)
 		end
 	end
