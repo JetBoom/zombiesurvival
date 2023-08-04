@@ -4334,7 +4334,7 @@ net.Receive("zs_changeclass", function(len, sender)
 	local classname = GAMEMODE:GetBestAvailableZombieClass(net.ReadString())
 	local suicide = net.ReadBool()
 	local classtab = GAMEMODE.ZombieClasses[classname]
-	if not classtab or classtab.Disabled or classtab.Hidden and not (classtab.CanUse and classtab:CanUse(sender)) then return end
+	if not classtab or classtab.Disabled or classtab.Boss or classtab.Hidden and not (classtab.CanUse and classtab:CanUse(sender)) then return end
 
 	if not gamemode.Call("IsClassUnlocked", classname) then
 		sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "class_not_unlocked_will_be_unlocked_x", classtab.Wave))
