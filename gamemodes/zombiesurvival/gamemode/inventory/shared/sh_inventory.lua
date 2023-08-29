@@ -224,7 +224,7 @@ GM:AddSkillModifier(GM:AddTrinket("Power Gauntlet", "powergauntlet", false, mvel
 
 GM:AddTrinket("Finesse Kit", "sharpkit", false, mveles, mweles, 2, "Deal up to +32% melee damage to slowed zombies")
 
-GM:AddTrinket("Sharp Stone", "sharpstone", false, mveles, mweles, 3, "+5% melee damage")
+GM:AddSkillModifier(GM:AddTrinket("Sharp Stone", "sharpstone", false, mveles, mweles, 3, "+5% melee damage"), SKILLMOD_MELEE_DAMAGE_MUL, 0.05)
 
 -- Performance Trinkets
 GM:AddTrinket("Oxygen Tank", "oxygentank", true, nil, {
