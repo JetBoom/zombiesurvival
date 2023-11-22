@@ -171,7 +171,6 @@ function SWEP:CanPrimaryAttack()
 	if self:GetPrimaryAmmoCount() <= 0 then
 		self:EmitSound("items/medshotno1.wav")
 
-		owner.NextMedKitUse = self:GetNextCharge()
 		return false
 	end
 
