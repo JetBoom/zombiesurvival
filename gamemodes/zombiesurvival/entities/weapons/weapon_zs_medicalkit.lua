@@ -171,6 +171,7 @@ function SWEP:CanPrimaryAttack()
 	if self:GetPrimaryAmmoCount() <= 0 then
 		self:EmitSound("items/medshotno1.wav")
 
+		self:SetNextCharge(CurTime() + 0.75)
 		return false
 	end
 
@@ -188,8 +189,9 @@ function SWEP:DrawHUD()
 	local wid, hei = 384, 16
 	local x, y = ScrW() - wid - 32, ScrH() - hei - 72
 	local texty = y - 4 - draw.GetFontHeight("ZSHUDFontSmall")
+	local owner = self:GetOwner()
 
-	local timeleft = self:GetNextCharge() - CurTime()
+	local timeleft = (owner.NextMedKitUse or self:GetNextCharge()) - CurTime()
 	if 0 < timeleft then
 		surface.SetDrawColor(5, 5, 5, 180)
 		surface.DrawRect(x, y, wid, hei)
