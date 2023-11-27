@@ -80,8 +80,8 @@ function SWEP:PrimaryAttack()
 
 	if not ent then return end
 
-	local multiplier = self.MedicHealMul or 1
-	local cooldownmultiplier = self.MedicCooldownMul or 1
+	local multiplier = owner.MedicHealMul or 1
+	local cooldownmultiplier = owner.MedicCooldownMul or 1
 	local healed = owner:HealPlayer(ent, math.min(self:GetCombinedPrimaryAmmo(), self.Heal))
 	local totake = self.FixUsage and 15 or math.ceil(healed / multiplier)
 
@@ -104,8 +104,8 @@ function SWEP:SecondaryAttack()
 	local owner = self:GetOwner()
 	if not self:CanPrimaryAttack() or not gamemode.Call("PlayerCanBeHealed", owner) then return end
 
-	local multiplier = self.MedicHealMul or 1
-	local cooldownmultiplier = self.MedicCooldownMul or 1
+	local multiplier = owner.MedicHealMul or 1
+	local cooldownmultiplier = owner.MedicCooldownMul or 1
 	local healed = owner:HealPlayer(owner, math.min(self:GetCombinedPrimaryAmmo(), self.Heal * self.Secondary.HealMul))
 	local totake = self.FixUsage and 10 or math.ceil(healed / multiplier)
 
