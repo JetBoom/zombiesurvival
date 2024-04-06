@@ -25,8 +25,9 @@ CLASS.ModelScale = 0.65
 --[[CLASS.ModelScale = 0.6324555
 CLASS.ClientsideModelScale = 0.4 / CLASS.ModelScale]]
 
-CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 36)}
-CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 36)}
+local scale = CLASS.ModelScale
+CLASS.Hull = {Vector(-16 / scale, -16 / scale, 0), Vector(16 / scale, 16 / scale, 36 / scale)}
+CLASS.HullDuck = {Vector(-16 / scale, -16 / scale, 0), Vector(16 / scale, 16 / scale, 36 / scale)}
 
 CLASS.ViewOffset = Vector(0, 0, 35.5)
 CLASS.ViewOffsetDucked = Vector(0, 0, 35.5)

@@ -2210,8 +2210,10 @@ function GM:PlayerInitialSpawnRound(pl)
 		pl:ChangeTeam(TEAM_HUMAN)
 		if self.DynamicSpawning then
 			timer.Simple(1, function()
-				GAMEMODE:AttemptHumanDynamicSpawn(pl)
-				pl:SetBarricadeGhosting(true, true)
+				if IsValid(pl) and pl:Team() == TEAM_HUMAN then
+					GAMEMODE:AttemptHumanDynamicSpawn(pl)
+					pl:SetBarricadeGhosting(true, true)
+				end
 			end)
 		end
 	elseif self:GetNumberOfWaves() == -1 or self.NoNewHumansWave <= self:GetWave() or team.NumPlayers(TEAM_UNDEAD) == 0 and 1 <= team.NumPlayers(TEAM_HUMAN) then -- Joined during game, no zombies, some humans or joined past the deadline.
@@ -2222,8 +2224,10 @@ function GM:PlayerInitialSpawnRound(pl)
 		pl:ChangeTeam(TEAM_HUMAN)
 		if self.DynamicSpawning then
 			timer.Simple(0, function()
-				GAMEMODE:AttemptHumanDynamicSpawn(pl)
-				pl:SetBarricadeGhosting(true, true)
+				if IsValid(pl) and pl:Team() == TEAM_HUMAN then
+					GAMEMODE:AttemptHumanDynamicSpawn(pl)
+					pl:SetBarricadeGhosting(true, true)
+				end
 			end)
 		end
 	end
@@ -2594,9 +2598,7 @@ function GM:PropBroken(ent, attacker)
 	if IsValid(ent) and IsValid(attacker) and not ent._PROPBROKEN and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
 		ent._PROPBROKEN = true
 
-		if attacker.LogID then --failsafe for local dev
-			PrintMessage(HUD_PRINTCONSOLE, attacker:LogID().." broke "..ent:GetModel())
-		end
+		PrintMessage(HUD_PRINTCONSOLE, attacker:LogID().." broke "..ent:GetModel())
 	end
 end
 
@@ -4332,7 +4334,7 @@ net.Receive("zs_changeclass", function(len, sender)
 	local classname = GAMEMODE:GetBestAvailableZombieClass(net.ReadString())
 	local suicide = net.ReadBool()
 	local classtab = GAMEMODE.ZombieClasses[classname]
-	if not classtab or classtab.Disabled or classtab.Hidden and not (classtab.CanUse and classtab:CanUse(sender)) then return end
+	if not classtab or classtab.Disabled or classtab.Boss or classtab.Hidden and not (classtab.CanUse and classtab:CanUse(sender)) then return end
 
 	if not gamemode.Call("IsClassUnlocked", classname) then
 		sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "class_not_unlocked_will_be_unlocked_x", classtab.Wave))

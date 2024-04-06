@@ -445,7 +445,7 @@ net.Receive("zs_remantleconf", function()
 	local wepclass = ri.m_WepClass
 	local contentsqua = GAMEMODE.GunTab.QualityTier
 	local desiredqua = contentsqua and contentsqua + 1 or 1
-	local upgclass = GAMEMODE:GetWeaponClassOfQuality(not contentsqua and wepclass or GAMEMODE.GunTab.BaseQuality, desiredqua)
+	local upgclass = GAMEMODE:GetWeaponClassOfQuality(not contentsqua and wepclass or GAMEMODE.GunTab.BaseQuality, desiredqua, ri.BranchCache)
 
 	GAMEMODE.GunTab = weapons.Get(upgclass)
 	local gtbl = GAMEMODE.GunTab
@@ -477,15 +477,10 @@ function PANEL:OnMousePressed(mc)
 		local current = self.RemantleNodes[hovbranch][hovquality]
 		local prev = self.RemantleNodes[hovbranch][hovquality - 1] or hovquality == 1 and self.RemantleNodes[0][0]
 		if cqua and hovquality > cqua and prev and prev.Unlocked and not current.Locked then
-			if self.GunTab.AmmoIfHas and MySelf:GetAmmoCount(self.GunTab.Primary.Ammo) == 0 then
-				GAMEMODE:CenterNotify(COLOR_RED, "You don't have the deployable ammo type for this!")
-				surface.PlaySound("buttons/button8.wav")
-
-				return
-			end
 
 			local scost = GAMEMODE:GetUpgradeScrap(self.GunTab, hovquality)
 			if MySelf:GetAmmoCount("scrap") >= scost then
+				GAMEMODE.RemantlerInterface.BranchCache = hovbranch
 				RunConsoleCommand("zs_upgrade", hovbranch ~= 0 and hovbranch)
 
 				return
