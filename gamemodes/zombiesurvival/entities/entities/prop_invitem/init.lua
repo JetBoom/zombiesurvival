@@ -45,11 +45,20 @@ function ENT:GiveToActivator(activator, caller)
 	if not itype then
 		return
 	end
-
 	local itypecat = GAMEMODE:GetInventoryItemType(itype)
-	if itypecat == INVCAT_TRINKETS and activator:HasInventoryItem(itype) then
-		activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_already_have_this_trinket"))
+	if  self.Owner and self.DroppedTime and self.pickUpProtected and (self.Owner:SteamID() ~= activator:SteamID()) and GAMEMODE:GetWave() < 3 then
+		local timeLeft = GAMEMODE.DroppedItemsTimeout - (CurTime() - self.DroppedTime)
+		activator:CenterNotify(COLOR_RED, translate.Format("this_item_has_a_owner", timeLeft))
 		return
+	end
+	if itypecat == INVCAT_TRINKETS then
+		if activator:HasInventoryItem(itype) then
+			activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "you_already_have_this_trinket"))
+			return
+		elseif not GAMEMODE:CanBuyTrinkets(activator) then
+			activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "limit_of_trinkets_reached"))
+			return
+		end
 	end
 
 	activator:AddInventoryItem(itype)

@@ -142,6 +142,12 @@ function MakepOptions()
 	check:SizeToContents()
 	list:AddItem(check)
 
+	local check = vgui.Create("DCheckBoxLabel", Window)
+	check:SetText(translate.Get("options_intro_music"))
+	check:SetConVar("zs_intro")
+	check:SizeToContents()
+	list:AddItem(check)
+
 	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Enable post processing")
 	check:SetConVar("zs_postprocessing")
@@ -258,6 +264,7 @@ function MakepOptions()
 	dropdown:SetText(GAMEMODE.PropRotationSnap == 15 and "15 degrees"
 		or GAMEMODE.PropRotationSnap == 30 and "30 degrees"
 		or GAMEMODE.PropRotationSnap == 45 and "45 degrees"
+		or GAMEMODE.PropRotationSnap == 90 and "90 degrees"
 		or "No snap")
 	dropdown:SetTextColor(color_black)
 	list:AddItem(dropdown)

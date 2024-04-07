@@ -10,6 +10,8 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 end
 
 function ENT:PlayerHurt(victim, attacker, healthleft, damage)
+	if victim ~= self:GetOwner() then return end
+
 	local applier = self.Applier
 	if applier and applier:IsValidLivingHuman() and applier ~= attacker and victim:IsValidLivingZombie() then
 		local attributeddamage = damage

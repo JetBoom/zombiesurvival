@@ -101,6 +101,13 @@ function ENT:GiveToActivator(activator, caller)
 		return
 	end
 
+	if self.Owner and self.DroppedTime and self.pickUpProtected and (self.Owner:SteamID() ~= activator:SteamID()) and GAMEMODE:GetWave() < 3 then
+		local timeLeft = GAMEMODE.DroppedItemsTimeout - (CurTime() - self.DroppedTime)
+		self:Input("OnPickupFailed", activator)
+		activator:CenterNotify(COLOR_RED, translate.Format("this_item_has_a_owner", timeLeft))
+		return
+	end
+
 	if activator:HasWeapon(weptype) and (self.Forced or not GAMEMODE.MaxWeaponPickups) then
 		local weptab = weapons.Get(weptype)
 		if not (weptab and weptab.NoPickupIfHas) then

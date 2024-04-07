@@ -25,12 +25,11 @@ CLASS.ModelScale = 0.65
 --[[CLASS.ModelScale = 0.6324555
 CLASS.ClientsideModelScale = 0.4 / CLASS.ModelScale]]
 
-local scale = CLASS.ModelScale
-CLASS.Hull = {Vector(-16 / scale, -16 / scale, 0), Vector(16 / scale, 16 / scale, 36 / scale)}
-CLASS.HullDuck = {Vector(-16 / scale, -16 / scale, 0), Vector(16 / scale, 16 / scale, 36 / scale)}
+CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 58)}
+CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 36)}
 
-CLASS.ViewOffset = Vector(0, 0, 35.5)
-CLASS.ViewOffsetDucked = Vector(0, 0, 35.5)
+CLASS.ViewOffset = Vector(0, 0, 50)
+CLASS.ViewOffsetDucked = Vector(0, 0, 50)
 
 local CurTime = CurTime
 local math_random = math.random
@@ -190,5 +189,5 @@ function CLASS:PostPlayerDraw(pl)
 end
 
 function CLASS:ShouldDrawLocalPlayer()
-	return true
+	return false
 end

@@ -117,6 +117,9 @@ function CLASS:GetAlpha(pl)
 	if wep:IsValid() and wep:IsAttacking() then
 		return 0.7
 	end
+	if pl:GetVelocity():Length() > 0 then
+		return 0.3
+	end
 
 	local eyepos = EyePos()
 	local nearest = pl:WorldSpaceCenter()

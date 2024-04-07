@@ -15,11 +15,7 @@ CLASS.CanTaunt = true
 CLASS.FearPerInstance = 1
 
 CLASS.Points = 30
-
 CLASS.SWEP = "weapon_zs_graveshovelz"
-
-if SERVER then
-	function CLASS:OnSpawned(pl)
 		pl:CreateAmbience("gravediggerambience")
 	end
 end

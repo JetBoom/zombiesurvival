@@ -76,7 +76,7 @@ translate.AddLanguage("it", "Italian")
     LANGUAGE.x_turned_off_noclip                                            = "%s è uscito dalla modalità noclip."
     LANGUAGE.unlocked_on_wave_x                                             = "Sbloccato nell'ondata %d"
     LANGUAGE.brains_eaten_x                                         = "Cervelli divorati: %s"
-    LANGUAGE.points_x                                                       = "Punti: %s"
+    LANGUAGE.points_x                                                       = "Punti:"
     LANGUAGE.next_wave_in_x                                         = "Prossima ondata tra %s"
     LANGUAGE.wave_ends_in_x                                         = "L'ondata corrente termina tra %s"
     LANGUAGE.wave_x_of_y                                                    = "Ondata %d di %d"

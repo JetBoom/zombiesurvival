@@ -131,8 +131,8 @@ function PANEL:Text3Paint()
 				draw.SimpleText(translate.Format("brains_eaten_x", MySelf:Frags()), self.Font, 0, 0, COLOR_SOFTRED)
 			end
 		else
-			--draw.SimpleText(translate.Format("points_x", MySelf:GetPoints().." / "..MySelf:Frags()), self.Font, 0, 0, COLOR_DARKRED)
-			draw.SimpleText("Points: "..MySelf:GetPoints().."  Score: "..MySelf:Frags(), self.Font, 0, 0, COLOR_SOFTRED)
+		 --draw.SimpleText(translate.Format("points_x", MySelf:GetPoints().." / "..MySelf:Frags()), self.Font, 0, 0, COLOR_DARKRED)
+			draw.SimpleText(translate.Get("points_x") .. " " .. MySelf:GetPoints() .. "  " .. translate.Get("score_x") .. " " .. MySelf:Frags(), self.Font, 0, 0, COLOR_SOFTRED)
 		end
 	end
 

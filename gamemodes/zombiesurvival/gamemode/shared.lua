@@ -6,6 +6,7 @@ GM.Website	=	"http://www.noxiousnet.com"
 -- No, adding a gun doesn't make your name worth being here.
 GM.Credits = {
 	{"William \"JetBoom\" Moodhe", "williammoodhe@gmail.com (www.noxiousnet.com)", "Creator / Programmer"},
+	{"Arthur Geron", "@arthurgeron", "Contributor / Programmer"},
 	{"11k", "tjd113@gmail.com", "Zombie view models"},
 	{"Eisiger", "k2deseve@gmail.com", "Zombie kill icons"},
 	{"Austin \"Little Nemo\" Killey", "austin_odyssey@yahoo.com", "Ambient music"},
@@ -70,6 +71,7 @@ include_library("player_movement")
 include_library("inventory")
 include_library("ammoexpand")
 
+include("sh_compass.lua")
 ----------------------
 
 GM.EndRound = false
