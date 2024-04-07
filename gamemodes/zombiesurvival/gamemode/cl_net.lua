@@ -8,7 +8,17 @@ end)
 local M_Player = FindMetaTable("Player")
 local P_Team = M_Player.Team
 
--- Pre-cache into sounds
+-- Pre-cache sounds
+resource.AddSingleFile("sound/zombiesurvival/round_end.wav")
+util.PrecacheSound("zombiesurvival/round_end.wav")
+resource.AddSingleFile("sound/zombiesurvival/roundstart.wav")
+util.PrecacheSound("zombiesurvival/roundstart.wav")
+resource.AddSingleFile("sound/zombiesurvival/_lasthuman.wav")
+util.PrecacheSound("zombiesurvival/_lasthuman.wav")
+resource.AddSingleFile("sound/zombiesurvival/redeem.mp3")
+util.PrecacheSound("zombiesurvival/redeem.mp3")
+resource.AddSingleFile("sound/zombiesurvival/sigil_loop.wav")
+util.PrecacheSound("zombiesurvival/sigil_loop.wav")
 resource.AddSingleFile("sound/zombiesurvival/zsrintrov2.wav")
 util.PrecacheSound("zombiesurvival/zsrintrov2.wav")
 
