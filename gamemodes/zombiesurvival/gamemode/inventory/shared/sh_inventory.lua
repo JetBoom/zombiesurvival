@@ -17,6 +17,29 @@ GM.ZSInventoryPrefix = {
 GM.Assemblies = {}
 GM.Breakdowns = {}
 
+function GM:GetTrinkets(pl)
+	local items = pl:GetInventoryItems()
+	local trinkets = {}
+	local trinketsArrayPos = 1
+	for invitem, count in pairs(items) do
+		if invitem and self:GetInventoryItemType(invitem) == INVCAT_TRINKETS then
+			trinkets[trinketsArrayPos] = invitem
+			trinketsArrayPos = trinketsArrayPos + 1 
+		end
+	end
+	return trinkets
+end
+
+
+function GM:GetTrinketsNumber(pl)
+	print(#self:GetTrinkets(pl) .. ' and ' .. table.Count(self:GetTrinkets(pl)))
+	return #self:GetTrinkets(pl)
+end
+
+function GM:CanBuyTrinkets(pl)
+	return self:GetTrinketsNumber(pl) < self.MAX_TRINKETS
+end
+
 function GM:GetInventoryItemType(item)
 	for typ, aff in pairs(self.ZSInventoryPrefix) do
 		if string.sub(item, 1, 4) == aff then
@@ -49,6 +72,7 @@ function GM:AddWeaponBreakdownRecipe(weapon, result)
 end
 
 GM:AddWeaponBreakdownRecipe("weapon_zs_stubber",							"comp_modbarrel")
+GM:AddWeaponBreakdownRecipe("weapon_zs_tosser",							    "comp_basicsmgparts")
 GM:AddWeaponBreakdownRecipe("weapon_zs_z9000",								"comp_basicecore")
 GM:AddWeaponBreakdownRecipe("weapon_zs_blaster",							"comp_pumpaction")
 GM:AddWeaponBreakdownRecipe("weapon_zs_novablaster",						"comp_contaecore")
@@ -56,12 +80,14 @@ GM:AddWeaponBreakdownRecipe("weapon_zs_waraxe", 							"comp_focusbarrel")
 GM:AddWeaponBreakdownRecipe("weapon_zs_innervator",							"comp_gaussframe")
 GM:AddWeaponBreakdownRecipe("weapon_zs_swissarmyknife",						"comp_shortblade")
 GM:AddWeaponBreakdownRecipe("weapon_zs_owens",								"comp_multibarrel")
-GM:AddWeaponBreakdownRecipe("weapon_zs_onyx",								"comp_precision")
+GM:AddWeaponBreakdownRecipe("weapon_zs_onyx",							    "comp_precision")
 GM:AddWeaponBreakdownRecipe("weapon_zs_minelayer",							"comp_launcher")
 GM:AddWeaponBreakdownRecipe("weapon_zs_fracture",							"comp_linearactuator")
 GM:AddWeaponBreakdownRecipe("weapon_zs_harpoon",							"comp_metalpole")
+GM:AddWeaponBreakdownRecipe("weapon_zs_pripyat",							"comp_radioactivecore")
 
 -- Assemblies (Assembly, Component, Weapon)
+GM.Assemblies["weapon_zs_scrapper"] 							= {"comp_basicsmgparts", 	"weapon_zs_uzi"}
 GM.Assemblies["weapon_zs_waraxe"] 								= {"comp_modbarrel", 		"weapon_zs_glock3"}
 GM.Assemblies["weapon_zs_bust"] 								= {"comp_busthead", 		"weapon_zs_plank"}
 GM.Assemblies["weapon_zs_sawhack"] 								= {"comp_sawblade", 		"weapon_zs_axe"}
@@ -83,6 +109,8 @@ GM.Assemblies["weapon_zs_eminence"] 							= {"trinket_ammovestiii",	"weapon_zs_
 GM.Assemblies["weapon_zs_gladiator"] 							= {"trinket_ammovestiii",	"weapon_zs_sweepershotgun"}
 GM.Assemblies["weapon_zs_ripper"]								= {"comp_sawblade",			"weapon_zs_zeus"}
 GM.Assemblies["weapon_zs_avelyn"]								= {"trinket_ammovestiii",	"weapon_zs_charon"}
+GM.Assemblies["weapon_zs_deathstalker"]							= {"comp_experimentalm4",	"weapon_zs_m4"}
+GM.Assemblies["weapon_zs_meltdown"]							    = {"comp_radioactivecore",	"weapon_zs_bulwark"}
 GM.Assemblies["weapon_zs_asmd"]									= {"comp_precision",		"weapon_zs_quasar"}
 GM.Assemblies["weapon_zs_enkindler"]							= {"comp_launcher",			"weapon_zs_cinderrod"}
 GM.Assemblies["weapon_zs_proliferator"]							= {"comp_linearactuator",	"weapon_zs_galestorm"}
@@ -120,6 +148,9 @@ GM:AddInventoryItemData("comp_linearactuator",	"Linear Actuator",			"A linear ac
 GM:AddInventoryItemData("comp_pulsespool",		"Pulse Spool",				"Used to inject more pulse power to a system. Could be used to stabilise something.",			"models/Items/combine_rifle_cartridge01.mdl")
 GM:AddInventoryItemData("comp_flak",			"Flak Chamber",				"An internal chamber for projecting heated scrap.",												"models/weapons/w_rocket_launcher.mdl")
 GM:AddInventoryItemData("comp_precision",		"Precision Chassis",		"A suite setup for rewarding precise shots on moving targets.",									"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_experimentalm4",		"experimental m4 Body",			"A strange m4 body created by a mad scientist i wonder what it does.",	"models/Items/combine_rifle_cartridge01.mdl")	
+GM:AddInventoryItemData("comp_radioactivecore",		"radioactive core",			"A core used to refine radioactive matter to be fired from a weapon.",	"models/Items/combine_rifle_cartridge01.mdl")	
+GM:AddInventoryItemData("comp_basicsmgparts",		"basic smg parts",	"simple parts used in a very basic smg.",				"models/Items/combine_rifle_cartridge01.mdl")
 
 -- Trinkets
 local trinket, description, trinketwep

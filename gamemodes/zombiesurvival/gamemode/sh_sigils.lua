@@ -7,7 +7,7 @@ function GM:GetSigils()
 	local sigils = {}
 
 	for _, ent in pairs(ents.FindByClass("prop_obj_sigil")) do
-		if ent:IsValid() and ent:GetSigilHealthBase() ~= 0 then
+		if ent:IsValid() then
 			sigils[#sigils + 1] = ent
 		end
 	end

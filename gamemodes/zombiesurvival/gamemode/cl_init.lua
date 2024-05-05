@@ -229,7 +229,6 @@ function GM:_InputMouseApply(cmd, x, y, ang)
 		RunConsoleCommand("_zs_rotateang", snapanglex, snapangley)
 		return true
 	end
-
 	if self:UseOverTheShoulder() and P_Team(MySelf) == TEAM_HUMAN then
 		self:InputMouseApplyOTS(cmd, x, y, ang)
 	end
@@ -776,7 +775,7 @@ function GM:PlayBeats(teamid, fear)
 	--if (LASTHUMAN or self:GetAllSigilsDestroyed()) and cv_ShouldPlayMusic:GetBool() then
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
 		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + SoundDuration(self.LastHumanSound) - 0.025
+		NextBeat = RealTime() + SoundDuration(self.LastHumanSound)
 		return
 	end
 
@@ -784,8 +783,11 @@ function GM:PlayBeats(teamid, fear)
 
 	local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
 	if not beats then return end
-
-	LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 10), 3)
+	if teamid == TEAM_HUMAN then
+		LastBeatLevel = 1
+	else
+		LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 10), 3)
+	end
 
 	local snd = beats[LastBeatLevel]
 	if snd then
@@ -839,8 +841,11 @@ function GM:DrawSigilTeleportBar(x, y, fraction, target, screenscale)
 	draw_SimpleText(translate.Get("point_at_a_sigil_to_choose_destination"), "ZSHUDFontSmaller", x, y + draw_GetFontHeight("ZSHUDFontSmaller") * 2 - 16, colSigilTeleport, TEXT_ALIGN_CENTER)
 end
 
+
 function GM:HumanHUD(screenscale)
 	local curtime = CurTime()
+	local OSTintro = 0
+
 	local w, h = ScrW(), ScrH()
 
 	local packup = MySelf.PackUp
@@ -855,8 +860,12 @@ function GM:HumanHUD(screenscale)
 		if self:GetWave() == 0 and not self:GetWaveActive() then
 			local txth = draw_GetFontHeight("ZSHUDFontSmall")
 			local desiredzombies = self:GetDesiredStartingZombies()
-
-			draw_SimpleTextBlurry(translate.Get("waiting_for_players").." "..util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			-- Play Intro
+			if self:GetWave() >= 1 and OSTintro == 0 and MySelf:GetInfo("zs_intro") == "1" and not self.ZombieEscape then
+				MySelf:EmitSound("zombiesurvival/zsrintrov2.wav", 50, 100, 0.5)
+				OSTintro = 1 -- So it doesn't repeat the track again.
+			end
+			draw_SimpleTextBlurry(translate.Get("waiting_for_players") .. " " .. util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			if desiredzombies > 0 then
 				draw_SimpleTextBlurry(translate.Get(self:HasSigils() and "humans_furthest_from_sigils_are_zombies" or "humans_closest_to_spawns_are_zombies"), "ZSHUDFontSmall", w * 0.5, h * 0.25 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
@@ -1323,6 +1332,7 @@ function GM:CreateNonScaleFonts()
 	surface.CreateFont("DefaultFontSmall", {font = "tahoma", size = 11, weight = 0, antialias = false})
 	surface.CreateFont("DefaultFontSmallDropShadow", {font = "tahoma", size = 11, weight = 0, shadow = true, antialias = false})
 	surface.CreateFont("DefaultFont", {font = "tahoma", size = 13, weight = 500, antialias = false})
+	surface.CreateFont("ZSHUDFontNightBird", {font = "tahoma", size = 13, weight = 500, antialias = false})
 	surface.CreateFont("DefaultFontAA", {font = "tahoma", size = 13, weight = 500, antialias = true})
 	surface.CreateFont("DefaultFontBold", {font = "tahoma", size = 13, weight = 1000, antialias = false})
 	surface.CreateFont("DefaultFontLarge", {font = "tahoma", size = 16, weight = 0, antialias = false})
@@ -1520,14 +1530,17 @@ function GM:InitializeBeats()
 
 		self.Beats[dirname] = {}
 		local highestexist
-		for i=1, 10 do
-			local a, __ = file.Find("sound/zombiesurvival/beats/"..dirname.."/"..i..".*", "GAME")
+		for i = 1, 10 do
+			local a, __ = file.Find("sound/zombiesurvival/beats/" .. dirname .. "/" .. i .. ".*", "GAME")
 			local a1 = FirstOfGoodType(a)
 			if a1 then
-				local filename = "zombiesurvival/beats/"..dirname.."/"..a1
-				if file.Exists("sound/"..filename, "GAME") then
+				local filename = "zombiesurvival/beats/" .. dirname .. "/" .. a1
+				-- had to add a string match bellow because somehow it'd still find the horrible old human beats
+				if file.Exists("sound/" .. filename, "GAME") and not string.match(filename, "beats/default") then
 					self.Beats[dirname][i] = Sound(filename)
 					highestexist = filename
+					resource.AddSingleFile("sound/" .. filename)
+					util.PrecacheSound(filename)
 
 					continue
 				end
@@ -1936,9 +1949,12 @@ function GM:_PrePlayerDraw(pl)
 			end
 			render_SetBlend(blend)
 			if myteam == TEAM_HUMAN and blend < 0.5 then
+				pac.IgnoreEntity(pl)
 				render_ModelMaterialOverride(matWhite)
 				render_SetColorModulation(0.2, 0.2, 0.2)
 				shadowman = true
+			else
+				pac.UnIgnoreEntity(pl)
 			end
 			undo = true
 		end
@@ -2136,28 +2152,26 @@ function GM:KeyPress(pl, key)
 end
 
 function GM:KeyRelease(pl, key)
-	if key == self.MenuKey then
-		if self.HumanMenuPanel and self.HumanMenuPanel:IsValid() then
-			if self.InventoryMenu and self.InventoryMenu:IsValid() then
-				self.InventoryMenu:SetVisible(false)
+	if key == self.MenuKey and self.HumanMenuPanel and self.HumanMenuPanel:IsValid() then
+		if self.InventoryMenu and self.InventoryMenu:IsValid() then
+			self.InventoryMenu:SetVisible(false)
 
-				if self.m_InvViewer and self.m_InvViewer:IsValid() then
-					self.m_InvViewer:SetVisible(false)
-				end
+			if self.m_InvViewer and self.m_InvViewer:IsValid() then
+				self.m_InvViewer:SetVisible(false)
 			end
+		end
 
-			if self.HumanMenuSupplyChoice then
-				self.HumanMenuSupplyChoice:CloseMenu()
-			end
+		if self.HumanMenuSupplyChoice then
+			self.HumanMenuSupplyChoice:CloseMenu()
+		end
 
-			if self.InventoryMenu.SelInv then
-				self.InventoryMenu.SelInv = nil
-				self:DoAltSelectedItemUpdate()
+		if self.InventoryMenu.SelInv then
+			self.InventoryMenu.SelInv = nil
+			self:DoAltSelectedItemUpdate()
 
-				local grid = self.InventoryMenu.Grid
-				for k, v in pairs(grid:GetChildren()) do
-					v.On = false
-				end
+			local grid = self.InventoryMenu.Grid
+			for k, v in pairs(grid:GetChildren()) do
+				v.On = false
 			end
 		end
 	end

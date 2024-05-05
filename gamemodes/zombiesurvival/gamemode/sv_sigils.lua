@@ -138,6 +138,14 @@ function GM:CreateSigils(secondtry, rearrange)
 					ent:Spawn()
 				end
 				ent.NodePos = point
+
+				-- Maintain some references to each other
+				if node.en then
+					ent.InfoSigil = node.en
+					node.en.CreatedSigil = ent
+
+					ent:FireInfoSigilOutput("OnSigilSpawn")
+				end				
 			end
 		end
 	end

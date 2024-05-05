@@ -601,6 +601,7 @@ function meta:ChangeToCrow()
 
 	local crowclass = GAMEMODE.ZombieClasses["Crow"]
 	if not crowclass then return end
+	if not GAMEMODE.BotsCanBeCrows and self:IsBot() then return end
 
 	local curclass = self.DeathClass or self:GetZombieClass()
 	local crowindex = crowclass.Index
@@ -612,8 +613,16 @@ function meta:ChangeToCrow()
 	self.DeathClass = curclass
 end
 
-function meta:SelectRandomPlayerModel()
-	self:SetModel(player_manager.TranslatePlayerModel(GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)]))
+function meta:SelectRandomPlayerModel(depth)
+	local stackDepth = depth or 0
+	local selectedModel = player_manager.TranslatePlayerModel(GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)])
+	if selectedModel and util.IsValidModel(selectedModel) then
+		self:SetModel(selectedModel)
+	elseif (stackDepth <= 3) then
+		self:SelectRandomPlayerModel()
+	else
+		self:SetModel("models/player/kleiner.mdl")
+	end
 end
 
 function meta:GiveEmptyWeapon(weptype)
@@ -841,6 +850,11 @@ function meta:DropWeaponByType(class)
 			ent:SetClip1(wep:Clip1())
 			ent:SetClip2(wep:Clip2())
 			ent.DroppedTime = CurTime()
+			ent.Owner = wep:GetOwner()
+			ent.pickUpProtected = true
+			timer.Simple(GAMEMODE.DroppedItemsTimeout, function()
+				ent.pickUpProtected = false
+			end)
 
 			self:StripWeapon(class)
 			self:UpdateAltSelectedWeapon()

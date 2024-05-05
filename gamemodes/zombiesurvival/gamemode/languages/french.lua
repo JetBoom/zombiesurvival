@@ -75,7 +75,7 @@ LANGUAGE.x_turned_on_noclip                                                     
 LANGUAGE.x_turned_off_noclip                                            = "%s a désactivé le passe-murailles."
 LANGUAGE.unlocked_on_wave_x                                                     = "Débloqué à la vague %d"
 LANGUAGE.brains_eaten_x                                                         = "Cerveaux dévorés: %s"
-LANGUAGE.points_x                                                                       = "Points: %s"
+LANGUAGE.points_x                                                                       = "Points:"
 LANGUAGE.next_wave_in_x                                                         = "Début de la prochaine vague dans %s"
 LANGUAGE.wave_ends_in_x                                                         = "Fin de la vague dans %s"
 LANGUAGE.wave_x_of_y                                                            = "Vague %d sur %d"

@@ -894,6 +894,7 @@
 @PointClass base(Weapon) studio("models/props_c17/utilityconnecter005.mdl")     = weapon_zs_brassknuckles      : "Some brass knuckles for fists." []
 @PointClass base(Weapon) studio("models/weapons/w_smg_p90.mdl")                 = weapon_zs_bulletstorm        : "Ammo Type: SMG.\nHas Storm firing mode: Fire rate is 60% but two bullets are fired at once." []
 @PointClass base(Weapon) studio("models/props_combine/breenbust.mdl")           = weapon_zs_bust               : "Craftable Weapon.\nRecipe: Plank + Breen's Bust" []
+@PointClass base(Weapon) studio("models/weapons/cstrike/c_rif_m4a1.mdl")        = weapon_zs_DeathStalker       : "Craftable Weapon.\nRecipe: weapon_zs_m4 + comp_experimentalm4" []
 @PointClass base(Weapon) studio("models/props_lab/cleaver.mdl")                 = weapon_zs_butcherknife       : "A large cleaver, for hacking and slashing body parts." []
 @PointClass base(Weapon) studio("models/weapons/w_crossbow.mdl")                = weapon_zs_charon             : "Ammo Type: Bolts.\nA rapid firing crossbow with no special effect." []
 @PointClass base(Weapon) studio("models/weapons/w_rif_famas.mdl")               = weapon_zs_crackler           : "Ammo Type: Assault Rifle.\nA reduced fire-rate assault rifle'" []

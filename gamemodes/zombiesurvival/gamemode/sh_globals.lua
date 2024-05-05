@@ -101,6 +101,8 @@ CARRY_SPEEDLOSS_PERKG = 1.3
 -- but can never be slower than this.
 CARRY_SPEEDLOSS_MINSPEED = 88
 
+
+GM.DroppedItemsTimeout = 60 -- Seconds
 GM.MaxLegDamage = 3
 GM.MaxArmDamage = 3
 
@@ -326,4 +328,16 @@ GM.ValidBeaconMessages = {
 	"message_beacon_23",
 	"message_beacon_24",
 	"message_beacon_25"
+}
+
+GM.FanList = {
+	"1418945843",
+	"1595085577",
+	"3311458935",
+	"3023059541",
+	"2000875318",
+	"778584317",
+	"6086255",
+	"2867054481",
+	"391833145"
 }

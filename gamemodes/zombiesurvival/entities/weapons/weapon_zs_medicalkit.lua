@@ -172,6 +172,7 @@ function SWEP:CanPrimaryAttack()
 		self:EmitSound("items/medshotno1.wav")
 
 		self:SetNextCharge(CurTime() + 0.75)
+		owner.NextMedKitUse = self:GetNextCharge()
 		return false
 	end
 

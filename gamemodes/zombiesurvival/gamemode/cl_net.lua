@@ -8,6 +8,21 @@ end)
 local M_Player = FindMetaTable("Player")
 local P_Team = M_Player.Team
 
+-- Pre-cache sounds
+resource.AddSingleFile("sound/zombiesurvival/round_end.wav")
+util.PrecacheSound("zombiesurvival/round_end.wav")
+resource.AddSingleFile("sound/zombiesurvival/roundstart.wav")
+util.PrecacheSound("zombiesurvival/roundstart.wav")
+resource.AddSingleFile("sound/zombiesurvival/_lasthuman.wav")
+util.PrecacheSound("zombiesurvival/_lasthuman.wav")
+resource.AddSingleFile("sound/zombiesurvival/redeem.mp3")
+util.PrecacheSound("zombiesurvival/redeem.mp3")
+resource.AddSingleFile("sound/zombiesurvival/sigil_loop.wav")
+util.PrecacheSound("zombiesurvival/sigil_loop.wav")
+resource.AddSingleFile("sound/zombiesurvival/zsrintrov2.wav")
+util.PrecacheSound("zombiesurvival/zsrintrov2.wav")
+
+
 local function AltSelItemUpd()
 	local activeweapon = MySelf:GetActiveWeapon()
 	if not activeweapon or not activeweapon:IsValid() then return end
@@ -130,8 +145,12 @@ net.Receive("zs_wavestart", function(length)
 			GAMEMODE:CenterNotify(translate.Format("x_sigils_appeared", GAMEMODE.MaxSigils))
 		end
 	end
+<<<<<<< HEAD
 
 	surface_PlaySound("ambient/creatures/town_zombie_call1.wav")
+=======
+	surface.PlaySound("zombiesurvival/roundstart.wav")
+>>>>>>> third-party/structure-change
 end)
 
 net.Receive("zs_classunlock", function(length)
@@ -148,6 +167,11 @@ net.Receive("zs_waveend", function(length)
 		GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Format("wave_x_is_over", wave))
 		GAMEMODE:CenterNotify(translate.Get("wave_x_is_over_sub"))
 
+<<<<<<< HEAD
+=======
+		surface.PlaySound("zombiesurvival/round_end.wav")
+
+>>>>>>> third-party/structure-change
 		if MySelf:IsValid() and P_Team(MySelf) == TEAM_HUMAN then
 			if MySelf:GetZSSPRemaining() > 0 then
 				GAMEMODE:CenterNotify(translate.Format("unspent_skill_points_press_x", input.LookupBinding("gm_showspare1") or "F3"))

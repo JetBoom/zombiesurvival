@@ -477,10 +477,15 @@ function PANEL:OnMousePressed(mc)
 		local current = self.RemantleNodes[hovbranch][hovquality]
 		local prev = self.RemantleNodes[hovbranch][hovquality - 1] or hovquality == 1 and self.RemantleNodes[0][0]
 		if cqua and hovquality > cqua and prev and prev.Unlocked and not current.Locked then
+			if self.GunTab.AmmoIfHas and MySelf:GetAmmoCount(self.GunTab.Primary.Ammo) == 0 then
+				GAMEMODE:CenterNotify(COLOR_RED, "You don't have the deployable ammo type for this!")
+				surface.PlaySound("buttons/button8.wav")
+
+				return
+			end
 
 			local scost = GAMEMODE:GetUpgradeScrap(self.GunTab, hovquality)
 			if MySelf:GetAmmoCount("scrap") >= scost then
-				GAMEMODE.RemantlerInterface.BranchCache = hovbranch
 				RunConsoleCommand("zs_upgrade", hovbranch ~= 0 and hovbranch)
 
 				return
@@ -598,7 +603,8 @@ function GM:OpenRemantlerMenu(remantler)
 	trinketsframe:SetPaintBackground(false)
 	frame.TrinketsFrame = trinketsframe
 
-	local ammoframe = vgui.Create("DPanel")
+	local ammoframe = vgui.Create("DScrollPanel")
+	ammoframe:GetVBar().Enabled = true
 	sheet = remprop:AddSheet("Ammunition", ammoframe, GAMEMODE.ItemCategoryIcons[ITEMCAT_AMMO], false, false)
 	sheet.Panel:SetPos(0, tabhei + 2)
 	ammoframe:SetSize(wid - 8, boty - topy - 8 - topspace:GetTall())
@@ -673,7 +679,7 @@ function GM:OpenRemantlerMenu(remantler)
 			list:SetTall(ammoframe:GetTall() - 32)
 
 			for j, tab in ipairs(GAMEMODE.Items) do
-				if tab.PointShop and tab.Category == ITEMCAT_AMMO or tab.CanMakeFromScrap then
+				if tab.PointShop and tab.Category == ITEMCAT_AMMO and !(tab.BannedFromRemantler) or tab.CanMakeFromScrap then
 					self:AddShopItem(list, j, tab, false, true)
 				end
 			end

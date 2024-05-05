@@ -34,6 +34,11 @@ function ENT:Initialize()
 end
 
 function ENT:Use(pl)
+	if self:GetInfoSigilKV("DisableTeleports") then
+		GAMEMODE:ConCommandErrorMessage(pl, "You cannot teleport from this sigil.")
+		return
+	end
+
 	if pl.NextSigilTPTry and pl.NextSigilTPTry >= CurTime() then return end
 
 	if pl:Team() == TEAM_HUMAN and pl:Alive() and not self:GetSigilCorrupted() then
@@ -79,12 +84,16 @@ function ENT:OnTakeDamage(dmginfo)
 					self:SetSigilHealthBase(self.MaxHealth)
 					self:SetSigilLastDamaged(0)
 					gamemode.Call("OnSigilUncorrupted", self, dmginfo)
+
+					self:FireInfoSigilOutput("OnUnCorrupt")
 				else
 					gamemode.Call("PreOnSigilCorrupted", self, dmginfo)
 					self:SetSigilCorrupted(true)
 					self:SetSigilHealthBase(self.MaxHealth)
 					self:SetSigilLastDamaged(0)
 					gamemode.Call("OnSigilCorrupted", self, dmginfo)
+
+					self:FireInfoSigilOutput("OnCorrupt")
 				end
 			end
 		elseif attacker:Team() == TEAM_UNDEAD then
@@ -95,4 +104,18 @@ end
 
 function ENT:UpdateTransmitState()
 	return TRANSMIT_ALWAYS
+end
+
+function ENT:GetInfoSigilKV(key)
+	if self.InfoSigil and self.InfoSigil:IsValid() then
+		return self.InfoSigil and self.InfoSigil[key]
+	end
+
+	return nil
+end
+
+function ENT:FireInfoSigilOutput(key, arg1, arg2, arg3)
+	if self.InfoSigil and self.InfoSigil:IsValid() then
+		self.InfoSigil:Input(key, arg1, arg2, arg3)
+	end
 end

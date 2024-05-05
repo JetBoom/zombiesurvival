@@ -216,7 +216,7 @@ function GM:LoadMapEditorFile()
 				if ent:IsValid() then
 					ent:SetPos(Vector(tonumber(expstuff[2]), tonumber(expstuff[3]), tonumber(expstuff[4])))
 					for i=5, #expstuff do
-						local kv = string.Explode("§", expstuff[i])
+						local kv = string.Explode("ï¿½", expstuff[i])
 						ent:SetKeyValue(kv[1], kv[2])
 					end
 					ent:Spawn()

@@ -261,3 +261,21 @@ function meta:SkillsReset()
 
 	self:CenterNotify(COLOR_CYAN, translate.ClientGet(self, "you_have_reset_all"))
 end
+
+
+
+hook.Add( "PlayerSay", "Reset_Skill_Web", function( ply, text )
+	local command = '!resetskills'
+	if string.match(string.lower(text), command)  then
+		if GAMEMODE:PlayerIsAdmin(ply) then
+			local name = string.Replace(text, command, '')
+			name = string.Replace(name, " ", '')
+			local target = FindPlayerByPartialName(ply, name)
+			if target then
+				target:SkillsReset()
+			end
+		else
+			ply:PrintMessage(HUD_PRINTTALK, "You don't have permission to use this command")
+		end
+	end
+end )
