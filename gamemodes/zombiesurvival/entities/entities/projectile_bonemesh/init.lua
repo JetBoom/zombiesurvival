@@ -57,7 +57,7 @@ function ENT:Explode()
 
 	util.Blood(pos, 150, Vector(0, 0, 1), 300, true)
 
-	for i=1, 4 do
+	for i=1, 5 do
 		local ent = ents.CreateLimited("prop_playergib")
 		if ent:IsValid() then
 			ent:SetPos(pos + VectorRand() * 4)

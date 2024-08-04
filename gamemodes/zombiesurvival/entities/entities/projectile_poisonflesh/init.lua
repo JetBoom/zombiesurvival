@@ -3,7 +3,7 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-ENT.Damage = 5
+ENT.Damage = math.random(2,3)
 ENT.Type = "anim"
 
 function ENT:Initialize()

@@ -1,3 +1,3 @@
 ENT.Type = "anim"
 
-ENT.Damage = 100
+ENT.Damage = math.random(100,200)
