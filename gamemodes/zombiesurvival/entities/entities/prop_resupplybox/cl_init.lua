@@ -35,16 +35,22 @@ function ENT:Think()
 end
 
 function ENT:RenderInfo(pos, ang, owner)
+
+	local time = CurTime()
+	local remain = math.max(0, NextUse - time)
+	local calc = math.Clamp(remain / 30, 0, 1)
+	local textcolor = Color(255 * calc, 255 * (1 - calc), 0, 255)
 	cam.Start3D2D(pos, ang, 0.075)
-
-		draw.RoundedBox(32, -92, -50, 184, 100, color_black_alpha90)
-
-		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, 0, NextUse <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	
+		draw.RoundedBox(32, -192, -50, 384, 160, color_black_alpha90)
+		
+		draw.SimpleText(string.FormattedTime(remain, "%02i:%02i'%02i"), "ZS3D2DFont2", 0, -80, textcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, 0, textcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		if owner:IsValid() and owner:IsPlayer() then
 			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 40, owner == MySelf and COLOR_BLUE or COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
 		end
-
+		
 	cam.End3D2D()
 end
 

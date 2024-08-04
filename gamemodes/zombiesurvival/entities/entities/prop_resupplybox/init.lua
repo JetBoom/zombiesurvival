@@ -136,7 +136,7 @@ function ENT:Use(activator, caller)
 		end
 	end
 
-	NextUse[myuid] = CurTime() + 120
+	NextUse[myuid] = CurTime() + math.random(30,40)
 
 	net.Start("zs_nextresupplyuse")
 		net.WriteFloat(NextUse[myuid])
