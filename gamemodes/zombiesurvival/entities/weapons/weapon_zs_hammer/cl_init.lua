@@ -1,7 +1,7 @@
 include("shared.lua")
 
-SWEP.PrintName = "Carpenter's Hammer"
-SWEP.Description = "A simple but extremely useful tool. Allows you to hammer in nails to make barricades.\nPress SECONDARY FIRE to hammer in nail. It will be attached to whatever is behind it.\nPress RELOAD to take a nail out.\nUse PRIMARY FIRE to bash zombie brains or to repair damaged nails.\nYou get a point bonus for repairing damaged nails but a point penalty for removing another player's nails."
+SWEP.PrintName = "목수의 망치"
+SWEP.Description = "보기에는 별것 없어 보이지만, 생존에 꼭 필요한 도구.\n공격 2:시야에 있는 프롭 두개를 못으로 고정.\n재장전:못 회수.\n공격 1: 프롭 수리.\n다른 사람의 못을 빼면 벌을 받고, 수리를 하면 포인트를 받는다."
 
 SWEP.ViewModelFOV = 75
 

@@ -75,8 +75,45 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 			local healed = hitent:GetBarricadeHealth() - oldhealth
 			hitent:SetBarricadeRepairs(math.max(hitent:GetBarricadeRepairs() - healed, 0))
 			self:PlayRepairSound(hitent)
-			gamemode.Call("PlayerRepairedObject", self.Owner, hitent, healed, self)
-
+			if self.Owner.hammerunion then
+                -- math.randomseed(CurTime())
+                local percentage = math.random(1, 1000)
+                local point = 0
+                if percentage >= 500 and percentage <= 505 then
+                    point = 5 * GAMEMODE.NailHealthPerRepair 
+                    -- counts[5] = counts[5] + 1
+                end
+                if percentage >= 120 and percentage <= 128 then
+                    point = 4 * GAMEMODE.NailHealthPerRepair 
+                    -- counts[4] = counts[4] + 1
+                end
+                if percentage >= 220 and percentage <= 240 then
+                    point = 3 * GAMEMODE.NailHealthPerRepair 
+                    -- counts[3] = counts[3] + 1
+                end
+                if percentage >= 600 and percentage <= 640 then
+                    point = 2 * GAMEMODE.NailHealthPerRepair 
+                    -- counts[2] = counts[2] + 1
+                end
+                if percentage >= 800 and percentage <= 900 then
+                    point = 1 * GAMEMODE.NailHealthPerRepair 
+                    -- counts[1] = counts[1] + 1
+                end
+                -- for j = 1, 8 do 
+                        -- PrintMessage(HUD_PRINTTALK, " ")
+                    -- end
+                -- for i, v in pairs(counts) do
+                    
+                    -- PrintMessage(HUD_PRINTTALK, tostring(i) .. "포인트: " .. tostring(v) .. "번 (실제로 " .. (v / count) * 100 .. "%)")
+                -- end
+                -- count = count + 1
+                -- PrintMessage(HUD_PRINTTALK, "총 횟수: " .. tostring(count))
+                if point > 0 then
+                    self.Owner:PrintMessage(HUD_PRINTTALK, "노동연합에서 추가로 " .. tostring(point / GAMEMODE.NailHealthPerRepair  ) .. " 포인트를 습득했습니다.")
+                end
+				healed = healed + point
+            end
+			gamemode.Call("PlayerRepairedObject", self.Owner, hitent, healed , self)
 			local effectdata = EffectData()
 				effectdata:SetOrigin(tr.HitPos)
 				effectdata:SetNormal(tr.HitNormal)
@@ -106,7 +143,7 @@ function SWEP:SecondaryAttack()
 	or tr.Fraction == 0
 	or trent:GetMoveType() ~= MOVETYPE_VPHYSICS and not trent:GetNailFrozen()
 	or trent.NoNails
-	or trent:IsNailed() and (#trent.Nails >= 8 or trent:GetPropsInContraption() >= GAMEMODE.MaxPropsInBarricade)
+	or trent:IsNailed() and (#trent.Nails >= 10 or trent:GetPropsInContraption() >= GAMEMODE.MaxPropsInBarricade)
 	or trent:GetMaxHealth() == 1 and trent:Health() == 0 and not trent.TotalHealth
 	or not trent:IsNailed() and not trent:GetPhysicsObject():IsMoveable() then return end
 

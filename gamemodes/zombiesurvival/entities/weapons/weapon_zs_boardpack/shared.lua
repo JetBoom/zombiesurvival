@@ -6,8 +6,8 @@ SWEP.AmmoIfHas = true
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "SniperRound"
-SWEP.Primary.Delay = 1
-SWEP.Primary.DefaultClip = 3
+SWEP.Primary.Delay = 1.5
+SWEP.Primary.DefaultClip = 7
 
 SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
@@ -21,16 +21,12 @@ SWEP.FullWalkSpeed = SPEED_SLOWEST
 SWEP.JunkModels = {
 	Model("models/props_debris/wood_board04a.mdl"),
 	Model("models/props_debris/wood_board06a.mdl"),
+	Model("models/props_debris/wood_board06a.mdl"),
+	Model("models/props_debris/wood_board06a.mdl"),
+	Model("models/props_debris/wood_board06a.mdl"),
 	Model("models/props_debris/wood_board02a.mdl"),
 	Model("models/props_debris/wood_board01a.mdl"),
 	Model("models/props_debris/wood_board07a.mdl"),
-	Model("models/props_c17/furnituredrawer002a.mdl"),
-	Model("models/props_c17/furnituredrawer003a.mdl"),
-	Model("models/props_c17/furnituredrawer001a_chunk01.mdl"),
-	Model("models/props_c17/furniturechair001a_chunk01.mdl"),
-	Model("models/props_c17/furnituredrawer001a_chunk02.mdl"),
-	Model("models/props_c17/furnituretable003a.mdl"),
-	Model("models/props_c17/furniturechair001a.mdl")
 }
 
 function SWEP:SetReplicatedAmmo(count)

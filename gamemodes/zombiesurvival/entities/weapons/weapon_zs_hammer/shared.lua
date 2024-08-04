@@ -37,6 +37,23 @@ SWEP.HealStrength = 1
 
 SWEP.NoHolsterOnCarry = true
 
+function SWEP:Think()
+  self.BaseClass.Think(self)
+  local stored = weapons.GetStored(self:GetClass())
+  if !IsValid(stored) then
+    return
+  end
+  if self.Owner:GetFastHammer() then
+    self.SwingTime = stored.SwingTime * 0.65
+    self.Primary.Delay = stored.Primary.Delay * 0.75
+    -- self.SwingTime = stored.SwingTime * 0
+    -- self.Primary.Delay = stored.Primary.Delay * 0
+  else
+    self.SwingTime = stored.SwingTime
+    self.Primary.Delay = stored.Primary.Delay
+  end	
+end
+
 function SWEP:PlayHitSound()
 	self:EmitSound("weapons/melee/crowbar/crowbar_hit-"..math.random(4)..".ogg", 75, math.random(110, 115))
 end

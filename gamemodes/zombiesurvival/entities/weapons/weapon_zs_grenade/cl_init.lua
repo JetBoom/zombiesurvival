@@ -1,7 +1,7 @@
 include("shared.lua")
 
-SWEP.PrintName = "Grenade"
-SWEP.Description = "A simple fragmentation grenade.\nWhen used in the right conditions, it can obliterate groups of zombies."
+SWEP.PrintName = "수류탄"
+SWEP.Description = "단순한 고폭 수류탄이다.\n전략적으로 이용하면 좀비 다수를 터트릴 수 있다."
 
 SWEP.ViewModelFOV = 60
 

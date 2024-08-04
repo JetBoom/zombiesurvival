@@ -4,8 +4,8 @@ SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "SniperRound"
-SWEP.Primary.Delay = 1.25
-SWEP.Primary.DefaultClip = 5
+SWEP.Primary.Delay = 1
+SWEP.Primary.DefaultClip = 9
 
 SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
