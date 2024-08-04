@@ -10,7 +10,7 @@ CLASS.Health = 100
 CLASS.SWEP = "weapon_zs_fleshcreeper"
 CLASS.Model = Model("models/antlion.mdl")
 CLASS.Speed = 175
-CLASS.JumpPower = 220
+CLASS.JumpPower = 300
 
 CLASS.Points = 4
 
@@ -182,7 +182,7 @@ end
 
 if not CLIENT then return end
 
---CLASS.Icon = "zombiesurvival/killicons/flesh_creeper"
+CLASS.Icon = "zombiesurvival/killicons/fleshcreeper"
 
 local matFlesh = Material("models/flesh")
 function CLASS:PrePlayerDraw(pl)

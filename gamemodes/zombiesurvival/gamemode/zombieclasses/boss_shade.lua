@@ -114,7 +114,7 @@ end
 
 if not CLIENT then return end
 
---CLASS.Icon = "zombiesurvival/killicons/shade"
+CLASS.Icon = "zombiesurvival/killicons/shade"
 
 local ToZero = {"ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_R_Thigh", "ValveBiped.Bip01_L_Calf", "ValveBiped.Bip01_R_Calf", "ValveBiped.Bip01_L_Foot", "ValveBiped.Bip01_R_Foot"}
 function CLASS:BuildBonePositions(pl)
