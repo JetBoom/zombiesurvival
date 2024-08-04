@@ -3,6 +3,9 @@ include("shared.lua")
 ENT.NextEmit = 0
 
 function ENT:Initialize()
+	self.Emitter = ParticleEmitter(self:GetPos())
+	self.Emitter:SetNearClip(24, 32)
+
 	local cmodel = ClientsideModel("models/healthvial.mdl")
 	if cmodel:IsValid() then
 		cmodel:SetPos(self:LocalToWorld(Vector(-4, 0, 0)))
@@ -18,7 +21,13 @@ function ENT:Initialize()
 	end
 end
 
+function ENT:Think()
+	self.Emitter:SetPos(self:GetPos())
+end
+
 function ENT:OnRemove()
+	--self.Emitter:Finish()
+
 	if self.CModel and self.CModel:IsValid() then
 		self.CModel:Remove()
 	end
@@ -29,11 +38,10 @@ function ENT:Draw()
 	--[[local parent = self:GetParent()
 	if parent == LocalPlayer() and parent:IsValid() and not parent:ShouldDrawLocalPlayer() then return end]]
 
-	local hittime = self:GetHitTime()
-	if hittime == 0 then
-		render.SetColorModulation(0, 1, 0)
+	if self:GetCharged() then
+		render.SetColorModulation(1, 0, 0)
 	else
-		render.SetColorModulation(0, 1 - math.Clamp(CurTime() - hittime, 0, 1), 0)
+		render.SetColorModulation(0, 1, 0)
 	end
 	render.ModelMaterialOverride(matOverride)
 
@@ -47,10 +55,7 @@ function ENT:Draw()
 
 	local pos = self:GetPos()
 
-	local emitter = ParticleEmitter(pos)
-	emitter:SetNearClip(24, 32)
-
-	local particle = emitter:Add("particles/smokey", pos)
+	local particle = self.Emitter:Add("particles/smokey", pos)
 	particle:SetDieTime(0.35)
 	particle:SetStartAlpha(255)
 	particle:SetEndAlpha(0)
@@ -58,7 +63,9 @@ function ENT:Draw()
 	particle:SetEndSize(0)
 	particle:SetRoll(math.Rand(0, 255))
 	particle:SetRollDelta(math.Rand(-10, 10))
-	particle:SetColor(30, 255, 30)
-
-	emitter:Finish()
+	if self:GetCharged() then
+		particle:SetColor(255, 30, 30)
+	else
+		particle:SetColor(30, 255, 30)
+	end
 end

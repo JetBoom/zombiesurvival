@@ -24,7 +24,7 @@ end
 
 function ENT:Think()
 	if self.PhysicsData then
-		self:Hit(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity, self.PhysicsData.OurOldVelocity)
+		self:Explode(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity, self.PhysicsData.OurOldVelocity)
 	end
 
 	local parent = self:GetParent()
@@ -33,7 +33,7 @@ function ENT:Think()
 	end
 end
 
-function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
+function ENT:Explode(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 	if self:GetHitTime() ~= 0 then return end
 	self:SetHitTime(CurTime())
 
