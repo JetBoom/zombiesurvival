@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Silencer' SMG"
+	SWEP.PrintName = "'사일런서' SMG"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -23,11 +23,11 @@ SWEP.WorldModel = "models/weapons/w_smg_tmp.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("Weapon_TMP.Single")
-SWEP.Primary.Damage = 22
+SWEP.Primary.Damage = 25
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.06
 
-SWEP.Primary.ClipSize = 25
+SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)

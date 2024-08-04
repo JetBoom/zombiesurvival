@@ -3,7 +3,7 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_basemelee"
 
 if CLIENT then
-	SWEP.PrintName = "Food"
+	SWEP.PrintName = "음식"
 
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false

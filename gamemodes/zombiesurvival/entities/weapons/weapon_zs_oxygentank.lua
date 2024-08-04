@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Oxygen Tank"
-	SWEP.Description = "Grants the user much higher air capacity."
+	SWEP.PrintName = "산소탱크"
+	SWEP.Description = "사용자가 물에서 호흡 가능한 시간을 늘려준다."
 
 	SWEP.ViewModelFOV = 60
 

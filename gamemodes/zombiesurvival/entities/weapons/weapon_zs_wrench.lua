@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Mechanic's Wrench"
+	SWEP.PrintName = "공돌이의 렌치"
 
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
@@ -15,7 +15,7 @@ if CLIENT then
 		["base"] = { type = "Model", model = "models/props_c17/tools_wrench01a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(2, 1, 0), angle = Angle(190, 90, 90), size = Vector(1.5, 1.5, 1.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "models/props_c17/metalladder001", skin = 0, bodygroup = {} }
 	}
 
-	SWEP.Description = "This tool can be used to repair deployables as long as they were not damaged recently."
+	SWEP.Description = "최근에 공격받은 것이 아니라면, 이 도구는 설치물을 수리할 수 있다."
 end
 
 SWEP.Base = "weapon_zs_basemelee"
@@ -68,7 +68,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 		hitent:SetObjectHealth(math.min(hitent:GetMaxObjectHealth(), hitent:GetObjectHealth() + healstrength))
 		local healed = hitent:GetObjectHealth() - oldhealth
 		self:PlayRepairSound(hitent)
-		gamemode.Call("PlayerRepairedObject", self.Owner, hitent, healed / 2, self)
+		gamemode.Call("PlayerRepairedObject", self.Owner, hitent, healed / 1.5, self)
 
 		local effectdata = EffectData()
 			effectdata:SetOrigin(tr.HitPos)

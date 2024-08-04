@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Butcher Knife"
-
+	SWEP.PrintName = "도살자의 고기칼"
+	SWEP.Description = "이 칼을 식인종이 사용하게 된다면, 좀비를 죽일 때마다 많은 양의 고기를 떨구게 할 수 있다."
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
 
@@ -27,10 +27,10 @@ SWEP.NoDroppedWorldModel = true
 --[[SWEP.BoxPhysicsMax = Vector(8, 1, 4)
 SWEP.BoxPhysicsMin = Vector(-8, -1, -4)]]
 
-SWEP.MeleeDamage = 40
+SWEP.MeleeDamage = 25
 SWEP.MeleeRange = 48
 SWEP.MeleeSize = 0.875
-SWEP.Primary.Delay = 0.7
+SWEP.Primary.Delay = 0.4
 
 SWEP.WalkSpeed = SPEED_FAST
 
@@ -56,7 +56,26 @@ function SWEP:PlayHitFleshSound()
 end
 
 function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
-	if hitent:IsValid() and hitent:IsPlayer() and hitent:Health() <= 0 then
-		-- Dismember closest limb to tr.HitPos
+	if (hitent:IsValid() and hitent:IsPlayer() and hitent:Health() <= 0) and (self.Owner.Cannibalistic == true or self.Owner:Team() == TEAM_UNDEAD) then
+		self.Owner:SetHealth(math.min(self.Owner:GetMaxHealth(), self.Owner:Health() + math.random(20))) 
+		if SERVER then
+		for i=1, 7 do
+		local ent = ents.CreateLimited("prop_playergib")
+		if ent:IsValid() then
+			ent:SetPos(pos + VectorRand() * 4)
+			ent:SetAngles(VectorRand():Angle())
+			ent:SetGibType(math.random(3, #GAMEMODE.HumanGibs))
+			ent:Spawn()
+
+			local phys = ent:GetPhysicsObject()
+			if phys:IsValid() then
+				phys:Wake()
+				phys:SetVelocityInstantaneous(VectorRand():GetNormalized() * math.Rand(120, 620))
+				phys:AddAngleVelocity(VectorRand() * 360)
+			end
+		end
+		end
+	
+	end
 	end
 end

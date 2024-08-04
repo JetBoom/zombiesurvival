@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Battleaxe' Handgun"
+	SWEP.PrintName = "'배틀액스' 권총"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 

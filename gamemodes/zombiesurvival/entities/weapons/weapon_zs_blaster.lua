@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Blaster' Shotgun"
+	SWEP.PrintName = "'블래스터' 산탄총"
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	
@@ -23,17 +23,17 @@ SWEP.WorldModel = "models/weapons/w_supershorty.mdl"
 SWEP.ReloadDelay = 0.4
 
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
-SWEP.Primary.Damage = 12
-SWEP.Primary.NumShots = 7
-SWEP.Primary.Delay = 0.8
+SWEP.Primary.Damage = 15
+SWEP.Primary.NumShots = 5
+SWEP.Primary.Delay = 0.4
 
-SWEP.Primary.ClipSize = 5
+SWEP.Primary.ClipSize = 3
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "buckshot"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
-SWEP.ConeMax = 0.18
-SWEP.ConeMin = 0.155
+SWEP.ConeMax = 0.2
+SWEP.ConeMin = 0.17
 
 SWEP.WalkSpeed = SPEED_SLOWER
 
@@ -48,7 +48,7 @@ function SWEP:Reload()
 		self.reloading = true
 		self.reloadtimer = CurTime() + self.ReloadDelay
 		self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_START)
-		self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RELOAD_SHOTGUN)
+		--[[self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RELOAD_SHOTGUN)]]
 	end
 
 	self:SetIronsights(false)
@@ -103,7 +103,4 @@ function SWEP:CanPrimaryAttack()
 	end
 
 	return true
-end
-
-function SWEP:SecondaryAttack()
 end

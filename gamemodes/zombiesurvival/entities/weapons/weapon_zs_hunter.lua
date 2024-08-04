@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Hunter' Rifle"
-	SWEP.Description = "Fires special large caliber rounds. The reloading time is slow but it packs a powerful punch."
+	SWEP.PrintName = "'헌터' 저격소총"
+	SWEP.Description = "강력한 대구경 탄환을 사용한다. 재장선 속도는 느리지만, 꽤나 강력하다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 
@@ -21,7 +21,7 @@ sound.Add(
 	channel = CHAN_WEAPON,
 	volume = 1.0,
 	soundlevel = 100,
-	pitchstart = 134,
+	pitchstart = 100,
 	pitchend = 10,
 	sound = "weapons/awp/awp1.wav"
 })

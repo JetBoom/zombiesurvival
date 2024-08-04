@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Medical Kit"
-	SWEP.Description = "An advanced kit of medicine, bandages, and morphine.\nVery useful for keeping a group of survivors healthy.\nUse PRIMARY FIRE to heal other players.\nUse SECONDARY FIRE to heal yourself.\nHealing other players is not only faster but you get a nice point bonus!"
+	SWEP.PrintName = "메디킷"
+	SWEP.Description = "좀비 대재앙 전 각국의 군대에서 널리 통용되던 다용도 치료용 키트이다.\n생존자들이 삶을 이어나가기 위해 꼭 필요한 필수품이다.\n공격 1: 아군 치료\n공격 2: 자가 치료.\n 자신을 치료하는 것보다 아군을 치료하는 것이 효율적이고, 포인트 또한 벌 수 있다!"
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0
 

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Axe"
+	SWEP.PrintName = "도끼"
 
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
@@ -27,7 +27,7 @@ SWEP.HoldType = "melee2"
 SWEP.MeleeDamage = 45
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.5
-SWEP.MeleeKnockBack = 32
+SWEP.MeleeKnockBack = SWEP.MeleeDamage * 1.5
 
 SWEP.WalkSpeed = SPEED_FAST
 

@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Knife"
-	SWEP.Description = "Deals double damage to the back."
+	SWEP.PrintName = "칼"
+	SWEP.Description = "등짝을 노리면 데미지가 2배로 들어간다는 설이 있다."
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
@@ -17,7 +17,7 @@ SWEP.WorldModel = "models/weapons/w_knife_t.mdl"
 SWEP.UseHands = true
 
 SWEP.MeleeDamage = 19
-SWEP.MeleeRange = 52
+SWEP.MeleeRange = 62
 SWEP.MeleeSize = 0.875
 
 SWEP.WalkSpeed = SPEED_FASTEST

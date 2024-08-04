@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Ricochete' Magnum"
-	SWEP.Description = "This gun's bullets will bounce off of walls which will then deal extra damage."
+	SWEP.PrintName = "'리코셰' 리볼버"
+	SWEP.Description = "이 총의 탄약은 개조되어 벽에 튕겨나가며 튕겨나간 탄환은 2배의 데미지를 가진다."
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 

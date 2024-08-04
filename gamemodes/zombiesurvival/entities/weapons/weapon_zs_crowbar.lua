@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Crowbar"
-	SWEP.Description = "Instantly kills headcrabs."
+	SWEP.PrintName = "행성파괴무기(빠루)"
+	SWEP.Description = "블랙 메사의 대공명 현상에서 그분이 사용하시던 무기.\n헤드크랩 종류를 즉사시킨다."
 
 	SWEP.ViewModelFOV = 65
 end
@@ -18,7 +18,7 @@ SWEP.HoldType = "melee"
 SWEP.MeleeDamage = 35
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.5
-SWEP.MeleeKnockBack = 10
+SWEP.MeleeKnockBack = SWEP.MeleeDamage * 1.5
 
 SWEP.Primary.Delay = 0.7
 

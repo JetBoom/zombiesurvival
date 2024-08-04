@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Bust-on-a-stick"
+	SWEP.PrintName = "흉상의 막대"
 	SWEP.ViewModelFOV = 70
 	SWEP.ViewModelFlip = false
 
@@ -27,7 +27,7 @@ SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
 SWEP.WorldModel = Model("models/props_combine/breenbust.mdl")
 SWEP.UseHands = true
 
-SWEP.MeleeDamage = 100
+SWEP.MeleeDamage = 80
 SWEP.MeleeRange = 60
 SWEP.MeleeSize = 1.4
 

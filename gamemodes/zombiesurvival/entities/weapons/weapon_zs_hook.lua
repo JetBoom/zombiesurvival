@@ -1,8 +1,9 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Meat Hook"
-
+	SWEP.PrintName = "갈고리"
+	SWEP.Description = "다른 근접 무기와는 다르게, 좀비에 박혀서 지속적 데미지를 준다. \n좀비가 죽고 난 후, 다시 주워 쓸 수 있다."
+	
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 

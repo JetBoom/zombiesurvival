@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Eraser' Tactical Pistol"
-	SWEP.Description = "Damage increases as remaining bullets decrease. The last shot is worth triple damage."
+	SWEP.PrintName = "'이레이서' 전략적 권총"
+	SWEP.Description = "한 총기연구시설에서 불의의 사고로 만들어진 권총.\n탄창에 남아있는 탄환의 수에 비례해 공격력이 증가한다. 마지막 한 발은 3배의 공격력을 가진다.."
 
 	SWEP.ViewModelFOV = 60
 	SWEP.ViewModelFlip = false

@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Impaler' Crossbow"
-	SWEP.Description = "This ancient weapon can easily skewer groups of zombies."
+	SWEP.PrintName = "'임페리얼' 석궁"
+	SWEP.Description = "고대로부터 전해져 내려오는 무기지만, 여러 마리의 좀비를 관통할 수 있다."
 
 	SWEP.HUD3DBone = "ValveBiped.Crossbow_base"
 	SWEP.HUD3DPos = Vector(1.5, 0.5, 11)
@@ -63,7 +63,7 @@ if SERVER then
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() then
 					phys:Wake()
-					phys:SetVelocityInstantaneous(owner:GetAimVector() * 1400)
+					phys:SetVelocityInstantaneous(owner:GetAimVector() * 2200)
 				end
 			end
 		end

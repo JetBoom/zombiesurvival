@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Annabelle' Rifle"
-	SWEP.Description = "This modified hunting rifle's bullets will explode in to smaller bullets upon hitting a hard surface."
+	SWEP.PrintName = "'애나벨' 사냥소총"
+	SWEP.Description = "이 소총의 탄약은 개조되어, 벽에 부딪힐 경우 튕겨나가며 여러 탄환으로 쪼개진다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	

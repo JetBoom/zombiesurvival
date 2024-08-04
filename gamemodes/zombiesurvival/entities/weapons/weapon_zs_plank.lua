@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Plank"
+	SWEP.PrintName = "나무판자"
 
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
@@ -55,7 +55,6 @@ function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
 	if hitent:IsValid() and hitent:IsPlayer() then
 		local combo = self:GetDTInt(2)
 		self:SetNextPrimaryFire(CurTime() + math.max(0.2, self.Primary.Delay * (1 - combo / 10)))
-
 		self:SetDTInt(2, combo + 1)
 	end
 end

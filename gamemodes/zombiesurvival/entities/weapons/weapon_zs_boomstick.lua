@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Boom Stick"
-	SWEP.Description = "This shotgun allows you to load up to four shells in the chamber at once. Hold down reload for faster loading of each shell."
+	SWEP.PrintName = "폭8막대"
+	SWEP.Description = "이 괴랄한 산탄총은 4발의 탄환을 저장한 뒤, 한 번에 발사할 수 있다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 
@@ -27,8 +27,8 @@ SWEP.ReloadDelay = 0.4
 
 SWEP.Primary.Sound = Sound("weapons/shotgun/shotgun_dbl_fire.wav")
 SWEP.Primary.Recoil = 12.5
-SWEP.Primary.Damage = 36
-SWEP.Primary.NumShots = 6
+SWEP.Primary.Damage = 30
+SWEP.Primary.NumShots = math.random(4,6)
 SWEP.Primary.Delay = 1.5
 
 SWEP.Primary.ClipSize = 4
@@ -39,7 +39,7 @@ SWEP.Primary.DefaultClip = 28
 SWEP.ConeMax = 0.23
 SWEP.ConeMin = 0.2
 
-SWEP.WalkSpeed = SPEED_SLOWER
+SWEP.WalkSpeed = SPEED_SLOWEST
 
 function SWEP:SetIronsights()
 end

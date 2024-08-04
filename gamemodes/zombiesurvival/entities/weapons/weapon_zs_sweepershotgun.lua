@@ -1,7 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Sweeper' Shotgun"
+	SWEP.PrintName = "'스웨퍼' 산탄총"
+	SWEP.Description = "이 산탄총은 소이탄을 사용해 좀비들을 불에 지를 수 있다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 
@@ -104,5 +105,13 @@ function SWEP:CanPrimaryAttack()
 	return true
 end
 
-function SWEP:SecondaryAttack()
+function SWEP.BulletCallback(ply,tr,dmginfo)
+	ent =  tr.Entity
+	if (ent:IsPlayer() and ent:Alive() and ent:Team() ~= TEAM_HUMAN) or ent:GetClass() == "prop_physics" then
+		if( ent:GetClass() != "prop_physics" ) then
+		end
+		if ent:IsPlayer() and ent:GetZombieClassTable().Name ~= "Shade" and SERVER then
+			ent:Ignite(math.random(5,7))
+		end
+	end
 end

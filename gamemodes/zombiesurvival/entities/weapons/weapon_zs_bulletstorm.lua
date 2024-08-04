@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Bullet Storm' SMG"
-	SWEP.Description = "Hold right click to use the Storm firing mode: fire rate is reduced to 60% but two bullets are fired at once."
+	SWEP.PrintName = "'아시모브' SMG"
+	SWEP.Description = "오른쪽 마우스 버튼을 누르고 있을 시, 사격 속도는 60% 하락하지만 발사되는 탄환은 2발로 늘어난다."
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -23,7 +23,7 @@ SWEP.WorldModel = "models/weapons/w_smg_p90.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("Weapon_p90.Single")
-SWEP.Primary.Damage = 15.5
+SWEP.Primary.Damage = 20
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.07
 

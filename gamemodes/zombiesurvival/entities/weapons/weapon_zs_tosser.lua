@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Tosser' SMG"
+	SWEP.PrintName = "'토저' SMG"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -25,7 +25,7 @@ SWEP.CSMuzzleFlashes = false
 
 SWEP.ReloadSound = Sound("Weapon_SMG1.Reload")
 SWEP.Primary.Sound = Sound("Weapon_AR2.NPC_Single")
-SWEP.Primary.Damage = 15
+SWEP.Primary.Damage = 13
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.15
 

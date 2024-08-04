@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Sawhack"
+	SWEP.PrintName = "톱날맨핵"
 
 	SWEP.ViewModelFOV = 60
 
@@ -31,7 +31,7 @@ SWEP.Primary.Delay = 0.45
 SWEP.MeleeDamage = 32
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.9
-SWEP.MeleeKnockBack = 10
+SWEP.MeleeKnockBack = SWEP.MeleeDamage * 0.5
 
 SWEP.WalkSpeed = SPEED_FAST
 

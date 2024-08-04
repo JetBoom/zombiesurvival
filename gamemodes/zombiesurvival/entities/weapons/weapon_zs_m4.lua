@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Stalker' M4"
-	SWEP.Description = "Using this gun will severely reduce the distance in which zombies can see your aura."
+	SWEP.PrintName = "'스토커' M4"
+	SWEP.Description = "이 총을 이용하면 좀비들의 향상된 탐지 능력을 잠시나마 벗어날 수 있다."
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -44,5 +44,5 @@ SWEP.WalkSpeed = SPEED_SLOW
 SWEP.IronSightsPos = Vector(-3, 0, 2)
 
 function SWEP:GetAuraRange()
-	return 512
+	return 400
 end

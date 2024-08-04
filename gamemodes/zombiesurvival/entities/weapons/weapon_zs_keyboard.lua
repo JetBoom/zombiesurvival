@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Keyboard"
-
+	SWEP.PrintName = "키보드"
+	SWEP.Description = "우리 모두 키보드 워리어가 되어 보자!"
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
 

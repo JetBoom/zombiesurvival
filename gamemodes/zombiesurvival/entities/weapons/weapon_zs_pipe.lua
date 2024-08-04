@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Lead Pipe"
-
+	SWEP.PrintName = "파이프"
+	SWEP.Description = "맞는 좀비를 어지럽게 한다."
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
 
@@ -51,9 +51,8 @@ end
 if SERVER then
 function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	if hitent:IsValid() and hitent:IsPlayer() and hitent:GetZombieClassTable().Name ~= "Shade" and CurTime() >= (hitent._NextLeadPipeEffect or 0) then
-		hitent._NextLeadPipeEffect = CurTime() + 1.5
-
-		--hitent:GiveStatus("disorientation")
+		hitent._NextLeadPipeEffect = CurTime() + 2
+		hitent:GiveStatus("disorientation")
 		local x = math.Rand(0.75, 1)
 		x = x * (math.random(2) == 2 and 1 or -1)
 

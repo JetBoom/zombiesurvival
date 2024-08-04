@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Zombie Drill' Desert Eagle"
-	SWEP.Description = "This handgun uses high-powered rounds that have more knockback than others." --SWEP.Description = "This high-powered handgun has the ability to pierce through multiple zombies. The bullet's power decreases by half which each zombie it hits."
+	SWEP.PrintName = "'좀비 드릴' 데저트 이글"
+	SWEP.Description = "이 총의 강력한 발사장치는 다른 총보다 큰 넉백을 준다." --SWEP.Description = "This high-powered handgun has the ability to pierce through multiple zombies. The bullet's power decreases by half which each zombie it hits."
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 
@@ -29,7 +29,7 @@ SWEP.Primary.Sound = Sound("Weapon_Deagle.Single")
 SWEP.Primary.Damage = 47
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.32
-SWEP.Primary.KnockbackScale = 2
+SWEP.Primary.KnockbackScale = 2.5
 
 SWEP.Primary.ClipSize = 7
 SWEP.Primary.Automatic = false

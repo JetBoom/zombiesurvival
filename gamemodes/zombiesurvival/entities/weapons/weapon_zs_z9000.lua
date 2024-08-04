@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'Z9000' Pulse Pistol"
-	SWEP.Description = "Although the Z9000 does not deal that much damage, the pulse shots it fires will slow targets."
+	SWEP.PrintName = "'Z9000' 펄스 권총"
+	SWEP.Description = "Z9000는 공격력이 강한 무기는 아니지만, 이 총에 맞은 좀비들은 한동안 느려지게 된다."
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 	
@@ -32,7 +32,7 @@ SWEP.CSMuzzleFlashes = false
 
 SWEP.ReloadSound = Sound("Weapon_Alyx_Gun.Reload")
 SWEP.Primary.Sound = Sound("Weapon_Alyx_Gun.Single")
-SWEP.Primary.Damage = 14
+SWEP.Primary.Damage = 18
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.2
 

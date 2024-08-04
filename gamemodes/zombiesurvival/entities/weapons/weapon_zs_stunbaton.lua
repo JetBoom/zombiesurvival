@@ -1,11 +1,11 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Stun Baton"
+	SWEP.PrintName = "진압용 전기봉"
 
 	SWEP.ViewModelFOV = 50
 
-	SWEP.Description = "Although weak compared to the other weapons, this baton\nhas the ability to slow zombies with an electric shock."
+	SWEP.Description = "다른 무기에 비하면 약하지만, 이 무기는 좀비를 한동안 느리게 만들 수 있다."
 end
 
 SWEP.Base = "weapon_zs_basemelee"
