@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Manhack"
-	SWEP.Description = "A deployable, remotely controlled device.\nIdeal for scouting but also can be used for attacking from safety."
+	SWEP.PrintName = "맨핵"
+	SWEP.Description = "원격 조종이 가능한 군용 로봇이다.\n본래 용도는 정찰용이었으나 안전하게 멀리서 공격하는 데도 사용 가능하다."
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 50

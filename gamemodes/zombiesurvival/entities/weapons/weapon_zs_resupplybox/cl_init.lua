@@ -1,7 +1,7 @@
 include("shared.lua")
 
-SWEP.PrintName = "Resupply Box"
-SWEP.Description = "Allows survivors to get ammunition for their current weapon. Each person can only use the box once every so often.\nPress PRIMARY ATTACK to deploy the box.\nPress SECONDARY ATTACK and RELOAD to rotate the box."
+SWEP.PrintName = "보급 상자"
+SWEP.Description = "사람들이 자동으로 자신의 무기에 해당하는 탄약을 가져갈 수 있게 한다.\n공격 1: 설치\n공격 2/재장전: 회전\n달리기 키(기본값:쉬프트): 회수\n사용 키(기본값:E):탄약 가져가기/주인 없는 보급 상자 가져가기\n생성할려고 하는 위치가 가능한 위치라면 초록색으로 표시된다."
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4

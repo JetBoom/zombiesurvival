@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Stone"
-	SWEP.Description = "A simple stone found laying pretty much anywhere."
+	SWEP.PrintName = "돌"
+	SWEP.Description = "뭔가 강렼해보이는 돌이다."
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 50
