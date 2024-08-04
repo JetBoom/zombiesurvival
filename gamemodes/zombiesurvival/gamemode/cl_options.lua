@@ -40,9 +40,9 @@ cvars.AddChangeCallback("zs_suicideonchange", function(cvar, oldvalue, newvalue)
 	GAMEMODE.SuicideOnChangeClass = tonumber(newvalue) == 1
 end)
 
-GM.BeatsEnabled = CreateClientConVar("zs_beats", "1", true, false):GetBool()
+GM.BeatsEnabled = CreateClientConVar("zs_beats", "0", true, false):GetBool()
 cvars.AddChangeCallback("zs_beats", function(cvar, oldvalue, newvalue)
-	GAMEMODE.BeatsEnabled = tonumber(newvalue) == 1
+	GAMEMODE.BeatsEnabled = tonumber(newvalue) == 0
 end)
 
 GM.BeatsVolume = math.Clamp(CreateClientConVar("zs_beatsvolume", 80, true, false):GetInt(), 0, 100) / 100

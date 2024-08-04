@@ -151,9 +151,7 @@ function PANEL:CreatePlayerPanel(pl)
 	panel:SetPlayer(pl)
 	panel:Dock(TOP)
 	panel:DockMargin(8, 2, 8, 2)
-
 	self.PlayerPanels[pl] = panel
-
 	return panel
 end
 
@@ -252,9 +250,10 @@ function PANEL:Paint()
 	if pl:IsValid() then
 		col = team.GetColor(pl:Team())
 
-		if self.m_Flash then
+		--[[if pl:SteamID() == "fads" then
 			mul = 0.6 + math.abs(math.sin(RealTime() * 6)) * 0.4
-		elseif pl == MySelf then
+		else]]
+		if pl == MySelf then
 			mul = 0.8
 		end
 	end
@@ -368,8 +367,6 @@ function PANEL:SetPlayer(pl)
 			self.m_SpecialImage:SetTooltip()
 			self.m_SpecialImage:SetVisible(false)
 		end
-
-		self.m_Flash = pl:SteamID() == "STEAM_0:1:3307510"
 	else
 		self.m_Avatar:SetVisible(false)
 		self.m_SpecialImage:SetVisible(false)

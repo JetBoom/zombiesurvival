@@ -73,7 +73,7 @@ cvars.AddChangeCallback("zs_grief_reflectthreshold", function(cvar, oldvalue, ne
 	GAMEMODE.GriefReflectThreshold = tonumber(newvalue) or -5
 end)
 
-GM.MaxPropsInBarricade = CreateConVar("zs_maxpropsinbarricade", "8", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Limits the amount of props that can be in one 'contraption' of nails."):GetInt()
+GM.MaxPropsInBarricade = CreateConVar("zs_maxpropsinbarricade", "16", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Limits the amount of props that can be in one 'contraption' of nails."):GetInt()
 cvars.AddChangeCallback("zs_maxpropsinbarricade", function(cvar, oldvalue, newvalue)
 	GAMEMODE.MaxPropsInBarricade = tonumber(newvalue) or 8
 end)

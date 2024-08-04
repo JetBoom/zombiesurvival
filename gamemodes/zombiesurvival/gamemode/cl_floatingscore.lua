@@ -15,7 +15,7 @@ function GM:ReceivedCommission(crate, buyer, points)
 end
 
 function GM:HealedOtherPlayer(other, points)
-	gamemode.Call("FloatingScore", other, "floatingscore_heal", points, nil, true)
+	gamemode.Call("FloatingScore", other, "floatingscore_med", points)
 end
 
 function GM:RepairedObject(other, points)

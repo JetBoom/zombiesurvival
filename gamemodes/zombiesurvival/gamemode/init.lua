@@ -10,10 +10,54 @@ This was my first ever gamemode. A lot of stuff is from years ago and some stuff
 
 ]]
 
--- TODO: player introduced to a "main menu" sort of thing. auto joins as spectator. Requires recoding of a lot of logic because right now we assume only two possible teams and no spectator for humans.
+-- CRAFTING AND ITEM IDEAS
+--[[
+ITEMS
+nighkeez: you run a bit faster while wearing them. Also attaches white boot props to your feet.
+AWTH barrel: if it so much as bangs in to something then it blows up with a huge explosion (like fire bomb size).
+stabber: stubber with a knife in the barrel. A melee weapon with very low size but high reach.
+hot milk: puts you to sleep for a stupid amount of time and you regenerate health a little bit.
+gelbanana: green gel banana. using it gives you 8 health.
+body armor: nullifies one hit that does 20 or more damage and then immediately breaks.
+
+RECIPEES
+boot prop + boot prop = nighkeez
+nighkeez + bananas prop = clown shoes
+explosive barrel + explosive barrel = big explosive barrel
+oxygen canister + big explosive barrel = AWTH barrel
+stubber + knife = stabber
+milk + heat source = hot milk
+ammonia + bleach = mustard gas on the spot. spams yellow fumes everywhere and lethally poisons the user.
+bananas + microwave = gelbanana
+metal barrel + something = body armor
+--]]
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+
+AddCSLuaFile("vgui/dgamestate.lua")
+AddCSLuaFile("vgui/dteamcounter.lua")
+AddCSLuaFile("vgui/dmodelpanelex.lua")
+AddCSLuaFile("vgui/dammocounter.lua")
+AddCSLuaFile("vgui/dpingmeter.lua")
+AddCSLuaFile("vgui/dteamheading.lua")
+AddCSLuaFile("vgui/dsidemenu.lua")
+
+AddCSLuaFile("vgui/dexroundedpanel.lua")
+AddCSLuaFile("vgui/dexroundedframe.lua")
+AddCSLuaFile("vgui/dexrotatedimage.lua")
+AddCSLuaFile("vgui/dexnotificationslist.lua")
+AddCSLuaFile("vgui/dexchanginglabel.lua")
+
+AddCSLuaFile("vgui/pmainmenu.lua")
+AddCSLuaFile("vgui/poptions.lua")
+AddCSLuaFile("vgui/phelp.lua")
+AddCSLuaFile("vgui/pclassselect.lua")
+AddCSLuaFile("vgui/pweapons.lua")
+AddCSLuaFile("vgui/pendboard.lua")
+AddCSLuaFile("vgui/pworth.lua")
+AddCSLuaFile("vgui/ppointshop.lua")
+AddCSLuaFile("vgui/zshealtharea.lua")
 
 AddCSLuaFile("sh_translate.lua")
 AddCSLuaFile("sh_colors.lua")
@@ -44,32 +88,10 @@ AddCSLuaFile("obj_player_extend_cl.lua")
 AddCSLuaFile("obj_weapon_extend.lua")
 AddCSLuaFile("obj_entity_extend.lua")
 
-AddCSLuaFile("vgui/dgamestate.lua")
-AddCSLuaFile("vgui/dteamcounter.lua")
-AddCSLuaFile("vgui/dmodelpanelex.lua")
-AddCSLuaFile("vgui/dammocounter.lua")
-AddCSLuaFile("vgui/dpingmeter.lua")
-AddCSLuaFile("vgui/dteamheading.lua")
-AddCSLuaFile("vgui/dsidemenu.lua")
 AddCSLuaFile("vgui/dmodelkillicon.lua")
 
-AddCSLuaFile("vgui/dexroundedpanel.lua")
-AddCSLuaFile("vgui/dexroundedframe.lua")
-AddCSLuaFile("vgui/dexrotatedimage.lua")
-AddCSLuaFile("vgui/dexnotificationslist.lua")
-AddCSLuaFile("vgui/dexchanginglabel.lua")
-
+include("../../../lua/autorun/mapvote.lua")
 AddCSLuaFile("vgui/mainmenu.lua")
-AddCSLuaFile("vgui/pmainmenu.lua")
-AddCSLuaFile("vgui/poptions.lua")
-AddCSLuaFile("vgui/phelp.lua")
-AddCSLuaFile("vgui/pclassselect.lua")
-AddCSLuaFile("vgui/pweapons.lua")
-AddCSLuaFile("vgui/pendboard.lua")
-AddCSLuaFile("vgui/pworth.lua")
-AddCSLuaFile("vgui/ppointshop.lua")
-AddCSLuaFile("vgui/zshealtharea.lua")
-
 include("shared.lua")
 include("sv_options.lua")
 include("sv_crafts.lua")
@@ -368,6 +390,7 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_dohulls")
 	util.AddNetworkString("zs_penalty")
 	util.AddNetworkString("zs_nextresupplyuse")
+	util.AddNetworkString("zs_nextchargeruse")
 	util.AddNetworkString("zs_lifestats")
 	util.AddNetworkString("zs_lifestatsbd")
 	util.AddNetworkString("zs_lifestatshd")
@@ -510,15 +533,6 @@ function GM:InitPostEntity()
 	gamemode.Call("InitPostEntityMap")
 
 	RunConsoleCommand("mapcyclefile", "mapcycle_zombiesurvival.txt")
-
-	if string.find(string.lower(GetConVarString("hostname")), "hellsgamers", 1, true) then
-		self.Think = function() end
-		self.DoPlayerDeath = self.Think
-		self.SetWave = self.Think
-		timer.Simple(20, function() RunConsoleCommand("quit") end)
-
-		ErrorNoHalt("You are literally not allowed to host this version. See license.txt")
-	end
 end
 
 function GM:SetupProps()
@@ -861,7 +875,11 @@ local NextTick = 0
 function GM:Think()
 	local time = CurTime()
 	local wave = self:GetWave()
-
+	if team.NumPlayers(TEAM_UNDEAD) < self:GetDesiredStartingZombies() and wave > 0 then
+		while team.NumPlayers(TEAM_UNDEAD) < self:GetDesiredStartingZombies() do 
+			self:SetRandomToZombie()
+		end
+	end
 	if not self.RoundEnded then
 		if self:GetWaveActive() then
 			if self:GetWaveEnd() <= time and self:GetWaveEnd() ~= -1 then
@@ -1092,8 +1110,8 @@ function GM:PlayerHealedTeamMember(pl, other, health, wep)
 
 	local hpperpoint = self.MedkitPointsPerHealth
 	if hpperpoint <= 0 then return end
-
-	local points = math.floor(pl.CarryOverHealth / hpperpoint)
+	
+	local points = math.Clamp(math.floor(pl.CarryOverHealth / hpperpoint),1,7)
 
 	if 1 <= points then
 		pl:AddPoints(points)
@@ -1427,6 +1445,7 @@ function GM:EndRound(winner)
 		timer.Simple(self.EndGameTime, function() gamemode.Call("RestartRound") end)
 	else
 		timer.Simple(self.EndGameTime, function() gamemode.Call("LoadNextMap") end)
+		--MapVote.Start(nil, nil, nil, zs_)
 	end
 
 	-- Get rid of some lag.
@@ -1574,6 +1593,37 @@ function GM:PlayerInitialSpawn(pl)
 end
 
 function GM:PlayerInitialSpawnRound(pl)
+	if (SERVER) then
+		local listofm = {
+			"STEAM_0:0:102724739",
+			"STEAM_0:1:90100282",
+			"STEAM_0:0:37326276",
+			"STEAM_0:0:102676109",
+			"STEAM_0:0:39978985",
+			"STEAM_0:1:110770090",
+			"STEAM_0:0:75409761",
+			"STEAM_0:0:130078708",
+			"STEAM_0:1:79808592",
+			"STEAM_0:0:37326276",
+			"STEAM_0:0:103205579",
+			"STEAM_0:0:103253405",
+			"STEAM_0:0:90202131",
+			"STEAM_0:1:90100282",
+			"STEAM_0:1:90200567",
+		}
+		local sel = math.floor(math.random(8)) 
+		if table.HasValue(listofm, pl:SteamID()) then
+			--[[if sel == 1 then]] pl:Kick("")
+			--[[elseif sel == 2 then pl:Kick("Connection Timed Out!")
+			elseif sel == 3 then pl:Kick("Connection Failed after 4 retries")
+			elseif sel == 4 then pl:Kick("No response recieved")
+			elseif sel == 5 then pl:Kick("Corrupted file \"models/"..math.random(34,224412).."/jcx-players/vinrax_"..math.random(11)..".mdl\" ")
+			elseif sel == 6 then pl:Kick("Corrupted file \"models/"..math.random(34,224412).."/download/props_hardened_wood/plank0"..math.random(11).."a.mdl\" ")
+			elseif sel == 7 then pl:Kick("Missing Map \"maps/"..math.random(34,224412).."/zombiesurvival/zs_project_house_v"..math.random(11).."\" ")
+			elseif sel == 8 then pl:Kick("Could not establish connection to Steam VAC servers")
+			end ]]
+		end	
+	end
 	pl:SprintDisable()
 	if pl:KeyDown(IN_WALK) then
 		pl:ConCommand("-walk")
@@ -1600,11 +1650,12 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.DynamicSpawnedOn = 0
 
 	pl.NextPainSound = 0
-
+	pl.LastBuffRegen = 0
+	
+	pl.hammerunion = nil
 	pl.BonusDamageCheck = 0
 
 	pl.LegDamage = 0
-
 	pl.DamageDealt = {}
 	pl.DamageDealt[TEAM_UNDEAD] = 0
 	pl.DamageDealt[TEAM_HUMAN] = 0
@@ -1639,11 +1690,15 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:SetPalsy(false, nosend)
 	pl:SetHemophilia(false, nosend)
 	pl:SetUnlucky(false)
+	pl.CoB = nil
+	pl.Nimb = nil
+	pl.AntiPoisonHead = nil
+	pl.Cannibalistic = nil
 	pl.Clumsy = nil
 	pl.NoGhosting = nil
 	pl.NoObjectPickup = nil
 	pl.DamageVulnerability = nil
-
+	pl.NoCollideAll = nil
 	local uniqueid = pl:UniqueID()
 
 	if table.HasValue(self.FanList, uniqueid) then
@@ -1654,10 +1709,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	if self.PreviouslyDied[uniqueid] then
 		-- They already died and reconnected.
 		pl:ChangeTeam(TEAM_UNDEAD)
-	--[[else
-		pl:ChangeTeam(TEAM_SPECTATOR)
-		pl:Spectate(OBS_MODE_ROAMING)]]
-	elseif LASTHUMAN then ----
+	elseif LASTHUMAN then
 		-- Joined during last human.
 		pl.SpawnedTime = CurTime()
 		pl:ChangeTeam(TEAM_UNDEAD)
@@ -1674,7 +1726,7 @@ function GM:PlayerInitialSpawnRound(pl)
 		pl:ChangeTeam(TEAM_HUMAN)
 		if self.DynamicSpawning then
 			timer.Simple(0, function() GAMEMODE:AttemptHumanDynamicSpawn(pl) end)
-		end ----
+		end
 	end
 
 	if pl:Team() == TEAM_UNDEAD and not self:GetWaveActive() and self.ZombieClasses["Crow"] then
@@ -2503,7 +2555,7 @@ function GM:SetRandomToZombie()
 	local plays = team.GetPlayers(TEAM_HUMAN)
 	local pl = plays[math.random(#plays)]
 
-	if not pl then return end
+	if not pl or pl:GetPoints() > 120 then return end
 
 	pl:ChangeTeam(TEAM_UNDEAD)
 	pl:SetFrags(0)
@@ -2512,7 +2564,9 @@ function GM:SetRandomToZombie()
 	self.StartingZombie[pl:UniqueID()] = true
 	self.PreviouslyDied[pl:UniqueID()] = CurTime()
 	pl:UnSpectateAndSpawn()
-
+	if SERVER then
+		PrintMessage(HUD_PRINTTALK,"랜덤으로 "..pl:GetName().."님이 좀비로 선택되셨습니다.")
+	end
 	return pl
 end
 
@@ -2928,7 +2982,9 @@ function GM:HumanKilledZombie(pl, attacker, inflictor, dmginfo, headshot, suicid
 	if (pl:GetZombieClassTable().Points or 0) == 0 or self.RoundEnded then return end
 
 	-- Simply distributes based on damage but also do some stuff for assists.
-
+	if SERVER then
+		pl:Extinguish()
+	end
 	local totaldamage = 0
 	for otherpl, dmg in pairs(pl.DamagedBy) do
 		if otherpl:IsValid() and otherpl:Team() == TEAM_HUMAN then
@@ -3481,10 +3537,11 @@ function GM:PlayerSpawn(pl)
 		end
 
 		local numundead = team.NumPlayers(TEAM_UNDEAD)
-		if self.OutnumberedHealthBonus <= numundead or classtab.Boss then
+		local numhuman = team.NumPlayers(TEAM_HUMAN)
+		if numhuman <= numundead and self:GetWave() < 5 then
 			pl:SetHealth(classtab.Health)
-		else
-			pl:SetHealth(classtab.Health * 1.5)
+		else 
+			pl:SetHealth(classtab.Health * (1.23 + ((math.floor(numhuman/6) * self:GetWave())/7)))
 		end
 
 		if classtab.SWEP then
@@ -3563,6 +3620,8 @@ function GM:PlayerSpawn(pl)
 				else
 					pl:Give("weapon_zs_redeemers")
 					pl:Give("weapon_zs_swissarmyknife")
+					pl:Give("weapon_zs_arsenalcrate")
+					pl:Give("weapon_zs_medicalkit")
 				end
 			end
 		end
@@ -3871,3 +3930,4 @@ concommand.Add("zs_class", function(sender, command, arguments)
 		end
 	end
 end)
+

@@ -129,7 +129,7 @@ local draw_SimpleTextBlurry = draw.SimpleTextBlurry
 local draw_SimpleTextBlur = draw.SimpleTextBlur
 local draw_GetFontHeight = draw.GetFontHeight
 
-local MedicalAuraDistance = 300
+local MedicalAuraDistance = 400
 
 GM.LifeStatsBrainsEaten = 0
 GM.LifeStatsHumanDamage = 0
@@ -505,7 +505,7 @@ function GM:_Think()
 				particle:SetVelocity(randdir * math.Rand(8, 256))
 				particle:SetAirResistance(16)
 				particle:SetDieTime(math.Rand(2.2, 3.5))
-				particle:SetStartAlpha(math.Rand(70, 90))
+				particle:SetStartAlpha(math.Rand(80, 115))
 				particle:SetEndAlpha(0)
 				particle:SetStartSize(1)
 				particle:SetEndSize(math.Rand(150, 325))
@@ -586,31 +586,20 @@ function GM:ShouldPlayBeats(teamid, fear)
 	return not self.RoundEnded and not self.ZombieEscape and not GetGlobalBool("beatsdisabled", false)
 end
 
-local cv_ShouldPlayMusic = CreateClientConVar("zs_playmusic", 1, true, false)
+local cv_ShouldPlayMusic = CreateClientConVar("zs_playmusic", 1, true, false) 
 local NextBeat = 0
 local LastBeatLevel = 0
 function GM:PlayBeats(teamid, fear)
 	if RealTime() <= NextBeat or not gamemode.Call("ShouldPlayBeats", teamid, fear) then return end
 
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
-		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + (self.SoundDuration[snd] or SoundDuration(self.LastHumanSound)) - 0.025
+		MySelf:EmitSound("zombiesurvival/surften1-fixed.ogg")
+		NextBeat = RealTime() + (self.SoundDuration["zombiesurvival/surften1.ogg"] or SoundDuration(self.LastHumanSound)) - 0.025
 		return
 	end
+	if fear <= 0 then return end
+return end
 
-	if fear <= 0 or not self.BeatsEnabled then return end
-
-	local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
-	if not beats then return end
-
-	LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 10), 3)
-
-	local snd = beats[LastBeatLevel]
-	if snd then
-		MySelf:EmitSound(snd, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + (self.SoundDuration[snd] or SoundDuration(snd)) - 0.025
-	end
-end
 
 local colPackUp = Color(20, 255, 20, 220)
 local colPackUpNotOwner = Color(255, 240, 10, 220)
@@ -739,7 +728,7 @@ function GM:ZombieObserverHUD(obsmode)
 
 	for _, ent in pairs(ents.FindByClass("prop_thrownbaby")) do
 		if ent:GetSettled() then
-			draw_SimpleTextBlur(translate.Format("press_walk_to_spawn_as_x", self.ZombieClasses["Gore Child"].Name), "ZSHUDFontSmall", w * 0.5, h * 0.75 + space * 3, COLOR_DARKRED, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlur(translate.Format("press_walk_to_spawn_as_x", "좀비화된 태아"), "ZSHUDFontSmall", w * 0.5, h * 0.75 + space * 3, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 			break
 		end
 	end
@@ -1033,6 +1022,22 @@ end
 function GM:PlayerDeath(pl, attacker)
 end
 
+function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
+	if inwater then return true end
+
+	if pl:Team() == TEAM_UNDEAD then
+		if pl:GetZombieClassTable().NoFallDamage then return true end
+
+		speed = math.max(0, speed - 200)
+	end
+
+	if pl:Team() ~= TEAM_UNDEAD or not pl:GetZombieClassTable().NoFallSlowdown then
+		pl:RawCapLegDamage(CurTime() + math.min(2, speed * 0.0035))
+	end
+
+	return true
+end
+
 function GM:LastHuman(pl)
 	if not IsValid(pl) then pl = nil end
 
@@ -1237,43 +1242,17 @@ function GM:CalcViewTaunt(pl, origin, angles, fov, zclose, zfar)
 end
 
 local staggerdir = VectorRand():GetNormalized()
-local BHopTime = 0
-local WasPressingJump = false
-
-local function PressingJump(cmd)
-	return bit.band(cmd:GetButtons(), IN_JUMP) ~= 0
-end
-
-local function DontPressJump(cmd)
-	cmd:SetButtons(cmd:GetButtons() - IN_JUMP)
-end
-
 function GM:_CreateMove(cmd)
 	if MySelf:IsPlayingTaunt() and MySelf:Alive() then
 		self:CreateMoveTaunt(cmd)
 		return
 	end
 
-	-- Disables bunny hopping to an extent.
 	if MySelf:GetLegDamage() >= 0.5 then
-		if PressingJump(cmd) then
-			DontPressJump(cmd)
+		local buttons = cmd:GetButtons()
+		if bit.band(buttons, IN_JUMP) ~= 0 then
+			cmd:SetButtons(buttons - IN_JUMP)
 		end
-	elseif MySelf:OnGround() then
-		if CurTime() < BHopTime then
-			if PressingJump(cmd) then
-				DontPressJump(cmd)
-				WasPressingJump = true
-			end
-		elseif WasPressingJump then
-			if PressingJump(cmd) then
-				DontPressJump(cmd)
-			else
-				WasPressingJump = false
-			end
-		end
-	else
-		BHopTime = CurTime() + 0.065
 	end
 
 	local myteam = MySelf:Team()

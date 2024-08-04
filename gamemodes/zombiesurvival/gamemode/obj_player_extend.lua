@@ -1,6 +1,8 @@
 local meta = FindMetaTable("Player")
 if not meta then return end
 
+meta.GetTeamID = meta.Team
+
 function meta:GetMaxHealthEx()
 	if self:Team() == TEAM_UNDEAD then
 		return self:GetMaxZombieHealth()
@@ -146,6 +148,10 @@ function meta:SetZombieClassName(classname)
 	end
 end
 
+function meta:AddLegDamage(damage)
+	self:SetLegDamage(self:GetLegDamage() + damage)
+end
+
 function meta:SetPoints(points)
 	self:SetDTInt(1, points)
 end
@@ -163,6 +169,14 @@ end
 
 function meta:GetPalsy()
 	return self.m_Palsy
+end
+
+function meta:SetFastHammer(b)
+    self:SetNWBool("FastHammer", b)
+end
+
+function meta:GetFastHammer(b)
+    return self:GetNWBool("FastHammer")
 end
 
 function meta:SetHemophilia(onoff, nosend)
@@ -184,10 +198,6 @@ function meta:GetUnlucky()
 	return self.m_Unlucky
 end
 
-function meta:AddLegDamage(damage)
-	self:SetLegDamage(self:GetLegDamage() + damage)
-end
-
 function meta:SetLegDamage(damage)
 	self.LegDamage = CurTime() + math.min(GAMEMODE.MaxLegDamage, damage * 0.125)
 	if SERVER then
@@ -207,7 +217,8 @@ function meta:RawCapLegDamage(time)
 end
 
 function meta:GetLegDamage()
-	return math.max(0, (self.LegDamage or 0) - CurTime())
+	local base = self.LegDamage or 0
+	return math.max(0, base - CurTime())
 end
 
 function meta:WouldDieFrom(damage, hitpos)
@@ -426,14 +437,8 @@ function meta:ShouldBarricadeGhostWith(ent)
 end
 
 function meta:BarricadeGhostingThink()
-	if self:KeyDown(IN_ZOOM) or self:ActiveBarricadeGhosting() then 
-		if self.FirstGhostThink then 
-			self:SetLocalVelocity( Vector( 0, 0, 0 ) ) 
-			self.FirstGhostThink = false 
-		end
-		return 
-	end
-	self.FirstGhostThink = true
+	if self:KeyDown(IN_ZOOM) or self:ActiveBarricadeGhosting() then return end
+
 	self:SetBarricadeGhosting(false)
 end
 

@@ -14,7 +14,7 @@ GM.Credits = {
 	{"Typhon", "lukas-tinel@hotmail.com", "HUD textures"},
 
 	{"Mr. Darkness", "", "Russian translation"},
-	{"honsal", "", "Korean translation"},
+	{"Jungmin \"Honsal\" Lee","","Korean translation"},
 	{"rui_troia", "", "Portuguese translation"},
 	{"Shinyshark", "", "Dutch translation"},
 	{"Kradar", "", "Italian translation"},
@@ -47,7 +47,6 @@ include("sh_options.lua")
 include("sh_zombieclasses.lua")
 include("sh_animations.lua")
 include("sh_sigils.lua")
-include("sh_channel.lua")
 
 include("noxapi/noxapi.lua")
 
@@ -61,7 +60,7 @@ include("workshopfix.lua")
 ----------------------
 
 GM.EndRound = false
-GM.StartingWorth = 100
+GM.StartingWorth = 200
 GM.ZombieVolunteers = {}
 
 team.SetUp(TEAM_ZOMBIE, "The Undead", Color(0, 255, 0, 255))
@@ -77,7 +76,7 @@ vector_tiny = Vector(0.001, 0.001, 0.001)
 GM.SoundDuration = {
 	["zombiesurvival/music_win.ogg"] = 33.149,
 	["zombiesurvival/music_lose.ogg"] = 45.714,
-	["zombiesurvival/lasthuman.ogg"] = 120.503,
+	["zombiesurvival/surften1.ogg"] = 148.203,
 
 	["zombiesurvival/beats/defaulthuman/1.ogg"] = 7.111,
 	["zombiesurvival/beats/defaulthuman/2.ogg"] = 7.111,
@@ -109,7 +108,7 @@ function GM:AddCustomAmmo()
 	game.AddAmmoType({name = "manhack"})
 	game.AddAmmoType({name = "manhack_saw"})
 	game.AddAmmoType({name = "drone"})
-
+	game.AddAmmoType({name = "charger"})
 	game.AddAmmoType({name = "dummy"})
 end
 
@@ -366,11 +365,11 @@ end
 function GM:Move(pl, move)
 	if pl:Team() == TEAM_HUMAN then
 		if pl:GetBarricadeGhosting() then
-			move:SetMaxSpeed(36)
-			move:SetMaxClientSpeed(36)
+			move:SetMaxSpeed(90 * (pl.Nimb and 1.2 or 1))
+			move:SetMaxClientSpeed(90 * (pl.Nimb and 1.2 or 1))
 		elseif move:GetForwardSpeed() < 0 then
-			move:SetMaxSpeed(move:GetMaxSpeed() * 0.5)
-			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.5)
+			move:SetMaxSpeed(move:GetMaxSpeed() * (pl.CoB and 1 or 0.5))
+			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * (pl.CoB and 1 or 0.5))
 		elseif move:GetForwardSpeed() == 0 then
 			move:SetMaxSpeed(move:GetMaxSpeed() * 0.85)
 			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.85)
@@ -432,14 +431,12 @@ end
 
 local TEAM_SPECTATOR = TEAM_SPECTATOR
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-	return listener:IsValid() and talker:IsValid() and listener:Team() == talker:Team() or listener:Team() == TEAM_SPECTATOR
-	--[[if self:GetEndRound() then return true, false end
-
-	if listener:Team() == talker:Team() then
-		return true, listener:GetPos():DistanceZSkew(talker:GetPos(), 2) <= 128
+	local localvoice = talker.localVoice
+	if localvoice and listener:Team() ~= talker:Team() then
+		return false, false
+	else
+		return true, false
 	end
-
-	return false]]
 end
 
 function GM:PlayerTraceAttack(pl, dmginfo, dir, trace)
@@ -466,7 +463,7 @@ function GM:ScalePlayerDamage(pl, hitgroup, dmginfo)
 end
 
 function GM:CanDamageNail(ent, attacker, inflictor, damage, dmginfo)
-	return not attacker:IsPlayer() or attacker:Team() == TEAM_UNDEAD
+	return not attacker:IsPlayer() or attacker:Team() ~= TEAM_HUMAN
 end
 
 function GM:CanPlaceNail(pl, tr)
@@ -675,6 +672,9 @@ function GM:IsSpecialPerson(pl, image)
 	if pl:SteamID() == "STEAM_0:1:3307510" then
 		img = "VGUI/steam/games/icon_sourcesdk"
 		tooltip = "JetBoom\nCreator of Zombie Survival!"
+	elseif pl:SteamID() == "STEAM_0:1:41282672" then
+		img = "VGUI/steam/games/icon_sourcesdk"
+		tooltip = "RICE\n 이 서버의 주력 개발자"
 	elseif pl:IsAdmin() then
 		img = "VGUI/servers/icon_robotron"
 		tooltip = "Admin"
@@ -752,7 +752,4 @@ function SoundDuration(snd)
 
 	return OldSoundDuration(snd)
 end
-end
-
-function GM:VehicleMove()
 end

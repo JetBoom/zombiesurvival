@@ -138,6 +138,14 @@ function meta:ResetBones(onlyscale)
 	end
 end
 
+function meta:SetTeamID(teamid)
+	self.TeamID = teamid
+end
+
+function meta:GetTeamID()
+	return self.Team and self:Team() or self.TeamID or 0
+end
+
 function meta:SetBarricadeHealth(m)
 	self:SetDTFloat(1, m)
 end
@@ -163,7 +171,7 @@ function meta:GetBarricadeRepairs()
 end
 
 function meta:GetMaxBarricadeRepairs()
-	return self:GetMaxBarricadeHealth() * 1.5
+	return self:GetMaxBarricadeHealth() * 1.75
 end
 
 function meta:GetBonePositionMatrixed(index)
