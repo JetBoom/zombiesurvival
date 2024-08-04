@@ -28,7 +28,7 @@ function MakepCredits()
 	frame:SetTitle(" ")
 	frame:SetKeyboardInputEnabled(false)
 
-	local label = EasyLabel(frame, GAMEMODE.Name.." Credits", "ZSHUDFontNS", color_white)
+	local label = EasyLabel(frame, "좀비 서바이벌 제작진", "ZSHUDFontNS", color_white)
 	label:AlignTop(y)
 	label:CenterHorizontal()
 	y = y + label:GetTall() + 8
@@ -76,7 +76,7 @@ function MakepHelp()
 		return
 	end
 
-	local wide, tall = 500, 480
+	local wide, tall = math.min(ScrW(), 1024), math.min(ScrH(), 768)
 
 	local Window = vgui.Create("DFrame")
 	Window:SetSize(wide, tall)
@@ -104,7 +104,7 @@ function MakepHelp()
 		body
 		{
 			font-family:tahoma;
-			font-size:11px;
+			font-size:16px;
 			color:white;
 			background-color:black;
 			width:]].. htmlpanel:GetWide() - 48 ..[[px;
@@ -114,10 +114,26 @@ function MakepHelp()
 			margin:10px;
 			padding:2px;
 		}
+		ul li{
+			margin:10px 0px 10px 0px;
+		}
+		table{
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+			text-align:center;
+			border-collapse: collapse;
+		}
+		th, td{
+			border: 2px solid white;
+		}
+		table caption{
+			font-size:200%;
+		}
 		</style>
 		</head>
 		<body>
-<center><span style="font-size:22px;font-weight:bold;color:limegreen;text-decoration:underline;">Zombie Survival</span><br>
+<center><span style="font-size:26px;font-weight:bold;color:limegreen;text-decoration:underline;">좀비 서바이벌</span><br>
 ]]..translate.Get(helptab.Name)..[[</center><br><br><div>]]..translate.Get(helptab.Content)..[[</div>
 </body>
 </html>]])
@@ -129,7 +145,7 @@ function MakepHelp()
 
 	local button = EasyButton(Window, "Credits", 8, 4)
 	button:SetPos(wide - button:GetWide() - 12, tall - button:GetTall() - 12)
-	button:SetText("Credits")
+	button:SetText("제작진")
 	button.DoClick = function(btn) MakepCredits() end
 
 	gamemode.Call("BuildHelpMenu", Window, propertysheet)

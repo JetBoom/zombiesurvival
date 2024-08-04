@@ -34,26 +34,26 @@ function MakepEndBoard(winner)
 	local heading
 	if localwin then
 		surface.PlaySound("beams/beamstart5.wav")
-		heading = EasyLabel(frame, "You have won!", "ZSHUDFont", COLOR_CYAN)
+		heading = EasyLabel(frame, "살아남았다!", "ZSHUDFont", COLOR_CYAN)
 	else
 		surface.PlaySound("ambient/levels/citadel/strange_talk"..math.random(3, 11)..".wav")
-		heading = EasyLabel(frame, "You have lost.", "ZSHUDFont", COLOR_RED)
+		heading = EasyLabel(frame, "인간 전체 사망", "ZSHUDFont", COLOR_RED)
 	end
 	heading:SetPos(wid * 0.5 - heading:GetWide() * 0.5, y)
 	y = y + heading:GetTall() + 4
 
 	local subheading
 	if localwin then
-		subheading = EasyLabel(frame, "The humans have survived for now.", "ZSHUDFontSmall", COLOR_WHITE)
+		subheading = EasyLabel(frame, "인간들은 삶을 다시 이어갈 수 있다...", "ZSHUDFontSmall", COLOR_WHITE)
 	else
-		subheading = EasyLabel(frame, "The undead army grows stronger.", "ZSHUDFontSmall", COLOR_LIMEGREEN)
+		subheading = EasyLabel(frame, "인류에게는 이제 희망이 없다", "ZSHUDFontSmall", COLOR_LIMEGREEN)
 	end
 	subheading:SetPos(wid * 0.5 - subheading:GetWide() * 0.5, y)
 	y = y + subheading:GetTall() + 8
 
 	local starty = y
 
-	local svpan = EasyLabel(frame, "Honorable Mentions", "ZSHUDFontSmall", COLOR_WHITE)
+	local svpan = EasyLabel(frame, "명예의 전당", "ZSHUDFontSmall", COLOR_WHITE)
 	svpan:SetPos(wid * 0.5 - svpan:GetWide() * 0.5, y)
 	y = y + svpan:GetTall() + 4
 
@@ -114,7 +114,7 @@ function PANEL:SetPlayer(pl, col, misc, misccol, overridename)
 		avatar:SetPos(4, 4)
 		avatar:SetSize(32, 32)
 		avatar:SetPlayer(pl)
-		avatar:SetTooltip("Click here to view their Steam Community profile.")
+		avatar:SetTooltip("스팀 커뮤니티 프로필을 볼려면 여기를 누르세요.")
 		self.m_pAvatar = avatar
 
 		local namelab = EasyLabel(self, name, "ZSHUDFontTiny", col)

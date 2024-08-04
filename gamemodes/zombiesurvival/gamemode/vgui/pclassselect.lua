@@ -49,7 +49,7 @@ function PANEL:Init()
 		end
 	end
 
-	local button = EasyButton(self, "Select desired boss class...", 8, 4)
+	local button = EasyButton(self, "보스 좀비 선택...", 8, 4)
 	self.ClassTypeButton = button
 	button.DoClick = BossTypeDoClick
 
@@ -109,7 +109,7 @@ function PANEL:Init()
 		end
 	end
 
-	local button = EasyButton(self, "Back to normal class menu...", 8, 4)
+	local button = EasyButton(self, "일반 좀비 선택...", 8, 4)
 	self.ClassTypeButton = button
 	button.DoClick = ClassTypeDoClick
 

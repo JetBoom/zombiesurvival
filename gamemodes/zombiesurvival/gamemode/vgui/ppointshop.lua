@@ -3,7 +3,7 @@ local function pointslabelThink(self)
 	if self.m_LastPoints ~= points then
 		self.m_LastPoints = points
 
-		self:SetText("Points to spend: "..points)
+		self:SetText("사용 가능 포인트: "..points)
 		self:SizeToContents()
 	end
 end
@@ -16,10 +16,10 @@ hook.Add("Think", "PointsShopThink", function()
 			pan.m_LastNearArsenalCrate = newstate
 
 			if newstate then
-				pan.m_DiscountLabel:SetText(GAMEMODE.ArsenalCrateDiscountPercentage.."% discount for buying between waves!")
+				pan.m_DiscountLabel:SetText("웨이브 중간에 구매하므로 인해 "..GAMEMODE.ArsenalCrateDiscountPercentage.."% 를 할인받을 수 있습니다!")
 				pan.m_DiscountLabel:SetTextColor(COLOR_GREEN)
 			else
-				pan.m_DiscountLabel:SetText("All sales are final!")
+				pan.m_DiscountLabel:SetText("청약철회 불가!")
 				pan.m_DiscountLabel:SetTextColor(COLOR_GRAY)
 			end
 
@@ -48,7 +48,10 @@ local ammonames = {
 	["smg1"] = "smgammo",
 	["ar2"] = "assaultrifleammo",
 	["357"] = "rifleammo",
-	["XBowBolt"] = "crossbowammo"
+	["XBowBolt"] = "crossbowammo",
+	["pulse"] = "pulseammo",
+	["gravity"] = "m249ammo",
+	["combinecannon"] = "railgunammo"
 }
 
 local warnedaboutammo = CreateClientConVar("_zs_warnedaboutammo", "0", true, false)
@@ -59,7 +62,7 @@ local function PurchaseDoClick(self)
 			local weptab = weapons.GetStored(itemtab.SWEP)
 			if weptab and weptab.Primary and weptab.Primary.Ammo and ammonames[weptab.Primary.Ammo] then
 				RunConsoleCommand("_zs_warnedaboutammo", "1")
-				Derma_Message("Be sure to buy extra ammo. Weapons purchased do not contain any extra ammo!", "Warning")
+				Derma_Message("무기를 구매할 때 추가로 탄약이 지급되지 않으므로, 탄약을 구매하는 걸 잊지 마세요!", "경고: 탄약 미포함")
 			end
 		end
 	end
@@ -118,7 +121,7 @@ function GM:OpenPointsShop()
 		return
 	end
 
-	local wid, hei = 480, math.max(ScrH() * 0.5, 400)
+	local wid, hei = 600, math.max(ScrH() * 0.5, 540)
 
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(wid, hei)
@@ -136,9 +139,9 @@ function GM:OpenPointsShop()
 	local topspace = vgui.Create("DPanel", frame)
 	topspace:SetWide(wid - 16)
 
-	local title = EasyLabel(topspace, "The Points Shop", "ZSHUDFontSmall", COLOR_WHITE)
+	local title = EasyLabel(topspace, "포인트 시장", "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
-	local subtitle = EasyLabel(topspace, "For all of your zombie apocalypse needs!", "ZSHUDFontTiny", COLOR_WHITE)
+	local subtitle = EasyLabel(topspace, "좀비 대재앙을 준비하기 위해 필요한 것이 없는 것 빼고 다 있습니다!", "ZSHUDFontTiny", COLOR_WHITE)
 	subtitle:CenterHorizontal()
 	subtitle:MoveBelow(title, 4)
 
@@ -154,7 +157,7 @@ function GM:OpenPointsShop()
 	tt:SetMouseInputEnabled(true)
 	tt:SetTooltip("This shop is armed with the QUIK - Anti-zombie backstab device.\nMove your mouse outside of the shop to quickly close it!")
 
-	local wsb = EasyButton(topspace, "Worth Menu", 8, 4)
+	local wsb = EasyButton(topspace, "시작 자금 무기창", 8, 4)
 	wsb:AlignRight(8)
 	wsb:AlignTop(8)
 	wsb.DoClick = worthmenuDoClick
@@ -163,7 +166,7 @@ function GM:OpenPointsShop()
 	local bottomspace = vgui.Create("DPanel", frame)
 	bottomspace:SetWide(topspace:GetWide())
 
-	local pointslabel = EasyLabel(bottomspace, "Points to spend: 0", "ZSHUDFontTiny", COLOR_GREEN)
+	local pointslabel = EasyLabel(bottomspace, "사용 가능 포인트: 0", "ZSHUDFontTiny", COLOR_GREEN)
 	pointslabel:AlignTop(4)
 	pointslabel:AlignLeft(8)
 	pointslabel.Think = pointslabelThink
@@ -247,7 +250,7 @@ function GM:OpenPointsShop()
 					button:SetImage("icon16/lorry_add.png")
 					button:SizeToContents()
 					button:SetPos(itempan:GetWide() - 20 - button:GetWide(), itempan:GetTall() - 20)
-					button:SetTooltip("Purchase "..name)
+					button:SetTooltip(name.. " 구매")
 					button.ID = itempan.ID
 					button.DoClick = PurchaseDoClick
 					itempan.m_BuyButton = button
@@ -260,7 +263,7 @@ function GM:OpenPointsShop()
 							ammobutton:SizeToContents()
 							ammobutton:CopyPos(button)
 							ammobutton:MoveLeftOf(button, 2)
-							ammobutton:SetTooltip("Purchase ammunition")
+							ammobutton:SetTooltip("탄약 구매")
 							ammobutton.AmmoType = ammonames[ammotype]
 							ammobutton.DoClick = BuyAmmoDoClick
 						end

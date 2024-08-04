@@ -6,18 +6,18 @@ local function WeaponButtonDoClick(self)
 end
 
 local Features = {
-{"WalkSpeed", "Movement speed"},
-{"MeleeDamage", "Damage"},
-{"MeleeRange", "Range"},
-{"MeleeSize", "Size"},
+{"WalkSpeed", "이동 속도"},
+{"MeleeDamage", "공격력"},
+{"MeleeRange", "사정거리"},
+{"MeleeSize", "크기"},
 
-{"ClipSize", "Clip size", 0, 50, false, "Primary"},
-{"Damage", "Damage", 2, 100, false, "Primary"},
-{"NumShots", "Number of shots", 1, 12, false, "Primary"},
-{"Delay", "Rate of fire", 0.05, 3, true, "Primary"},
+{"ClipSize", "탄창 크기", 0, 50, false, "Primary"},
+{"Damage", "공격력", 2, 100, false, "Primary"},
+{"NumShots", "한 번에 발사되는 수", 1, 12, false, "Primary"},
+{"Delay", "발사 중간 딜레이", 0.05, 3, true, "Primary"},
 
-{"ConeMax", "Minimum accuracy"},
-{"ConeMin", "Maximum accuracy"}
+{"ConeMax", "최소 정확도"},
+{"ConeMin", "최대 정확도"}
 }
 
 local function SetWeaponViewerSWEP(self, swep)
@@ -118,7 +118,7 @@ function MakepWeapons(silent)
 
 	local y = 8
 
-	local title = EasyLabel(frame, "Weapon Database", "ZSHUDFont", color_white)
+	local title = EasyLabel(frame, "무기 데이터베이스", "ZSHUDFont", color_white)
 	title:SetPos(wid * 0.5 - title:GetWide() * 0.5, y)
 	y = y + title:GetTall() + 8
 
@@ -134,7 +134,8 @@ function MakepWeapons(silent)
 		local enttab = weapons.GetStored(wep)
 		local wepnode
 		if enttab then
-			wepnode = tree:AddNode(enttab.PrintName or wep)
+			wepnode = tree:AddNode(enttab.PrintName --or wep
+			)
 		else
 			wepnode = tree:AddNode(wep)
 		end
