@@ -31,49 +31,49 @@ function GM:OpenMainMenu()
 	-- Tooltip section...
 
 	button = vgui.Create("ZSMenuButton", MainMenu)
-	button:SetText("QUIT")
+	button:SetText("종료")
 	button:SizeToContents()
 	button:Dock(BOTTOM)
 	button:DockMargin(90, 8, 0, 220)
 	button.Tooltip = "mainmenu_tooltip_quit"
 
 	button = vgui.Create("ZSMenuButton", MainMenu)
-	button:SetText("BECOME A SUPPORTER")
+	button:SetText("서포터 되기")
 	button:SizeToContents()
 	button:Dock(BOTTOM)
 	button:DockMargin(80, 8, 0, 0)
 	button.Tooltip = "mainmenu_tooltip_supporter"
 
 	button = vgui.Create("ZSMenuButton", MainMenu)
-	button:SetText("CREDITS")
+	button:SetText("제작자")
 	button:SizeToContents()
 	button:Dock(BOTTOM)
 	button:DockMargin(70, 8, 0, 0)
 	button.Tooltip = "mainmenu_tooltip_credits"
 
 	button = vgui.Create("ZSMenuButton", MainMenu)
-	button:SetText("GUIDES")
+	button:SetText("가이드")
 	button:SizeToContents()
 	button:Dock(BOTTOM)
 	button:DockMargin(60, 8, 0, 0)
 	button.Tooltip = "mainmenu_tooltip_guides"
 
 	button = vgui.Create("ZSMenuButton", MainMenu)
-	button:SetText("HELP")
+	button:SetText("도움말")
 	button:SizeToContents()
 	button:Dock(BOTTOM)
 	button:DockMargin(50, 8, 0, 0)
 	button.Tooltip = "mainmenu_tooltip_help"
 
 	button = vgui.Create("ZSMenuButton", MainMenu)
-	button:SetText("SPECTATE")
+	button:SetText("관전")
 	button:SizeToContents()
 	button:Dock(BOTTOM)
 	button:DockMargin(40, 8, 0, 0)
 	button.Tooltip = "mainmenu_tooltip_spectate"
 
 	local button = vgui.Create("ZSMenuButton", MainMenu)
-	button:SetText("PLAY")
+	button:SetText("플레이")
 	button:SizeToContents()
 	button:Dock(BOTTOM)
 	button:DockMargin(30, 8, 0, 0)

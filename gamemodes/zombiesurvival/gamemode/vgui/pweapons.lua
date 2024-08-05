@@ -134,8 +134,7 @@ function MakepWeapons(silent)
 		local enttab = weapons.GetStored(wep)
 		local wepnode
 		if enttab then
-			wepnode = tree:AddNode(enttab.PrintName --or wep
-			)
+			wepnode = tree:AddNode(enttab.PrintName or wep)
 		else
 			wepnode = tree:AddNode(wep)
 		end

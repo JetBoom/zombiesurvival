@@ -253,7 +253,7 @@ function MakepWorth()
 			defimage:SetImage("icon16/heart.png")
 			defimage:SizeToContents()
 			defimage:SetMouseInputEnabled(true)
-			defimage:SetTooltip("이것이 보통 구매 목록이다.\n자금 매장에서 구매를 하지 못하면 자동으로 이 목록의 물품이 사지게 된다.")
+			defimage:SetTooltip("이것이 보통 구매 목록이다.\n자금 상점에서 구매를 하지 못하면 자동으로 이 목록의 물품이 사지게 된다.")
 			defimage:SetPos(x, cartpan:GetTall() * 0.5 - defimage:GetTall() * 0.5)
 			x = x + defimage:GetWide() + 4
 		end
@@ -504,6 +504,12 @@ function PANEL:DoClick(silent, force)
 			surface.PlaySound("buttons/button8.wav")
 			return
 		end
+		--[[
+		//이부분은 프리미엄이나 플레이타임 카운터와 연동하여 뉴비에게만 보이게..
+		if tab.Name == "목수의 망치" then
+			Derma_Message("목수의 망치는 사용하기 어려운 도구입니다! 초보자라면 망치를 구매하는 것을 추천하지 않습니다. ", "목수의 망치", "알겠습니다.")
+		end
+		--]]
 		self.On = true
 		if not silent then
 			surface.PlaySound("buttons/button17.wav")
@@ -511,7 +517,7 @@ function PANEL:DoClick(silent, force)
 		WorthRemaining = WorthRemaining - tab.Worth
 	end
 
-	pWorth.WorthLab:SetText("Worth: ".. WorthRemaining)
+	pWorth.WorthLab:SetText("시작 자금: ".. WorthRemaining)
 	if WorthRemaining <= 0 then
 		pWorth.WorthLab:SetTextColor(COLOR_RED)
 		pWorth.WorthLab:InvalidateLayout()

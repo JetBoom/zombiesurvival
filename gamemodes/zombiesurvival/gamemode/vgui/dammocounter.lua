@@ -25,13 +25,13 @@ function PANEL:Init()
 	self.m_DropButton = vgui.Create("DImageButton", self)
 	self.m_DropButton:SetImage("icon16/box.png")
 	self.m_DropButton:SizeToContents()
-	self.m_DropButton:SetTooltip("Drop")
+	self.m_DropButton:SetTooltip("버리기")
 	self.m_DropButton.DoClick = DropDoClick
 
 	self.m_GiveButton = vgui.Create("DImageButton", self)
 	self.m_GiveButton:SetImage("icon16/user_go.png")
 	self.m_GiveButton:SizeToContents()
-	self.m_GiveButton:SetTooltip("Give")
+	self.m_GiveButton:SetTooltip("주기")
 	self.m_GiveButton.DoClick = GiveDoClick
 
 	self:SetAmmoType("pistol")
