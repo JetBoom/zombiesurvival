@@ -36,7 +36,7 @@ function SWEP:PrimaryAttack()
 				local vel = (self.Owner:TraceLine(10240, MASK_SOLID, filt).HitPos - obj:LocalToWorld(obj:OBBCenter())):GetNormalized() * 1000
 
 				local phys = obj:GetPhysicsObject()
-				if phys:IsValid() and phys:IsMoveable() and phys:GetMass() <= 300 then
+				if phys:IsValid() and phys:IsMoveable() and phys:GetMass() <= 600 then
 					phys:Wake()
 					phys:SetVelocity(vel)
 					obj:SetPhysicsAttacker(self.Owner)

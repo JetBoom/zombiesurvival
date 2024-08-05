@@ -153,7 +153,7 @@ end
 function SWEP:CanBurrow()
 	local owner = self.Owner
 	local tr = util.TraceLine({start = owner:GetPos(), endpos = owner:GetPos() - owner:GetUp() * 8, mask = MASK_SOLID_BRUSHONLY})
-	return tr.HitWorld and (tr.MatType == MAT_DIRT or tr.MatType == MAT_SAND or tr.MatType == MAT_SLOSH or tr.MatType == MAT_FOILAGE or tr.MatType == 88)
+	return tr.HitWorld
 end
 
 function SWEP:Move(mv)

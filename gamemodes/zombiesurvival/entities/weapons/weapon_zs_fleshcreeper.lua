@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "Flesh Creeper"
+SWEP.PrintName = "종양 네스터"
 
 SWEP.MeleeDelay = 0.5
 SWEP.MeleeReach = 52
@@ -109,16 +109,18 @@ function SWEP:BuildingThink()
 
 	local hitpos = tr.HitPos
 
-	for x = -20, 20, 20 do
-		for y = -20, 20, 20 do
-			local start = endpos + x * right + y * forward
-			tr = util.TraceLine({start = start, endpos = start + Vector(0, 0, -48), mask = MASK_PLAYERSOLID})
-			if not tr.HitWorld or tr.HitSky or math.abs(tr.HitNormal.z - z) >= 0.2 then
-				self:SendMessage("not_enough_room_for_a_nest")
-				return
-			end
-		end
-	end
+	-- local rsz = 5
+	-- for x = -rsz, rsz, rsz do
+		-- for y = -rsz, rsz, rsz do
+			-- local start = endpos + x * right + y * forward
+			-- local start = endpos + x * right + y * forward
+			-- tr = util.TraceLine({start = start, endpos = start + Vector(0, 0, -48), mask = MASK_PLAYERSOLID})
+			-- if not tr.HitWorld or tr.HitSky or math.abs(tr.HitNormal.z - z) >= 0.2 then
+				-- self:SendMessage("not_enough_room_for_a_nest")
+				-- return
+			-- end
+		-- end
+	-- end
 
 	for _, ent in pairs(team.GetValidSpawnPoint(TEAM_UNDEAD)) do
 		if ent.Disabled then continue end

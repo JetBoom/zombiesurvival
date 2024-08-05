@@ -3,7 +3,7 @@ AddCSLuaFile()
 SWEP.Base = "weapon_zs_zombie"
 
 if CLIENT then
-	SWEP.PrintName = "Puke Pus"
+	SWEP.PrintName = "퓨크 퍼스"
 end
 
 SWEP.Primary.Delay = 3.5
@@ -41,7 +41,6 @@ if not SERVER then return end
 
 function SWEP:Think()
 	local pl = self.Owner
-
 	if self.PukeLeft > 0 and CurTime() >= self.NextPuke then
 		self.PukeLeft = self.PukeLeft - 1
 		self.NextEmit = CurTime() + 0.1
@@ -52,11 +51,15 @@ function SWEP:Think()
 			ent:SetOwner(pl)
 			ent:Spawn()
 
+			ent:SetTeamID(TEAM_UNDEAD)
+
 			local phys = ent:GetPhysicsObject()
 			if phys:IsValid() then
 				local ang = pl:EyeAngles()
-				ang:RotateAroundAxis(ang:Forward(), math.Rand(-30, 30))
-				ang:RotateAroundAxis(ang:Up(), math.Rand(-30, 30))
+				if math.random(100) < 95 then
+					ang:RotateAroundAxis(ang:Forward(), math.Rand(-30, 30))
+					ang:RotateAroundAxis(ang:Up(), math.Rand(-30, 30))
+				end
 				phys:SetVelocityInstantaneous(ang:Forward() * math.Rand(475, 750))
 			end
 		end

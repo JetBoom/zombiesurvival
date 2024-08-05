@@ -17,7 +17,7 @@ SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo	= "none"
 
 SWEP.PounceDamage = 10
-SWEP.PounceDamagePerTick = 5
+SWEP.PounceDamagePerTick = 6
 SWEP.PounceDamageTicks = 10
 SWEP.PounceDamageTime = 1
 SWEP.PounceDamageVsPropsMultiplier = 2
@@ -113,9 +113,11 @@ function SWEP:Think()
 
 				if ent:IsPlayer() then
 					ent:MeleeViewPunch(self.PounceDamage)
-					ent:PoisonDamage(self.PounceDamage, owner, self)
-					local timername = tostring(ent).."poisonedby"..tostring(owner)..CurTime()
-					timer.CreateEx(timername, self.PounceDamageTime, self.PounceDamageTicks, DoPoisoned, ent, owner, self.PounceDamagePerTick, timername)
+					if not ent.AntiPoisonHead then
+						ent:PoisonDamage(self.PounceDamage, owner, self)
+						local timername = tostring(ent).."poisonedby"..tostring(owner)..CurTime()
+						timer.CreateEx(timername, self.PounceDamageTime, self.PounceDamageTicks, DoPoisoned, ent, owner, self.PounceDamagePerTick, timername)
+					end
 				else
 					ent:PoisonDamage(self.PounceDamage * self.PounceDamageVsPropsMultiplier, owner, self)
 				end

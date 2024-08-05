@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Ghoul"
+	SWEP.PrintName = "구울"
 end
 
 SWEP.Base = "weapon_zs_zombie"
@@ -51,7 +51,7 @@ local function DoFleshThrow(pl, wep)
 					ent:SetPos(startpos)
 					ent:SetOwner(pl)
 					ent:Spawn()
-
+					ent:SetTeamID(TEAM_UNDEAD)
 					local phys = ent:GetPhysicsObject()
 					if phys:IsValid() then
 						phys:SetVelocityInstantaneous(ang:Forward() * math.Rand(320, 380))
