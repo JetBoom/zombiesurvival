@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'세이버' 메딕 건"
-	SWEP.Description = "미량의 체력을 회복하고 아드레날린을 주입시키는 주사기를 발사해 이동속도를 증가시킨다.\n 충전해서 쏘면 한 번에 많은 양의 체력이 회복된다."
+	SWEP.PrintName = "'Savior' 메딕 건"
+	SWEP.Description = "멀리 있는 사람도 치료할 수 있는 의료 주사기를 발사한다. 한 방의 치유량은 적지만, 먼 대상에게 빠르게 발사할 수 있어 유용하다."
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0
 	
@@ -48,11 +48,17 @@ SWEP.ReloadSound = Sound("Weapon_Pistol.Reload")
 
 SWEP.Primary.Delay = 0.25
 
-SWEP.Primary.ClipSize = 25
+SWEP.Primary.ClipSize = 21
 SWEP.Primary.DefaultClip = 150
 SWEP.Primary.Ammo = "Battery"
-SWEP.RequiredClip = 5
-SWEP.Primary.Recoil = 0.3
+SWEP.RequiredClip = 3
+SWEP.Charged = 0
+SWEP.MaxCharged = 30
+SWEP.ChargeSound = "items/medcharge4.wav"
+SWEP.ChargeShotSound = "beams/beamstart5.wav"
+SWEP.ChargeReadySound = "zombiesurvival/ding.ogg"
+SWEP.ChargeShotReady = false
+SWEP.ChargedClip = 0
 
 SWEP.WalkSpeed = SPEED_NORMAL
 
@@ -63,93 +69,6 @@ SWEP.ConeMin = 0.005
 
 SWEP.IronSightsPos = Vector(-5.95, 3, 2.75)
 SWEP.IronSightsAng = Vector(-0.15, -1, 2)
-
-SWEP.MaxCharged = 25
-SWEP.PlayCharging = nil
-
-function SWEP:SetupDataTables()
-	self:NetworkVar("Float", 0, "Charged")
-end
-
-function SWEP:SecondaryAttack()
-end
-
-function SWEP:CanPrimaryAttack()
-	if self.Charging then
-		return false
-	end
-	return self.BaseClass.CanPrimaryAttack(self)
-end
-
-
-function SWEP:Think()
-	local owner = self.Owner
-	if self:GetNextReload() + 0.3 > CurTime() then
-		self:SetCharged(0)
-		return
-	end
-		
-	
-	local charged = self:GetCharged()
-	self.CannotCharged = false
-	if owner:KeyDown(IN_ATTACK2) then
-		if self:Clip1() == 25 then
-			self:SetCharged(math.Clamp(charged + FrameTime() * 8, 0, self.MaxCharged))
-			self.Charging = true
-			if self.PlayCharging then
-				self:StopSound("medicgun_charging")
-				self.PlayCharging = nil				
-			elseif not self.PlayCharging then		
-				self:EmitSound("medicgun_charging")
-				self.PlayCharging = true
-			end
-		else
-			self.CannotCharged = true
-			self:StopSound("medicgun_charging")
-			self.PlayCharging = nil		
-		end
-	else
-		if charged == self.MaxCharged then
-			self:SetCharged(0)
-			self.Charging = false
-			self:TakePrimaryAmmo(25)
-			self:ShootChargedBullet()
-			self:StopSound("medicgun_charging")
-			self.PlayCharging = nil		
-		end
-		if charged > 0 then
-			self:SetCharged(math.Clamp(charged - FrameTime() * 16, 0, self.MaxCharged))
-		else
-			self.Charging = false
-			self:StopSound("medicgun_charging")
-			self.PlayCharging = nil		
-		end
-	end
-end
-
-if CLIENT then
-	function SWEP:DrawHUD()
-		if self.CannotCharged then
-			surface.SetDrawColor(255, 0, 0, 120)
-			surface.DrawOutlinedRect(ScrW() / 2 - 100, ScrH() / 2 + 32, 200, 16)
-			surface.SetFont("Default")
-			surface.SetTextColor(255, 0, 0, 120)
-			surface.SetTextPos(ScrW() / 2 - 98, ScrH() / 2 + 34)
-			surface.DrawText("탄창이 꽉 찬 상태여야 합니다.")
-		elseif self.Charging then
-			local charged = self:GetCharged()
-			local ratio = charged / self.MaxCharged
-			surface.SetDrawColor(255 - 255 * ratio, 255 * ratio, 0, 120)
-			surface.DrawRect(ScrW() / 2 - 100, ScrH() / 2 + 32, 200 * ratio, 16)
-			if charged == self.MaxCharged then
-				surface.SetDrawColor(13, 255, 150, 120)
-				surface.DrawOutlinedRect(ScrW() / 2 - 104, ScrH() / 2 + 28, 208, 24)
-				surface.DrawOutlinedRect(ScrW() / 2 - 103, ScrH() / 2 + 29, 206, 22)
-			end
-		end
-		self.BaseClass.DrawHUD(self)
-	end
-end
 
 function SWEP:ShootBullets(dmg, numbul, cone)
 	local owner = self.Owner
@@ -166,51 +85,17 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 		ent:SetAngles(aimvec:Angle())
 		ent:SetOwner(owner)
 		ent:Spawn()
-
+		ent.FirstShot = self:Clip1() == 0
+		
 		ent.Heal = math.ceil(ent.Heal * (owner.HumanHealMultiplier or 1))
 
 		local phys = ent:GetPhysicsObject()
 		if phys:IsValid() then
 			phys:Wake()
-			phys:SetVelocityInstantaneous(aimvec * 2560)
+			phys:SetVelocityInstantaneous(aimvec * 2500)
 		end
 	end
 end
-
-function SWEP:ShootChargedBullet(dmg, numbul, cone)
-	local owner = self.Owner
-	self:SendWeaponAnimation()
-	owner:DoAttackEvent()
-	
-	self:EmitSound("beams/beamstart5.wav")
-
-	if CLIENT then return end
-
-	local aimvec = owner:GetAimVector()
-
-	local ent = ents.Create("projectile_healdart")
-	if ent:IsValid() then
-		ent:SetPos(owner:GetShootPos())
-		ent:SetAngles(aimvec:Angle())
-		ent:SetOwner(owner)
-		ent:SetCharged(true)
-		ent:Spawn()
-
-		ent.Heal = math.ceil(30 * (owner.HumanHealMultiplier or 1))
-
-		local phys = ent:GetPhysicsObject()
-		if phys:IsValid() then
-			phys:Wake()
-			phys:SetVelocityInstantaneous(aimvec * 5120)
-		end
-	end
-end
-
---[[function SWEP:Initialize()
-	if CLIENT and self:GetOwner() == LocalPlayer() and LocalPlayer():GetActiveWeapon() == self then
-		hook.Add("PostPlayerDraw", "PostPlayerDrawMedical", GAMEMODE.PostPlayerDrawMedical)
-	end
-end]]
 
 function SWEP:Deploy()
 	gamemode.Call("WeaponDeployed", self.Owner, self)
@@ -219,15 +104,197 @@ function SWEP:Deploy()
 
 	if CLIENT then
 		hook.Add("PostPlayerDraw", "PostPlayerDrawMedical", GAMEMODE.PostPlayerDrawMedical)
+		GAMEMODE.MedicalAura = true
 	end
 
 	return true
 end
 
+if SERVER then
+	util.AddNetworkString("MedicGunCharge")
+end
+function SWEP:Think()
+	local owner = self.Owner
+	if SERVER then
+		local charge = (engine.TickInterval() * 10)
+		
+		if self:Clip1() > 0 then
+			net.Start("MedicGunCharge")
+				net.WriteString("yesammo")
+			net.Send(owner)
+		end
+		
+		if owner:KeyDown(IN_SPEED) then
+		
+			if owner:GetAmmoCount(self.Primary.Ammo) < self.MaxCharged then
+				net.Start("MedicGunCharge")
+					net.WriteString("noammo")
+				net.Send(owner)
+				return
+			end
+			
+			if self:Clip1() <= 0 then
+				net.Start("MedicGunCharge")
+					net.WriteString("noclip")
+				net.Send(owner)
+				return
+			end
+			
+			if self.Charged < self.MaxCharged then
+				self.Charged = math.Clamp(self.Charged + charge, 0, self.MaxCharged)
+				self:EmitSound(self.ChargeSound, 65, 255, 1, CHAN_WEAPON)
+				net.Start("MedicGunCharge")
+					net.WriteString("charge")
+					net.WriteFloat(self.Charged)
+				net.Send(owner)
+			elseif !self.ChargeShotReady then
+				self.ChargeShotReady = true
+				self:EmitSound(self.ChargeReadySound, 70, 100, 1, CHAN_WEAPON)
+				local clip1 = self:Clip1()
+				self.ChargedClip = clip1
+				self:TakePrimaryAmmo(clip1)
+				net.Start("MedicGunCharge")
+					net.WriteString("ready")
+				net.Send(owner)
+			end
+		elseif self.Charged == self.MaxCharged then
+			local aimvec = owner:GetAimVector()
+			local ent = ents.Create("projectile_healdart")
+			if ent:IsValid() then
+				ent:SetPos(owner:GetShootPos())
+				ent:SetAngles(aimvec:Angle())
+				ent:SetOwner(owner)
+				ent:Spawn()
+				ent.FirstShot = true
+				ent:SetCharged(true)
+				ent.Heal = math.ceil((self.ChargedClip / self.RequiredClip) * ent.Heal * 1.2 * (owner.HumanHealMultiplier or 1))
+				
+				local phys = ent:GetPhysicsObject()
+				if phys:IsValid() then
+					phys:Wake()
+					phys:SetVelocityInstantaneous(aimvec * 5000)
+				end
+				
+				self.Charged = 0
+				self:EmitSound(self.ChargeShotSound, 100, 100, 1, CHAN_WEAPON)
+				
+				self.ChargeShotReady = false
+			end
+			net.Start("MedicGunCharge")
+				net.WriteString("shoot")
+			net.Send(owner)
+		elseif self.Charged > 0 then
+			self.Charged = math.Clamp(self.Charged - charge * 1.5, 0, self.MaxCharged)
+			self:StopSound(self.ChargeSound)
+			net.Start("MedicGunCharge")
+				net.WriteString("charge")
+				net.WriteFloat(self.Charged)
+			net.Send(owner)
+			self.ChargeShotReady = false
+		end
+	end
+	
+	self.BaseClass.Think(self)
+end
+
+if CLIENT then
+	net.Receive("MedicGunCharge", function()
+		local state = net.ReadString()
+		local wep = LocalPlayer():GetActiveWeapon()
+		
+		if !wep or !IsValid(wep) or wep:GetClass() != "weapon_zs_medicgun" then
+		end
+		
+		if state == "noclip" then
+			if wep.Charged < wep.MaxCharged then
+				wep:EmitSound("buttons/combine_button_locked.wav", 60, 100, 1, CHAN_WEAPON)
+			end
+		end
+		
+		if state == "noammo" then
+			wep.Noammo = true
+			wep.NoammoTime = CurTime()
+		end
+		
+		if state == "yesammo" then
+			wep.Noammo = false
+		end
+		
+		if state == "charge" then
+			local charged = net.ReadFloat()
+			wep.Charged = charged
+		end
+		
+		if state == "ready" then
+			wep.Charged = wep.MaxCharged
+			wep:EmitSound(wep.ChargeReadySound, 70, 100, 1, CHAN_WEAPON)
+		end
+		
+		if state == "shoot" then
+			wep.Charged = 0
+			wep:EmitSound(wep.ChargeShotSound, 100, 100, 1, CHAN_WEAPON)
+		end
+		
+		if state == "stopsound" then
+			wep:StopSound(wep.ChargeSound)
+		end
+	end)
+end
+
 function SWEP:Holster()
 	if CLIENT then
 		hook.Remove("PostPlayerDraw", "PostPlayerDrawMedical")
+		GAMEMODE.MedicalAura = false
 	end
-	self:StopSound("medicgun_charging")
+
 	return true
+end
+
+function SWEP:OnRemove()
+	if CLIENT and self.Owner == LocalPlayer() then
+		hook.Remove("PostPlayerDraw", "PostPlayerDrawMedical")
+		GAMEMODE.MedicalAura = false
+	end
+end
+
+function SWEP:DrawHUD()
+	if !self.Noammo then
+		if self.Charged > 0 and self.Charged < self.MaxCharged then
+			self:EmitSound(self.ChargeSound, 65, 255, 1, CHAN_WEAPON)
+		end
+		
+		if self.Charged > 0 then
+			local scrW = ScrW()
+			local scrH = ScrH()
+			local width = 200
+			local height = 20
+			local x = scrW / 2 - width / 2
+			local y = scrH / 2 - height / 2 + 30
+			local ratio = self.Charged / self.MaxCharged
+			surface.SetDrawColor(Color(0, 0, 255))
+			surface.DrawOutlinedRect(x - 1, y - 1, width + 2, height + 2)
+			draw.RoundedBox(0, x, y, width * ratio, height, Color(255 * (1 - ratio), 255 * ratio, 0))
+			draw.DrawText("CHARGING", "DefaultFontBold", x + 100, y + 3, Color(0 + (255 * ratio), 0 + (255 * ratio), 0 + (255 * ratio)), TEXT_ALIGN_CENTER)
+		end
+	else
+		local scrW = ScrW()
+		local scrH = ScrH()
+		local width = 200
+		local height = 20
+		local x = scrW / 2 - width / 2
+		local y = scrH / 2 - height / 2 + 30
+		local ratio = self.Charged / self.MaxCharged
+		surface.SetDrawColor(Color(0, 0, 255))
+		surface.DrawOutlinedRect(x - 1, y - 1, width + 2, height + 2)
+		draw.RoundedBox(0, x, y, width * ratio, height, Color(255, 0, 0, 70))
+		draw.DrawText("NO AMMO", "DefaultFontBold", x + 100, y + 3, Color(0, 0, 0), TEXT_ALIGN_CENTER)
+		
+		if self.NoammoTime and self.NoammoTime + 1 <= CurTime() then
+			self.Noammo = false
+			self.NoammoTime = nil
+		end
+	end
+	if self.BaseClass.DrawHUD then
+		self.BaseClass.DrawHUD(self)
+	end
 end
