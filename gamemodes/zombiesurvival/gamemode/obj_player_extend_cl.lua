@@ -61,7 +61,7 @@ function meta:SetMaxHealth(num)
 	self:SetDTInt(0, math.ceil(num))
 end
 
-meta.OldGetMaxHealth = FindMetaTable("Entity").GetMaxHealth
+meta.OldGetMaxHealth = meta.OldGetMaxHealth or FindMetaTable("Entity").GetMaxHealth
 function meta:GetMaxHealth()
 	return self:GetDTInt(0)
 end

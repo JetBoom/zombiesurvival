@@ -151,7 +151,9 @@ function PANEL:CreatePlayerPanel(pl)
 	panel:SetPlayer(pl)
 	panel:Dock(TOP)
 	panel:DockMargin(8, 2, 8, 2)
+
 	self.PlayerPanels[pl] = panel
+
 	return panel
 end
 
@@ -194,6 +196,10 @@ local function MuteDoClick(self)
 	if pl:IsValid() then
 		pl:SetMuted(not pl:IsMuted())
 		self:GetParent().NextRefresh = RealTime()
+		net.Start("MutePlayer")
+			net.WriteEntity(pl)
+			net.WriteBool(pl:IsMuted())
+		net.SendToServer()
 	end
 end
 
@@ -355,7 +361,7 @@ function PANEL:Think()
 end
 
 function PANEL:SetPlayer(pl)
-	self.m_Player = pl or NULL
+	self.m_Player = IsValid(pl) and pl or NULL
 
 	if pl:IsValid() and pl:IsPlayer() then
 		self.m_Avatar:SetPlayer(pl)

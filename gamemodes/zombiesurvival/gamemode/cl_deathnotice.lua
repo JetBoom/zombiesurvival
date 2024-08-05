@@ -1,7 +1,7 @@
 if not killicon.GetFont then
-	killicon.OldAddFont = killicon.AddFont
-	killicon.OldAddAlias = killicon.AddAlias
-	killicon.OldAdd = killicon.Add
+	killicon.OldAddFont = killicon.OldAddFont or killicon.AddFont
+	killicon.OldAddAlias = killicon.OldAddAlias or killicon.AddAlias
+	killicon.OldAdd = killicon.OldAdd or killicon.Add
 
 	local storedfonts = {}
 	local storedicons = {}
@@ -109,6 +109,7 @@ killicon.AddFont("weapon_zs_stubber", "zsdeathnoticecs", "n", color_white)
 killicon.AddFont("weapon_zs_hunter", "zsdeathnoticecs", "r", color_white)
 killicon.AddFont("weapon_zs_tosser", "zsdeathnotice", "/", color_white)
 killicon.AddFont("weapon_zs_owens", "zsdeathnotice", "-", color_white)
+killicon.AddFont("weapon_zs_z9000", "zsdeathnotice", "-", color_white)
 killicon.AddFont("weapon_zs_battleaxe", "zsdeathnoticecs", "c", color_white)
 killicon.AddFont("weapon_zs_boomstick", "zsdeathnotice", "0", color_white)
 killicon.AddFont("weapon_zs_annabelle", "zsdeathnotice", "0", color_white)
@@ -125,7 +126,11 @@ killicon.AddFont("weapon_zs_deagle", "zsdeathnoticecs", "f", color_white)
 killicon.AddFont("weapon_zs_zedeagle", "zsdeathnoticecs", "f", color_white)
 killicon.AddFont("weapon_zs_glock3", "zsdeathnoticecs", "c", color_white)
 killicon.AddFont("weapon_zs_magnum", "zsdeathnotice", ".", color_white)
+killicon.AddFont("weapon_zs_immortal", "zsdeathnotice", ".", color_white)
 killicon.AddFont("weapon_zs_peashooter", "zsdeathnoticecs", "a", color_white)
+killicon.AddFont("weapon_zs_medicalkit", "zsdeathnoticecs", "F", color_white)
+killicon.AddFont("weapon_zs_medicgun", "zsdeathnoticecs", "F", color_white)
+killicon.AddFont("weapon_zs_mediccharger", "zsdeathnoticecs", "F", color_white)
 killicon.AddFont("weapon_zs_slugrifle", "zsdeathnoticecs", "n", color_white)
 killicon.AddFont("weapon_zs_smg", "zsdeathnoticecs", "x", color_white)
 killicon.AddFont("weapon_zs_zesmg", "zsdeathnoticecs", "x", color_white)
@@ -144,9 +149,12 @@ killicon.AddFont("weapon_zs_ender", "zsdeathnoticecs", "v", color_white)
 killicon.AddFont("weapon_zs_redeemers", "zsdeathnoticecs", "s", color_white)
 killicon.AddFont("weapon_zs_m249", "zsdeathnoticecs", "z", color_white)
 killicon.AddFont("weapon_zs_zeus", "zsdeathnoticecs", "i", color_white)
-killicon.AddFont("weapon_zs_railgun", "zsdeathnoticecs", "o", color_white)
+killicon.AddFont("weapon_zs_sg550", "zsdeathnoticecs", "o", color_white)
+killicon.AddFont("weapon_zs_neutrino", "zsdeathnotice", ",", color_white)
 killicon.AddFont("weapon_zs_pulseboomstick", "zsdeathnotice", ",", color_white)
 killicon.AddFont("weapon_zs_krieg", "zsdeathnoticecs", "A", color_white)
+killicon.AddFont("weapon_zs_rpg", "zsdeathnotice", "3", color_white)
+killicon.AddFont("weapon_zs_stone", "zsdeathnotice", "8", color_white)
 
 killicon.Add("weapon_zs_axe", "killicon/zs_axe", color_white)
 killicon.Add("weapon_zs_sawhack", "killicon/zs_axe", color_white)
@@ -157,8 +165,10 @@ killicon.Add("weapon_zs_fryingpan", "killicon/zs_fryingpan", color_white)
 killicon.Add("weapon_zs_pot", "killicon/zs_pot", color_white)
 killicon.Add("weapon_zs_plank", "killicon/zs_plank", color_white)
 killicon.Add("weapon_zs_hammer", "killicon/zs_hammer", color_white)
+killicon.Add("weapon_zs_ppsh41", "killicon/killico_ppsh_stick", color_white)
 killicon.Add("weapon_zs_electrohammer", "killicon/zs_hammer", color_white)
 killicon.Add("weapon_zs_shovel", "killicon/zs_shovel", color_white)
+killicon.Add("weapon_zs_kongol", "killicon/zs_axe", color_white)
 killicon.AddFont("weapon_zs_crowbar", "zsdeathnotice", "6", color_white)
 killicon.AddFont("weapon_zs_stunbaton", "zsdeathnotice", "!", color_white)
 

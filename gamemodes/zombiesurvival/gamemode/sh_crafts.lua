@@ -54,6 +54,13 @@ GM.Crafts = {
 			return enta:IsPhysicsModel("models/props_junk/sawblade001a.mdl") and entb:IsWeaponType("weapon_zs_manhack")
 		end,
 		Result = {"weapon_zs_manhack_saw"}
+	},
+	{
+		Name = "kongol axe",
+		callback = function(enta, entb)
+			return enta:IsWeaponType("weapon_zs_axe") and entb:IsWeaponType("weapon_zs_butcherknife")
+		end,
+		Result = {"weapon_zs_kongol"}
 	}
 }
 

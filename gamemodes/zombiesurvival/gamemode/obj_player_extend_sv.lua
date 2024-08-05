@@ -249,7 +249,7 @@ function meta:GiveEmptyWeapon(weptype)
 	end
 end
 
-local OldGive = meta.Give
+local OldGive = OldGive or meta.Give
 function meta:Give(weptype)
 	if self:Team() ~= TEAM_HUMAN then
 		return OldGive(self, weptype)
@@ -465,7 +465,7 @@ local function SetModel(pl, mdl)
 	end
 end
 
-meta.OldCreateRagdoll = meta.CreateRagdoll
+meta.OldCreateRagdoll = meta.OldCreateRagdoll or meta.CreateRagdoll
 function meta:CreateRagdoll()
 	local status = self.status_overridemodel
 	if status and status:IsValid() then
@@ -552,7 +552,7 @@ function meta:DropAllAmmo()
 end
 
 -- Lets other players know about our maximum health.
-meta.OldSetMaxHealth = FindMetaTable("Entity").SetMaxHealth
+meta.OldSetMaxHealth = meta.OldSetMaxHealth or FindMetaTable("Entity").SetMaxHealth
 function meta:SetMaxHealth(num)
 	num = math.ceil(num)
 	self:SetDTInt(0, num)
@@ -821,7 +821,9 @@ function meta:GiveWeaponByType(weapon, plyr, ammo)
 				plyr:GiveAmmo(desiredgive, ammotype)
 
 				self:PlayGiveAmmoSound()
-				self:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+				if SERVER then
+					self:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+				end
 			end
 		end
 	end
@@ -895,7 +897,7 @@ function meta:SetLastAttacker(ent)
 	end
 end
 
-meta.OldUnSpectate = meta.UnSpectate
+meta.OldUnSpectate = meta.OldUnSpectate or meta.UnSpectate
 function meta:UnSpectate()
 	if self:GetObserverMode() ~= OBS_MODE_NONE then
 		self:OldUnSpectate(obsm)

@@ -46,7 +46,7 @@ DIR_LEFT = 3
 
 DEFAULT_VIEW_OFFSET = Vector(0, 0, 64)
 DEFAULT_VIEW_OFFSET_DUCKED = Vector(0, 0, 28)
-DEFAULT_JUMP_POWER = 185
+DEFAULT_JUMP_POWER = 205
 DEFAULT_STEP_SIZE = 18
 DEFAULT_MASS = 80
 DEFAULT_MODELSCALE = 1
@@ -139,6 +139,7 @@ GM.AmmoNames["striderminigun"] = "비컨"
 GM.AmmoNames["gravity"] = "M249"
 GM.AmmoNames["spotlamp"] = "램프"
 GM.AmmoNames["stone"] = "짱돌"
+GM.AmmoNames["smg1_grenade"] = "화염병"
 GM.AmmoNames["pulse"] = "펄스 에너지"
 
 GM.AmmoTranslations = {}
@@ -163,6 +164,7 @@ GM.AmmoModels["gravity"] = "models/props_junk/cardboard_box004a.mdl" -- M249
 GM.AmmoModels["xbowbolt"] = "models/Items/CrossbowRounds.mdl" -- Bolts
 GM.AmmoModels["gaussenergy"] = "models/Items/CrossbowRounds.mdl" -- Nails
 GM.AmmoModels["grenade"] = "models/weapons/w_grenade.mdl" -- Grenades
+GM.AmmoModels["smg1_grenade"] = "models/props_junk/glassbottle01a.mdl" -- 화염병
 GM.AmmoModels["thumper"] = "models/Combine_turrets/Floor_turret.mdl" -- Gun turrets
 GM.AmmoModels["airboatgun"] = "models/Items/item_item_crate.mdl" -- Arsenal crates
 GM.AmmoModels["striderminigun"] = "models/props_combine/combine_mine01.mdl" -- Message beacons
@@ -202,13 +204,3 @@ GM.ValidBeaconMessages = {
 	"message_beacon_25"
 }
 
-GM.FanList = {
-	"1418945843",
-	"1595085577",
-	"3311458935",
-	"3023059541",
-	"2000875318",
-	"778584317",
-	"6086255",
-	"2867054481"
-}

@@ -31,12 +31,10 @@ function meta:HasWon()
 
 	return false
 end
-
 local TEAM_SPECTATOR = TEAM_SPECTATOR
 function meta:IsSpectator()
 	return self:Team() == TEAM_SPECTATOR
 end
-
 function meta:GetBossZombieIndex()
 	local bossclasses = {}
 	for _, classtable in pairs(GAMEMODE.ZombieClasses) do
@@ -190,6 +188,7 @@ function meta:GetHemophilia()
 	return self.m_Hemophilia
 end
 
+
 function meta:SetUnlucky(onoff)
 	self.m_Unlucky = onoff
 end
@@ -277,7 +276,7 @@ function meta:ProcessDamage(dmginfo)
 end
 
 function meta:KnockDown(time)
-	if self:Team() == TEAM_HUMAN then
+	if self:Team() ~= TEAM_UNDEAD then
 		self:GiveStatus("knockdown", time or 3)
 	end
 end

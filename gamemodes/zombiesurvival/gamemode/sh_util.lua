@@ -142,29 +142,14 @@ end
 function util.BlastDamageEx(inflictor, attacker, epicenter, radius, damage, damagetype)
 	local filter = inflictor
 	for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
-		local nearest = ent:NearestPoint(epicenter)
-		if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
-			ent:TakeSpecialDamage(((radius - nearest:Distance(epicenter)) / radius) * damage, damagetype, attacker, inflictor, nearest)
-		end
-	end
-end
-
-function util.SlowingBlastDamageEx(inflictor, attacker, epicenter, radius, damage, damagetype)
-	local filter = inflictor
-	for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
-		local nearest = ent:NearestPoint(epicenter)
-		if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
-			ent:TakeSpecialDamage(((radius - nearest:Distance(epicenter)) / radius) * damage, damagetype, attacker, inflictor, nearest)
-			if ent:IsPlayer() and not ent:Team() == TEAM_UNDEAD then
-				ent:RawSetLegDamage(2)
-				local dice = math.random(5)
-				if dice == 1 then ent:KnockDown(0.3) end
-				ent:PoisonDamage(10, attacker, inflictor)
+		if ent and ent:IsValid() then
+			local nearest = ent:NearestPoint(epicenter)
+			if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
+				ent:TakeSpecialDamage(((radius - nearest:Distance(epicenter)) / radius) * damage, damagetype, attacker, inflictor, nearest)
 			end
 		end
 	end
 end
-
 
 function util.BlastDamage2(inflictor, attacker, epicenter, radius, damage)
 	util.BlastDamageEx(inflictor, attacker, epicenter, radius, damage, DMG_BLAST)
@@ -185,12 +170,10 @@ end
 function util.PoisonBlastDamage(inflictor, attacker, epicenter, radius, damage, noreduce)
 	local filter = inflictor
 	for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
-		local nearest = ent:NearestPoint(epicenter)
-		if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
-			if ent:IsPlayer() then
-				ent:PoisonDamage(((radius - nearest:Distance(epicenter)) / radius) * damage * 0.5, attacker, inflictor, nil, noreduce)
-			else 
-				ent:PoisonDamage(((radius - nearest:Distance(epicenter)) / radius) * damage * 1.1, attacker, inflictor, nil, noreduce)
+		if ent and ent:IsValid() then
+			local nearest = ent:NearestPoint(epicenter)
+			if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
+				ent:PoisonDamage(((radius - nearest:Distance(epicenter)) / radius) * damage, attacker, inflictor, nil, noreduce)
 			end
 		end
 	end

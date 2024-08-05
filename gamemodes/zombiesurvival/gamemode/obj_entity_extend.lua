@@ -35,7 +35,7 @@ end
 
 function meta:ClipHullMeleeTrace(distance, size, filter, start)
 	local cliphullpretrace = self:ClipHullTraceHull(distance, size, start)
-	if cliphullpretrace and LASTHITCLIPHULL then
+	if cliphullpretrace and LASTHITCLIPHULL and cliphullpretrace.Entity ~= prehit then
 		return cliphullpretrace
 	end
 
@@ -136,14 +136,6 @@ function meta:ResetBones(onlyscale)
 			self:ManipulateBonePosition(i, vector_origin)
 		end
 	end
-end
-
-function meta:SetTeamID(teamid)
-	self.TeamID = teamid
-end
-
-function meta:GetTeamID()
-	return self.Team and self:Team() or self.TeamID or 0
 end
 
 function meta:SetBarricadeHealth(m)
@@ -398,7 +390,7 @@ if CLIENT then
 	end
 end
 
-local OldSequenceDuration = meta.SequenceDuration
+local OldSequenceDuration = meta.OldSequenceDuration or meta.SequenceDuration
 function meta:SequenceDuration(seqid)
 	return OldSequenceDuration(self, seqid) or 0
 end

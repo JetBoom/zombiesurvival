@@ -129,7 +129,7 @@ local draw_SimpleTextBlurry = draw.SimpleTextBlurry
 local draw_SimpleTextBlur = draw.SimpleTextBlur
 local draw_GetFontHeight = draw.GetFontHeight
 
-local MedicalAuraDistance = 400
+local MedicalAuraDistance = 300
 
 GM.LifeStatsBrainsEaten = 0
 GM.LifeStatsHumanDamage = 0
@@ -466,10 +466,11 @@ function GM:PostRender()
 	if self.m_ZombieVision and MySelf:IsValid() and MySelf:Team() == TEAM_UNDEAD then
 		local eyepos = EyePos()
 		local eyedir = EyeAngles():Forward()
-		--local tr = util.TraceLine({start = eyepos, endpos = eyepos + eyedir * 128, mask = MASK_SOLID_BRUSHONLY})
-
+		local tr = util.TraceLine({start = eyepos, endpos = eyepos + eyedir * 128, mask = MASK_SOLID_BRUSHONLY})
+		
 		local dlight = DynamicLight(MySelf:EntIndex())
 		if dlight then
+		
 			dlight.Pos = MySelf:GetShootPos()
 			dlight.r = 10
 			dlight.g = 255
@@ -586,20 +587,31 @@ function GM:ShouldPlayBeats(teamid, fear)
 	return not self.RoundEnded and not self.ZombieEscape and not GetGlobalBool("beatsdisabled", false)
 end
 
-local cv_ShouldPlayMusic = CreateClientConVar("zs_playmusic", 1, true, false) 
+local cv_ShouldPlayMusic = CreateClientConVar("zs_playmusic", 1, true, false)
 local NextBeat = 0
 local LastBeatLevel = 0
 function GM:PlayBeats(teamid, fear)
 	if RealTime() <= NextBeat or not gamemode.Call("ShouldPlayBeats", teamid, fear) then return end
 
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
-		MySelf:EmitSound("zombiesurvival/surften1-fixed.ogg")
-		NextBeat = RealTime() + (self.SoundDuration["zombiesurvival/surften1.ogg"] or SoundDuration(self.LastHumanSound)) - 0.025
+		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
+		NextBeat = RealTime() + (self.SoundDuration[snd] or SoundDuration(self.LastHumanSound)) - 0.025
 		return
 	end
-	if fear <= 0 then return end
-return end
 
+	if fear <= 0 or not self.BeatsEnabled then return end
+
+	local beats = self.Beats[teamid == TEAM_HUMAN and self.BeatSetHuman or self.BeatSetZombie]
+	if not beats then return end
+
+	LastBeatLevel = math.Approach(LastBeatLevel, math.ceil(fear * 10), 3)
+
+	local snd = beats[LastBeatLevel]
+	if snd then
+		MySelf:EmitSound(snd, 0, 100, self.BeatsVolume)
+		NextBeat = RealTime() + (self.SoundDuration[snd] or SoundDuration(snd)) - 0.025
+	end
+end
 
 local colPackUp = Color(20, 255, 20, 220)
 local colPackUpNotOwner = Color(255, 240, 10, 220)
@@ -774,9 +786,9 @@ function GM:ZombieHUD()
 		local bossname = GAMEMODE.NextBossZombieClass
 		if pl and pl:IsValid() then
 			if pl == MySelf then 
-				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_RED, TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", "'"..translate.Get(bossname).."'"), "ZSHUDFont", x, y+th, COLOR_RED, TEXT_ALIGN_CENTER)
 			else 
-				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..bossname.."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), "'"..translate.Get(bossname).."'"), "ZSHUDFont", x, y+th, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			end
 		end
 		if MySelf:GetZombieClassTable().NeverAlive then
@@ -1022,22 +1034,6 @@ end
 function GM:PlayerDeath(pl, attacker)
 end
 
-function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
-	if inwater then return true end
-
-	if pl:Team() == TEAM_UNDEAD then
-		if pl:GetZombieClassTable().NoFallDamage then return true end
-
-		speed = math.max(0, speed - 200)
-	end
-
-	if pl:Team() ~= TEAM_UNDEAD or not pl:GetZombieClassTable().NoFallSlowdown then
-		pl:RawCapLegDamage(CurTime() + math.min(2, speed * 0.0035))
-	end
-
-	return true
-end
-
 function GM:LastHuman(pl)
 	if not IsValid(pl) then pl = nil end
 
@@ -1139,16 +1135,16 @@ function GM:HumanMenu()
 		panel:AddItem(b)
 	end
 
-	local b = EasyButton(panel, "Give Weapon", 8, 4)
+	local b = EasyButton(panel, "무기 주기", 8, 4)
 	b.DoClick = GiveWeapon
 	panel:AddItem(b)
-	b = EasyButton(panel, "Give Weapon and 5 clips", 8, 4)
+	b = EasyButton(panel, "무기 + 탄창 5개 주기", 8, 4)
 	b.DoClick = GiveWeaponClip
 	panel:AddItem(b)
-	b = EasyButton(panel, "Drop weapon", 8, 4)
+	b = EasyButton(panel, "무기 버리기", 8, 4)
 	b.DoClick = DropWeapon
 	panel:AddItem(b)
-	b = EasyButton(panel, "Empty clip", 8, 4)
+	b = EasyButton(panel, "탄창 비우기", 8, 4)
 	b.DoClick = EmptyClip
 	panel:AddItem(b)
 
@@ -1242,16 +1238,45 @@ function GM:CalcViewTaunt(pl, origin, angles, fov, zclose, zfar)
 end
 
 local staggerdir = VectorRand():GetNormalized()
+local BHopTime = 0
+local WasPressingJump = false
+
+local function PressingJump(cmd)
+	return bit.band(cmd:GetButtons(), IN_JUMP) ~= 0
+end
+
+local function DontPressJump(cmd)
+	cmd:SetButtons(cmd:GetButtons() - IN_JUMP)
+end
+
 function GM:_CreateMove(cmd)
 	if MySelf:IsPlayingTaunt() and MySelf:Alive() then
 		self:CreateMoveTaunt(cmd)
 		return
 	end
 
-	if MySelf:GetLegDamage() >= 0.5 then
-		local buttons = cmd:GetButtons()
-		if bit.band(buttons, IN_JUMP) ~= 0 then
-			cmd:SetButtons(buttons - IN_JUMP)
+	-- Disables bunny hopping to an extent.
+	local map = game.GetMap()
+	if string.find(map, "_obj_") or string.find(map, "objective") or (MySelf.buffRevolution and MySelf:Team() == TEAM_HUMAN) then
+		if MySelf:GetLegDamage() >= 0.5 then
+			if PressingJump(cmd) then
+				DontPressJump(cmd)
+			end
+		elseif MySelf:OnGround() then
+			if CurTime() < BHopTime then
+				if PressingJump(cmd) then
+					DontPressJump(cmd)
+					WasPressingJump = true
+				end
+			elseif WasPressingJump then
+				if PressingJump(cmd) then
+					DontPressJump(cmd)
+				else
+					WasPressingJump = false
+				end
+			end
+		else
+			BHopTime = CurTime() + 0.065
 		end
 	end
 

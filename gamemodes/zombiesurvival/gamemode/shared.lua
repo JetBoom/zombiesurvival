@@ -14,7 +14,7 @@ GM.Credits = {
 	{"Typhon", "lukas-tinel@hotmail.com", "HUD textures"},
 
 	{"Mr. Darkness", "", "Russian translation"},
-	{"Jungmin \"Honsal\" Lee","","Korean translation"},
+	{"honsal", "", "Korean translation"},
 	{"rui_troia", "", "Portuguese translation"},
 	{"Shinyshark", "", "Dutch translation"},
 	{"Kradar", "", "Italian translation"},
@@ -47,8 +47,9 @@ include("sh_options.lua")
 include("sh_zombieclasses.lua")
 include("sh_animations.lua")
 include("sh_sigils.lua")
+include("sh_channel.lua")
 
-include("noxapi/noxapi.lua")
+-- include("noxapi/noxapi.lua")
 
 include("obj_vector_extend.lua")
 include("obj_entity_extend.lua")
@@ -103,13 +104,15 @@ GM.SoundDuration = {
 function GM:AddCustomAmmo()
 	game.AddAmmoType({name = "pulse"})
 	game.AddAmmoType({name = "stone"})
-
+	game.AddAmmoType({name = "molotov"})
 	game.AddAmmoType({name = "spotlamp"})
 	game.AddAmmoType({name = "manhack"})
 	game.AddAmmoType({name = "manhack_saw"})
 	game.AddAmmoType({name = "drone"})
-	game.AddAmmoType({name = "charger"})
 	game.AddAmmoType({name = "dummy"})
+	game.AddAmmoType({name = "rpg"})
+	game.AddAmmoType({name = "charger"})
+	game.AddAmmoType({name = "defenceprojectile"})
 end
 
 function GM:CanRemoveOthersNail(pl, nailowner, ent)
@@ -273,8 +276,8 @@ function GM:GetDynamicSpawnsOld(pl)
 	return tab
 end
 
-GM.DynamicSpawnDist = 400
-GM.DynamicSpawnDistBuild = 650
+GM.DynamicSpawnDist = 250
+GM.DynamicSpawnDistBuild = 300
 function GM:DynamicSpawnIsValid(nest, humans, allplayers)
 	if self:ShouldUseAlternateDynamicSpawn() then
 		return self:DynamicSpawnIsValidOld(nest, humans, allplayers)
@@ -364,13 +367,14 @@ end
 
 function GM:Move(pl, move)
 	if pl:Team() == TEAM_HUMAN then
-		if pl:GetBarricadeGhosting() then
-			move:SetMaxSpeed(90 * (pl.Nimb and 1.2 or 1))
-			move:SetMaxClientSpeed(90 * (pl.Nimb and 1.2 or 1))
-		elseif move:GetForwardSpeed() < 0 then
-			move:SetMaxSpeed(move:GetMaxSpeed() * (pl.CoB and 1 or 0.5))
-			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * (pl.CoB and 1 or 0.5))
-		elseif move:GetForwardSpeed() == 0 then
+		-- if pl:GetBarricadeGhosting() then
+			-- move:SetMaxSpeed(36)
+			-- move:SetMaxClientSpeed(36)
+		-- elseif move:GetForwardSpeed() < 0 then
+		if move:GetForwardSpeed() < 0 and !pl.buffBalSense then
+			move:SetMaxSpeed(move:GetMaxSpeed() * 0.5)
+			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.5)
+		elseif move:GetForwardSpeed() == 0 and !pl.buffBalSense then
 			move:SetMaxSpeed(move:GetMaxSpeed() * 0.85)
 			move:SetMaxClientSpeed(move:GetMaxClientSpeed() * 0.85)
 		end
@@ -403,6 +407,9 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 
 	local damage = (0.1 * (speed - 525)) ^ 1.45
 	if hitfloater then damage = damage / 2 end
+	if pl.buffBeliefJump and pl:Team() == TEAM_HUMAN then
+		damage = damage * 0.75
+	end
 
 	if math.floor(damage) > 0 then
 		if damage >= 5 and (not isundead or not pl:GetZombieClassTable().NoFallSlowdown) then
@@ -410,7 +417,11 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 		end
 
 		if SERVER then
-			if damage >= 30 and damage < pl:Health() then
+			local mul = 1
+			if pl:Team() == TEAM_HUMAN and pl.buffBeliefJump then
+				mul = 1.25
+			end
+			if damage >= 30 * mul and damage < pl:Health() then
 				pl:KnockDown(damage * 0.05)
 			end
 			pl:TakeSpecialDamage(damage, DMG_FALL, game.GetWorld(), game.GetWorld(), pl:GetPos())
@@ -422,6 +433,9 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 end
 
 function GM:PlayerCanBeHealed(pl)
+	if pl.buffVampire or pl.Cannibalistic then
+		return false
+	end
 	return true
 end
 
@@ -431,12 +445,14 @@ end
 
 local TEAM_SPECTATOR = TEAM_SPECTATOR
 function GM:PlayerCanHearPlayersVoice(listener, talker)
-	local localvoice = talker.localVoice
-	if localvoice and listener:Team() ~= talker:Team() then
-		return false, false
-	else
-		return true, false
+	return !table.HasValue((listener.muted or {}), talker)
+	--[[if self:GetEndRound() then return true, false end
+
+	if listener:Team() == talker:Team() then
+		return true, listener:GetPos():DistanceZSkew(talker:GetPos(), 2) <= 128
 	end
+
+	return false]]
 end
 
 function GM:PlayerTraceAttack(pl, dmginfo, dir, trace)
@@ -463,7 +479,7 @@ function GM:ScalePlayerDamage(pl, hitgroup, dmginfo)
 end
 
 function GM:CanDamageNail(ent, attacker, inflictor, damage, dmginfo)
-	return not attacker:IsPlayer() or attacker:Team() ~= TEAM_HUMAN
+	return not attacker:IsPlayer() or attacker:Team() == TEAM_UNDEAD
 end
 
 function GM:CanPlaceNail(pl, tr)
@@ -678,9 +694,9 @@ function GM:IsSpecialPerson(pl, image)
 	elseif pl:IsAdmin() then
 		img = "VGUI/servers/icon_robotron"
 		tooltip = "Admin"
-	elseif pl:IsNoxSupporter() then
-		img = "noxiousnet/noxicon.png"
-		tooltip = "Nox Supporter"
+	-- elseif pl:IsNoxSupporter() then
+		-- img = "noxiousnet/noxicon.png"
+		-- tooltip = "Nox Supporter"
 	end
 
 	if img then
@@ -738,7 +754,7 @@ end
 
 if not FixedSoundDuration then
 FixedSoundDuration = true
-local OldSoundDuration = SoundDuration
+local OldSoundDuration = OldSoundDuration or SoundDuration
 function SoundDuration(snd)
 	if snd then
 		local ft = string.sub(snd, -4)
@@ -752,4 +768,7 @@ function SoundDuration(snd)
 
 	return OldSoundDuration(snd)
 end
+end
+
+function GM:VehicleMove()
 end

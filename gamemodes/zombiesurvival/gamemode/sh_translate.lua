@@ -7,7 +7,7 @@ translate = {}
 local Languages = {}
 local Translations = {}
 local AddingLanguage
-local DefaultLanguage = "en"
+local DefaultLanguage = "ko"
 local CurrentLanguage = DefaultLanguage
 
 if CLIENT then

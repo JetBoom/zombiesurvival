@@ -195,7 +195,7 @@ function meta:DrawCrosshairCross()
 
 	cone = ScrH() / 76.8 * cone
 
-	CrossHairScale = math.Approach(CrossHairScale, cone, FrameTime() * math.max(5, math.abs(CrossHairScale - cone) * 0.02))
+	CrossHairScale = math.Approach(CrossHairScale, cone, FrameTime() * math.max(10, math.abs(CrossHairScale - cone) * 0.1))
 
 	local midarea = 40 * CrossHairScale
 

@@ -202,7 +202,7 @@ function meta:PackUp(pl)
 	local status = pl:GiveStatus("packup")
 	if status:IsValid() then
 		status:SetPackUpEntity(self)
-		status:SetEndTime(CurTime() + (self.PackUpTime or 4))
+		status:SetEndTime(CurTime() + (self.PackUpTime or 4) * (pl.buffBlueprint and 0.3 or 1))
 
 		if self.GetObjectOwner then
 			local owner = self:GetObjectOwner()
@@ -248,7 +248,7 @@ function meta:ResetLastBarricadeAttacker(attacker, dmginfo)
 	end
 end
 
-meta.OldSetPhysicsAttacker = meta.SetPhysicsAttacker
+meta.OldSetPhysicsAttacker = meta.OldSetPhysicsAttacker or meta.SetPhysicsAttacker
 function meta:SetPhysicsAttacker(ent)
 	if string.sub(self:GetClass(), 1, 12) == "func_physbox" and ent:IsValid() then
 		self.PBAttacker = ent
@@ -290,16 +290,62 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 
 	self:ResetLastBarricadeAttacker(attacker, dmginfo)
 
+	local thorncade = false
+	local owners = {}
 	local nails = self:GetLivingNails()
 	if #nails <= 0 then return end
 
 	self:SetBarricadeHealth(self:GetBarricadeHealth() - damage)
 	for i, nail in ipairs(nails) do
 		nail:OnDamaged(damage, attacker, inflictor, dmginfo)
+		if nail.thorncade or nail:GetOwner().thorncade then
+			if !table.HasValue(owners, nail:GetOwner()) then
+				table.insert(owners, nail:GetOwner())
+			end
+			thorncade = thorncade or true
+		end
+	end
+	
+	for i, v in pairs(owners) do
+		if !IsValid(v) or !v:Alive() or v:Team() == TEAM_ZOMBIE then
+			table.RemoveByValue(owners, v)
+			PrintTable(owners)
+		end
 	end
 
 	if attacker:IsPlayer() then
 		GAMEMODE:DamageFloater(attacker, self, dmginfo)
+		if attacker:Team() == TEAM_ZOMBIE and thorncade then
+			local dmg = dmginfo:GetDamage() * 0.75
+			local count = table.Count(owners)
+			dmg = dmg / (count > 0 and count or 1)
+		
+			if count <= 0 then
+				attacker:TakeDamage(dmg, self, self)
+			else
+				for i, v in pairs(owners) do
+					--attacker:TakeDamage(dmg, v, self)
+					attacker:TakeDamage(dmg, self, self)
+					v:AddLifeHumanDamage(dmg)
+					v.m_PointQueue = v.m_PointQueue + dmg / attacker:GetMaxHealth() * (attacker:GetZombieClassTable().Points or 0) * 0.5
+					--init.lua 복붙, 가시철책 포인트 50% 감소
+					local _dmginfo = DamageInfo()
+					_dmginfo:SetAmmoType(dmginfo:GetAmmoType())
+					_dmginfo:SetAttacker(dmginfo:GetAttacker())
+					_dmginfo:SetDamage(dmginfo:GetDamage())
+					_dmginfo:ScaleDamage(0.75)
+					_dmginfo:SetDamageBonus(dmginfo:GetDamageBonus())
+					_dmginfo:SetDamageCustom(dmginfo:GetDamageCustom())
+					_dmginfo:SetDamageForce(dmginfo:GetDamageForce())
+					_dmginfo:SetDamagePosition(dmginfo:GetDamagePosition())
+					_dmginfo:SetDamageType(dmginfo:GetDamageType())
+					_dmginfo:SetInflictor(dmginfo:GetInflictor())
+					_dmginfo:SetMaxDamage(dmginfo:GetMaxDamage())
+					_dmginfo:SetReportedPosition(dmginfo:GetReportedPosition())
+					GAMEMODE:DamageFloater(v, self, _dmginfo)						
+				end
+			end
+		end
 	end
 
 	if dmginfo then dmginfo:SetDamage(0) end

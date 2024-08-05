@@ -106,6 +106,10 @@ local function SkewedDistance(a, b, skew)
 end
 
 function GM:ProfilerPlayerValid(pl)
+	if (!IsValid(pl) or !pl.GetPos) then
+		return false
+	end
+
 	-- Preliminary checks. We need to mark players as incompatible when they do certain things.
 	if pl.NoProfiling then return false end
 
