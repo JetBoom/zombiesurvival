@@ -14,6 +14,7 @@ SWEP.Primary.ClipSize = 8
 SWEP.Primary.DefaultClip = 0
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
+SWEP.Primary.Recoil = 0
 SWEP.RequiredClip = 1
 
 SWEP.Secondary.ClipSize = 1
@@ -29,6 +30,12 @@ SWEP.IronSightsHoldType = "ar2"
 SWEP.IronSightsPos = Vector(0, 0, 0)
 
 SWEP.EmptyWhenPurchased = true
+
+SWEP.ConeResetDelay = 0.8
+
+SWEP.LastFired = 0
+
+SWEP.ConeMul = 1
 
 function SWEP:Initialize()
 	if not self:IsValid() then return end --???
@@ -50,7 +57,8 @@ function SWEP:Initialize()
 end
 
 function SWEP:GetCone()
-	if not self.Owner:OnGround() or self.ConeMax == self.ConeMin then return self.ConeMax end
+	-- if not self.Owner:OnGround() or self.ConeMax == self.ConeMin then return self.ConeMax end
+	if self.ConeMax == self.ConeMin then return self.ConeMax end
 
 	local basecone = self.ConeMin
 	local conedelta = self.ConeMax - basecone
@@ -58,8 +66,8 @@ function SWEP:GetCone()
 	local multiplier = math.min(self.Owner:GetVelocity():Length() / self.WalkSpeed, 1) * 0.5
 	if not self.Owner:Crouching() then multiplier = multiplier + 0.25 end
 	if not self:GetIronsights() then multiplier = multiplier + 0.25 end
-
-	return basecone + conedelta * multiplier ^ self.ConeRamp
+	
+	return (basecone + conedelta * multiplier ^ self.ConeRamp) * 0.08 * self.ConeMul
 end
 
 function SWEP:PrimaryAttack()
@@ -149,6 +157,7 @@ function SWEP:TakeAmmo()
 end
 
 function SWEP:Reload()
+	self.ConeMul = 1
 	if self.Owner:IsHolding() then return end
 
 	if self:GetIronsights() then
@@ -235,9 +244,38 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 	owner:DoAttackEvent()
 
 	self:StartBulletKnockback()
+	
+	self:DoRecoil()
 	owner:FireBullets({Num = numbul, Src = owner:GetShootPos(), Dir = owner:GetAimVector(), Spread = Vector(cone, cone, 0), Tracer = 1, TracerName = self.TracerName, Force = dmg * 0.1, Damage = dmg, Callback = self.BulletCallback})
-	self:DoBulletKnockback(self.Primary.KnockbackScale * 0.05)
+	self:DoBulletKnockback(self.Primary.KnockbackScale * 0.02)
 	self:EndBulletKnockback()
+	
+	self.LastFired = CurTime()
+end
+
+function SWEP:DoRecoil()
+	local owner = self.Owner
+	if !IsValid(owner) or !owner.ViewPunch then 
+		return
+	end
+	
+	local recoil = self.Primary.Recoil
+	if owner:Crouching() then
+		recoil = recoil * 0.7
+	end
+	
+	if self:GetIronsights() then
+		recoil = recoil * 0.7
+	end
+	
+	owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * recoil, math.Rand(-0.2, 0.2) * recoil, 0))
+	
+	if CLIENT then
+		local eyeang = owner:EyeAngles()
+		eyeang.pitch = eyeang.pitch + self.Primary.Recoil * math.Rand(-0.2, -0.1)
+		eyeang.yaw = eyeang.yaw + self.Primary.Recoil * math.Rand(-0.2, 0.2)
+		owner:SetEyeAngles(eyeang)
+	end
 end
 
 local ActIndex = {

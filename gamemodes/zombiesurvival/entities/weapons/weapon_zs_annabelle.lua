@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'애나벨' 사냥소총"
-	SWEP.Description = "이 소총의 탄약은 개조되어, 벽에 부딪힐 경우 튕겨나가며 여러 탄환으로 쪼개진다."
+	SWEP.PrintName = "'Annabelle' 소총"
+	SWEP.Description = "이 사냥용 소총의 개조된 탄환은 단단한 표면에 부딪치면 폭발해 여러 작은 탄환으로 타격을 준다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	
@@ -27,6 +27,7 @@ SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Damage = 90
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 1
+SWEP.Primary.Recoil = 13
 SWEP.ReloadDelay = 0.4
 
 SWEP.Primary.ClipSize = 4
@@ -34,8 +35,8 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "357"
 SWEP.Primary.DefaultClip = 24
 
-SWEP.ConeMax = 0.1
-SWEP.ConeMin = 0.015
+SWEP.ConeMax = 0.3
+SWEP.ConeMin = 0.1
 
 SWEP.WalkSpeed = SPEED_SLOW
 
@@ -46,8 +47,8 @@ SWEP.IronSightsPos = Vector(-8.8, 10, 4.32)
 SWEP.IronSightsAng = Vector(1.4,0.1,5)
 
 function SWEP:Reload()
+	self.ConeMul = 1
 	if self.reloading then return end
-
 	if self:Clip1() < self.Primary.ClipSize and 0 < self.Owner:GetAmmoCount(self.Primary.Ammo) then
 		self:SetNextPrimaryFire(CurTime() + self.ReloadDelay)
 		self.reloading = true
@@ -89,6 +90,11 @@ function SWEP:Think()
 	if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
 		self:SetIronsights(false)
 	end
+	if self.LastFired + self.ConeResetDelay > CurTime() then
+		local multiplier = 1
+		multiplier = multiplier + (self.ConeMax * 10) * ((self.LastFired + self.ConeResetDelay - CurTime()) / self.ConeResetDelay)
+		self.ConeMul = math.min(multiplier, 10)
+	end
 end
 end
 
@@ -118,6 +124,12 @@ function SWEP:Think()
 
 	if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
 		self:SetIronsights(false)
+	end
+	
+	if self.LastFired + self.ConeResetDelay > CurTime() then
+		local multiplier = 1
+		multiplier = multiplier + (self.ConeMax * 10) * ((self.LastFired + self.ConeResetDelay - CurTime()) / self.ConeResetDelay)
+		self.ConeMul = math.min(multiplier, 10)
 	end
 end
 end
@@ -153,7 +165,7 @@ local function DoRicochet(attacker, hitpos, hitnormal, normal, damage)
 end
 function SWEP.BulletCallback(attacker, tr, dmginfo)
 	if SERVER and tr.HitWorld and not tr.HitSky then
-		local hitpos, hitnormal, normal, dmg = tr.HitPos, tr.HitNormal, tr.Normal, dmginfo:GetDamage() / 5
+		local hitpos, hitnormal, normal, dmg = tr.HitPos, tr.HitNormal, tr.Normal, dmginfo:GetDamage() / 3
 		timer.Simple(0, function() DoRicochet(attacker, hitpos, hitnormal, normal, dmg) end)
 	end
 

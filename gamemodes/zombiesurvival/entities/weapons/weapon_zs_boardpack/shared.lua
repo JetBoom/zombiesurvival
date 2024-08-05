@@ -6,7 +6,7 @@ SWEP.AmmoIfHas = true
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "SniperRound"
-SWEP.Primary.Delay = 1.5
+SWEP.Primary.Delay = 1
 SWEP.Primary.DefaultClip = 7
 
 SWEP.Secondary.ClipSize = 1
@@ -18,15 +18,29 @@ SWEP.Secondary.Delay = 0.15
 SWEP.WalkSpeed = SPEED_NORMAL
 SWEP.FullWalkSpeed = SPEED_SLOWEST
 
+// 넓적판자 확률증가 딜레이
+SWEP.INCREASE_BOARD_DELAY_KEY = "IncreaseBoardDelay"
+SWEP.INCREASE_BOARD_DELAY = 45
+// 마지막 판자 소환 시간
+SWEP.LAST_BOARD_TIME_KEY = "LastBoardTime"
+
+function SWEP:SetupDataTables()
+	self:NetworkVar("Float", 0, "IncreaseBoardDelay")
+	self:NetworkVar("Float", 1, "LastBoardTime")
+end
+
 SWEP.JunkModels = {
 	Model("models/props_debris/wood_board04a.mdl"),
-	Model("models/props_debris/wood_board06a.mdl"),
-	Model("models/props_debris/wood_board06a.mdl"),
-	Model("models/props_debris/wood_board06a.mdl"),
-	Model("models/props_debris/wood_board06a.mdl"),
 	Model("models/props_debris/wood_board02a.mdl"),
 	Model("models/props_debris/wood_board01a.mdl"),
 	Model("models/props_debris/wood_board07a.mdl"),
+	Model("models/props_c17/furnituredrawer002a.mdl"),
+	Model("models/props_c17/furnituredrawer003a.mdl"),
+	Model("models/props_c17/furnituredrawer001a_chunk01.mdl"),
+	Model("models/props_c17/furniturechair001a_chunk01.mdl"),
+	Model("models/props_c17/furnituretable003a.mdl"),
+	Model("models/props_c17/furniturechair001a.mdl"),
+	Model("models/props_debris/wood_board06a.mdl")
 }
 
 function SWEP:SetReplicatedAmmo(count)
@@ -46,17 +60,21 @@ end
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 
+	local curtime = CurTime()
+	
 	local aimvec = self.Owner:GetAimVector()
 	local shootpos = self.Owner:GetShootPos()
 	local tr = util.TraceLine({start = shootpos, endpos = shootpos + aimvec * 32, filter = self.Owner})
 
-	self:SetNextPrimaryAttack(CurTime() + self.Primary.Delay)
+	self:SetNextPrimaryAttack(curtime + self.Primary.Delay)
 
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.random(75, 80))
 
 	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-	self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE)
-	self.IdleAnimation = CurTime() + math.min(self.Primary.Delay, self:SequenceDuration())
+	if SERVER then
+		self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE)
+	end
+	self.IdleAnimation = curtime + math.min(self.Primary.Delay, self:SequenceDuration())
 
 	if SERVER then
 		local ent = ents.Create("prop_physics")
@@ -111,6 +129,21 @@ function SWEP:Think()
 			self:SetReplicatedAmmo(count)
 			self.Owner:ResetSpeed()
 		end
+		
+		if self:GetLastBoardTime() + self:GetIncreaseBoardDelay() <= CurTime() then
+		
+			local elapsedtime = CurTime() - (self:GetLastBoardTime() + self:GetIncreaseBoardDelay())
+			
+			while (elapsedtime >= 0) do
+			
+				table.remove(self.JunkModels, 1)
+				table.insert(self.JunkModels, Model("models/props_debris/wood_board06a.mdl"))
+				
+				elapsedtime = elapsedtime - self:GetIncreaseBoardDelay()				
+			end
+			
+			self:SetLastBoardTime(CurTime())
+		end		
 	end
 end
 

@@ -1,7 +1,7 @@
 include("shared.lua")
 
-SWEP.PrintName = "Junk Pack"
-SWEP.Description = "It's simply a pack of wooden junk kept together with some duct tape.\nVery useful for making barricades when no materials are around.\nNeeds something like a hammer and nails to keep the things in place."
+SWEP.PrintName = "판자 더미"
+SWEP.Description = "대충 묶어놓은 판자 더미.\n주변에 쓸만한 물건이 없을 때 바리케이드를 지을 물자로 사용하기 좋다.\n제대로 고정시키기 위해 망치와 못 등이 필요하다."
 SWEP.ViewModelFOV = 45
 SWEP.ViewModelFlip = false
 
