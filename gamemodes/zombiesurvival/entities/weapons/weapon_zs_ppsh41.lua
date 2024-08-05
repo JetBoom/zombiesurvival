@@ -81,22 +81,18 @@ local Bash_Miss = {
 }
 
 if CLIENT then
-	SWEP.PrintName = "'파파샤' SMG"
-	SWEP.Description = "보조 공격으로 개머리판 공격을 할 수 있다. 그러나 구식 무기라 탄창을 확인할 수 없다."
+	SWEP.PrintName = "'Shpagina' SMG"
+	SWEP.Description = "보조 공격으로 개머리판 공격을 할 수 있다."
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
 	SWEP.ViewModelFlip = false
-	SWEP.ViewModelFOV = 60
-
+	SWEP.ViewModelFOV = 75
+	
 	SWEP.HUD3DBone = "sov_ppsh"
-	SWEP.HUD3DPos = Vector(-1, -3.5, -1)
-	SWEP.HUD3DAng = Angle(0, 0, 0)
-	SWEP.HUD3DScale = 0.015
-	function SWEP:Draw3DHUD()
-	end
-	function SWEP:Draw2DHUD()
-	end
+	SWEP.HUD3DPos = Vector(14.215, -1.484, 1.562)
+	SWEP.HUD3DAng = Angle(0, -90, 90)
+	SWEP.HUD3DScale = 0.025
 end
 
 SWEP.Base = "weapon_zs_base"
@@ -109,7 +105,7 @@ SWEP.WorldModel	= "models/weapons/w_grub_ppsh_stick.mdl"
 SWEP.UseHands = true
 SWEP.Primary.Damage = 18
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.08
+SWEP.Primary.Delay = 0.09
 SWEP.TracerName = "Tracer"
 SWEP.Primary.ClipSize = 35
 SWEP.Primary.Automatic = true
@@ -122,12 +118,12 @@ SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= true
 SWEP.Secondary.Ammo			= "none"
-SWEP.Secondary.Damage = 45
+SWEP.Secondary.Damage = 50
 SWEP.Secondary.Delay = 2
 SWEP.MeleeRange = 60
 SWEP.MeleeSize = 1.7
 SWEP.MeleeKnockBack = 80
-
+SWEP.IsMelee = nil
 
 SWEP.Primary.Sound = Sound("Weapon_PPSH.Single")
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_SMG1
@@ -142,7 +138,7 @@ local sound_int = false
 local sound_end = false
 	
 function SWEP:Reload()
-	--[[]]self:SetHoldType( self.HoldType ) 
+	self:SetHoldType( self.HoldType ) 
 	if self.Owner:IsHolding() then return end
 
 	if self:GetIronsights() then
@@ -152,6 +148,7 @@ function SWEP:Reload()
 	if self:GetNextReload() <= CurTime() and self:DefaultReload(ACT_VM_RELOAD) then
 		self.IdleAnimation = CurTime() + self:SequenceDuration()
 		self:SetNextReload(self.IdleAnimation)
+
 		self.Owner:DoReloadEvent()
 		if self.ReloadSound then
 			self:EmitSound(self.ReloadSound)
@@ -166,18 +163,20 @@ function SWEP:PrimaryAttack()
 	self:EmitFireSound()
 	self:TakeAmmo()
 	self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self:GetCone())
-	self:MuzzleFlash()
+	--self:MuzzleFlash()
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 end
 
 function SWEP:SecondaryAttack()
 	if not self.Owner:KeyDown(IN_ATTACK) then 
 	self:SetHoldType( self.MeleeHoldType ) 
+	self.IsMelee = true
 	self.Owner:DoAttackEvent()
 	timer.Create( "holdtypereset", 1, 1, function() if self.Owner:IsValid() then self:SetHoldType( self.HoldType ) end end )
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 	self:SetNextPrimaryFire(CurTime() + self.Secondary.Delay*0.5)
 	self:EmitSound("Weapon_PPSH.MeleeSwing")
+	self.Owner:GetViewModel():SetPlaybackRate(2)
 	self.Weapon:SendWeaponAnim( ACT_IDLE_ANGRY_MELEE )
 	local owner = self.Owner
 	local filter = owner:GetMeleeFilter()
@@ -258,7 +257,7 @@ function SWEP:SecondaryAttack()
 		if self.PostOnMeleeMiss then self:PostOnMeleeMiss(tr) end
 	end
 	end )
-	
+	self.IsMelee = false
 	owner:LagCompensation(false)
 end
 end

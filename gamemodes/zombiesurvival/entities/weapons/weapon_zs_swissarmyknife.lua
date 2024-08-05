@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "칼"
-	SWEP.Description = "등짝을 노리면 데미지가 2배로 들어간다는 설이 있다."
+	SWEP.PrintName = "스위스 육군 칼"
+	SWEP.Description = "백스텝으로 두 배의 데미지!"
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
@@ -16,13 +16,13 @@ SWEP.ViewModel = "models/weapons/cstrike/c_knife_t.mdl"
 SWEP.WorldModel = "models/weapons/w_knife_t.mdl"
 SWEP.UseHands = true
 
-SWEP.MeleeDamage = 19
-SWEP.MeleeRange = 62
+SWEP.MeleeDamage = 10
+SWEP.MeleeRange = 64
 SWEP.MeleeSize = 0.875
 
 SWEP.WalkSpeed = SPEED_FASTEST
 
-SWEP.Primary.Delay = 0.85
+SWEP.Primary.Delay = 0.38
 
 SWEP.HitDecal = "Manhackcut"
 
@@ -49,7 +49,7 @@ end
 function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	if hitent:IsValid() and hitent:IsPlayer() and not self.m_BackStabbing and math.abs(hitent:GetForward():Angle().yaw - self.Owner:GetForward():Angle().yaw) <= 90 then
 		self.m_BackStabbing = true
-		self.MeleeDamage = self.MeleeDamage * 2
+		self.MeleeDamage = self.MeleeDamage * 4
 	end
 end
 
@@ -57,7 +57,7 @@ function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
 	if self.m_BackStabbing then
 		self.m_BackStabbing = false
 
-		self.MeleeDamage = self.MeleeDamage / 2
+		self.MeleeDamage = self.MeleeDamage / 4
 	end
 end
 

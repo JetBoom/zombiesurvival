@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'토저' SMG"
+	SWEP.PrintName = "'Tosser' SMG"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -25,11 +25,12 @@ SWEP.CSMuzzleFlashes = false
 
 SWEP.ReloadSound = Sound("Weapon_SMG1.Reload")
 SWEP.Primary.Sound = Sound("Weapon_AR2.NPC_Single")
-SWEP.Primary.Damage = 13
+SWEP.Primary.Damage = 10
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.15
+SWEP.Primary.Delay = 0.133
+SWEP.Primary.Recoil = 2.5
 
-SWEP.Primary.ClipSize = 25
+SWEP.Primary.ClipSize = 35
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
@@ -37,8 +38,8 @@ GAMEMODE:SetupDefaultClip(SWEP.Primary)
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_SMG1
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SMG1
 
-SWEP.ConeMax = 0.055
-SWEP.ConeMin = 0.029
+SWEP.ConeMax = 0.3548
+SWEP.ConeMin = 0.2151
 
 SWEP.WalkSpeed = SPEED_NORMAL
 

@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "메가매셔"
+	SWEP.PrintName = "메가 매셔"
 	SWEP.ViewModelFOV = 75
 
 	SWEP.VElements = {
@@ -26,10 +26,10 @@ SWEP.DamageType = DMG_CLUB
 SWEP.ViewModel = "models/weapons/v_sledgehammer/v_sledgehammer.mdl"
 SWEP.WorldModel = "models/weapons/w_sledgehammer.mdl"
 
-SWEP.MeleeDamage = 220
+SWEP.MeleeDamage = 190
 SWEP.MeleeRange = 75
 SWEP.MeleeSize = 4
-SWEP.MeleeKnockBack = SWEP.MeleeDamage * 3
+SWEP.MeleeKnockBack = 150
 
 SWEP.Primary.Delay = 2.25
 

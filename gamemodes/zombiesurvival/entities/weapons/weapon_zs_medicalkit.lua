@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "메디킷"
-	SWEP.Description = "좀비 대재앙 전 각국의 군대에서 널리 통용되던 다용도 치료용 키트이다.\n생존자들이 삶을 이어나가기 위해 꼭 필요한 필수품이다.\n공격 1: 아군 치료\n공격 2: 자가 치료.\n 자신을 치료하는 것보다 아군을 치료하는 것이 효율적이고, 포인트 또한 벌 수 있다!"
+	SWEP.PrintName = "의료킷"
+	SWEP.Description = "응급 처치에 사용할 수 있는 모든 것이 담긴 다용도 치료 키트이다.\n생존자들의 체력을 책임진다.\n주 공격 버튼: 타인 치료.\n보조 공격 버튼: 자신 치료\n타인을 치료하면 충전 속도가 빠를 뿐 아니라 포인트도 얻는다!"
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0
 
@@ -20,14 +20,14 @@ SWEP.ViewModel = "models/weapons/c_medkit.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Delay = 10
-SWEP.Primary.Heal = 15
+SWEP.Primary.Heal = 17
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = 150
 SWEP.Primary.Ammo = "Battery"
 
 SWEP.Secondary.Delay = 20
-SWEP.Secondary.Heal = 10
+SWEP.Secondary.Heal = 12
 
 SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
@@ -38,6 +38,10 @@ SWEP.WalkSpeed = SPEED_NORMAL
 SWEP.NoMagazine = true
 
 SWEP.HoldType = "slam"
+
+function SWEP:SetupDataTables()
+	self:NetworkVar("Float", 0, "NextCharge")
+end
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
@@ -66,7 +70,7 @@ function SWEP:PrimaryAttack()
 		local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Primary.Heal * multiplier, maxhealth - health)))
 		local totake = math.ceil(toheal / multiplier)
 		if toheal > 0 then
-			self:SetNextCharge(CurTime() + self.Primary.Delay * math.min(1, toheal / self.Primary.Heal))
+			self:SetNextCharge(CurTime() + self.Primary.Delay * math.min(1, toheal / self.Primary.Heal) * (self.Owner.buffMedic and 0.75 or 1))
 			owner.NextMedKitUse = self:GetNextCharge()
 
 			self:TakeCombinedPrimaryAmmo(totake)
@@ -93,7 +97,7 @@ function SWEP:SecondaryAttack()
 	local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Secondary.Heal * multiplier, maxhealth - health)))
 	local totake = math.ceil(toheal / multiplier)
 	if toheal > 0 then
-		self:SetNextCharge(CurTime() + self.Secondary.Delay * math.min(1, toheal / self.Secondary.Heal))
+		self:SetNextCharge(CurTime() + self.Secondary.Delay * math.min(1, toheal / self.Secondary.Heal) * (self.Owner.buffMedic and 0.75 or 1))
 		owner.NextMedKitUse = self:GetNextCharge()
 
 		self:TakeCombinedPrimaryAmmo(totake)
@@ -140,13 +144,13 @@ end
 function SWEP:Reload()
 end
 
-function SWEP:SetNextCharge(tim)
-	self:SetDTFloat(0, tim)
-end
+-- function SWEP:SetNextCharge(tim)
+	-- self:SetDTFloat(0, tim)
+-- end
 
-function SWEP:GetNextCharge()
-	return self:GetDTFloat(0)
-end
+-- function SWEP:GetNextCharge()
+	-- return self:GetDTFloat(0)
+-- end
 
 function SWEP:CanPrimaryAttack()
 	local owner = self.Owner
@@ -189,7 +193,7 @@ function SWEP:DrawHUD()
 		surface.DrawOutlinedRect(x, y, wid, hei)
 	end
 
-	draw.SimpleText("Medical Kit", "ZSHUDFontSmall", x, texty, COLOR_GREEN, TEXT_ALIGN_LEFT)
+	draw.SimpleText("의료킷", "ZSHUDFontSmall", x, texty, COLOR_GREEN, TEXT_ALIGN_LEFT)
 
 	local charges = self:GetPrimaryAmmoCount()
 	if charges > 0 then

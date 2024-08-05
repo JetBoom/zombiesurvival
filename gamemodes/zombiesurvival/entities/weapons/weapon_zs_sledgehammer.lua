@@ -17,7 +17,7 @@ SWEP.WorldModel = "models/weapons/w_sledgehammer.mdl"
 SWEP.MeleeDamage = 75
 SWEP.MeleeRange = 64
 SWEP.MeleeSize = 1.75
-SWEP.MeleeKnockBack = SWEP.MeleeDamage * 1.75
+SWEP.MeleeKnockBack = 70
 
 SWEP.Primary.Delay = 1.3
 

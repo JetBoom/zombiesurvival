@@ -1,7 +1,7 @@
 include("shared.lua")
 
-SWEP.PrintName = "메세지 비컨"
-SWEP.Description = "이 비컨은 멀리까지 메세지를 전달할 수 있도록 도와준다.\n공격 1: 설치\n공격 2: 메세지 선택\n달리기 키(기본값:쉬프트): 회수\n생성할려고 하는 위치가 가능한 위치라면 초록색으로 표시된다."
+SWEP.PrintName = "메세지 비콘"
+SWEP.Description = "먼 거리에 있는 생존자에게 메세지를 보여줄 수 있다.\n보조 공격 버튼: 메세지 선택\n주 공격 버튼: 설치\n달리기 버튼: 회수"
 SWEP.DrawCrosshair = false
 
 SWEP.Slot = 4

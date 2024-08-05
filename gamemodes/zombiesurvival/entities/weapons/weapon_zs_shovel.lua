@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "삽"
-	SWEP.Description = "쓰러진 좀비에 특히 탁월하다."
+	SWEP.Description = "넉다운된 좀비를 단숨에 처치할 수 있다."
 
 	SWEP.ViewModelFOV = 60
 
@@ -30,7 +30,7 @@ SWEP.UseHands = true
 SWEP.MeleeDamage = 50
 SWEP.MeleeRange = 68
 SWEP.MeleeSize = 1.5
-SWEP.MeleeKnockBack = SWEP.MeleeDamage * 2
+SWEP.MeleeKnockBack = 40
 
 SWEP.Primary.Delay = 1.2
 

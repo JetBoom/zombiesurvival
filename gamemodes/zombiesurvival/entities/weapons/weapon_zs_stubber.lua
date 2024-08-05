@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'스터버' 소총"
+	SWEP.PrintName = "'Stubber' 소총"
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 
@@ -23,9 +23,10 @@ SWEP.UseHands = true
 
 SWEP.ReloadSound = Sound("Weapon_Scout.ClipOut")
 SWEP.Primary.Sound = Sound("Weapon_Scout.Single")
-SWEP.Primary.Damage = 50
+SWEP.Primary.Damage = 30
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 1.5
+SWEP.Primary.Recoil = 8.92
 SWEP.ReloadDelay = SWEP.Primary.Delay
 
 SWEP.Primary.ClipSize = 5
@@ -36,7 +37,7 @@ SWEP.Primary.DefaultClip = 25
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SHOTGUN
 
-SWEP.ConeMax = 0.075
+SWEP.ConeMax = 1
 SWEP.ConeMin = 0
 
 SWEP.IronSightsPos = Vector(5.015, -8, 2.52)
@@ -51,6 +52,28 @@ end
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 85, 100)
 end
+
+local function BulletCallback(attacker, tr, dmginfo)
+	local ent = tr.Entity
+	if ent:IsValid() then
+		if ent:IsPlayer() then
+			if ent:Team() == TEAM_UNDEAD and tempknockback then
+				tempknockback[ent] = ent:GetVelocity()
+			end
+			
+			if tr.HitGroup == HITGROUP_HEAD then
+				dmginfo:ScaleDamage(3)
+			end
+		else
+			local phys = ent:GetPhysicsObject()
+			if ent:GetMoveType() == MOVETYPE_VPHYSICS and phys:IsValid() and phys:IsMoveable() then
+				ent:SetPhysicsAttacker(attacker)
+			end
+		end
+	end
+end
+
+SWEP.BulletCallback = BulletCallback
 
 if CLIENT then
 	SWEP.IronsightsMultiplier = 0.25

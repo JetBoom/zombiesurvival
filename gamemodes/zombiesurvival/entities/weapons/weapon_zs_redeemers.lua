@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'성불자' 듀얼 권총"
+	SWEP.PrintName = "'Redeemers' 쌍권총"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 
@@ -24,19 +24,20 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("Weapon_ELITE.Single")
 SWEP.Primary.Damage = 22
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.12
+SWEP.Primary.Delay = 0.15
+SWEP.Primary.Recoil = 1.95
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "pistol"
-SWEP.Primary.DefaultClip = 240
+SWEP.Primary.DefaultClip = 150
 
-SWEP.ConeMax = 0.055
-SWEP.ConeMin = 0.05
+SWEP.ConeMax = 0.251
+SWEP.ConeMin = 0.08
 function SWEP:Deploy()
 	self:SetNextReload(0)
 	if server then
-	self.Primary.Damage = GAMEMODE:GetWave() * 4
+		self.Primary.Damage = GAMEMODE:GetWave() * 5
 	end
 	gamemode.Call("WeaponDeployed", self.Owner, self)
 	self:SetIronsights(false)

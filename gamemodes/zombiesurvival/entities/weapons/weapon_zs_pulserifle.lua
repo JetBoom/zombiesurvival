@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'아도니스' 펄스 소총"
-	SWEP.Description = "강력한 데미지를 입히며 좀비를 느리게 한다."
+	SWEP.PrintName = "'Adonis' 펄스 라이플"
+	SWEP.Description = "강력한 데미지 뿐 아니라 대상의 속도를 늦추는 기능까지 가지고 있는 소총."
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -26,16 +26,17 @@ SWEP.CSMuzzleFlashes = false
 
 SWEP.ReloadSound = Sound("Weapon_SMG1.Reload")
 SWEP.Primary.Sound = Sound("Airboat.FireGunHeavy")
-SWEP.Primary.Damage = 34
+SWEP.Primary.Damage = 32
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.15
+SWEP.Primary.Delay = 0.22
 
-SWEP.Primary.ClipSize = 40
+SWEP.Primary.ClipSize = 20
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "pulse"
+SWEP.Primary.Recoil = 3.98
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
-SWEP.ConeMax = 0.06
+SWEP.ConeMax = 0.313
 SWEP.ConeMin = 0.02
 
 SWEP.WalkSpeed = SPEED_SLOW

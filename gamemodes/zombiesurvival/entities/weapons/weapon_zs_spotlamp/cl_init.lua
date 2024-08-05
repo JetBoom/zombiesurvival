@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "설치형 램프"
+SWEP.PrintName = "스팟 램프"
 SWEP.Description = "이 램프는 일정 지역을 밝게 비추어준다.\n공격 1: 설치\n공격 2/재장전: 회전\n달리기 키(기본값:쉬프트): 회수\n생성할려고 하는 위치가 가능한 위치라면 초록색으로 표시된다."
 SWEP.DrawCrosshair = false
 

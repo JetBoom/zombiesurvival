@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Wraith"
+SWEP.PrintName = "망령"
 SWEP.ViewModelFOV = 47
 
 --[[function SWEP:Holster()

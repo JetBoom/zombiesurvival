@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Z9000' 펄스 권총"
-	SWEP.Description = "Z9000는 공격력이 강한 무기는 아니지만, 이 총에 맞은 좀비들은 한동안 느려지게 된다."
+	SWEP.Description = "공격력이 강한 무기는 아니지만, 이 총에 맞은 좀비들은 한동안 느려지게 된다."
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 	
@@ -35,13 +35,14 @@ SWEP.Primary.Sound = Sound("Weapon_Alyx_Gun.Single")
 SWEP.Primary.Damage = 18
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.2
+SWEP.Primary.Recoil = 2.908
 
 SWEP.Primary.ClipSize = 10
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pulse"
 SWEP.Primary.DefaultClip = 50
 
-SWEP.ConeMax = 0.04
+SWEP.ConeMax = 0.645
 SWEP.ConeMin = 0.03
 
 SWEP.IronSightsPos = Vector(-5.95, 3, 2.75)
