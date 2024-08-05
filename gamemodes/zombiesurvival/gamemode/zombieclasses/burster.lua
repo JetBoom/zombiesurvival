@@ -148,7 +148,7 @@ if SERVER then
 		if wep:IsValid() and wep.GetCharge and wep:GetCharge() > 0 then return false end
 	end
 
-	local function DoExplode(pl, pos, magnitude)
+	function DoExplode(pl, pos, magnitude)
 		local inflictor = pl:GetActiveWeapon()
 		if not inflictor:IsValid() then inflictor = pl end
 

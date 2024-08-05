@@ -3,10 +3,10 @@ CLASS.TranslationName = "class_ghoul"
 CLASS.Description = "description_ghoul"
 CLASS.Help = "controls_ghoul"
 
-CLASS.Wave = 0
-CLASS.Unlocked = true
+CLASS.Wave = 2 / 6
+CLASS.Unlocked = false
 
-CLASS.Health = 150
+CLASS.Health = 215
 CLASS.Speed = 160
 
 CLASS.Points = 4
@@ -149,7 +149,7 @@ end
 				ent:SetPos(damagepos + heading)
 				ent:SetOwner(pl)
 				ent:Spawn()
-				ent:SetTeamID(TEAM_UNDEAD)
+
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() then
 					phys:Wake()

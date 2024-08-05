@@ -20,7 +20,7 @@ CLASS.Points = 30
 
 CLASS.SWEP = "weapon_zs_nightmare"
 
-CLASS.Model = Model("models/player/charple.mdl")
+CLASS.Model = Model("models/player/skeleton.mdl")
 
 CLASS.VoicePitch = 0.65
 

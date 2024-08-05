@@ -97,6 +97,8 @@ function CLASS:CalcMainActivity(pl, velocity)
 		pl.CalcIdeal = ACT_ZOMBIE_LEAPING
 	elseif speed <= 0.5 and wep:IsRoaring() then
 		pl.CalcSeqOverride = pl:LookupSequence("menu_zombie_01")
+	elseif speed > 16 and wep:GetSwinging() then
+		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE
 	else
 		pl.CalcIdeal = ACT_HL2MP_RUN_ZOMBIE_FAST
 	end

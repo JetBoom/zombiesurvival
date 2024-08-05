@@ -9,8 +9,8 @@ CLASS.Unlocked = true
 CLASS.Hidden = true
 CLASS.Boss = true
 
-CLASS.Health = 750
-CLASS.Speed = 190
+CLASS.Health = 800
+CLASS.Speed = 210
 
 CLASS.CanTaunt = true
 
@@ -130,14 +130,15 @@ if SERVER then
 	function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo, assister)
 		local pos = pl:LocalToWorld(pl:OBBCenter())
 		timer.Simple(0, function()
-			MakeButcherKnife(pos)
+			if IsValid(attacker) and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
+				attacker:Give("weapon_zs_butcherknife")
+			end
 		end)
 	end
 end
 
 if not CLIENT then return end
 
-CLASS.Icon = "zombiesurvival/killicons/butcher"
 
 function CLASS:PrePlayerDraw(pl)
 	render.SetColorModulation(1, 0.5, 0.5)
@@ -146,3 +147,5 @@ end
 function CLASS:PostPlayerDraw(pl)
 	render.SetColorModulation(1, 1, 1)
 end
+
+CLASS.Icon = "zombiesurvival/killicons/butcher"
