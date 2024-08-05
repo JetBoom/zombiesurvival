@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Bone Mesh"
+SWEP.PrintName = "본 메쉬"
 SWEP.ViewModelFOV = 47
 SWEP.DrawCrosshair = false
 

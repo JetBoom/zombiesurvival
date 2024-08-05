@@ -60,7 +60,7 @@ function SWEP:Think()
 					ang:RotateAroundAxis(ang:Forward(), math.Rand(-30, 30))
 					ang:RotateAroundAxis(ang:Up(), math.Rand(-30, 30))
 				end
-				phys:SetVelocityInstantaneous(ang:Forward() * math.Rand(475, 750))
+				phys:SetVelocityInstantaneous(ang:Forward() * math.Rand(475, 750) + self.Owner:GetVelocity())
 			end
 		end
 	end

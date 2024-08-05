@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "Chem Zombie"
+SWEP.PrintName = "오염된 좀비"
 SWEP.DrawCrosshair = false
 
 function SWEP:Think()

@@ -8,7 +8,7 @@ SWEP.MeleeDamage = 3
 SWEP.MeleeForceScale = 0.025
 SWEP.MeleeSize = 0.5
 SWEP.MeleeDamageType = DMG_SLASH
-SWEP.Primary.Delay = 0.25
+SWEP.Primary.Delay = 0.32
 
 function SWEP:Think()
 	self.BaseClass.Think(self)

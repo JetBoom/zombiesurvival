@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.Base = "weapon_zs_zombie"
 
-SWEP.PrintName = "종양 네스터"
+SWEP.PrintName = "종양 크리퍼"
 
 SWEP.MeleeDelay = 0.5
 SWEP.MeleeReach = 52
