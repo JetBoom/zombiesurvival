@@ -17,10 +17,10 @@ SWEP.MeleeSize = 1.5
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.Primary.Delay = 0.32
 
-SWEP.PounceDamage = 10
+SWEP.PounceDamage = 5 --SWEP.PounceDamage = 10
 SWEP.PounceDamageType = DMG_IMPACT
-SWEP.PounceReach = 32
-SWEP.PounceSize = 16
+SWEP.PounceReach = 26
+SWEP.PounceSize = 12
 SWEP.PounceStartDelay = 0.5
 SWEP.PounceDelay = 1.25
 SWEP.PounceVelocity = 700
@@ -94,6 +94,7 @@ function SWEP:Think()
 			local traces = owner:PenetratingMeleeTrace(self.PounceReach, self.PounceSize, nil, owner:LocalToWorld(owner:OBBCenter()), dir)
 			local damage = self:GetDamage(self:GetTracesNumPlayers(traces), self.PounceDamage)
 
+			local hit = false
 			for _, trace in ipairs(traces) do
 				if not trace.Hit then continue end
 
@@ -106,7 +107,7 @@ function SWEP:Think()
 					local ent = trace.Entity
 					if ent and ent:IsValid() then
 						hit = true
-						self:MeleeHit(ent, trace, damage, 10)
+						self:MeleeHit(ent, trace, damage, ent:IsPlayer() and 5 or 10)
 					end
 				end
 			end
@@ -342,10 +343,10 @@ function SWEP:Move(mv)
 		local vel = Vector(0, 0, 4)
 
 		if owner:KeyDown(IN_FORWARD) then
-			vel = vel + dir * 250 --160
+			vel = vel + dir * 160 --160 패치 250
 		end
 		if owner:KeyDown(IN_BACK) then
-			vel = vel + dir * -250 ---160
+			vel = vel + dir * -160 ---160, 패치 250
 		end
 
 		if vel.z == 4 then

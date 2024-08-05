@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Bullet Storm' SMG"
-	SWEP.Description = "보조 공격 버튼을 눌러 Storm firing 모드로 사격한다.\n해당 모드를 사용하는 동안 격발 딜레이가 60% 증가하지만 한 번에 두 개의 탄환이 발사된다.\n방어구 관통력 50%"
+	SWEP.Description = "보조 공격 버튼을 눌러 Storm firing 모드로 사격한다.\n해당 모드를 사용하는 동안 격발 딜레이가 60% 증가하지만 한 번에 두 개의 탄환이 발사된다."
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -40,8 +40,6 @@ SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_SMG1
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SMG1
 
 SWEP.WalkSpeed = SPEED_SLOW
-
-SWEP.ArmorThroughRate = 0.5
 
 SWEP.IronSightsPos = Vector(-2, 6, 3)
 SWEP.IronSightsAng = Vector(0, 2, 0)

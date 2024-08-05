@@ -49,7 +49,7 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
 			local attach = eHitEntity:GetAttachment(1)
 			if attach then
 				if vHitPos:Distance(attach.Pos) <= 18 then
-					if not eHitEntity.AntiPoisonHead then
+					if not eHitEntity.buffAntiPoisonHead then
 						eHitEntity:PlayEyePoisonedSound()
 						local status = eHitEntity:GiveStatus("confusion")
 						if status then

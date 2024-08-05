@@ -113,7 +113,7 @@ function SWEP:Think()
 
 				if ent:IsPlayer() then
 					ent:MeleeViewPunch(self.PounceDamage)
-					if not ent.AntiPoisonHead then
+					if not ent.buffAntiPoisonHead then
 						ent:PoisonDamage(self.PounceDamage, owner, self)
 						local timername = tostring(ent).."poisonedby"..tostring(owner)..CurTime()
 						timer.CreateEx(timername, self.PounceDamageTime, self.PounceDamageTicks, DoPoisoned, ent, owner, self.PounceDamagePerTick, timername)
