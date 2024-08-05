@@ -7,6 +7,19 @@ function SWEP:Reload()
 	self.BaseClass.SecondaryAttack(self)
 end
 
+SWEP.LastHealSelf = 0
+
+function SWEP:Think()
+	self.BaseClass.Think(self)
+	if self.LastHealSelf + 3 <= CurTime() then
+		local owner = self.Owner
+		if IsValid(owner) then
+			owner:SetHealth(math.min(owner:Health() + 1, owner:GetMaxZombieHealth()))
+			self.LastHealSelf = CurTime()
+		end
+	end
+end
+
 local function DoFleshThrow(pl, wep)
 	if pl:IsValid() and pl:Alive() and wep:IsValid() then
 		pl:ResetSpeed()

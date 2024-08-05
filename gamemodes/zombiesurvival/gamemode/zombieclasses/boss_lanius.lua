@@ -3,7 +3,7 @@ CLASS.TranslationName = "class_lanius"
 CLASS.Description = "description_lanius"
 CLASS.Help = "controls_lanius"
 
-CLASS.Health = 550
+CLASS.Health = 750
 CLASS.Wave = 0
 CLASS.Threshold = 0
 CLASS.SWEP = "weapon_zs_lanius"
@@ -21,16 +21,16 @@ CLASS.Unlocked = true
 CLASS.Hidden = true
 CLASS.Boss = true
 
-CLASS.Hull = {Vector(-13, -13, 0), Vector(13, 13, 15)}
-CLASS.HullDuck = {Vector(-7, -7, 0), Vector(7, 7, 8)}
+CLASS.Hull = {Vector(-6.6, -6.6, 0), Vector(6.6, 6.6, 9)}
+--CLASS.HullDuck = {Vector(-7, -7, 0), Vector(7, 7, 8)}
 CLASS.ViewOffset = Vector(0,0,8)
 CLASS.ViewOffsetDucked = Vector(0,0,8)
 CLASS.CrouchedWalkSpeed = 3
 CLASS.StepSize = 8
 CLASS.Mass = 6
 
-CLASS.NoUse = true
-CLASS.NoGibs = true
+CLASS.NoUse = false
+CLASS.NoGibs = false
 CLASS.NoCollideAll = false
 CLASS.NoFallDamage = true
 CLASS.NoFallSlowdown = true
@@ -92,10 +92,10 @@ function CLASS:Move(pl, mv)
 			if pl:KeyDown(IN_DUCK) then
 			mv:SetVelocity(dir:Forward() * 150)
 			else 
-			mv:SetVelocity(dir:Forward() * 230)
+			mv:SetVelocity(dir:Forward() * 260)
 			end
 		else
-			mv:SetVelocity(dir:Forward() * 200)
+			mv:SetVelocity(dir:Forward() * 220)
 		end
 
 		return true
@@ -110,12 +110,13 @@ end]]
 local matSkin = Material("models/flesh")
 function CLASS:PrePlayerDraw(pl)
 	render.ModelMaterialOverride(matSkin)
-	render.SetColorModulation(0.6, 1, 0.6)
+	render.SetColorModulation(0.3, 0.4, 0.4)
 end
 
 function CLASS:PostPlayerDraw(pl)
 	render.ModelMaterialOverride()
 	render.SetColorModulation(1, 1, 1)
 end
+
 
 CLASS.Icon = "zombiesurvival/killicons/crow"

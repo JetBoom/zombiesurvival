@@ -10,11 +10,21 @@ SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.Delay = 2
+SWEP.Primary.MinDamage = 2
+SWEP.Primary.MaxDamage = 8
+SWEP.MeleeDelay = 1
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo	= "none"
+
+SWEP.KEY_PHOENIX = "Phoenix"
+SWEP.BOMB_DISTANCE = 700
+
+function SWEP:SetupDataTables()
+	self:NetworkVar("Bool", 0, "PhoenixKey")
+end
 
 function SWEP:Initialize()
 	self:HideViewAndWorldModel()

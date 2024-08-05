@@ -21,3 +21,12 @@ end
 function SWEP:IsMoaning()
 	return false
 end
+function SWEP:SendAttackAnim()
+	self.Owner:GetViewModel( ):SetPlaybackRate( 4 )
+	if self.SwapAnims then
+		self:SendWeaponAnim(ACT_VM_HITCENTER)
+	else
+		self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
+	end
+	self.SwapAnims = not self.SwapAnims
+end

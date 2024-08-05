@@ -12,6 +12,9 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	end
 end
 
+SWEP.MeleeCount = 0
+
 function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
-	self.MeleeDamage = 24
+	self.MeleeDamage = 30
+	self.MeleeCount = self.MeleeCount + 1
 end

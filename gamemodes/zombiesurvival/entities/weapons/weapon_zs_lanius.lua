@@ -5,7 +5,7 @@ SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
-SWEP.Primary.Delay = 0.11
+SWEP.Primary.Delay = 0.15
 SWEP.IsCrow = true
 SWEP.DrawCrosshair = true
 SWEP.Attacking = false
@@ -57,11 +57,11 @@ if CLIENT then return end
 end
 function SWEP:SecondaryAttack()
 	if CurTime() < self:GetNextSecondaryFire() then return end
-	self:SetNextSecondaryFire(CurTime() + math.random(4,6))
+	self:SetNextSecondaryFire(CurTime() + 5)
 	if self.Owner:Team() ~= TEAM_UNDEAD then self.Owner:Kill() return end
 	self.Owner:EmitSound("npc/combine_gunship/gunship_pain.wav",75,120)
 	timer.Simple(0.7, 
-	function() if self.Owner:Alive() then self:DoGas() end end)
+	function() if self.Owner:IsValid() and self.Owner:Alive() then self:DoGas() end end)
 end
 
 function SWEP:PrimaryAttack()
@@ -71,8 +71,8 @@ function SWEP:PrimaryAttack()
 	if CurTime() < self:GetNextPrimaryFire() or not self.Owner:IsOnGround() then return end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	if self.Owner:Team() ~= TEAM_UNDEAD then self.Owner:Kill() return end
-	self.Owner.EatAnim = CurTime() + 0.12
-	self:SetPeckEndTime(CurTime() + 0.12)
+	self.Owner.EatAnim = CurTime() + 0.15
+	self:SetPeckEndTime(CurTime() + 0.15)
 	self.Owner:SetSpeed(30)
 end
 
@@ -113,7 +113,7 @@ function SWEP:Think()
 	if peckend == 0 or CurTime() < peckend then return end
 	self:SetPeckEndTime(0)
 
-	local trace = owner:TraceLine(26, MASK_SOLID)
+	local trace = owner:TraceLine(64, MASK_SOLID)
 	local ent = NULL
 	if trace.Entity then
 		ent = trace.Entity
@@ -124,7 +124,7 @@ function SWEP:Think()
 	if ent:IsValid() then
 		if not ent:IsPlayer() then
 			if ent.CanPackUp == true then 
-				ent:TakeSpecialDamage(3, DMG_SLASH, owner, self)
+				ent:TakeSpecialDamage(5, DMG_SLASH, owner, self)
 			else
 				local phys = ent:GetPhysicsObject()
 				ent:TakeSpecialDamage(math.random(4,8), DMG_SLASH, owner, self)

@@ -168,7 +168,8 @@ function ENT:Think()
 		objectphys:ApplyForceOffset(objectphys:GetMass() * frametime * 450 * (pullpos - hingepos):GetNormalized(), hingepos)
 	elseif owner:KeyDown(IN_ATTACK2) and not owner:GetActiveWeapon().NoPropThrowing then
 		owner:ConCommand("-attack2")
-		objectphys:ApplyForceCenter(objectphys:GetMass() * math.Clamp(1.25 - math.min(1, (object:OBBMins():Length() + object:OBBMaxs():Length()) / CARRY_DRAG_VOLUME), 0.25, 1) * 500 * owner:GetAimVector())
+		local vel = objectphys:GetMass() * math.Clamp(1.25 - math.min(1, (object:OBBMins():Length() + object:OBBMaxs():Length()) / CARRY_DRAG_VOLUME), 0.25, 1) * 500 * owner:GetAimVector() * (owner.buffPitcher and 2 or 1)
+		objectphys:ApplyForceCenter(vel)
 		object:SetPhysicsAttacker(owner)
 
 		self:Remove()
@@ -181,9 +182,11 @@ function ENT:Think()
 			objectpos = objectpos - obbcenter.y * object:GetRight()
 			objectpos = objectpos - obbcenter.x * object:GetForward()
 			self.ObjectPosition = objectpos
-			if not self.ObjectAngles then
+			-- if not self.ObjectAngles then
+			if not owner:KeyDown(IN_WALK) then
 				self.ObjectAngles = object:GetAngles()
 			end
+			-- end
 		end
 
 		if owner:KeyDown(IN_SPEED) then
@@ -193,9 +196,8 @@ function ENT:Think()
 		elseif owner:KeyDown(IN_WALK) then
 			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Up(), owner.InputMouseX or 0)
 			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Right(), owner.InputMouseY or 0)
-		else
-			self.ObjectAngles = object:GetAngles()
 		end
+
 		ShadowParams.pos = self.ObjectPosition
 		ShadowParams.angle = self.ObjectAngles
 		ShadowParams.deltatime = frametime
