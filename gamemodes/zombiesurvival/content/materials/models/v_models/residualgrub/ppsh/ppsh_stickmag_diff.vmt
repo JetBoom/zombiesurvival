@@ -1,0 +1,11 @@
+"vertexlitgeneric"
+{
+	"$baseTexture" "models/v_models/ResidualGrub/ppsh/PPSH_STICKMAG_DIFF"
+	"$bumpmap" "models/v_models/ResidualGrub/ppsh/PPSH_STICKMAG_NORM"
+	 "$phong" "1"
+	"$phongboost" "0.2"
+	"$phongfresnelranges" "[0.5 0.7 0.8]"
+	"$phongexponent" "8"
+	"$phongalbedotint" "1"
+	"$halflambert" "1"
+}

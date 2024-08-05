@@ -1,0 +1,11 @@
+"vertexlitgeneric"
+{
+	"$baseTexture" "models/v_models/ResidualGrub/hands/1stPerson_Arms_Sov_Tunic_D"
+	"$bumpmap" "models/v_models/ResidualGrub/hands/1stPerson_Arms_Sov_Tunic_N"
+	 "$phong" "1"
+	"$phongboost" "0.2"
+	"$phongfresnelranges" "[0.5 0.7 0.8]"
+	"$phongexponent" "8"
+	"$phongalbedotint" "1"
+	"$halflambert" "1"
+}
