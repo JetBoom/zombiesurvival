@@ -6,7 +6,7 @@ function ENT:Initialize()
 	self:DrawShadow(false)
 
 	self.AmbientSound = CreateSound(self, "npc/antlion_guard/growl_idle.wav")
-	self.AmbientSound:PlayEx(0.75, 85)
+	self.AmbientSound:PlayEx(0.55, 85)
 end
 
 function ENT:OnRemove()
@@ -20,7 +20,7 @@ function ENT:Think()
 		if wep:IsValid() and wep.GetCharge and wep:GetCharge() > 0 then
 			self.AmbientSound:Stop()
 		else
-			self.AmbientSound:PlayEx(0.75, 85 + math.sin(RealTime()))
+			self.AmbientSound:PlayEx(0.55, 85 + math.sin(RealTime()))
 		end
 	end
 end
