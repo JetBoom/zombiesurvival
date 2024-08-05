@@ -17,4 +17,12 @@ hook.Add("InitPostEntityMap", "Adding", function()
 		ent:SetPos(Vector(-1641, -61, 7))
 		ent:Spawn()
 	end
+	
+	for _, ent in pairs(ents.FindByModel("*26")) do
+		ent:Remove()
+	end
+	
+	for _, ent in pairs(ents.FindByModel("*6")) do 
+		ent:Remove()
+	end
 end)
