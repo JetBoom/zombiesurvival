@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 ENT.Type = "anim"
 ENT.Base = "status__base"
-
+ENT.NextEmit = 0
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 ENT.DamageScale = 1.3
@@ -19,7 +19,7 @@ function ENT:Initialize()
 	if SERVER then
 		hook.Add("EntityTakeDamage", self, self.EntityTakeDamage)
 		hook.Add("PlayerHurt", self, self.PlayerHurt)
-
+		hook.Add("PostPlayerDeath",self,self.PostPlayerDeath)
 		self:EmitSound("beams/beamstart5.wav", 65, 140)
 	end
 
@@ -27,6 +27,7 @@ function ENT:Initialize()
 		hook.Add("PrePlayerDraw", self, self.PrePlayerDraw)
 		hook.Add("PostPlayerDraw", self, self.PostPlayerDraw)
 		hook.Add("RenderScreenspaceEffects", self, self.RenderScreenspaceEffects)
+
 	end
 
 	self.DieTime = CurTime() + self.LifeTime
@@ -41,7 +42,10 @@ if SERVER then
 			dmginfo:SetDamage(dmginfo:GetDamage() * self.DamageScale)
 		end
 	end
-
+	function ENT:PostPlayerDeath(pl)
+		if pl ~= self:GetOwner() then return end
+		self:Remove()
+	end
 	function ENT:PlayerHurt(pl, attacker, healthleft, damage)
 		if attacker:IsValid() and attacker:IsPlayer() and attacker ~= pl and attacker:Team() == TEAM_UNDEAD then
 			local attributeddamage = damage
@@ -73,8 +77,28 @@ function ENT:DrawTranslucent()
 
 	self:SetRenderOrigin(owner:GetPos() + Vector(0, 0, owner:OBBMaxs().z + math.abs(math.sin(CurTime() * 2)) * 4))
 	self:SetRenderAngles(Angle(0, CurTime() * 270, 0))
-	self:DrawModel()
+	if CurTime() >= self.NextEmit and self:GetVelocity():Length() >= 16 then
+		self.NextEmit = CurTime() + 0.05
 
+		local emitter = ParticleEmitter(self:GetPos())
+		emitter:SetNearClip(16, 24)
+
+		local particle = emitter:Add("noxctf/sprite_bloodspray"..math.random(8), self:GetPos())
+		particle:SetVelocity(VectorRand():GetNormalized() * math.Rand(8, 16))
+		particle:SetDieTime(1)
+		particle:SetStartAlpha(230)
+		particle:SetEndAlpha(230)
+		particle:SetStartSize(10)
+		particle:SetEndSize(0)
+		particle:SetRoll(math.Rand(0, 360))
+		particle:SetRollDelta(math.Rand(-25, 25))
+		particle:SetColor(255, 0, 0)
+		particle:SetLighting(true)
+
+		emitter:Finish()
+	end
+		
+	self:DrawModel()
 	render.SuppressEngineLighting(false)
 	render.SetBlend(1)
 	render.SetColorModulation(1, 1, 1)
