@@ -1,4 +1,4 @@
-﻿AddCSLuaFile()
+AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "실험용 가우스 레일건"
@@ -89,7 +89,14 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 		e:SetMagnitude(1)
 		e:SetScale(1)
 	util.Effect("cball_bounce", e)
-
+	if ent:IsPlayer() and ent:Team() == TEAM_UNDEAD and tr.HitGroup == HITGROUP_HEAD then
+		local edata = EffectData()
+		edata:SetOrigin(tr.HitPos)
+		edata:SetNormal(tr.HitNormal)
+		edata:SetMagnitude(5)
+		edata:SetScale(1)
+		util.Effect("hit_hunter", edata) 
+	end
 	GenericBulletCallback(attacker, tr, dmginfo)
 end
 if CLIENT then
@@ -108,6 +115,47 @@ if CLIENT then
 		if self:IsScoped() then
 			local scrw, scrh = ScrW(), ScrH()
 			local size = math.min(scrw, scrh)
+		local hw,hh = scrw * 0.5, scrh * 0.5
+		local screenscale = BetterScreenScale()
+		local gradsize = math.ceil(size * 0.14)
+		local line = 38 * screenscale
+		
+		surface.SetDrawColor(0,145,255,16)
+		surface.DrawRect(0,0,scrw,scrh)
+		for i=0,6 do
+			local rectsize = math.floor(screenscale * 44) + i * math.floor(130 * screenscale)
+			local hrectsize = rectsize * 0.5
+			surface.SetDrawColor(0,145,255,math.max(35,25 + i * 30))
+			surface.DrawOutlinedRect(hw-hrectsize,hh-hrectsize,rectsize,rectsize)
+		end
+		if scrw > size then
+			local extra = (scrw - size) * 0.5
+			for i=0,12 do
+				surface.SetDrawColor(0,145,255, math.max(10,255 - i * 21.25))
+				surface.DrawLine(hw,i*line,hw,i*line+line)
+				surface.DrawLine(hw,scrh-i*line,hw,scrh-i*line-line)
+				surface.DrawLine(i*line+extra,hh,i*line+line+extra,hh)
+				surface.DrawLine(scrw-i*line-extra,hh,scrw-i*line-line-extra,hh)
+			end
+			surface.SetDrawColor(0, 0, 0, 255)
+			surface.DrawRect(0, 0, extra, scrh)
+			surface.DrawRect(scrw - extra, 0, extra, scrh)
+		end
+		if scrh > size then
+			local extra = (scrh - size) * 0.5
+			for i=0,12 do
+				surface.SetDrawColor(0,145,255, math.max(10,255 - i * 21.25))
+				surface.DrawLine(hw,i*line+extra,hw,i*line+line+extra)
+				surface.DrawLine(hw,scrh-i*line-extra,hw,scrh-i*line-line-extra)
+				surface.DrawLine(i*line,hh,i*line+line,hh)
+				surface.DrawLine(scrw-i*line,hh,scrw-i*line-line,hh)
+			end
+			surface.SetDrawColor(0, 0, 0, 255)
+			surface.DrawRect(0, 0, scrw, extra)
+			surface.DrawRect(0, scrh - extra, scrw, extra)
+		end
+			local scrw, scrh = ScrW(), ScrH()
+			local size = math.min(scrw, scrh)
 			surface.SetMaterial(matScope)
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect((scrw - size) * 0.5, (scrh - size) * 0.5, size, size)
@@ -124,4 +172,5 @@ if CLIENT then
 			end
 		end
 	end
+	
 end
