@@ -37,21 +37,8 @@ SWEP.HealStrength = 1
 
 SWEP.NoHolsterOnCarry = true
 
-function SWEP:Think()
-  self.BaseClass.Think(self)
-  local stored = weapons.GetStored(self:GetClass())
-  if !IsValid(stored) then
-    return
-  end
-  if self.Owner:GetFastHammer() then
-    self.SwingTime = stored.SwingTime * 0.65
-    self.Primary.Delay = stored.Primary.Delay * 0.75
-    -- self.SwingTime = stored.SwingTime * 0
-    -- self.Primary.Delay = stored.Primary.Delay * 0
-  else
-    self.SwingTime = stored.SwingTime
-    self.Primary.Delay = stored.Primary.Delay
-  end	
+function SWEP:SetupDataTables()
+	self:NetworkVar("Bool", 0, "CarbonHammer")
 end
 
 function SWEP:PlayHitSound()
@@ -60,4 +47,30 @@ end
 
 function SWEP:PlayRepairSound(hitent)
 	hitent:EmitSound("npc/dog/dog_servo"..math.random(7, 8)..".wav", 70, math.random(100, 105))
+end
+
+function SWEP:Think()
+	local owner = self.Owner
+	if SERVER then
+		if owner.carbonHammer and !self:GetCarbonHammer() then
+			self:SetCarbonHammer(true)
+			self.Primary.Delay = self.Primary.Delay * 0.75
+			self.Primary.SwingTime = self.SwingTime * 0.75
+		elseif !owner.carbonHammer and self:GetCarbonHammer() then
+			self:SetCarbonHammer(false)
+			self.Primary.Delay = self.Primary.Delay / 0.75
+			self.Primary.SwingTime = self.SwingTime / 0.75
+		end
+	else
+		local carbonHammer = self:GetCarbonHammer()
+		if carbonHammer then
+			self.Primary.Delay = self.Primary.Delay * 0.75
+			self.Primary.SwingTime = self.SwingTime * 0.75
+		elseif !carbonHammer then
+			self.Primary.Delay = self.Primary.Delay / 0.75
+			self.Primary.SwingTime = self.SwingTime / 0.75
+		end
+	end
+	
+	self.BaseClass.Think(self)
 end

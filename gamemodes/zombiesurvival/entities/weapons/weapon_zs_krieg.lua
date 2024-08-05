@@ -1,7 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'크리그' SG552"
+	SWEP.PrintName = "'크리그' 돌격 소총"
+	SWEP.Description = "좀비의 머리 타격 시 전기 충격을 주어 어지럽게 한다."
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 
@@ -18,15 +19,15 @@ SWEP.Base = "weapon_zs_base"
 
 SWEP.HoldType = "ar2"
 
-SWEP.ViewModel = "models/weapons/cstrike/c_rif_sg552.mdl"
-SWEP.WorldModel = "models/weapons/w_rif_sg552.mdl"
+SWEP.ViewModel = Model( "models/weapons/cstrike/c_rif_sg552.mdl" )
+SWEP.WorldModel = Model( "models/weapons/w_rif_sg552.mdl" )
 SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("Weapon_SG552.Single")
-SWEP.Primary.Damage = 24
+SWEP.Primary.Damage = 25
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.15
-SWEP.Primary.DefaultDelay = 0.15
+SWEP.Primary.Delay = 0.12
+SWEP.Primary.Recoil = 4.158
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "ar2"
@@ -39,8 +40,8 @@ end
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_AR2
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_AR2
 
-SWEP.ConeMax = 0.09
-SWEP.ConeMin = 0.04
+SWEP.ConeMax = 0.3291
+SWEP.ConeMin = 0.0787
 
 SWEP.WalkSpeed = SPEED_SLOW
 SWEP.IronSightsPos = Vector(-2.52, 3.819, 3.599)
@@ -59,15 +60,6 @@ function SWEP:SetIronsights(b)
 	gamemode.Call("WeaponDeployed", self.Owner, self)
 end
 
-function SWEP:PrimaryAttack()
-	if not self:CanPrimaryAttack() then return end
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-
-	self:EmitFireSound()
-	self:TakeAmmo()
-	self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self:GetCone())
-	self.IdleAnimation = CurTime() + self:SequenceDuration()
-end
 
 function SWEP:Think()
 	local owner = self.Owner
@@ -78,6 +70,44 @@ function SWEP:Think()
 	end
 end
 
+local function BulletCallback(attacker, tr, dmginfo)
+	local ent = tr.Entity
+	if (not tr.HitWorld) and IsValid(ent) then
+                    
+    end
+	if ent:IsValid() then
+		if ent:IsPlayer() then
+			if ent:Team() == TEAM_UNDEAD and tempknockback then
+				tempknockback[ent] = ent:GetVelocity()
+			end
+			
+			if tr.HitGroup == HITGROUP_HEAD then
+				local edata = EffectData()
+				edata:SetEntity(ent)
+				edata:SetMagnitude(5)
+				edata:SetScale(1)
+				util.Effect("TeslaHitBoxes", edata) 
+				ent:EmitSound("ambient/energy/zap"..math.random(1,9)..".wav")
+				if SERVER and ent:IsPlayer() then
+                    local eyeang = ent:EyeAngles()
+
+                    local j = 15
+                    eyeang.pitch = math.Clamp(eyeang.pitch + math.Rand(-j, j), -90, 90)
+                    eyeang.yaw = math.Clamp(eyeang.yaw + math.Rand(-j, j), -90, 90)
+                    ent:SetEyeAngles(eyeang)
+                end
+			end
+		else
+			local phys = ent:GetPhysicsObject()
+			if ent:GetMoveType() == MOVETYPE_VPHYSICS and phys:IsValid() and phys:IsMoveable() then
+				ent:SetPhysicsAttacker(attacker)
+			end
+		end		
+	end
+	GenericBulletCallback(attacker, tr, dmginfo)
+end
+
+SWEP.BulletCallback = BulletCallback
 
 if CLIENT then
 SWEP.IronsightsMultiplier = 0.35

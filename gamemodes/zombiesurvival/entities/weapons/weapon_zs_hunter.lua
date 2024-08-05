@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Hunter' 저격 소총"
-	SWEP.Description = "매우 강력한 대구경 탄환을 발사한다. 재장전 속도가 매우 느리지만 그만큼 큰 파괴력을 지닌다. 달리기 키를 눌러 탄환을 차징한 후 더욱 강력한 한 발을 발사할 수 있다."
+	SWEP.Description = "매우 강력한 대구경 탄환을 발사한다. 재장전 속도가 매우 느리지만 그만큼 큰 파괴력을 지닌다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 

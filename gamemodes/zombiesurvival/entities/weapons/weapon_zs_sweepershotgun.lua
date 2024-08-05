@@ -2,7 +2,6 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "'Sweeper' 샷건"
-	SWEP.Description = "이 산탄총은 소이탄을 사용해 좀비들을 불에 지를 수 있다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 

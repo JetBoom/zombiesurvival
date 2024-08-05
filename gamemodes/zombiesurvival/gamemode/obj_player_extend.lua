@@ -169,14 +169,6 @@ function meta:GetPalsy()
 	return self.m_Palsy
 end
 
-function meta:SetFastHammer(b)
-    self:SetNWBool("FastHammer", b)
-end
-
-function meta:GetFastHammer(b)
-    return self:GetNWBool("FastHammer")
-end
-
 function meta:SetHemophilia(onoff, nosend)
 	self.m_Hemophilia = onoff
 	if SERVER and not nosend then

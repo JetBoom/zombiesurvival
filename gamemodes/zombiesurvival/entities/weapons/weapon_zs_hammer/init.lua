@@ -15,7 +15,7 @@ function SWEP:Reload()
 
 	local ent
 	local dist
-
+	
 	for _, e in pairs(ents.FindByClass("prop_nail")) do
 		if not e.m_PryingOut and e:GetParent() == trent then
 			local edist = e:GetActualPos():Distance(tr.HitPos)
@@ -41,9 +41,26 @@ function SWEP:Reload()
 	owner:DoAnimationEvent(ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE)
 
 	owner:EmitSound("weapons/melee/crowbar/crowbar_hit-"..math.random(4)..".ogg")
-
+	local baseent = ent:GetParent()
+	local nailowners = {}
+	for i, v in ipairs(baseent:GetLivingNails()) do
+		if v:GetOwner():IsValid(v) and v:GetOwner():Alive() and v:GetOwner():Team() == TEAM_HUMAN then
+			table.insert(nailowners,v)
+		end
+	end
+	if owner.steelNail and baseent.steelNail then
+		for i, v in ipairs(nailowners) do
+			if v.steelNail then
+				return
+			end
+		end
+		baseent.steelNail = false
+		baseent:SetMaxBarricadeHealth(ent:GetMaxNailHealth() / 1.5)
+		baseent:SetBarricadeHealth(ent:GetNailHealth() / 1.5)
+		baseent:SetBarricadeRepairs(baseent:GetBarricadeRepairs()/1.5)
+	end
 	ent:GetParent():RemoveNail(ent, nil, self.Owner)
-
+	
 	if nailowner and nailowner:IsValid() and nailowner:IsPlayer() and nailowner ~= owner and nailowner:Team() == TEAM_HUMAN then
 		if not gamemode.Call("PlayerIsAdmin", owner) and (nailowner:Frags() >= 75 or owner:Frags() < 75) then
 			owner:GivePenalty(30)
@@ -68,6 +85,13 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 
 		if hitent:IsNailed() then
 			local healstrength = GAMEMODE.NailHealthPerRepair * (self.Owner.HumanRepairMultiplier or 1) * self.HealStrength
+			if self.Owner.buffBattleEngineer then
+				if self.Owner.battleEngineerCount >= 1 then
+					healstrength = healstrength * 1.2
+					self.Owner.battleEngineerCount = self.Owner.battleEngineerCount - 1
+				end
+			end
+			
 			local oldhealth = hitent:GetBarricadeHealth()
 			if oldhealth <= 0 or oldhealth >= hitent:GetMaxBarricadeHealth() or hitent:GetBarricadeRepairs() <= 0 then return end
 
@@ -109,7 +133,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
                 -- count = count + 1
                 -- PrintMessage(HUD_PRINTTALK, "총 횟수: " .. tostring(count))
                 if point > 0 then
-                    self.Owner:PrintMessage(HUD_PRINTTALK, "노동연합에서 추가로 " .. tostring(point / GAMEMODE.NailHealthPerRepair  ) .. " 포인트를 습득했습니다.")
+                    self.Owner:PrintMessage(HUD_PRINTTALK, "[노동연합] 노동연합에서 추가로 " .. tostring(point / GAMEMODE.NailHealthPerRepair  ) .. " 포인트를 습득했습니다.")
                 end
 				healed = healed + point
             end
@@ -120,6 +144,24 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 				effectdata:SetMagnitude(1)
 			util.Effect("nailrepaired", effectdata, true, true)
 
+			if self.Owner.metalDetector then
+				local rate = math.random(1, 1000000)
+				if rate > 550000 and rate <= 600000 then
+					local tester = math.random(0, 5)
+					local toGive = ""
+					local toGiveString = ""
+					if (tester >= 3) then
+						toGive = "SniperRound"
+						toGiveString = "판자"
+					else
+						toGive = "GaussEnergy"
+						toGiveString = "못"
+					end
+					pl:GiveAmmo(1, toGive)
+					self.Owner:PrintMessage(HUD_PRINTTALK, "[금속 탐지기] 재사용 할 수 있는 재료를 발견했습니다! (" .. toGiveString .. "+1)")
+				end
+			end
+			
 			return true
 		end
 	end
@@ -239,6 +281,8 @@ function SWEP:SecondaryAttack()
 			nail:AttachTo(trent, ent, tr.PhysicsBone, trtwo.PhysicsBone)
 			nail:Spawn()
 			nail:SetDeployer(owner)
+
+			nail.thorncade = owner.thorncade
 
 			cons:DeleteOnRemove(nail)
 
