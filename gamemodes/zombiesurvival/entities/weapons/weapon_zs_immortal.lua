@@ -1,8 +1,8 @@
 ﻿AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'불멸' 권총"
-	SWEP.Description = "사용자의 체력이 50% 이하일 때 이동속도가 증가한다."
+	SWEP.PrintName = "'Immortal' 권총"
+	SWEP.Description = "사용자의 체력이 30% 이하일 때 데미지를 30% 덜 입는다."
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 
@@ -46,33 +46,20 @@ SWEP.HoldType = "pistol"
 SWEP.ViewModel = "models/weapons/c_357.mdl"
 SWEP.WorldModel = "models/weapons/w_357.mdl"
 SWEP.UseHands = true
+SWEP.WalkSpeed = SPEED_FASTER
 SWEP.ReloadSound = Sound("Weapon_AWP.ClipOut")
 SWEP.Primary.Sound = Sound("Weapon_Immortal.Single")
-SWEP.Primary.Damage = 70
+SWEP.Primary.Damage = 60
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.8
-
+SWEP.Primary.Recoil = 50
 SWEP.Primary.ClipSize = 4
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
-SWEP.TracerName = "AirboatGunHeavyTracer"
-SWEP.ConeMax = 0
-SWEP.ConeMin = 0
+SWEP.TracerName = "Tracer"
+SWEP.ConeMax = 0.4
+SWEP.ConeMin = 0.1
 
 SWEP.IronSightsPos = Vector(-4.6, 0, -0.12)
 SWEP.IronSightsAng = Vector(0, 0, 0)
-
-function SWEP:GetWalkSpeed()
-	if self:GetIronsights() then
-		return math.min(self.WalkSpeed, math.max(90, self.WalkSpeed * 0.5))
-	end
-
-	return self.WalkSpeed
-end
-
-function SWEP:GetWalkSpeed()
-	if self.Owner:Health() <= (self.Owner:GetMaxHealth()*0.5) then
-		return math.min(400, self.WalkSpeed * 1.5)
-	end
-end

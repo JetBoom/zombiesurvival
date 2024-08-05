@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName = "Fists"
+SWEP.PrintName = "주먹"
 
 if GAMEMODE.ZombieEscape then
 	SWEP.WalkSpeed = SPEED_ZOMBIEESCAPE_NORMAL
@@ -73,7 +73,7 @@ function SWEP:PrimaryAttack(right)
 	self:EmitSound( SwingSound )
 
 	self:UpdateNextIdle()
-	self:SetNextMeleeAttack( CurTime() + 0.2 )
+	self:SetNextMeleeAttack( CurTime() + 0.1 )
 	
 	self:SetNextPrimaryFire( CurTime() + 0.9 )
 	self:SetNextSecondaryFire( CurTime() + 0.9 )
@@ -132,13 +132,29 @@ function SWEP:DealDamage()
 			dmginfo:SetDamage(self.Damage)
 		end
 
-		if hitent:IsPlayer() and hitent:WouldDieFrom(dmginfo:GetDamage(), dmginfo:GetDamagePosition()) then
+		if hitent:IsPlayer()  then
 			if anim == "fists_left" then
 				dmginfo:SetDamageForce(owner:GetRight() * 4912 + owner:GetForward() * 9998)
 			elseif anim == "fists_right" then
 				dmginfo:SetDamageForce(owner:GetRight() * -4912 + owner:GetForward() * 9989)
 			elseif anim == "fists_uppercut" then
 				dmginfo:SetDamageForce(owner:GetUp() * 5158 + owner:GetForward() * 10012)
+			end
+		end
+		
+		if owner.buffPunch then
+			dmginfo:ScaleDamage(4)
+			local rand = math.Rand(10000, 11000) 
+			if rand >= 10450 and rand < 10500 and hitent:IsPlayer() and hitent:Team() ~= owner:Team() then
+				timer.Simple(0, function()
+					hitent:SetSpeed(1)
+					hitent:SetJumpPower(0)
+					
+					timer.Create("buffPunch" .. tostring(hitent:EntIndex()), (hitent:GetZombieClassTable().Boss and 1 or 3), 1, function()
+						hitent:ResetSpeed()
+						hitent:ResetJumpPower()
+					end)
+				end)
 			end
 		end
 

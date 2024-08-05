@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'임페리얼' 석궁"
-	SWEP.Description = "고대로부터 전해져 내려오는 무기지만, 여러 마리의 좀비를 관통할 수 있다."
+	SWEP.PrintName = "'Impaler' 크로스보우"
+	SWEP.Description = "겉보기엔 투박한 무기지만 여러 마리의 좀비들을 꼬치로 만들어 버릴 수 있는 파괴력을 가졌다."
 
 	SWEP.HUD3DBone = "ValveBiped.Crossbow_base"
 	SWEP.HUD3DPos = Vector(1.5, 0.5, 11)
@@ -30,6 +30,7 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "XBowBolt"
 SWEP.Primary.Delay = 2.0
 SWEP.Primary.DefaultClip = 15
+SWEP.Primary.Recoil = 12
 
 SWEP.SecondaryDelay = 0.25
 
@@ -45,7 +46,9 @@ if SERVER then
 			local owner = self.Owner
 
 			self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-			owner:RestartGesture(ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW)
+			if SERVER then
+				owner:RestartGesture(ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW)
+			end
 
 			self:TakePrimaryAmmo(1)
 
@@ -53,6 +56,8 @@ if SERVER then
 
 			self:EmitSound("Weapon_Crossbow.Single")
 
+			self:DoRecoil()
+			
 			local ent = ents.Create("projectile_arrow")
 			if ent:IsValid() then
 				ent:SetOwner(owner)
@@ -74,7 +79,9 @@ if SERVER then
 			self:EmitSound("weapons/crossbow/bolt_load"..math.random(2)..".wav", 50, 100)
 			self:EmitSound("weapons/crossbow/reload1.wav")
 			self:DefaultReload(ACT_VM_RELOAD)
-			self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RELOAD_CROSSBOW)
+			if SERVER then
+				self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RELOAD_CROSSBOW)
+			end
 			self:SetNextReload(CurTime() + self:SequenceDuration())
 		end
 	end
@@ -102,8 +109,8 @@ if CLIENT then
 		if self:CanPrimaryAttack() then
 			self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 			self:TakePrimaryAmmo(1)
+			self:DoRecoil()
 			self:EmitSound("Weapon_Crossbow.Single")
-			self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW)
 			self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 			self.IdleAnimation = CurTime() + self:SequenceDuration()
 		end
@@ -126,7 +133,6 @@ if CLIENT then
 		if self:GetNextReload() <= CurTime() and self:Clip1() == 0 and 0 < self.Owner:GetAmmoCount("XBowBolt") then
 			surface.PlaySound("weapons/crossbow/bolt_load"..math.random(1,2)..".wav")
 			self:DefaultReload(ACT_VM_RELOAD)
-			self.Owner:RestartGesture(ACT_HL2MP_GESTURE_RELOAD_CROSSBOW)
 			self:SetNextReload(CurTime() + self:SequenceDuration())
 		end
 	end

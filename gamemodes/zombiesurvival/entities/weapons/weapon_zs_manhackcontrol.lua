@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "맨핵 리모컨"
-	SWEP.Description = "맨핵을 조종할 수 있는 리모컨이다."
+	SWEP.PrintName = "맨핵 컨트롤러"
+	SWEP.Description = "맨핵을 조종할 수 있게 해주는 컨트롤러."
 
 	SWEP.ViewModelFOV = 50
 

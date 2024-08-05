@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "폭8막대"
-	SWEP.Description = "이 괴랄한 산탄총은 4발의 탄환을 저장한 뒤, 한 번에 발사할 수 있다."
+	SWEP.PrintName = "붐스틱"
+	SWEP.Description = "이 샷건은 최대 4발의 탄환을 탄창 안에 저장한 뒤 있는 모든 탄환을 한번에 격발시킬 수 있다. 재장전 키를 누르고 있으면 더 빨리 장전된다."
 	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 
@@ -23,23 +23,27 @@ SWEP.UseHands = true
 
 SWEP.CSMuzzleFlashes = false
 
-SWEP.ReloadDelay = 0.4
+SWEP.ReloadDelay = 0.3
 
 SWEP.Primary.Sound = Sound("weapons/shotgun/shotgun_dbl_fire.wav")
-SWEP.Primary.Recoil = 12.5
-SWEP.Primary.Damage = 30
-SWEP.Primary.NumShots = math.random(4,6)
+SWEP.Primary.Damage = 22
+SWEP.Primary.NumShots = 4
 SWEP.Primary.Delay = 1.5
+SWEP.Primary.Recoil = 50
 
-SWEP.Primary.ClipSize = 4
+SWEP.Primary.ClipSize = 8
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "buckshot"
 SWEP.Primary.DefaultClip = 28
 
-SWEP.ConeMax = 0.23
-SWEP.ConeMin = 0.2
+SWEP.ConeMax = 2.999
+SWEP.ConeMin = 1.646
 
-SWEP.WalkSpeed = SPEED_SLOWEST
+SWEP.WalkSpeed = SPEED_SLOWER
+
+SWEP.OwnerKnockback = 50
+
+local barricadeDamageMul = 0.1
 
 function SWEP:SetIronsights()
 end
@@ -48,6 +52,8 @@ SWEP.reloadtimer = 0
 SWEP.nextreloadfinish = 0
 
 function SWEP:Reload()
+	self.ConeMul = 1
+	
 	if self.reloading then return end
 
 	if self:GetNextReload() <= CurTime() and self:Clip1() < self.Primary.ClipSize and 0 < self.Owner:GetAmmoCount(self.Primary.Ammo) then
@@ -66,16 +72,28 @@ function SWEP:PrimaryAttack()
 		self:EmitSound(self.Primary.Sound)
 
 		local clip = self:Clip1()
+		
+		local owner = self.Owner
+		if SERVER then
+			if IsValid(owner) and (owner:GetVelocity() * Vector(1, 1, 0)):Length() >= 300 then
+				self.OriginalRecoil = self.Primary.Recoil
+				self.Primary.Recoil = self.OriginalRecoil * 2
+			end
+		end
 
 		self:ShootBullets(self.Primary.Damage, self.Primary.NumShots * clip, self:GetCone())
-
+		
+		self.Primary.Recoil = self.OriginalRecoil or self.Primary.Recoil
+		
 		self:TakePrimaryAmmo(clip)
 		self.Owner:ViewPunch(clip * 0.5 * self.Primary.Recoil * Angle(math.Rand(-0.1, -0.1), math.Rand(-0.1, 0.1), 0))
 
 		self.Owner:SetGroundEntity(NULL)
-		self.Owner:SetVelocity(-80 * clip * self.Owner:GetAimVector())
+		self.Owner:SetVelocity(-self.OwnerKnockback * clip * self.Owner:GetAimVector())
 
 		self.IdleAnimation = CurTime() + self:SequenceDuration()
+		
+		self.LastFired = CurTime()
 	end
 end
 
@@ -110,6 +128,11 @@ function SWEP:Think()
 	if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
 		self:SetIronsights(false)
 	end
+	if self.LastFired + self.ConeResetDelay > CurTime() then
+		local multiplier = 1
+		multiplier = multiplier + (self.ConeMax * 100) * ((self.LastFired + self.ConeResetDelay - CurTime()) / self.ConeResetDelay)
+		self.ConeMul = math.min(multiplier, 1)
+	end
 end
 
 function SWEP:CanPrimaryAttack()
@@ -135,3 +158,30 @@ function SWEP:CanPrimaryAttack()
 
 	return self:GetNextPrimaryFire() <= CurTime()
 end
+
+local function BulletCallback(attacker, tr, dmginfo)
+	local ent = tr.Entity
+	if ent:IsValid() then
+		if ent:IsPlayer() then
+			if ent:Team() == TEAM_UNDEAD and tempknockback then
+				tempknockback[ent] = ent:GetVelocity()
+			end
+		else
+			local phys = ent:GetPhysicsObject()
+			if ent:GetMoveType() == MOVETYPE_VPHYSICS and phys:IsValid() and phys:IsMoveable() then
+				ent:SetPhysicsAttacker(attacker)
+			end
+			
+			if ent:IsNailed() then
+				local damage = dmginfo:GetDamage()
+				ent:SetBarricadeRepairs(math.max(ent:GetBarricadeRepairs() - damage * barricadeDamageMul, 0))
+				
+				if ent:GetBarricadeRepairs() <= 0 then
+					ent:SetBarricadeHealth(ent:GetBarricadeHealth() - damage * barricadeDamageMul * 1.5)
+				end
+			end
+		end
+	end
+end
+
+SWEP.BulletCallback = BulletCallback

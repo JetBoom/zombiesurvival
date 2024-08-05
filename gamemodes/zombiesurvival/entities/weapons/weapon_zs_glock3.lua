@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "'크로스파이어' 개조형 글록"
+	SWEP.PrintName = "'Crossfire' 글록 3"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 
@@ -23,15 +23,76 @@ SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("Weapon_Glock.Single")
 SWEP.Primary.Damage = 17
-SWEP.Primary.NumShots = 3
+SWEP.Primary.NumShots = 0
 SWEP.Primary.Delay = 0.3
+SWEP.Primary.Recoil = 3.8
 
 SWEP.Primary.ClipSize = 7
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
-SWEP.ConeMax = 0.14
-SWEP.ConeMin = 0.07
+SWEP.ConeMax = 1.254
+SWEP.ConeMin = 0.254
 
 SWEP.IronSightsPos = Vector(-5.75, 10, 2.7)
+
+function SWEP:PrimaryAttack()
+	if not self:CanPrimaryAttack() then return end
+
+	self:TakeAmmo()
+	
+	for i = 0, 2 do
+		timer.Simple(0.07 * i, function()
+		self:EmitFireSound()
+			self:ShootBullets(self.Primary.Damage, 1, self:GetCone())
+			self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+		end)
+	end
+	self.IdleAnimation = CurTime() + self:SequenceDuration()
+end
+
+function SWEP:ShootBullets(dmg, numbul, cone)
+	local owner = self.Owner
+	--owner:MuzzleFlash()
+	self:SendWeaponAnimation()
+	owner:DoAttackEvent()
+
+	self:StartBulletKnockback()
+	
+	self:DoRecoil()
+	if SERVER then
+		owner:FireBullets({Num = numbul, Src = owner:GetShootPos(), Dir = owner:GetAimVector() + Vector(math.Rand(-cone, cone), math.Rand(-cone, cone), 0), Spread = Vector(cone, cone, 0), Tracer = 1, TracerName = self.TracerName, Force = dmg * 0.1, Damage = dmg, Callback = self.BulletCallback})
+	end
+	self:DoBulletKnockback(self.Primary.KnockbackScale * 0.05)
+	self:EndBulletKnockback()
+	
+	self.LastFired = CurTime()
+end
+
+function SWEP:Think()
+	if CLIENT then
+		if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
+			self:SetIronsights(false)
+		end
+		if self.LastFired + self.ConeResetDelay > CurTime() then
+			local multiplier = 1
+			multiplier = multiplier + (self.ConeMax * 10) * ((self.LastFired + self.ConeResetDelay - CurTime()) / self.ConeResetDelay)
+			self.ConeMul = math.min(multiplier, 1)
+		end
+	else
+		if self.IdleAnimation and self.IdleAnimation <= CurTime() then
+			self.IdleAnimation = nil
+			self:SendWeaponAnim(ACT_VM_IDLE)
+		end
+		if self:GetIronsights() and not self.Owner:KeyDown(IN_ATTACK2) then
+			self:SetIronsights(false)
+		end
+		
+		if self.LastFired + self.ConeResetDelay > CurTime() then
+			local multiplier = 1
+			multiplier = multiplier + (self.ConeMax * 10) * ((self.LastFired + self.ConeResetDelay - CurTime()) / self.ConeResetDelay)
+			self.ConeMul = math.min(multiplier, 1)
+		end
+	end
+end

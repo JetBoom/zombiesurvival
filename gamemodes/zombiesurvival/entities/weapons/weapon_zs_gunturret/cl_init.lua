@@ -1,6 +1,6 @@
 include("shared.lua")
 
-SWEP.PrintName = "자동 설치형 터렛"
+SWEP.PrintName = "적외선 타겟팅 터렛"
 SWEP.Description = "이 자동 터렛은 설치되면 좀비를 끝까지 찾아 죽이지만, 탄약을 계속 보급해줘야만 쓸모가 있다.\n공격 1: 설치\n공격 2/재장전: 회전\n달리기 키(기본값:쉬프트): 회수\n사용 키(기본값:E):자신의 SMG 탄약 보급/주인 없는 터렛 가져가기\n생성할려고 하는 위치가 가능한 위치라면 초록색으로 표시된다."
 SWEP.DrawCrosshair = false
 

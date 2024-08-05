@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "Drone Control"
-	SWEP.Description = "Controller for your Drone."
+	SWEP.PrintName = "드론 컨트롤러"
+	SWEP.Description = "드론을 조종할 수 있게 해주는 컨트롤러."
 
 	SWEP.ViewModelFOV = 50
 

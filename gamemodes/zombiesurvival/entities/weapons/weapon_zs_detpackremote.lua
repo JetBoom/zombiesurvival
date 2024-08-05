@@ -4,8 +4,8 @@ if CLIENT then
 	SWEP.ViewModelFOV = 50
 	SWEP.BobScale = 0.5
 	SWEP.SwayScale = 0.5
-	SWEP.PrintName = "C4 폭파기"
-	SWEP.Description = "이 무기로 설치된 C4를 폭파할 수 있다."
+	SWEP.PrintName = "폭파 신호기"
+	SWEP.Description = "설치한 원격 폭발물을 폭파시킬 수 있다."
 
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0

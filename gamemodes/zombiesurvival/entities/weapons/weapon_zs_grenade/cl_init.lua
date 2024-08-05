@@ -1,7 +1,7 @@
 include("shared.lua")
 
 SWEP.PrintName = "수류탄"
-SWEP.Description = "단순한 고폭 수류탄이다.\n전략적으로 이용하면 좀비 다수를 터트릴 수 있다."
+SWEP.Description = "흔히 볼 수 있는 파쇄 수류탄.\n전략적으로 이용하면 다수의 좀비들을 흔적도 없이 쓸어버릴 수 있다."
 
 SWEP.ViewModelFOV = 60
 

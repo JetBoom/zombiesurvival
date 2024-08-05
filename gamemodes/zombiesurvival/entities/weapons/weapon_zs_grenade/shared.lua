@@ -14,6 +14,8 @@ SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
 SWEP.Secondary.Ammo = "dummy"
 
+SWEP.ThrowPowerMul = 1
+
 SWEP.WalkSpeed = SPEED_FAST
 
 function SWEP:Initialize()
@@ -60,7 +62,7 @@ function SWEP:PrimaryAttack()
 			if phys:IsValid() then
 				phys:Wake()
 				phys:AddAngleVelocity(VectorRand() * 5)
-				phys:SetVelocityInstantaneous(self.Owner:GetAimVector() * 800)
+				phys:SetVelocityInstantaneous(self.Owner:GetAimVector() * 800 * self.ThrowPowerMul)
 			end
 		end
 	end

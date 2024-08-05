@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "전기 망치"
+	SWEP.PrintName = "LV5 망치"
 
 	SWEP.VElements = {
 		["base2"] = { type = "Model", model = "models/props_lab/teleportring.mdl", bone = "ValveBiped.Bip01", rel = "base", pos = Vector(0, 0, 0), angle = Angle(0, 180, 0), size = Vector(0.08, 0.08, 0.08), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
@@ -20,25 +20,38 @@ end
 
 SWEP.Base = "weapon_zs_hammer"
 
-SWEP.MeleeDamage = 45
+SWEP.MeleeDamage = 40
 SWEP.HealStrength = 1.4
 
 SWEP.ViewModel = "models/weapons/v_hammer/v_hammer.mdl"
 SWEP.WorldModel = "models/weapons/w_hammer.mdl"
 
+function SWEP:SetupDataTables()
+	self:NetworkVar("Bool", 0, "CarbonHammer")
+end
+
 function SWEP:Think()
-    self.BaseClass.BaseClass.Think(self)
-    local stored = weapons.GetStored(self:GetClass())
-    if !IsValid(stored) then
-        return
-    end
-    if self.Owner:GetFastHammer() then
-        self.SwingTime = stored.SwingTime * 0.5
-        self.Primary.Delay = stored.Primary.Delay * 0.5
-        -- self.SwingTime = stored.SwingTime * 0
-        -- self.Primary.Delay = stored.Primary.Delay * 0
-    else
-        self.SwingTime = stored.SwingTime
-        self.Primary.Delay = stored.Primary.Delay
-    end
+	local owner = self.Owner
+	if SERVER then
+		if owner.carbonHammer and !self:GetCarbonHammer() then
+			self:SetCarbonHammer(true)
+			self.Primary.Delay = self.Primary.Delay * 0.75
+			self.Primary.SwingTime = self.SwingTime * 0.75
+		elseif !owner.carbonHammer and self:GetCarbonHammer() then
+			self:SetCarbonHammer(false)
+			self.Primary.Delay = self.Primary.Delay / 0.75
+			self.Primary.SwingTime = self.SwingTime / 0.75
+		end
+	else
+		local carbonHammer = self:GetCarbonHammer()
+		if carbonHammer then
+			self.Primary.Delay = self.Primary.Delay * 0.75
+			self.Primary.SwingTime = self.SwingTime * 0.75
+		elseif !carbonHammer then
+			self.Primary.Delay = self.Primary.Delay / 0.75
+			self.Primary.SwingTime = self.SwingTime / 0.75
+		end
+	end
+
+	self.BaseClass.BaseClass.Think(self)
 end

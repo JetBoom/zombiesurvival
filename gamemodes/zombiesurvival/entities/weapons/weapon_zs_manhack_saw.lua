@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.PrintName = "톱날 맨핵"
-	SWEP.Description = "맨핵에 톱날을 달아 더욱 강력해진 맨핵이다. 단 조종하기가 약간 힘들다."
+	SWEP.PrintName = "맨핵 : 톱날"
+	SWEP.Description = "톱날이 장착된 맨핵.\n더 강력한 데미지와 튼튼한 내구성을 얻었으나 컨트롤하기가 비교적 어려워졌다."
 end
 
 SWEP.Base = "weapon_zs_manhack"

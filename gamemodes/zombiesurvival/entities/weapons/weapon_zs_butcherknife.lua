@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "도살자의 고기칼"
-	SWEP.Description = "이 칼을 식인종이 사용하게 된다면, 좀비를 죽일 때마다 많은 양의 고기를 떨구게 할 수 있다."
+	SWEP.Description = "이 칼을 식인종이 사용하게 된다면, 좀비를 죽일 때마다 체력을 회복하며 많은 양의 고기를 떨구게 할 수 있다."
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelFlip = false
 
