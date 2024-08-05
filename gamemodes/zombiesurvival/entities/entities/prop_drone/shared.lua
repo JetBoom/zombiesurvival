@@ -4,15 +4,15 @@ ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 ENT.m_NoNailUnfreeze = true
 ENT.NoNails = true
 
-ENT.WrenchRepairMultiplier = 0.666
+ENT.WrenchRepairMultiplier = 1.666
 
-ENT.Acceleration = 110
-ENT.MaxSpeed = 160
-ENT.HoverSpeed = 64
-ENT.HoverHeight = 58
-ENT.HoverForce = 64
+ENT.Acceleration = 800
+ENT.MaxSpeed = 400
+ENT.HoverSpeed = 128
+ENT.HoverHeight = 80
+ENT.HoverForce = 800
 ENT.TurnSpeed = 45
-ENT.IdleDrag = 0.25
+ENT.IdleDrag = 10
 
 function ENT:ShouldNotCollide(ent)
 	return ent:IsPlayer() and ent:Team() == TEAM_HUMAN

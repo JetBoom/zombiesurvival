@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 ENT.m_NextStrainSound = 0
-
+ENT.thorncade = nil
 hook.Add("PlayerInitialSpawn", "NailPlayerInitialSpawn", function(pl)
 	local uid = pl:UniqueID()
 
@@ -56,6 +56,44 @@ function ENT:AttachTo(baseent, attachent, physbone, physbone2)
 		baseent:SetMaxBarricadeHealth(health)
 		baseent:SetBarricadeHealth(health)
 		baseent:SetBarricadeRepairs(baseent:GetMaxBarricadeRepairs())
+	end
+end
+
+function ENT:Think()
+	local owner = self:GetOwner()
+	if isstring(owner) then
+		owner = player.GetByUniqueID(owner)
+	end
+	if owner.thorncade then self.thorncade = true
+	else self.thorncade = nil
+	end
+	local baseent = self:GetParent()
+	local nailowners = {}
+	for i, v in ipairs(baseent:GetLivingNails()) do
+		if v:GetOwner():IsValid(v) and v:GetOwner():Alive() and v:GetOwner():Team() == TEAM_HUMAN then
+			table.insert(nailowners,v:GetOwner())
+		end
+	end
+		
+	if owner.steelNail and !baseent.steelNail then
+		baseent.steelNail = true
+		baseent:SetMaxBarricadeHealth(self:GetMaxNailHealth() * 1.5)
+		baseent:SetBarricadeHealth(self:GetNailHealth() * 1.5)
+		baseent:SetBarricadeRepairs(baseent:GetBarricadeRepairs()*1.5)
+	elseif !owner.steelNail and baseent.steelNail then
+		for i, v in ipairs(nailowners) do
+			if IsValid(v) and v:Alive() and v:Team() == TEAM_HUMAN and v.steelNail then
+				return
+			end
+		end
+		baseent.steelNail = false
+		baseent:SetMaxBarricadeHealth(self:GetMaxNailHealth() / 1.5)
+		baseent:SetBarricadeHealth(self:GetNailHealth() / 1.5)
+		baseent:SetBarricadeRepairs(baseent:GetBarricadeRepairs()/1.5)
+	end
+	
+	if self.BaseClass.Think then
+		self.BaseClass.Think(self)
 	end
 end
 

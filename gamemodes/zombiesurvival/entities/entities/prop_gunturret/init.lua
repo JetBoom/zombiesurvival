@@ -181,7 +181,9 @@ function ENT:Use(activator, caller)
 			if togive > 0 then
 				self:SetAmmo(curammo + togive)
 				activator:RemoveAmmo(togive, "smg1")
-				activator:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+				if SERVER then
+					activator:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
+				end
 				self:EmitSound("npc/turret_floor/click1.wav")
 				--gamemode.Call("PlayerRepairedObject", activator, self, togive * 1.5, self)
 			end

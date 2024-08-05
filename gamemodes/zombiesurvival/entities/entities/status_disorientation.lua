@@ -17,7 +17,7 @@ function ENT:Initialize()
 
 	local parent = self:GetParent()
 	if parent:IsValid() and (SERVER or CLIENT and LocalPlayer() == parent) then
-		parent:SetDSP(35)
+		parent:SetDSP(7)
 	end
 
 	self.DieTime = CurTime() + self.LifeTime

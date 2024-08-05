@@ -24,7 +24,9 @@ function ENT:Think()
 			self.NextEmit = CurTime() + 0.05 + perc * math.Rand(0.05, 0.25)
 
 			local sat = perc * 90
-
+			
+			local pos = self:GetPos()
+			
 			local emitter = ParticleEmitter(pos)
 			emitter:SetNearClip(16, 24)
 

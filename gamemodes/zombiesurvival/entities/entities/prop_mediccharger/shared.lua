@@ -4,8 +4,10 @@ ENT.m_NoNailUnfreeze = true
 ENT.NoNails = true
 
 ENT.CanPackUp = true
-ENT.DefaultAmmoCount = 120
+ENT.DefaultAmmoCount = 600
 ENT.MaxAmmo = 3000
+ENT.AmmoRechargeDelay = 5
+ENT.AmmoRechargeAmount = 20
 ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
 

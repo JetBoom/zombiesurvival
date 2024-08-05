@@ -136,7 +136,7 @@ function ENT:Use(activator, caller)
 		end
 	end
 
-	NextUse[myuid] = CurTime() + math.random(30,40)
+	NextUse[myuid] = CurTime() + 30 * (activator.buffSupplier and 0.75 or 1)
 
 	net.Start("zs_nextresupplyuse")
 		net.WriteFloat(NextUse[myuid])
@@ -146,7 +146,7 @@ function ENT:Use(activator, caller)
 	if activator ~= owner and owner:IsValid() and owner:IsPlayer() and owner:Team() == TEAM_HUMAN then
 		owner.ResupplyBoxUsedByOthers = owner.ResupplyBoxUsedByOthers + 1
 
-		if owner.ResupplyBoxUsedByOthers % 2 == 0 then
+		if owner.ResupplyBoxUsedByOthers % 3 == 0 then
 			owner:AddPoints(1)
 		end
 

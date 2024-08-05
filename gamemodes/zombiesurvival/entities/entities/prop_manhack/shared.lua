@@ -4,7 +4,7 @@ ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 ENT.m_NoNailUnfreeze = true
 ENT.NoNails = true
 
-ENT.WrenchRepairMultiplier = 0.5
+ENT.WrenchRepairMultiplier = 0.25
 
 ENT.Model = "models/manhack.mdl"
 ENT.HitBoxSize = 9.5
@@ -13,21 +13,21 @@ ENT.WeaponClass = "weapon_zs_manhack"
 ENT.ControllerClass = "weapon_zs_manhackcontrol"
 ENT.AmmoType = "manhack"
 
-ENT.Acceleration = 320
-ENT.MaxSpeed = 315
-ENT.HoverSpeed = 64
+ENT.Acceleration = 540
+ENT.MaxSpeed = 260
+ENT.HoverSpeed = 80
 ENT.HoverHeight = 48
-ENT.HoverForce = 96
-ENT.TurnSpeed = 305
-ENT.IdleDrag = 1
+ENT.HoverForce = 80
+ENT.TurnSpeed = 120
+ENT.IdleDrag = 0.25
 
 ENT.MaxHealth = 75
-ENT.HitCooldown = 0.15
+ENT.HitCooldown = 0.1
 ENT.HitDamage = 15
-ENT.BounceFleshVelocity = 66
-ENT.BounceVelocity = 50
-ENT.SelfDamageSpeed = 0.7
-ENT.SelfDamageMul = 0.08
+ENT.BounceFleshVelocity = 48
+ENT.BounceVelocity = 32
+ENT.SelfDamageSpeed = 0.85
+ENT.SelfDamageMul = 0.065
 
 function ENT:ShouldNotCollide(ent)
 	return ent:IsPlayer() and ent:Team() == TEAM_HUMAN

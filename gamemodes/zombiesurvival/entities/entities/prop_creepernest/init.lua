@@ -5,6 +5,10 @@ include("shared.lua")
 
 ENT.NextDecay = 0
 ENT.BuildsThisTick = 0
+ENT.HealRadius = 225
+ENT.HealedList = {}
+ENT.LastNestBonus = 0
+ENT.NestBrains = 0
 
 function ENT:Initialize()
 	self:SetModel("models/props_wasteland/antlionhill.mdl")
@@ -31,6 +35,7 @@ function ENT:Initialize()
 end
 
 function ENT:BuildUp()
+	local owner = self.Owner
 	if CurTime() ~= self.LastBuildTime then
 		self.LastBuildTime = CurTime()
 		self.BuildsThisTick = 0
@@ -39,7 +44,7 @@ function ENT:BuildUp()
 	if self.BuildsThisTick < 3 then
 		self.BuildsThisTick = self.BuildsThisTick + 1
 
-		self:SetNestHealth(math.min(self:GetNestHealth() + FrameTime() * self:GetNestMaxHealth() * 0.025, self:GetNestMaxHealth()))
+		self:SetNestHealth(math.min(self:GetNestHealth() + FrameTime() * self:GetNestMaxHealth() * 0.1, self:GetNestMaxHealth()))
 	end
 end
 
@@ -55,6 +60,68 @@ function ENT:Think()
 			self:TakeDamage(5)
 		end
 	end
+	
+	if self:GetNestBuilt() then
+		for _, v in pairs(player.GetAll()) do
+			if v:Team() == TEAM_ZOMBIE then
+				if v:GetPos():Distance(self:GetPos()) <= self.HealRadius then
+					if (v:Health() < v:GetMaxZombieHealth()) and v:Alive() then
+						self:Heal(v)
+					else
+						self:ResetHealedList(v:UniqueID())
+					end
+				else
+					self:ResetHealedList(v:UniqueID())
+				end
+			end
+		end
+	end
+end
+
+function ENT:ResetHealedList(uid)
+	if (self.HealedList[uid] and self.HealedList[uid].nextHeal) then
+		self.HealedList[uid].nextHeal = CurTime() + 1
+	end
+end
+
+function ENT:Heal(zombie)
+	local hlist = self.HealedList
+	local uid = zombie:UniqueID()
+	
+	local curtime = CurTime()
+	local boss = zombie:GetZombieClassTable().Boss
+	
+	if !hlist[uid] then
+		hlist[uid] = {
+			nextHeal = curtime
+		}
+	end
+	
+	local heal = 0
+	
+	if hlist[uid].nextHeal <= curtime and zombie:Health() < zombie:GetMaxZombieHealth() then
+		if (hlist[uid] != nil and hlist[uid].nextHeal != nil) then
+			if (hlist[uid].nextHeal < curtime) then
+				local elapsedtime = curtime - hlist[uid].nextHeal
+				
+				if (elapsedtime < 0.3) then
+					return
+				end
+				
+				heal = ((boss and 1 or 2) * elapsedtime) / (boss and 0.35 or 0.15)
+				zombie:SetHealth(math.min(zombie:Health() + heal, zombie:GetMaxZombieHealth()))
+				hlist[uid].nextHeal = curtime + (boss and 0.35 or 0.15)
+			end
+		end
+		
+		local ed = EffectData()
+		
+			ed:SetOrigin(zombie:LocalToWorld(zombie:OBBCenter()))
+		
+		util.Effect("nestheal", ed)
+	end
+	
+	self.HealedList = hlist
 end
 
 function ENT:OnTakeDamage(dmginfo)

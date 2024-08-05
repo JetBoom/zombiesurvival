@@ -1,6 +1,6 @@
 ENT.Type = "anim"
 
-ENT.MaxHealth = 100
+ENT.MaxHealth = 175
 
 ENT.ModelScale = Vector(0.2, 0.2, 0.1)
 

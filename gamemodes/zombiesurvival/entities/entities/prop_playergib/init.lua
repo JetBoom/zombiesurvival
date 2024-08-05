@@ -79,12 +79,16 @@ function ENT:Think()
 end
 
 function ENT:StartTouch(ent)
-	if self.DieTime ~= 0 and ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_UNDEAD and ent:Health() < ent:GetMaxZombieHealth() then
-		self.DieTime = 0
-
-		ent:SetHealth(math.min(ent:GetMaxZombieHealth(), ent:Health() + 10))
-
-		self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
-		util.Blood(self:GetPos(), math.random(2), Vector(0, 0, 1), 100, self:GetDTInt(0), true)
+	if self.DieTime ~= 0 and ent:IsPlayer() and ent:Alive() then
+		if ent:Team() == TEAM_UNDEAD and ent:Health() < ent:GetMaxZombieHealth() then
+			self.DieTime = 0
+			ent:SetHealth(math.min(ent:GetMaxZombieHealth(), ent:Health() + 10))
+			self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
+		elseif ent:Team() == TEAM_HUMANS and ent.Cannibalistic and ent:Health() < ent:GetMaxHealth() then
+			self.DieTime = 0
+			ent:SetHealth(math.min(ent:GetMaxHealth(), ent:Health() + math.random(3,5)))
+			self:EmitSound("items/medshot4.wav")
+			util.Blood(self:GetPos(), math.random(2), Vector(0, 0, 1), 100, self:GetDTInt(0), true)
+		end
 	end
 end

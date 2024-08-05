@@ -2,16 +2,15 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
-
-local function RefreshCrateOwners(pl)
+local function RefreshChargerOwners(pl)
 	for _, ent in pairs(ents.FindByClass("prop_mediccharger")) do
 		if ent:IsValid() and ent:GetObjectOwner() == pl then
 			ent:SetObjectOwner(NULL)
 		end
 	end
 end
-hook.Add("PlayerDisconnected", "MCharger.PlayerDisconnected", RefreshCrateOwners)
-hook.Add("OnPlayerChangedTeam", "MCharger.OnPlayerChangedTeam", RefreshCrateOwners)
+hook.Add("PlayerDisconnected", "MCharger.PlayerDisconnected", RefreshChargerOwners)
+hook.Add("OnPlayerChangedTeam", "MCharger.OnPlayerChangedTeam", RefreshChargerOwners)
 
 function ENT:Initialize()
 	self:SetModel("models/props_combine/health_charger001.mdl")
@@ -63,7 +62,7 @@ function ENT:SetObjectHealth(health)
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pos)
 		util.Effect("Explosion", effectdata, true, true)
-
+		self.Owner:CenterNotify(COLOR_RED, translate.ClientGet(owner,"charger_destroyed"))
 		local amount = math.ceil(self:GetAmmoCount() * 0.33)
 		while amount > 0 do
 			local todrop = math.min(amount, 50)
@@ -96,22 +95,6 @@ function ENT:OnTakeDamage(dmginfo)
 	end
 end
 
-function ENT:AltUse(activator, tr)
-	if activator:IsValid() and activator:IsPlayer() and activator:Team() == TEAM_HUMAN and activator:Alive() and  activator:GetAmmoCount("Battery") > 10 then
-		local curammo = self:GetAmmoCount()
-		local togive = math.min(math.min(30, activator:GetAmmoCount("Battery")), self.MaxAmmo - curammo)
-		if togive > 0 then
-			self:SetAmmoCount(curammo + togive)
-			activator:RemoveAmmo(togive, "Battery")
-			activator:RestartGesture(ACT_GMOD_GESTURE_ITEM_GIVE)
-			self:EmitSound("items/smallmedkit1.wav")
-			gamemode.Call("PlayerRepairedObject", activator, self, togive/5, self)
-		end
-	else
-		self:PackUp(activator)
-	end
-end
-
 function ENT:OnPackedUp(pl)
 	pl:GiveEmptyWeapon("weapon_zs_mediccharger")
 	pl:GiveAmmo(1, "charger")
@@ -124,6 +107,12 @@ end
 function ENT:Think()
 	if self.Destroyed then
 		self:Remove()
+	end
+	local curammo = self:GetAmmoCount()
+	local lastCharge = self.LastRecharge or -1
+	if lastCharge + self.AmmoRechargeDelay <= CurTime() then
+		self:SetAmmoCount(math.Min(curammo + self.AmmoRechargeAmount, self.MaxAmmo))
+		self.LastRecharge = CurTime()
 	end
 end
 
@@ -142,11 +131,11 @@ function ENT:Use(activator, caller)
 
 	if activator:IsValid() and activator:IsPlayer() and activator:Team() == owner:Team() and activator:Alive() and gamemode.Call("PlayerCanBeHealed", activator)and self:GetAmmoCount() >= 0 then
 		if CurTime() < (NextUse[myuid] or 0) then
-			activator:CenterNotify(COLOR_RED, translate.ClientGet("아직 준비되지 않았다"))
+			activator:CenterNotify(COLOR_RED, translate.ClientGet(activator, "no_ammo_here"))
 		return
 		end
 
-		NextUse[myuid] = CurTime() + 15
+		NextUse[myuid] = CurTime() + 10* (self.Owner.buffMedic and 0.75 or 1)
 
 		net.Start("zs_nextchargeruse")
 			net.WriteFloat(NextUse[myuid])
@@ -157,18 +146,17 @@ function ENT:Use(activator, caller)
 		activator:SetHealth(health + toheal)
 		self:SetAmmoCount(self:GetAmmoCount() - toheal*2,0)
 		self:EmitSound("items/medshot4.wav")
-		owner.ChargerUsedByOthers = owner.ChargerUsedByOthers + 1
-
-		if owner.ResupplyBoxUsedByOthers % 2 == 0 then
-			owner:AddPoints(1)
+		if activator != owner then
+			owner.ChargerUsedByOthers = owner.ChargerUsedByOthers + 1
+			if owner.ChargerUsedByOthers % 2 == 0 then
+				owner:AddPoints(1)
+				net.Start("zs_commission")
+				net.WriteEntity(self)
+				net.WriteEntity(activator)
+				net.WriteUInt(1, 16)
+				net.Send(owner)
+			end	
 		end
-
-		net.Start("zs_commission")
-			net.WriteEntity(self)
-			net.WriteEntity(activator)
-			net.WriteUInt(1, 16)
-		net.Send(owner)
-
-		end
-		self.Close = CurTime() + 3
 	end
+		self.Close = CurTime() + 3
+end
