@@ -3,7 +3,7 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-ENT.Heal = 3
+ENT.Heal = 4
 
 function ENT:Initialize()
 	self:SetModel("models/Items/CrossbowRounds.mdl")
@@ -22,9 +22,9 @@ function ENT:Initialize()
 	self:Fire("kill", "", 30)
 end
 
-function ENT:Think()
+function ENT:Think()	
 	if self.PhysicsData then
-		self:Explode(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity, self.PhysicsData.OurOldVelocity)
+		self:Hit(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity, self.PhysicsData.OurOldVelocity)
 	end
 
 	local parent = self:GetParent()
@@ -33,7 +33,7 @@ function ENT:Think()
 	end
 end
 
-function ENT:Explode(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
+function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 	if self:GetHitTime() ~= 0 then return end
 	self:SetHitTime(CurTime())
 
@@ -68,18 +68,25 @@ function ENT:Explode(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 		end
 		self:SetOwner(eHitEntity)
 
-		if eHitEntity:IsPlayer() and eHitEntity:Team() ~= TEAM_UNDEAD then
+		if eHitEntity:IsPlayer() and eHitEntity:Team() == owner:Team() and eHitEntity:Alive() and gamemode.Call("PlayerCanBeHealed", eHitEntity) then
 			eHitEntity:GiveStatus("healdartboost").DieTime = CurTime() + 10
 
 			local oldhealth = eHitEntity:Health()
 			local newhealth = math.min(oldhealth + self.Heal, eHitEntity:GetMaxHealth())
 			if oldhealth ~= newhealth then
 				eHitEntity:SetHealth(newhealth)
-
 				if owner:IsPlayer() then
 					gamemode.Call("PlayerHealedTeamMember", owner, eHitEntity, newhealth - oldhealth, self)
 				end
 			end
+		elseif eHitEntity:IsPlayer() and eHitEntity:Team() == TEAM_UNDEAD then
+			if self.FirstShot then
+				eHitEntity:GiveStatus("disorientation").Dietime = CurTime() + self.Heal/15
+				eHitEntity:EmitSound("weapons/bugbait/bugbait_impact1.wav")
+			end
+		elseif eHitEntity:IsPlayer() and eHitEntity:Team() == owner:Team() then
+			eHitEntity:EmitSound("items/medshotno1.wav")
+			self:Remove() 
 		end
 	end
 

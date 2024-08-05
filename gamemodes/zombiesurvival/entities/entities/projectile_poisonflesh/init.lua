@@ -3,11 +3,11 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-ENT.Damage = math.random(2,3)
+ENT.Damage = 5
 ENT.Type = "anim"
 
 function ENT:Initialize()
-	self.DeathTime = CurTime() + 30
+	self.DeathTime = CurTime() + 10
 
 	self:DrawShadow(false)
 	self:PhysicsInitSphere(1)

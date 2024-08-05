@@ -26,8 +26,6 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-	--self.Emitter:Finish()
-
 	if self.CModel and self.CModel:IsValid() then
 		self.CModel:Remove()
 	end
@@ -38,24 +36,46 @@ function ENT:Draw()
 	--[[local parent = self:GetParent()
 	if parent == LocalPlayer() and parent:IsValid() and not parent:ShouldDrawLocalPlayer() then return end]]
 
-	if self:GetCharged() then
-		render.SetColorModulation(1, 0, 0)
+	local hittime = self:GetHitTime()
+	local charged = self:GetCharged()
+	
+	if charged then
+		self.CModel:SetColor(Color(255, 0, 255))
+	end
+	
+	if hittime == 0 then
+		if charged then
+			render.SetColorModulation(1, 0, 1)
+		else
+			render.SetColorModulation(0, 1, 0)
+		end
 	else
-		render.SetColorModulation(0, 1, 0)
+		if charged then
+			local c =  1 - math.Clamp(CurTime() - hittime, 0, 1)
+			render.SetColorModulation(c, 0, c)
+		else
+			render.SetColorModulation(0, 1 - math.Clamp(CurTime() - hittime, 0, 1), 0)
+		end
 	end
 	render.ModelMaterialOverride(matOverride)
 
 	self:DrawModel()
 
 	render.ModelMaterialOverride()
-	render.SetColorModulation(1, 1, 1)
+	if charged then
+		render.SetColorModulation(1, 0, 1)
+	else
+		render.SetColorModulation(1, 1, 1)
+	end
 
 	if self:GetMoveType() == MOVETYPE_NONE or CurTime() < self.NextEmit then return end
 	self.NextEmit = CurTime() + 0.01
 
 	local pos = self:GetPos()
 
-	local particle = self.Emitter:Add("particles/smokey", pos)
+	local emitter = self.Emitter
+
+	local particle = emitter:Add("particles/smokey", pos)
 	particle:SetDieTime(0.35)
 	particle:SetStartAlpha(255)
 	particle:SetEndAlpha(0)
@@ -64,8 +84,10 @@ function ENT:Draw()
 	particle:SetRoll(math.Rand(0, 255))
 	particle:SetRollDelta(math.Rand(-10, 10))
 	if self:GetCharged() then
-		particle:SetColor(255, 30, 30)
+		particle:SetColor(255, 30, 255)
 	else
 		particle:SetColor(30, 255, 30)
 	end
+
+	emitter:Finish()
 end

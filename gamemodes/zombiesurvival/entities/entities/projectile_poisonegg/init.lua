@@ -44,12 +44,11 @@ function ENT:Explode(eHitEntity)
 	if not owner:IsValid() then owner = self end
 	self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
 	if eHitEntity:IsValid() and eHitEntity:IsPlayer() and eHitEntity:Team() ~= TEAM_UNDEAD then
-		eHitEntity:PoisonDamage(math.random(4,6), owner, self)
+		eHitEntity:PoisonDamage(20, owner, self)
 		eHitEntity:AddLegDamage(20)
-		local dice = math.random(10)
+		local dice = math.random(5)
 		if dice == 5 then eHitEntity:KnockDown(2) end
 	end
-	util.BlastDamageEx(self, owner, pos, 40, 5, DMG_ACID)
 	util.Blood(pos, 50, Vector(0, 0, 1), 300, true)
 	local effectdata = EffectData()
 end

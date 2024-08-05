@@ -85,9 +85,15 @@ function ENT:PhysicsCollide(data, physobj)
 		self.ExplodeTime = 0
 		self:NextThink(CurTime())
 	else
-		local normal = data.OurOldVelocity:GetNormalized()
-		local DotProduct = data.HitNormal:Dot(normal * -1)
-
-		physobj:SetVelocityInstantaneous((2 * DotProduct * data.HitNormal + normal) * math.max(100, data.Speed) * 0.9)
+		if ent and ent:IsValid() and not ent:IsPlayer() then
+			if ent.CanPackUp == true then 
+			else
+				local phys = ent:GetPhysicsObject()
+				ent:TakeSpecialDamage(10, DMG_CLUB, owner, self)
+			end
+			local normal = data.OurOldVelocity:GetNormalized()
+			local DotProduct = data.HitNormal:Dot(normal * -1)
+			physobj:SetVelocityInstantaneous((2 * DotProduct * data.HitNormal + normal) * math.max(100, data.Speed) * 0.9)
+		end
 	end
 end

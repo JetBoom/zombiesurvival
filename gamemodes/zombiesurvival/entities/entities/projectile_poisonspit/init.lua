@@ -24,7 +24,7 @@ end
 
 function ENT:Think()
 	if self.PhysicsData then
-		self:Explode(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity)
+		self:Hit(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity)
 	end
 
 	if self.DeathTime <= CurTime() then
@@ -32,7 +32,7 @@ function ENT:Think()
 	end
 end
 
-function ENT:Explode(vHitPos, vHitNormal, eHitEntity)
+function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
 	if self.Exploded then return end
 	self.Exploded = true
 	self.DeathTime = 0
