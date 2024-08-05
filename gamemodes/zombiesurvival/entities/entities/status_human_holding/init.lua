@@ -117,8 +117,8 @@ concommand.Add("_zs_rotateang", function(sender, command, arguments)
 	local y = tonumbersafe(arguments[2])
 
 	if x and y then
-		sender.InputMouseX = math.Clamp(x * 0.2, -180, 180)
-		sender.InputMouseY = math.Clamp(y * 0.2, -180, 180)
+		sender.InputMouseX = math.Clamp(x * 0.08, -180, 180)
+		sender.InputMouseY = math.Clamp(y * 0.08, -180, 180)
 	end
 end)
 
@@ -193,8 +193,9 @@ function ENT:Think()
 		elseif owner:KeyDown(IN_WALK) then
 			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Up(), owner.InputMouseX or 0)
 			self.ObjectAngles:RotateAroundAxis(owner:EyeAngles():Right(), owner.InputMouseY or 0)
+		else
+			self.ObjectAngles = object:GetAngles()
 		end
-
 		ShadowParams.pos = self.ObjectPosition
 		ShadowParams.angle = self.ObjectAngles
 		ShadowParams.deltatime = frametime

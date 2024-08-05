@@ -39,13 +39,12 @@ function ENT:AcceptInput(name, activator, caller, arg)
 	for _, ent in pairs(ents.FindInSphere(vPos, self:GetRadius())) do
 		if ent and ent:IsValid() and ent:IsPlayer() and ent:Alive() and WorldVisible(vPos, ent:NearestPoint(vPos)) then
 			if ent:Team() == TEAM_UNDEAD then
-				--[[if ent:Health() < ent:GetMaxHealth() and not ent:GetZombieClassTable().Boss then
+				if ent:Health() < ent:GetMaxHealth() and not ent:GetZombieClassTable().Boss then
 					ent:SetHealth(math.min(ent:GetMaxZombieHealth(), ent:Health() + self.Heal))
 					ent.m_LastGasHeal = CurTime()
-				end]]
+				end
 				ent:GiveStatus("zombiespawnbuff", 3)
 			elseif 1 < ent:Health() then
-				--ent:PoisonDamage(math.min(10, ent:Health() - 1), self, self)
 				ent:PoisonDamage(math.min(5, ent:Health() - 1), self, self)
 			end
 		end
