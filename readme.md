@@ -1,3 +1,9 @@
+<p align="center">
+  <img alt="Steam Subscriptions" src="https://img.shields.io/steam/downloads/105462463?logo=steam&color=black&style=for-the-badge" />
+  <img alt="Steam Favorites" src="https://img.shields.io/steam/favorites/105462463?logo=steam&color=black&style=for-the-badge" />
+  <img alt="Steam Update Date" src="https://img.shields.io/steam/update-date/105462463?logo=steam&color=black&style=for-the-badge" />
+</p>
+
 # Zombie Survival
 A gamemode for Garry's Mod where some players start as survivors and some as zombies.
 The zombies try to kill all the survivors and turn them in to zombies.
