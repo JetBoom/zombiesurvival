@@ -1,7 +1,7 @@
 <p align="center">
-  <img alt="Steam Subscriptions" src="https://img.shields.io/steam/downloads/105462463?logo=steam&color=black&style=for-the-badge" />
-  <img alt="Steam Favorites" src="https://img.shields.io/steam/favorites/105462463?logo=steam&color=black&style=for-the-badge" />
-  <img alt="Steam Update Date" src="https://img.shields.io/steam/update-date/105462463?logo=steam&color=black&style=for-the-badge" />
+  <img alt="Steam Subscriptions" src="https://img.shields.io/steam/subscriptions/105462463?style=for-the-badge&logo=steam&label=Steam%20subscriptions&color=black">
+  <img alt="Steam Favorites" src="https://img.shields.io/steam/favorites/105462463?style=for-the-badge&logo=steam&label=Steam%20favorites&color=black">
+  <img alt="Steam Update Date" src="https://img.shields.io/steam/update-date/105462463?style=for-the-badge&logo=steam&label=Steam%20last%20update&color=black">
 </p>
 
 # Zombie Survival
