@@ -25,7 +25,7 @@ function ENT:RenderModels(ble, cmod)
 			pos, ang = self:GetBoneOrientation( self.WElements, v, "ValveBiped.Bip01_R_Hand" )
 		end
 
-		if (!pos) then continue end
+		if (!pos) then pos=self:GetPos() ang=self:GetAngles() end --Bad fix but okay..
 
 		local model = v.modelEnt
 		local sprite = v.spriteMaterial
