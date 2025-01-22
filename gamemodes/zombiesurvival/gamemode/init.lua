@@ -4003,10 +4003,13 @@ function GM:PlayerSpawn(pl)
 		pl:SetViewOffsetDucked(DEFAULT_VIEW_OFFSET_DUCKED)
 
 		if self.ZombieEscape then
+			local randomprimary = table.Random(self.ZombieEscapeWeaponsPrimary)
+			local randomsecondary = table.Random(self.ZombieEscapeWeaponsSecondary)
+			
 			pl:Give("weapon_zs_zeknife")
 			pl:Give("weapon_zs_zegrenade")
-			pl:Give(table.Random(self.ZombieEscapeWeaponsPrimary))
-			pl:Give(table.Random(self.ZombieEscapeWeaponsSecondary))
+			pl:Give(randomprimary)
+			pl:Give(randomsecondary)
 		else
 			local start = pl:GetRandomStartingItem()
 			if start then
