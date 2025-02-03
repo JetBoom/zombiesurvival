@@ -186,7 +186,7 @@ function PANEL:DoClick()
 	if self.ClassTable then
 		if self.ClassTable.Boss then
 			RunConsoleCommand("zs_bossclass", self.ClassTable.Name)
-			GAMEMODE:CenterNotify(translate.Format("boss_class_select", self.ClassTable.Name))
+			GAMEMODE:CenterNotify(translate.Format("boss_class_select", translate.Get(GAMEMODE.ZombieClasses[self.ClassTable.Name].TranslationName)))
 		else
 			net.Start("zs_changeclass")
 				net.WriteString(self.ClassTable.Name)
