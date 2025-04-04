@@ -132,6 +132,9 @@ local HITGROUP_LEFTLEG = HITGROUP_LEFTLEG
 local HITGROUP_RIGHTLEG = HITGROUP_RIGHTLEG
 local math_max = math.max
 
+local util_GetModelInfo = util.GetModelInfo
+local util_KeyValuesToTable = util.KeyValuesToTable
+
 local M_Player = FindMetaTable("Player")
 
 local P_GetBarricadeGhosting = M_Player.GetBarricadeGhosting
@@ -876,6 +879,78 @@ function GM:CreateZombieGas()
 				ent:Spawn()
 			end
 		end
+	end
+end
+
+-- https://developer.valvesoftware.com/w/index.php?title=Prop_door_rotating&oldid=467623#L4D_Series_Doors
+-- Cache of `door_options` "pound" sounds found in door model QC keyvalues
+-- Each model key maps to a table where key -1 is the default, and other keys (0, 1, ...) are skin overrides
+--   These tables also contain a special `__index` metamethod that will return the value stored at `-1`
+--   if the requested value doesn't exist, further simplifying retrieval logic
+GM.BreakableDoorModelsToHitSounds = {}
+
+-- Contains a special `__index` metamethod
+local doorHitSoundTableMeta = {
+	__index = function(t, key)
+		return rawget(t, key) or rawget(t, -1)
+	end
+}
+
+local function getDoorHitSoundsFromModel(mdl)
+	-- Retrieve and verify model info
+	local info = util_GetModelInfo(mdl)
+	if not info then return false end
+
+	local keyvalues = util_KeyValuesToTable(info["ModelKeyValues"])
+	if not keyvalues then return false end
+
+	local doorOptions = keyvalues["door_options"]
+	if not doorOptions then return false end
+
+	local result = {}
+
+	-- Extract default "pound" sound (from "defaults" or "default")
+	local defaultBlock
+	-- Also removes the extracted key from the `doorOptions` table to avoid wasteful
+	-- iteration later on
+	defaultBlock, doorOptions["defaults"] = doorOptions["defaults"], nil
+	if not defaultBlock then
+		-- It appears these KVs can also be stored in the "default" block, so check that
+		-- if "defaults" was absent
+		defaultBlock, doorOptions["default"] = doorOptions["default"], nil
+	end
+
+	if defaultBlock and defaultBlock["pound"] then
+		result[-1] = defaultBlock["pound"]
+	end
+
+	-- Extract any skin-specific "pound" sounds (e.g., "skin0", "skin1", ...)
+	for key, block in pairs(doorOptions) do
+		local skinNum = key:match("^skin(%d+)$")
+		if skinNum then
+			skinNum = tonumber(skinNum)
+			if block and block["pound"] then
+				result[skinNum] = block["pound"]
+			end
+		end
+	end
+
+	-- Add metatable with special `__index` metamethod to output table
+	return setmetatable(result, doorHitSoundTableMeta)
+end
+
+-- Doors with compatible models can still have their breakable properties enabled later on via entity I/O,
+-- so this behavior must be accommodated universally
+function GM:SetupBreakablePropDoor(door)
+	local doorModel = door:GetModel()
+	-- Keeping a record of the original door model is necessary, as its model will change
+	-- with damage (and the model-keys used by GM.BreakableDoorModelsToHitSounds won't)
+	door.m_DoorOriginalModel = doorModel
+	-- Note the disctinction between this null check and `not GM.BreakableDoorModelsToHitSounds[doorModel]` (see below)
+	if self.BreakableDoorModelsToHitSounds[doorModel] == nil then
+		-- Evaluates to `false` instead of `nil` for non-breakable doors (useful above; helps to prevent repeats of logic
+		-- for the same model later on)
+		self.BreakableDoorModelsToHitSounds[doorModel] = getDoorHitSoundsFromModel(doorModel)
 	end
 end
 
@@ -1823,6 +1898,9 @@ function GM:InitPostEntityMap(fromze)
 	for _, ent in pairs(ents.FindByClass("func_physbox_multiplayer")) do
 		ent.IsPhysbox = true
 		ent.IgnoreZEProtect = true
+	end
+	for _, ent in ipairs(ents.FindByClass("prop_door_rotating")) do
+		gamemode.Call("SetupBreakablePropDoor", ent)
 	end
 
 	for _, ent in pairs(ents.FindByClass("item_*")) do ent.NoNails = true end
@@ -2808,7 +2886,34 @@ function GM:EntityTakeDamage(ent, dmginfo)
 		end
 
 		if dmginfo:GetDamage() >= 20 and attacker:IsPlayer() and attacker:Team() == TEAM_UNDEAD then
-			ent:EmitSound(math.random(2) == 1 and "npc/zombie/zombie_pound_door.wav" or "ambient/materials/door_hit1.wav")
+			-- If the door is lacking an `m_DoorOriginalModel` field, set it up accordingly
+			-- (This could theoretically happen if the door was spawned after InitPostEntityMap)
+			if not ent.m_DoorOriginalModel and ent:GetModel() then
+				gamemode.Call("SetupBreakablePropDoor", ent)
+			end
+			-- Get the breakable door model hitsounds table for this door model (if it exists);
+			-- also check first to see if `m_DoorOriginalModel` even exists on `ent` (which it always should),
+			-- circumventing errors if a `prop_door_rotating` was spawned after `GM:PostEntityMap`
+			local breakableDoorModelHitSounds = ent.m_DoorOriginalModel and self.BreakableDoorModelsToHitSounds[ent.m_DoorOriginalModel]
+			-- Because of these hitsound tables' `__index` metamethod, indexing a key not present
+			-- in the table will instead evaluate to whatever is stored at index `-1` (the default
+			-- hit sound for that door, if it exists)
+			local hitSound = breakableDoorModelHitSounds and breakableDoorModelHitSounds[ent:GetSkin()]
+			-- Fall back to the regular ZS behavior when neither the current skin has a "pound" sound override
+			-- nor a default
+			if breakableDoorModelHitSounds and hitSound then
+				ent:EmitSound(hitSound)
+			else
+				ent:EmitSound(math.random(2) == 1 and "npc/zombie/zombie_pound_door.wav" or "ambient/materials/door_hit1.wav")
+			end
+		end
+
+		-- If `GM.OnlyUndeadCanGibDoors` (zs_onlyzombiescangibdoors) is enabled and the attacker is anything but,
+		-- undead temporarily disable the door's native breakability (and restore in `GM:PostEntityTakeDamage`
+		-- AFTER the current damage event has finished taking place)
+		if self.OnlyUndeadCanGibDoors and ent:IsDoorNativelyBreakable() and (not attacker:IsPlayer() or attacker:Team() ~= TEAM_UNDEAD) then
+			ent:SetSaveValue("m_bBreakable", false)
+			ent.m_bWasBreakableBeforeDmg = true
 		end
 
 		if self.ZombieEscape then
@@ -2948,6 +3053,19 @@ function GM:EntityTakeDamage(ent, dmginfo)
 			self:DamageFloater(attacker, ent, dmgpos, dmg)
 		elseif hasdmgsess and dispatchdamagedisplay then
 			attacker:CollectDamageNumberSession(dmg, dmgpos, ent:IsPlayer())
+		end
+	end
+end
+
+function GM:PostEntityTakeDamage(ent, dmginfo, wasDamageTaken)
+	local entclass = ent:GetClass()
+
+	if entclass == "prop_door_rotating" then
+		-- If this door was breakable before the current damage event began...
+		if ent.m_bWasBreakableBeforeDmg then
+			-- Restore the door's native breakability state
+			ent:SetSaveValue("m_bBreakable", true)
+			ent.m_bWasBreakableBeforeDmg = nil
 		end
 	end
 end

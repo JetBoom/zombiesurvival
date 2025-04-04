@@ -105,6 +105,11 @@ cvars.AddChangeCallback("zs_repairpointsperhealth", function(cvar, oldvalue, new
 	GAMEMODE.RepairPointsPerHealth = tonumber(newvalue) or 1
 end)
 
+GM.OnlyUndeadCanGibDoors = CreateConVar("zs_onlyzombiescangibdoors", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Specifies only the undead can gib doors marked as breakable (L4D-style doors)."):GetBool()
+cvars.AddChangeCallback("zs_onlyzombiescangibdoors", function(cvar, oldvalue, newvalue)
+	GAMEMODE.OnlyUndeadCanGibDoors = tobool(newvalue)
+end)
+
 local function GetMostKey(key, top)
 	top = top or 0
 	local toppl
