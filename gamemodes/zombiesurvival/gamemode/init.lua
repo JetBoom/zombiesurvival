@@ -914,11 +914,6 @@ local function getDoorHitSoundsFromModel(mdl)
 	-- Also removes the extracted key from the `doorOptions` table to avoid wasteful
 	-- iteration later on
 	defaultBlock, doorOptions["defaults"] = doorOptions["defaults"], nil
-	if not defaultBlock then
-		-- It appears these KVs can also be stored in the "default" block, so check that
-		-- if "defaults" was absent
-		defaultBlock, doorOptions["default"] = doorOptions["default"], nil
-	end
 
 	if defaultBlock and defaultBlock["pound"] then
 		result[-1] = defaultBlock["pound"]
