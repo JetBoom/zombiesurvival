@@ -219,7 +219,14 @@ end
 
 function meta:AddOnOutput(key, value)
 	self[key] = self[key] or {}
-	local tab = string.Explode(",", value)
+
+	-- Newer Source Engine games use this symbol as a delimiter
+	local tab = string.Explode("\x1B", value)
+	-- Fall back to comma-delimited array when necessary
+	if (#tab < 2) then
+		tab = string.Explode(",", value)
+	end
+
 	table.insert(self[key], {entityname=tab[1], input=tab[2], args=tab[3], delay=tab[4], reps=tab[5]})
 end
 
