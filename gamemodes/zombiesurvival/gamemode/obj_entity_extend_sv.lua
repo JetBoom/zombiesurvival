@@ -7,8 +7,21 @@ function meta:SetCollisionGroup(g)
 	o(self, g)
 end]]
 
+--[[
+	From the Garry's Mod Wiki (https://wiki.facepunch.com/gmod/Entity:GetSaveTable):
+
+	It is highly recommended to use Entity:GetInternalVariable for retrieving a single
+	key of the save table for performance reasons.
+--]]
+
 function meta:IsDoorLocked()
-	return self:GetSaveTable().m_bLocked
+	return self:GetInternalVariable("m_bLocked")
+end
+
+-- Figured "Natively" is a must when just about everything in this gamemode is destructible
+-- but through self-implemented means (not mechanics "native" to the game engine)
+function meta:IsDoorNativelyBreakable()
+	return self:GetInternalVariable("m_bBreakable") -- This can also change through entity I/O
 end
 
 function meta:HealPlayer(pl, amount, pointmul, nobymsg, poisononly)
