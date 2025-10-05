@@ -9,7 +9,7 @@ STATTRACK_TYPE_ZOMBIECLASS = 2
 STATTRACK_TYPE_ROUND = 3
 STATTRACK_TYPE_SKILL = 4
 
-hook.Add("Initialize", "ZSProfiler", function()
+hook.Add("Initialize", "ZSStatTrack", function()
 	file.CreateDir(stattrack.Folder)
 
 	for _, map in pairs({"tantibus", "serious_sam", "gauntlet", "high_noon", "croak"}) do
