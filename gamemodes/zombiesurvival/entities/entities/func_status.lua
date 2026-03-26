@@ -46,8 +46,7 @@ function ENT:KeyValue(key, value)
 	if key == "enabled" then
 		self.On = tonumber(value) == 1
 	elseif key == "status" then
-		local val = string.lower(value)
-		self.Status = (val == "slow" or val == "dimvision" or val == "enfeeble" or val == "frost") and val or "slow"
+		self.Status = string.lower(value)
 	elseif key == "linger" then
 		self.Linger = tonumber(value) == 1
 	elseif key == "duration" then
