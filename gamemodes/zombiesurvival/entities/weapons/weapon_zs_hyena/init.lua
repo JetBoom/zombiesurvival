@@ -4,6 +4,7 @@ SWEP.Primary.Projectile = "projectile_bomb_sticky"
 SWEP.Primary.ProjVelocity = 850
 
 function SWEP:EntModify(ent)
+	ent:SetChargeTime(self.StickyBombChargeTime)
 	self:SetNextSecondaryFire(CurTime() + 0.2)
 end
 

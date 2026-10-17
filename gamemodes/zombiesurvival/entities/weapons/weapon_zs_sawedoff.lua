@@ -79,12 +79,13 @@ SWEP.DryFireSound = Sound("Weapon_Shotgun.Empty")
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -1.125, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -1.069, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Splinter' Slug Gun", "Single accurate slug round, less total damage", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Splinter' Slug Gun", "Single accurate slug round, less total damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 5.5
 	wept.Primary.NumShots = 1
 	wept.ConeMin = wept.ConeMin * 0.15
 	wept.ConeMax = wept.ConeMax * 0.3
 end)
+branch.TranslationID = "sawedoff_branch_1"
 
 SWEP.ReloadStartActivity = ACT_VM_RELOAD
 SWEP.ReloadActivity = ACT_VM_HOLSTER

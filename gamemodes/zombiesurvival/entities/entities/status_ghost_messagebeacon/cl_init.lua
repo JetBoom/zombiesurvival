@@ -5,7 +5,7 @@ ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 function ENT:Think()
 	self:RecalculateValidity()
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.05)
 	return true
 end
 

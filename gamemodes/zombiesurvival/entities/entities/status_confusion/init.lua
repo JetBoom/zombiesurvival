@@ -15,9 +15,15 @@ end
 
 function ENT:Think()
 	local owner = self:GetOwner()
-	if CurTime() >= self:GetEndTime() or self.EyeEffect and owner:IsValid() and owner:WaterLevel() >= 3 then
+	local curtime = CurTime()
+
+	if curtime >= self:GetEndTime() or (self.EyeEffect and owner:IsValid() and owner:WaterLevel() >= 3) then
 		self:Remove()
+		return
 	end
+
+	self:NextThink(math.min(self:GetEndTime(), curtime + 0.25))
+	return true
 end
 
 function ENT:OnRemove()

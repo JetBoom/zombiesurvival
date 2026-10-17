@@ -32,7 +32,7 @@ function ENT:Draw()
 		end
 
 		if owner:IsValid() and owner:IsPlayer() then
-			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 120, owner == MySelf and COLOR_LBLUE or COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw.SimpleText(translate.Format("deployable_owner_format", owner:ClippedName()), "ZS3D2DFont2Small", 0, 120, owner == MySelf and COLOR_LBLUE or COLOR_GRAY, TEXT_ALIGN_CENTER)
 		end
 
 	cam.End3D2D()

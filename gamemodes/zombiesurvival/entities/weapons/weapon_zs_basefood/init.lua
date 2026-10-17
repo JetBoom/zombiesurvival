@@ -2,20 +2,26 @@ INC_SERVER()
 
 function SWEP:Eat()
 	local owner = self:GetOwner()
+	local C = GAMEMODE.SkillConstants
 
 	if owner:IsSkillActive(SKILL_SUGARRUSH) then
-		local boost = owner:GiveStatus("adrenalineamp", 14)
+		local boost = owner:GiveStatus("adrenalineamp", C.SugarRushDuration)
 		if boost and boost:IsValid() then
-			boost:SetSpeed(35)
+			boost:SetSpeed(C.SugarRushSpeedBonus)
 		end
 	end
 
-	local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+	local max = owner:IsSkillActive(SKILL_D_FRAIL)
+		and math.floor(owner:GetMaxHealth() * (C.FrailHealthCapPercent / 100))
+		or owner:GetMaxHealth()
 
 	if owner:IsSkillActive(SKILL_GLUTTON) then
 		local healing = self.FoodHealth * (owner.FoodRecoveryMul or 1)
 
-		owner:SetBloodArmor(math.min(owner:GetBloodArmor() + (math.min(30, healing) * owner.BloodarmorGainMul), owner.MaxBloodArmor + (40 * owner.MaxBloodArmorMul)))
+		owner:SetBloodArmor(math.min(
+			owner:GetBloodArmor() + (math.min(30, healing) * owner.BloodarmorGainMul),
+			owner.MaxBloodArmor + (40 * owner.MaxBloodArmorMul)
+		))
 	else
 		local healing = self.FoodHealth * (owner:GetTotalAdditiveModifier("FoodRecoveryMul", "HealingReceived") - (owner:GetPhantomHealth() > 0.5 and 0.5 or 0))
 

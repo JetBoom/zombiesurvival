@@ -36,5 +36,5 @@ function ENT:Draw()
 	particle:SetAirResistance(12)
 	particle:SetColor(60, 170, 40)
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

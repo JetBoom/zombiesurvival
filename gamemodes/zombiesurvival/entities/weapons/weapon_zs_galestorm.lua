@@ -76,10 +76,13 @@ SWEP.Tier = 2
 SWEP.IronSightsPos = Vector(-7, 15, 0)
 SWEP.IronSightsAng = Vector(3, -3, -10)
 
+SWEP.StormFireDelayMul = 1.2
+SWEP.StormFireRatePercent = math.floor(100 / SWEP.StormFireDelayMul + 0.5)
+
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.7, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.4, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.01, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Whirlwind' Shower Rifle", "Uses rifle ammo, shoots slower, but more damage and more accuracy", function(wept)
+local branch1 = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Whirlwind' Shower Rifle", "Uses rifle ammo, shoots slower, but more damage and more accuracy", function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 4
 	wept.Primary.Damage = wept.Primary.Damage * 4
 	wept.Primary.Ammo = "357"
@@ -94,13 +97,14 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Whirlwind' Shower Rifle", "Uses rifle a
 		self:EmitSound("weapons/sg552/sg552-1.wav", 70, 235, 0.65, CHAN_AUTO)
 	end
 end)
+branch1.TranslationID = "galestorm_branch_1"
 
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 	local ironsights = self:GetIronsights()
 
-	self:SetNextPrimaryFire(CurTime() + self:GetFireDelay() * (ironsights and 1.2 or 1))
+	self:SetNextPrimaryFire(CurTime() + self:GetFireDelay() * (ironsights and self.StormFireDelayMul or 1))
 
 	self:EmitFireSound()
 	self:TakeAmmo()

@@ -159,7 +159,11 @@ function CLASS:PostRenderEffects(pl)
 end
 
 function CLASS:PrePlayerDraw(pl)
-	pl:RemoveAllDecals()
+	local now = CurTime()
+	if now >= (pl._nextFrostDecalClear or 0) then
+		pl._nextFrostDecalClear = now + 0.5
+		pl:RemoveAllDecals()
+	end
 
 	self:PreRenderEffects(pl)
 end

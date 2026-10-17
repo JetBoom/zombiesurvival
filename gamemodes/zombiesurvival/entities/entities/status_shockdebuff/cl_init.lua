@@ -19,7 +19,7 @@ function ENT:Draw()
 	emitter:SetNearClip(16, 24)
 
 	for i = 1, 3 do
-		particle = emitter:Add("trails/electric", pos + VectorRand() * 8)
+		local particle = emitter:Add("trails/electric", pos + VectorRand() * 8)
 		particle:SetDieTime(0.1)
 		particle:SetStartAlpha(230)
 		particle:SetEndAlpha(0)
@@ -32,5 +32,5 @@ function ENT:Draw()
 		particle:SetColor(150, 255, 150)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

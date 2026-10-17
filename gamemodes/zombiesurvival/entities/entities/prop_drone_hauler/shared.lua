@@ -47,19 +47,25 @@ end
 
 function ENT:BeingControlled()
 	local owner = self:GetObjectOwner()
-	if owner:IsValid() then
-		local wep = owner:GetActiveWeapon()
-		return wep:IsValid() and wep:GetClass() == "weapon_zs_dronecontrol" and wep:GetDTBool(0)
-	end
+	if not owner:IsValid() then return false end
 
-	return false
+	local wep = owner:GetActiveWeapon()
+	if not wep:IsValid() then return false end
+	if wep:GetClass() ~= "weapon_zs_dronecontrol" then return false end
+	if not wep:GetDTBool(0) then return false end
+
+	if wep.GetDrone and wep:GetDrone() ~= self then return false end
+
+	return true
 end
 
 local M_Player = FindMetaTable("Player")
 local P_Team = M_Player.Team
 local temp_attacker
 local function ManualTraceFilter(ent)
-	if ent == temp_attacker or getmetatable(ent) == M_Player and P_Team(ent) == TEAM_HUMAN or ent.FHB or ent.IsCreeperNest then
+	if ent == temp_attacker
+	or ent:IsPlayer() and P_Team(ent) == TEAM_HUMAN
+	or ent.FHB or ent.IsCreeperNest then
 		return false
 	end
 

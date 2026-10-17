@@ -3,6 +3,38 @@ function GM:ConCommandErrorMessage(pl, message)
 	pl:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
 end
 
+local function ResolveItemDisplayName(pl, itemtab)
+	if itemtab.SWEP then
+		local weptbl = weapons.Get(itemtab.SWEP)
+		if weptbl then
+			return translate.ClientWeaponName(pl, weptbl)
+		end
+
+		local invdata = GAMEMODE.ZSInventoryItemData[itemtab.SWEP]
+		if invdata and invdata.TranslationID then
+			return translate.ClientItemName(pl, invdata.TranslationID, invdata.TranslationPrefix)
+				or itemtab.Name
+		end
+
+		return itemtab.Name
+	end
+
+	local name = itemtab.Name
+	if type(name) == "string" and name:sub(1, 1) == "#" then
+		local key = name:sub(2)
+		if itemtab.DisplayCount then
+			return translate.ClientFormat(pl, key, itemtab.DisplayCount)
+		end
+		return translate.ClientGet(pl, key)
+	end
+
+	if type(name) == "string" and translate.Exists(name) then
+		return translate.ClientGet(pl, name)
+	end
+
+	return name
+end
+
 concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 	if not (sender:IsValid() and sender:IsConnected() and sender:IsValidLivingHuman()) or #arguments == 0 then return end
 	local usescrap = arguments[2]
@@ -35,17 +67,19 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 	local cost = itemtab.Price
 
 	if GAMEMODE:IsClassicMode() and itemtab.NoClassicMode then
-		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "cant_use_x_in_classic", itemtab.Name))
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "cant_use_x_in_classic", ResolveItemDisplayName(sender, itemtab)))
 		return
 	end
 
 	if GAMEMODE.ZombieEscape and itemtab.NoZombieEscape then
-		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "cant_use_x_in_zombie_escape", itemtab.Name))
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "cant_use_x_in_zombie_escape", ResolveItemDisplayName(sender, itemtab)))
 		return
 	end
 
 	if itemtab.SkillRequirement and not sender:IsSkillActive(itemtab.SkillRequirement) then
-		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", itemtab.Name))
+		local reqskill = GAMEMODE.Skills[itemtab.SkillRequirement]
+		local skillname = translate.ClientSkillName(sender, itemtab.SkillRequirement, reqskill)
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", skillname))
 		return
 	end
 
@@ -125,7 +159,9 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 		sender:TakePoints(cost)
 		sender:SendLua("surface.PlaySound(\"ambient/levels/labs/coinslot1.wav\")")
 	end
-	sender:PrintTranslatedMessage(HUD_PRINTTALK, usescrap and "created_x_for_y_scrap" or "purchased_x_for_y_points", itemtab.Name, cost)
+	local display_name = ResolveItemDisplayName(sender, itemtab)
+
+	sender:PrintTranslatedMessage(HUD_PRINTTALK, usescrap and "created_x_for_y_scrap" or "purchased_x_for_y_points", display_name, cost)
 
 	GAMEMODE:AddItemStocks(id, -1)
 
@@ -170,15 +206,25 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 	if invitem and not sender:HasInventoryItem(invitem) then return end
 
 	local active = sender:GetActiveWeapon()
-	local contents, wtbl = active:GetClass()
+	if not (active and active:IsValid()) then return end
+
+	local contents = active:GetClass()
+	if not contents then return end
+
+	local wtbl
 	if not invitem then
 		wtbl = weapons.Get(contents)
-		if wtbl.NoDismantle or not (wtbl.AllowQualityWeapons or wtbl.PermitDismantle) then
+
+		if not wtbl or wtbl.NoDismantle
+			or not (wtbl.AllowQualityWeapons or wtbl.PermitDismantle) then
 			GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "cannot_dismantle"))
 			return
 		end
 
-		if wtbl.AmmoIfHas and sender:GetAmmoCount(wtbl.Primary.Ammo) == 0 and active:Clip1() == 0 then
+		local primaryAmmo = wtbl.Primary and wtbl.Primary.Ammo
+		if wtbl.AmmoIfHas and primaryAmmo
+			and sender:GetAmmoCount(primaryAmmo) == 0
+			and active:Clip1() == 0 then
 			sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
 			return
 		end
@@ -186,7 +232,8 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 		potinv = GAMEMODE.Breakdowns[contents]
 	else
 		itypecat = GAMEMODE:GetInventoryItemType(invitem)
-		if itypecat ~= INVCAT_TRINKETS or GAMEMODE.ZSInventoryItemData[invitem].PermitDismantle then
+		if itypecat ~= INVCAT_TRINKETS
+			or GAMEMODE.ZSInventoryItemData[invitem].PermitDismantle then
 			GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "cannot_dismantle"))
 			return
 		end
@@ -194,7 +241,9 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 		potinv = GAMEMODE.Breakdowns[invitem]
 	end
 
-	local scrap = GAMEMODE:GetDismantleScrap(wtbl or GAMEMODE.ZSInventoryItemData[invitem], invitem)
+	local scrap = GAMEMODE:GetDismantleScrap(
+		wtbl or GAMEMODE.ZSInventoryItemData[invitem], invitem)
+
 	net.Start("zs_ammopickup")
 		net.WriteUInt(scrap, 16)
 		net.WriteString("scrap")
@@ -206,7 +255,7 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 	else
 		sender:GetActiveWeapon():EmptyAll(true)
 
-		if wtbl and wtbl.AmmoIfHas then
+		if wtbl and wtbl.AmmoIfHas and wtbl.Primary then
 			sender:RemoveAmmo(1, wtbl.Primary.Ammo)
 		end
 
@@ -214,11 +263,11 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 		sender:UpdateAltSelectedWeapon()
 	end
 
-	GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, invitem or contents, "Disassembles", 1)
+	GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON,
+		invitem or contents, "Disassembles", 1)
 
 	if potinv and potinv.Result then
 		sender:AddInventoryItem(potinv.Result)
-
 		net.Start("zs_invitem")
 			net.WriteString(potinv.Result)
 		net.Send(sender)
@@ -268,8 +317,31 @@ concommand.Add("zs_upgrade", function(sender, command, arguments)
 		return
 	end
 
-	local upgname = classtbl.PrintName
-	sender:CenterNotify(COLOR_CYAN, translate.ClientGet(sender, "remantle_success"), color_white, " "..upgname)
+	local upgname = translate.ClientWeaponName(sender, classtbl)
+	local remantle_header = translate.ClientGet(sender, "remantle_success")
+	local remantle_prefix = translate.ClientFormat(sender, "remantle_success_prefix", remantle_header, upgname)
+	local remantle_suffix = translate.ClientFormat(sender, "remantle_success_suffix", remantle_header, upgname)
+
+	if remantle_prefix ~= "" and not remantle_prefix:find("%s$") then
+		remantle_prefix = remantle_prefix .. " "
+	end
+	if remantle_suffix ~= "" and not remantle_suffix:find("^%s") then
+		remantle_suffix = " " .. remantle_suffix
+	end
+
+	local args = {}
+	if remantle_prefix ~= "" then
+		args[#args + 1] = COLOR_CYAN
+		args[#args + 1] = remantle_prefix
+	end
+	args[#args + 1] = COLOR_WHITE
+	args[#args + 1] = upgname
+	if remantle_suffix ~= "" then
+		args[#args + 1] = COLOR_CYAN
+		args[#args + 1] = remantle_suffix
+	end
+
+	sender:CenterNotify(unpack(args))
 	sender:SendLua("surface.PlaySound(\"buttons/lever"..math.random(5)..".wav\")")
 	sender:RemoveAmmo(scrapcost, "scrap")
 
@@ -338,9 +410,11 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
 		local tab = FindStartingItem(id)
 		if tab and not hasalready[id] then
 			if tab.SkillRequirement and not sender:IsSkillActive(tab.SkillRequirement) then
-				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", tab.Name))
+				local reqskill = GAMEMODE.Skills[tab.SkillRequirement]
+				local skillname = translate.ClientSkillName(sender, tab.SkillRequirement, reqskill)
+				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", skillname))
 			elseif tab.NoClassicMode and GAMEMODE:IsClassicMode() then
-				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", tab.Name))
+				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", ResolveItemDisplayName(sender, tab)))
 			elseif tab.Callback then
 				tab.Callback(sender)
 				hasalready[id] = true
@@ -624,4 +698,20 @@ concommand.Add("zs_shitmap_tomover", function(sender, command, arguments)
 	if ent then
 		sender:SetPos(ent:WorldSpaceCenter())
 	end
+end)
+
+-- ============================================================
+-- Backup in case the client didn't send the block
+-- (e.g. a modified client). We duplicate the LMB/RMB block
+-- with a server-side PlayerBindPress for non-ZS weapons during ghosting.
+-- ============================================================
+hook.Add("PlayerBindPress", "ZS_NonZS_GhostBlockAttack_SV", function(ply, bind, pressed)
+	if not pressed then return end
+	if bind ~= "+attack" and bind ~= "+attack2" then return end
+	if not IsValid(ply) or not ply:GetBarricadeGhosting() then return end
+
+	local wep = ply:GetActiveWeapon()
+	if IsValid(wep) and wep:GetClass():sub(1, 10) == "weapon_zs_" then return end
+
+	return true
 end)

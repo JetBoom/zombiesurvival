@@ -130,7 +130,7 @@ function ENT:Think()
 				particle:SetVelocity(VectorRand():GetNormal() * 20)
 			end
 
-			emitter:Finish() emitter = nil collectgarbage("step", 64)
+			emitter:Finish()
 		end
 	else
 		self.AmbientSound:Stop()

@@ -27,6 +27,13 @@ function ENT:OnInitialize()
 	self.ShieldMaterial = CreateMaterial("shadeshield" .. self:EntIndex(), "Aftershock_dx9", materialp)
 end
 
+function ENT:OnRemove()
+	hook.Remove("Move", self)
+	hook.Remove("CreateMove", self)
+	hook.Remove("ShouldDrawLocalPlayer", self)
+	self.BaseClass.OnRemove(self)
+end
+
 function ENT:Think()
 	local curtime = CurTime()
 
@@ -53,7 +60,7 @@ function ENT:Think()
 			particle:SetEndSize(math.Rand(12, 14))
 			particle:SetColor(0, 140, 255)
 
-			emitter:Finish() emitter = nil collectgarbage("step", 64)
+			emitter:Finish()
 		end
 	elseif self:GetState() == 1 then
 		self.AmbientSound:Stop()

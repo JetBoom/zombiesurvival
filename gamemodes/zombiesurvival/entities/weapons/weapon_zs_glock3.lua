@@ -43,7 +43,7 @@ SWEP.IronSightsPos = Vector(-5.75, 10, 2.7)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.9, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.5, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but more accurate shots, higher base damage, and a chance to gain reaper stacks", function(wept)
+local branch1 = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but more accurate shots, higher base damage, and a chance to gain reaper stacks", function(wept)
 	wept.Primary.NumShots = 2
 	wept.Primary.Damage = wept.Primary.Damage * 1.2
 	wept.ConeMin = wept.ConeMin * 0.65
@@ -59,13 +59,15 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Collider' Glock 3", "Fires 1 less but m
 		end
 	end
 end)
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Shroud' SOCOM Mark 23", "Fires 1 shot, hides your aura, deals less total damage but is more accurate", function(wept)
+branch1.TranslationID = "glock3_branch_1"
+local branch2 = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Shroud' SOCOM Mark 23", "Fires 1 shot, hides your aura, deals less total damage but is more accurate", function(wept)
 	wept.Primary.NumShots = 1
 	wept.Primary.Damage = wept.Primary.Damage * 2.3
 	wept.Primary.Delay = 0.2
 	wept.ConeMin = wept.ConeMin * 0.3
 	wept.ConeMax = wept.ConeMax * 0.4
 	wept.Primary.Sound = Sound("weapons/usp/usp1.wav")
+	wept.NumShotsReduction = 1
 
 	wept.VElements = {
 		["detail"] = { type = "Model", model = "models/Mechanics/wheels/wheel_extruded_48.mdl", bone = "ValveBiped.Bip01_Spine4", rel = "bottom2", pos = Vector(0, -1.64, 0), angle = Angle(0, 0, -90), size = Vector(0.014, 0.014, 0.014), color = Color(190, 190, 190, 255), surpresslightning = false, material = "models/props_combine/metal_combinebridge001", skin = 0, bodygroup = {} },
@@ -93,6 +95,8 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Shroud' SOCOM Mark 23", 
 		return 512
 	end
 end)
-branch.Colors = {Color(170, 170, 170), Color(120, 120, 120), Color(70, 70, 70)}
-branch.NewNames = {"Cloaked", "Covert", "Silent"}
-branch.Killicon = "weapon_zs_shroud"
+branch2.Colors = {Color(170, 170, 170), Color(120, 120, 120), Color(70, 70, 70)}
+branch2.TranslationID = "glock3_branch_2"
+branch2.NewNames = {"Cloaked", "Covert", "Silent"}
+branch2.NewNameIDs = {"cloaked", "covert", "silent"}
+branch2.Killicon = "weapon_zs_shroud"

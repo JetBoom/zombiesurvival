@@ -51,7 +51,7 @@ SWEP.IronSightsAng = Vector(0, 0, 0)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.01, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEADSHOT_MULTI, 0.07)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Comrade' Micronaut Rifle", "Reduced accuracy, damage but increased clip size and fires additional projectiles", function(wept)
+local branch1 = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Comrade' Micronaut Rifle", "Reduced accuracy, damage but increased clip size and fires additional projectiles", function(wept)
 	wept.ConeMax = wept.ConeMax * 1.5
 	wept.ConeMin = wept.ConeMin * 1.5
 	wept.Primary.Damage = wept.Primary.Damage * 0.8
@@ -96,7 +96,8 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Comrade' Micronaut Rifle", "Reduced acc
 		owner:LagCompensation(false)
 	end
 end)
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Horizon' Battle Rifle", "Extremely accurate, more damage and fires in slow bursts", function(wept)
+branch1.TranslationID = "amigo_branch_1"
+local branch2 = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Horizon' Battle Rifle", "Extremely accurate, more damage and fires in slow bursts", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.12
 	wept.Primary.Delay = wept.Primary.Delay * 6
 	wept.Primary.BurstShots = 3
@@ -195,9 +196,11 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Horizon' Battle Rifle", 
 		end
 	end
 end)
-branch.Colors = {Color(110, 160, 170), Color(90, 140, 150), Color(70, 120, 130)}
-branch.NewNames = {"Focused", "Transfixed", "Orphic"}
-branch.Killicon = "weapon_zs_battlerifle"
+branch2.Colors = {Color(110, 160, 170), Color(90, 140, 150), Color(70, 120, 130)}
+branch2.TranslationID = "amigo_branch_2"
+branch2.NewNames = {"Focused", "Transfixed", "Orphic"}
+branch2.NewNameIDs = {"focused", "transfixed", "orphic"}
+branch2.Killicon = "weapon_zs_battlerifle"
 
 function SWEP:IsScoped()
 	return self:GetIronsights() and self.fIronTime and self.fIronTime + 0.25 <= CurTime()

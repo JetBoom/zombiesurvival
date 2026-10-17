@@ -7,9 +7,8 @@ SWEP.Slot = 2
 SWEP.SlotPos = 0
 
 if CLIENT then
-	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 60
-
+    SWEP.ViewModelFlip = false
 	SWEP.HUD3DBone = "v_weapon.ump45_Release"
 	SWEP.HUD3DPos = Vector(-1.5, -3, 2)
 	SWEP.HUD3DAng = Angle(0, 0, 0)
@@ -80,18 +79,18 @@ if not CLIENT then return end
 function SWEP:Draw3DHUD(vm, pos, ang)
 	self.BaseClass.Draw3DHUD(self, vm, pos, ang)
 
+	local owner = self:GetOwner()
+	local ownerstatus = owner:GetStatus("reaper")
+	if not ownerstatus then return end
+
 	local wid, hei = 180, 200
 	local x, y = wid * -0.6, hei * -0.5
+	local text = "+"
+	for i = 2, ownerstatus:GetDTInt(1) do
+		text = text .. "+"
+	end
 
 	cam.Start3D2D(pos, ang, self.HUD3DScale)
-		local owner = self:GetOwner()
-		local ownerstatus = owner:GetStatus("reaper")
-		if ownerstatus then
-			local text = ""
-			for i = 0, ownerstatus:GetDTInt(1)-1 do
-				text = text .. "+"
-			end
-			draw.SimpleTextBlurry(text, "ZS3D2DFontSmall", x + wid/2, y + hei * 0.15, Color(60, 30, 175, 230), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		end
+		draw.SimpleTextBlurry(text, "ZS3D2DFontSmall", x + wid/2, y + hei * 0.15, Color(60, 30, 175, 230), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 end

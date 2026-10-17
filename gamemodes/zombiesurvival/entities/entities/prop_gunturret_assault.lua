@@ -27,7 +27,7 @@ function ENT:Initialize()
 		ent:SetMaterial("phoenix_storms/torpedo")
 		ent:SetColor(Color(70, 70, 70))
 
-		matrix = Matrix()
+		local matrix = Matrix()
 		matrix:Scale(Vector(1.1, 0.9, 0.9))
 		ent:EnableMatrix("RenderMultiply", matrix)
 
@@ -44,7 +44,7 @@ function ENT:Initialize()
 		ent:SetMaterial("phoenix_storms/torpedo")
 		ent:SetColor(Color(70, 70, 70))
 
-		matrix = Matrix()
+		local matrix = Matrix()
 		matrix:Scale(Vector(1.1, 0.9, 0.9))
 		ent:EnableMatrix("RenderMultiply", matrix)
 
@@ -61,7 +61,7 @@ function ENT:Initialize()
 		ent:SetMaterial("phoenix_storms/torpedo")
 		ent:SetColor(Color(100, 100, 100))
 
-		matrix = Matrix()
+		local matrix = Matrix()
 		matrix:Scale(Vector(0.65, 0.65, 1.5))
 		ent:EnableMatrix("RenderMultiply", matrix)
 
@@ -78,7 +78,7 @@ function ENT:Initialize()
 		ent:SetMaterial("phoenix_storms/torpedo")
 		ent:SetColor(Color(100, 100, 100))
 
-		matrix = Matrix()
+		local matrix = Matrix()
 		matrix:Scale(Vector(0.25, 0.15, 0.7))
 		ent:EnableMatrix("RenderMultiply", matrix)
 

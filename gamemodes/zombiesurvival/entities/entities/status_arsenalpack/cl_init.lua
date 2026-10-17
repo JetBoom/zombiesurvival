@@ -11,8 +11,16 @@ function ENT:Draw()
 	local owner = self:GetOwner()
 	if not owner:IsValid() or owner == MySelf and not owner:ShouldDrawLocalPlayer() then return end
 
-	local boneid = owner:LookupBone("ValveBiped.Bip01_Spine2")
-	if not boneid or boneid <= 0 then return end
+	-- LookupBone — expensive operation. The player model changes
+	-- only on spawn / class change, so we cache by model.
+	local boneid = self._CachedBoneId
+	local mdl = owner:GetModel()
+	if not boneid or self._CachedBoneModel ~= mdl then
+		boneid = owner:LookupBone("ValveBiped.Bip01_Spine2")
+		self._CachedBoneId = boneid
+		self._CachedBoneModel = mdl
+		if not boneid or boneid <= 0 then return end
+	end
 
 	local bonepos, boneang = owner:GetBonePositionMatrixed(boneid)
 
@@ -38,7 +46,7 @@ function ENT:Draw()
 		local w, h = 420, 200
 		cam.Start3D2D(self:LocalToWorld(Vector(0, 0, self:OBBMaxs().z)), self:GetAngles(), 0.025)
 			draw.RoundedBox(64, w * -0.5, h * -0.5, w, h, color_black_alpha120)
-			draw.SimpleText(translate.Get("arsenal_crate"), "ZS3D2DFont2", 0, 0, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(translate.Get("arsenal_crate_trinket"), "ZS3D2DFont2", 0, 0, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		cam.End3D2D()
 	end
 end

@@ -36,29 +36,28 @@ end
 
 function ENT:RenderInfo(pos, ang, owner)
 	cam.Start3D2D(pos, ang, 0.075)
-		draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, -130, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(translate.Get("resupply_box_3d"), "ZS3D2DFont2", 0, -130, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		local caches = MySelf.Stowage and MySelf.StowageCaches
 
 		local timeremain = math.ceil(math.max(0, (MySelf.NextUse or 0) - CurTime()))
 		if MySelf.NextUse then
-			draw.SimpleText(timeremain > 0 and timeremain or translate.Get("ready"), "ZS3D2DFont2", 0, -60, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(timeremain > 0 and timeremain or translate.Get("ready_3d"), "ZS3D2DFont2", 0, -60, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		if caches then
-			draw.SimpleText(caches .. " Uses Left", "ZS3D2DFont2Small", 0, 0, caches > 0 and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(translate.Format("uses_left_x_3d", caches), "ZS3D2DFont2Small", 0, 0, caches > 0 and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1), nil, 190)
 
 		if owner:IsValid() and owner:IsPlayer() then
-			draw.SimpleText("("..owner:ClippedName()..")", "ZS3D2DFont2Small", 0, 30, owner == MySelf and COLOR_LBLUE or COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw.SimpleText(translate.Format("deployable_owner_format", owner:ClippedName()), "ZS3D2DFont2Small", 0, 30, owner == MySelf and COLOR_LBLUE or COLOR_GRAY, TEXT_ALIGN_CENTER)
 		end
 
 		if MySelf:Team() == TEAM_HUMAN then
-			local ammotype = GAMEMODE.CachedResupplyAmmoType
-			ammotype = GAMEMODE.AmmoNames[ammotype] or ammotype
+			local ammotype = translate.AmmoName(GAMEMODE.CachedResupplyAmmoType)
 
-			draw.SimpleText("["..ammotype.."]", "ZS3D2DFont2Smaller", 0, 70, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw.SimpleText(translate.Format("deployable_ammotype_format", ammotype), "ZS3D2DFont2Smaller", 0, 70, COLOR_GRAY, TEXT_ALIGN_CENTER)
 		end
 	cam.End3D2D()
 end
@@ -76,7 +75,7 @@ function ENT:Draw()
 
 	cam.Start3D2D(self:LocalToWorld(vOffsetEE), ang, 0.01)
 
-		draw.SimpleText("ur a faget", "ZS3D2DFont2", 0, 0, color_white, TEXT_ALIGN_CENTER)
+		draw.SimpleText(translate.Get("resupply_box_easter_3d"), "ZS3D2DFont2", 0, 0, color_white, TEXT_ALIGN_CENTER)
 
 	cam.End3D2D()
 end

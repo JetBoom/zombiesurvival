@@ -12,40 +12,45 @@ end
 function ENT:Think()
 end
 
-function ENT:AcceptInput(name, caller, activator, args)
-	name = string.lower(name)
-	if name == "message" then
-		args = args or ""
+function ENT:AcceptInput(name, activator, caller, data)
+	data = translate.MapText(data or "")
+	name = string.lower(name or "")
 
-		args = string.gsub(args, "<.-=.->", "")
-		args = string.gsub(args, "</.->", "")
+	if name == "message" then
+		data = data or ""
+		data = string.gsub(data, "<.-=.->", "")
+		data = string.gsub(data, "</.->", "")
 
 		local TextColor = Color(self.Red, self.Green, self.Blue)
-		
+
 		if self.SendTo == 0 then
 			if self.Position == "top" then
-				GAMEMODE:TopNotifyAll(TextColor, args, {CustomTime = self.DisplayTime})
+				GAMEMODE:TopNotifyAll(TextColor, data, {CustomTime = self.DisplayTime})
 			else
-				GAMEMODE:CenterNotifyAll(TextColor, args, {CustomTime = self.DisplayTime})
+				GAMEMODE:CenterNotifyAll(TextColor, data, {CustomTime = self.DisplayTime})
 			end
 		elseif self.SendTo == -1 then
-			for _, pl in pairs(player.GetAll()) do
-				if pl == activator or pl == caller then
-					if self.Position == "top" then
-						pl:TopNotify(TextColor, args, {CustomTime = self.DisplayTime})
-					else
-						pl:CenterNotify(TextColor, args, {CustomTime = self.DisplayTime})
-					end
-					break
+			local target
+			if IsValid(activator) and activator:IsPlayer() then
+				target = activator
+			elseif IsValid(caller) and caller:IsPlayer() then
+				target = caller
+			end
+
+			if target then
+				if self.Position == "top" then
+					target:TopNotify(TextColor, data, {CustomTime = self.DisplayTime})
+				else
+					target:CenterNotify(TextColor, data, {CustomTime = self.DisplayTime})
 				end
 			end
 		else
 			for _, pl in pairs(player.GetAll()) do
 				if pl:Team() == self.SendTo then
 					if self.Position == "top" then
-						pl:TopNotify(TextColor, args, {CustomTime = self.DisplayTime})
+						pl:TopNotify(TextColor, data, {CustomTime = self.DisplayTime})
 					else
-						pl:CenterNotify(TextColor, args, {CustomTime = self.DisplayTime})
+						pl:CenterNotify(TextColor, data, {CustomTime = self.DisplayTime})
 					end
 				end
 			end
@@ -53,17 +58,17 @@ function ENT:AcceptInput(name, caller, activator, args)
 
 		return true
 	elseif name == "setundeadhudmessage" or name == "setzombiehudmessage" then
-		SetGlobalString("hudoverride"..TEAM_UNDEAD, args)
+		SetGlobalString("hudoverride"..TEAM_UNDEAD, data)
 	elseif name == "sethumanhudmessage" or name == "setsurvivorhudmessage" then
-		SetGlobalString("hudoverride"..TEAM_HUMAN, args)
+		SetGlobalString("hudoverride"..TEAM_HUMAN, data)
 	elseif name == "clearundeadhudmessage" or name == "clearzombiehudmessage" then
 		SetGlobalString("hudoverride"..TEAM_UNDEAD, "")
 	elseif name == "clearhumanhudmessage" or name == "clearsurvivorhudmessage" then
 		SetGlobalString("hudoverride"..TEAM_HUMAN, "")
 	elseif name == "setdisplaytime" then
-		self.DisplayTime = tonumber(args)
+		self.DisplayTime = tonumber(data)
 	elseif name == "settextcolor" or name == "settextcolour" then
-		self:ApplyColor(args)
+		self:ApplyColor(data)
 	end
 end
 

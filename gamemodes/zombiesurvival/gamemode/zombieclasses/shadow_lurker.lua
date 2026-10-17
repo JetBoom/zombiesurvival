@@ -31,6 +31,9 @@ CLASS.IsTorso = true
 
 CLASS.Skeletal = true
 
+CLASS.CorpseHideMainModel = true
+CLASS.CorpseTranslucent = true
+
 local math_random = math.random
 local ACT_IDLE = ACT_IDLE
 local ACT_WALK = ACT_WALK
@@ -84,28 +87,18 @@ end
 
 if SERVER then
 function CLASS:ProcessDamage(pl, dmginfo)
-	if dmginfo:GetInflictor().IsMelee then
-		dmginfo:SetDamage(dmginfo:GetDamage() / 2)
-	end
+    if dmginfo:GetInflictor().IsMelee then
+        dmginfo:SetDamage(dmginfo:GetDamage() / 2)
+    end
 end
 
 function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo, assister)
-	local effectdata = EffectData()
-		effectdata:SetOrigin(pl:GetPos())
-		effectdata:SetNormal(pl:GetForward())
-		effectdata:SetEntity(pl)
-	util.Effect("death_shadowlurker", effectdata, nil, true)
+    local effectdata = EffectData()
+        effectdata:SetOrigin(pl:GetPos())
+        effectdata:SetNormal(pl:GetForward())
+        effectdata:SetEntity(pl)
+    util.Effect("death_shadowlurker", effectdata, nil, true)
 
-	local fakedeath = pl:FakeDeath(462, 1, 1, 1)
-	if fakedeath and fakedeath:IsValid() then
-		fakedeath:SetColor(color_black)
-		fakedeath:SetModel(self.OverrideModel)
-		fakedeath:SetPos(fakedeath:GetPos() - fakedeath:GetDeathAngles():Up() * 46)
-
-		self:ManipulateOverrideModel(pl, fakedeath)
-	end
-
-	return true
 end
 end
 

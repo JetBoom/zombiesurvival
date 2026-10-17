@@ -14,7 +14,7 @@ function ENT:OnRemove()
 end
 
 function ENT:Think()
-	owner = self:GetOwner()
+	local owner = self:GetOwner()
 	if owner:IsValid() then
 		local wep = owner:GetActiveWeapon()
 		if wep:IsValid() and wep.IsSwinging and wep:IsSwinging() then

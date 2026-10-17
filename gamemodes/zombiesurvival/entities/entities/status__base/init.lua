@@ -1,10 +1,9 @@
 INC_SERVER()
 
 function ENT:Initialize()
-	self:DrawShadow(false)
-	self.DieTime = self.DieTime or 0
-
-	self:OnInitialize()
+    self:DrawShadow(false)
+    if self.DieTime == nil then self.DieTime = 0 end
+    self:OnInitialize()
 end
 
 function ENT:SetPlayer(pPlayer, bExists)
@@ -28,11 +27,9 @@ function ENT:PlayerSet(pPlayer, bExists)
 end
 
 function ENT:Think()
-	-- Any kind of active effect.
-
-	if self.DieTime <= CurTime() then
-		self:Remove()
-	end
+    if self.DieTime and self.DieTime > 0 and self.DieTime <= CurTime() then
+        self:Remove()
+    end
 end
 
 function ENT:KeyValue(key, value)

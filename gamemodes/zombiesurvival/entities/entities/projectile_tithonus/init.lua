@@ -28,7 +28,7 @@ function ENT:PhysicsCollide(data, phys)
 	if self.HitData then return end
 	self.HitData = data
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.1)
 end
 
 function ENT:OnRemove()
@@ -36,12 +36,6 @@ function ENT:OnRemove()
 		effectdata:SetOrigin(self.HitData and self.HitData.HitPos or self:GetPos())
 		effectdata:SetNormal(self.HitData and self.HitData.HitNormal or Vector(0, 0, 0))
 	util.Effect("hit_tithonus", effectdata)
-end
-
-function ENT:PhysicsCollide(data, phys)
-	if self.HitData then return end
-	self.HitData = data
-	self:NextThink(CurTime())
 end
 
 function ENT:Think()
@@ -58,7 +52,7 @@ function ENT:Think()
 		end
 		self:DealProjectileTraceDamage(self.ProjDamage or 77, tr, owner)
 		if tr.Entity:IsPlayer() then
-			tr.Entity:AddLegDamageExt(5.5, owner, source, SLOWTYPE_PULSE)
+			tr.Entity:AddLegDamageExt(5.5, owner, self, SLOWTYPE_PULSE)
 		end
 		if self.PointsMultiplier then
 			POINTSMULTIPLIER = nil

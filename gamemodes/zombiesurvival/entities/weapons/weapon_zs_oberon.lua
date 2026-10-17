@@ -79,7 +79,7 @@ SWEP.Tier = 3
 SWEP.PointsMultiplier = GAMEMODE.PulsePointsMultiplier
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_LEG_DAMAGE, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Neptune' Pulse Shotgun", "Fast firing and reloading, uses 3x ammo", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Neptune' Pulse Shotgun", "Fast firing and reloading, uses 3x ammo", function(wept)
 	wept.RequiredClip = 3
 	wept.Primary.ClipSize = 21
 	wept.Primary.Delay = 0.6
@@ -95,6 +95,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Neptune' Pulse Shotgun", "Fast firing a
 		wept.VElements["base+++"].color = Color(0, 255, 255)
 	end
 end)
+branch.TranslationID = "oberon_branch_1"
 
 function SWEP.BulletCallback(attacker, tr, dmginfo)
 	local ent = tr.Entity

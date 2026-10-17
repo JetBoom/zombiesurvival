@@ -131,14 +131,13 @@ function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
 		return true
 	end
 
+	-- Get + Set впустую: считаем 0.5× сразу.
 	local len2d = velocity:Length2D()
 	if len2d > 1 then
-		pl:SetPlaybackRate(math_min(len2d / maxseqgroundspeed, 3))
+		pl:SetPlaybackRate(math_min(len2d / maxseqgroundspeed, 3) * 0.5)
 	else
-		pl:SetPlaybackRate(1)
+		pl:SetPlaybackRate(0.5)
 	end
-
-	pl:SetPlaybackRate(pl:GetPlaybackRate() * 0.5)
 
 	return true
 end

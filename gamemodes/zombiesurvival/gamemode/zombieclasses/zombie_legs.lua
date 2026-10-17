@@ -34,7 +34,7 @@ CLASS.VoicePitch = 0.65
 
 CLASS.SWEP = "weapon_zs_zombielegs"
 
-CLASS.BloodColor = -1
+CLASS.BloodColor = BLOOD_COLOR_RED
 
 local math_random = math.random
 
@@ -52,15 +52,31 @@ if SERVER then
 	end
 end
 
+-- Hull[2].z = 32 → 32 * 1.33 = 42.56
+local LEG_TOP_OFFSET = 32 * 1.33
+
 function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
 	if not dmginfo:IsBulletDamage() then return true end
 
-	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC and dmginfo:GetDamagePosition().z > pl:LocalToWorld(Vector(0, 0, self.Hull[2].z * 1.33)).z then
+	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG
+		and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC
+		and dmginfo:GetDamagePosition().z > pl:GetPos().z + LEG_TOP_OFFSET then
 		dmginfo:SetDamage(0)
 		dmginfo:ScaleDamage(0)
 	end
 
 	return true
+end
+
+function CLASS:PlayerTraceAttack(pl, dmginfo, dir, trace)
+	if not dmginfo:IsBulletDamage() then return end
+
+	local hitgroup = trace.HitGroup
+	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG
+		and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC
+		and trace.HitPos.z > pl:GetPos().z + LEG_TOP_OFFSET then
+		return true
+	end
 end
 
 --[[function CLASS:Move(pl, mv)

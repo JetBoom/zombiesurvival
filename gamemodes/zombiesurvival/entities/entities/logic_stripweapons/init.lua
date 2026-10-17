@@ -8,7 +8,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 	name = string.lower(name)
 	if name == "stripweapon" then
 		if activator:IsPlayer() and activator:Alive() and activator:Team() == TEAM_HUMAN then
-				activator:StripWeapon(args)
+				activator:StripWeapon()
 		end
 	elseif name == "stripallweapons" then
 		if activator:IsPlayer() and activator:Alive() and activator:Team() == TEAM_HUMAN then
@@ -19,7 +19,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 					if weaponclass ~= "weapon_zs_fists" then activator:StripWeapon(weaponclass) end
 				end
 			else
-				activator:StripWeapons(args)
+				activator:StripWeapons()
 			end
 		end
 	elseif name == "setkeepfists" then

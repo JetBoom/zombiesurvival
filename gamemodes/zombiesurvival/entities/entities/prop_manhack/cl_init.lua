@@ -56,7 +56,7 @@ function ENT:Think()
 		particle:SetBounce(0.2)
 		particle:SetColor(sat, sat, sat)
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 end
 
@@ -183,15 +183,21 @@ function ENT:ShouldDrawLocalPlayer(pl)
 end
 
 local trace_cam = {mask = MASK_VISIBLE, mins = Vector(-4, -4, -4), maxs = Vector(4, 4, 4)}
+
+local temp_manhack
+local function ManhackCamFilter(ent)
+	return ent:IsPlayer() or ent == temp_manhack
+end
+
 function ENT:CalcView(pl, origin, angles, fov, znear, zfar)
 	if self:GetObjectOwner() ~= pl or not self:BeingControlled() then return end
 
-	local filter = player.GetAll()
-	filter[#filter + 1] = self
+	temp_manhack = self
 	trace_cam.start = self:GetPos()
 	trace_cam.endpos = trace_cam.start + angles:Forward() * -48
-	trace_cam.filter = filter
+	trace_cam.filter = ManhackCamFilter
 	local tr = util.TraceHull(trace_cam)
+	temp_manhack = nil
 
 	return {origin = tr.HitPos + tr.HitNormal * 3}
 end

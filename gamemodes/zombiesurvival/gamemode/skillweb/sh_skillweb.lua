@@ -22,7 +22,12 @@ function GM:ProgressForXP(xp)
 end
 
 GM.MaxLevel = 50
+GM.SkillResetLevel = 10
 GM.MaxXP = GM:XPForLevel(GM.MaxLevel)
+
+-- How many additional SP are given for each remort level.
+-- Final formula: GetZSSPTotal = GetZSLevel() + GetZSRemortLevel() * RemortSkillPoints
+GM.RemortSkillPoints = 1
 
 -- Makes sure all skill connections are double linked
 function GM:FixSkillConnections()
@@ -68,15 +73,36 @@ local meta = FindMetaTable("Player")
 if not meta then return end
 
 function meta:IsSkillUnlocked(skillid)
-	return table.HasValue(self:GetUnlockedSkills(), skillid)
+	local a = self.UnlockedSkillsAssoc
+	if a == nil then
+		a = table.ToAssoc(self:GetUnlockedSkills())
+		self.UnlockedSkillsAssoc = a
+	end
+	return a[skillid] == true
 end
 
 function meta:SkillCanUnlock(skillid)
 	return GAMEMODE:SkillCanUnlock(self, skillid, self:GetUnlockedSkills())
 end
 
+function meta:HasAllSkillsUnlockable()
+	for skillid, skill in pairs(GAMEMODE.Skills) do
+		if skill and not skill.Disabled
+			and not self:IsSkillUnlocked(skillid)
+			and self:SkillCanUnlock(skillid) then
+			return false
+		end
+	end
+	return true
+end
+
 function meta:IsSkillDesired(skillid)
-	return table.HasValue(self:GetDesiredActiveSkills(), skillid)
+	local a = self.DesiredActiveSkillsAssoc
+	if a == nil then
+		a = table.ToAssoc(self:GetDesiredActiveSkills())
+		self.DesiredActiveSkillsAssoc = a
+	end
+	return a[skillid] == true
 end
 
 function meta:IsSkillActive(skillid)
@@ -139,21 +165,12 @@ function meta:ApplySkills(override)
 	self:ApplyAssocModifiers(desired_assoc)
 
 	-- All skill function states can easily be kept track of.
-	local funcs
 	local gm_functions = GAMEMODE.SkillFunctions
-	for skillid in pairs(allskills) do
-
-		funcs = gm_functions[skillid]
-		if funcs then
-			if current_active[skillid] and not desired_assoc[skillid] then -- On but we want it off.
-				for _, func in pairs(funcs) do
-					func(self, false)
-				end
-			elseif desired_assoc[skillid] and not current_active[skillid] then -- Off but we want it on.
-				for _, func in pairs(funcs) do
-					func(self, true)
-				end
-			end -- Otherwise it's already in the state we want.
+	for skillid, funcs in pairs(gm_functions) do
+		if current_active[skillid] and not desired_assoc[skillid] then
+			for i = 1, #funcs do funcs[i](self, false) end
+		elseif desired_assoc[skillid] and not current_active[skillid] then
+			for i = 1, #funcs do funcs[i](self, true) end
 		end
 	end
 
@@ -202,21 +219,12 @@ function meta:ApplyTrinkets(override)
 
 	self:ApplyAssocModifiers(real_assoc)
 
-	local funcs
 	local gm_functions = GAMEMODE.SkillFunctions
-	for skillid in pairs(allskills) do
-
-		funcs = gm_functions[skillid]
-		if funcs then
-			if not real_assoc[skillid] then -- On but we want it off.
-				for _, func in pairs(funcs) do
-					func(self, false)
-				end
-			elseif real_assoc[skillid] then -- Off but we want it on.
-				for _, func in pairs(funcs) do
-					func(self, true)
-				end
-			end
+	for skillid, funcs in pairs(gm_functions) do
+		if real_assoc[skillid] then
+			for i = 1, #funcs do funcs[i](self, true) end
+		else
+			for i = 1, #funcs do funcs[i](self, false) end
 		end
 	end
 end
@@ -228,7 +236,7 @@ meta.CanSkillRemort = meta.CanSkillsRemort
 
 function meta:SetSkillActive(skillid, active, nosend)
 	local skills = table.ToAssoc(self:GetActiveSkills())
-	skills[active] = active
+	skills[skillid] = active or nil
 	self:SetActiveSkills(skills, nosend)
 end
 
@@ -257,7 +265,7 @@ function meta:GetZSSPRemaining()
 end
 
 function meta:GetZSSPTotal()
-	return self:GetZSLevel() + self:GetZSRemortLevel()
+	return self:GetZSLevel() + self:GetZSRemortLevel() * GAMEMODE.RemortSkillPoints
 end
 
 function meta:GetDesiredActiveSkills()

@@ -1,11 +1,11 @@
-local messages = {
-	"MUNCH!",
-	"BRAIN GET!",
-	"+1!",
-	"JOIN US!",
-	"ONE OF US!",
-	"BUTT MANGLED!",
-	"CHOMP!"
+local message_keys = {
+	"floatingscore_und_msg_1",
+	"floatingscore_und_msg_2",
+	"floatingscore_und_msg_3",
+	"floatingscore_und_msg_4",
+	"floatingscore_und_msg_5",
+	"floatingscore_und_msg_6",
+	"floatingscore_und_msg_7"
 }
 
 EFFECT.LifeTime = 3
@@ -19,9 +19,9 @@ function EFFECT:Init(data)
 
 	local amount = math.Round(data:GetMagnitude())
 	if amount > 1 then
-		self.Message = amount.." BRAINS!"
+		self.Message = translate.Format("floatingscore_und_brains", amount)
 	else
-		self.Message = messages[math.random(#messages)]
+		self.Message = translate.Get(message_keys[math.random(#message_keys)])
 	end
 
 	self.DeathTime = CurTime() + self.LifeTime

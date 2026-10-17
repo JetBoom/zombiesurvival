@@ -21,7 +21,7 @@ function ENT:Draw()
 		particle:SetRollDelta(math.Rand(-10, 10))
 		particle:SetColor(155, 100, 255)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 
 	if self:GetVelocity() ~= vector_origin then
 		render.SetMaterial(matGlow)
@@ -76,5 +76,5 @@ function ENT:OnRemove()
 		particle:SetEndLength(5)
 		particle:SetVelocity(VectorRand():GetNormal() * 50)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

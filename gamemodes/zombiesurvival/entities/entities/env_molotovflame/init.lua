@@ -22,11 +22,30 @@ function ENT:AcceptInput(name, activator, caller, arg)
 	if not owner:IsValidLivingHuman() then owner = self end
 
 	local vPos = self:GetPos()
+	-- We collect all entityflame once, then work by the index "parent → flames".
+	local flamesByParent = {}
+	for _, fire in pairs(ents.FindByClass("entityflame")) do
+		if fire:IsValid() then
+			local parent = fire:GetParent()
+			if parent and parent:IsValid() then
+				local list = flamesByParent[parent]
+				if list then
+					list[#list + 1] = fire
+				else
+					flamesByParent[parent] = { fire }
+				end
+			end
+		end
+	end
+
 	for _, ent in pairs(ents.FindInSphere(vPos, self.Radius)) do
 		if ent and (ent:IsValidLivingPlayer() and (ent:Team() == TEAM_UNDEAD or ent == owner)) and WorldVisible(vPos, ent:NearestPoint(vPos)) then
 			ent:Ignite(2)
-			for __, fire in pairs(ents.FindByClass("entityflame")) do
-				if fire:IsValid() and fire:GetParent() == ent then
+
+			local flames = flamesByParent[ent]
+			if flames then
+				for i = 1, #flames do
+					local fire = flames[i]
 					fire:SetOwner(owner)
 					fire:SetPhysicsAttacker(owner)
 					fire.AttackerForward = owner

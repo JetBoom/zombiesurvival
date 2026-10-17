@@ -1,11 +1,15 @@
 function GMAPEX:Initialize()
-	scripted_ents.RegisterFromFile("point_lentmanentity.lua")
+	scripted_ents.RegisterFromFile("point_gmapexentity.lua")
 end
 
 function scripted_ents.RegisterFromFile(filename)
-	ENT = {}
+	local ent = {}
+	setfenv(0, _G)
+	local oldENT = ENT
+	ENT = ent
 	include(filename)
-	scripted_ents.Register(filename:sub(1, -5):lower(), filename)
+	ENT = oldENT
+	scripted_ents.Register(ent, filename:sub(1, -5):lower())
 end
 
 function AccessorFuncDT(tab, membername, type, id)

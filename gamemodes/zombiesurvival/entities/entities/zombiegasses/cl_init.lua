@@ -58,5 +58,5 @@ function ENT:Draw()
 	particle:SetEndSize( particledata.sizeEnd )
 	particle:SetRollDelta( math.Rand( -particledata.rotRate, particledata.rotRate ) )
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

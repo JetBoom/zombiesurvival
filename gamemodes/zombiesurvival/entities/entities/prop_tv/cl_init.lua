@@ -18,7 +18,7 @@ local LightPos = Vector(7.4, 8, 3)
 local LightPos2 = Vector(7.4, 8, 1)
 local CamAng = Angle(0, 90, 90)
 local CamScale = 0.05
-MyCamera = NULL
+local MyCamera = NULL
 
 local matGlow = Material("sprites/glow04_noz")
 function ENT:Draw()

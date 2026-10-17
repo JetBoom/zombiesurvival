@@ -16,7 +16,7 @@ end
 
 function ENT:PhysicsCollide(data, phys)
 	--if data.Speed >= 50 then
-		self.PhysicsData = data
+		self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 		self.Owner = self:GetOwner()
 		self:NextThink(CurTime())
 	--end

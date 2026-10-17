@@ -31,8 +31,12 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-	self.AmbientSound:Stop()
-	self.ShootingSound:Stop()
+    self.AmbientSound:Stop()
+    self.ShootingSound:Stop()
+
+    hook.Remove("CreateMove",             self)
+    hook.Remove("ShouldDrawLocalPlayer",  self)
+    hook.Remove("CalcView",               self)
 end
 
 function ENT:SetObjectHealth(health)
@@ -118,7 +122,7 @@ function ENT:DrawTranslucent()
 			self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1), name, 150, 0.85, -150)
 
 			if ammo > 0 then
-				draw.SimpleTextBlurry("["..ammo.." / "..self.MaxAmmo.."]", "ZS3D2DFontSmall", 0, 180, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlurry(translate.Format("deployable_ammo_count_x_y", ammo, self.MaxAmmo), "ZS3D2DFontSmall", 0, 180, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
 				draw.SimpleTextBlurry(translate.Get("empty"), "ZS3D2DFontSmall", 0, 180, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end

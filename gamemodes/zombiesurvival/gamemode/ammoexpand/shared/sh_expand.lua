@@ -2,7 +2,6 @@
 
 CUSTOM_AMMO = {}
 
-local CUSTOM_AMMO = CUSTOM_AMMO
 local CUSTOM_AMMO_NUM = 128
 
 local M_Weapon = FindMetaTable("Weapon")
@@ -21,16 +20,10 @@ local old_Weapon_GetSecondaryAmmoType = M_Weapon.GetSecondaryAmmoType
 
 local old_Player_GetAmmoCount = M_Player.GetAmmoCount
 
-local added = 0
 function game.AddAmmoType(data)
-	added = added + 1
-	if added < 35 then
-		--print('adding ' .. data.name .. ' via old')
-		old_game_AddAmmoType(data)
-	else
-		--print('adding ' .. data.name .. ' via new')
-		game.AddExpandedAmmoType(data)
-	end
+	local ok = pcall(old_game_AddAmmoType, data)
+	if ok then return end
+	game.AddExpandedAmmoType(data)
 end
 
 function game.AddExpandedAmmoType(data)

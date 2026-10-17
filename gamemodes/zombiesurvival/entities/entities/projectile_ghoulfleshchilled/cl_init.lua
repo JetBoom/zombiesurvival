@@ -11,7 +11,7 @@ function ENT:Draw()
 	self:DrawModel()
 
 	if CurTime() < self.NextEmit then return end
-	self.NextEmit = CurTime() + 0.025
+	self.NextEmit = CurTime() + 0.06
 
 	local pos = self:GetPos()
 
@@ -26,9 +26,9 @@ function ENT:Draw()
 	particle:SetEndSize(0)
 	particle:SetRoll(math.Rand(0, 255))
 	particle:SetRollDelta(math.Rand(-10, 10))
-	particle:SetVelocity((self:GetVelocity():GetNormalized() * -1 + VectorRand():GetNormalized()):GetNormalized() * math.Rand(16, 48))
+	particle:SetVelocity(-self:GetVelocity() * 0.02 + VectorRand() * 8)
 	particle:SetLighting(true)
 	particle:SetColor(0, 125, 255)
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

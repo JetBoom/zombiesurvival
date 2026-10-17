@@ -17,6 +17,7 @@ SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "Battery"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
+SWEP.NoMagazine = true
 
 SWEP.ConeMax = 0
 SWEP.ConeMin = 0

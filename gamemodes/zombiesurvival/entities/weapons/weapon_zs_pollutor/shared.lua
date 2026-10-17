@@ -31,7 +31,7 @@ SWEP.FireAnimSpeed = 0.4
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.05)
 
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Scorch' Napalm Rifle", "Chance to ignite instead of corrode at the cost of damage", function(wept)
+local branch1 = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Scorch' Napalm Rifle", "Chance to ignite instead of corrode at the cost of damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.86
 
 	if SERVER then
@@ -45,10 +45,12 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Scorch' Napalm Rifle", "
 		wept.WElements["bio++++++"].color = Color(230, 150, 100)
 	end
 end)
-branch.Colors = {Color(255, 160, 50), Color(215, 120, 50), Color(175, 100, 40)}
-branch.NewNames = {"Hot", "Searing", "Torching"}
+branch1.Colors = {Color(255, 160, 50), Color(215, 120, 50), Color(175, 100, 40)}
+branch1.TranslationID = "pollutor_branch_1"
+branch1.NewNames = {"Hot", "Searing", "Torching"}
+branch1.NewNameIDs = {"hot", "searing", "torching"}
 
-branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Glaze' Cryo Rifle", "Launches cryoblobs that slow zombies down at the cost of damage", function(wept)
+local branch2 = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Glaze' Cryo Rifle", "Launches cryoblobs that slow zombies down at the cost of damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.77
 
 	if SERVER then
@@ -62,8 +64,10 @@ branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Glaze' Cryo Rifle", "Launches 
 		wept.WElements["bio++++++"].color = Color(100, 190, 230)
 	end
 end)
-branch.Colors = {Color(50, 160, 255), Color(50, 130, 215), Color(40, 115, 175)}
-branch.NewNames = {"Cold", "Arctic", "Glacial"}
+branch2.Colors = {Color(50, 160, 255), Color(50, 130, 215), Color(40, 115, 175)}
+branch2.TranslationID = "pollutor_branch_2"
+branch2.NewNames = {"Cold", "Arctic", "Glacial"}
+branch2.NewNameIDs = {"cold", "arctic", "glacial"}
 
 function SWEP:EmitFireSound()
 	self:EmitSound("^weapons/mortar/mortar_fire1.wav", 70, math.random(88, 92), 0.65)

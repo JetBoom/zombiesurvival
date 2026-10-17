@@ -39,7 +39,7 @@ function ENT:Draw()
 		particle:SetColor(110, 110, 110)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end
 
 function ENT:Think()
@@ -66,5 +66,5 @@ function ENT:OnRemove()
 		particle:SetColor(255, 255, 255)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

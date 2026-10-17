@@ -19,6 +19,7 @@ SWEP.Primary.Damage = 90
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.Ammo = "XBowBolt"
 SWEP.Primary.DefaultClip = 15
+SWEP.ShowReserveAmmo = true
 
 SWEP.SecondaryDelay = 0.25
 

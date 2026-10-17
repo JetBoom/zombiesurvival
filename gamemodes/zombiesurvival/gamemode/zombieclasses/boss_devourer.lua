@@ -22,6 +22,8 @@ CLASS.Model = Model("models/player/charple.mdl")
 CLASS.OverrideModel = Model("models/player/skeleton.mdl")
 
 CLASS.NoHideMainModel = true
+CLASS.CorpseHideMainModel = true
+CLASS.CorpsePlainOverrideModel = true
 
 CLASS.VoicePitch = 0.65
 

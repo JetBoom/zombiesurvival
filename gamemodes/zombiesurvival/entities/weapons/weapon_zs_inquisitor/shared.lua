@@ -17,6 +17,7 @@ SWEP.Primary.Sound = Sound("weapons/crossbow/fire1.wav")
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "XBowBolt"
+SWEP.ShowReserveAmmo = true
 SWEP.Primary.Delay = 1.25
 SWEP.Primary.DefaultClip = 15
 SWEP.Primary.Damage = 69
@@ -34,12 +35,13 @@ SWEP.Tier = 2
 
 SWEP.Primary.ProjVelocity = 1600
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.06)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Absolver' Crossbow", "Higher velocity, more damage, but does not pierce, reloads slower", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Absolver' Crossbow", "Higher velocity, more damage, but does not pierce, reloads slower", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.2
 	wept.Primary.ProjVelocity = 2100
 	wept.Primary.Projectile = "projectile_arrow_cha"
 	wept.ReloadSpeed = wept.ReloadSpeed * 0.85
 end)
+branch.TranslationID = "inquisitor_branch_1"
 
 function SWEP:SendReloadAnimation()
 	self:SendWeaponAnim(ACT_VM_DRAW)

@@ -52,11 +52,11 @@ function ENT:Explode(hitpos, hitnormal, hitent)
 		util.BlastDamagePlayer(source, owner, hitpos, 81, self.ProjDamage or 29, DMG_ALWAYSGIB, 0.95)
 	end
 
-	self:EmitSound(")weapons/explode5.wav", 80, 130)
+	self:EmitSound("weapons/explode5.wav", 80, 130)
 	self:Remove()
 end
 
 function ENT:PhysicsCollide(data, physobj)
 	self.PhysicsData = data
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.05)
 end

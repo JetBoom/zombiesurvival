@@ -64,39 +64,49 @@ function ENT:KeyValue(key, value)
 	end
 end
 
+-- Cache: lowercased name -> index. Built once per map.
+local ClassIndexByName
+local function GetClassIndexByName(lower_name)
+	if not ClassIndexByName then
+		ClassIndexByName = {}
+		for k, v in ipairs(GAMEMODE.ZombieClasses) do
+			local n = v.Name
+			if n then ClassIndexByName[string.lower(n)] = k end
+		end
+	end
+	return ClassIndexByName[lower_name]
+end
+
 function ENT:DoTouch(ent, class_name, death_class_name)
-	if self.On and ent:IsValidLivingZombie() then
-		local prev = ent:GetZombieClass()
-		if table.HasValue( self.OnlyWhenClass, prev ) or self.OnlyWhenClass[1] == -1 then
-			if class_name and class_name ~= string.lower(ent:GetZombieClassTable().Name) then
-				for k, v in ipairs(GAMEMODE.ZombieClasses) do
-					if string.lower(v.Name) == class_name then
-						local prevpos = ent:GetPos()
-						local prevang = ent:EyeAngles()
-						ent:KillSilent()
-						ent:SetZombieClass(k)
-						ent.DidntSpawnOnSpawnPoint = true
-						ent:UnSpectateAndSpawn()
-						if self.OneTime then
-							ent.DeathClass = prev
-						end
-						if self.InstantChange then
-							ent:SetPos(prevpos)
-							ent:SetEyeAngles(prevang)
-						end
-						break
-					end
-				end
+	if not self.On or not ent:IsValidLivingZombie() then return end
+
+	local prev = ent:GetZombieClass()
+	if not (table.HasValue(self.OnlyWhenClass, prev) or self.OnlyWhenClass[1] == -1) then return end
+
+	local currentname = string.lower(ent:GetZombieClassTable().Name)
+
+	if class_name and class_name ~= currentname then
+		local k = GetClassIndexByName(class_name)
+		if k then
+			local prevpos = ent:GetPos()
+			local prevang = ent:EyeAngles()
+			ent:KillSilent()
+			ent:SetZombieClass(k)
+			ent.DidntSpawnOnSpawnPoint = true
+			ent:UnSpectateAndSpawn()
+			if self.OneTime then
+				ent.DeathClass = prev
 			end
-			if death_class_name and death_class_name ~= string.lower(ent:GetZombieClassTable().Name) then
-				for k, v in ipairs(GAMEMODE.ZombieClasses) do
-					if string.lower(v.Name) == death_class_name then
-						ent.DeathClass = k
-					break
-					end
-				end
+			if self.InstantChange then
+				ent:SetPos(prevpos)
+				ent:SetEyeAngles(prevang)
 			end
 		end
+	end
+
+	if death_class_name and death_class_name ~= currentname then
+		local k = GetClassIndexByName(death_class_name)
+		if k then ent.DeathClass = k end
 	end
 end
 

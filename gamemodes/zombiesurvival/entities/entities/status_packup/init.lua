@@ -40,7 +40,7 @@ function ENT:Think()
 					end
 
 					if count < self.PackUpOverride then
-						self:NextThink(CurTime())
+						self:NextThink(CurTime() + 0.05)
 						return true
 					end
 
@@ -74,6 +74,6 @@ function ENT:Think()
 		self.Removing = true
 	end
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.05)
 	return true
 end

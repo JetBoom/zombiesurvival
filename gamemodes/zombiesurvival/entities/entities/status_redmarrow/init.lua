@@ -5,5 +5,9 @@ function ENT:Think()
 
 	if self.DieTime <= CurTime() or not (owner:Alive() and owner:Team() == TEAM_UNDEAD and owner:GetZombieClassTable().Name == "Red Marrow") then
 		self:Remove()
+		return
 	end
+
+	self:NextThink(CurTime() + 0.5)
+	return true
 end

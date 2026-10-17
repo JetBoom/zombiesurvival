@@ -70,6 +70,7 @@ SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "357"
 SWEP.Primary.DefaultClip = 9
+SWEP.ShowReserveAmmo = true
 
 SWEP.ConeMax = 0.25
 SWEP.ConeMin = 0.25

@@ -5,7 +5,10 @@ function CreateClientConVar(...)
 	return oldCreateClientConVar(...) or dummy
 end
 
+include("addon_compatibility/sh_tfa_compat.lua")
+
 include("sh_globals.lua")
+include("sh_skillconstants.lua")
 
 include("obj_entity_extend_cl.lua")
 include("obj_player_extend_cl.lua")
@@ -14,14 +17,40 @@ include("obj_weapon_extend_cl.lua")
 include("loader.lua")
 
 include("shared.lua")
-include("cl_draw.lua")
 include("cl_util.lua")
+
+-- ============================================================
+-- Localized team names
+-- ============================================================
+do
+	local origGetName = team.GetName
+
+	-- Raw name from team.SetUp → translation key.
+	local RawToKey = {
+		["Survivors"]  = "team_survivors",
+		["The Undead"] = "team_undead",
+	}
+
+	function team.GetName(teamid)
+		local raw = origGetName(teamid)
+		if type(raw) ~= "string" then return raw end
+
+		local key = RawToKey[raw]
+		if key and translate.Exists(key) then
+			return translate.Get(key)
+		end
+
+		return raw
+	end
+end
+
 include("cl_options.lua")
 include("cl_scoreboard.lua")
 include("cl_targetid.lua")
 include("cl_postprocess.lua")
 include("cl_voicesets.lua")
 include("cl_net.lua")
+include("cl_zombiecorpse.lua")
 include("skillweb/cl_skillweb.lua")
 
 include("vgui/dteamcounter.lua")
@@ -29,6 +58,7 @@ include("vgui/dmodelpanelex.lua")
 include("vgui/dammocounter.lua")
 include("vgui/dteamheading.lua")
 include("vgui/dmodelkillicon.lua")
+include("vgui/dlabelautoscroll.lua") 
 
 include("vgui/dexroundedpanel.lua")
 include("vgui/dexroundedframe.lua")
@@ -57,11 +87,45 @@ include("cl_dermaskin.lua")
 include("cl_deathnotice.lua")
 include("cl_floatingscore.lua")
 include("cl_hint.lua")
+include("cl_weaponselect.lua")
 include("cl_thirdperson.lua")
 
 include("itemstocks/cl_stock.lua")
 
 include("cl_zombieescape.lua")
+
+-- ============================================================
+-- Bot display-name override (client-side only)
+-- ------------------------------------------------------------
+-- NextBots and engine bots get their display name formatted
+-- through LANGUAGE.name_format_bot. Overriding Name/Nick here
+-- means every UI element that calls pl:Name()/pl:Nick()
+-- automatically shows the bot marker.
+--
+-- UI that needs the un-decorated name (scoreboard, compact
+-- lists, etc.) should call pl:RawName() / pl:RawNick().
+--
+-- CLIENT-side on purpose: server-side Name() stays raw so
+-- unique-id checks, admin tooling and log matching keep working
+-- on the exact engine name.
+-- ============================================================
+do
+	local M_Player = FindMetaTable("Player")
+	function M_Player:DisplayName()
+		local name = self:Name()
+		if not (self:IsBot() or self.IsZSBot) then return name end
+
+		local fmt = translate.Get("name_format_bot")
+		if type(fmt) ~= "string" or fmt:sub(1, 1) == "@" then return name end
+
+		return string.format(fmt, name)
+	end
+end
+
+include("cl_fontfallback.lua")
+include("cl_maptext_entities.lua")
+include("cl_chatcapture.lua")
+include("addon_compatibility/sh_sourceweapon_compat.lua")
 
 w, h = ScrW(), ScrH()
 
@@ -180,6 +244,22 @@ local MedicalAuraDistance = 800 ^ 2
 local M_Player = FindMetaTable("Player")
 local P_Team = M_Player.Team
 
+-- Zombie classes that have BuildBonePositions. Rebuilt when
+-- zombie classes change (RevertZombieClasses / RestartRound).
+local ZombieClassesNeedBones = {}
+
+local function RebuildZombieBoneSet()
+	ZombieClassesNeedBones = {}
+	local classes = GAMEMODE and GAMEMODE.ZombieClasses
+	if not classes then return end
+	for _, v in ipairs(classes) do
+		if type(v) == "table" and v.BuildBonePositions then
+			ZombieClassesNeedBones[v.Index] = true
+		end
+	end
+end
+hook.Add("InitPostEntity", "ZS_RebuildZombieBoneSet", RebuildZombieBoneSet)
+
 GM.LifeStatsBrainsEaten = 0
 GM.LifeStatsHumanDamage = 0
 GM.LifeStatsBarricadeDamage = 0
@@ -209,15 +289,88 @@ end
 function GM:ClickedEndBoardPlayerButton(pl, button)
 end
 
+-- U+00A0 non-breaking space.
+-- DLabel:SizeToContents → surface.GetTextSize trims trailing ASCII spaces,
+-- therefore:
+--   * a single " " between elements gets zero width and disappears;
+--   * the trailing space in "Arsenal was updated: " is lost, and the next
+--     word sticks to the colon.
+-- NBSP is a full-fledged glyph with non-zero width, so its measurement does not trim it.
+local NBSP = "\194\160"
+
+-- Cache: translate.MapText is not cheap (it does gsub + Exists lookups),
+-- and notifications often repeat the same string (kill feed, wave
+-- messages). Cache the resolved text and the hasmaptext flag by the
+-- original string.
+local notifyStringCache = {}
+local notifyStringCacheCount = 0
+local NOTIFY_CACHE_MAX = 256
+
+local function ResolveNotifyString(v)
+	local cached = notifyStringCache[v]
+	if cached then
+		return cached.text, cached.hasmaptext
+	end
+
+	local lead  = v:match("^%s*") or ""
+	local trail = v:match("%s*$") or ""
+	local core  = v:sub(#lead + 1, #v - #trail)
+
+	local hasmaptext = false
+	if translate.Exists(core) and core ~= translate.Get(core) then
+		hasmaptext = true
+	end
+
+	local text = NBSP:rep(#lead)
+		.. translate.MapText(core)
+		.. NBSP:rep(#trail)
+
+	notifyStringCache[v] = { text = text, hasmaptext = hasmaptext }
+	notifyStringCacheCount = notifyStringCacheCount + 1
+	if notifyStringCacheCount >= NOTIFY_CACHE_MAX then
+		notifyStringCache = {}
+		notifyStringCacheCount = 0
+	end
+	return text, hasmaptext
+end
+
+local function TranslateNotifyArgs(...)
+	local args = {...}
+	local hasmaptext = false
+
+	for i = 1, #args do
+		local v = args[i]
+		if type(v) == "string" then
+			if v == "" then
+				-- We don't touch the empty line.
+			elseif v:match("^%s+$") then
+				-- Pure-whitespace separator (" ") — convert it all to NBSP,
+				-- so that DLabel gets the actual width.
+				args[i] = NBSP:rep(#v)
+			else
+				local text, hadmap = ResolveNotifyString(v)
+				args[i] = text
+				if hadmap then hasmaptext = true end
+			end
+		end
+	end
+
+	if hasmaptext then
+		args[#args + 1] = {no_stack = true}
+	end
+
+	return args
+end
+
 function GM:CenterNotify(...)
 	if self.CenterNotificationHUD and self.CenterNotificationHUD:IsValid() then
-		return self.CenterNotificationHUD:AddNotification(...)
+		return self.CenterNotificationHUD:AddNotification(unpack(TranslateNotifyArgs(...)))
 	end
 end
 
 function GM:TopNotify(...)
 	if self.TopNotificationHUD and self.TopNotificationHUD:IsValid() then
-		return self.TopNotificationHUD:AddNotification(...)
+		return self.TopNotificationHUD:AddNotification(unpack(TranslateNotifyArgs(...)))
 	end
 end
 
@@ -749,20 +902,15 @@ function GM:_Think()
 
 	local tab
 
-	for _, pl in pairs(player.GetAll()) do
-		if P_Team(pl) == TEAM_UNDEAD then
+	for _, pl in player.Iterator() do
+		if P_Team(pl) == TEAM_UNDEAD and ZombieClassesNeedBones[pl:GetZombieClass()] then
 			tab = pl:GetZombieClassTable()
-			if tab.BuildBonePositions then
-				if not pl.WasBuildingBonePositions then
-					pl.BuildingBones = pl:GetBoneCount() - 1
-					pl.WasBuildingBonePositions = true
-				end
-				pl:ResetBones()
-				tab.BuildBonePositions(tab, pl)
-			elseif pl.WasBuildingBonePositions then
-				pl.WasBuildingBonePositions = nil
-				pl:ResetBones()
+			if not pl.WasBuildingBonePositions then
+				pl.BuildingBones = pl:GetBoneCount() - 1
+				pl.WasBuildingBonePositions = true
 			end
+			pl:ResetBones()
+			tab.BuildBonePositions(tab, pl)
 		elseif pl.WasBuildingBonePositions then
 			pl.WasBuildingBonePositions = nil
 			pl:ResetBones()
@@ -842,8 +990,20 @@ function GM:DrawSigilTeleportBar(x, y, fraction, target, screenscale)
 	surface_DrawOutlinedRect(startx, y, maxbarwidth, barheight)
 
 	draw_SimpleText(translate.Format("teleporting_to_sigil", letter), "ZSHUDFontSmall", x, y - draw_GetFontHeight("ZSHUDFontSmall") - 2, colSigilTeleport, TEXT_ALIGN_CENTER)
-	draw_SimpleText(translate.Get("press_shift_to_cancel"), "ZSHUDFontSmaller", x, y + draw_GetFontHeight("ZSHUDFontSmaller") - 16, colSigilTeleport, TEXT_ALIGN_CENTER)
+	draw_SimpleText(translate.Get("press_x_to_cancel"), "ZSHUDFontSmall", x, y + draw_GetFontHeight("ZSHUDFontSmaller") - 16, colSigilTeleport, TEXT_ALIGN_CENTER)
 	draw_SimpleText(translate.Get("point_at_a_sigil_to_choose_destination"), "ZSHUDFontSmaller", x, y + draw_GetFontHeight("ZSHUDFontSmaller") * 2 - 16, colSigilTeleport, TEXT_ALIGN_CENTER)
+end
+
+function GM:IsAnyUIOpen()
+	if gamemode.Call("IsWeaponSelectOpen") then return true end
+
+	if pWorth and pWorth:IsValid() then return true end
+
+	if self.ArsenalInterface and self.ArsenalInterface:IsValid() and self.ArsenalInterface:IsVisible() then return true end
+
+	if self.RemantlerInterface and self.RemantlerInterface:IsValid() and self.RemantlerInterface:IsVisible() then return true end
+
+	return false
 end
 
 function GM:HumanHUD(screenscale)
@@ -863,7 +1023,7 @@ function GM:HumanHUD(screenscale)
 			local txth = draw_GetFontHeight("ZSHUDFontSmall")
 			local desiredzombies = self:GetDesiredStartingZombies()
 
-			draw_SimpleTextBlurry(translate.Get("waiting_for_players").." "..util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime)), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Format("waiting_for_players_x", util.ToMinutesSecondsCD(math.max(0, self:GetWaveStart() - curtime))), "ZSHUDFontSmall", w * 0.5, h * 0.25, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			if desiredzombies > 0 then
 				draw_SimpleTextBlurry(translate.Get(self:HasSigils() and "humans_furthest_from_sigils_are_zombies" or "humans_closest_to_spawns_are_zombies"), "ZSHUDFontSmall", w * 0.5, h * 0.25 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
@@ -877,10 +1037,27 @@ function GM:HumanHUD(screenscale)
 				end
 
 				local y = h * 0.7 + txth * 1.9
-				txth = draw_GetFontHeight("ZSHUDFontTiny")
+				txth = draw_GetFontHeight(ZS_TinyFontWithOutline())
 				for i, pl in ipairs(self.ZombieVolunteers) do
 					if pl:IsValid() then
-						draw_SimpleTextBlurry(pl:Name(), "ZSHUDFontTiny", w * 0.5, y, pl == MySelf and COLOR_SOFTRED or COLOR_GRAY, TEXT_ALIGN_CENTER)
+						local displayname = pl:DisplayName()
+						if not displayname or displayname == "" then
+							displayname = pl:Name()
+						end
+						if not displayname or displayname == "" then
+							displayname = pl:GetNWString("name", "")
+						end
+						if not displayname or displayname == "" then
+							displayname = pl:GetNWString("BotName", "")
+						end
+						if not displayname or displayname == "" then
+							displayname = pl:GetNWString("zs_bot_name", "")
+						end
+						if not displayname or displayname == "" then
+							displayname = pl:IsBot() and "BOT" or "???"
+						end
+
+						draw_SimpleTextBlurry(displayname, ZS_TinyFontWithOutline(), w * 0.5, y, pl == MySelf and COLOR_SOFTRED or COLOR_GRAY, TEXT_ALIGN_CENTER)
 						y = y + txth * 0.8
 					end
 				end
@@ -901,11 +1078,11 @@ function GM:HumanHUD(screenscale)
 	local lockon = self.HumanMenuLockOn
 	if lockon and self:ValidMenuLockOnTarget(MySelf, lockon) then
 		local txth = draw_GetFontHeight("ZSHUDFontSmall")
-		draw_SimpleTextBlurry(translate.Format("giving_items_to", lockon:Name()), "ZSHUDFontSmall", w * 0.5, h * 0.55 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Format("giving_items_to", lockon:DisplayName()), "ZSHUDFontSmall", w * 0.5, h * 0.55 + txth, COLOR_GRAY, TEXT_ALIGN_CENTER)
 	end
 
-	if gamemode.Call("PlayerCanPurchase", MySelf) then
-		draw_SimpleTextBlurry(translate.Get("press_f2_for_the_points_shop"), "ZSHUDFontSmall", w * 0.5, screenscale * 135, COLOR_GRAY, TEXT_ALIGN_CENTER)
+	if gamemode.Call("PlayerCanPurchase", MySelf) and not gamemode.Call("IsAnyUIOpen") then
+		draw_SimpleTextBlurry(translate.Format("press_x_for_the_points_shop", translate.GetBindKeyName("gm_showteam")), "ZSHUDFontSmall", w * 0.5, screenscale * 135, COLOR_GRAY, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -940,13 +1117,13 @@ function GM:ZombieObserverHUD(obsmode)
 		local target = MySelf:GetObserverTarget()
 		if target and target:IsValid() then
 			if target:IsPlayer() and P_Team(target) == TEAM_UNDEAD then
-				draw_SimpleTextBlur(translate.Format("observing_x", target:Name(), math.max(0, target:Health())), "ZSHUDFontSmall", w * 0.5, h * 0.75 - texh - 32, COLOR_DARKRED, TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("observing_x", target:DisplayName(), math.max(0, target:Health())), "ZSHUDFontSmall", w * 0.5, h * 0.65 - texh - 32, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 			end
 
 			if target.IsCreeperNest or target.MinionSpawn then
-				local txt = target.IsCreeperNest and "Nest" or "Gore Child"
+				local txt = target.IsCreeperNest and translate.Get("indicator_nest") or translate.Get("class_gore_child")
 
-				draw_SimpleTextBlur(translate.Format("observing_x_simple", txt), "ZSHUDFontSmall", w * 0.5, h * 0.75 - texh - 32, COLOR_DARKRED, TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("observing_x_simple", txt), "ZSHUDFontSmall", w * 0.5, h * 0.65 - texh - 32, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 			end
 
 			dyn = self:GetDynamicSpawning() and self:DynamicSpawnIsValid(target)
@@ -957,13 +1134,13 @@ function GM:ZombieObserverHUD(obsmode)
 	local x, y = w / 2, h * 0.68
 
 	if self:GetWaveActive() then
-		draw_SimpleTextBlurry(translate.Get("press_lmb_to_spawn"), "ZSHUDFontSmall", x, y, COLOR_GRAY, TEXT_ALIGN_CENTER)
-		draw_SimpleTextBlurry(translate.Get("press_rmb_to_spawn_close"), "ZSHUDFontSmall", x, y + space, COLOR_GRAY, TEXT_ALIGN_CENTER)
-		draw_SimpleTextBlurry(translate.Get("press_reload_to_spawn_far"), "ZSHUDFontSmall", x, y + space * 2, COLOR_GRAY, TEXT_ALIGN_CENTER)
-		draw_SimpleTextBlurry(translate.Get("press_alt_nest_menu"), "ZSHUDFontSmaller", x, y + space * 4, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Get("press_x_to_spawn"), "ZSHUDFontSmall", x, y, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Get("press_x_to_spawn_close"), "ZSHUDFontSmall", x, y + space, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Get("press_x_to_spawn_far"), "ZSHUDFontSmall", x, y + space * 2, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Get("press_x_nest_menu"), "ZSHUDFontSmaller", x, y + space * 4, COLOR_GRAY, TEXT_ALIGN_CENTER)
 	end
 
-	draw_SimpleTextBlurry(translate.Get("press_jump_to_free_roam"), "ZSHUDFontSmall", x, y + space * 3, COLOR_GRAY, TEXT_ALIGN_CENTER)
+	draw_SimpleTextBlurry(translate.Get("press_x_to_free_roam"), "ZSHUDFontSmall", x, y + space * 3, COLOR_GRAY, TEXT_ALIGN_CENTER)
 end
 
 local colLifeStats = Color(255, 50, 50, 255)
@@ -1009,9 +1186,9 @@ function GM:ZombieHUD()
 		if pl and pl:IsValid() then
 			local x, y = ScrW() / 2, ScrH() * 0.3 + draw_GetFontHeight("ZSHUDFont")
 			if pl == MySelf then
-				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", translate.Get(GAMEMODE.ZombieClasses[GAMEMODE.NextBossZombieClass].TranslationName)), "ZSHUDFont", x, y, Color(255, 50, 50), TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("you_will_be_x_soon", translate.ClassName(translate.Get(GAMEMODE.ZombieClasses[GAMEMODE.NextBossZombieClass].TranslationName))), "ZSHUDFont", x, y, Color(255, 50, 50), TEXT_ALIGN_CENTER)
 			else
-				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:Name(), translate.Get(GAMEMODE.ZombieClasses[GAMEMODE.NextBossZombieClass].TranslationName)), "ZSHUDFont", x, y, COLOR_GRAY, TEXT_ALIGN_CENTER)
+				draw_SimpleTextBlur(translate.Format("x_will_be_y_soon", pl:DisplayName(), translate.ClassName(translate.Get(GAMEMODE.ZombieClasses[GAMEMODE.NextBossZombieClass].TranslationName))), "ZSHUDFont", x, y, COLOR_GRAY, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -1076,7 +1253,7 @@ function GM:DrawCrateIndicators()
 			surface_SetDrawColor(255, 255, 255, alpha)
 			surface_DrawTexturedRect(-123, -113, 248, 228)
 
-			draw_SimpleTextBlurry("Arsenal Crate", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("indicator_arsenal_crate"), "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
 			cam_IgnoreZ(false)
@@ -1113,7 +1290,7 @@ function GM:DrawResupplyIndicators()
 			surface_DrawTexturedRect(-128, -128, 256, 256)
 
 			local timeremain = math.ceil(math.max(0, (MySelf.NextUse or 0) - CurTime()))
-			local txt = not MySelf.NextUse and translate.Get("ready") or timeremain > 0 and timeremain or translate.Get("ready")
+			local txt = not MySelf.NextUse and translate.Get("indicator_ready") or timeremain > 0 and timeremain or translate.Get("indicator_ready")
 			draw_SimpleTextBlurry(txt, "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
@@ -1150,7 +1327,7 @@ function GM:DrawRemantlerIndicators()
 			surface_SetDrawColor(255, 255, 255, alpha)
 			surface_DrawTexturedRect(-128, -128, 256, 256)
 
-			draw_SimpleTextBlurry("Weapon Remantler", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			draw_SimpleTextBlurry(translate.Get("indicator_weapon_remantler"), "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 			cam_End3D2D()
 			cam_IgnoreZ(false)
@@ -1184,7 +1361,7 @@ function GM:DrawNestIndicators()
 		surface_SetDrawColor(255, 255, 255, alpha)
 		surface_DrawTexturedRect(-128, -128, 256, 256)
 
-		draw_SimpleTextBlurry("Nest", "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
+		draw_SimpleTextBlurry(translate.Get("indicator_nest"), "ZS3D2DFont2Big", 0, 128, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 		if distance < 80000 then
 			local nown = nest:GetNestOwner()
@@ -1268,7 +1445,9 @@ function GM:RestartRound()
 end
 
 function GM:_HUDShouldDraw(name)
-	if self.FilmMode and name ~= "CHudWeaponSelection" then return false end
+	if name == "CHudWeaponSelection" then return false end
+
+	if self.FilmMode then return false end
 
 	return name ~= "CHudHealth" and name ~= "CHudBattery"
 	and name ~= "CHudAmmo" and name ~= "CHudSecondaryAmmo"
@@ -1287,16 +1466,65 @@ function GM:_CachedFearPower()
 end
 
 function surface.CreateLegacyFont(font, size, weight, antialias, additive, name, shadow, outline, blursize)
-	surface.CreateFont(name, {font = font, size = size, weight = weight, antialias = antialias, additive = additive, shadow = shadow, outline = outline, blursize = blursize})
+	local params = {font = font, size = size, weight = weight, antialias = antialias, additive = additive, shadow = shadow, outline = outline, blursize = blursize,}
+	if GAMEMODE and GAMEMODE.FontExtended then
+		params.extended = true
+	end
+	surface.CreateFont(name, params)
 end
 
-local fontfamily = "Ghoulish Fright AOE"
-local fontfamilysm = "Remington Noiseless"
-local fontfamily3d = "hidden"
-local fontsizeadd = 8
-local fontweight = 0
+local DEFAULT_FONTFAMILY    = "ghoulish_fright_aoe_v2.1"
+local DEFAULT_FONTFAMILY_SM = "remington_noiseless_v2"
+local DEFAULT_FONTFAMILY_3D = "hidden"
+local DEFAULT_FONTSIZEADD   = 8
+local DEFAULT_FONTWEIGHT    = 0
+
+local function GetLangFontSetting(key, default)
+	if translate and translate.Exists then
+		local v = translate.Get(key)
+		if v and v ~= "" and v ~= ("@" .. key .. "@") then
+			return v
+		end
+	end
+	return default
+end
+
+local function ReadFontSettings()
+    local baseFamily   = GetLangFontSetting("font_family", DEFAULT_FONTFAMILY)
+    local baseFamilySm = GetLangFontSetting("font_family_sm", DEFAULT_FONTFAMILY_SM)
+    local baseFamily3D = GetLangFontSetting("font_family_3d", DEFAULT_FONTFAMILY_3D)
+    local baseSizeAdd  = tonumber(GetLangFontSetting("font_size_add", tostring(DEFAULT_FONTSIZEADD))) or DEFAULT_FONTSIZEADD
+    local baseWeight   = tonumber(GetLangFontSetting("font_weight", tostring(DEFAULT_FONTWEIGHT))) or DEFAULT_FONTWEIGHT
+    local baseExtended = GetLangFontSetting("font_extended", "0") == "1"
+    local baseOutline  = GetLangFontSetting("font_outline",  "1") == "1"
+
+    return {
+        family   = baseFamily,
+        familySm = baseFamilySm,
+        family3D = baseFamily3D,
+        sizeAdd  = baseSizeAdd,
+        weight   = baseWeight,
+        extended = baseExtended,
+        outline  = baseOutline,
+
+        -- Menu-only overrides.
+        -- If a language file doesn't set these, they inherit the base
+        -- values above — so languages that don't want the change are
+        -- untouched. English, for example, keeps Remington Noiseless
+        -- with outline, exactly as before.
+        familyMenu  = GetLangFontSetting("font_family_menu",  baseFamilySm),
+        outlineMenu = GetLangFontSetting("font_outline_menu", baseOutline and "1" or "0") == "1",
+    }
+end
 
 function GM:Create3DFonts()
+	local settings = ReadFontSettings()
+	local fontfamily    = settings.family
+	local fontfamilysm  = settings.familySm
+	local fontfamily3d  = settings.family3D
+	local fontsizeadd   = settings.sizeAdd
+	local fontweight    = settings.weight
+
 	local fontsizeadd3D = 0
 	local fontweight3D = 0
 
@@ -1339,9 +1567,16 @@ function GM:CreateNonScaleFonts()
 end
 
 function GM:CreateScalingFonts()
+	local settings = ReadFontSettings()
+	local fontfamily    = settings.family
+	local fontfamilysm  = settings.familySm
+	local fontsizeadd   = settings.sizeAdd
+	local fontweight    = settings.weight
+
 	local fontaa = true
-	local fontshadow = false
-	local fontoutline = true
+	local fontoutline = settings.outline
+	
+	local fontoutlinemenu = settings.outlineMenu
 
 	local screenscale = BetterScreenScale()
 
@@ -1354,13 +1589,38 @@ function GM:CreateScalingFonts()
 	surface.CreateLegacyFont("csd", screenscale * 72, 100, true, false, "zsdeathnoticecspa", false, false)
 	surface.CreateLegacyFont("HL2MP", screenscale * 72, 100, true, false, "zsdeathnoticepa", false, false)
 
-	surface.CreateLegacyFont(fontfamily, screenscale * (16 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontTiny", fontshadow, fontoutline)
-	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallest", fontshadow, fontoutline)
-	surface.CreateLegacyFont(fontfamily, screenscale * (22 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmaller", fontshadow, fontoutline)
-	surface.CreateLegacyFont(fontfamily, screenscale * (28 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmall", fontshadow, fontoutline)
-	surface.CreateLegacyFont(fontfamily, screenscale * (42 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFont", fontshadow, fontoutline)
-	surface.CreateLegacyFont(fontfamily, screenscale * (72 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontBig", fontshadow, fontoutline)
+	surface.CreateLegacyFont(fontfamily, screenscale * (16 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontTiny", false, fontoutline)
+	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallest", false, fontoutline)
+	surface.CreateLegacyFont(fontfamily, screenscale * (22 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmaller", false, fontoutline)
+	surface.CreateLegacyFont(fontfamily, screenscale * (28 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmall", false, fontoutline)
+	surface.CreateLegacyFont(fontfamily, screenscale * (42 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFont", false, fontoutline)
+	-- Dedicated banner font for wave/sigil notifications.
+    -- The generic ZSHUDFont is created with a fractional size at any
+    -- non-1080p resolution (e.g. 0.851 * 50 = 42.55 at 720p), and GMod's
+    -- outline pass — which always offsets by whole pixels — produces a
+    -- broken, pixelated border around every glyph. Rounding the size to
+    -- an integer fixes the alignment without touching anything else.
+    local bannerFontSize = math.max(1, math.Round(screenscale * (42 + fontsizeadd)))
+    surface.CreateLegacyFont(fontfamily, bannerFontSize, fontweight, fontaa, false, "ZSHUDFontBanner", false, fontoutline)
+    surface.CreateLegacyFont(fontfamily, bannerFontSize, fontweight, fontaa, false, "ZSHUDFontBannerBlur", false, false, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (72 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontBig", false, fontoutline)
 	surface.CreateLegacyFont(fontfamily, screenscale * (16 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontTinyBlur", false, false, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (16 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontTinyOutline", false, true)
+	surface.CreateLegacyFont(fontfamily, screenscale * (16 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontTinyNoOutline", false, false)
+	surface.CreateLegacyFont(fontfamily, screenscale * (16 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontTinyOutlineBlur",   false, false, 8)
+    surface.CreateLegacyFont(fontfamily, screenscale * (16 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontTinyNoOutlineBlur", false, false, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallestOutline", false, true)
+	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallestNoOutline", false, false)
+	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallestOutlineBlur", false, true, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallestNoOutlineBlur", false, false, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (22 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallerOutline", false, true)
+	surface.CreateLegacyFont(fontfamily, screenscale * (22 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallerNoOutline", false, false)
+	surface.CreateLegacyFont(fontfamily, screenscale * (22 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallerOutlineBlur", false, true, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (22 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallerNoOutlineBlur", false, false, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (28 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallOutline", false, true)
+	surface.CreateLegacyFont(fontfamily, screenscale * (28 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallOutlineBlur", false, false, 8)
+	surface.CreateLegacyFont(fontfamily, screenscale * (28 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallNoOutline", false, false)
+	surface.CreateLegacyFont(fontfamily, screenscale * (28 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallNoOutlineBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * (22 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallerBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * (28 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontSmallBlur", false, false, 8)
 	surface.CreateLegacyFont(fontfamily, screenscale * (42 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontBlur", false, false, 8)
@@ -1385,18 +1645,26 @@ function GM:CreateScalingFonts()
 	surface.CreateLegacyFont(fontfamily, screenscale * (42 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontNS", false, false)
 	surface.CreateLegacyFont(fontfamily, screenscale * (72 + fontsizeadd), fontweight, fontaa, false, "ZSHUDFontBigNS", false, false)
 
-	surface.CreateLegacyFont(fontfamilysm, screenscale * 13, fontweight, fontaa, false, "ZSBodyTextFontSmall", fontshadow)
+	surface.CreateLegacyFont(fontfamilysm, screenscale * 13, fontweight, fontaa, false, "ZSBodyTextFontSmall", false)
 
-	surface.CreateLegacyFont(fontfamilysm, screenscale * 15, fontweight, fontaa, false, "ZSBodyTextFont", fontshadow, fontoutline)
-	surface.CreateLegacyFont(fontfamilysm, screenscale * 20, fontweight, fontaa, false, "ZSBodyTextFontBig", fontshadow, fontoutline)
+	surface.CreateLegacyFont(fontfamilysm, screenscale * 15, fontweight, fontaa, false, "ZSBodyTextFont", false, fontoutline)
+	surface.CreateLegacyFont(fontfamilysm, screenscale * 15, fontweight, fontaa, false, "ZSBodyTextFontNoOutline", false, false)
+	surface.CreateLegacyFont(fontfamilysm, screenscale * 20, fontweight, fontaa, false, "ZSBodyTextFontBig", false, fontoutline)
 
 	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), 0, true, false, "ZSDamageResistance", false, true)
 	surface.CreateLegacyFont(fontfamily, screenscale * (20 + fontsizeadd), 0, true, false, "ZSDamageResistanceBlur", false, true)
 
+	surface.CreateLegacyFont("Trebuchet MS", screenscale * 26, 700, true, false, "ZSMapTextSmall", false, false)
+	surface.CreateLegacyFont("Trebuchet MS", screenscale * 42, 700, true, false, "ZSMapText",       false, false)
+
 	surface.CreateFont("ZSXPBar", {font = "tahoma", size = screenscale * 14, weight = 500, antialias = false, shadow = true})
 end
 
+InstallFontFallbackHooks()
+
 function GM:CreateFonts()
+	GAMEMODE.FontExtended = ReadFontSettings().extended
+
 	self:Create3DFonts()
 	self:CreateNonScaleFonts()
 	self:CreateScalingFonts()
@@ -1429,35 +1697,267 @@ function GM:EvaluateFilmMode()
 		self.StatusHUD:SetVisible(visible)
 	end
 end
+-- =========================================================
+-- Notification stacking
+-- Duplicate notifications are collapsed into one with the suffix/prefix "(xN)".
+-- The text and position of the counter are configured in language files.
+-- =========================================================
+
+local NOTIFY_STACK_LIFETIME = 5
+
+local function NotificationArgsToKey(args)
+	local parts = {}
+	for i = 1, #args do
+		local v = args[i]
+		local t = type(v)
+		if t == "table" then
+			local subparts = {}
+			for k, vv in pairs(v) do
+				subparts[#subparts + 1] = tostring(k) .. ":" .. tostring(vv)
+			end
+			table.sort(subparts)
+			parts[#parts + 1] = "{" .. table.concat(subparts, ",") .. "}"
+		else
+			parts[#parts + 1] = t .. ":" .. tostring(v)
+		end
+	end
+	return table.concat(parts, "\1")
+end
+
+-- Returns the ready-made counter suffix. The format is translated.
+-- If the key is missing — the hardcoded default "(xN)" is used.
+local function GetStackLabel(count)
+	local key = "notify_stack_format"
+	if translate and translate.Exists and translate.Exists(key) then
+		return translate.Format(key, count)
+	end
+	return "(x" .. count .. ")"
+end
+
+-- The counter appears before the message if LANGUAGE.notify_stack_prefix == "1".
+local function StackLabelGoesFirst()
+	local key = "notify_stack_prefix"
+	if translate and translate.Exists and translate.Exists(key) then
+		return translate.Get(key) == "1"
+	end
+	return false
+end
+
+function GM:SetupNotificationStacking(panel)
+	if not panel or not panel.AddNotification then return end
+	if panel.StackingInstalled then return end
+	panel.StackingInstalled = true
+
+	panel.StackCache   = {}   -- mode 1: (xN) stack
+	panel.NumericCache = {}   -- mode 2: numeric merge
+
+	local origAddNotification = panel.AddNotification
+
+	-- ========================================================
+	-- Numeric merge helpers (mode 2)
+	-- ========================================================
+	local function NumericTemplate(s)
+		if type(s) ~= "string" then return nil end
+		return (s:gsub("%d+", "\1"))
+	end
+
+	local function ExtractNumbers(s)
+		local nums = {}
+		if type(s) ~= "string" then return nums end
+		for n in s:gmatch("%d+") do
+			nums[#nums + 1] = tonumber(n) or 0
+		end
+		return nums
+	end
+
+	local function ReplaceNumbers(s, newvals)
+		local i = 0
+		return (s:gsub("%d+", function(old)
+			i = i + 1
+			local v = newvals[i]
+			if v == nil then return old end
+			return tostring(v)
+		end))
+	end
+
+	local function BuildNumericKey(args)
+		local parts = {}
+		for i = 1, #args do
+			local v = args[i]
+			if type(v) == "string" then
+				parts[#parts + 1] = i .. ":" .. (NumericTemplate(v) or "")
+			end
+		end
+		return table.concat(parts, "\3")
+	end
+
+	local function MergeNumericArgs(oldArgs, newArgs)
+		local result = {}
+		for i = 1, #newArgs do
+			local nv = newArgs[i]
+			local ov = oldArgs[i]
+			if type(nv) == "string" and type(ov) == "string" then
+				local onums = ExtractNumbers(ov)
+				local nnums = ExtractNumbers(nv)
+				local sum = {}
+				for j = 1, math.max(#onums, #nnums) do
+					sum[j] = (onums[j] or 0) + (nnums[j] or 0)
+				end
+				result[i] = ReplaceNumbers(nv, sum)
+			else
+				result[i] = nv
+			end
+		end
+		return result
+	end
+
+	-- ========================================================
+	-- Wrapped AddNotification
+	-- ========================================================
+	function panel:AddNotification(...)
+		local mode = GAMEMODE.NotifyStack or 0
+
+		-- Separate no_stack marker from real args
+		local rawargs = { ... }
+		local args = {}
+		local no_stack = false
+		for i = 1, #rawargs do
+			local v = rawargs[i]
+			if type(v) == "table" and v.no_stack then
+				no_stack = true
+			else
+				args[#args + 1] = v
+			end
+		end
+
+		-- Explicitly marked (map text / cards) — always fresh
+		if no_stack then
+			return origAddNotification(self, unpack(args))
+		end
+
+		-- Mode 0 — no stacking at all
+		if mode == 0 then
+			return origAddNotification(self, unpack(args))
+		end
+
+		local curtime = CurTime()
+
+		-- Purge expired entries in both caches
+		for k, v in pairs(self.StackCache) do
+			if curtime >= v.expires then
+				self.StackCache[k] = nil
+			end
+		end
+		for k, v in pairs(self.NumericCache) do
+			if curtime >= v.expires then
+				self.NumericCache[k] = nil
+			end
+		end
+
+		-- ================================================
+		-- Mode 1 — full (xN) stacking
+		-- ================================================
+		if mode == 1 then
+			local key = NotificationArgsToKey(args)
+			local cached = self.StackCache[key]
+
+			if cached and curtime < cached.expires then
+				cached.count = cached.count + 1
+				cached.expires = curtime + NOTIFY_STACK_LIFETIME
+
+				if cached.panel and cached.panel:IsValid() then
+					cached.panel:Remove()
+				end
+
+				local NBSP = "\194\160"
+				local newargs = {}
+				for i = 1, #args do newargs[i] = args[i] end
+
+				local label = GetStackLabel(cached.count)
+
+				if StackLabelGoesFirst() then
+					table.insert(newargs, 1, label .. NBSP)
+				else
+					newargs[#newargs + 1] = NBSP .. label
+				end
+
+				cached.panel = origAddNotification(self, unpack(newargs))
+				return cached.panel
+			end
+
+			local newpanel = origAddNotification(self, unpack(args))
+			self.StackCache[key] = {
+				panel = newpanel,
+				count = 1,
+				expires = curtime + NOTIFY_STACK_LIFETIME,
+			}
+			return newpanel
+		end
+
+		-- ================================================
+		-- Mode 2 — numeric merge
+		-- ================================================
+		local nkey = BuildNumericKey(args)
+		local ncached = self.NumericCache[nkey]
+
+		if ncached and curtime < ncached.expires then
+			ncached.expires = curtime + NOTIFY_STACK_LIFETIME
+
+			if ncached.panel and ncached.panel:IsValid() then
+				ncached.panel:Remove()
+			end
+
+			local merged = MergeNumericArgs(ncached.args, args)
+			ncached.args = merged
+			ncached.panel = origAddNotification(self, unpack(merged))
+			return ncached.panel
+		end
+
+		local newpanel = origAddNotification(self, unpack(args))
+		self.NumericCache[nkey] = {
+			panel = newpanel,
+			args = args,
+			expires = curtime + NOTIFY_STACK_LIFETIME,
+		}
+		return newpanel
+	end
+end
 
 function GM:CreateVGUI()
 	local screenscale = BetterScreenScale()
 	self.GameStatePanel = vgui.Create("ZSGameState")
 	self.GameStatePanel:SetTextFont("ZSHUDFontSmaller")
 	self.GameStatePanel:SetAlpha(220)
-	self.GameStatePanel:SetSize(screenscale * 420, screenscale * 80)
+	self.GameStatePanel:SetSize(screenscale * 460, screenscale * 80)
 	self.GameStatePanel:ParentToHUD()
 
 	self.TopNotificationHUD = vgui.Create("DEXNotificationsList")
 	self.TopNotificationHUD:SetAlign(RIGHT)
 	self.TopNotificationHUD.PerformLayout = function(pan)
-		pan:SetSize(ScrW() * 0.4, ScrH() * 0.6)
+		pan:SetSize(ScrW() * 0.55, ScrH() * 0.6)
 		pan:AlignTop(16 * BetterScreenScale())
 		pan:AlignRight()
 	end
 	self.TopNotificationHUD:InvalidateLayout()
 	self.TopNotificationHUD:ParentToHUD()
+	-- IMPORTANT: TopNotify does NOT collapse identical messages and does NOT add
+	-- the "(xN)" suffix. Collapsing is applied only to CenterNotify.
+	-- (Previously, self:SetupNotificationStacking(self.TopNotificationHUD) was here,
+	-- which caused TopNotify to duplicate "(xN)".)
 
 	self.CenterNotificationHUD = vgui.Create("DEXNotificationsList")
 	self.CenterNotificationHUD:SetAlign(CENTER)
-	self.CenterNotificationHUD:SetMessageHeight(36)
+	self.CenterNotificationHUD:SetWrapText(true)
+	self.CenterNotificationHUD:SetDynamicHeight(true)
+	self.CenterNotificationHUD:SetMessageHeight(36 * BetterScreenScale())
 	self.CenterNotificationHUD.PerformLayout = function(pan)
-		pan:SetSize(ScrW() / 2, ScrH() * 0.35)
+		pan:SetSize(ScrW() * 0.5, ScrH() * 0.35)
 		pan:CenterHorizontal()
 		pan:AlignBottom(16 * BetterScreenScale())
 	end
 	self.CenterNotificationHUD:InvalidateLayout()
 	self.CenterNotificationHUD:ParentToHUD()
+	self:SetupNotificationStacking(self.CenterNotificationHUD)
 end
 
 function GM:CreateLateVGUI()
@@ -1625,132 +2125,200 @@ local function DismantleWeapon()
 	RunConsoleCommand("zs_dismantle", GAMEMODE.InventoryMenu.SelInv)
 end
 
-local function AltSelItemUpd()
-	local activeweapon = MySelf:GetActiveWeapon()
-	if not activeweapon or not activeweapon:IsValid() then return end
-
-	local actwclass = activeweapon:GetClass()
-	GAMEMODE.HumanMenuPanel.SelectedItemLabel:SetText(weapons.Get(actwclass).PrintName)
-end
+local AltSelItemUpd = ZS_UpdateAltSelItemLabel
 
 function GM:DoAltSelectedItemUpdate()
 	if self.InventoryMenu.SelInv then
-		self.HumanMenuPanel.SelectedItemLabel:SetText(self.ZSInventoryItemData[self.InventoryMenu.SelInv].PrintName)
+		local invdata = self.ZSInventoryItemData[self.InventoryMenu.SelInv]
+		if not invdata then return end
+		local name = invdata.PrintName
+		if invdata.TranslationID then
+			name = translate.ItemName(invdata.TranslationID, invdata.TranslationPrefix) or name
+		end
+		self.HumanMenuPanel.SelectedItemLabel:SetText(name)
 	else
 		timer.Simple(0.25, AltSelItemUpd)
 	end
 end
 
-function GM:HumanMenu()
-	if self.ZombieEscape then return end
+local function ZS_ScrollableSideMenuLabel(parent, text, font, color)
+	local label = vgui.Create("DLabelAutoScroll", parent)
+	label:SetFont(font or "ZSHUDFontSmaller")
+	label:SetTextColor(color or color_white)
+	label:SetScrollingMode("time")
+	label:SetContentAlignment(5)
+	label:SetSize(parent:GetWide(), draw.GetFontHeight(font or "ZSHUDFontSmaller") + 2)
+	label:SetText(text or "")
+	return label
+end
 
-	local ent = MySelf:MeleeTrace(48, 2, nil, nil, true).Entity
-	if self:ValidMenuLockOnTarget(MySelf, ent) then
-		self.HumanMenuLockOn = ent
-	else
-		self.HumanMenuLockOn = nil
-	end
+local function ZS_ScrollableSideMenuButton(parent, text, font)
+	local btn = vgui.Create("DButton", parent)
+	btn:SetText("")
 
-	self:OpenInventory()
-	if self.HumanMenuPanel and self.HumanMenuPanel:IsValid() then
-		self.HumanMenuPanel:SetVisible(true)
-		self.HumanMenuPanel:OpenMenu()
+	btn.ScrollText      = text or ""
+	btn.ScrollFont      = font or "ZSHUDFontSmaller"
+	btn.ScrollTimeStart = RealTime()
 
-		self:DoAltSelectedItemUpdate()
-		return
-	end
+	local basePaint = btn.Paint
+	btn.Paint = function(me, w, h)
+		if basePaint then basePaint(me, w, h) end
 
-	local panel = vgui.Create("DSideMenu")
-	self.HumanMenuPanel = panel
+		local txt = me.ScrollText
+		if not txt or txt == "" then return end
 
-	local screenscale = BetterScreenScale()
-	for k, v in pairs(self.AmmoNames) do
-		local b = vgui.Create("DAmmoCounter", panel)
-		b:SetAmmoType(k)
-		b:SetTall(math.max(32, screenscale * 36))
-		panel:AddItem(b)
-	end
+		local f = me.ScrollFont
+		if type(f) ~= "string" then f = "ZSHUDFontSmaller" end
 
-	local hei = draw_GetFontHeight("ZSHUDFontSmall")
+		local col = me:GetFGColor()
+		if type(col) ~= "Color" then col = color_white end
 
-	local selecteditemtitle = EasyLabel(panel, "Selected Item", "ZSHUDFontSmall", color_white)
-	selecteditemtitle:SetContentAlignment(5)
-	panel:AddItem(selecteditemtitle)
+		if me:GetDisabled() then
+			col = Color(col.r * 0.5, col.g * 0.5, col.b * 0.5, col.a * 0.5)
+		elseif me:IsHovered() then
+			col = Color(255, 255, 255, 255)
+		else
+			col = Color(190, 190, 190, 255)
+		end
 
-	local selecteditemlabel = EasyLabel(panel, "Fists", "ZSHUDFontSmaller", color_white)
-	selecteditemlabel:SetContentAlignment(5)
-	panel:AddItem(selecteditemlabel)
-	panel.SelectedItemLabel = selecteditemlabel
+		local tw
+		if ZS_MeasureMixedText then
+			tw = ZS_MeasureMixedText(txt, f)
+		else
+			surface.SetFont(f)
+			tw = surface.GetTextSize(txt)
+		end
 
-	local gwbtn = vgui.Create("DButton")
-	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Give Item")
-	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
-	gwbtn:CenterHorizontal()
-	gwbtn.DoClick = GiveWeapon
-	panel:AddItem(gwbtn)
-
-	gwbtn = vgui.Create("DButton")
-	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Give Item and 5 clips")
-	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
-	gwbtn:CenterHorizontal()
-	gwbtn.DoClick = GiveWeaponClip
-	panel:AddItem(gwbtn)
-
-	gwbtn = vgui.Create("DButton")
-	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Drop Item")
-	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
-	gwbtn:CenterHorizontal()
-	gwbtn.DoClick = DropWeapon
-	panel:AddItem(gwbtn)
-
-	gwbtn = vgui.Create("DButton")
-	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Empty Weapon Clip")
-	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
-	gwbtn:CenterHorizontal()
-	gwbtn.DoClick = EmptyClip
-	panel:AddItem(gwbtn)
-
-	gwbtn = vgui.Create("DButton")
-	gwbtn:SetFont("ZSHUDFontSmaller")
-	gwbtn:SetText("Dismantle Item")
-	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
-	gwbtn:CenterHorizontal()
-	gwbtn.DoClick = DismantleWeapon
-	panel:AddItem(gwbtn)
-
-	panel:AddItem(EasyLabel(panel, "Resupply Ammo Selection", "DefaultFont", color_white))
-	local dropdown = vgui.Create("DComboBox", panel)
-	dropdown:SetMouseInputEnabled(true)
-	dropdown:AddChoice("Resupply Held Weapon")
-	for k,v in pairs(self.AmmoResupply) do
-		dropdown:AddChoice(self.AmmoNames[k])
-	end
-	dropdown.OnSelect = function(me, index, value, data)
-		if value == "Resupply Held Weapon" then
-			MySelf.ResupplyChoice = nil
-			RunConsoleCommand("zs_resupplyammotype", "default")
+		if tw <= w - 4 then
+			draw.SimpleText(txt, f, w * 0.5, h * 0.5, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			return
 		end
 
-		for k,v in pairs(self.AmmoNames) do
-			if value == v then
-				MySelf.ResupplyChoice = k
-				RunConsoleCommand("zs_resupplyammotype", k)
-				break
-			end
+		local travel     = tw - (w - 4)
+		local speed      = 40
+		local pause      = 1.2
+		local scrollTime = travel / speed
+		local cycle      = (scrollTime + pause) * 2
+		local t          = (RealTime() - me.ScrollTimeStart) % cycle
+
+		local frac
+		if t < pause then
+			frac = 0
+		elseif t < pause + scrollTime then
+			frac = (t - pause) / scrollTime
+		elseif t < pause + scrollTime + pause then
+			frac = 1
+		else
+			frac = 1 - (t - pause - scrollTime - pause) / scrollTime
 		end
+
+		local x = 2 - travel * frac
+		local sx, sy = me:LocalToScreen(0, 0)
+		render.SetScissorRect(sx + 2, sy, sx + w - 2, sy + h, true)
+			draw.SimpleText(txt, f, x, h * 0.5, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		render.SetScissorRect(0, 0, 0, 0, false)
 	end
-	dropdown:SetText("Resupply Held Weapon")
-	dropdown:SetTextColor(color_black)
-	panel:AddItem(dropdown)
 
-	self.HumanMenuSupplyChoice = dropdown
+	btn.SetText = function(me, t)
+		me.ScrollText      = tostring(t or "")
+		me.ScrollTimeStart = RealTime()
+	end
+	btn.GetText = function(me) return me.ScrollText or "" end
+	btn.SetFont = function(me, f) me.ScrollFont = f or "ZSHUDFontSmaller" end
+	btn.GetFont = function(me) return me.ScrollFont or "ZSHUDFontSmaller" end
 
-	panel:OpenMenu()
+	return btn
+end
+
+function GM:HumanMenu()
+    if self.ZombieEscape then return end
+    local ent = MySelf:MeleeTrace(48, 2, nil, nil, true).Entity
+    if self:ValidMenuLockOnTarget(MySelf, ent) then
+        self.HumanMenuLockOn = ent
+    else
+        self.HumanMenuLockOn = nil
+    end
+
+    self:OpenInventory()
+    if self.HumanMenuPanel and self.HumanMenuPanel:IsValid() then
+        self.HumanMenuPanel:SetVisible(true)
+        self.HumanMenuPanel:OpenMenu()
+        self:DoAltSelectedItemUpdate()
+        return
+    end
+
+    local panel = vgui.Create("DSideMenu")
+    self.HumanMenuPanel = panel
+    local screenscale = BetterScreenScale()
+    for k, v in pairs(self.AmmoNames) do
+        local b = vgui.Create("DAmmoCounter", panel)
+        b:SetAmmoType(k)
+        b:SetTall(math.max(32, screenscale * 36))
+        panel:AddItem(b)
+    end
+
+    local hei = draw_GetFontHeight("ZSHUDFontSmall")
+    local selecteditemtitle = ZS_ScrollableSideMenuLabel(panel, translate.Get("gamemenu_selected_item"), "ZSHUDFontSmall", color_white)
+    selecteditemtitle:SetContentAlignment(5)
+    panel:AddItem(selecteditemtitle)
+    local selecteditemlabel = ZS_ScrollableSideMenuLabel(panel, translate.Get("wpn_name_fists"), "ZSHUDFontSmaller", color_white)
+    selecteditemlabel:SetContentAlignment(5)
+    panel:AddItem(selecteditemlabel)
+    panel.SelectedItemLabel = selecteditemlabel
+    local gwbtn = ZS_ScrollableSideMenuButton(panel, translate.Get("gamemenu_give_item"), "ZSHUDFontSmaller")
+    gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
+    gwbtn:CenterHorizontal()
+    gwbtn.DoClick = GiveWeapon
+    panel:AddItem(gwbtn)
+    gwbtn = ZS_ScrollableSideMenuButton(panel, translate.Get("gamemenu_give_item_clip"), "ZSHUDFontSmaller")
+    gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
+    gwbtn:CenterHorizontal()
+    gwbtn.DoClick = GiveWeaponClip
+    panel:AddItem(gwbtn)
+    gwbtn = ZS_ScrollableSideMenuButton(panel, translate.Get("gamemenu_drop_item"), "ZSHUDFontSmaller")
+    gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
+    gwbtn:CenterHorizontal()
+    gwbtn.DoClick = DropWeapon
+    panel:AddItem(gwbtn)
+    gwbtn = ZS_ScrollableSideMenuButton(panel, translate.Get("gamemenu_empty_clip"), "ZSHUDFontSmaller")
+    gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
+    gwbtn:CenterHorizontal()
+    gwbtn.DoClick = EmptyClip
+    panel:AddItem(gwbtn)
+    gwbtn = ZS_ScrollableSideMenuButton(panel, translate.Get("gamemenu_dismantle_item"), "ZSHUDFontSmaller")
+    gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
+    gwbtn:CenterHorizontal()
+    gwbtn.DoClick = DismantleWeapon
+    panel:AddItem(gwbtn)
+    local resupplyLabel = ZS_ScrollableSideMenuLabel(panel, translate.Get("gamemenu_resupply_selection"), "DefaultFont", color_white)
+    resupplyLabel:SetContentAlignment(4)
+    panel:AddItem(resupplyLabel)
+	local dropdown = vgui.Create("DComboBox", panel)
+	dropdown:SetMouseInputEnabled(true)
+	StyleZSComboBox(dropdown)
+
+    -- Store the raw ammo type in AddChoice's `data` slot so the OnSelect
+    -- callback doesn't have to reverse-map the (now translated) label.
+    dropdown:AddChoice(translate.Get("gamemenu_resupply_held"), nil)
+    for k, _ in pairs(self.AmmoResupply) do
+        dropdown:AddChoice(translate.AmmoName(k, "inv"), k)
+    end
+
+    dropdown.OnSelect = function(me, index, value, data)
+        if not data then
+            MySelf.ResupplyChoice = nil
+            RunConsoleCommand("zs_resupplyammotype", "default")
+            return
+        end
+
+        MySelf.ResupplyChoice = data
+        RunConsoleCommand("zs_resupplyammotype", data)
+    end
+
+    dropdown:SetText(translate.Get("gamemenu_resupply_held"))
+    panel:AddItem(dropdown)
+    self.HumanMenuSupplyChoice = dropdown
+    panel:OpenMenu()
 end
 
 function GM:ZombieSpawnMenu()
@@ -1772,7 +2340,7 @@ end
 
 function GM:PlayerBindPress(pl, bind, wasin)
 	if bind == "gmod_undo" or bind == "undo" then
-		RunConsoleCommand("+zoom")
+	RunConsoleCommand("+zoom")
 		timer.Create("ReleaseZoom", 1, 1, function() RunConsoleCommand("-zoom") end)
 	elseif bind == "+menu_context" then
 		if P_Team(pl) == TEAM_UNDEAD then
@@ -1905,17 +2473,17 @@ function GM:PreDrawViewModel(vm, pl, wep)
 end
 
 function GM:PostDrawViewModel(vm, pl, wep)
-	if wep and wep:IsValid() then
-		if wep.UseHands or not wep:IsScripted() then
-			local hands = pl:GetHands()
-			if hands and hands:IsValid() then
-				hands:DrawModel()
-			end
-		end
+	if not (wep and wep:IsValid()) then return end
 
-		if wep.PostDrawViewModel then
-			wep:PostDrawViewModel(vm)
+	if wep.UseHands or not wep:IsScripted() then
+		local hands = pl:GetHands()
+		if hands and hands:IsValid() then
+			hands:DrawModel()
 		end
+	end
+
+	if wep.PostDrawViewModel then
+		wep:PostDrawViewModel(vm)
 	end
 end
 
@@ -1924,6 +2492,24 @@ local matWhite = Material("models/debug/debugwhite")
 local lowhealthcolor = GM.AuraColorEmpty
 local fullhealthcolor = GM.AuraColorFull
 function GM:_PrePlayerDraw(pl)
+	-- Classes with CLASS.OverrideModel (Eradicator, Bonemesh, Howler, etc.)
+	-- hide the base model via status_overridemodel → SetRenderMode(NONE).
+	-- This flag can be reset on network updates / class change / respawn,
+	-- causing the base zombie model to render for a frame or two alongside
+	-- the override model.
+	--
+	-- Re-apply SetRenderMode(NONE) every frame on the client. Local flag,
+	-- not networked. IMPORTANT: don't return true here — that skips the
+	-- whole render pass including EF_BONEMERGE children, making the
+	-- override model invisible.
+	local overridestatus = pl.status_overridemodel
+	if overridestatus and overridestatus:IsValid() then
+		local classtab = pl:GetZombieClassTable()
+		if classtab and not classtab.NoHideMainModel then
+			pl:SetRenderMode(RENDERMODE_NONE)
+		end
+	end
+
 	local shadowman = false
 
 	if pl ~= MySelf and pl:IsEffectActive(EF_DIMLIGHT) then
@@ -2221,19 +2807,90 @@ function GM:Rewarded(class, amount)
 
 	class = class or "0"
 
-	local toptext = translate.Get("arsenal_upgraded")
+	local header = translate.Get("arsenal_upgraded")
+	local hasKillicon = killicon.Get(class) ~= killicon.Get("default")
+
+	local itemName
 
 	local wep = weapons.Get(class)
-	if wep and wep.PrintName and #wep.PrintName > 0 then
-		if killicon.Get(class) == killicon.Get("default") then
-			self:CenterNotify(COLOR_PURPLE, toptext..": ", color_white, wep.PrintName)
-		else
-			self:CenterNotify({killicon = class}, " ", COLOR_PURPLE, toptext..": ", color_white, wep.PrintName)
+	if wep then
+		itemName = translate.WeaponName(wep)
+	end
+
+	if not itemName then
+		local ply = LocalPlayer()
+		if IsValid(ply) then
+			local wepEnt = ply:GetWeapon(class)
+			if IsValid(wepEnt) and wepEnt.GetPrintName then
+				local pn = wepEnt:GetPrintName()
+				if type(pn) == "string" and pn ~= "" and pn:sub(1, 1) ~= "#" then
+					itemName = pn
+				elseif type(pn) == "string" and pn:sub(1, 1) == "#" then
+					local key = pn:sub(2)
+					local resolved = language.GetPhrase(key)
+					if type(resolved) == "string" and resolved ~= key and resolved ~= "" then
+						itemName = resolved
+					else
+						key = key:gsub("^HL2_", ""):gsub("^Cstrike_", ""):gsub("^GMod_", ""):gsub("_", " ")
+						itemName = key:gsub("(%a)([%w]*)", function(a, b)
+							return a:upper() .. b:lower()
+						end)
+					end
+				end
+			end
 		end
-	elseif amount then
-		self:CenterNotify(COLOR_PURPLE, toptext..": ", color_white, amount.." "..class)
+	end
+
+	if not itemName then
+		if amount then
+			itemName = amount .. " " .. class
+		else
+			local pretty = class:gsub("^weapon_", ""):gsub("^zs_", ""):gsub("_", " ")
+			pretty = pretty:gsub("(%a)([%w]*)", function(a, b)
+				return a:upper() .. b:lower()
+			end)
+			itemName = pretty
+		end
+	end
+
+	-- No item to combine with — show the bare header.
+	if not itemName then
+		self:CenterNotify(COLOR_PURPLE, header)
+		return
+	end
+
+	-- The notification is split into two translatable segments around the
+	-- item name. Both segments may be empty. Available placeholders:
+	--   %1$s = header, %2$s = item name.
+	-- The item name itself is always drawn in white; the surrounding
+	-- segments (which carry the header) are drawn in purple.
+    local prefix = translate.Format("arsenal_upgraded_prefix", header, itemName)
+    local suffix = translate.Format("arsenal_upgraded_suffix", header, itemName)
+
+    if prefix ~= "" and not prefix:find("%s$") then
+        prefix = prefix .. " "
+    end
+    if suffix ~= "" and not suffix:find("^%s") then
+        suffix = " " .. suffix
+    end
+
+    -- Build the notification argument list, preserving the color split.
+    local args = {}
+    if prefix ~= "" then
+        args[#args + 1] = COLOR_PURPLE
+        args[#args + 1] = prefix
+    end
+    args[#args + 1] = COLOR_WHITE
+    args[#args + 1] = itemName
+    if suffix ~= "" then
+        args[#args + 1] = COLOR_PURPLE
+        args[#args + 1] = suffix
+    end
+
+	if hasKillicon then
+		self:CenterNotify({killicon = class}, " ", unpack(args))
 	else
-		self:CenterNotify(COLOR_PURPLE, toptext)
+		self:CenterNotify(unpack(args))
 	end
 end
 
@@ -2244,3 +2901,136 @@ end
 function PlayMenuCloseSound()
 	MySelf:EmitSound("buttons/lightswitch2.wav", 100, 20)
 end
+
+hook.Add("InitPostEntity", "ZS_TranslateWeaponPrintName", function()
+	local weaponmeta = FindMetaTable("Weapon")
+	if not weaponmeta then return end
+	if weaponmeta.ZS_GetPrintNamePatched then return end
+	weaponmeta.ZS_GetPrintNamePatched = true
+
+	local oldGetPrintName = weaponmeta.GetPrintName
+	function weaponmeta:GetPrintName()
+		local translated = translate.WeaponName(self)
+		if translated then return translated end
+		if oldGetPrintName then return oldGetPrintName(self) end
+		return self.PrintName or "Weapon"
+	end
+end)
+
+do
+	local colBG    = Color(16, 16, 16, 90)
+	local colRed   = Color(220, 0, 0, 230)
+	local colWhite = Color(220, 220, 220, 230)
+	local colAmmo  = Color(255, 255, 255, 230)
+
+	local function ShouldUseOurHUD(wep)
+		return wep:GetClass():sub(1, 10) ~= "weapon_zs_"
+	end
+
+	local function ReadAmmo(wep)
+		local primary     = wep:GetPrimaryAmmoType()
+		local hasAmmoType = primary and primary > 0
+		local clip        = wep:Clip1()
+		local hasClip     = clip >= 0
+		return primary, hasAmmoType, clip, hasClip
+	end
+
+
+	hook.Add("HUDPaint", "ZS_WeaponAmmo2D", function()
+		if GAMEMODE.FilmMode then return end
+		if not MySelf or not MySelf:IsValid() or not MySelf:Alive() then return end
+		if MySelf:Team() ~= TEAM_HUMAN then return end
+		if not GAMEMODE:ShouldDraw2DWeaponHUD() then return end
+
+		local wep = MySelf:GetActiveWeapon()
+		if not (wep and wep:IsValid()) then return end
+		if not ShouldUseOurHUD(wep) then return end
+
+		local primary, hasAmmoType, clip, hasClip = ReadAmmo(wep)
+		if not hasClip and not hasAmmoType then return end
+
+		local ss = BetterScreenScale()
+		local wid, hei = 180 * ss, 64 * ss
+		local x = ScrW() - wid - 128 * ss
+		local y = ScrH() - hei - 72 * ss
+
+		draw.RoundedBox(16, x, y, wid, hei, colBG)
+
+		if hasClip and hasAmmoType then
+			local spare = MySelf:GetAmmoCount(primary)
+			draw.SimpleTextBlurry(clip,
+				clip >= 100 and "ZSHUDFont" or "ZSHUDFontBig",
+				x + wid * 0.25, y + hei * 0.5,
+				(clip == 0) and colRed or colAmmo,
+				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlurry(spare,
+				spare >= 1000 and "ZSHUDFontSmall" or "ZSHUDFont",
+				x + wid * 0.75, y + hei * 0.5,
+				(spare == 0) and colRed or colWhite,
+				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+		elseif hasClip then
+			draw.SimpleTextBlurry(clip,
+				clip >= 100 and "ZSHUDFont" or "ZSHUDFontBig",
+				x + wid * 0.5, y + hei * 0.5,
+				colAmmo,
+				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+		else
+			local spare = MySelf:GetAmmoCount(primary)
+			draw.SimpleTextBlurry(spare,
+				spare >= 1000 and "ZSHUDFontSmall" or "ZSHUDFont",
+				x + wid * 0.5, y + hei * 0.5,
+				(spare == 0) and colRed or colWhite,
+				TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+	end)
+end
+
+hook.Add("InitPostEntity", "ZS_GiveGModFistsTranslateActivity", function()
+	local wep = weapons.GetStored("weapon_fists")
+	if wep and not wep.ZS_TranslateAdded then
+		wep.ZS_TranslateAdded = true
+		wep.TranslateActivity = function(self, act)
+			return self.ActivityTranslate and self.ActivityTranslate[act] or -1
+		end
+	end
+end)
+
+do
+	local ghostlerp = 0
+
+	hook.Add("CalcViewModelView", "ZS_NonZS_GhostLower", function(wep, vm, oldPos, oldAng, pos, ang)
+		if not IsValid(wep) or wep:GetClass():sub(1, 10) == "weapon_zs_" then
+			return
+		end
+
+		local ply = wep:GetOwner()
+		if not IsValid(ply) then return end
+
+		if ply:GetBarricadeGhosting() then
+			ghostlerp = math.min(1, ghostlerp + FrameTime() * 4)
+		elseif ghostlerp > 0 then
+			ghostlerp = math.max(0, ghostlerp - FrameTime() * 5)
+		end
+
+		if ghostlerp > 0 then
+			pos = pos + 3.5 * ghostlerp * ang:Up()
+			ang:RotateAroundAxis(ang:Right(), -30 * ghostlerp)
+			return pos, ang
+		end
+	end)
+end
+
+hook.Add("CreateMove", "ZS_NonZS_GhostBlockAttack", function(cmd)
+	local ply = LocalPlayer()
+	if not IsValid(ply) or not ply:GetBarricadeGhosting() then return end
+
+	local wep = ply:GetActiveWeapon()
+	if IsValid(wep) and wep:GetClass():sub(1, 10) == "weapon_zs_" then return end
+
+	cmd:RemoveKey(IN_ATTACK)
+	cmd:RemoveKey(IN_ATTACK2)
+end)
+
+include("addon_compatibility/cl_tfa_compat.lua")

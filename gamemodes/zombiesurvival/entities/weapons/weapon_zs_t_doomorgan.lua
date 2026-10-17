@@ -27,12 +27,14 @@ end
 SWEP.Primary.Automatic = false
 SWEP.Primary.Delay = 1
 
+SWEP.CleanseCooldown = 20
+
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
 	local owner = self:GetOwner()
-	if SERVER and not owner.LastDoomOrganCleanse or (owner.LastDoomOrganCleanse and owner.LastDoomOrganCleanse + 20 < CurTime()) then
+	if SERVER and not owner.LastDoomOrganCleanse or (owner.LastDoomOrganCleanse and owner.LastDoomOrganCleanse + self.CleanseCooldown < CurTime()) then
 		owner.LastDoomOrganCleanse = CurTime()
 		owner:EmitSound("weapons/bugbait/bugbait_squeeze3.wav", 70, 70)
 		owner:EmitSound("physics/flesh/flesh_squishy_impact_hard3.wav", 65, 135, 1, CHAN_AUTO)

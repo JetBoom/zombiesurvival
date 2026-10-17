@@ -161,12 +161,7 @@ function meta:CallWeaponFunction(funcname, ...)
 end
 
 function meta:ClippedName()
-	local name = self:Name()
-	if #name > 16 then
-		name = string.sub(name, 1, 14)..".."
-	end
-
-	return name
+	return string.TruncateUTF8(self:Name(), 16)
 end
 
 function meta:SigilTeleportDestination(not_from_sigil, corrupted)
@@ -288,8 +283,16 @@ function meta:SetZombieClassName(classname)
 	end
 end
 
+local POINTS_NW2_KEY = "zs_points"
+
 function meta:GetPoints()
-	return self:GetDTInt(1)
+	local points = self:GetNW2String(POINTS_NW2_KEY, "")
+
+	if points ~= "" then
+		return tonumber(points) or 0
+	end
+
+	return 0
 end
 
 function meta:GetBloodArmor()
@@ -434,7 +437,7 @@ local zctab
 local zcfunc
 function meta:CallZombieFunction0(funcname)
 	if P_Team(self) == TEAM_UNDEAD then
-		zctab = ZombieClasses[E_GetTable(self).Class or GAMEMODE.DefaultZombieClass]
+		zctab = ZombieClasses[self.Class or GAMEMODE.DefaultZombieClass]
 		zcfunc = zctab[funcname]
 		if zcfunc then
 			return zcfunc(zctab, self)
@@ -444,7 +447,7 @@ end
 
 function meta:CallZombieFunction1(funcname, a1)
 	if P_Team(self) == TEAM_UNDEAD then
-		zctab = ZombieClasses[E_GetTable(self).Class or GAMEMODE.DefaultZombieClass]
+		zctab = ZombieClasses[self.Class or GAMEMODE.DefaultZombieClass]
 		zcfunc = zctab[funcname]
 		if zcfunc then
 			return zcfunc(zctab, self, a1)
@@ -454,7 +457,7 @@ end
 
 function meta:CallZombieFunction2(funcname, a1, a2)
 	if P_Team(self) == TEAM_UNDEAD then
-		zctab = ZombieClasses[E_GetTable(self).Class or GAMEMODE.DefaultZombieClass]
+		zctab = ZombieClasses[self.Class or GAMEMODE.DefaultZombieClass]
 		zcfunc = zctab[funcname]
 		if zcfunc then
 			return zcfunc(zctab, self, a1, a2)
@@ -464,7 +467,7 @@ end
 
 function meta:CallZombieFunction3(funcname, a1, a2, a3)
 	if P_Team(self) == TEAM_UNDEAD then
-		zctab = ZombieClasses[E_GetTable(self).Class or GAMEMODE.DefaultZombieClass]
+		zctab = ZombieClasses[self.Class or GAMEMODE.DefaultZombieClass]
 		zcfunc = zctab[funcname]
 		if zcfunc then
 			return zcfunc(zctab, self, a1, a2, a3)
@@ -474,18 +477,18 @@ end
 
 function meta:CallZombieFunction4(funcname, a1, a2, a3, a4)
 	if P_Team(self) == TEAM_UNDEAD then
-		zctab = ZombieClasses[E_GetTable(self).Class or GAMEMODE.DefaultZombieClass]
+		zctab = ZombieClasses[self.Class or GAMEMODE.DefaultZombieClass]
 		zcfunc = zctab[funcname]
 		if zcfunc then
 			return zcfunc(zctab, self, a1, a2, a3, a4)
 		end
 	end
 end
-meta.CallZombieFunction = meta.CallZombieFunction4 -- 4 should be enough for legacy.
+meta.CallZombieFunction = meta.CallZombieFunction4
 
 function meta:CallZombieFunction5(funcname, a1, a2, a3, a4, a5)
 	if P_Team(self) == TEAM_UNDEAD then
-		zctab = ZombieClasses[E_GetTable(self).Class or GAMEMODE.DefaultZombieClass]
+		zctab = ZombieClasses[self.Class or GAMEMODE.DefaultZombieClass]
 		zcfunc = zctab[funcname]
 		if zcfunc then
 			return zcfunc(zctab, self, a1, a2, a3, a4, a5)
@@ -651,7 +654,7 @@ end
 -- Needs to be as optimized as possible.
 function meta:ShouldNotCollide(ent)
 	if E_IsValid(ent) then
-		if getmetatable(ent) == meta then
+		if ent:IsPlayer() then
 			if P_Team(self) == P_Team(ent) or E_GetTable(self).NoCollideAll or E_GetTable(ent).NoCollideAll then
 				return true
 			end
@@ -719,11 +722,13 @@ local function DynamicTraceFilter(ent)
 end
 
 local function MeleeTraceFilterFFA(ent)
-	if temp_pen_ents[ent] then
+	if temp_pen_ents[ent]
+	or ent == temp_attacker
+	or E_GetTable(ent).IgnoreMelee then
 		return false
 	end
 
-	return ent ~= temp_attacker
+	return true
 end
 
 local melee_trace = {filter = MeleeTraceFilter, mask = MASK_SOLID, mins = Vector(), maxs = Vector()}

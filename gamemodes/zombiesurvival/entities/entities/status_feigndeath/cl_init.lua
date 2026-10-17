@@ -41,6 +41,10 @@ function ENT:ShouldDrawLocalPlayer(pl)
 end
 
 function ENT:OnRemove()
+	hook.Remove("Move", self)
+	hook.Remove("CreateMove", self)
+	hook.Remove("ShouldDrawLocalPlayer", self)
+
 	local owner = self:GetOwner()
 	if owner:IsValid() then
 		owner.FeignDeath = nil
@@ -66,7 +70,7 @@ function ENT:DrawTranslucent()
 
 	cam.IgnoreZ(true)
 	cam.Start3D2D(pos, ang, 0.1)
-		draw.SimpleTextBlur(translate.Get("press_sprint_to_get_up"), "ZS3D2DFont2Small", 0, 0, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleTextBlur(translate.Get("press_x_to_get_up"), "ZS3D2DFont2Small", 0, 0, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 	cam.IgnoreZ(false)
 end

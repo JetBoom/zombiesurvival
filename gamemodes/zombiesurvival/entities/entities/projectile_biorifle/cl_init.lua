@@ -61,5 +61,5 @@ function ENT:OnRemove()
 		particle:SetRollDelta(math.Rand(-3, 3))
 		particle:SetColor(c.r, c.g, c.b)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

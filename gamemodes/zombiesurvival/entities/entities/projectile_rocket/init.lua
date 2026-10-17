@@ -29,7 +29,7 @@ function ENT:Think()
 			util.Effect("Explosion", effectdata)
 			util.Effect("explosion_rocket", effectdata)
 		else
-			self:EmitSound(")weapons/explode5.wav", 80, 130)
+			self:EmitSound("weapons/explode5.wav", 80, 130)
 		end
 
 		self:Remove()
@@ -52,6 +52,6 @@ function ENT:Explode()
 end
 
 function ENT:PhysicsCollide(data, phys)
-	self.PhysicsData = data
+	self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	self:NextThink(CurTime())
 end

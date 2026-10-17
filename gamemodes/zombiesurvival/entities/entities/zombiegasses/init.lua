@@ -26,8 +26,20 @@ function ENT:AcceptInput(name, activator, caller, arg)
 	self:Fire("attack", "", self.TickTime)
 
 	local vPos = self:GetPos()
+	local radius = self:GetRadius()
 
-	for _, ent in pairs(ents.FindInSphere(vPos, self:GetRadius())) do
+	-- Fast early-out: if no player is within range — there's nothing for us to do.
+	local radiusSqr = (radius + 64) * (radius + 64)
+	local anyplayer = false
+	for _, pl in ipairs(player.GetAll()) do
+		if pl:Alive() and pl:GetPos():DistToSqr(vPos) < radiusSqr then
+			anyplayer = true
+			break
+		end
+	end
+	if not anyplayer then return true end
+
+	for _, ent in pairs(ents.FindInSphere(vPos, radius)) do
 		if ent and ent:IsValidLivingPlayer() and WorldVisible(vPos, ent:WorldSpaceCenter()) then
 			if ent:Team() == TEAM_UNDEAD then
 				if CurTime() >= (ent.LastRangedAttack or 0) + 3 then

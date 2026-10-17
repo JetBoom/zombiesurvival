@@ -95,7 +95,10 @@ function meta:TryAssembleItem(component, heldclass)
 		if not self:TakeInventoryItem(component) then return end
 
 		self:AddInventoryItem(desiassembly)
-		self:CenterNotify(COLOR_LIMEGREEN, translate.ClientGet(self, "crafting_successful"), color_white, "   ("..GAMEMODE.ZSInventoryItemData[desiassembly].PrintName..")")
+
+		local invdata = GAMEMODE.ZSInventoryItemData[desiassembly]
+		local invname = translate.ItemName(invdata.TranslationID, invdata.TranslationPrefix) or invdata.PrintName
+		self:CenterNotify(COLOR_LIMEGREEN, translate.ClientFormat(self, "crafting_successful", invname))
 	else
 		desitable = weapons.Get(desiassembly)
 		if (not desitable.AmmoIfHas and self:HasWeapon(desiassembly)) or not self:TakeInventoryItem(component) then return end
@@ -107,7 +110,8 @@ function meta:TryAssembleItem(component, heldclass)
 		self:SelectWeapon(desiassembly)
 		self:UpdateAltSelectedWeapon()
 
-		self:CenterNotify(COLOR_LIMEGREEN, translate.ClientGet(self, "crafting_successful"), color_white, "   ("..desitable.PrintName..")")
+		local wname = translate.WeaponName(desitable) or desitable.PrintName
+		self:CenterNotify(COLOR_LIMEGREEN, translate.ClientFormat(self, "crafting_successful", wname))
 	end
 
 	if heldwepiitype then

@@ -19,7 +19,7 @@ function ENT:Draw()
 	emitter:SetNearClip(16, 24)
 
 	for i = 1, 3 do
-		particle = emitter:Add("sprites/light_glow02_add", pos + VectorRand() * 12)
+		local particle = emitter:Add("sprites/light_glow02_add", pos + VectorRand() * 12)
 		particle:SetDieTime(math.Rand(1.1, 1.2))
 		particle:SetStartAlpha(160)
 		particle:SetEndAlpha(0)
@@ -32,5 +32,5 @@ function ENT:Draw()
 		particle:SetColor(90, 140, 30)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

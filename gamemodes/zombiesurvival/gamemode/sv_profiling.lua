@@ -24,7 +24,7 @@ elseif file.Exists(GM.FolderName.."/gamemode/"..GM.ProfilerFolderPreMade.."/"..m
 	SRL = nil
 end
 
-function GM:ClearProfiler()
+function GM:SaveProfiler()
 	if not self:ProfilerEnabled() then return end
 
 	self:SaveProfiler()
@@ -71,7 +71,7 @@ function GM:LoadNodeProfile(data)
 		end
 
 		return true
-	elseif data.Nodes and data.Version >= self.ProfilerVersion then
+	elseif data.Nodes and (data.Version or 0) >= self.ProfilerVersion then
 		if data.Nodes then
 			self.ProfilerNodes = data.Nodes
 		else

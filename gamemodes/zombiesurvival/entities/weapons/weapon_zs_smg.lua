@@ -48,7 +48,7 @@ SWEP.IronSightsAng = Vector(0.8, 0, 0)
 SWEP.IronSightsPos = Vector(-5.33, 7, 1.8)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Smasher' SMG", "Additional damage to skeletal enemies, inflicts force, but fires and reloads slower", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Smasher' SMG", "Additional damage to skeletal enemies, inflicts force, but fires and reloads slower", function(wept)
 	wept.Primary.Delay = 0.15
 	wept.ReloadSpeed = 0.9
 
@@ -66,3 +66,4 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Smasher' SMG", "Additional damage to sk
 		end
 	end
 end)
+branch.TranslationID = "smg_branch_1"

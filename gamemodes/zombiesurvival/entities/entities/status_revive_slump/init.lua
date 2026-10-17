@@ -4,7 +4,7 @@ function ENT:PlayerSet(pPlayer, bExists)
 	self.HealCarryOver = self.HealCarryOver or 0
 
 	pPlayer.Revive = self
-	--pPlayer:Freeze(true)
+	pPlayer:Freeze(true)
 	if not bExists then
 		pPlayer:GodEnable()
 		self.GodDisableTime = CurTime() + 0.1
@@ -36,7 +36,7 @@ function ENT:Think()
 		end
 	end
 
-	self:NextThink(fCurTime)
+	self:NextThink(CurTime() + 0.1)
 	return true
 end
 
@@ -44,7 +44,7 @@ function ENT:OnRemove()
 	local parent = self:GetOwner()
 	if parent:IsValid() then
 		parent.Revive = nil
-		--parent:Freeze(false)
+		parent:Freeze(false)
 		parent:GodDisable()
 		parent:AddFlags(FL_ONGROUND)
 	end

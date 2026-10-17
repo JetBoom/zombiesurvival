@@ -11,5 +11,10 @@ end
 
 function ENT:Think()
 	local owner = self:GetOwner()
-	if not (owner:IsValid() and owner:Alive() and owner:HasTrinket("oxygentank")) then self:Remove() end
+	if not (owner:IsValid() and owner:Alive() and owner:HasTrinket("oxygentank")) then
+		self:Remove()
+		return
+	end
+	self:NextThink(CurTime() + 0.25)
+	return true
 end

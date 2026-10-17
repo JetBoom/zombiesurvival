@@ -22,7 +22,8 @@ function ENT:Think()
 		else
 			self.AmbientSound:PlayEx(1, 26 + math.sin(RealTime()))
 		end
-	end]]
+	self:NextThink(CurTime() + 0.1)
+	return true]]
 end
 
 function ENT:Draw()

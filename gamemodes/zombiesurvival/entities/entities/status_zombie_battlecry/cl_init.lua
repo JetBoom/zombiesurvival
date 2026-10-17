@@ -36,6 +36,9 @@ function ENT:DrawTranslucent()
 	if not ent:IsValid() then return end
 	if ent.SpawnProtection then return end
 
+	if self.ParticleTimer > CurTime() then return end
+	self.ParticleTimer = CurTime() + 0.065
+
 	local pos
 	if ent == MySelf and not ent:ShouldDrawLocalPlayer() then
 		local aa, bb = ent:WorldSpaceAABB()
@@ -47,24 +50,19 @@ function ENT:DrawTranslucent()
 	local emitter = ParticleEmitter(self:GetPos())
 	emitter:SetNearClip(24, 32)
 
-	if self.ParticleTimer <= CurTime() then
-		self.ParticleTimer = CurTime() + 0.065
+	local scale = ent:GetModelScale()
 
-		local scale = MySelf:GetModelScale()
+	local particle = emitter:Add("sprites/glow04_noz", pos + VectorRand():GetNormalized() * 2)
+	particle:SetDieTime(0.65)
+	particle:SetStartSize(12 * scale)
+	particle:SetEndSize(5 * scale)
+	particle:SetColor(255, 40, 0)
+	particle:SetStartAlpha(90)
+	particle:SetEndAlpha(0)
+	particle:SetGravity(Vector(0, 0, 256))
+	particle:SetVelocity(ent:GetVelocity())
+	particle:SetRoll(math.random(0, 360))
+	particle:SetRollDelta(math.random(-5, 5))
 
-		local particle = emitter:Add("sprites/glow04_noz", pos + VectorRand():GetNormalized() * 2)
-		particle:SetDieTime(0.65)
-		particle:SetStartSize(12 * scale)
-		particle:SetEndSize(5 * scale)
-		particle:SetColor(255, 40, 0)
-		particle:SetStartAlpha(90)
-		particle:SetEndAlpha(0)
-		particle:SetGravity(Vector(0, 0, 256))
-		particle:SetVelocity(ent:GetVelocity())
-		particle:SetRoll(math.random(0, 360))
-		particle:SetRollDelta(math.random(-5, 5))
-
-	end
-
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

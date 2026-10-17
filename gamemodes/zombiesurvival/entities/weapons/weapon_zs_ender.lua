@@ -42,12 +42,13 @@ SWEP.Tier = 3
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.603, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.51, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Ender' Automatic Slug Rifle", "Single accurate slug round, less total damage", function(wept)
+local branch1 = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Ender' Automatic Slug Rifle", "Single accurate slug round, less total damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 5.5
 	wept.Primary.NumShots = 1
 	wept.ConeMin = wept.ConeMin * 0.15
 	wept.ConeMax = wept.ConeMax * 0.3
 end)
+branch1.TranslationID = "ender_branch_1"
 
 function SWEP:SecondaryAttack()
 end

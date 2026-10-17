@@ -32,6 +32,19 @@ function ENT:Initialize()
 	end
 end
 
+function ENT:OnRemove()
+	if SERVER then
+		hook.Remove("EntityTakeDamage", self)
+		hook.Remove("PlayerHurt", self)
+	end
+	if CLIENT then
+		hook.Remove("PrePlayerDraw", self)
+		hook.Remove("PostPlayerDraw", self)
+		hook.Remove("RenderScreenspaceEffects", self)
+	end
+	self.BaseClass.OnRemove(self)
+end
+
 function ENT:PlayerSet()
 	self:SetStartTime(CurTime())
 end

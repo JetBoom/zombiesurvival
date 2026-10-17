@@ -40,6 +40,7 @@ SWEP.Weight = 1
 
 function SWEP:CanEat()
 	local owner = self:GetOwner()
+	local C = GAMEMODE.SkillConstants
 
 	if owner:GetStatus("sickness") then return false end
 
@@ -51,7 +52,10 @@ function SWEP:CanEat()
 		return owner:GetBloodArmor() < owner.MaxBloodArmor + (40 * owner.MaxBloodArmorMul)
 	end
 
-	local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+	local max = owner:IsSkillActive(SKILL_D_FRAIL)
+		and math.floor(owner:GetMaxHealth() * (C.FrailHealthCapPercent / 100))
+		or owner:GetMaxHealth()
+
 	return owner:Health() < max
 end
 
@@ -117,9 +121,14 @@ function SWEP:Think()
 			self:SetEatEndTime(0)
 		end
 
+
 		if owner:IsSkillActive(SKILL_GLUTTON) or owner:IsSkillActive(SKILL_SUGARRUSH) then return end
 
-		local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+		local C = GAMEMODE.SkillConstants
+		local max = owner:IsSkillActive(SKILL_D_FRAIL)
+			and math.floor(owner:GetMaxHealth() * (C.FrailHealthCapPercent / 100))
+			or owner:GetMaxHealth()
+
 		if owner:Health() >= max then
 			self:SetEatEndTime(0)
 		end

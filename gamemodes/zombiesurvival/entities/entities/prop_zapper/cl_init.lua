@@ -55,7 +55,7 @@ function ENT:DrawTranslucent()
 			self:Draw3DHealthBar(math.Clamp(self:GetObjectHealth() / self:GetMaxObjectHealth(), 0, 1), name, 0, 0.8)
 
 			if ammo > 0 then
-				draw.SimpleTextBlurry("["..ammo.." / "..self.MaxAmmo.."]", "ZS3D2DFont", 0, 450, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlurry(translate.Format("deployable_ammo_count_x_y", ammo, self.MaxAmmo), "ZS3D2DFont", 0, 450, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
 				draw.SimpleTextBlurry(translate.Get("empty"), "ZS3D2DFont", 0, 450, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
@@ -100,7 +100,7 @@ function ENT:Think()
 				particle:SetVelocity(VectorRand():GetNormal() * 20)
 			end
 
-			emitter:Finish() emitter = nil collectgarbage("step", 64)
+			emitter:Finish()
 		end
 	else
 		self.AmbientSound:Stop()

@@ -21,6 +21,8 @@ function ENT:Think()
 			self.AmbientSound:Stop()
 		else
 			self.AmbientSound:PlayEx(0.55, math.min(60 + owner:GetVelocity():Length2D() * 0.15, 100) + math.sin(RealTime()))
+		    self:NextThink(CurTime() + 0.1)
+	        return true
 		end
 	end
 end

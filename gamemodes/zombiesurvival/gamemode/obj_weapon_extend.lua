@@ -44,11 +44,21 @@ function meta:GetReloadFinish()
 end
 
 function meta:GetPrimaryAmmoCount()
-	return self:GetOwner():GetAmmoCount(self.Primary.Ammo) + self:Clip1()
+	local ammotype = self:GetPrimaryAmmoTypeString()
+	local owner = self:GetOwner()
+	if not ammotype or ammotype == "none" or not IsValid(owner) then
+		return self:Clip1()
+	end
+	return owner:GetAmmoCount(ammotype) + self:Clip1()
 end
 
 function meta:GetSecondaryAmmoCount()
-	return self:GetOwner():GetAmmoCount(self.Secondary.Ammo) + self:Clip2()
+	local ammotype = self:GetSecondaryAmmoTypeString()
+	local owner = self:GetOwner()
+	if not ammotype or ammotype == "none" or not IsValid(owner) then
+		return self:Clip2()
+	end
+	return owner:GetAmmoCount(ammotype) + self:Clip2()
 end
 
 function meta:HideViewAndWorldModel()

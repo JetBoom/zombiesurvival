@@ -29,6 +29,35 @@ end
 
 local target
 local obstrace = {mask = MASK_PLAYERSOLID, filter = function(ent) return ent ~= target and not ent:IsPlayer() end}
+
+local function CollectNearbyObstructions(bot, eyepos, radius)
+    local now = CurTime()
+    local cached = bot._ObstructionCache
+    if cached and now < cached.expires then
+        return cached.list
+    end
+
+    local positions = {}
+    for _, ent in pairs(ents.FindInSphere(eyepos, radius)) do
+        local cls = ent:GetClass()
+        if cls == "func_breakable" or ent:IsBarricadeProp() then
+            local nearest = ent:NearestPoint(eyepos)
+            if nearest == vector_origin then nearest = ent:WorldSpaceCenter() end
+            positions[#positions + 1] = (nearest * 2 + ent:WorldSpaceCenter()) / 3
+        elseif ent:GetMoveType() == MOVETYPE_VPHYSICS then
+            local phys = ent:GetPhysicsObject()
+            if phys:IsValid() and phys:IsMoveable() then
+                local nearest = ent:NearestPoint(eyepos)
+                if nearest == vector_origin then nearest = ent:WorldSpaceCenter() end
+                positions[#positions + 1] = (nearest * 2 + ent:WorldSpaceCenter()) / 3
+            end
+        end
+    end
+
+    bot._ObstructionCache = { list = positions, expires = now + 0.25 }
+    return positions
+end
+
 function ZSBOTS.StartCommand(pl, cmd)
 	if not pl.IsZSBot or not pl:OldAlive() then return end
 
@@ -162,16 +191,11 @@ function ZSBOTS.StartCommand(pl, cmd)
 
 			-- Break obstructions.
 			if not targetunobstructed and (not targetdist or targetdist > meleerange) then
-				local obstruction_positions = {}
+				local obstruction_positions = CollectNearbyObstructions(pl, eyepos, math.sqrt(meleerange))
 				local obstruction_position
 
-				for _, ent in pairs(ents.FindInSphere(eyepos, math.sqrt(meleerange))) do
-					if ent:GetClass() == "func_breakable" or ent:IsBarricadeProp() or (ent:GetMoveType() == MOVETYPE_VPHYSICS and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():IsMoveable()) --[[and ent:VisibleVec(eyepos)]] then
-						local nearest = ent:NearestPoint(eyepos)
-						if nearest == vector_origin then nearest = ent:WorldSpaceCenter() end
-						table.insert(obstruction_positions, (nearest * 2 + ent:WorldSpaceCenter()) / 3)
-					end
-				end
+				-- copy so that sort doesn't corrupt the cache
+				obstruction_positions = table.Copy(obstruction_positions)
 
 				table.sort(obstruction_positions, SortObstructions)
 
@@ -245,25 +269,33 @@ end
 
 local NextBotTick = 0
 function ZSBOTS.Think()
-	for _, bot in ipairs(Bots) do
-		if not bot:OldAlive() then
-			gamemode.Call("PlayerDeathThink", bot)
+	local allplayers = player.GetAll()
+
+	-- PlayerDeathThink once per tick per player, not N_bots × N_players.
+	for _, pl in ipairs(allplayers) do
+		if not pl:OldAlive() then
+			gamemode.Call("PlayerDeathThink", pl)
 		end
 	end
 
 	if CurTime() < NextBotTick then return end
 	NextBotTick = CurTime() + 0.25
 
-	-- This is significantly cheaper than pathfinding to all valid targets.
+	-- We compile the list of people once, not for each bot.
+	local humans = {}
+	for _, pl in ipairs(allplayers) do
+		if pl:Team() == TEAM_HUMAN and pl:OldAlive() and pl:GetObserverMode() == OBS_MODE_NONE then
+			humans[#humans + 1] = pl
+		end
+	end
+
 	for _, bot in pairs(Bots) do
 		bot.PathableTargets = {}
 
-		for __, pl in ipairs(player.GetAll()) do
-			if pl:Team() == TEAM_HUMAN and pl:OldAlive() and pl:GetObserverMode() == OBS_MODE_NONE then
-				table.insert(bot.PathableTargets, pl)
-			elseif pl:IsBot() and not pl:OldAlive() then
-				gamemode.Call("PlayerDeathThink", pl)
-			end
+		-- Copying the shared list. A table per bot — yes, but without iterating
+		-- over all players again and without repeated calls to IsPlayer/Team/etc.
+		for i = 1, #humans do
+			bot.PathableTargets[i] = humans[i]
 		end
 
 		--[[for _, ent in pairs(ents.FindByClass("prop_*")) do

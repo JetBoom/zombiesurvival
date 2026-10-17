@@ -46,7 +46,7 @@ function meta:ProcessDamage(dmginfo)
 		if attacker:IsValidLivingHuman() and inflictor:IsValid() and inflictor == attacker:GetActiveWeapon() then
 			local damage = dmginfo:GetDamage()
 			local wep = attacker:GetActiveWeapon()
-			local attackermaxhp = math.floor(attacker:GetMaxHealth() * (attacker:IsSkillActive(SKILL_D_FRAIL) and 0.25 or 1))
+			local attackermaxhp = math.floor(attacker:GetMaxHealth() * (attacker:IsSkillActive(SKILL_D_FRAIL) and (GAMEMODE.SkillConstants.FrailHealthCapPercent / 100) or 1))
 
 			if wep.IsMelee then
 				if attacker:IsSkillActive(SKILL_CHEAPKNUCKLE) and math.abs(self:GetForward():Angle().yaw - attacker:GetForward():Angle().yaw) <= 90 then
@@ -62,7 +62,7 @@ function meta:ProcessDamage(dmginfo)
 				end
 
 				if attacker:IsSkillActive(SKILL_BLOODLUST) and attacker:GetPhantomHealth() > 0 and attacker:Health() < attackermaxhp then
-					local toheal = math.min(attacker:GetPhantomHealth(), math.min(self:Health(), damage * 0.25))
+					local toheal = math.min(attacker:GetPhantomHealth(), math.min(self:Health(), damage * GAMEMODE.SkillConstants.BloodlustHealFromPhantomMul))
 					attacker:SetHealth(math.min(attacker:Health() + toheal, attackermaxhp))
 					attacker:SetPhantomHealth(attacker:GetPhantomHealth() - toheal)
 				end
@@ -73,7 +73,7 @@ function meta:ProcessDamage(dmginfo)
 
 				if wep.Culinary and attacker:IsSkillActive(SKILL_MASTERCHEF) and math.random(9) == 1 then
 					self.ChefMarkOwner = attacker
-					self.ChefMarkTime = CurTime() + 1
+					self.ChefMarkTime = CurTime() + GAMEMODE.SkillConstants.MasterChefMarkDuration
 				end
 			end
 		end
@@ -216,7 +216,10 @@ function meta:ProcessDamage(dmginfo)
 				end
 			end
 
-			local ratio = 0.5 + self.BloodArmorDamageReductionAdd + (self:IsSkillActive(SKILL_IRONBLOOD) and self:Health() <= self:GetMaxHealth() * 0.5 and 0.25 or 0)
+			local C = GAMEMODE.SkillConstants
+			local ironbloodActive = self:IsSkillActive(SKILL_IRONBLOOD) and self:Health() <= self:GetMaxHealth() * (C.IronBloodHealthThresholdPercent / 100)
+
+			local ratio = 0.5 + self.BloodArmorDamageReductionAdd + (ironbloodActive and 0.25 or 0)
 			local absorb = math.min(self:GetBloodArmor(), damage * ratio)
 			dmginfo:SetDamage(damage - absorb)
 			self:SetBloodArmor(self:GetBloodArmor() - absorb)
@@ -238,7 +241,7 @@ function meta:ProcessDamage(dmginfo)
 	end
 
 	if self:IsSkillActive(SKILL_BLOODLUST) and attacker:IsValid() and attacker:IsPlayer() and inflictor:IsValid() and attacker:Team() == TEAM_UNDEAD then
-		self:SetPhantomHealth(math.min(self:GetPhantomHealth() + dmginfo:GetDamage() / 2, self:GetMaxHealth()))
+		self:SetPhantomHealth(math.min(self:GetPhantomHealth() + dmginfo:GetDamage() * GAMEMODE.SkillConstants.BloodlustPhantomGainMul, self:GetMaxHealth()))
 	end
 
 	if dmginfo:GetDamage() > 0 and not self:HasGodMode() then
@@ -251,7 +254,7 @@ end
 GM.TrinketRecharges = {
 	reactiveflasher = {"ReactiveFlashMessage", "LastReactiveFlash", "Reactive Flasher", 75},
 	bleaksoul = {"BleakSoulMessage", "LastBleakSoul", "Bleak Soul", 35},
-	biocleanser = {"BioCleanserMessage", "LastBioCleanser", "Bio Cleanser", 20},
+	biocleanser = {"BioCleanserMessage", "LastBioCleanser", "Bio Cleanser", GAMEMODE.SkillConstants.BiocleanserCooldown},
 	iceburst = {"IceBurstMessage", "LastIceBurst", "Iceburst Shield", 40}
 }
 
@@ -262,7 +265,10 @@ function meta:CheckTrinketRecharges()
 		local msg, last, name, delay = data[1], data[2], data[3], data[4]
 
 		if self:HasTrinket(trinket) and not self[msg] and self[last] and time > self[last] + delay then
-			self:CenterNotify(COLOR_ORANGE, translate.ClientFormat(self, "trinket_recharged", name))
+			local invdata = GAMEMODE.ZSInventoryItemData["trinket_" .. trinket]
+			local display_name = invdata and translate.ClientItemName(self, invdata.TranslationID, invdata.TranslationPrefix) or name
+
+			self:CenterNotify(COLOR_ORANGE, translate.ClientFormat(self, "trinket_recharged", display_name))
 			self:SendLua("surface.PlaySound(\"buttons/button5.wav\")")
 			self[msg] = true
 		end
@@ -350,8 +356,67 @@ function meta:SetWasHitInHead()
 	self.m_LastHitInHead = CurTime() + 0.2
 end
 
+local POINTS_NW2_KEY = "zs_points"
+
 function meta:SetPoints(points)
-	self:SetDTInt(1, points)
+	points = math.floor(tonumber(points) or 0)
+
+	self:SetNW2String(
+		POINTS_NW2_KEY,
+		string.format("%.0f", points)
+	)
+end
+
+local ZS_SCORE_NW2_KEY = "zs_score"
+local ZS_SCORE_WRAP = 4294967296
+
+-- Player:Frags() is an engine integer. Keep the gamemode's real score
+-- separately so it cannot wrap at the engine integer limit.
+local function GetLegacyZSScore(self)
+	local frags = self:Frags()
+
+	-- Try to recover an already-overflowed positive score once.
+	-- Points are already stored safely as a string by this gamemode.
+	local points = tonumber(self:GetNW2String(POINTS_NW2_KEY, ""))
+	if points and points >= 2147483648 then
+		local diff = points - frags
+		if math.abs(diff) >= 2147483648 then
+			local wraps = math.floor(diff / ZS_SCORE_WRAP + 0.5)
+			local recovered = frags + wraps * ZS_SCORE_WRAP
+			if recovered >= 0 then
+				return recovered
+			end
+		end
+	end
+
+	return frags
+end
+
+function meta:GetZSScore()
+	local value = self:GetNW2String(ZS_SCORE_NW2_KEY, "")
+	if value ~= "" then
+		return tonumber(value) or 0
+	end
+
+	return GetLegacyZSScore(self)
+end
+
+function meta:SetZSScore(score)
+	score = math.floor(tonumber(score) or 0)
+
+	self:SetNW2String(
+		ZS_SCORE_NW2_KEY,
+		string.format("%.0f", score)
+	)
+
+	-- Keep the engine score sane for other addons / the default scoreboard.
+	-- It is no longer the source of truth for Zombie Survival.
+	self:SetFrags(math.Clamp(score, -2147483648, 2147483647))
+end
+
+function meta:AddZSScore(amount)
+	amount = tonumber(amount) or 0
+	self:SetZSScore(self:GetZSScore() + amount)
 end
 
 function meta:SetBloodArmor(armor)
@@ -798,26 +863,82 @@ function meta:DropAll()
 	self:DropAllInventoryItems()
 end
 
-local function CreateRagdoll(pl)
+local function LegacyCreateRagdoll(pl)
 	if pl:IsValid() then pl:OldCreateRagdoll() end
 end
-local function SetModel(pl, mdl)
+local function LegacySetModel(pl, mdl)
 	if pl:IsValid() then
 		pl:SetModel(mdl)
-		timer.Simple(0, function() CreateRagdoll(pl) end)
+		timer.Simple(0, function() LegacyCreateRagdoll(pl) end)
 	end
 end
 
 meta.OldCreateRagdoll = meta.CreateRagdoll
 function meta:CreateRagdoll()
 	local status = self.status_overridemodel
-	if status and status:IsValid() then
-		local mdl = status:GetModel()
-		timer.Simple(0, function() SetModel(self, mdl) end)
-		status:SetRenderMode(RENDERMODE_NONE)
-	else
+
+	if not (status and status:IsValid()) then
 		self:OldCreateRagdoll()
+
+		timer.Simple(0, function()
+			if not self:IsValid() then return end
+			local rag = self:GetRagdollEntity()
+			if not IsValid(rag) then return end
+
+			rag:SetRenderMode(RENDERMODE_NORMAL)
+			rag:SetColor(Color(255, 255, 255, 255))
+			rag:SetNoDraw(false)
+		end)
+
+		return
 	end
+
+	local classtab = self:GetZombieClassTable()
+	local basemodel = classtab and classtab.Model
+	local ovmodel = classtab and classtab.OverrideModel
+	local layered = classtab and classtab.CorpseBoneMerge
+	if layered == nil then layered = true end
+
+	status:SetRenderMode(RENDERMODE_NONE)
+
+	local prevrender = self:GetRenderMode()
+	self:SetRenderMode(RENDERMODE_NORMAL)
+
+	if not basemodel or not layered then
+		local mdl = status:GetModel()
+		self:OldCreateRagdoll()
+		self:SetRenderMode(prevrender)
+		timer.Simple(0, function() LegacySetModel(self, mdl) end)
+		return
+	end
+
+	local wantmodel
+	if classtab.CorpseUseBaseModel or classtab.NoHideMainModel then
+		wantmodel = basemodel
+	else
+		wantmodel = ovmodel or basemodel
+	end
+
+	if self:GetModel() ~= wantmodel then
+		self:SetModel(wantmodel)
+	end
+
+	self:OldCreateRagdoll()
+	self:SetRenderMode(prevrender)
+
+	timer.Simple(0, function()
+		if not self:IsValid() then return end
+		local rag = self:GetRagdollEntity()
+		if not IsValid(rag) then return end
+
+		if classtab.CorpseHideMainModel then
+			rag:SetRenderMode(RENDERMODE_TRANSALPHA)
+		else
+			rag:SetRenderMode(RENDERMODE_NORMAL)
+		end
+		rag:SetColor(Color(255, 255, 255, 255))
+		rag:SetNoDraw(false)
+	end)
 end
 
 function meta:DropWeaponByType(class)
@@ -1016,7 +1137,7 @@ function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 		self.PointsToAbsorb = nil
 	end
 
-	self:AddFrags(wholepoints)
+	self:AddZSScore(wholepoints)
 	self:SetPoints(self:GetPoints() + wholepoints)
 
 	if self.PointsVault then
@@ -1054,17 +1175,19 @@ function meta:TakePoints(points)
 end
 
 function meta:UpdateAllZombieClasses()
-	for _, pl in pairs(player.GetAll()) do
-		if pl ~= self and pl:Team() == TEAM_UNDEAD then
-			local id = pl:GetZombieClass()
-			if id and 0 < id then
-				net.Start("zs_zclass")
-					net.WriteEntity(pl)
-					net.WriteUInt(id, 8)
-				net.Send(self)
-			end
-		end
-	end
+    if GAMEMODE:IsBotNetNoop(self) then return end
+
+    for _, pl in pairs(player.GetAll()) do
+        if pl ~= self and pl:Team() == TEAM_UNDEAD then
+            local id = pl:GetZombieClass()
+            if id and 0 < id then
+                net.Start("zs_zclass")
+                    net.WriteEntity(pl)
+                    net.WriteUInt(id, 8)
+                net.Send(self)
+            end
+        end
+    end
 end
 
 function meta:CreateAmbience(class)
@@ -1252,11 +1375,11 @@ function meta:Redeem(silent, noequip)
 	self.m_PreRedeem = nil
 	self:DoHulls()
 
-	local frags = self:Frags()
+	local frags = self:GetZSScore()
 	if frags < 0 then
-		self:SetFrags(frags * 5)
+		self:SetZSScore(frags * 5)
 	else
-		self:SetFrags(0)
+		self:SetZSScore(0)
 	end
 	self:SetDeaths(0)
 
@@ -1298,17 +1421,17 @@ function meta:ShouldCrouchJumpPunish()
 end
 
 function meta:TakeBrains(amount)
-	self:AddFrags(-amount)
+	self:AddZSScore(-amount)
 	self.BrainsEaten = self.BrainsEaten - 1
 end
 
 function meta:AddBrains(amount)
-	self:AddFrags(amount)
+	self:AddZSScore(amount)
 	self.BrainsEaten = self.BrainsEaten + 1
 	self:CheckRedeem()
 end
 
-meta.GetBrains = meta.Frags
+meta.GetBrains = meta.GetZSScore
 
 function meta:CheckRedeem(instant)
 	if not self:IsValid() or P_Team(self) ~= TEAM_UNDEAD
@@ -1347,7 +1470,7 @@ function meta:GivePenalty(amount)
 end
 
 function meta:GivePointPenalty(amount)
-	self:SetFrags(self:Frags() - amount)
+	self:SetZSScore(self:GetZSScore() - amount)
 
 	net.Start("zs_penalty")
 		net.WriteUInt(amount, 16)
@@ -1355,7 +1478,7 @@ function meta:GivePointPenalty(amount)
 end
 
 function meta:ReflectDamage(damage)
-	local frags = self:Frags()
+	local frags = self:GetZSScore()
 	if frags < GAMEMODE.GriefReflectThreshold then
 		self:TakeDamage(math.ceil(damage * frags * -0.05 * GAMEMODE.GriefDamageMultiplier))
 	end
@@ -1648,7 +1771,7 @@ function meta:SendDeployableLostMessage(deployable)
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
 	net.Start("zs_deployablelost")
-		net.WriteString(deployableinfo.Name)
+		net.WriteString(translate.DeployableName(self, deployableinfo))
 		net.WriteString(deployableinfo.WepClass)
 	net.Send(self)
 end
@@ -1658,7 +1781,7 @@ function meta:SendDeployableClaimedMessage(deployable)
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
 	net.Start("zs_deployableclaim")
-		net.WriteString(deployableinfo.Name)
+		net.WriteString(translate.DeployableName(self, deployableinfo))
 		net.WriteString(deployableinfo.WepClass)
 	net.Send(self)
 end
@@ -1668,7 +1791,7 @@ function meta:SendDeployableOutOfAmmoMessage(deployable)
 	local deployableinfo = GAMEMODE.DeployableInfo[deployableclass]
 
 	net.Start("zs_deployableout")
-		net.WriteString(deployableinfo.Name)
+		net.WriteString(translate.DeployableName(self, deployableinfo))
 		net.WriteString(deployableinfo.WepClass)
 	net.Send(self)
 end

@@ -37,7 +37,7 @@ function M_Player:GiveAmmo(amount, id_or_name, suppress_sound)
 	if id then
 		local et = E_GetTable(self)
 		if not et.ca then et.ca = {} end
-		et.ca[id] = (self.ca[id] or 0) + amount
+		et.ca[id] = (et.ca[id] or 0) + amount
 
 		self:UpdateCustomAmmoCount(id)
 
@@ -55,7 +55,7 @@ function M_Player:RemoveAmmo(amount, id_or_name)
 	if id then
 		local et = E_GetTable(self)
 		if not et.ca then et.ca = {} end
-		et.ca[id] = math.max((self.ca[id] or 0) - amount, 0)
+		et.ca[id] = math.max((et.ca[id] or 0) - amount, 0)
 
 		self:UpdateCustomAmmoCount(id)
 	else
@@ -77,7 +77,7 @@ function M_Player:SetAmmo(amount, id_or_name)
 end
 
 function M_Player:RemoveAllAmmo()
-	self.ca = nil
+	E_GetTable(self).ca = nil
 	old_Player_RemoveAllAmmo(self)
 
 	net.Start("cusammo_removeall")
@@ -86,7 +86,7 @@ end
 
 -- Not sure if there's a difference between RemoveAllAmmo and StripAmmo
 function M_Player:StripAmmo()
-	self.ca = nil
+	E_GetTable(self).ca = nil
 	old_Player_StripAmmo(self)
 
 	net.Start("cusammo_removeall")
@@ -96,6 +96,7 @@ end
 function M_Player:UpdateCustomAmmoCount(index)
 	net.Start("cusammo")
 	net.WriteUInt(index - 128, 6)
-	net.WriteUInt(self.ca and self.ca[index] or 0, 10)
+	local et = E_GetTable(self)
+    net.WriteUInt(et.ca and et.ca[index] or 0, 10)
 	net.Send(self)
 end

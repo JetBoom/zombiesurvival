@@ -13,7 +13,7 @@ end
 function ENT:Think()
 	self.AmbientSound:PlayEx(1, 50 + math.min(1, CurTime() - self.Created) * 30)
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.1)
 	return true
 end
 
@@ -90,6 +90,6 @@ function ENT:Draw()
 			particle:SetColor(150, 0, 0)
 		end
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 end

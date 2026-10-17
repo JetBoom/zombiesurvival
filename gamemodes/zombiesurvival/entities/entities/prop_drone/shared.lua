@@ -50,19 +50,28 @@ end
 
 function ENT:BeingControlled()
 	local owner = self:GetObjectOwner()
-	if owner:IsValid() then
-		local wep = owner:GetActiveWeapon()
-		return wep:IsValid() and wep:GetClass() == "weapon_zs_dronecontrol" and wep:GetDTBool(0)
-	end
+	if not owner:IsValid() then return false end
 
-	return false
+	local wep = owner:GetActiveWeapon()
+	if not wep:IsValid() then return false end
+	if wep:GetClass() ~= "weapon_zs_dronecontrol" then return false end
+	if not wep:GetDTBool(0) then return false end
+
+	-- If the controller can select a specific drone (new API),
+	-- take this into account. Otherwise — backward compatibility mode: control
+	-- all drones (old behavior).
+	if wep.GetDrone and wep:GetDrone() ~= self then return false end
+
+	return true
 end
 
 local M_Player = FindMetaTable("Player")
 local P_Team = M_Player.Team
 local temp_attacker
 local function ManualTraceFilter(ent)
-	if ent == temp_attacker or getmetatable(ent) == M_Player and P_Team(ent) == TEAM_HUMAN or ent.FHB or ent.IsCreeperNest then
+	if ent == temp_attacker
+	or ent:IsPlayer() and P_Team(ent) == TEAM_HUMAN
+	or ent.FHB or ent.IsCreeperNest then
 		return false
 	end
 
@@ -103,10 +112,18 @@ function ENT:CalculateFireAngles()
 		return
 	end
 
-	if owner:IsValidPlayer() and owner:GetActiveWeapon():IsValid() and owner:GetActiveWeapon():GetClass() == "weapon_zs_dronecontrol" then
+	-- Previously, only the weapon class was checked. It was enough to take
+	-- the controller in hand for the laser to start rotating with the gaze,
+	-- even though control was disabled. Now BeingControlled is required,
+	-- which takes into account both the mode and the selected drone.
+	if self:BeingControlled() then
 		local ang = self:GetLocalAnglesToPos(self:GetManualTrace().HitPos)
 		self.FireYaw = math.Clamp(math.NormalizeAngle(ang.yaw), -80, 80)
 		self.FirePitch = math.Clamp(math.NormalizeAngle(ang.pitch), -45, 37.5)
+	else
+		-- Out of control, smoothly return the laser to its original position.
+		self.FireYaw = math.Approach(self.FireYaw, 0, FrameTime() * 60)
+		self.FirePitch = math.Approach(self.FirePitch, 15, FrameTime() * 30)
 	end
 end
 

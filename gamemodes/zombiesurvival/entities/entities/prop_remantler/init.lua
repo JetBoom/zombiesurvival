@@ -34,6 +34,10 @@ function ENT:SetObjectHealth(health)
 	if health <= 0 and not self.Destroyed then
 		self.Destroyed = true
 
+		timer.Simple(0, function()
+			if IsValid(self) then self:Remove() end
+		end)
+
 		if self:GetObjectOwner():IsValidLivingHuman() then
 			self:GetObjectOwner():SendDeployableLostMessage(self)
 		end
@@ -83,9 +87,6 @@ function ENT:OnPackedUp(pl)
 end
 
 function ENT:Think()
-	if self.Destroyed then
-		self:Remove()
-	end
 end
 
 function ENT:Use(activator, caller)
@@ -121,7 +122,9 @@ function ENT:Use(activator, caller)
 		return
 	end
 
-	if (heldtbl.AllowQualityWeapons or heldtbl.PermitDismantle) then
+	-- heldtbl may be nil: this is an HL2/GMod-weapon, not a Lua SWEP.
+	-- Check carefully to avoid crashing.
+	if heldtbl and (heldtbl.AllowQualityWeapons or heldtbl.PermitDismantle) then
 		activator:SendLua("surface.PlaySound(\"ambient/misc/shutter1.wav\")")
 	end
 

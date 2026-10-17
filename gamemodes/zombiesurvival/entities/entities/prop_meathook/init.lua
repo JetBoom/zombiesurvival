@@ -37,27 +37,32 @@ end
 
 function ENT:Think()
 	local parent = self:GetParent()
-	if parent:IsValid() and parent:IsPlayer() then
-		if parent:Alive() and parent:Team() == TEAM_UNDEAD and self.TicksLeft >= 1 and not parent.SpawnProtection then
-			if CurTime() >= self.NextDamage then
-				local owner = self:GetOwner()
-
-				self.NextDamage = CurTime() + 0.35
-				self.TicksLeft = self.TicksLeft - 1
-
-				if self.Weaken then
-					local status = parent:GiveStatus("zombiestrdebuff")
-					status.DieTime = CurTime() + 0.45
-					status.Applier = owner
-				end
-
-				util.Blood((parent:NearestPoint(self:GetPos()) + parent:WorldSpaceCenter()) / 2, math.random(4, 9), Vector(0, 0, 1), 100)
-				parent:TakeSpecialDamage(self.BleedPerTick, DMG_SLASH, owner, self)
-			end
-		else
-			self:Drop()
-		end
-	else
+	if not parent:IsValid() or not parent:IsPlayer() then
 		self:Remove()
+		return
 	end
+
+	if not (parent:Alive() and parent:Team() == TEAM_UNDEAD and self.TicksLeft >= 1 and not parent.SpawnProtection) then
+		self:Drop()
+		return
+	end
+
+	if CurTime() >= self.NextDamage then
+		local owner = self:GetOwner()
+
+		self.NextDamage = CurTime() + 0.35
+		self.TicksLeft = self.TicksLeft - 1
+
+		if self.Weaken then
+			local status = parent:GiveStatus("zombiestrdebuff")
+			status.DieTime = CurTime() + 0.45
+			status.Applier = owner
+		end
+
+		util.Blood((parent:NearestPoint(self:GetPos()) + parent:WorldSpaceCenter()) / 2, math.random(4, 9), Vector(0, 0, 1), 100)
+		parent:TakeSpecialDamage(self.BleedPerTick, DMG_SLASH, owner, self)
+	end
+
+	self:NextThink(CurTime() + 0.1)
+	return true
 end

@@ -45,7 +45,7 @@ SWEP.IronSightsPos = Vector(-3, 3, 2)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.375, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.2, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Crackler' Combat Rifle", "Loses automatic fire rate but gains a bit of damage and accuracy", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Crackler' Combat Rifle", "Loses automatic fire rate but gains a bit of damage and accuracy", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.2
 	wept.Primary.Delay = wept.Primary.Delay * 2
 	wept.Primary.ClipSize = 15
@@ -53,3 +53,4 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Crackler' Combat Rifle", "Loses automat
 	wept.ConeMax = wept.ConeMax * 0.7
 	wept.Primary.Automatic = false
 end)
+branch.TranslationID = "crackler_branch_1"

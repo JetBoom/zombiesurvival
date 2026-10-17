@@ -16,7 +16,7 @@ end
 function ENT:PhysicsUpdate(phys)
 	self.LastPhysicsUpdate = UnPredictedCurTime()
 	local vel = phys:GetVelocity()
-	phys:SetAngles(phys:GetVelocity():Angle())
+	phys:SetAngles(vel:Angle())
 	phys:SetVelocityInstantaneous(vel)
 end
 
@@ -81,6 +81,6 @@ function ENT:Hit(vHitPos, vHitNormal, vel, hitent)
 end
 
 function ENT:PhysicsCollide(data, phys)
-	self.PhysicsData = data
+	self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	self:NextThink(CurTime())
 end

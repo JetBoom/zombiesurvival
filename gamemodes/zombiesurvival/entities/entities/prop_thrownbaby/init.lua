@@ -31,7 +31,12 @@ function ENT:Think()
 
 		net.Start("zs_nestbuilt")
 		net.Broadcast()
+
+		return
 	end
+
+	self:NextThink(CurTime() + 0.1)
+	return true
 end
 
 function ENT:OnTakeDamage(dmginfo)

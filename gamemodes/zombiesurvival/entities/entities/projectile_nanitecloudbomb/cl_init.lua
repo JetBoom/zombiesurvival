@@ -30,7 +30,7 @@ function ENT:DrawTranslucent()
 			particle:SetVelocity(dir * 5)
 		end
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 
 		self.NextEmit = CurTime() + 0.09
 	end

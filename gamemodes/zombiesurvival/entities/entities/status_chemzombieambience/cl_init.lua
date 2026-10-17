@@ -18,6 +18,8 @@ end
 
 function ENT:Think()
 	self.AmbientSound:PlayEx(0.67, 100 + RealTime() % 1)
+	self:NextThink(CurTime() + 0.1)
+	return true
 end
 
 local matGlow = Material("sprites/glow04_noz")
@@ -50,7 +52,7 @@ function ENT:DrawTranslucent()
 			particle:SetAirResistance(12)
 			particle:SetColor(0, 200, 0)
 
-			emitter:Finish() emitter = nil collectgarbage("step", 64)
+			emitter:Finish()
 		end
 	end
 end

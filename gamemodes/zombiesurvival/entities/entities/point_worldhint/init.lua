@@ -8,6 +8,7 @@ function ENT:Initialize()
 end
 
 function ENT:AcceptInput(name, activator, caller, args)
+	args = translate.MapText(args)
 	if name == "setviewer" then
 		self:SetKeyValue("viewer", args)
 		return true

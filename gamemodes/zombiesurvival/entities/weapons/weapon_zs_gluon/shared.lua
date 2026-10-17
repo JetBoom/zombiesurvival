@@ -21,6 +21,7 @@ SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "pulse"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
+SWEP.NoMagazine = true 
 
 SWEP.ConeMax = 0
 SWEP.ConeMin = 0
@@ -44,7 +45,7 @@ SWEP.TracerName = "tracer_gluon"
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_SHORT_TEAM_HEAT, -0.01, 1)
 
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hades' Higgs Gun", "Has a pulse slowing effect but deals less damage", function(wept)
+local branch1 = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hades' Higgs Gun", "Has a pulse slowing effect but deals less damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 10.5/12.5
 	wept.TracerName = "tracer_higgs"
 	wept.EmitStartFiringSound = function(self)
@@ -54,10 +55,12 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hades' Higgs Gun", "Has 
 	wept.FireSoundPitch = 96
 	wept.LegDamage = true
 end)
-branch.Colors = {Color(160, 160, 160), Color(105, 105, 105), Color(50, 50, 50)}
-branch.NewNames = {"Deep", "Null", "Void"}
+branch1.Colors = {Color(160, 160, 160), Color(105, 105, 105), Color(50, 50, 50)}
+branch1.TranslationID = "gluon_branch_1"
+branch1.NewNames = {"Deep", "Null", "Void"}
+branch1.NewNameIDs = {"deep", "null", "void"}
 
-GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Tartarus' Muon Gun", "Deals more damage with heat, but can overheat and damage you, reduced range", function(wept)
+local branch2 = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Tartarus' Muon Gun", "Deals more damage with heat, but can overheat and damage you, reduced range", function(wept)
 	wept.GluonDamage = function(self)
 		return wept.Primary.Damage + (self:GetShortHeat() * 0.25 * wept.Primary.Damage)
 	end
@@ -65,7 +68,10 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Tartarus' Muon Gun", "Deals more damage
 	wept.FireSoundPitch = 65
 	wept.Overheat = true
 	wept.Primary.MaxDistance = 512
-end).Colors = {Color(150, 110, 180), Color(130, 90, 160), Color(110, 60, 150)}
+end)
+
+branch2.Colors = {Color(150, 110, 180), Color(130, 90, 160), Color(110, 60, 150)}
+branch2.TranslationID = "gluon_branch_2"
 
 function SWEP:Initialize()
 	self.FiringSound = CreateSound(self, "^thrusters/rocket02.wav")

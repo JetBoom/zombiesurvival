@@ -49,7 +49,7 @@ function ENT:DrawTranslucent()
 			particle:SetAirResistance(12)
 			particle:SetColor(255, 255, 255)
 
-			emitter:Finish() emitter = nil collectgarbage("step", 64)
+			emitter:Finish()
 		end
 	end
 end

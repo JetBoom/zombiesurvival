@@ -119,6 +119,7 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Aspirant' Burst M4", "In
 		wept.HUD3DPos = Vector(-1.2, -5, -1.2)
 	end
 end)
+branch.TranslationID = "m4_branch_1"
 branch.Killicon = "weapon_zs_aspirant"
 
 function SWEP:SetNextShot(nextshot)

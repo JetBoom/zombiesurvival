@@ -2,7 +2,11 @@ net.Receive("zs_skill_is_desired", function(length, pl)
 	local skillid = net.ReadUInt(16)
 	local desired = net.ReadBool()
 
-	pl:SetSkillDesired(skillid, desired)
+	local skill = GAMEMODE.Skills[skillid]
+	if not desired and skill and skill.AlwaysActive then
+	else
+		pl:SetSkillDesired(skillid, desired)
+	end
 end)
 
 net.Receive("zs_skills_desired", function(length, pl)
@@ -52,7 +56,7 @@ net.Receive("zs_skill_is_unlocked", function(length, pl)
 	if skill and not pl:IsSkillUnlocked(skillid) and pl:GetZSSPRemaining() >= 1 and pl:SkillCanUnlock(skillid) and not skill.Disabled then
 		pl:SetSkillUnlocked(skillid, true)
 
-		local msg = "You've unlocked a skill: "..skill.Name
+		local msg = translate.ClientFormat(pl, "skill_unlocked_x", translate.ClientSkillName(pl, skillid, skill))
 		pl:CenterNotify(msg)
 		pl:PrintMessage(HUD_PRINTTALK, msg)
 
@@ -69,14 +73,14 @@ net.Receive("zs_skills_remort", function(length, pl)
 end)
 
 net.Receive("zs_skills_reset", function(length, pl)
-	if pl:GetZSLevel() < 10 then
-		pl:SkillNotify("You must be level 10 to reset your skills.")
+	if pl:GetZSLevel() < GAMEMODE.SkillResetLevel then
+		pl:SkillNotify(translate.ClientFormat(pl, "skillweb_reset_need_level_x", GAMEMODE.SkillResetLevel))
 		return
 	end
 
 	local time = os.time()
 	if pl.NextSkillReset and time < pl.NextSkillReset then
-		pl:SkillNotify("You must wait before resetting your skills again.")
+		pl:SkillNotify(translate.ClientGet(pl, "skillweb_wait_reset"))
 		return
 	end
 
@@ -89,16 +93,33 @@ end)
 
 net.Receive("zs_skills_refunded", function(length, pl)
 	if pl.SkillsRefunded then
-		pl:SkillNotify("The skill tree has changed and your skills have been refunded.")
+		pl:SkillNotify(translate.ClientGet(pl, "skillweb_skills_refunded"))
 	end
 
 	pl.SkillsRefunded = false
 end)
 
+local SortedSkillIDs = nil
+local function GetSortedSkillIDs()
+	if SortedSkillIDs then return SortedSkillIDs end
+	local ids = {}
+	for skillid in pairs(GAMEMODE.Skills) do
+		ids[#ids + 1] = skillid
+	end
+	table.sort(ids)
+	SortedSkillIDs = ids
+	return ids
+end
+hook.Add("OnReloaded", "ZS_SkillWeb_InvalidateSortedIDs", function()
+	SortedSkillIDs = nil
+end)
+
 function GM:WriteSkillBits(t)
 	t = table.ToAssoc(t)
 
-	for skillid in pairs(GAMEMODE.Skills) do
+	local ids = GetSortedSkillIDs()
+
+	for _, skillid in ipairs(ids) do
 		if t[skillid] then
 			net.WriteBool(true)
 		else
@@ -177,11 +198,13 @@ function meta:RemoveSkills()
 	local active = self:GetActiveSkills()
 	local gm_functions = GAMEMODE.SkillFunctions
 
-	for _, skillid in pairs(active) do
-		local funcs = gm_functions[skillid]
-		if funcs then
-			for __, func in pairs(funcs) do
-				func(self, false)
+	for skillid, isactive in pairs(active) do
+		if isactive then
+			local funcs = gm_functions[skillid]
+			if funcs then
+				for i = 1, #funcs do
+					funcs[i](self, false)
+				end
 			end
 		end
 	end
@@ -203,6 +226,7 @@ end
 
 function meta:SetDesiredActiveSkills(skills, nosend)
 	self.DesiredActiveSkills = table.ToKeyValues(skills)
+	self.DesiredActiveSkillsAssoc = nil
 
 	if not nosend then
 		net.Start("zs_skills_desired")
@@ -223,6 +247,7 @@ end
 
 function meta:SetUnlockedSkills(skills, nosend)
 	self.UnlockedSkills = table.ToKeyValues(skills)
+	self.UnlockedSkillsAssoc = nil
 
 	if not nosend then
 		net.Start("zs_skills_unlocked")
@@ -240,9 +265,10 @@ function meta:SkillsRemort()
 	self:SetUnlockedSkills({})
 	self:SetDesiredActiveSkills({})
 	self.NextSkillReset = nil
+    local extrasp = self:GetZSRemortLevel() * GAMEMODE.RemortSkillPoints
 
 	self:CenterNotify(COLOR_CYAN, translate.ClientFormat(self, "you_have_remorted_now_rl_x", rl))
-	self:CenterNotify(COLOR_YELLOW, translate.ClientFormat(self, "you_now_have_x_extra_sp", rl))
+	self:CenterNotify(COLOR_YELLOW, translate.ClientFormat(self, "you_now_have_x_extra_sp", extrasp))
 	for _, pl in pairs(player.GetAll()) do
 		if pl ~= self then
 			pl:CenterNotify(COLOR_CYAN, translate.ClientFormat(pl, "x_has_remorted_to_rl_y", myname, rl))

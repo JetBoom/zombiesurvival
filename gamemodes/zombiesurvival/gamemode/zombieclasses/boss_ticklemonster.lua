@@ -20,6 +20,7 @@ CLASS.SWEP = "weapon_zs_ticklemonster"
 
 CLASS.Model = Model("models/player/zombie_classic_hbfix.mdl")
 CLASS.OverrideModel = Model("models/player/zombie_fast.mdl")
+CLASS.CorpseBoneMerge = false
 
 CLASS.VoicePitch = 0.8
 
@@ -124,22 +125,28 @@ function CLASS:DoAnimationEvent(pl, event, data)
 	end
 end
 
-if SERVER then
-	function CLASS:OnSpawned(pl)
-		pl:CreateAmbience("ticklemonsterambience")
-	end
-end
-
-if not CLIENT then return end
-
-CLASS.Icon = "zombiesurvival/killicons/tickle"
-
 local vecSpineOffset = Vector(8, 0, 0)
 local SpineBones = {"ValveBiped.Bip01_Spine2", "ValveBiped.Bip01_Spine4", "ValveBiped.Bip01_Spine3"}
+
 function CLASS:BuildBonePositions(pl)
-	for _, bone in pairs(SpineBones) do
-		local spineid = pl:LookupBone(bone)
-		if spineid and spineid > 0 then
+	local cache = pl._tmBoneCache
+	local model = pl:GetModel()
+	if not cache or cache.model ~= model then
+		cache = {
+			model = model,
+			spine = {},
+			larm  = pl:LookupBone("ValveBiped.Bip01_L_Forearm") or 0,
+			rarm  = pl:LookupBone("ValveBiped.Bip01_R_Forearm") or 0,
+		}
+		for i, bone in ipairs(SpineBones) do
+			cache.spine[i] = pl:LookupBone(bone) or 0
+		end
+		pl._tmBoneCache = cache
+	end
+
+	for i = 1, #cache.spine do
+		local spineid = cache.spine[i]
+		if spineid > 0 then
 			pl:ManipulateBonePosition(spineid, vecSpineOffset)
 		end
 	end
@@ -154,13 +161,18 @@ function CLASS:BuildBonePositions(pl)
 		end
 		pl.m_TMArmLength = math_Approach(pl.m_TMArmLength or 2, desiredscale, FrameTime() * 10)
 
-		local larmid = pl:LookupBone("ValveBiped.Bip01_L_Forearm")
-		if larmid and larmid > 0 then
-			pl:ManipulateBoneScale(larmid, Vector(pl.m_TMArmLength, 2, 2))
-		end
-		local rarmid = pl:LookupBone("ValveBiped.Bip01_R_Forearm")
-		if rarmid and rarmid > 0 then
-			pl:ManipulateBoneScale(rarmid, Vector(pl.m_TMArmLength, 2, 2))
-		end
+		local scale = Vector(pl.m_TMArmLength, 2, 2)
+		if cache.larm > 0 then pl:ManipulateBoneScale(cache.larm, scale) end
+		if cache.rarm > 0 then pl:ManipulateBoneScale(cache.rarm, scale) end
 	end
 end
+
+if SERVER then
+	function CLASS:OnSpawned(pl)
+		pl:CreateAmbience("ticklemonsterambience")
+	end
+end
+
+if not CLIENT then return end
+
+CLASS.Icon = "zombiesurvival/killicons/tickle"

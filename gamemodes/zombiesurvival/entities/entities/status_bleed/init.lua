@@ -17,9 +17,7 @@ function ENT:Think()
 	owner:TakeDamage(dmg, self.Damager and self.Damager:IsValid() and self.Damager:IsPlayer() and self.Damager:Team() ~= owner:Team() and self.Damager or owner, self)
 	self:AddDamage(-dmg)
 
-	local dir = VectorRand()
-	dir:Normalize()
-	util.Blood(owner:WorldSpaceCenter(), 3, dir, 32)
+	util.Blood(owner:WorldSpaceCenter(), 3, VectorRand(), 32)
 
 	local moving = owner:GetVelocity():LengthSqr() >= 19600 --140^2
 	local ticktime = (moving and 0.65 or 1.3)/(owner.BleedSpeedMul or 1)

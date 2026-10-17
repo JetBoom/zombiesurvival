@@ -30,6 +30,9 @@ SWEP.MaxStock = 3
 
 SWEP.AllowQualityWeapons = true
 
+SWEP.ScytheComboLength = 3
+SWEP.ScytheFinisherMul = 1.35
+
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.12)
 
 function SWEP:PlaySwingSound()
@@ -78,17 +81,18 @@ function SWEP:MeleeSwing()
 	local damage = self:GetDamage(self:GetTracesNumPlayers(tr))
 	local ent
 
-	local damagemultiplier = owner:Team() == TEAM_HUMAN and owner.MeleeDamageMultiplier or 1 --(owner.BuffMuscular and owner:Team()==TEAM_HUMAN) and 1.2 or 1
+	local constants = GAMEMODE.SkillConstants
+	local damagemultiplier = owner:Team() == TEAM_HUMAN and owner.MeleeDamageMultiplier or 1
 	if owner:IsSkillActive(SKILL_LASTSTAND) then
-		if owner:Health() <= owner:GetMaxHealth() * 0.25 then
-			damagemultiplier = damagemultiplier * 2
+		if owner:Health() <= owner:GetMaxHealth() * (constants.LastStandHealthThresholdPercent / 100) then
+			damagemultiplier = damagemultiplier * constants.LastStandDamageBonus
 		else
-			damagemultiplier = damagemultiplier * 0.85
+			damagemultiplier = damagemultiplier * constants.LastStandDamagePenalty
 		end
 	end
 
-	if combo == 2 then
-		damagemultiplier = damagemultiplier * 1.35
+	if combo == self.ScytheComboLength - 1 then
+		damagemultiplier = damagemultiplier * self.ScytheFinisherMul
 	end
 
 	for _, trace in ipairs(tr) do
@@ -136,10 +140,10 @@ function SWEP:MeleeSwing()
 
 	local armdelay = owner:GetMeleeSpeedMul()
 	self:SetNextPrimaryFire(CurTime() +
-		self.Primary.Delay * (combo < 2 and 0.36 or 1.25) * armdelay
+		self.Primary.Delay * (combo < self.ScytheComboLength - 1 and 0.36 or 1.25) * armdelay
 	)
 
-	self:SetDTInt(10, combo >= 2 and 0 or combo + 1)
+	self:SetDTInt(10, combo >= self.ScytheComboLength - 1 and 0 or combo + 1)
 end
 
 function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier, damage)
@@ -148,7 +152,7 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier, damage)
 	local owner = self:GetOwner()
 
 	if SERVER and hitent:IsPlayer() and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
-		damagemultiplier = damagemultiplier * 3.5
+		damagemultiplier = damagemultiplier * GAMEMODE.SkillConstants.GlassWeaponsDamageBonus
 		owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
 	end
 

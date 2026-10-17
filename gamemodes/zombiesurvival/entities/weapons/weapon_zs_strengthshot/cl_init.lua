@@ -27,12 +27,14 @@ function SWEP:Draw2DHUD()
 	if not owner:IsSkillActive(SKILL_SMARTTARGETING) then return end
 
 	local player = self:GetSeekedPlayer()
+	local valid = player:IsValidLivingHuman()
+	local text = valid and player:Name() or translate.Get("medic_no_target")
+
 	local screenscale = BetterScreenScale()
 	surface.SetFont("ZSHUDFont")
-	local text = player:IsValidLivingHuman() and player:Name() or "No Target"
 	local _, nTEXH = surface.GetTextSize(text)
 
-	draw.SimpleTextBlurry(text, "ZSHUDFont", ScrW() - 218 * screenscale, ScrH() - nTEXH * 3.5, text ~= "No Target" and COLOR_LIMEGREEN or COLOR_RED, TEXT_ALIGN_CENTER)
+	draw.SimpleTextBlurry(text, "ZSHUDFont", ScrW() - 218 * screenscale, ScrH() - nTEXH * 3.5, valid and COLOR_LIMEGREEN or COLOR_RED, TEXT_ALIGN_CENTER)
 end
 
 function SWEP:Draw3DHUD(vm, pos, ang)
@@ -45,10 +47,12 @@ function SWEP:Draw3DHUD(vm, pos, ang)
 	local x, y = wid * 0, hei * -1
 
 	local player = self:GetSeekedPlayer()
+	local valid = player:IsValidLivingHuman()
+	local text = valid and player:Name() or translate.Get("medic_no_target")
+
 	surface.SetFont("ZS3D2DFontSmall")
-	local text = player:IsValidLivingHuman() and player:Name() or "No Target"
 
 	cam.Start3D2D(pos, ang, self.HUD3DScale / 2)
-		draw.SimpleTextBlurry(text, "ZS3D2DFontSmall", x, y, text ~= "No Target" and COLOR_LIMEGREEN or COLOR_RED, TEXT_ALIGN_CENTER)
+		draw.SimpleTextBlurry(text, "ZS3D2DFontSmall", x, y, valid and COLOR_LIMEGREEN or COLOR_RED, TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 end

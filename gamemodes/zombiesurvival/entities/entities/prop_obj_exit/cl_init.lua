@@ -99,7 +99,9 @@ function ENT:RenderScreenspaceEffects()
 			local dot = (pos - eyepos):GetNormalized():Dot(eyevec) - distance * 0.0005
 			if dot > 0 then
 				local srcpos = pos:ToScreen()
-				DrawSunbeams(0.8, dot * power, 0.1, srcpos.x / w, srcpos.y / h)
+				-- ScrW()/ScrH() instead of global w/h from cl_init.lua —
+				-- those don't update when the window is resized.
+				DrawSunbeams(0.8, dot * power, 0.1, srcpos.x / ScrW(), srcpos.y / ScrH())
 			end
 		end
 	end
@@ -197,5 +199,5 @@ function ENT:DrawTranslucent()
 		particle:SetRollDelta(math.Rand(-5, 5))
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

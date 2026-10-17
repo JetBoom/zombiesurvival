@@ -11,6 +11,26 @@ function ENT:Draw()
 		render.SetMaterial(matGlow2)
 		render.DrawSprite(self:GetPos(), 8, 8, Color(255, 255, 255, 255))
 	end
+
+	if CurTime() < (self.NextEmit or 0) then return end
+	self.NextEmit = CurTime() + 0.05
+
+	local pos = self:GetPos()
+	local emitter = ParticleEmitter(pos)
+	emitter:SetNearClip(24, 32)
+	local particle
+	for i = 0, 1 do
+		particle = emitter:Add(matGlow, pos)
+		particle:SetVelocity(VectorRand() * 5)
+		particle:SetDieTime(0.2)
+		particle:SetStartAlpha(125)
+		particle:SetEndAlpha(0)
+		particle:SetStartSize(5)
+		particle:SetEndSize(0)
+		particle:SetRollDelta(math.Rand(-10, 10))
+		particle:SetColor(110, 110, 255)
+	end
+	emitter:Finish()
 end
 
 function ENT:OnRemove()
@@ -31,5 +51,5 @@ function ENT:OnRemove()
 		particle:SetRollDelta(math.Rand(-3, 3))
 		particle:SetColor(100, 125, 255)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

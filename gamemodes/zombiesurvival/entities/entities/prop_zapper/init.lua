@@ -195,6 +195,6 @@ function ENT:Think()
 		end
 	end
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.1)
 	return true
 end

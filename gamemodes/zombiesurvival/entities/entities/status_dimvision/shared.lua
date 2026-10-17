@@ -19,6 +19,10 @@ function ENT:Initialize()
 end
 
 function ENT:OnRemove()
+	if CLIENT then
+		hook.Remove("RenderScreenspaceEffects", self)
+	end
+
 	self.BaseClass.OnRemove(self)
 
 	self:GetOwner().DimVision = nil

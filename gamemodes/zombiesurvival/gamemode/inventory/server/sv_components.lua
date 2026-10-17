@@ -9,7 +9,9 @@ GM.StarterTrinkets = {
 	"trinket_chemistry"
 }
 
+local wcindex = 0
 function GM:AddWorldPropConversionRecipe(model, result)
+	wcindex = wcindex + 1
 	local datatab = {Result = result, Index = wcindex}
 	self.WorldConversions[model] = datatab
 	self.WorldConversions[#self.WorldConversions + 1] = datatab

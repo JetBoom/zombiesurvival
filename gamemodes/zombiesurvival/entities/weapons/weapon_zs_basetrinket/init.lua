@@ -6,6 +6,8 @@ SWEP.TrinketStatus = ""
 function SWEP:Initialize()
 	BaseClass.Initialize(self)
 
+	if GAMEMODE:IsBotWeaponNoop(self) then return end
+
 	timer.Simple(0, function()
 		if IsValid(self) then
 			if self.TrinketStatus ~= "" then

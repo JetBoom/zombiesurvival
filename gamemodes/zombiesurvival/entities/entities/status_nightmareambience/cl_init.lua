@@ -22,7 +22,10 @@ function ENT:Think()
 		else]]
 			--self.AmbientSound:PlayEx(0.8, 100 + RealTime() % 0.1)
 		--[[end
-	end]]
+		end
+	self:NextThink(CurTime() + 0.1)
+	return true
+end]]
 end
 
 function ENT:Draw()

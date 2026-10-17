@@ -125,31 +125,42 @@ function SWEP:FinishReload()
 	local max1 = self:GetPrimaryClipSize()
 	local max2 = self:GetMaxClip2()
 
+	-- Primary: if the clip is greater than the maximum (the ZE case with DefaultClip == 99999,
+	-- which GMod set as the initial Clip1), clamp it to max1.
 	if max1 > 0 then
-		local ammotype = self:GetPrimaryAmmoType()
-		local spare = owner:GetAmmoCount(ammotype)
-		local current = self:Clip1()
-		local needed = max1 - current
+		local current  = self:Clip1()
+		local infinite = self.Primary and self.Primary.DefaultClip == 99999
 
-		needed = math.min(spare, needed)
+		if current > max1 then
+			self:SetClip1(max1)
+		else
+			local needed = max1 - current
+			local spare  = infinite and needed or owner:GetAmmoCount(self:GetPrimaryAmmoType())
+			needed = math.min(spare, needed)
+			self:SetClip1(current + needed)
 
-		self:SetClip1(current + needed)
-		if SERVER then
-			owner:RemoveAmmo(needed, ammotype)
+			if SERVER and not infinite then
+				owner:RemoveAmmo(needed, self:GetPrimaryAmmoType())
+			end
 		end
 	end
 
+	-- Secondary — the same contract.
 	if max2 > 0 then
-		local ammotype = self:GetSecondaryAmmoType()
-		local spare = owner:GetAmmoCount(ammotype)
-		local current = self:Clip2()
-		local needed = max2 - current
+		local current  = self:Clip2()
+		local infinite = self.Secondary and self.Secondary.DefaultClip == 99999
 
-		needed = math.min(spare, needed)
+		if current > max2 then
+			self:SetClip2(max2)
+		else
+			local needed = max2 - current
+			local spare  = infinite and needed or owner:GetAmmoCount(self:GetSecondaryAmmoType())
+			needed = math.min(spare, needed)
+			self:SetClip2(current + needed)
 
-		self:SetClip2(current + needed)
-		if SERVER then
-			owner:RemoveAmmo(needed, ammotype)
+			if SERVER and not infinite then
+				owner:RemoveAmmo(needed, self:GetSecondaryAmmoType())
+			end
 		end
 	end
 end
@@ -261,11 +272,46 @@ function SWEP:EmitReloadFinishSound()
 end
 
 function SWEP:CanReload()
-	return self:GetNextReload() <= CurTime() and self:GetReloadFinish() == 0 and
-		(
-			self:GetMaxClip1() > 0 and self:Clip1() < self:GetPrimaryClipSize() and self:ValidPrimaryAmmo() and self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType()) > 0
-			or self:GetMaxClip2() > 0 and self:Clip1() < self:GetMaxClip2() and self:ValidSecondaryAmmo() and self:GetOwner():GetAmmoCount(self:GetSecondaryAmmoType()) > 0
-		)
+	local owner = self:GetOwner()
+	if not owner:IsValid() then return false end
+	if self:GetNextReload() > CurTime() or self:GetReloadFinish() ~= 0 then return false end
+
+	-- ZE-weapons: Primary.DefaultClip == 99999 is a marker for an "infinite
+	-- reserve", NOT the actual magazine size. GMod sets
+	-- Clip1 = DefaultClip (= 99999) on pl:Give(), which is greater than
+	-- ClipSize (= 8) and breaks the usual `Clip1 < GetPrimaryClipSize` check. Plus, for such weapons,
+	-- Primary.Ammo may be "none", in which case ValidPrimaryAmmo() → nil.
+	-- Handle this case in a separate branch.
+	local function InfiniteReserve(tab)
+		return tab and tab.DefaultClip == 99999
+	end
+
+	-- Primary
+	local max1 = self:GetMaxClip1()
+	if max1 > 0 then
+		if InfiniteReserve(self.Primary) then
+			-- Reload is needed if the magazine is not exactly max1.
+			if self:Clip1() ~= max1 then return true end
+		elseif self:Clip1() < self:GetPrimaryClipSize()
+			and self:ValidPrimaryAmmo()
+			and owner:GetAmmoCount(self:GetPrimaryAmmoType()) > 0 then
+			return true
+		end
+	end
+
+	-- Secondary
+	local max2 = self:GetMaxClip2()
+	if max2 > 0 then
+		if InfiniteReserve(self.Secondary) then
+			if self:Clip2() ~= max2 then return true end
+		elseif self:Clip2() < max2
+			and self:ValidSecondaryAmmo()
+			and owner:GetAmmoCount(self:GetSecondaryAmmoType()) > 0 then
+			return true
+		end
+	end
+
+	return false
 end
 
 function SWEP:GetIronsights()
@@ -289,8 +335,9 @@ function SWEP:OnRestore()
 end
 
 function SWEP:SendWeaponAnimation()
-	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-	self:GetOwner():GetViewModel():SetPlaybackRate(self.FireAnimSpeed)
+    if SERVER and GAMEMODE:IsBotWeaponNoop(self) then return end
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    self:GetOwner():GetViewModel():SetPlaybackRate(self.FireAnimSpeed)
 end
 
 function SWEP:SendReloadAnimation()
@@ -311,12 +358,12 @@ function SWEP:GetReloadSpeedMultiplier()
 end
 
 function SWEP:ProcessReloadEndTime()
-	local reloadspeed = self.ReloadSpeed * self:GetReloadSpeedMultiplier()
+    local reloadspeed = self.ReloadSpeed * self:GetReloadSpeedMultiplier()
+    self:SetReloadFinish(CurTime() + self:SequenceDuration() / reloadspeed)
 
-	self:SetReloadFinish(CurTime() + self:SequenceDuration() / reloadspeed)
-	if not self.DontScaleReloadSpeed then
-		self:GetOwner():GetViewModel():SetPlaybackRate(reloadspeed)
-	end
+    if not self.DontScaleReloadSpeed and not (SERVER and GAMEMODE:IsBotWeaponNoop(self)) then
+        self:GetOwner():GetViewModel():SetPlaybackRate(reloadspeed)
+    end
 end
 
 function SWEP:GetFireDelay()

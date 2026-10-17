@@ -51,7 +51,7 @@ function ENT:Draw()
 			particle:SetRollDelta(math.Rand(-10, 10))
 			particle:SetColor(45, 90, 255)
 		end
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 end
 

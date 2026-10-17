@@ -184,12 +184,13 @@ function SWEP:MeleeSwing()
 		return
 	end
 
+	local constants = GAMEMODE.SkillConstants
 	local damagemultiplier = owner:Team() == TEAM_HUMAN and owner.MeleeDamageMultiplier or 1 --(owner.BuffMuscular and owner:Team()==TEAM_HUMAN) and 1.2 or 1
 	if owner:IsSkillActive(SKILL_LASTSTAND) then
-		if owner:Health() <= owner:GetMaxHealth() * 0.25 then
-			damagemultiplier = damagemultiplier * 2
+		if owner:Health() <= owner:GetMaxHealth() * (constants.LastStandHealthThresholdPercent / 100) then
+			damagemultiplier = damagemultiplier * constants.LastStandDamageBonus
 		else
-			damagemultiplier = damagemultiplier * 0.85
+			damagemultiplier = damagemultiplier * constants.LastStandDamagePenalty
 		end
 	end
 
@@ -306,7 +307,7 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 	local owner = self:GetOwner()
 
 	if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
-		damagemultiplier = damagemultiplier * 3.5
+		damagemultiplier = damagemultiplier * GAMEMODE.SkillConstants.GlassWeaponsDamageBonus
 		owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
 	end
 

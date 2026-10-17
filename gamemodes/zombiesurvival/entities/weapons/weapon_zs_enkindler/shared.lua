@@ -21,6 +21,7 @@ SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "impactmine"
 SWEP.Primary.DefaultClip = 7
+SWEP.ShowReserveAmmo = true
 
 SWEP.ReloadSound = Sound("weapons/ar2/ar2_reload.wav")
 

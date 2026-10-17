@@ -12,3 +12,8 @@ SWEP.ShowWorldModel = false
 SWEP.Primary.Ammo = "mediccloudbomb"
 
 SWEP.MaxStock = 4
+
+SWEP.MedicCloudHealAmount = 2.5
+SWEP.MedicCloudTickTime   = 1
+SWEP.MedicCloudTicks      = 10
+SWEP.MedicCloudRadius     = 100

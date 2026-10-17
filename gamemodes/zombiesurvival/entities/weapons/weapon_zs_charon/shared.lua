@@ -32,7 +32,7 @@ SWEP.ConeMin = 3.25
 SWEP.NextZoom = 0
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.03)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Styx' Repeating Crossbow", "Increases the rate of fire, clip size, but decreases accuracy, reload speed and damage", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Styx' Repeating Crossbow", "Increases the rate of fire, clip size, but decreases accuracy, reload speed and damage", function(wept)
 	wept.Primary.ClipSize = math.floor(wept.Primary.ClipSize * 2)
 	wept.Primary.Delay = wept.Primary.Delay * 0.5
 	wept.Primary.Damage = wept.Primary.Damage * 0.78
@@ -42,6 +42,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Styx' Repeating Crossbow", "Increases t
 	wept.ConeMin = wept.ConeMin * 1.4
 	wept.ReloadSpeed = wept.ReloadSpeed * 0.7
 end)
+branch.TranslationID = "charon_branch_1"
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end

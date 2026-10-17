@@ -17,6 +17,8 @@ function ENT:Think()
 			self.AmbientSound:Stop()
 		end
 	end
+	self:NextThink(CurTime() + 0.25)
+	return true
 end
 
 function ENT:OnRemove()

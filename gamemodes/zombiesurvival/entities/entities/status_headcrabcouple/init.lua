@@ -4,12 +4,13 @@ function ENT:PlayerSet(pPlayer, bExists)
 	pPlayer.m_Couple = self
 end
 
-function ENT:Remove()
+function ENT:OnRemove()
 	local owner = self:GetOwner()
 	if owner:IsValid() and owner.m_Couple == self then
 		owner:SetBodyGroup(1, 0)
 		owner.m_Couple = nil
 	end
+	self.BaseClass.OnRemove(self)
 end
 
 function ENT:Think()

@@ -86,7 +86,11 @@ end
 function ENT:Think()
 	if self.Destroyed then
 		self:Remove()
+		return
 	end
+
+	self:NextThink(CurTime() + 0.1)
+	return true
 end
 
 function ENT:UpdateTransmitState()

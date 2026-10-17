@@ -152,6 +152,7 @@ end
 if not CLIENT then return end
 
 CLASS.Icon = "zombiesurvival/killicons/fresh_dead"
+CLASS.RagdollColor = Color(127, 229, 127)
 
 function CLASS:PrePlayerDraw(pl)
 	render.SetColorModulation(0.5, 0.9, 0.5)

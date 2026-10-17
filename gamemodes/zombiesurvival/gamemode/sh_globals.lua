@@ -108,6 +108,7 @@ GM.UtilityKey = IN_SPEED
 GM.MenuKey = IN_WALK -- I would use the spawn menu but it has no IN_ key assignment.
 
 GM.ArsenalCrateCommission = 0.04
+GM.ArsenalCrateCommissionPercent = GM.ArsenalCrateCommission * 100
 
 GM.BaseDeploySpeed = 1 -- Put this back to 1 to increase the value of it
 
@@ -118,6 +119,7 @@ GM.MaxNails = 4
 GM.NumberOfWaves = 6
 
 GM.PulsePointsMultiplier = 1.25
+GM.PulsePointsMultiplierPercent = (GM.PulsePointsMultiplier - 1) * 100
 
 -- The amount of damage you need to inflict to a zombie type to get a point
 GM.HumanoidZombiePointRatio = 45
@@ -177,50 +179,50 @@ GM.CleanupFilter = {
 }
 
 GM.AmmoNames = {}
-GM.AmmoNames["ar2"] = "Assault Rifle"
-GM.AmmoNames["pistol"] = "Pistol"
-GM.AmmoNames["smg1"] = "SMG"
-GM.AmmoNames["357"] = "Rifle"
-GM.AmmoNames["xbowbolt"] = "Bolts"
-GM.AmmoNames["buckshot"] = "Buckshot"
-GM.AmmoNames["sniperround"] = "Boards"
-GM.AmmoNames["grenade"] = "Grenades"
-GM.AmmoNames["thumper"] = "Turrets"
-GM.AmmoNames["battery"] = "Medical Supplies"
-GM.AmmoNames["gaussenergy"] = "Nails"
-GM.AmmoNames["airboatgun"] = "Arsenal Crates"
-GM.AmmoNames["striderminigun"] = "Beacons"
-GM.AmmoNames["helicoptergun"] = "Resupply Boxes"
-GM.AmmoNames["slam"] = "Force Field Emitters"
-GM.AmmoNames["spotlamp"] = "Spot Lamps"
-GM.AmmoNames["stone"] = "Stones"
-GM.AmmoNames["flashbomb"] = "Flash Bombs"
-GM.AmmoNames["betty"] = "Proximity Mines"
-GM.AmmoNames["molotov"] = "Molotovs"
-GM.AmmoNames["manhack"] = "Manhacks"
-GM.AmmoNames["manhack_saw"] = "Sawblade Manhacks"
-GM.AmmoNames["drone"] = "Drones"
-GM.AmmoNames["sigilfragment"] = "Sigil Fragments"
-GM.AmmoNames["corruptedfragment"] = "Corrupted Fragments"
-GM.AmmoNames["mediccloudbomb"] = "Medic Cloud Bombs"
-GM.AmmoNames["nanitecloudbomb"] = "Nanite Cloud Bombs"
-GM.AmmoNames["foodwatermelon"] = "Watermelons"
-GM.AmmoNames["foodorange"] = "Oranges"
-GM.AmmoNames["foodbanana"] = "Bananas"
-GM.AmmoNames["foodsoda"] = "Soda Cans"
-GM.AmmoNames["foodmilk"] = "Milk Cartons"
-GM.AmmoNames["foodtakeout"] = "Chinese Takeouts"
-GM.AmmoNames["foodwater"] = "Water Bottles"
-GM.AmmoNames["pulse"] = "Pulse Shots"
-GM.AmmoNames["impactmine"] = "Explosives"
-GM.AmmoNames["chemical"] = "Chemicals"
-GM.AmmoNames["repairfield"] = "Repair Fields"
-GM.AmmoNames["zapper"] = "Zappers"
-GM.AmmoNames["zapper_arc"] = "Arc Zappers"
-GM.AmmoNames["remantler"] = "Remantlers"
-GM.AmmoNames["turret_buckshot"] = "Blast Turrets"
-GM.AmmoNames["turret_assault"] = "Assault Turrets"
-GM.AmmoNames["scrap"] = "Scrap"
+GM.AmmoNames["ar2"] = "ammo_name_ar2"
+GM.AmmoNames["pistol"] = "ammo_name_pistol"
+GM.AmmoNames["smg1"] = "ammo_name_smg1"
+GM.AmmoNames["357"] = "ammo_name_357"
+GM.AmmoNames["xbowbolt"] = "ammo_name_xbowbolt"
+GM.AmmoNames["buckshot"] = "ammo_name_buckshot"
+GM.AmmoNames["sniperround"] = "ammo_name_sniperround"
+GM.AmmoNames["grenade"] = "ammo_name_grenade"
+GM.AmmoNames["thumper"] = "ammo_name_thumper"
+GM.AmmoNames["battery"] = "ammo_name_battery"
+GM.AmmoNames["gaussenergy"] = "ammo_name_gaussenergy"
+GM.AmmoNames["airboatgun"] = "ammo_name_airboatgun"
+GM.AmmoNames["striderminigun"] = "ammo_name_striderminigun"
+GM.AmmoNames["helicoptergun"] = "ammo_name_helicoptergun"
+GM.AmmoNames["slam"] = "ammo_name_slam"
+GM.AmmoNames["spotlamp"] = "ammo_name_spotlamp"
+GM.AmmoNames["stone"] = "ammo_name_stone"
+GM.AmmoNames["flashbomb"] = "ammo_name_flashbomb"
+GM.AmmoNames["betty"] = "ammo_name_betty"
+GM.AmmoNames["molotov"] = "ammo_name_molotov"
+GM.AmmoNames["manhack"] = "ammo_name_manhack"
+GM.AmmoNames["manhack_saw"] = "ammo_name_manhack_saw"
+GM.AmmoNames["drone"] = "ammo_name_drone"
+GM.AmmoNames["sigilfragment"] = "ammo_name_sigilfragment"
+GM.AmmoNames["corruptedfragment"] = "ammo_name_corruptedfragment"
+GM.AmmoNames["mediccloudbomb"] = "ammo_name_mediccloudbomb"
+GM.AmmoNames["nanitecloudbomb"] = "ammo_name_nanitecloudbomb"
+GM.AmmoNames["foodwatermelon"] = "ammo_name_foodwatermelon"
+GM.AmmoNames["foodorange"] = "ammo_name_foodorange"
+GM.AmmoNames["foodbanana"] = "ammo_name_foodbanana"
+GM.AmmoNames["foodsoda"] = "ammo_name_foodsoda"
+GM.AmmoNames["foodmilk"] = "ammo_name_foodmilk"
+GM.AmmoNames["foodtakeout"] = "ammo_name_foodtakeout"
+GM.AmmoNames["foodwater"] = "ammo_name_foodwater"
+GM.AmmoNames["pulse"] = "ammo_name_pulse"
+GM.AmmoNames["impactmine"] = "ammo_name_impactmine"
+GM.AmmoNames["chemical"] = "ammo_name_chemical"
+GM.AmmoNames["repairfield"] = "ammo_name_repairfield"
+GM.AmmoNames["zapper"] = "ammo_name_zapper"
+GM.AmmoNames["zapper_arc"] = "ammo_name_zapper_arc"
+GM.AmmoNames["remantler"] = "ammo_name_remantler"
+GM.AmmoNames["turret_buckshot"] = "ammo_name_turret_buckshot"
+GM.AmmoNames["turret_assault"] = "ammo_name_turret_assault"
+GM.AmmoNames["scrap"] = "ammo_name_scrap"
 
 GM.AmmoTranslations = {}
 GM.AmmoTranslations["weapon_physcannon"] = "pistol"
@@ -263,7 +265,26 @@ GM.AmmoModels["scrap"] = "models/props_junk/vent001_chunk5.mdl"
 GM.AmmoModels["sniperround"] = "models/props_debris/wood_board02a.mdl"
 GM.AmmoModels["camera"] = "models/props_combine/combine_mine01.mdl"
 
-GM.AmmoIcons = {}
+-- Case-insensitive ammo icon table.
+-- Ammo types come from different sources (engine id, map keyvalues,
+-- Lua code) with no normalized case: a prop_ammo placed by a mapper may
+-- well carry "GaussEnergy", while the keys here are lowercase.
+-- __index falls back to a lowercase lookup in the raw table, so the
+-- lookup works with any casing.
+--
+-- pairs() still iterates over the real (lowercase) keys — where the
+-- table is iterated, behavior is unchanged.
+local function MakeCaseInsensitive()
+    return setmetatable({}, {
+        __index = function(t, k)
+            if type(k) == "string" then
+                return rawget(t, string.lower(k))
+            end
+        end,
+    })
+end
+
+GM.AmmoIcons = MakeCaseInsensitive()
 GM.AmmoIcons["pistol"] = "ammo_pistol"
 GM.AmmoIcons["smg1"] = "ammo_smg"
 GM.AmmoIcons["ar2"] = "ammo_assault"

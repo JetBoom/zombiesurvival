@@ -74,7 +74,7 @@ SWEP.MaxStock = 3
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -1.125)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.81)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Anvil' Drum Shotgun", "Uses 3 shells at once, slightly more damage, reduced accuracy", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Anvil' Drum Shotgun", "Uses 3 shells at once, slightly more damage, reduced accuracy", function(wept)
 	wept.Primary.NumShots = wept.Primary.NumShots * 3
 	wept.Primary.Delay = wept.Primary.Delay * 3.3
 	wept.Primary.Damage = wept.Primary.Damage * 1.1
@@ -89,6 +89,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Anvil' Drum Shotgun", "Uses 3 shells at
 		self:EmitSound("weapons/shotgun/shotgun_fire6.wav", 75, math.random(102, 108), 0.65, CHAN_WEAPON + 20)
 	end
 end)
+branch.TranslationID = "jackhammer_branch_1"
 
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 75, math.random(147, 153), 0.7)

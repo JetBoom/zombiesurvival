@@ -47,7 +47,12 @@ function ENT:Think()
 		util.Blood(tr.Entity:WorldSpaceCenter(), math.max(0, 15), -self:GetForward(), math.Rand(100, 300), true)
 
 		self:Remove()
+		return
 	elseif self.HitData then
 		self:Remove()
+		return
 	end
+
+	self:NextThink(CurTime() + 0.05)
+	return true
 end

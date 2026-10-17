@@ -82,7 +82,7 @@ function PANEL:RefreshContents()
 		occurs[nown] = (occurs[nown] or 0) + 1
 		local ownname = nown:IsValidZombie() and nown:ClippedName() or ""
 
-		local item = EasyButton(self, "Nest (" .. ownname .. " - " .. occurs[nown] .. ")", 8, 4)
+		local item = EasyButton(self, translate.Format("spawnmenu_nest_format", ownname, occurs[nown]), 8, 4)
 		item:SetFont("ZSHUDFontSmall")
 		item:SizeToContents()
 		item.DoClick = function()
@@ -97,7 +97,7 @@ function PANEL:RefreshContents()
 	for k, baby in ipairs(GAMEMODE.CachedBabies) do
 		if not baby:IsValid() then continue end
 
-		local item = EasyButton(self, "Gore Child", 8, 4)
+		local item = EasyButton(self, translate.Get("class_gore_child"), 8, 4)
 		item:SetFont("ZSHUDFontSmall")
 		item:SizeToContents()
 		item.DoClick = function()

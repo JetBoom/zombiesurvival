@@ -4,6 +4,10 @@ GM.WeaponQualities = {
 	{"Honed", 1.19, "Modified"},
 	{"Perfected", 1.35, "Reformed"}
 }
+-- Translation ids for the names above, same order. Used by translate.WeaponName to build a translated
+-- "<quality> <weapon>" name for quality/branch weapon variants (see CreateWeaponOfQuality below).
+GM.WeaponQualityNameIDs = {"sturdy", "honed", "perfected"}
+GM.WeaponQualityAltNameIDs = {"tuned", "modified", "reformed"}
 GM.WeaponQualityColors = {
 	{Color(235, 235, 115), Color(172, 219, 105)},
 	{Color(50, 90, 175), Color(35, 110, 145)},
@@ -67,32 +71,32 @@ function GM:AddNewRemantleBranch(swep, no, printname, desc, branchfunc)
 	return datatab
 end
 
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MIN_SPREAD, 				"Minimum Spread", 			false, 	{ConeMin = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_SPREAD,					"Maximum Spread", 			false, 	{ConeMax = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_FIRE_DELAY,					"Fire Delay", 				false, 	{Delay = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RELOAD_SPEED,				"Reload Speed",		 		false, 	{ReloadSpeed = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_CLIP_SIZE,					"Clip Size", 				true, 	{ClipSize = true}).ReqClip = true
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_RANGE,				"Melee Range", 				false, 	{MeleeRange = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_SIZE,					"Melee Size", 				false, 	{MeleeSize = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_IMPACT_DELAY,			"Melee Impact Delay", 		false, 	{SwingTime = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_PROJECTILE_VELOCITY,		"Projectile Velocity", 		false, 	{ProjVelocity = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHORT_TEAM_HEAT,			"Short Team Heat", 			false, 	{HeatBuildShort = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHOT_COUNT,					"Shot Count", 				true, 	{NumShots = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BULLET_PIERCES,				"Bullet Pierces", 			true, 	{Pierces = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAXIMUM_MINES,				"Maximum Mines", 			true, 	{MaxMines = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_DISTANCE,				"Maximum Distance", 		false, 	{MaxDistance = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_AURA_RADIUS,				"Aura Detection Radius", 	false, 	{AuraRange = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RECOIL,						"Recoil", 					false, 	{Recoil = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_DAMAGE,						"Damage", 					false, 	{Damage = true, MeleeDamage = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALRANGE,					"Heal Range", 				false, 	{HealRange = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALCOOLDOWN,				"Healing Cooldown", 		false, 	{Delay = true})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BUFF_DURATION,				"Buff Duration", 			false, 	{BuffDuration = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_LEG_DAMAGE,					"Slow Strength", 			false, 	{LegDamage = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_REPAIR,						"Repair Strength", 			false, 	{Repair = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_TURRET_SPREAD,				"Turret Bullet Spread", 	false, 	{TurretSpread = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALING,					"Healing Amount", 			false, 	{Heal = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEADSHOT_MULTI,				"Headshot Damage Bonus", 	false, 	{HeadshotMulti = false})
-GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_KNOCK,				"Knockback", 				false, 	{MeleeKnockBack = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MIN_SPREAD,               "wpn_stat_min_spread",           false, {ConeMin = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_SPREAD,               "wpn_stat_max_spread",           false, {ConeMax = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_FIRE_DELAY,               "wpn_stat_fire_delay",           false, {Delay = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RELOAD_SPEED,             "wpn_stat_reload_speed",         false, {ReloadSpeed = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_CLIP_SIZE,                "wpn_stat_clip_size",            true,  {ClipSize = true}).ReqClip = true
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_RANGE,              "wpn_stat_melee_range",          false, {MeleeRange = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_SIZE,               "wpn_stat_melee_size",           false, {MeleeSize = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_IMPACT_DELAY,       "wpn_stat_melee_impact_delay",   false, {SwingTime = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_PROJECTILE_VELOCITY,      "wpn_stat_projectile_velocity",  false, {ProjVelocity = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHORT_TEAM_HEAT,          "wpn_stat_short_team_heat",      false, {HeatBuildShort = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_SHOT_COUNT,               "wpn_stat_shot_count",           true,  {NumShots = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BULLET_PIERCES,           "wpn_stat_bullet_pierces",       true,  {Pierces = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAXIMUM_MINES,            "wpn_stat_maximum_mines",        true,  {MaxMines = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MAX_DISTANCE,             "wpn_stat_maximum_distance",     false, {MaxDistance = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_AURA_RADIUS,              "wpn_stat_aura_radius",          false, {AuraRange = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_RECOIL,                   "wpn_stat_recoil",               false, {Recoil = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_DAMAGE,                   "wpn_stat_damage",               false, {Damage = true, MeleeDamage = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALRANGE,                "wpn_stat_heal_range",           false, {HealRange = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALCOOLDOWN,             "wpn_stat_healing_cooldown",     false, {Delay = true})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_BUFF_DURATION,            "wpn_stat_buff_duration",        false, {BuffDuration = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_LEG_DAMAGE,               "wpn_stat_slow_strength",        false, {LegDamage = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_REPAIR,                   "wpn_stat_repair_strength",      false, {Repair = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_TURRET_SPREAD,            "wpn_stat_turret_spread",        false, {TurretSpread = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEALING,                  "wpn_stat_healing_amount",       false, {Heal = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_HEADSHOT_MULTI,           "wpn_stat_headshot_bonus",       false, {HeadshotMulti = false})
+GM:AddWeaponQualityModifier(WEAPON_MODIFIER_MELEE_KNOCK,              "wpn_stat_knockback",            false, {MeleeKnockBack = false})
 
 local function ApplyWeaponModifier(modinfo, wept, datatab, remantledescs, i)
 	local displayed = false
@@ -108,11 +112,19 @@ local function ApplyWeaponModifier(modinfo, wept, datatab, remantledescs, i)
 			mtbl[var] = newstat
 
 			if not displayed and qfactor > 0 then
-				local ispos = datatab.Amount > 0 and "+" or ""
-				local statincdesc = not modinfo.DisplayRaw and (((math.Round(newstat/basestat, 2)-1) * 100).. "% ")
-					or ((datatab.Amount * qfactor / (modinfo.ReqClip and wept.RequiredClip or 1)).. " ")
+				local statname = translate.Get(modinfo.Name)
+				local ispos = datatab.Amount > 0
+				local val, key
 
-				table.insert(remantledescs, ispos .. statincdesc .. modinfo.Name)
+				if modinfo.DisplayRaw then
+					val = datatab.Amount * qfactor / (modinfo.ReqClip and wept.RequiredClip or 1)
+					key = ispos and "wpn_stat_format_raw_pos" or "wpn_stat_format_raw_neg"
+				else
+					val = (math.Round(newstat / basestat, 2) - 1) * 100
+					key = ispos and "wpn_stat_format_pct_pos" or "wpn_stat_format_pct_neg"
+				end
+
+				table.insert(remantledescs, translate.Format(key, val, statname))
 				displayed = true
 			end
 		end
@@ -145,6 +157,34 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 		wept.PrintName = (branch and branch.NewNames and branch.NewNames[i] or branch and quality[3] or quality[1]).." "..(branch and branch.PrintName or wept.PrintName)
 	end
 
+	-- Translation metadata for translate.WeaponName. Additive only: wept.PrintName above
+	-- stays the English fallback, this just lets translate.WeaponName rebuild the same
+	-- name in another language.
+	--
+	-- Base translation ID for this variant:
+	--   * branch variant → branch.TranslationID (e.g. "cosmos"),
+	--   * otherwise      → the base weapon's ID: explicit SWEP.TranslationID, or the
+	--     classname with "weapon_zs_" stripped (what GetWeaponTranslationID does for
+	--     the original weapon at runtime).
+	--
+	-- Without this, translate.WeaponName would derive an ID from the variant's
+	-- generated classname ("weapon_zs_tempest_q21") and fall through to the base
+	-- weapon's PrintName.
+	local baseid = wept.TranslationID
+	if not baseid and wept.ClassName then
+		baseid = string.gsub(wept.ClassName, "^weapon_zs_", "")
+	end
+
+	if branch and branch.TranslationID then
+		wept.TranslationID = branch.TranslationID
+	elseif baseid then
+		wept.TranslationID = baseid
+	end
+
+	wept.QualityNameID = (branch and branch.NewNameIDs and branch.NewNameIDs[i])
+		or (branch and self.WeaponQualityAltNameIDs[i])
+		or self.WeaponQualityNameIDs[i]
+
 	if wept.PrimaryRemantleModifier then
 		local primod = wept.PrimaryRemantleModifier
 
@@ -157,7 +197,7 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 			wept.MeleeDamage = wept.MeleeDamage * quality[2]
 		end
 
-		table.insert(remantledescs, "+" .. ((quality[2]-1) * 100) .. "% " .. "Damage")
+		table.insert(remantledescs, translate.Format("wpn_stat_format_pct_pos", (quality[2] - 1) * 100, translate.Get("wpn_stat_damage")))
 	end
 	if wept.AltRemantleModifiers then
 		for modifier, datatab in pairs(wept.AltRemantleModifiers) do
@@ -193,8 +233,21 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 				CreateQualityKillicon(wept.DeployClass, newcl, i)
 			end
 
-			if self.DeployableInfo[wept.DeployClass] then
-				self:AddDeployableInfo(newcl, quality[1].." "..self.DeployableInfo[wept.DeployClass].Name, "")
+			local baseinfo = self.DeployableInfo[wept.DeployClass]
+			if baseinfo then
+				local newinfo = self:AddDeployableInfo(newcl, quality[1].." "..baseinfo.Name, "")
+				-- Metadata for localizing notifications (deployable_lost /
+				-- deployable_claimed / ran_out_of_ammo).
+				--
+				-- Previously Name was a ready-made English concatenation
+				-- "Sturdy deployable_gunturret". translate.Get couldn't find
+				-- such a key and returned "@Sturdy deployable_gunturret@",
+				-- which is what ended up in the notification. Now we store
+				-- parts separately and assemble the string only when sending
+				-- to the client.
+				newinfo.QualityTier   = i
+				newinfo.QualityNameID = wept.QualityNameID
+				newinfo.BaseNameKey   = baseinfo.Name
 			end
 		end)
 

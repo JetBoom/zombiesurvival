@@ -22,3 +22,14 @@ function ENT:Initialize()
 		hook.Add("Draw", self, self.Draw)
 	end
 end
+
+function ENT:OnRemove()
+	self.BaseClass.OnRemove(self)
+
+	if SERVER then
+		hook.Remove("EntityTakeDamage", self)
+	end
+	if CLIENT then
+		hook.Remove("Draw", self)
+	end
+end

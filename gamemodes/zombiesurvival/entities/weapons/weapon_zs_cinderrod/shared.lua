@@ -11,6 +11,7 @@ SWEP.ConeMin = 6.5
 
 SWEP.ReloadSpeed = 0.35
 SWEP.ReloadDelay = 0.45
+SWEP.NoMagazine = true
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.15, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RECOIL, -32.5)

@@ -55,6 +55,7 @@ local function draw_GetFontHeight(font)
 end
 
 local function draw_SimpleText(text, font, x, y, colour, xalign, yalign)
+	if not text or text == "" then return end
 	surface_SetFont(font)
 
 	if xalign == TEXT_ALIGN_CENTER then
@@ -82,37 +83,29 @@ local function draw_SimpleText(text, font, x, y, colour, xalign, yalign)
 	surface_DrawText(text)
 end
 
-local function draw_DrawText(text, font, x, y, colour, xalign )
-	local curX = x
-	local curY = y
-	local curString = ""
+local function draw_DrawText(text, font, x, y, colour, xalign)
+	if not text or text == "" then return end
 
 	surface_SetFont(font)
 	local lineHeight = draw_GetFontHeight(font)
 
-	for i=1, #text do
-		local ch = string_sub(text, i, i)
-		if ch == "\n" then
-			if #curString > 0 then
-				draw_SimpleText(curString, font, curX, curY, colour, xalign)
-			end
+	local curY = y
+	local curX = x
 
+	for chunk, sep in string.gmatch(text .. "\n", "([^\n\t]*)([\n\t]?)") do
+		if chunk ~= "" then
+			draw_SimpleText(chunk, font, curX, curY, colour, xalign)
+		end
+
+		if sep == "\n" then
 			curY = curY + lineHeight / 2
 			curX = x
-			curString = ""
-		elseif ch == "\t" then
-			if #curString > 0 then
-				draw_SimpleText(curString, font, curX, curY, colour, xalign)
-			end
-			local tmpSizeX, _ =  surface_GetTextSize(curString)
-			curX = math_ceil( (curX + tmpSizeX) / 50 ) * 50
-			curString = ""
-		else
-			curString = curString .. ch
+		elseif sep == "\t" then
+			local tmpSizeX, _ = surface_GetTextSize(chunk)
+			curX = math_ceil((curX + tmpSizeX) / 50) * 50
 		end
-	end
-	if #curString > 0 then
-		draw_SimpleText(curString, font, curX, curY, colour, xalign)
+
+		if sep == "" then break end
 	end
 end
 

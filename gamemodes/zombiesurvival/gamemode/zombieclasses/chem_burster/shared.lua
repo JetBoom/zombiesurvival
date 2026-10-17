@@ -17,6 +17,9 @@ CLASS.SWEP = "weapon_zs_burster"
 CLASS.Model = Model("models/player/zombie_classic.mdl")
 CLASS.OverrideModel = Model("models/Zombie/Poison.mdl")
 
+CLASS.CorpseUseBaseModel = true
+CLASS.CorpseHideMainModel = true
+
 CLASS.PainSounds = {Sound("npc/metropolice/knockout2.wav"), Sound("npc/metropolice/pain1.wav"), Sound("npc/metropolice/pain2.wav"), Sound("npc/metropolice/pain3.wav"), Sound("npc/metropolice/pain4.wav")}
 CLASS.VoicePitch = 0.7
 

@@ -53,7 +53,7 @@ SWEP.IronSightsPos = Vector(-5.75, 10, 2.7)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEADSHOT_MULTI, 0.07)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Halberd' Handgun", "Deals extra damage to zombies with full health, but less overall damage", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Halberd' Handgun", "Deals extra damage to zombies with full health, but less overall damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.85
 
 	wept.BulletCallback = function(attacker, tr, dmginfo)
@@ -65,6 +65,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Halberd' Handgun", "Deals extra damage 
 		end
 	end
 end)
+branch.TranslationID = "waraxe_branch_1"
 
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 80, math.random(78, 82))

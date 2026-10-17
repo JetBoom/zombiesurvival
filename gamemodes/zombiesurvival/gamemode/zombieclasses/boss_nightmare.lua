@@ -98,15 +98,19 @@ CLASS.Icon = "zombiesurvival/killicons/nightmare2"
 local function CreateBoneOffsets(pl)
 	pl.m_NightmareBoneOffsetsNext = CurTime() + math_Rand(0.02, 0.1)
 
+	local model = pl:GetModel()
+	local bonecount = pl.m_NightmareBoneCount
+	if not bonecount or pl.m_NightmareBoneModel ~= model then
+		bonecount = pl:GetBoneCount()
+		pl.m_NightmareBoneCount = bonecount
+		pl.m_NightmareBoneModel = model
+	end
+
 	local offsets = {}
 	local angs = {}
-	for i=1, pl:GetBoneCount() - 1 do
-		if math_random(3) == 3 then
-			offsets[i] = VectorRand():GetNormalized() * math.Rand(0.5, 3)
-		end
-		if math_random(5) == 5 then
-			angs[i] = Angle(math_Rand(-5, 5), math_Rand(-15, 15), math_Rand(-5, 5))
-		end
+	for i = 1, bonecount - 1 do
+		if math_random(3) == 3 then offsets[i] = VectorRand():GetNormalized() * math.Rand(0.5, 3) end
+		if math_random(5) == 5 then angs[i] = Angle(math_Rand(-5, 5), math_Rand(-15, 15), math_Rand(-5, 5)) end
 	end
 	pl.m_NightmareBoneOffsets = offsets
 	pl.m_NightmareBoneAngles = angs
@@ -117,15 +121,15 @@ function CLASS:BuildBonePositions(pl)
 		CreateBoneOffsets(pl)
 	end
 
-	local offsets = pl.m_NightmareBoneOffsets
-	local angs = pl.m_NightmareBoneAngles
-	for i=1, pl:GetBoneCount() - 1 do
-		if offsets[i] then
-			pl:ManipulateBonePosition(i, offsets[i])
-		end
-		if angs[i] then
-			pl:ManipulateBoneAngles(i, angs[i])
-		end
+	local offsets   = pl.m_NightmareBoneOffsets
+	local angs      = pl.m_NightmareBoneAngles
+	local bonecount = pl.m_NightmareBoneCount or pl:GetBoneCount()
+
+	for i = 1, bonecount - 1 do
+		local o = offsets[i]
+		local a = angs[i]
+		if o then pl:ManipulateBonePosition(i, o) end
+		if a then pl:ManipulateBoneAngles(i, a) end
 	end
 end
 

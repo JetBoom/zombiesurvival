@@ -49,7 +49,7 @@ SWEP.IronSightsAng = Vector(-1, -1, 0)
 SWEP.IronSightsPos = Vector(-3, 4, 3)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Inferno' Incendiary Rifle", "Fires incendiary assault rifle rounds, but reduced damage", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Inferno' Incendiary Rifle", "Fires incendiary assault rifle rounds, but reduced damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.85
 
 	wept.BulletCallback = function(attacker, tr, dmginfo)
@@ -66,3 +66,4 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Inferno' Incendiary Rifle", "Fires ince
 		end
 	end
 end)
+branch.TranslationID = "inferno_branch_1"

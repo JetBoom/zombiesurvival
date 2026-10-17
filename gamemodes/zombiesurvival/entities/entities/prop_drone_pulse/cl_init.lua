@@ -50,9 +50,13 @@ function ENT:DrawTranslucent()
 end
 
 function ENT:OnRemove()
-	self.AmbientSound:Stop()
+    self.AmbientSound:Stop()
 
-	if self.GunAttachment and self.GunAttachment:IsValid() then
-		self.GunAttachment:Remove()
-	end
+    if self.GunAttachment and self.GunAttachment:IsValid() then
+        self.GunAttachment:Remove()
+    end
+
+    hook.Remove("CreateMove",             self)
+    hook.Remove("ShouldDrawLocalPlayer",  self)
+    hook.Remove("CalcView",               self)
 end

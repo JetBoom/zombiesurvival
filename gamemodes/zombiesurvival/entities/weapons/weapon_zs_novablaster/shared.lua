@@ -38,7 +38,7 @@ SWEP.Tier = 2
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.7, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.4, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.05, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Nova Helix' Pulse Revolver", "Fires two projectiles in a wavy formation", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Nova Helix' Pulse Revolver", "Fires two projectiles in a wavy formation", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.6
 	wept.Primary.ProjVelocity = 450
 	wept.Primary.NumShots = 2
@@ -51,6 +51,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Nova Helix' Pulse Revolver", "Fires two
 		end
 	end
 end)
+branch.TranslationID = "novablaster_branch_1"
 
 function SWEP:EmitFireSound()
 	self:EmitSound("weapons/stunstick/alyx_stunner2.wav", 72, 219, 0.75)

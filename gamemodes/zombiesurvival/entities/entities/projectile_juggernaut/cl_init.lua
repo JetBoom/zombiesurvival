@@ -33,7 +33,7 @@ end
 
 function ENT:Think()
 	if self:GetVelocity() == vector_origin and self.Trailing < CurTime() then
-		function self:Draw() self.Entity:DrawModel() end
+		function self:Draw() self:DrawModel() end
 		function self:Think() end
 	else
 		table.insert(self.TrailPositions, 1, self:GetPos())

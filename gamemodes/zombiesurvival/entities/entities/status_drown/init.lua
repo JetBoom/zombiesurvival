@@ -23,5 +23,9 @@ function ENT:Think()
 		return true
 	elseif not self:IsUnderwater() and self:GetDrown() == 0 then
 		self:Remove()
+		return
 	end
+
+	self:NextThink(CurTime() + 0.2)
+	return true
 end

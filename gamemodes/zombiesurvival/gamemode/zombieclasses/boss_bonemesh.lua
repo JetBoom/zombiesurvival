@@ -20,6 +20,8 @@ CLASS.SWEP = "weapon_zs_bonemesh"
 
 CLASS.Model = Model("models/player/zombie_fast.mdl")
 CLASS.OverrideModel = Model("models/Zombie/Poison.mdl")
+CLASS.CorpseUseBaseModel = true
+CLASS.CorpseHideMainModel = true
 
 CLASS.VoicePitch = 0.8
 

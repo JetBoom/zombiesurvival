@@ -27,11 +27,16 @@ end
 function ENT:Think()
 	if self.PhysicsData then
 		self:Hit(self.PhysicsData.HitPos, self.PhysicsData.HitNormal, self.PhysicsData.HitEntity)
+		return
 	end
 
 	if self.DeathTime <= CurTime() then
 		self:Remove()
+		return
 	end
+
+	self:NextThink(CurTime() + 0.05)
+	return true
 end
 
 function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
@@ -70,6 +75,6 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity)
 end
 
 function ENT:PhysicsCollide(data, phys)
-	self.PhysicsData = data
+	self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	self:NextThink(CurTime())
 end

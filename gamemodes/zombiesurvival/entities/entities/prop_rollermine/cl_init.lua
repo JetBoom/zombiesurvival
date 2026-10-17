@@ -61,7 +61,7 @@ function ENT:Think()
 		particle:SetBounce(0.2)
 		particle:SetColor(sat, sat, sat)
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 end
 

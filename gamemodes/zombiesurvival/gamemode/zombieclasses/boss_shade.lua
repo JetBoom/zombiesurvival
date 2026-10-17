@@ -175,10 +175,22 @@ CLASS.Icon = "zombiesurvival/killicons/shadev2"
 CLASS.IconColor = Color(0, 50, 255)
 
 local ToZero = {"ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_R_Thigh", "ValveBiped.Bip01_L_Calf", "ValveBiped.Bip01_R_Calf", "ValveBiped.Bip01_L_Foot", "ValveBiped.Bip01_R_Foot"}
+
 function CLASS:BuildBonePositions(pl)
-	for _, bonename in pairs(ToZero) do
-		local boneid = pl:LookupBone(bonename)
-		if boneid and boneid > 0 then
+	local cache = pl._shadeBoneCache
+	local model = pl:GetModel()
+	if not cache or cache.model ~= model then
+		cache = { model = model, ids = {} }
+		for i, bonename in ipairs(ToZero) do
+			cache.ids[i] = pl:LookupBone(bonename) or 0
+		end
+		pl._shadeBoneCache = cache
+	end
+
+	local ids = cache.ids
+	for i = 1, #ids do
+		local boneid = ids[i]
+		if boneid > 0 then
 			pl:ManipulateBoneScale(boneid, vector_tiny)
 		end
 	end
@@ -235,7 +247,11 @@ function CLASS:PostRenderEffects(pl)
 end
 
 function CLASS:PrePlayerDraw(pl)
-	pl:RemoveAllDecals()
+	local now = CurTime()
+	if now >= (pl._nextShadeDecalClear or 0) then
+		pl._nextShadeDecalClear = now + 0.5
+		pl:RemoveAllDecals()
+	end
 
 	self:PreRenderEffects(pl)
 end

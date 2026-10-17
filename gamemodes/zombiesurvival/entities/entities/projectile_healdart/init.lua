@@ -103,7 +103,8 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 		if eHitEntity:IsPlayer() and eHitEntity:Team() ~= TEAM_UNDEAD then
 			local ehithp, ehitmaxhp = eHitEntity:Health(), eHitEntity:GetMaxHealth()
 
-			if eHitEntity:IsSkillActive(SKILL_D_FRAIL) and ehithp >= ehitmaxhp * 0.25 then
+			if eHitEntity:IsSkillActive(SKILL_D_FRAIL)
+				and ehithp >= ehitmaxhp * (GAMEMODE.SkillConstants.FrailHealthCapPercent / 100) then
 				owner:CenterNotify(COLOR_RED, translate.Format("frail_healdart_warning", eHitEntity:GetName()))
 				self:EmitSound("buttons/button8.wav", 70, math.random(115,128))
 				self:DoRefund(owner)
@@ -135,7 +136,7 @@ end
 
 function ENT:PhysicsCollide(data, phys)
 	if not self:HitFence(data, phys) then
-		self.PhysicsData = data
+		self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	end
 
 	self:NextThink(CurTime())

@@ -52,7 +52,7 @@ SWEP.AllowQualityWeapons = true
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.04, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_KNOCK, 10, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Razorhack", "Increased attack delay, but deals more damage while bleeding", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Razorhack", "Increased attack delay, but deals more damage while bleeding", function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 1.25
 	wept.OnMeleeHit = function(self, hitent, hitflesh, tr)
 		if self:GetOwner():GetBleedDamage() > 1 then
@@ -64,6 +64,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Razorhack", "Increased attack delay, but
 		self.MeleeDamage = wept.MeleeDamage
 	end
 end)
+branch.TranslationID = "sawhack_branch_1"
 
 SWEP.NoHitSoundFlesh = true
 

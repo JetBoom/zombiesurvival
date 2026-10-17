@@ -40,22 +40,22 @@ ITEMSUBCAT_TRINKETS_SUPPORT = 5
 ITEMSUBCAT_TRINKETS_SPECIAL = 6
 
 GM.ItemCategories = {
-	[ITEMCAT_GUNS] = "Guns",
-	[ITEMCAT_AMMO] = "Ammunition",
-	[ITEMCAT_MELEE] = "Melee",
-	[ITEMCAT_TOOLS] = "Tools",
-	[ITEMCAT_DEPLOYABLES] = "Deployables",
-	[ITEMCAT_TRINKETS] = "Trinkets",
-	[ITEMCAT_OTHER] = "Other"
+	[ITEMCAT_GUNS] = "itemcat_guns",
+	[ITEMCAT_AMMO] = "itemcat_ammo",
+	[ITEMCAT_MELEE] = "itemcat_melee",
+	[ITEMCAT_TOOLS] = "itemcat_tools",
+	[ITEMCAT_DEPLOYABLES] = "itemcat_deployables",
+	[ITEMCAT_TRINKETS] = "itemcat_trinkets",
+	[ITEMCAT_OTHER] = "itemcat_other"
 }
 
 GM.ItemSubCategories = {
-	[ITEMSUBCAT_TRINKETS_DEFENSIVE] = "Defensive",
-	[ITEMSUBCAT_TRINKETS_OFFENSIVE] = "Offensive",
-	[ITEMSUBCAT_TRINKETS_MELEE] = "Melee",
-	[ITEMSUBCAT_TRINKETS_PERFORMANCE] = "Performance",
-	[ITEMSUBCAT_TRINKETS_SUPPORT] = "Support",
-	[ITEMSUBCAT_TRINKETS_SPECIAL] = "Special"
+	[ITEMSUBCAT_TRINKETS_DEFENSIVE] = "itemsubcat_defensive",
+	[ITEMSUBCAT_TRINKETS_OFFENSIVE] = "itemsubcat_offensive",
+	[ITEMSUBCAT_TRINKETS_MELEE] = "itemsubcat_melee",
+	[ITEMSUBCAT_TRINKETS_PERFORMANCE] = "itemsubcat_performance",
+	[ITEMSUBCAT_TRINKETS_SUPPORT] = "itemsubcat_support",
+	[ITEMSUBCAT_TRINKETS_SPECIAL] = "itemsubcat_special"
 }
 
 --[[
@@ -90,6 +90,59 @@ function GM:AddPointShopItem(signature, category, price, swep, name, desc, model
 	item.PointShop = true
 
 	return item
+end
+
+-- Only the icons have to be mapped manually: the rule from ammotype is not inferred.
+local AMMO_ICONS = {
+    pistol      = "ammo_pistol",
+    buckshot    = "ammo_shotgun",
+    smg1        = "ammo_smg",
+    ar2         = "ammo_assault",
+    ["357"]     = "ammo_rifle",
+    pulse       = "ammo_pulse",
+    xbowbolt    = "ammo_bolts",
+    impactmine  = "ammo_explosive",
+    gaussenergy = "ammo_nail",
+    battery     = "ammo_medpower",
+    chemical    = "ammo_chemical",
+}
+
+local function AmmoFmtKey(ammotype)
+    return "ammo_item_fmt_" .. string.lower(ammotype)
+end
+
+-- Starting ammo items for the Worth menu.
+local function AmmoItem(sig, cat, price, count, ammotype)
+    local icon = AMMO_ICONS[string.lower(ammotype)]
+    if not icon then
+        error(("AmmoItem: no icon for ammo type %q (item %q)"):format(tostring(ammotype), tostring(sig)))
+    end
+
+    local item = GM:AddStartingItem(sig, cat, price, nil, "#" .. AmmoFmtKey(ammotype), nil, icon, function(pl) pl:GiveAmmo(count, ammotype, true) end)
+    item.DisplayCount = count
+    return item
+end
+
+local function AmmoItemPS(sig, cat, price, count, ammotype, overrideNameKey, overrideDescKey)
+    local icon = AMMO_ICONS[string.lower(ammotype)]
+    if not icon then
+        error(("AmmoItemPS: no icon for ammo type %q (item %q)"):format(tostring(ammotype), tostring(sig)))
+    end
+
+    -- overrideNameKey — "#key" without a number, if the item is special (for example "Nail").
+    -- If not specified — use the standard format with DisplayCount.
+    local nameKey = overrideNameKey or ("#" .. AmmoFmtKey(ammotype))
+
+    local item = GM:AddPointShopItem(sig, cat, price, nil, nameKey, overrideDescKey, icon,
+        function(pl) pl:GiveAmmo(count, ammotype, true) end
+    )
+
+    -- Set DisplayCount only when the name is standard (with a number).
+    -- If overrideNameKey is specified, the item itself decides whether to display the number or not.
+    if not overrideNameKey then
+        item.DisplayCount = count
+    end
+    return item
 end
 
 -- How much ammo is considered one 'clip' of ammo? For use with setting up weapon defaults. Works directly with zs_survivalclips
@@ -145,26 +198,26 @@ GM:AddStartingItem("sling",				ITEMCAT_GUNS,			45,				"weapon_zs_slinger")
 GM:AddStartingItem("z9000",				ITEMCAT_GUNS,			45,				"weapon_zs_z9000")
 GM:AddStartingItem("minelayer",			ITEMCAT_GUNS,			60,				"weapon_zs_minelayer")
 
-GM:AddStartingItem("2pcp",				ITEMCAT_AMMO,			15,				nil,			"28 pistol ammo",				nil,		"ammo_pistol",			function(pl) pl:GiveAmmo(28, "pistol", true) end)
-GM:AddStartingItem("3pcp",				ITEMCAT_AMMO,			20,				nil,			"42 pistol ammo",				nil,		"ammo_pistol",			function(pl) pl:GiveAmmo(42, "pistol", true) end)
-GM:AddStartingItem("2sgcp",				ITEMCAT_AMMO,			15,				nil,			"24 shotgun ammo",				nil,		"ammo_shotgun",			function(pl) pl:GiveAmmo(24, "buckshot", true) end)
-GM:AddStartingItem("3sgcp",				ITEMCAT_AMMO,			20,				nil,			"36 shotgun ammo",				nil,		"ammo_shotgun",			function(pl) pl:GiveAmmo(36, "buckshot", true) end)
-GM:AddStartingItem("2smgcp",			ITEMCAT_AMMO,			15,				nil,			"72 SMG ammo",					nil,		"ammo_smg",				function(pl) pl:GiveAmmo(72, "smg1", true) end)
-GM:AddStartingItem("3smgcp",			ITEMCAT_AMMO,			20,				nil,			"108 SMG ammo",					nil,		"ammo_smg",				function(pl) pl:GiveAmmo(108, "smg1", true) end)
-GM:AddStartingItem("2arcp",				ITEMCAT_AMMO,			15,				nil,			"64 assault rifle ammo",		nil,		"ammo_assault",			function(pl) pl:GiveAmmo(64, "ar2", true) end)
-GM:AddStartingItem("3arcp",				ITEMCAT_AMMO,			20,				nil,			"96 assault rifle ammo",		nil,		"ammo_assault",			function(pl) pl:GiveAmmo(96, "ar2", true) end)
-GM:AddStartingItem("2rcp",				ITEMCAT_AMMO,			15,				nil,			"16 rifle ammo",				nil,		"ammo_rifle",			function(pl) pl:GiveAmmo(16, "357", true) end)
-GM:AddStartingItem("3rcp",				ITEMCAT_AMMO,			20,				nil,			"24 rifle ammo",				nil,		"ammo_rifle",			function(pl) pl:GiveAmmo(24, "357", true) end)
-GM:AddStartingItem("2pls",				ITEMCAT_AMMO,			15,				nil,			"60 pulse ammo",				nil,		"ammo_pulse",			function(pl) pl:GiveAmmo(60, "pulse", true) end)
-GM:AddStartingItem("3pls",				ITEMCAT_AMMO,			20,				nil,			"90 pulse ammo",				nil,		"ammo_pulse",			function(pl) pl:GiveAmmo(90, "pulse", true) end)
-GM:AddStartingItem("xbow1",				ITEMCAT_AMMO,			15,				nil,			"16 crossbow bolts",			nil,		"ammo_bolts",			function(pl) pl:GiveAmmo(16, "XBowBolt", true) end)
-GM:AddStartingItem("xbow2",				ITEMCAT_AMMO,			20,				nil,			"24 crossbow bolts",			nil,		"ammo_bolts",			function(pl) pl:GiveAmmo(24, "XBowBolt", true) end)
-GM:AddStartingItem("4mines",			ITEMCAT_AMMO,			15,				nil,			"6 explosives",					nil,		"ammo_explosive",		function(pl) pl:GiveAmmo(6, "impactmine", true) end)
-GM:AddStartingItem("6mines",			ITEMCAT_AMMO,			20,				nil,			"9 explosives",					nil,		"ammo_explosive",		function(pl) pl:GiveAmmo(9, "impactmine", true) end)
-GM:AddStartingItem("8nails",			ITEMCAT_AMMO,			15,				nil,			"8 nails",						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(8, "GaussEnergy", true) end)
-GM:AddStartingItem("12nails",			ITEMCAT_AMMO,			20,				nil,			"12 nails",						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(12, "GaussEnergy", true) end)
-GM:AddStartingItem("60mkit",			ITEMCAT_AMMO,			15,				nil,			"60 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(60, "Battery", true) end)
-GM:AddStartingItem("90mkit",			ITEMCAT_AMMO,			25,				nil,			"90 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(90, "Battery", true) end)
+AmmoItem("2pcp",    ITEMCAT_AMMO, 15, 28,  "pistol")
+AmmoItem("3pcp",    ITEMCAT_AMMO, 20, 42,  "pistol")
+AmmoItem("2sgcp",   ITEMCAT_AMMO, 15, 24,  "buckshot")
+AmmoItem("3sgcp",   ITEMCAT_AMMO, 20, 36,  "buckshot")
+AmmoItem("2smgcp",  ITEMCAT_AMMO, 15, 72,  "smg1")
+AmmoItem("3smgcp",  ITEMCAT_AMMO, 20, 108, "smg1")
+AmmoItem("2arcp",   ITEMCAT_AMMO, 15, 64,  "ar2")
+AmmoItem("3arcp",   ITEMCAT_AMMO, 20, 96,  "ar2")
+AmmoItem("2rcp",    ITEMCAT_AMMO, 15, 16,  "357")
+AmmoItem("3rcp",    ITEMCAT_AMMO, 20, 24,  "357")
+AmmoItem("2pls",    ITEMCAT_AMMO, 15, 60,  "pulse")
+AmmoItem("3pls",    ITEMCAT_AMMO, 20, 90,  "pulse")
+AmmoItem("xbow1",   ITEMCAT_AMMO, 15, 16,  "XBowBolt")
+AmmoItem("xbow2",   ITEMCAT_AMMO, 20, 24,  "XBowBolt")
+AmmoItem("4mines",  ITEMCAT_AMMO, 15, 6,   "impactmine")
+AmmoItem("6mines",  ITEMCAT_AMMO, 20, 9,   "impactmine")
+AmmoItem("8nails",  ITEMCAT_AMMO, 15, 8,   "GaussEnergy")
+AmmoItem("12nails", ITEMCAT_AMMO, 20, 12,  "GaussEnergy")
+AmmoItem("60mkit",  ITEMCAT_AMMO, 15, 60,  "Battery")
+AmmoItem("90mkit",  ITEMCAT_AMMO, 25, 90,  "Battery")
 
 GM:AddStartingItem("brassknuckles",		ITEMCAT_MELEE,			20,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
 GM:AddStartingItem("zpaxe",				ITEMCAT_MELEE,			40,				"weapon_zs_axe")
@@ -358,20 +411,20 @@ GM:AddPointShopItem("spinfusor",		ITEMCAT_GUNS,			200,			"weapon_zs_spinfusor")
 GM:AddPointShopItem("broadside",		ITEMCAT_GUNS,			200,			"weapon_zs_broadside")
 GM:AddPointShopItem("smelter",			ITEMCAT_GUNS,			200,			"weapon_zs_smelter")
 
-GM:AddPointShopItem("pistolammo",		ITEMCAT_AMMO,			9,				nil,							"14 pistol ammo",				nil,									"ammo_pistol",						function(pl) pl:GiveAmmo(14, "pistol", true) end)
-GM:AddPointShopItem("shotgunammo",		ITEMCAT_AMMO,			9,				nil,							"12 shotgun ammo",				nil,									"ammo_shotgun",						function(pl) pl:GiveAmmo(12, "buckshot", true) end)
-GM:AddPointShopItem("smgammo",			ITEMCAT_AMMO,			9,				nil,							"36 SMG ammo",					nil,									"ammo_smg",							function(pl) pl:GiveAmmo(36, "smg1", true) end)
-GM:AddPointShopItem("rifleammo",		ITEMCAT_AMMO,			9,				nil,							"8 rifle ammo",					nil,									"ammo_rifle",						function(pl) pl:GiveAmmo(8, "357", true) end)
-GM:AddPointShopItem("crossbowammo",		ITEMCAT_AMMO,			9,				nil,							"8 crossbow bolts",				nil,									"ammo_bolts",						function(pl) pl:GiveAmmo(8,	"XBowBolt",	true) end)
-GM:AddPointShopItem("assaultrifleammo",	ITEMCAT_AMMO,			9,				nil,							"32 assault rifle ammo",		nil,									"ammo_assault",						function(pl) pl:GiveAmmo(32, "ar2", true) end)
-GM:AddPointShopItem("pulseammo",		ITEMCAT_AMMO,			9,				nil,							"30 pulse ammo",				nil,									"ammo_pulse",						function(pl) pl:GiveAmmo(30, "pulse", true) end)
-GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			9,				nil,							"3 explosives",					nil,									"ammo_explosive",					function(pl) pl:GiveAmmo(3, "impactmine", true) end)
-GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			9,				nil,							"20 chemical vials",			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(20, "chemical", true) end)
-item =
-GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			15,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
+AmmoItemPS("pistolammo",       ITEMCAT_AMMO, 9,  14, "pistol")
+AmmoItemPS("shotgunammo",      ITEMCAT_AMMO, 9,  12, "buckshot")
+AmmoItemPS("smgammo",          ITEMCAT_AMMO, 9,  36, "smg1")
+AmmoItemPS("rifleammo",        ITEMCAT_AMMO, 9,  8,  "357")
+AmmoItemPS("crossbowammo",     ITEMCAT_AMMO, 9,  8,  "XBowBolt")
+AmmoItemPS("assaultrifleammo", ITEMCAT_AMMO, 9,  32, "ar2")
+AmmoItemPS("pulseammo",        ITEMCAT_AMMO, 9,  30, "pulse")
+AmmoItemPS("impactmine",       ITEMCAT_AMMO, 9,  3,  "impactmine")
+AmmoItemPS("chemical",         ITEMCAT_AMMO, 9,  20, "chemical")
+
+item = AmmoItemPS("25mkit", ITEMCAT_AMMO, 15, 25, "Battery", nil, "#ammo_item_25mkit_desc")
 item.CanMakeFromScrap = true
-item =
-GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							"Nail",							"It's just one nail.",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end)
+
+item = AmmoItemPS("nail", ITEMCAT_AMMO, 4, 1, "GaussEnergy", "#ammo_item_nail", "#ammo_item_nail_desc")
 item.NoClassicMode = true
 item.CanMakeFromScrap = true
 -- Tier 1
@@ -578,28 +631,28 @@ item.SkillRequirement = SKILL_U_NANITECLOUD
 
 local function genericcallback(pl, magnitude) return pl:Name(), magnitude end
 GM.HonorableMentions = {}
-GM.HonorableMentions[HM_MOSTZOMBIESKILLED] = {Name = "Most zombies killed", String = "by %s, with %d killed zombies.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_MOSTDAMAGETOUNDEAD] = {Name = "Most damage to undead", String = "goes to %s, with a total of %d damage dealt to the undead.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_MOSTHEADSHOTS] = {Name = "Most headshot kills", String = "goes to %s, with a total of %s headshot kills.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_PACIFIST] = {Name = "Pacifist", String = "goes to %s for not killing a single zombie and still surviving!", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_MOSTHELPFUL] = {Name = "Most helpful", String = "goes to %s for assisting in the disposal of %d zombies.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_LASTHUMAN] = {Name = "Last Human", String = "goes to %s for being the last person alive.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_OUTLANDER] = {Name = "Outlander", String = "goes to %s for getting killed %d feet away from a zombie spawn.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_GOODDOCTOR] = {Name = "Good Doctor", String = "goes to %s for healing their team for %d points of health.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_HANDYMAN] = {Name = "Handy Man", String = "goes to %s for getting %d barricade assistance points.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_SCARECROW] = {Name = "Scarecrow", String = "goes to %s for killing %d poor crows.", Callback = genericcallback, Color = COLOR_WHITE}
-GM.HonorableMentions[HM_MOSTBRAINSEATEN] = {Name = "Most brains eaten", String = "by %s, with %d brains eaten.", Callback = genericcallback, Color = COLOR_LIMEGREEN}
-GM.HonorableMentions[HM_MOSTDAMAGETOHUMANS] = {Name = "Most damage to humans", String = "goes to %s, with a total of %d damage given to living players.", Callback = genericcallback, Color = COLOR_LIMEGREEN}
-GM.HonorableMentions[HM_LASTBITE] = {Name = "Last Bite", String = "goes to %s for ending the round.", Callback = genericcallback, Color = COLOR_LIMEGREEN}
-GM.HonorableMentions[HM_USEFULTOOPPOSITE] = {Name = "Most useful to opposite team", String = "goes to %s for giving up a whopping %d kills!", Callback = genericcallback, Color = COLOR_RED}
-GM.HonorableMentions[HM_STUPID] = {Name = "Stupid", String = "is what %s is for getting killed %d feet away from a zombie spawn.", Callback = genericcallback, Color = COLOR_RED}
-GM.HonorableMentions[HM_SALESMAN] = {Name = "Salesman", String = "is what %s is for having %d points worth of items taken from their arsenal crate.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_WAREHOUSE] = {Name = "Warehouse", String = "describes %s well since they had their resupply boxes used %d times.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_DEFENCEDMG] = {Name = "Defender", String = "goes to %s for protecting humans from %d damage with defence boosts.", Callback = genericcallback, Color = COLOR_WHITE}
-GM.HonorableMentions[HM_STRENGTHDMG] = {Name = "Alchemist", String = "is what %s is for boosting players with an additional %d damage.", Callback = genericcallback, Color = COLOR_CYAN}
-GM.HonorableMentions[HM_BARRICADEDESTROYER] = {Name = "Barricade Destroyer", String = "goes to %s for doing %d damage to barricades.", Callback = genericcallback, Color = COLOR_LIMEGREEN}
-GM.HonorableMentions[HM_NESTDESTROYER] = {Name = "Nest Destroyer", String = "goes to %s for destroying %d nests.", Callback = genericcallback, Color = COLOR_LIMEGREEN}
-GM.HonorableMentions[HM_NESTMASTER] = {Name = "Nest Master", String = "goes to %s for having %d zombies spawn through their nest.", Callback = genericcallback, Color = COLOR_LIMEGREEN}
+GM.HonorableMentions[HM_MOSTZOMBIESKILLED] = {Name = "hm_mostzombieskilled_name", String = "hm_mostzombieskilled_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_MOSTDAMAGETOUNDEAD] = {Name = "hm_mostdamagetoundead_name", String = "hm_mostdamagetoundead_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_MOSTHEADSHOTS] = {Name = "hm_mostheadshots_name", String = "hm_mostheadshots_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_PACIFIST] = {Name = "hm_pacifist_name", String = "hm_pacifist_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_MOSTHELPFUL] = {Name = "hm_mosthelpful_name", String = "hm_mosthelpful_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_LASTHUMAN] = {Name = "hm_lasthuman_name", String = "hm_lasthuman_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_OUTLANDER] = {Name = "hm_outlander_name", String = "hm_outlander_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_GOODDOCTOR] = {Name = "hm_gooddoctor_name", String = "hm_gooddoctor_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_HANDYMAN] = {Name = "hm_handyman_name", String = "hm_handyman_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_SCARECROW] = {Name = "hm_scarecrow_name", String = "hm_scarecrow_str", Callback = genericcallback, Color = COLOR_WHITE}
+GM.HonorableMentions[HM_MOSTBRAINSEATEN] = {Name = "hm_mostbrainseaten_name", String = "hm_mostbrainseaten_str", Callback = genericcallback, Color = COLOR_LIMEGREEN}
+GM.HonorableMentions[HM_MOSTDAMAGETOHUMANS] = {Name = "hm_mostdamagetohumans_name", String = "hm_mostdamagetohumans_str", Callback = genericcallback, Color = COLOR_LIMEGREEN}
+GM.HonorableMentions[HM_LASTBITE] = {Name = "hm_lastbite_name", String = "hm_lastbite_str", Callback = genericcallback, Color = COLOR_LIMEGREEN}
+GM.HonorableMentions[HM_USEFULTOOPPOSITE] = {Name = "hm_usefultoopposite_name", String = "hm_usefultoopposite_str", Callback = genericcallback, Color = COLOR_RED}
+GM.HonorableMentions[HM_STUPID] = {Name = "hm_stupid_name", String = "hm_stupid_str", Callback = genericcallback, Color = COLOR_RED}
+GM.HonorableMentions[HM_SALESMAN] = {Name = "hm_salesman_name", String = "hm_salesman_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_WAREHOUSE] = {Name = "hm_warehouse_name", String = "hm_warehouse_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_DEFENCEDMG] = {Name = "hm_defencedmg_name", String = "hm_defencedmg_str", Callback = genericcallback, Color = COLOR_WHITE}
+GM.HonorableMentions[HM_STRENGTHDMG] = {Name = "hm_strengthdmg_name", String = "hm_strengthdmg_str", Callback = genericcallback, Color = COLOR_CYAN}
+GM.HonorableMentions[HM_BARRICADEDESTROYER] = {Name = "hm_barricadedestroyer_name", String = "hm_barricadedestroyer_str", Callback = genericcallback, Color = COLOR_LIMEGREEN}
+GM.HonorableMentions[HM_NESTDESTROYER] = {Name = "hm_nestdestroyer_name", String = "hm_nestdestroyer_str", Callback = genericcallback, Color = COLOR_LIMEGREEN}
+GM.HonorableMentions[HM_NESTMASTER] = {Name = "hm_nestmaster_name", String = "hm_nestmaster_str", Callback = genericcallback, Color = COLOR_LIMEGREEN}
 
 -- Don't let humans use these models because they look like undead models. Must be lower case.
 GM.RestrictedModels = {
@@ -635,26 +688,26 @@ function GM:AddDeployableInfo(class, name, wepclass)
 
 	return tab
 end
-GM:AddDeployableInfo("prop_arsenalcrate", 		"Arsenal Crate", 		"weapon_zs_arsenalcrate")
-GM:AddDeployableInfo("prop_resupplybox", 		"Resupply Box", 		"weapon_zs_resupplybox")
-GM:AddDeployableInfo("prop_remantler", 			"Weapon Remantler", 	"weapon_zs_remantler")
-GM:AddDeployableInfo("prop_messagebeacon", 		"Message Beacon", 		"weapon_zs_messagebeacon")
-GM:AddDeployableInfo("prop_camera", 			"Camera",	 			"weapon_zs_camera")
-GM:AddDeployableInfo("prop_gunturret", 			"Gun Turret",	 		"weapon_zs_gunturret")
-GM:AddDeployableInfo("prop_gunturret_assault", 	"Assault Turret",	 	"weapon_zs_gunturret_assault")
-GM:AddDeployableInfo("prop_gunturret_buckshot",	"Blast Turret",	 		"weapon_zs_gunturret_buckshot")
-GM:AddDeployableInfo("prop_gunturret_rocket",	"Rocket Turret",	 	"weapon_zs_gunturret_rocket")
-GM:AddDeployableInfo("prop_repairfield",		"Repair Field Emitter",	"weapon_zs_repairfield")
-GM:AddDeployableInfo("prop_zapper",				"Zapper",				"weapon_zs_zapper")
-GM:AddDeployableInfo("prop_zapper_arc",			"Arc Zapper",			"weapon_zs_zapper_arc")
-GM:AddDeployableInfo("prop_ffemitter",			"Force Field Emitter",	"weapon_zs_ffemitter")
-GM:AddDeployableInfo("prop_manhack",			"Manhack",				"weapon_zs_manhack")
-GM:AddDeployableInfo("prop_manhack_saw",		"Sawblade Manhack",		"weapon_zs_manhack_saw")
-GM:AddDeployableInfo("prop_drone",				"Drone",				"weapon_zs_drone")
-GM:AddDeployableInfo("prop_drone_pulse",		"Pulse Drone",			"weapon_zs_drone_pulse")
-GM:AddDeployableInfo("prop_drone_hauler",		"Hauler Drone",			"weapon_zs_drone_hauler")
-GM:AddDeployableInfo("prop_rollermine",			"Rollermine",			"weapon_zs_rollermine")
-GM:AddDeployableInfo("prop_tv",                   	 "TV",                    	"weapon_zs_tv")
+GM:AddDeployableInfo("prop_arsenalcrate", 		"deployable_arsenalcrate", 		"weapon_zs_arsenalcrate")
+GM:AddDeployableInfo("prop_resupplybox", 		"deployable_resupplybox", 		"weapon_zs_resupplybox")
+GM:AddDeployableInfo("prop_remantler", 			"deployable_remantler", 		"weapon_zs_remantler")
+GM:AddDeployableInfo("prop_messagebeacon", 		"deployable_messagebeacon", 	"weapon_zs_messagebeacon")
+GM:AddDeployableInfo("prop_camera", 			"deployable_camera",	 		"weapon_zs_camera")
+GM:AddDeployableInfo("prop_gunturret", 			"deployable_gunturret",	 		"weapon_zs_gunturret")
+GM:AddDeployableInfo("prop_gunturret_assault", 	"deployable_gunturret_assault",	"weapon_zs_gunturret_assault")
+GM:AddDeployableInfo("prop_gunturret_buckshot",	"deployable_gunturret_buckshot","weapon_zs_gunturret_buckshot")
+GM:AddDeployableInfo("prop_gunturret_rocket",	"deployable_gunturret_rocket",	"weapon_zs_gunturret_rocket")
+GM:AddDeployableInfo("prop_repairfield",		"deployable_repairfield",		"weapon_zs_repairfield")
+GM:AddDeployableInfo("prop_zapper",				"deployable_zapper",			"weapon_zs_zapper")
+GM:AddDeployableInfo("prop_zapper_arc",			"deployable_zapper_arc",		"weapon_zs_zapper_arc")
+GM:AddDeployableInfo("prop_ffemitter",			"deployable_ffemitter",			"weapon_zs_ffemitter")
+GM:AddDeployableInfo("prop_manhack",			"deployable_manhack",			"weapon_zs_manhack")
+GM:AddDeployableInfo("prop_manhack_saw",		"deployable_manhack_saw",		"weapon_zs_manhack_saw")
+GM:AddDeployableInfo("prop_drone",				"deployable_drone",				"weapon_zs_drone")
+GM:AddDeployableInfo("prop_drone_pulse",		"deployable_drone_pulse",		"weapon_zs_drone_pulse")
+GM:AddDeployableInfo("prop_drone_hauler",		"deployable_drone_hauler",		"weapon_zs_drone_hauler")
+GM:AddDeployableInfo("prop_rollermine",			"deployable_rollermine",		"weapon_zs_rollermine")
+GM:AddDeployableInfo("prop_tv",                 "deployable_tv",               	"weapon_zs_tv")
 
 GM.MaxSigils = 3
 
@@ -762,3 +815,30 @@ GM.EndWavePointsBonus = 5
 
 -- Also give humans this many points when the wave ends, multiplied by (wave - 1)
 GM.EndWavePointsBonusPerWave = 1
+
+-- ============================================================
+-- Bot optimization helpers (shared)
+-- ============================================================
+-- The actual value of GM.OptimizeBots is set by the server convar
+-- "zs_optimize_bots" (see sv_options.lua). On the client it remains nil,
+-- so these functions on the client always return false and don't break anything.
+
+function GM:IsBotNetNoop(pl)
+    if not SERVER then return false end
+    if not self.OptimizeBots then return false end
+    if not pl or not pl:IsValid() then return false end
+    return pl:IsBot()
+end
+
+function GM:IsBotWeaponNoop(wep)
+    if not SERVER then return false end
+    if not self.OptimizeBots then return false end
+    if not wep or not wep:IsValid() then return false end
+    local owner = wep:GetOwner()
+    return owner and owner:IsValid() and owner:IsBot()
+end
+
+function GM:IsBotGameplayNoop(pl)
+    if not self:IsBotNetNoop(pl) then return false end
+    return pl:Team() ~= TEAM_HUMAN
+end

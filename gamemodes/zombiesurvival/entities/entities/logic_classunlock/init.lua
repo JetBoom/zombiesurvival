@@ -28,7 +28,7 @@ function ENT:AcceptInput(name, activator, caller, args)
 					for _, pl in pairs(player.GetAll()) do
 						if pl:GetZombieClass() == k then
 							for classid, classtab in ipairs(GAMEMODE.ZombieClasses) do
-								if GAMEMODE:IsClassUnlocked(k) and not classtab.Hidden then
+								if classid ~= k and GAMEMODE:IsClassUnlocked(classid) and not classtab.Hidden and not classtab.Boss then
 									pl.DeathClass = classid
 									break
 								end

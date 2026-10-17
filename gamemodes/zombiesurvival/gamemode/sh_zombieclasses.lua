@@ -1,26 +1,67 @@
 GM.RevertableZombieClasses = {}
 
-function GM:IsClassUnlocked(classname)
-	local classtab = self.ZombieClasses[classname]
-	if not classtab then return false end
+-- Result cache: the result depends only on (wave, waveactive,
+-- useSigils, NumSigilsCorrupted, Unlocked/Locked class fields).
+-- All of this changes rarely — on SetWave / SetUseSigils / when the
+-- class state changes. The cache is explicitly cleared from these places.
+local ClassUnlockCache = nil
+local ClassUnlockCacheKey = nil
 
-	if classtab.Boss then return true end
+function GM:InvalidateClassUnlockCache()
+	ClassUnlockCache = nil
+	ClassUnlockCacheKey = nil
+end
+
+function GM:IsClassUnlocked(classname)
+	local key = self:GetWave()
+		.. "_" .. (self:GetWaveActive() and "1" or "0")
+		.. "_" .. (self:GetUseSigils() and "1" or "0")
+		.. "_" .. self:NumSigilsCorrupted()
+
+	if ClassUnlockCacheKey ~= key then
+		ClassUnlockCacheKey = key
+		ClassUnlockCache = {}
+	end
+
+	local cached = ClassUnlockCache[classname]
+	if cached ~= nil then return cached end
+
+	local classtab = self.ZombieClasses[classname]
+	if not classtab then
+		ClassUnlockCache[classname] = false
+		return false
+	end
+
+	if classtab.Boss then
+		ClassUnlockCache[classname] = true
+		return true
+	end
 
 	if classtab.IsClassUnlocked then
 		local ret = classtab:IsClassUnlocked()
-		if ret ~= nil then return ret end
+		if ret ~= nil then
+			ClassUnlockCache[classname] = ret
+			return ret
+		end
 	end
 
-	if classtab.Locked then return false end
+	if classtab.Locked then
+		ClassUnlockCache[classname] = false
+		return false
+	end
 
-	return classtab.Unlocked
-	or classtab.Wave and self:GetWave() >= classtab.Wave
-	or classtab.Wave and not self:GetWaveActive() and self:GetWave() + 1 >= classtab.Wave
-	or classtab.Sanity and self:GetUseSigils() and self:NumSigilsCorrupted() / self.MaxSigils >= classtab.Sanity
-	--or classtab.Sanity and self:GetUseSigils() and self:GetSigilsDestroyed() / self.MaxSigils >= classtab.Sanity
+	local result = classtab.Unlocked
+		or classtab.Wave and self:GetWave() >= classtab.Wave
+		or classtab.Wave and not self:GetWaveActive() and self:GetWave() + 1 >= classtab.Wave
+		or classtab.Sanity and self:GetUseSigils() and self:NumSigilsCorrupted() / self.MaxSigils >= classtab.Sanity
+
+	ClassUnlockCache[classname] = result
+	return result
 end
 
 function GM:ClassUnlocksUpdate(pl)
+	self:InvalidateClassUnlockCache()
+
 	for k,v in ipairs(GAMEMODE.ZombieClasses) do
 		net.Start("zs_classunlockstate")
 			net.WriteInt(k, 8)
@@ -76,10 +117,26 @@ function GM:RegisterZombieClass(name, tab)
 	tab.Points = tab.Points or 0
 
 	gm.ZombieClasses[name] = tab
+
+	-- Reverse map: SWEP classname -> zombie class tab.
+	-- Used by translate.WeaponName to display zombie weapons as their class name.
+	if tab.SWEP then
+		gm.ZombieClassBySWEP = gm.ZombieClassBySWEP or {}
+		gm.ZombieClassBySWEP[tab.SWEP] = tab
+	end
 end
 
 function GM:RevertZombieClasses()
 	self.ZombieClasses = table.Copy(self.RevertableZombieClasses)
+
+	self.ZombieClassBySWEP = {}
+	for _, tab in pairs(self.ZombieClasses) do
+		if type(tab) == "table" and tab.SWEP then
+			self.ZombieClassBySWEP[tab.SWEP] = tab
+		end
+	end
+
+	self:InvalidateClassUnlockCache()
 end
 
 function GM:RegisterZombieClasses()

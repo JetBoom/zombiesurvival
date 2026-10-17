@@ -19,6 +19,7 @@ SWEP.Primary.ClipSize = 150
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "smg1"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
+SWEP.NoMagazine = true
 
 SWEP.Secondary.Automatic = true
 
@@ -32,15 +33,16 @@ SWEP.MaxStock = 2
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.769)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.656)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Citadel' Minicannon", "Uses 3 ammo per shot, shoots slower, but more damage and accuracy", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Citadel' Minicannon", "Uses 3 ammo per shot, shoots slower, but more damage and accuracy", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 2.5
 	wept.ConeMin = wept.ConeMin * 0.5
 	wept.ConeMax = wept.ConeMax * 0.5
 	wept.Primary.Delay = wept.Primary.Delay * 2.65
 	wept.Recoil = 4
+	wept.AmmoPerShot = 3
 
 	wept.TakeAmmo = function(self)
-		self:TakeCombinedPrimaryAmmo(3)
+		self:TakeCombinedPrimaryAmmo(self.AmmoPerShot)
 	end
 
 	wept.GetFireDelay = function(self)
@@ -52,6 +54,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Citadel' Minicannon", "Uses 3 ammo per 
 		self:EmitSound("weapons/m4a1/m4a1_unsil-1.wav", 75, math.random(85, 87), 0.65, CHAN_WEAPON + 20)
 	end
 end)
+branch.TranslationID = "bulwark_branch_1"
 
 SWEP.WalkSpeed = SPEED_SLOWEST * 0.75
 SWEP.FireAnimSpeed = 0.3

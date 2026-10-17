@@ -48,6 +48,7 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "buckshot"
 SWEP.ReloadSound = Sound("weapons/aug/aug_boltslap.wav")
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
+SWEP.ShowReserveAmmo = true
 
 SWEP.ReloadSpeed = 0.45
 SWEP.ReloadDelay = 0.45

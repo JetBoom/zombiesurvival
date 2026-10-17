@@ -50,5 +50,5 @@ function ENT:OnRemove()
 		particle:SetRollDelta(math.Rand(-3, 3))
 		particle:SetColor(alt and 200 or 150, 165, (alt or alt2) and 205 or 90)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

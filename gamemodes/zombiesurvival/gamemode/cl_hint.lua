@@ -27,6 +27,8 @@ end)
 
 local matRing = Material("effects/select_ring")
 local colFG = Color(220, 220, 220, 255)
+local colRing = Color(220, 220, 220, 255)
+
 function DrawWorldHint(hint, pos, delta, scale)
 	if not GAMEMODE.MessageBeaconShow then return end
 
@@ -34,7 +36,8 @@ function DrawWorldHint(hint, pos, delta, scale)
 
 	delta = delta or 1
 
-	colFG.a = math.min(220, delta * 220)
+	local baseA = math.min(220, delta * 220)
+	colFG.a = baseA
 
 	local ang = (eyepos - pos):Angle()
 	ang:RotateAroundAxis(ang:Right(), 270)
@@ -47,9 +50,12 @@ function DrawWorldHint(hint, pos, delta, scale)
 	draw.SimpleText(hint, "ZS3D2DFont2Small", 0, 64, colFG, TEXT_ALIGN_CENTER)
 
 	surface.SetMaterial(matRing)
-	for i=1, 4 do
-		colFG.a = colFG.a * (1 / i)
-		surface.SetDrawColor(colFG)
+	colRing.r = colFG.r
+	colRing.g = colFG.g
+	colRing.b = colFG.b
+	for i = 1, 4 do
+		colRing.a = baseA / i
+		surface.SetDrawColor(colRing)
 		local pulse = math.max(0.25, math.abs(math.sin(RealTime() * 6))) * 30 * i
 		surface.DrawTexturedRectRotated(0, 0, 128 + pulse, 128 + pulse, 0)
 	end

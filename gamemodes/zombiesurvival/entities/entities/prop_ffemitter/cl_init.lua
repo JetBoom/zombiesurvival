@@ -21,7 +21,7 @@ function ENT:RenderInfo(pos, ang, owner)
 		end
 
 		if ammo > 0 then
-			draw.SimpleTextBlurry("["..ammo.." / "..self.MaxAmmo.."]", "ZS3D2DFontSmall", 0, 120, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleTextBlurry(translate.Format("deployable_ammo_count_x_y", ammo, self.MaxAmmo), "ZS3D2DFontSmall", 0, 120, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		else
 			draw.SimpleTextBlurry(translate.Get("empty"), "ZS3D2DFontSmall", 0, 120, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end

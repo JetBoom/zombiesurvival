@@ -227,9 +227,9 @@ function GM:DrawHumanIndicators()
 		dist = pl:GetPos():DistToSqr(eyepos)
 		if pl:Alive() and dist <= range and (not pl:GetDTBool(DT_PLAYER_BOOL_NECRO) or dist >= 27500) then
 			healthfrac = math_max(pl:Health(), 0) / pl:GetMaxHealth()
-			colHealth.r = math_Approach(colHealthEmpty.r, colHealthFull.r, math_abs(colHealthEmpty.r - colHealthFull.r) * healthfrac)
-			colHealth.g = math_Approach(colHealthEmpty.g, colHealthFull.g, math_abs(colHealthEmpty.g - colHealthFull.g) * healthfrac)
-			colHealth.b = math_Approach(colHealthEmpty.b, colHealthFull.b, math_abs(colHealthEmpty.b - colHealthFull.b) * healthfrac)
+			colHealth.r = Lerp(healthfrac, colHealthEmpty.r, colHealthFull.r)
+			colHealth.g = Lerp(healthfrac, colHealthEmpty.g, colHealthFull.g)
+			colHealth.b = Lerp(healthfrac, colHealthEmpty.b, colHealthFull.b)
 
 			pos = pl:WorldSpaceCenter()
 

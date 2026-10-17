@@ -5,7 +5,7 @@ ENT.LastPos = Vector(0, 0, 0)
 ENT.NextTrace = 0
 
 function ENT:Initialize()
-	self:SetRenderBounds(Vector(-self.Range, -self.Range, -self.Range), Vector(self.Range, self.Range, self.Range))
+	self:SetRenderBounds(Vector(-16, -16, -16), Vector(16, 16, 16))
 end
 
 function ENT:Draw()

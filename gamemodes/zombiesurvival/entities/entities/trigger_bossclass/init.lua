@@ -43,13 +43,12 @@ function ENT:KeyValue(key, value)
 		self.InstantChange = tonumber(value) == 1
 	elseif key == "class" then
 		self.BossIndex = nil
+		local target = string.lower(value or "")
 		for _, classtable in ipairs(GAMEMODE.ZombieClasses) do
-			if classtable.Boss then
-				local classname=GAMEMODE.ZombieClasses[classtable.Index].Name
-				if string.lower(classname) == string.lower(value or "") then
-					self.BossIndex = classtable.Index
-					break
-				end
+			if classtable.Boss
+				and string.lower(classtable.Name) == target then
+				self.BossIndex = classtable.Index
+				break
 			end
 		end
 	end

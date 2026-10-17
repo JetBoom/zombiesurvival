@@ -17,7 +17,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 
 	if attacker:IsValid() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN --[[and inflictor == wep and wep.IsMelee]] then
 		local dmg = dmginfo:GetDamage()
-		local extradamage = dmg * 0.25
+		local extradamage = dmg * (GAMEMODE.SkillConstants.StrengthShotgunBonusPercent / 100)
 		dmginfo:SetDamage(dmg + extradamage)
 
 		if self.Applier and self.Applier:IsValidLivingHuman() and ent:IsPlayer() and ent:Team() == TEAM_ZOMBIE then

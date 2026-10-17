@@ -47,13 +47,16 @@ SWEP.MaxStock = 3
 SWEP.IronSightsPos = Vector(-2, 6, 3)
 SWEP.IronSightsAng = Vector(0, 2, 0)
 
+SWEP.StormFireDelayMul = 1.3333
+SWEP.StormFireRatePercent = math.floor(100 / SWEP.StormFireDelayMul + 0.5)
+
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 	local ironsights = self:GetIronsights()
 
-	self:SetNextPrimaryFire(CurTime() + self:GetFireDelay() * (ironsights and 1.3333 or 1))
+	self:SetNextPrimaryFire(CurTime() + self:GetFireDelay() * (ironsights and self.StormFireDelayMul or 1))
 
 	self:EmitFireSound()
 	self:TakeAmmo()

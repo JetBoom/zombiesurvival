@@ -38,14 +38,23 @@ SWEP.FireAnimSpeed = 0.75
 
 SWEP.Tier = 5
 SWEP.MaxStock = 2
+SWEP.BranchAmmoPercent = 33
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Salvo' Micro-missile Launcher", "Rapidly fires miniature missiles that use 33% ammo", function(wept)
+
+local SALVO_AMMO_DIVISOR  = 3
+local SALVO_AMMO_PERCENT  = math.floor(100 / SALVO_AMMO_DIVISOR)
+
+SWEP.BranchAmmoPercent   = SALVO_AMMO_PERCENT
+SWEP.BranchAmmoDivisor   = SALVO_AMMO_DIVISOR
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Salvo' Micro-missile Launcher", "Rapidly fires miniature missiles that use 33% ammo", function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 0.24
 	wept.Primary.Automatic = true
 	wept.Recoil = 0
 	wept.Primary.Damage = wept.Primary.Damage * 0.3
 	wept.FireAnimSpeed = 1.1
+	wept.BranchAmmoPercent  = SALVO_AMMO_PERCENT
+    wept.BranchAmmoDivisor  = SALVO_AMMO_DIVISOR
 
 	wept.EmitFireSound = function(self)
 		self:EmitSound(self.Primary.Sound, 75, math.random(218, 223), 0.6)
@@ -62,24 +71,26 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Salvo' Micro-missile Launcher", "Rapidl
 	end
 
 	wept.PrimaryAttack = function(self)
-		if not self:CanPrimaryAttack() then return end
-		self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-		self:EmitFireSound()
+        if not self:CanPrimaryAttack() then return end
+        self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+        self:EmitFireSound()
 
-		local altuse = self:GetDTInt(10)
-		if altuse == 0 then
-			self:TakeAmmo()
-		end
-		self:SetDTInt(10, (altuse - 1) % 3)
+        local divisor = self.BranchAmmoDivisor or SALVO_AMMO_DIVISOR
 
-		self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self:GetCone())
-		self.IdleAnimation = CurTime() + self:SequenceDuration()
-	end
+        local altuse = self:GetDTInt(10)
+        if altuse == 0 then
+            self:TakeAmmo()
+        end
+        self:SetDTInt(10, (altuse - 1) % divisor)
+
+        self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self:GetCone())
+        self.IdleAnimation = CurTime() + self:SequenceDuration()
+    end
 
 	wept.ConeMax = 3
 	wept.ConeMin = 1.5
 end)
-
+branch.TranslationID = "broadside_branch_1"
 
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 80, math.random(118, 123), 0.8)

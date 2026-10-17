@@ -1,29 +1,29 @@
-GM.Name		=	"Zombie Survival"
-GM.Author	=	"William \"JetBoom\" Moodhe"
+GM.Name     =   "Zombie Survival"
+GM.Author   =   "William \"JetBoom\" Moodhe"
 GM.Email	=	"williammoodhe@gmail.com"
 GM.Website	=	"http://www.noxiousnet.com"
 
 -- No, adding a gun doesn't make your name worth being here.
 GM.Credits = {
-	{"William \"JetBoom\" Moodhe", "williammoodhe@gmail.com (www.noxiousnet.com)", "Creator / Programmer"},
-	{"11k", "tjd113@gmail.com", "Zombie view models"},
-	{"Eisiger", "k2deseve@gmail.com", "Zombie kill icons"},
-	{"Austin \"Little Nemo\" Killey", "austin_odyssey@yahoo.com", "Ambient music"},
-	{"Zombie Panic: Source", "http://www.zombiepanic.org/", "Melee weapon sounds"},
-	{"Samuel", "samuel_games@hotmail.com", "Board Kit models"},
-	{"Typhon", "lukas-tinel@hotmail.com", "Fear-o-meter textures"},
-	{"Benjy, The Darker One, Raox, Scott", "", "Code contributions"},
+	{"credit_name_creator", "williammoodhe@gmail.com (www.noxiousnet.com)", "credit_role_creator_programmer"},
+	{"11k", "tjd113@gmail.com", "credit_role_zombie_view_models"},
+	{"Eisiger", "k2deseve@gmail.com", "credit_role_zombie_kill_icons"},
+	{"credit_name_little_nemo", "austin_odyssey@yahoo.com", "credit_role_ambient_music"},
+	{"Zombie Panic: Source", "http://www.zombiepanic.org/", "credit_role_melee_weapon_sounds"},
+	{"Samuel", "samuel_games@hotmail.com", "credit_role_board_kit_models"},
+	{"Typhon", "lukas-tinel@hotmail.com", "credit_role_fearometer_textures"},
+	{"Benjy, The Darker One, Raox, Scott", "", "credit_role_code_contributions"},
 
-	{"Mr. Darkness", "", "Russian translation"},
-	{"honsal", "", "Korean translation"},
-	{"rui_troia", "", "Portuguese translation"},
-	{"Shinyshark", "", "Dutch translation"},
-	{"Kradar", "", "Italian translation"},
-	{"Raptor", "", "German translation"},
-	{"The Special Duckling", "", "Danish translation"},
-	{"ptown, Dr. Broly", "", "Spanish translation"},
+	{"Mr. Darkness", "", "credit_role_russian_translation"},
+	{"honsal", "", "credit_role_korean_translation"},
+	{"rui_troia", "", "credit_role_portuguese_translation"},
+	{"Shinyshark", "", "credit_role_dutch_translation"},
+	{"Kradar", "", "credit_role_italian_translation"},
+	{"Raptor", "", "credit_role_german_translation"},
+	{"The Special Duckling", "", "credit_role_danish_translation"},
+	{"ptown, Dr. Broly", "", "credit_role_spanish_translation"},
 
-	{"Anyone else on GitHub or who I've forgotten", "", "Various contributions"},
+	{"credit_name_anyone_else_github", "", "credit_role_various_contributions"},
 }
 
 if file.Exists(GM.FolderName.."/gamemode/maps/"..game.GetMap()..".lua", "LUA") then
@@ -46,9 +46,38 @@ include("obj_player_extend.lua")
 include("obj_weapon_extend.lua")
 
 include("sh_translate.lua")
+include("sh_titles.lua")
 include("sh_colors.lua")
 include("sh_serialization.lua")
 include("sh_util.lua")
+include("sh_maptext.lua")
+include("addon_compatibility/sh_sourceweapon_compat.lua")
+
+-- ============================================================
+-- GM.Name / GM.Author — localization
+-- ============================================================
+local OriginalName   = "Zombie Survival"
+local OriginalAuthor = "William \"JetBoom\" Moodhe"
+
+GM.Name   = nil
+GM.Author = nil
+
+setmetatable(GM, {
+    __index = function(self, key)
+        if key == "Name" then
+            if translate.Exists("gamemode_name") then
+                return translate.Get("gamemode_name")
+            end
+            return OriginalName
+        end
+        if key == "Author" then
+            if translate.Exists("gamemode_author") then
+                return translate.Get("gamemode_author")
+            end
+            return OriginalAuthor
+        end
+    end,
+})
 
 include("skillweb/sh_skillweb.lua")
 
@@ -570,7 +599,8 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 end
 
 function GM:PlayerCanBeHealed(pl)
-	local maxhp = pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
+	local maxhp = pl:IsSkillActive(SKILL_D_FRAIL)
+		and math.floor(pl:GetMaxHealth() * (self.SkillConstants.FrailHealthCapPercent / 100)) or pl:GetMaxHealth()
 
 	return pl:Health() < maxhp or pl:GetPoisonDamage() > 0 or pl:GetBleedDamage() > 0
 end
@@ -801,7 +831,7 @@ end
 function GM:PlayerNoClip(pl, on)
 	if pl:IsAdmin() then
 		if SERVER then
-			PrintMessage(HUD_PRINTCONSOLE, translate.Format(on and "x_turned_on_noclip" or "x_turned_off_noclip", pl:Name()))
+			PrintTranslatedMessage(HUD_PRINTCONSOLE, on and "x_turned_on_noclip" or "x_turned_off_noclip", pl:Name())
 		end
 
 		if SERVER then
@@ -817,15 +847,21 @@ end
 function GM:IsSpecialPerson(pl, image)
 	local img, tooltip
 
+	local function Tr(key, default)
+		local v = translate.Get(key)
+		if v == "@" .. key .. "@" then return default end
+		return v
+	end
+
 	if pl:SteamID() == "STEAM_0:1:3307510" then
 		img = "VGUI/steam/games/icon_sourcesdk"
-		tooltip = "JetBoom\nCreator of Zombie Survival!"
+		tooltip = Tr("special_person_tooltip_jetboom", "JetBoom\nCreator of Zombie Survival!")
 	elseif pl:IsAdmin() then
 		img = "VGUI/servers/icon_robotron"
-		tooltip = "Admin"
+		tooltip = Tr("special_person_tooltip_admin", "Admin")
 	elseif pl:IsNoxSupporter() then
 		img = "noxiousnet/noxicon.png"
-		tooltip = "Nox Supporter"
+		tooltip = Tr("special_person_tooltip_noxsupporter", "Nox Supporter")
 	end
 
 	if img then

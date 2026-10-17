@@ -8,13 +8,7 @@ end)
 local M_Player = FindMetaTable("Player")
 local P_Team = M_Player.Team
 
-local function AltSelItemUpd()
-	local activeweapon = MySelf:GetActiveWeapon()
-	if not activeweapon or not activeweapon:IsValid() then return end
-
-	local actwclass = activeweapon:GetClass()
-	GAMEMODE.HumanMenuPanel.SelectedItemLabel:SetText(weapons.Get(actwclass).PrintName)
-end
+local AltSelItemUpd = ZS_UpdateAltSelItemLabel
 
 net.Receive("zs_legdamage", function(length)
 	MySelf.LegDamage = net.ReadFloat()
@@ -119,12 +113,12 @@ net.Receive("zs_wavestart", function(length)
 	gamemode.Call("SetWaveEnd", time)
 
 	if GAMEMODE.ZombieEscape then
-		GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFont"}, translate.Get("escape_from_the_zombies"))
+		GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFontBanner"}, translate.Get("escape_from_the_zombies"))
 	elseif wave == GAMEMODE:GetNumberOfWaves() then
-		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Get("final_wave"), {killicon = "default"})
+		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFontBanner"}, " ", COLOR_RED, translate.Get("final_wave"), {killicon = "default"})
 		GAMEMODE:CenterNotify(translate.Get("final_wave_sub"))
 	else
-		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Format("wave_x_has_begun", wave), {killicon = "default"})
+		GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFontBanner"}, " ", COLOR_RED, translate.Format("wave_x_has_begun", wave), {killicon = "default"})
 
 		if wave == 1 and GAMEMODE:GetUseSigils() then
 			GAMEMODE:CenterNotify(translate.Format("x_sigils_appeared", GAMEMODE.MaxSigils))
@@ -135,7 +129,10 @@ net.Receive("zs_wavestart", function(length)
 end)
 
 net.Receive("zs_classunlock", function(length)
-	GAMEMODE:CenterNotify(COLOR_GREEN, translate.Format("x_unlocked", net.ReadString()))
+	local str   = net.ReadString()
+	local count = net.ReadUInt(8)
+
+	GAMEMODE:CenterNotify(COLOR_GREEN, translate.Format("x_unlocked", str, count))
 end)
 
 net.Receive("zs_waveend", function(length)
@@ -149,8 +146,8 @@ net.Receive("zs_waveend", function(length)
 		GAMEMODE:CenterNotify(translate.Get("wave_x_is_over_sub"))
 
 		if MySelf:IsValid() and P_Team(MySelf) == TEAM_HUMAN then
-			if MySelf:GetZSSPRemaining() > 0 then
-				GAMEMODE:CenterNotify(translate.Format("unspent_skill_points_press_x", input.LookupBinding("gm_showspare1") or "F3"))
+			if MySelf:GetZSSPRemaining() > 0 and not MySelf:HasAllSkillsUnlockable() then
+				GAMEMODE:CenterNotify(translate.Format("unspent_skill_points_press_x", translate.GetBindKeyName("gm_showspare1")))
 			end
 
 			if GAMEMODE.EndWavePointsBonus > 0 then
@@ -186,9 +183,9 @@ net.Receive("zs_boss_spawned", function(length)
 	local kid = {killicon = "default"}
 
 	if ent == MySelf and ent:IsValid() then
-		GAMEMODE:CenterNotify(ki, " ", COLOR_RED, translate.Format("you_are_x", translate.Get(classtbl.TranslationName)), ki)
+		GAMEMODE:CenterNotify(ki, " ", COLOR_RED, translate.Format("you_are_x", translate.ClassName(translate.Get(classtbl.TranslationName))), ki)
 	elseif ent:IsValid() and P_Team(MySelf) == TEAM_UNDEAD then
-		GAMEMODE:CenterNotify(ki, " ", COLOR_RED, translate.Format("x_has_risen_as_y", ent:Name(), translate.Get(classtbl.TranslationName)), ki)
+		GAMEMODE:CenterNotify(ki, " ", COLOR_RED, translate.Format("x_has_risen_as_y", ent:DisplayName(), translate.ClassName(translate.Get(classtbl.TranslationName))), ki)
 	else
 		GAMEMODE:CenterNotify(kid, " ", COLOR_RED, translate.Get("x_has_risen"), kid)
 	end
@@ -204,7 +201,7 @@ net.Receive("zs_boss_slain", function(length)
 	local ki = {killicon = classtbl.SWEP}
 
 	if ent:IsValid() then
-		GAMEMODE:CenterNotify(ki, " ", COLOR_YELLOW, translate.Format("x_has_been_slain_as_y", ent:Name(), translate.Get(classtbl.TranslationName)), ki)
+		GAMEMODE:CenterNotify(ki, " ", COLOR_YELLOW, translate.Format("x_has_been_slain_as_y", ent:DisplayName(), translate.ClassName(translate.Get(classtbl.TranslationName))), ki)
 	end
 
 	if MySelf:IsValid() then
@@ -219,6 +216,8 @@ net.Receive("zs_classunlockstate", function(length)
 
 	class.Locked = not unlocked
 	class.Unlocked = unlocked
+
+	GAMEMODE:InvalidateClassUnlockCache()
 end)
 
 net.Receive("zs_centernotify", function(length)
@@ -237,7 +236,20 @@ net.Receive("zs_survivor", function(length)
 	local ent = net.ReadEntity()
 
 	if ent:IsValidPlayer() then
-		GAMEMODE:TopNotify(ent, " ", translate.Get("has_survived"))
+		local name = ent:Name()
+		if not name or name == "" then name = ent:Nick() end
+		if not name or name == "" then name = ent:IsBot() and "BOT" or "???" end
+
+		local fmt = translate.Get("has_survived")
+		local prefix, suffix = fmt:match("^(.-)%%s(.*)$")
+
+		if prefix then
+			local teamcol = team.GetColor(ent:Team())
+
+			GAMEMODE:TopNotify({avatar = ent}, " ", prefix, teamcol, " ", name, COLOR_WHITE, suffix)
+		else
+			GAMEMODE:TopNotify({avatar = ent}, " ", translate.Format("has_survived", name))
+		end
 
 		if ent == MySelf then
 			util.WhiteOut(3)
@@ -270,7 +282,7 @@ net.Receive("zs_healother", function(length)
 	if net.ReadBool() then
 		gamemode.Call("HealedOtherPlayer", net.ReadEntity(), net.ReadFloat())
 	else
-		GAMEMODE:CenterNotify({killicon = "weapon_zs_medicalkit"}, " ", COLOR_GREEN, translate.Format("healed_x_for_y", net.ReadEntity():Name(), net.ReadFloat()))
+		GAMEMODE:CenterNotify({killicon = "weapon_zs_medicalkit"}, " ", COLOR_GREEN, translate.Format("healed_x_for_y", net.ReadEntity():DisplayName(), net.ReadFloat()))
 	end
 end)
 
@@ -303,9 +315,9 @@ net.Receive("zs_sigilcorrupted", function(length)
 		end)
 
 		if corrupted == maxsigils then
-			GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFontSmall"}, COLOR_RED, translate.Get("sigil_corrupted_last"), {killicon = "default"})
+			GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFontBanner"}, COLOR_RED, translate.Get("sigil_corrupted_last"), {killicon = "default"})
 		else
-			GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFontSmall"}, translate.Get("sigil_corrupted"))
+			GAMEMODE:CenterNotify(COLOR_RED, {font = "ZSHUDFontBanner"}, translate.Get("sigil_corrupted"))
 			--GAMEMODE:CenterNotify(COLOR_RED, translate.Format("sigil_corrupted_x_remain", maxsigils - corrupted))
 		end
 	end
@@ -331,7 +343,7 @@ net.Receive("zs_ammopickup", function(length)
 	local ammotype = net.ReadString()
 	local ico = GAMEMODE.AmmoIcons[ammotype] or "weapon_zs_resupplybox"
 
-	ammotype = GAMEMODE.AmmoNames[ammotype] or ammotype
+	ammotype = translate.AmmoName(ammotype, "notify")
 
 	GAMEMODE:CenterNotify({killicon = ico}, " ", COLOR_GREEN, translate.Format("obtained_x_y_ammo", amount, ammotype))
 end)
@@ -344,9 +356,9 @@ net.Receive("zs_ammogive", function(length)
 	if not ent:IsValidPlayer() then return end
 	local ico = GAMEMODE.AmmoIcons[ammotype] or "weapon_zs_resupplybox"
 
-	ammotype = GAMEMODE.AmmoNames[ammotype] or ammotype
+	ammotype = translate.AmmoName(ammotype, "notify")
 
-	GAMEMODE:CenterNotify({killicon = ico}, " ", COLOR_GREEN, translate.Format("gave_x_y_ammo_to_z", amount, ammotype, ent:Name()))
+	GAMEMODE:CenterNotify({killicon = ico}, " ", COLOR_GREEN, translate.Format("gave_x_y_ammo_to_z", amount, ammotype, ent:DisplayName()))
 end)
 
 net.Receive("zs_ammogiven", function(length)
@@ -357,9 +369,9 @@ net.Receive("zs_ammogiven", function(length)
 	if not ent:IsValidPlayer() then return end
 	local ico = GAMEMODE.AmmoIcons[ammotype] or "weapon_zs_resupplybox"
 
-	ammotype = GAMEMODE.AmmoNames[ammotype] or ammotype
+	ammotype = translate.AmmoName(ammotype, "notify")
 
-	GAMEMODE:CenterNotify({killicon = ico}, " ", COLOR_GREEN, translate.Format("obtained_x_y_ammo_from_z", amount, ammotype, ent:Name()))
+	GAMEMODE:CenterNotify({killicon = ico}, " ", COLOR_GREEN, translate.Format("obtained_x_y_ammo_from_z", amount, ammotype, ent:DisplayName()))
 end)
 
 net.Receive("zs_deployablelost", function(length)
@@ -399,7 +411,8 @@ end)
 
 net.Receive("zs_invitem", function(length)
 	local invitemt = net.ReadString()
-	local inviname = GAMEMODE.ZSInventoryItemData[invitemt].PrintName
+	local invdata = GAMEMODE.ZSInventoryItemData[invitemt]
+	local inviname = translate.ItemName(invdata.TranslationID, invdata.TranslationPrefix) or invdata.PrintName
 	local category = GAMEMODE:GetInventoryItemType(invitemt)
 
 	surface.PlaySound("items/ammo_pickup.wav")
@@ -408,13 +421,14 @@ end)
 
 net.Receive("zs_invgiven", function(length)
 	local invitemt = net.ReadString()
-	local inviname = GAMEMODE.ZSInventoryItemData[invitemt].PrintName
+	local invdata = GAMEMODE.ZSInventoryItemData[invitemt]
+	local inviname = translate.ItemName(invdata.TranslationID, invdata.TranslationPrefix) or invdata.PrintName
 	local category = GAMEMODE:GetInventoryItemType(invitemt)
 	local ent = net.ReadEntity()
 
 	if not ent:IsValidPlayer() then return end
 
-	GAMEMODE:CenterNotify({killicon = category == INVCAT_TRINKETS and "weapon_zs_trinket" or "weapon_zs_craftables"}, " ", COLOR_RORANGE, translate.Format("obtained_inv_item_from_z", inviname, ent:Name()))
+	GAMEMODE:CenterNotify({killicon = category == INVCAT_TRINKETS and "weapon_zs_trinket" or "weapon_zs_craftables"}, " ", COLOR_RORANGE, translate.Format("obtained_inv_item_from_z", inviname, ent:DisplayName()))
 end)
 
 net.Receive("zs_healby", function(length)
@@ -423,7 +437,7 @@ net.Receive("zs_healby", function(length)
 
 	if not ent:IsValidPlayer() then return end
 
-	GAMEMODE:CenterNotify({killicon = "weapon_zs_medicalkit"}, " ", COLOR_GREEN, translate.Format("healed_x_by_y", ent:Name(), amount))
+	GAMEMODE:CenterNotify({killicon = "weapon_zs_medicalkit"}, " ", COLOR_GREEN, translate.Format("healed_x_by_y", ent:DisplayName(), amount))
 end)
 
 net.Receive("zs_buffby", function(length)
@@ -432,7 +446,7 @@ net.Receive("zs_buffby", function(length)
 
 	if not ent:IsValidPlayer() then return end
 
-	GAMEMODE:CenterNotify({killicon = "weapon_zs_medicgun"}, " ", COLOR_GREEN, translate.Format("buffed_x_with_y", ent:Name(), buff))
+	GAMEMODE:CenterNotify({killicon = "weapon_zs_medicgun"}, " ", COLOR_GREEN, translate.Format("buffed_x_with_y", ent:DisplayName(), buff))
 end)
 
 net.Receive("zs_buffwith", function(length)
@@ -441,14 +455,14 @@ net.Receive("zs_buffwith", function(length)
 
 	if not ent:IsValidPlayer() then return end
 
-	GAMEMODE:CenterNotify({killicon = "weapon_zs_medicgun"}, " ", COLOR_GREEN, translate.Format("buffed_x_with_a_y", ent:Name(), buff))
+	GAMEMODE:CenterNotify({killicon = "weapon_zs_medicgun"}, " ", COLOR_GREEN, translate.Format("buffed_x_with_a_y", ent:DisplayName(), buff))
 end)
 
 net.Receive("zs_nailremoved", function(length)
 	local ent = net.ReadEntity()
 	if not ent:IsValidPlayer() then return end
 
-	GAMEMODE:CenterNotify({killicon = "weapon_zs_hammer"}, " ", COLOR_RED, translate.Format("removed_your_nail", ent:Name()))
+	GAMEMODE:CenterNotify({killicon = "weapon_zs_hammer"}, " ", COLOR_RED, translate.Format("removed_your_nail", ent:DisplayName()))
 end)
 
 net.Receive("zs_currentround", function(length)

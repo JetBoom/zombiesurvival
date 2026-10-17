@@ -325,10 +325,6 @@ end
 
 function ENT:SetObjectOwner(ent)
 	self:SetDTEntity(1, ent)
-	if self.HitBox then
-		self.HitBox:SetObjectOwner(ent)
-	end
-
 	self:SetupPlayerSkills()
 end
 

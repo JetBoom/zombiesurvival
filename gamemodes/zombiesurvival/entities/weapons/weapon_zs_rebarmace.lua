@@ -47,7 +47,7 @@ SWEP.Tier = 3
 SWEP.AllowQualityWeapons = true
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.15)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Rebar Ward Hammer", "Grants defence on kill, does not knockback zombie vision, faster but less damage and knockback", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Rebar Ward Hammer", "Grants defence on kill, does not knockback zombie vision, faster but less damage and knockback", function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 0.8
 	wept.MeleeDamage = wept.MeleeDamage * 0.75
 	wept.MeleeKnockBack = 200
@@ -64,6 +64,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Rebar Ward Hammer", "Grants defence on k
 		wept.OnMeleeHit = function() end
 	end
 end)
+branch.TranslationID = "rebarmace_branch_1"
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.random(55, 65))

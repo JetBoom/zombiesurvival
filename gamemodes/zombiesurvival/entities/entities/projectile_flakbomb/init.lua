@@ -19,12 +19,14 @@ end
 function ENT:Think()
 	if self.ExplodeTime <= CurTime() then
 		self:Explode(self:GetPos())
+		return
 	end
 	if self.PhysicsData then
 		self:Explode(self:GetPos(), self.PhysicsData.HitNormal, self.PhysicsData.HitEntity)
+		return
 	end
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.05)
 	return true
 end
 
@@ -66,7 +68,7 @@ function ENT:Explode(hitpos, hitnormal, hitent)
 		end
 	end
 
-	self:EmitSound(")weapons/explode5.wav", 80, 110)
+	self:EmitSound("weapons/explode5.wav", 80, 110)
 	self:Remove()
 end
 

@@ -127,9 +127,20 @@ local BonesToZero = {
 	"ValveBiped.Bip01_R_Finger32"
 }
 function CLASS:BuildBonePositions(pl)
-	for _, bone in pairs(BonesToZero) do
-		local boneid = pl:LookupBone(bone)
-		if boneid and boneid > 0 then
+	local cache = pl._pukepusBoneIDs
+	local model = pl:GetModel()
+	if not cache or cache.model ~= model then
+		cache = { model = model, ids = {} }
+		for i, bone in ipairs(BonesToZero) do
+			cache.ids[i] = pl:LookupBone(bone) or 0
+		end
+		pl._pukepusBoneIDs = cache
+	end
+
+	local ids = cache.ids
+	for i = 1, #ids do
+		local boneid = ids[i]
+		if boneid > 0 then
 			pl:ManipulateBoneScale(boneid, vector_tiny)
 		end
 	end
@@ -178,11 +189,27 @@ end
 
 if SERVER then
 	function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo, assister)
-		local pos = pl:WorldToLocal(dmginfo:GetDamagePosition())
-		local norm = dmginfo:GetDamageForce():GetNormalized() * -1
+		local worldpos = dmginfo:GetDamagePosition()
+
+		if not worldpos or worldpos == vector_origin then
+			worldpos = pl:WorldSpaceCenter()
+		end
+
+		local localdir
+		local force = dmginfo:GetDamageForce()
+		if force and force:LengthSqr() >= 1 then
+			localdir = -force:GetNormalized()
+		elseif IsValid(attacker) and attacker ~= pl then
+			localdir = (attacker:WorldSpaceCenter() - worldpos):GetNormalized()
+		else
+			localdir = Vector(0, 0, 1)
+		end
+
+		local localpos = pl:WorldToLocal(worldpos)
+
 		timer.Simple(0, function()
 			if pl:IsValid() then
-				CreateFlesh(pl, 300, pos, norm)
+				CreateFlesh(pl, 300, localpos, localdir)
 			end
 		end)
 	end

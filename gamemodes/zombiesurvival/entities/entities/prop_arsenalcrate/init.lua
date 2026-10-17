@@ -56,9 +56,9 @@ function ENT:SetObjectHealth(health)
 	if health <= 0 and not self.Destroyed then
 		self.Destroyed = true
 
-		if self:GetObjectOwner():IsValidLivingHuman() then
-			self:GetObjectOwner():SendDeployableLostMessage(self)
-		end
+		timer.Simple(0, function()
+			if IsValid(self) then self:Remove() end
+		end)
 
 		local ent = ents.Create("prop_physics")
 		if ent:IsValid() then
@@ -116,7 +116,4 @@ function ENT:OnPackedUp(pl)
 end
 
 function ENT:Think()
-	if self.Destroyed then
-		self:Remove()
-	end
 end

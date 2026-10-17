@@ -10,12 +10,17 @@ function ENT:Initialize()
 end
 
 function ENT:OnRemove()
-	local ent = ents.Create("env_nanitecloud")
-	if ent:IsValid() then
-		ent:SetPos(self.HitPos or self:GetPos())
-		ent:SetOwner(self.Owner or self:GetOwner())
-		ent:Spawn()
-	end
+    local ent = ents.Create("env_nanitecloud")
+    if ent:IsValid() then
+        ent.NaniteCloudHealPower = self.NaniteCloudHealPower
+        ent.NaniteCloudTickTime  = self.NaniteCloudTickTime
+        ent.NaniteCloudTicks     = self.NaniteCloudTicks
+        ent.NaniteCloudRadius    = self.NaniteCloudRadius
+
+        ent:SetPos(self.HitPos or self:GetPos())
+        ent:SetOwner(self.Owner or self:GetOwner())
+        ent:Spawn()
+    end
 end
 
 function ENT:PhysicsCollide(data, phys)

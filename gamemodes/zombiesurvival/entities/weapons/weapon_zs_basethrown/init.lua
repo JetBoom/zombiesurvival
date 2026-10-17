@@ -4,6 +4,9 @@ SWEP.ThrownProjectile = "projectile_zsgrenade"
 SWEP.ThrowAngVel = 5
 SWEP.ThrowVel = 800
 
+function SWEP:EntModify(ent)
+end
+
 function SWEP:ShootBullets(damage, numshots, cone)
 	local owner = self:GetOwner()
 	self:SendWeaponAnim(ACT_VM_THROW)
@@ -15,6 +18,7 @@ function SWEP:ShootBullets(damage, numshots, cone)
 		pos.z = pos.z - (damage and 16 or 0)
 		ent:SetPos(pos)
 		ent:SetOwner(owner)
+		self:EntModify(ent)
 		ent:Spawn()
 
 		ent.GrenadeDamage = self.GrenadeDamage

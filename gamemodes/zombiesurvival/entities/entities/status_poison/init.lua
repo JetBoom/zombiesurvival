@@ -11,7 +11,7 @@ end
 function ENT:Think()
 	local owner = self:GetOwner()
 
-	if self:GetDamage() <= 0 --[[or owner:Team() ~= TEAM_HUMAN]] then
+	if self:GetDamage() <= 0 then
 		self:Remove()
 		return
 	end
@@ -20,7 +20,7 @@ function ENT:Think()
 	local damage = math.min(self.DamagePerTick, self:GetDamage())
 	local attacker = self
 
-	-- Whoever has the most amount of remaining damage should get this credit.
+	-- One pass: find the zombie with the highest remaining damage.
 	local mostd = 0
 	for a, d in pairs(attackers) do
 		if a:IsValidZombie() and d > mostd then
@@ -28,20 +28,11 @@ function ENT:Think()
 			mostd = d
 		end
 	end
-	-- Uhhh... just pick the first one in the list then.
-	if attacker == self then
-		for a, d in pairs(attackers) do
-			if a:IsValidZombie() then
-				attacker = a
-				break
-			end
-		end
-	end
 
 	owner:EmitSound("player/pl_pain"..math.random(5, 7)..".wav")
 	self:AddDamage(-damage)
 
-	if attackers[attacker] then
+	if attacker ~= self and attackers[attacker] then
 		attackers[attacker] = attackers[attacker] - damage
 	end
 

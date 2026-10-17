@@ -151,13 +151,61 @@ function CatmullInterpolate(previous, start, last, nextp, elapsedTime, duration)
 							0.5 * percentCompleteSquared)
 end
 
-function string.AndSeparate(list)
+function string.AndSeparate(list, listSeparator, andSeparator, finalSeparator, transform)
 	local length = #list
 	if length <= 0 then return "" end
 	if length == 1 then return list[1] end
-	if length == 2 then return list[1].." and "..list[2] end
 
-	return table.concat(list, ", ", 1, length - 1)..", and "..list[length]
+	listSeparator  = listSeparator  or ", "
+	andSeparator   = andSeparator   or " and "
+	finalSeparator = finalSeparator or ", and "
+
+	if transform then
+		local t = {list[1]}
+		for i = 2, length do
+			t[i] = transform(list[i], i) or list[i]
+		end
+		list = t
+	end
+
+	if length == 2 then
+		return list[1]..andSeparator..list[2]
+	end
+
+	return table.concat(list, listSeparator, 1, length - 1)..finalSeparator..list[length]
+end
+
+function string.utf8lower(s)
+	if not s or s == "" then return s end
+
+	-- Fast-path for ASCII: 90% of strings on the server — English text.
+	if not s:find("[\128-\255]") then
+		return s:lower()
+	end
+
+	local ok, result = pcall(function()
+		local out = {}
+		for _, code in utf8.codes(s) do
+			local lower = code
+
+			if code >= 65 and code <= 90 then
+				lower = code + 32
+			elseif code >= 1040 and code <= 1071 then
+				lower = code + 32
+			elseif code == 1025 then lower = 1105
+			elseif code == 1030 then lower = 1110
+			elseif code == 1031 then lower = 1111
+			elseif code == 1028 then lower = 1108
+			elseif code == 1168 then lower = 1169
+			end
+
+			out[#out + 1] = utf8.char(lower)
+		end
+		return table.concat(out)
+	end)
+
+	if not ok then return s end
+	return result
 end
 
 function util.SkewedDistance(a, b, skew)
@@ -357,9 +405,9 @@ function table.IsAssoc(t)
 		if v == true then
 			return true
 		end
-
-		return false
 	end
+
+	return false
 end
 
 function table.ToAssoc(t)
@@ -503,4 +551,171 @@ function util.CreatePulseImpactEffect(hitpos, hitnormal)
 	pulseeffect:SetOrigin(hitpos)
 	pulseeffect:SetNormal(hitnormal)
 	util.Effect("cball_bounce", pulseeffect)
+end
+
+-- Truncates a UTF-8 string so its rendered width in `font` doesn't exceed `maxw` pixels.
+-- Appends `suffix` (default "..") if truncation happened.
+-- Uses binary search on UTF-8 character boundaries — safe for CJK, Cyrillic, Latin, etc.
+function string.TruncateUTF8ToWidth(s, font, maxw, suffix)
+    if not s or s == "" then return s end
+    suffix = suffix or ".."
+
+    local function measure(t)
+        if ZS_MeasureMixedText then
+            return ZS_MeasureMixedText(t, font)
+        end
+        surface.SetFont(font)
+        return surface.GetTextSize(t)
+    end
+
+    if measure(s) <= maxw then return s end
+
+    local suffixW = measure(suffix)
+    if suffixW >= maxw then return suffix end
+
+    local target = maxw - suffixW
+    local len = utf8.len(s)
+    if not len then return s end
+
+    local lo, hi = 0, len
+    while lo < hi do
+        local mid = math.floor((lo + hi + 1) / 2)
+        local ok, byteidx = pcall(utf8.offset, s, mid + 1)
+        if not ok or not byteidx then break end
+        if measure(s:sub(1, byteidx - 1)) <= target then
+            lo = mid
+        else
+            hi = mid - 1
+        end
+    end
+
+    if lo < 1 then return suffix end
+    local ok, byteidx = pcall(utf8.offset, s, lo + 1)
+    if not ok or not byteidx then return suffix end
+    return s:sub(1, byteidx - 1) .. suffix
+end
+
+-- Splits a string into lines so that each fits within maxw pixels.
+-- Works both by spaces (Latin/Cyrillic) and character-by-character (CJK).
+-- maxlines — maximum number of lines. If the text does not fit, the last line
+-- is appended with the tail and truncated with "..".
+-- Requires string.TruncateUTF8ToWidth (declared above).
+function string.WrapTextLines(text, font, maxw, maxlines)
+    if not text or text == "" then return { "" } end
+    maxlines = maxlines or 2
+
+    -- Use the mixed-font measurer when it exists. The client installs it
+    -- in cl_fontfallback.lua; on the server it's absent and we fall back
+    -- to the plain surface.GetTextSize. Without this the base decorative
+    -- font (which has no Cyrillic glyphs) reports near-zero width for
+    -- Russian text, and wrapping never kicks in.
+    local function measure(s)
+        if ZS_MeasureMixedText then
+            return ZS_MeasureMixedText(s, font)
+        end
+        surface.SetFont(font)
+        return surface.GetTextSize(s)
+    end
+
+    if measure(text) <= maxw then
+        return { text }
+    end
+
+    local lines = {}
+    local current = ""
+    local i = 1
+    local n = #text
+
+    while i <= n do
+        local b = string.byte(text, i)
+        local charLen = 1
+        if b >= 0xF0 then charLen = 4
+        elseif b >= 0xE0 then charLen = 3
+        elseif b >= 0xC0 then charLen = 2
+        end
+        if i + charLen - 1 > n then charLen = n - i + 1 end
+
+        local char = string.sub(text, i, i + charLen - 1)
+        i = i + charLen
+
+        local test = current .. char
+        if measure(test) > maxw and current ~= "" then
+            local breakAt = current:match("^.*()%s")
+            if breakAt and breakAt > 1 then
+                lines[#lines + 1] = string.sub(current, 1, breakAt - 1)
+                current = string.sub(current, breakAt + 1) .. char
+            else
+                lines[#lines + 1] = current
+                current = char
+            end
+        else
+            current = test
+        end
+    end
+    if current ~= "" then lines[#lines + 1] = current end
+
+    -- If there are more lines than maxlines — compress the tail into the last one.
+    if #lines > maxlines then
+        local kept = {}
+        for k = 1, maxlines - 1 do kept[k] = lines[k] end
+
+        local tail = lines[maxlines]
+        for k = maxlines + 1, #lines do tail = tail .. " " .. lines[k] end
+        kept[maxlines] = string.TruncateUTF8ToWidth(tail, font, maxw)
+
+        return kept
+    end
+
+    return lines
+end
+
+-- Truncates the string by the number of UTF-8 characters, not bytes.
+-- Needed for Chinese/Japanese/Korean, where 1 character = 3 bytes.
+function string.TruncateUTF8(s, maxchars, suffix)
+	if not s then return s end
+	suffix = suffix or ".."
+	local len = utf8.len(s)
+	if not len or len <= maxchars then return s end
+
+	local tail = maxchars - #suffix + 1
+	if tail < 1 then return suffix end
+
+	local ok, byteidx = pcall(utf8.offset, s, tail + 1)
+	if not ok or not byteidx then return suffix end
+	return s:sub(1, byteidx - 1)..suffix
+end
+
+-- Checks whether the string contains at least one character from the specified scripts.
+-- scripts — an array of names from SCRIPT_RANGES, or {"any"} (always true).
+local SCRIPT_RANGES = {
+	latin    = {{0x0041, 0x005A}, {0x00C0, 0x00DE}, {0x0100, 0x017F}, {0x0180, 0x024F}},
+	greek    = {{0x0391, 0x03A9}, {0x03B1, 0x03C9}},
+	cyrillic = {{0x0400, 0x04FF}, {0x0500, 0x052F}},
+	armenian = {{0x0531, 0x0556}},
+	georgian = {{0x10A0, 0x10FF}, {0x2D00, 0x2D2D}},
+}
+
+local function CodeInRanges(code, ranges)
+	for _, r in ipairs(ranges) do
+		if code >= r[1] and code <= r[2] then return true end
+	end
+	return false
+end
+
+function string.HasScript(s, scripts)
+	if not s or s == "" then return false end
+	if not scripts or scripts[1] == "any" then return true end
+
+	local ok, res = pcall(function()
+		for _, code in utf8.codes(s) do
+			for _, name in ipairs(scripts) do
+				local ranges = SCRIPT_RANGES[name]
+				if ranges and CodeInRanges(code, ranges) then
+					return true
+				end
+			end
+		end
+		return false
+	end)
+	return ok and res
 end

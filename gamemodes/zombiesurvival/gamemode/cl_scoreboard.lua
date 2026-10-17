@@ -15,6 +15,8 @@ function GM:ScoreboardShow()
 	ScoreBoard:SetAlpha(0)
 	ScoreBoard:AlphaTo(255, 0.15, 0)
 	ScoreBoard:SetVisible(true)
+
+	self.ScoreboardVisible = true
 end
 
 function GM:ScoreboardRebuild()
@@ -29,13 +31,14 @@ function GM:ScoreboardHide()
 		PlayMenuCloseSound()
 		ScoreBoard:SetVisible(false)
 	end
+
+	self.ScoreboardVisible = false
 end
 
 local PANEL = {}
 
 PANEL.RefreshTime = 2
 PANEL.NextRefresh = 0
-PANEL.m_MaximumScroll = 0
 
 local function BlurPaint(self)
 	draw.SimpleTextBlur(self:GetValue(), self.Font, 0, 0, self:GetTextColor())
@@ -64,7 +67,7 @@ function PANEL:Init()
 	self.m_ServerNameLabel:NoClipping(true)
 	self.m_ServerNameLabel.Paint = BlurPaint
 
-	self.m_AuthorLabel = EasyLabel(self, "by "..GAMEMODE.Author.." ("..GAMEMODE.Email..")", "ZSScoreBoardPing", COLOR_GRAY)
+	self.m_AuthorLabel = EasyLabel(self, translate.Format("scoreboard_author_format", GAMEMODE.Author, GAMEMODE.Email), "ZSScoreBoardPing", COLOR_GRAY)
 	self.m_ContactLabel = EasyLabel(self, GAMEMODE.Website, "ZSScoreBoardPing", COLOR_GRAY)
 
 	self.m_HumanHeading = vgui.Create("DTeamHeading", self)
@@ -73,11 +76,11 @@ function PANEL:Init()
 	self.m_ZombieHeading = vgui.Create("DTeamHeading", self)
 	self.m_ZombieHeading:SetTeam(TEAM_UNDEAD)
 
-	self.m_PointsLabel = EasyLabel(self, "Score", "ZSScoreBoardPlayer", COLOR_GRAY)
-	self.m_RemortCLabel = EasyLabel(self, "R.LVL", "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_PointsLabel = EasyLabel(self, translate.Get("scoreboard_score"), "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_RemortCLabel = EasyLabel(self, translate.Get("scoreboard_remort_level"), "ZSScoreBoardPlayer", COLOR_GRAY)
 
-	self.m_BrainsLabel = EasyLabel(self, "Brains", "ZSScoreBoardPlayer", COLOR_GRAY)
-	self.m_RemortCZLabel = EasyLabel(self, "R.LVL", "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_BrainsLabel = EasyLabel(self, translate.Get("scoreboard_brains"), "ZSScoreBoardPlayer", COLOR_GRAY)
+	self.m_RemortCZLabel = EasyLabel(self, translate.Get("scoreboard_remort_level"), "ZSScoreBoardPlayer", COLOR_GRAY)
 
 	self.ZombieList = vgui.Create("DScrollPanel", self)
 	self.ZombieList.Team = TEAM_UNDEAD
@@ -100,23 +103,74 @@ function PANEL:PerformLayout()
 	self.m_HumanHeading:SetPos(self:GetWide() * 0.25 - self.m_HumanHeading:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
 
 	self.m_ZombieHeading:SetSize(self:GetWide() / 2 - 32, 28 * screenscale)
-	self.m_ZombieHeading:SetPos(self:GetWide() * 0.75 - self.m_ZombieHeading:GetWide() * 0.5, 110 * screenscale - self.m_ZombieHeading:GetTall())
+	self.m_ZombieHeading:SetPos(self:GetWide() * 0.75 - self.m_ZombieHeading:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
 
 	self.m_PointsLabel:SizeToContents()
-	self.m_PointsLabel:SetPos((self:GetWide() / 2 - 24) * 0.6 - self.m_PointsLabel:GetWide() * 0.35, 110 * screenscale - self.m_HumanHeading:GetTall())
-	self.m_PointsLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
-
 	self.m_RemortCLabel:SizeToContents()
-	self.m_RemortCLabel:SetPos((self:GetWide() / 2 - 24) * 0.71 - self.m_RemortCLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
-	self.m_RemortCLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
-
 	self.m_BrainsLabel:SizeToContents()
-	self.m_BrainsLabel:SetPos(self:GetWide() / 2 + 3 * screenscale + (self:GetWide() / 2 - 24) * 0.61 - self.m_BrainsLabel:GetWide() * 0.35, 110 * screenscale - self.m_HumanHeading:GetTall())
-	self.m_BrainsLabel:MoveBelow(self.m_ZombieHeading, 1 * screenscale)
-
 	self.m_RemortCZLabel:SizeToContents()
-	self.m_RemortCZLabel:SetPos(self:GetWide() / 2 + 3 * screenscale + (self:GetWide() / 2 - 24) * 0.71 - self.m_RemortCZLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
-	self.m_RemortCZLabel:MoveBelow(self.m_ZombieHeading, 1 * screenscale)
+
+	local labelY = 110 * screenscale + 1 * screenscale
+	local gap    = 10 * screenscale
+
+	-- Layout inside ZSPlayerPanel (defined lower in this file):
+	--   scoreLabel center            = panelW * 0.6
+	--   classImage left edge         = panelW * 0.75 - panelTall / 2
+	--   remortLabel right edge       = classImage left - 2
+	-- We mirror those numbers here so the header label sits exactly above
+	-- the value it describes, regardless of the translation length.
+	local listPad  = 8 * screenscale
+	local panelPad = 8
+	local listOuterW = self:GetWide() / 2 - 24
+	local panelW     = listOuterW - panelPad * 2
+	local panelTall  = 32 * screenscale
+
+	do
+		local panelX = listPad + panelPad
+		local scoreCenterX  = panelX + panelW * 0.6
+		local remortCenterX = panelX + panelW * 0.75 - panelTall * 0.5 - 2
+
+		local scoreW  = self.m_PointsLabel:GetWide()
+		local remortW = self.m_RemortCLabel:GetWide()
+
+		local scoreLeft  = scoreCenterX  - scoreW  / 2
+		local remortLeft = remortCenterX - remortW / 2
+
+		-- If the translations are so long that they start to overlap —
+		-- center them as a single group while preserving the gap.
+		if scoreLeft + scoreW + gap > remortLeft then
+			local groupCenter = (scoreCenterX + remortCenterX) / 2
+			local groupW = scoreW + gap + remortW
+			scoreLeft  = groupCenter - groupW / 2
+			remortLeft = scoreLeft + scoreW + gap
+		end
+
+		self.m_PointsLabel:SetPos(scoreLeft, labelY)
+		self.m_RemortCLabel:SetPos(remortLeft, labelY)
+	end
+
+	do
+		local listX = self:GetWide() - listPad - listOuterW
+		local panelX = listX + panelPad
+		local brainsCenterX = panelX + panelW * 0.6
+		local remortCenterX = panelX + panelW * 0.75 - panelTall * 0.5 - 2
+
+		local brainW  = self.m_BrainsLabel:GetWide()
+		local remortW = self.m_RemortCZLabel:GetWide()
+
+		local brainLeft  = brainsCenterX - brainW  / 2
+		local remortLeft = remortCenterX - remortW / 2
+
+		if brainLeft + brainW + gap > remortLeft then
+			local groupCenter = (brainsCenterX + remortCenterX) / 2
+			local groupW = brainW + gap + remortW
+			brainLeft  = groupCenter - groupW / 2
+			remortLeft = brainLeft + brainW + gap
+		end
+
+		self.m_BrainsLabel:SetPos(brainLeft, labelY)
+		self.m_RemortCZLabel:SetPos(remortLeft, labelY)
+	end
 
 	self.HumanList:SetSize(self:GetWide() / 2 - 24, self:GetTall() - 150 * screenscale)
 	self.HumanList:AlignBottom(16 * screenscale)
@@ -161,27 +215,21 @@ function PANEL:Paint()
 	surface.DrawTexturedRect(wid * 0.5 - 16, hei - 64, 32, 64)
 end
 
-function PANEL:GetPlayerPanel(pl)
-	for _, panel in pairs(self.PlayerPanels) do
-		if panel:IsValid() and panel:GetPlayer() == pl then
-			return panel
-		end
-	end
-end
-
 function PANEL:CreatePlayerPanel(pl)
-	local curpan = self:GetPlayerPanel(pl)
-	if curpan and curpan:IsValid() then return curpan end
-
 	if pl:Team() == TEAM_SPECTATOR then return end
 
-	local panel = vgui.Create("ZSPlayerPanel", pl:Team() == TEAM_UNDEAD and self.ZombieList or self.HumanList)
+	-- PlayerPanels is keyed by player, so a direct lookup replaces
+	-- the old O(n) scan.
+	if not self.PlayerPanels then self.PlayerPanels = {} end
+	if self.PlayerPanels[pl] then return end
+
+	local parent = (pl:Team() == TEAM_UNDEAD) and self.ZombieList or self.HumanList
+	local panel  = vgui.Create("ZSPlayerPanel", parent)
 	panel:SetPlayer(pl)
 	panel:Dock(TOP)
 	panel:DockMargin(8, 2, 8, 2)
 
 	self.PlayerPanels[pl] = panel
-
 	return panel
 end
 
@@ -192,22 +240,39 @@ function PANEL:RefreshScoreboard()
 
 	if self.PlayerPanels == nil then self.PlayerPanels = {} end
 
-	for pl, panel in pairs(self.PlayerPanels) do
-		if not panel:IsValid() or pl:IsValid() and pl:IsSpectator() then
-			self:RemovePlayerPanel(panel)
+	local humans, zombies = {}, {}
+	for _, pl in pairs(player.GetAllActive()) do
+		local t = pl:Team()
+		if t == TEAM_HUMAN then
+			humans[#humans + 1] = pl
+		elseif t == TEAM_UNDEAD then
+			zombies[#zombies + 1] = pl
 		end
 	end
 
-	for _, pl in pairs(player.GetAllActive()) do
-		self:CreatePlayerPanel(pl)
-	end
-end
+	local sig = #humans .. "h"
+	for _, pl in ipairs(humans) do sig = sig .. ":" .. pl:EntIndex() end
+	sig = sig .. "|" .. #zombies .. "z"
+	for _, pl in ipairs(zombies) do sig = sig .. ":" .. pl:EntIndex() end
 
-function PANEL:RemovePlayerPanel(panel)
-	if panel:IsValid() then
-		self.PlayerPanels[panel:GetPlayer()] = nil
-		panel:Remove()
+	if sig == self._LastRosterSig then return end
+	self._LastRosterSig = sig
+
+	for _, panel in pairs(self.PlayerPanels) do
+		if panel:IsValid() then panel:Remove() end
 	end
+	self.PlayerPanels = {}
+
+	local function sortfn(a, b)
+		local sa, sb = a:Frags(), b:Frags()
+		if sa ~= sb then return sa > sb end
+		return a:EntIndex() < b:EntIndex()
+	end
+	table.sort(humans,  sortfn)
+	table.sort(zombies, sortfn)
+
+	for _, pl in ipairs(humans)  do self:CreatePlayerPanel(pl) end
+	for _, pl in ipairs(zombies) do self:CreatePlayerPanel(pl) end
 end
 
 vgui.Register("ZSScoreBoard", PANEL, "Panel")
@@ -219,12 +284,31 @@ PANEL.RefreshTime = 1
 PANEL.m_Player = NULL
 PANEL.NextRefresh = 0
 
-local function MuteDoClick(self)
-	local pl = self:GetParent():GetPlayer()
-	if pl:IsValid() then
-		pl:SetMuted(not pl:IsMuted())
-		self:GetParent().NextRefresh = RealTime()
+-- Every bot in GMod shares the same SteamID, and both the engine's
+-- voice-mute list and GM.ZSFriends are keyed by SteamID. Using the
+-- entity index for bots keeps the two controls per-bot.
+local function GetPlayerKey(pl)
+	if pl:IsBot() then
+		return "bot_" .. pl:EntIndex()
 	end
+	return pl:SteamID()
+end
+
+local function MuteDoClick(self)
+	local panel = self.PlayerPanel
+	if not panel or not panel:IsValid() then return end
+
+	local pl = panel:GetPlayer()
+	if not pl:IsValid() then return end
+
+	if pl:IsBot() then
+		-- Engine mute is SteamID-keyed, so we can't use it for bots.
+		pl.ZS_LocalMuted = not pl.ZS_LocalMuted
+	else
+		pl:SetMuted(not pl:IsMuted())
+	end
+
+	panel.NextRefresh = RealTime()
 end
 
 GM.ZSFriends = {}
@@ -237,24 +321,26 @@ end)]]
 local function ToggleZSFriend(self)
 	if MySelf.LastFriendAdd and MySelf.LastFriendAdd + 2 > CurTime() then return end
 
-	local pl = self:GetParent():GetPlayer()
-	if pl:IsValid() then
-		if GAMEMODE.ZSFriends[pl:SteamID()] then
-			GAMEMODE.ZSFriends[pl:SteamID()] = nil
-		else
-			GAMEMODE.ZSFriends[pl:SteamID()] = true
-		end
+	local panel = self.PlayerPanel
+	if not panel or not panel:IsValid() then return end
 
-		self:GetParent().NextRefresh = RealTime()
+	local pl = panel:GetPlayer()
+	if not pl:IsValid() then return end
 
+	local key = GetPlayerKey(pl)
+	local newstate = not GAMEMODE.ZSFriends[key]
+	GAMEMODE.ZSFriends[key] = newstate or nil
+
+	panel.NextRefresh = RealTime()
+
+	if not pl:IsBot() then
 		net.Start("zs_zsfriend")
 			net.WriteString(pl:SteamID())
-			net.WriteBool(GAMEMODE.ZSFriends[pl:SteamID()])
+			net.WriteBool(newstate)
 		net.SendToServer()
-
-		MySelf.LastFriendAdd = CurTime()
-		--file.Write(GAMEMODE.FriendsFile, Serialize(GAMEMODE.ZSFriends))
 	end
+
+	MySelf.LastFriendAdd = CurTime()
 end
 
 net.Receive("zs_zsfriendadded", function()
@@ -264,7 +350,7 @@ end)
 
 local function AvatarDoClick(self)
 	local pl = self.PlayerPanel:GetPlayer()
-	if pl:IsValidPlayer() then
+	if pl:IsValidPlayer() and not pl:IsBot() then
 		pl:ShowProfile()
 	end
 end
@@ -272,6 +358,13 @@ end
 local function empty() end
 
 function PANEL:Init()
+	-- Button/DLabel normally sets "" as the initial text. We override
+	-- Init without calling the base, so the engine's own default
+	-- ("Label") survives and DButton:PaintOver draws it on the very
+	-- first frames after a rebuild — visible as a brief "Label" flash
+	-- in the middle of the row.
+	self:SetText("")
+
 	local screenscale = math.max(0.95, BetterScreenScale())
 	self:SetTall(32 * screenscale)
 
@@ -307,9 +400,11 @@ function PANEL:Init()
 
 	self.m_Mute = vgui.Create("DImageButton", self)
 	self.m_Mute.DoClick = MuteDoClick
+	self.m_Mute.PlayerPanel = self
 
 	self.m_Friend = vgui.Create("DImageButton", self)
 	self.m_Friend.DoClick = ToggleZSFriend
+	self.m_Friend.PlayerPanel = self
 end
 
 local colTemp = Color(255, 255, 255, 200)
@@ -390,14 +485,14 @@ function PANEL:RefreshPlayer()
 		return
 	end
 
-	local name = pl:Name()
+	local name = string.TruncateUTF8(pl:Name(), 23)
 	if #name > 23 then
 		name = string.sub(name, 1, 21)..".."
 	end
 	self.m_PlayerLabel:SetText(name)
 	self.m_PlayerLabel:SetAlpha(240)
 
-	self.m_ScoreLabel:SetText(pl:Frags())
+	self.m_ScoreLabel:SetText(GAMEMODE:FormatNumber(GAMEMODE:GetDisplayedScore(pl), nil, 1))
 	self.m_ScoreLabel:SetAlpha(240)
 
 	local rlvl = pl:GetZSRemortLevel()
@@ -414,10 +509,15 @@ function PANEL:RefreshPlayer()
 	self.m_RemortLabel:SetColor(hcolor)
 	self.m_RemortLabel:SetAlpha(240)
 
-	if MySelf:Team() == TEAM_UNDEAD and pl:Team() == TEAM_UNDEAD and pl:GetZombieClassTable().Icon then
+	-- Team checks and zombie class table: read once, use often.
+	local plyTeam    = pl:Team()
+	local showClass  = (MySelf:Team() == TEAM_UNDEAD and plyTeam == TEAM_UNDEAD)
+	local classTbl   = showClass and pl:GetZombieClassTable() or nil
+
+	if classTbl and classTbl.Icon then
 		self.m_ClassImage:SetVisible(true)
-		self.m_ClassImage:SetImage(pl:GetZombieClassTable().Icon)
-		self.m_ClassImage:SetImageColor(pl:GetZombieClassTable().IconColor or color_white)
+		self.m_ClassImage:SetImage(classTbl.Icon)
+		self.m_ClassImage:SetImageColor(classTbl.IconColor or color_white)
 	else
 		self.m_ClassImage:SetVisible(false)
 	end
@@ -426,39 +526,71 @@ function PANEL:RefreshPlayer()
 		self.m_Mute:SetVisible(false)
 		self.m_Friend:SetVisible(false)
 	else
-		if pl:IsMuted() then
-			self.m_Mute:SetImage("icon16/sound_mute.png")
+		local muted
+		if pl:IsBot() then
+			muted = pl.ZS_LocalMuted
 		else
-			self.m_Mute:SetImage("icon16/sound.png")
+			muted = pl:IsMuted()
 		end
 
-		self.m_Friend:SetColor(pl.ZSFriendAdded and COLOR_LIMEGREEN or COLOR_GRAY)
-		self.m_Friend:SetImage(GAMEMODE.ZSFriends[pl:SteamID()] and "icon16/heart_delete.png" or "icon16/heart.png")
+		self.m_Mute:SetImage(muted and "icon16/sound_mute.png" or "icon16/sound.png")
+
+		-- Two independent signals of friendship:
+		--   * GAMEMODE.ZSFriends[key]  — we marked them as a friend.
+		--   * pl.ZSFriendAdded         — server told us they marked us.
+		-- Either direction counts; use one flag for both color and icon.
+		local key = GetPlayerKey(pl)
+		local isfriend = GAMEMODE.ZSFriends[key] or pl.ZSFriendAdded
+		self.m_Friend:SetColor(isfriend and COLOR_LIMEGREEN or COLOR_GRAY)
+		self.m_Friend:SetImage(isfriend and "icon16/heart_delete.png" or "icon16/heart.png")
 	end
 
-	self:SetZPos(-pl:Frags())
-
-	if pl:Team() ~= self._LastTeam then
-		self._LastTeam = pl:Team()
-		self:SetParent(self._LastTeam == TEAM_HUMAN and ScoreBoard.HumanList or ScoreBoard.ZombieList)
-	end
-
-	self:InvalidateLayout()
+	-- Sort order is handled by the scoreboard refresh. RefreshPlayer
+	-- only updates the label values, no layout pass is needed.
 end
 
 function PANEL:Think()
-	if RealTime() >= self.NextRefresh then
-		self.NextRefresh = RealTime() + self.RefreshTime
-		self:RefreshPlayer()
-	end
+    local pl = self:GetPlayer()
+    if not pl:IsValid() then
+        self:Remove()
+        return
+    end
+
+    -- Detect team change every frame. Instead of trying to move
+    -- this panel (SetParent doesn't work cleanly between
+    -- DScrollPanels), we destroy it and let the scoreboard rebuild
+    -- recreate it in the right list on the next refresh.
+    local team = pl:Team()
+    if team ~= self._LastTeam then
+        -- Ask the board to rebuild immediately, then remove
+        -- ourselves. RefreshScoreboard will recreate us in the
+        -- correct list, at the correct sort position.
+        if ScoreBoard and ScoreBoard:IsValid() then
+            ScoreBoard.NextRefresh = 0
+        end
+        self:Remove()
+        return
+    end
+
+    if RealTime() >= self.NextRefresh then
+        self.NextRefresh = RealTime() + self.RefreshTime
+        self:RefreshPlayer()
+    end
 end
 
 function PANEL:SetPlayer(pl)
 	self.m_Player = pl or NULL
+	self._LastTeam = pl:IsValid() and pl:Team() or nil
 
 	if pl:IsValidPlayer() then
 		self.m_Avatar:SetPlayer(pl)
 		self.m_Avatar:SetVisible(true)
+
+		if pl:IsBot() then
+			self.m_AvatarButton:SetTooltip()
+		else
+			self.m_AvatarButton:SetTooltip(translate.Get("tooltip_view_steam_profile"))
+		end
 
 		if gamemode.Call("IsSpecialPerson", pl, self.m_SpecialImage) then
 			self.m_SpecialImage:SetVisible(true)

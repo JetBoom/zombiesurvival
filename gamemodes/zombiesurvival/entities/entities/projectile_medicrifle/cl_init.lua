@@ -30,7 +30,7 @@ function ENT:Draw()
 	render.SetColorModulation(1, 1, 1)
 
 	if self:GetMoveType() == MOVETYPE_NONE or CurTime() < self.NextEmit then return end
-	self.NextEmit = CurTime() + 0.01
+	self.NextEmit = CurTime() + 0.06
 
 	local pos = self:GetPos()
 
@@ -48,5 +48,5 @@ function ENT:Draw()
 	particle:SetRollDelta(math.Rand(-10, 10))
 	particle:SetColor(alt and 255 or 90, 140, alt and 90 or 255)
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

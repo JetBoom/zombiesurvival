@@ -8,11 +8,11 @@ function ENT:Think()
 		return
 	end
 
-	if not self:GetPuller():IsValid() then
+	local puller = self:GetPuller()
+	if not puller:IsValid() then
 		return
 	end
 
-	local puller = self:GetPuller()
 	if puller:GetPos():DistToSqr(owner:GetPos()) < 14000 then
 		self:Remove()
 		return

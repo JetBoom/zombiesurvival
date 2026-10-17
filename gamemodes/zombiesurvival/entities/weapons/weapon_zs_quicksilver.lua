@@ -49,11 +49,12 @@ SWEP.Tier = 4
 SWEP.MaxStock = 3
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.05)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Mercurial' Birdshot Rifle", "Fires a spread of less accurate shots that deal more total damage", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Mercurial' Birdshot Rifle", "Fires a spread of less accurate shots that deal more total damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage / 5
 	wept.Primary.NumShots = 6
 	wept.ConeMin = 3
 end)
+branch.TranslationID = "quicksilver_branch_1"
 
 function SWEP:IsScoped()
 	return self:GetIronsights() and self.fIronTime and self.fIronTime + 0.25 <= CurTime()

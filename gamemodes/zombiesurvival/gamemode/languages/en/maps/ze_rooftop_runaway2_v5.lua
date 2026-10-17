@@ -1,0 +1,38 @@
+LANGUAGE = {}
+
+LANGUAGE.__map_signature = "179277ea3967d9fa8963862213ccd849"
+
+-- ============================================================
+-- logic_auto — fires outputs on map spawn
+-- ============================================================
+
+LANGUAGE["MAP MADE BY GARGANTUA"] = "MAP MADE BY GARGANTUA"
+
+
+-- ============================================================
+-- Source: math_counter
+-- ============================================================
+
+LANGUAGE["DOOR IS CLOSING"] = "DOOR IS CLOSING"
+
+LANGUAGE["DOOR IS NOW OPEN!!"] = "DOOR IS NOW OPEN!!"
+
+LANGUAGE["DOOR WILL CLOSE IN 10 SECONDS."] = "DOOR WILL CLOSE IN 10 SECONDS."
+
+LANGUAGE["DOOR WILL CLOSE IN 5 SECONDS."] = "DOOR WILL CLOSE IN 5 SECONDS."
+
+LANGUAGE["DOOR WILL OPEN IN 10 SECONDS."] = "DOOR WILL OPEN IN 10 SECONDS."
+
+LANGUAGE["DOOR WILL OPEN IN 120 SECONDS."] = "DOOR WILL OPEN IN 120 SECONDS."
+
+LANGUAGE["DOOR WILL OPEN IN 15 SECONDS."] = "DOOR WILL OPEN IN 15 SECONDS."
+
+LANGUAGE["DOOR WILL OPEN IN 30 SECONDS."] = "DOOR WILL OPEN IN 30 SECONDS."
+
+LANGUAGE["DOOR WILL OPEN IN 5 SECONDS."] = "DOOR WILL OPEN IN 5 SECONDS."
+
+LANGUAGE["DOOR WILL OPEN IN 60 SECONDS."] = "DOOR WILL OPEN IN 60 SECONDS."
+
+LANGUAGE["DOOR WILL OPEN IN 90 SECONDS."] = "DOOR WILL OPEN IN 90 SECONDS."
+
+LANGUAGE["INCOMING AIRSTRIKE!!"] = "INCOMING AIRSTRIKE!!"

@@ -27,7 +27,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 		local points = (dmgfraction / hpperpoint) * 1.5
 
 		if self.Applier and self.Applier:IsValidLivingHuman() then
-			self.Applier.DefenceDamage = (applier.DefenceDamage or 0) + dmgfraction
+			self.Applier.DefenceDamage = (self.Applier.DefenceDamage or 0) + dmgfraction
 			self.Applier:AddPoints(points)
 		end
 	end

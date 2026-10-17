@@ -44,10 +44,11 @@ function EFFECT:Render()
 		local amount = self.Amount
 		local flooramount = math_floor(amount)
 		if amount == flooramount then
-			draw_SimpleText(amount.." point"..(amount ~= 1 and "s" or ""), "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_CENTER)
+			draw_SimpleText(translate.Format("floatingscore_points", amount), "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_CENTER)
 		else
+			local fractext = tostring(amount - flooramount):sub(2) -- ".5" -> "5"
 			draw_SimpleText(flooramount, "ZS3D2DFont2Big", 0, -21, col, TEXT_ALIGN_RIGHT)
-			draw_SimpleText(tostring(amount - flooramount):sub(2).." points", "ZS3D2DFont2", 2, 8, col, TEXT_ALIGN_LEFT)
+			draw_SimpleText(translate.Format("floatingscore_points_fraction", fractext), "ZS3D2DFont2", 2, 8, col, TEXT_ALIGN_LEFT)
 		end
 	cam_End3D2D()
 	cam_IgnoreZ(false)

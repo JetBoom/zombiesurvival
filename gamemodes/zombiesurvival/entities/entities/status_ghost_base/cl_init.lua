@@ -3,14 +3,27 @@ INC_CLIENT()
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 function ENT:Think()
-	self:RecalculateValidity()
+	local owner = self:GetOwner()
+	if not owner:IsValid() then
+		self:Remove()
+		return
+	end
 
-	self:NextThink(CurTime())
+	-- Client-side predictive reconstruction is needed only for its OWN
+	-- ghost. For other entities, the position has already arrived from the server, and
+	-- client-side traces at the interpolated angles/position of the owner
+	-- would only overwrite it and give false validity.
+	if MySelf == owner then
+		self:RecalculateValidity()
+	end
+
+	self:NextThink(CurTime() + 0.05)
 	return true
 end
 
-local colValid = Color(50, 255, 50, 50)
+local colValid   = Color(50, 255, 50, 50)
 local colInvalid = Color(255, 50, 50, 50)
+
 function ENT:DrawTranslucent()
 	local validp = self:GetValidPlacement()
 
@@ -30,7 +43,7 @@ function ENT:DrawTranslucent()
 
 			cam.Start3D2D(self:WorldSpaceCenter(), angs, 0.2)
 				surface.SetDrawColor(validp and colValid or colInvalid)
-				surface.DrawRect( 0, -1, 128, 2 )
+				surface.DrawRect(0, -1, 128, 2)
 			cam.End3D2D()
 		end
 

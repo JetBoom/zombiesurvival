@@ -6,11 +6,13 @@ ENT.SmokeTimer = 0
 
 function ENT:Draw()
 	self:DrawModel()
+
 	local pos = self:GetPos()
 	local alt = self:GetDTBool(0)
+	local size = alt and 30 or 100
 
 	render.SetMaterial(matGlow)
-	render.DrawSprite(pos, alt and 30 or 100, alt and 30 or 100, Color(255,210,170))
+	render.DrawSprite(pos, size, size, Color(255, 210, 170))
 end
 
 function ENT:Initialize()
@@ -21,13 +23,15 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	local pos = self:GetPos()
-	local emitter = ParticleEmitter(pos)
-	local alt = self:GetDTBool(0)
-	emitter:SetNearClip(24, 32)
+	local alt     = self:GetDTBool(0)
+	local curtime = CurTime()
+	local pos     = self:GetPos()
 
-	if self.SmokeTimer < CurTime() then
-		self.SmokeTimer = CurTime() + (alt and 0.3 or 0.05)
+	if self.SmokeTimer < curtime then
+		self.SmokeTimer = curtime + (alt and 0.3 or 0.05)
+
+		local emitter = ParticleEmitter(pos)
+		emitter:SetNearClip(24, 32)
 
 		local particle = emitter:Add("effects/fire_cloud1", pos)
 		particle:SetVelocity(self:GetVelocity() * -0.4 + VectorRand() * 60)
@@ -49,35 +53,40 @@ function ENT:Think()
 		particle:SetRoll(math.Rand(0, 359))
 		particle:SetRollDelta(math.Rand(-3, 3))
 		particle:SetColor(240, 190, 120)
-	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+		-- Finish() must be paired with ParticleEmitter() in THE SAME block.
+		-- Otherwise, on the second Think, emitter is nil, and we access it.
+		emitter:Finish()
+	end
 
 	local dlight = DynamicLight(self:EntIndex())
 	if dlight then
-		dlight.Pos = pos
-		dlight.r = 255
-		dlight.g = 190
-		dlight.b = 130
+		dlight.Pos        = pos
+		dlight.r          = 255
+		dlight.g          = 190
+		dlight.b          = 130
 		dlight.Brightness = 2
-		dlight.Size = 150
-		dlight.Decay = 300
-		dlight.DieTime = CurTime() + 2
+		dlight.Size       = 150
+		dlight.Decay      = 300
+		dlight.DieTime    = curtime + 2
 	end
 end
 
 function ENT:OnRemove()
-	self.AmbientSound:Stop()
+	if self.AmbientSound then
+		self.AmbientSound:Stop()
+	end
+
+	local alt = self:GetDTBool(0)
+	if not alt then return end
 
 	local pos = self:GetPos()
-	local alt = self:GetDTBool(0)
-
-	if not alt then return end
 
 	local emitter = ParticleEmitter(pos)
 	emitter:SetNearClip(24, 32)
+
 	local particle
-	for i=0, 25 do
+	for i = 0, 25 do
 		particle = emitter:Add(matGlow, pos)
 		particle:SetVelocity(VectorRand() * 275)
 		particle:SetDieTime(0.5)
@@ -89,8 +98,9 @@ function ENT:OnRemove()
 		particle:SetRollDelta(math.Rand(-3, 3))
 		particle:SetColor(245, 155, 30)
 	end
-	for i=1, 16 do
-		particle = emitter:Add("effects/fire_embers"..math.random(1, 3), pos)
+
+	for i = 1, 16 do
+		particle = emitter:Add("effects/fire_embers" .. math.random(1, 3), pos)
 		particle:SetVelocity(VectorRand():GetNormal() * 250)
 		particle:SetDieTime(math.Rand(1.25, 1.5))
 		particle:SetStartAlpha(130)
@@ -102,9 +112,10 @@ function ENT:OnRemove()
 		particle:SetAirResistance(50)
 		particle:SetCollide(true)
 		particle:SetBounce(0.3)
-		particle:SetGravity(Vector(0,0,-400))
+		particle:SetGravity(Vector(0, 0, -400))
 	end
-	for i=0,5 do
+
+	for i = 0, 5 do
 		particle = emitter:Add(matGlow, pos)
 		particle:SetVelocity(VectorRand() * 5)
 		particle:SetDieTime(0.3)
@@ -116,7 +127,8 @@ function ENT:OnRemove()
 		particle:SetRollDelta(math.Rand(-3, 3))
 		particle:SetColor(245, 175, 60)
 	end
-	for i=1, 75 do
+
+	for i = 1, 75 do
 		particle = emitter:Add("effects/splash2", pos)
 		particle:SetDieTime(0.6)
 		particle:SetColor(255, 130, 0)
@@ -128,5 +140,6 @@ function ENT:OnRemove()
 		particle:SetEndLength(15)
 		particle:SetVelocity(VectorRand():GetNormal() * 200)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+
+	emitter:Finish()
 end

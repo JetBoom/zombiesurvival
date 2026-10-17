@@ -49,7 +49,7 @@ SWEP.ConeMin = 2.5
 SWEP.IronSightsPos = Vector(-6.425, 5, 1.02)
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.015)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Thrower' Burst SMG", "Increased damage but makes the tosser burst fire", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Thrower' Burst SMG", "Increased damage but makes the tosser burst fire", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 1.1
 	wept.Primary.Delay = wept.Primary.Delay * 3.9
 	wept.Primary.BurstShots = 3
@@ -86,6 +86,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Thrower' Burst SMG", "Increased damage 
 		end
 	end
 end)
+branch.TranslationID = "tosser_branch_1"
 
 function SWEP:SetNextShot(nextshot)
 	self:SetDTFloat(5, nextshot)

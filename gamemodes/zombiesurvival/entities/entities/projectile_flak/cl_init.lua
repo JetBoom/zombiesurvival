@@ -21,32 +21,32 @@ function ENT:Draw()
 	end
 
 	render.SetMaterial(matTrail)
-	for i=1, #self.TrailPositions do
-		if self.TrailPositions[i+1] then
-			colTrail.a = 255 - 255 * (i/#self.TrailPositions)
-
-			render.DrawBeam(self.TrailPositions[i], self.TrailPositions[i+1], 5, 1, 0, colTrail)
-		end
+	local filled = self.TrailFilled or 0
+	for i = 1, filled - 1 do
+		colTrail.a = 255 - 255 * (i / filled)
+		render.DrawBeam(self.TrailPositions[i], self.TrailPositions[i+1], 5, 1, 0, colTrail)
 	end
 end
 
 function ENT:Initialize()
 	self.Trailing = CurTime() + 0.1
-	self.TrailPositions = {}
+	self.TrailPositions = {Vector(0,0,0), Vector(0,0,0), Vector(0,0,0), Vector(0,0,0), Vector(0,0,0), Vector(0,0,0)}
+	self.TrailIdx = 1
+	self.TrailFilled = 0
 end
 
 function ENT:Think()
-	table.insert(self.TrailPositions, 1, self:GetPos())
-	if self.TrailPositions[1] then
-		table.remove(self.TrailPositions, 7)
-	end
+	self.TrailPositions[self.TrailIdx] = self:GetPos()
+	self.TrailIdx = self.TrailIdx % 6 + 1
+	if self.TrailFilled < 6 then self.TrailFilled = self.TrailFilled + 1 end
 
-	local dist = 0
 	local mypos = self:GetPos()
-	for i=1, #self.TrailPositions do
-		if self.TrailPositions[i]:DistToSqr(mypos) > dist then
+	local dist = 0
+	for i = 1, self.TrailFilled do
+		local d = self.TrailPositions[i]:DistToSqr(mypos)
+		if d > dist then
 			self:SetRenderBoundsWS(self.TrailPositions[i], mypos, Vector(16, 16, 16))
-			dist = self.TrailPositions[i]:DistToSqr(mypos)
+			dist = d
 		end
 	end
 end

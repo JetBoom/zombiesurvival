@@ -45,6 +45,7 @@ SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "357"
 SWEP.Primary.DefaultClip = 15
+SWEP.ShowReserveAmmo = true
 
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SHOTGUN
@@ -62,7 +63,7 @@ SWEP.Tier = 3
 SWEP.TracerName = "AR2Tracer"
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hunter' Explosive Rifle", "Uses twice as much ammo, reloads slowly, but overkill damage is dealt as an explosion", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hunter' Explosive Rifle", "Uses twice as much ammo, reloads slowly, but overkill damage is dealt as an explosion", function(wept)
 	wept.Primary.ClipSize = 2
 	wept.RequiredClip = 2
 	wept.ReloadSpeed = 0.9
@@ -83,6 +84,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Hunter' Explosive Rifle", "Uses twice a
 		end
 	end
 end)
+branch.TranslationID = "hunter_branch_1"
 
 function SWEP:IsScoped()
 	return self:GetIronsights() and self.fIronTime and self.fIronTime + 0.25 <= CurTime()

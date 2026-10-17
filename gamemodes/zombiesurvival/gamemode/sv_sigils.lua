@@ -149,6 +149,9 @@ function GM:SetUseSigils(use)
 	--if self:GetUseSigils() ~= use then
 		self.UseSigils = use
 		SetGlobalBool("sigils", use)
+		if self.InvalidateClassUnlockCache then
+			self:InvalidateClassUnlockCache()
+		end
 	--end
 end
 

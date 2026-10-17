@@ -97,7 +97,7 @@ SWEP.MaxStock = 3
 SWEP.PointsMultiplier = GAMEMODE.PulsePointsMultiplier
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 4)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Blazar' Pulse Tri-Rifle", "Shoots 3 pulse shots in a spread out line with more total damage", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Blazar' Pulse Tri-Rifle", "Shoots 3 pulse shots in a spread out line with more total damage", function(wept)
 	wept.Primary.NumShots = 3
 	wept.Primary.Damage = wept.Primary.Damage * 1.2/3
 
@@ -125,6 +125,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Blazar' Pulse Tri-Rifle", "Shoots 3 pul
 		self:EmitSound("weapons/physcannon/superphys_launch1.wav", 72, 158, 0.75, CHAN_WEAPON + 1)
 	end
 end)
+branch.TranslationID = "quasar_branch_1"
 
 function SWEP:IsScoped()
 	return self:GetIronsights() and self.fIronTime and self.fIronTime + 0.25 <= CurTime()

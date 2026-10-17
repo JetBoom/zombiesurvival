@@ -89,11 +89,11 @@ function SWEP:PrimaryAttack(right)
 	local hitdelay = self.Primary.Delay / 3 * (owner.MeleeSwingDelayMul or 1) * armdelay
 	owner:GetViewModel():SetPlaybackRate(1 / armdelay)
 	if time < self.LastSwingStart + 1 and owner:IsSkillActive(SKILL_COMBOKNUCKLE) then
-		if time < self.LastSwingHit + 0.75 then --if self:GetHitPrevious() then
-			hitdelay = hitdelay / 2
+		if time < self.LastSwingHit + 0.75 then
+			hitdelay = hitdelay * GAMEMODE.SkillConstants.ComboKnuckleFastMul
 			owner:GetViewModel():SetPlaybackRate(2 / armdelay)
 		else
-			hitdelay = hitdelay * 2
+			hitdelay = hitdelay * GAMEMODE.SkillConstants.ComboKnuckleSlowMul
 			owner:GetViewModel():SetPlaybackRate(0.5 / armdelay)
 		end
 	end
@@ -144,11 +144,11 @@ function SWEP:DealDamage()
 	if tr.Hit then
 		self.LastSwingHit = time
 		if owner:IsSkillActive(SKILL_COMBOKNUCKLE) then
-			delay = delay / 2
+			delay = delay * constants.ComboKnuckleFastMul
 		end
 	else
 		if owner:IsSkillActive(SKILL_COMBOKNUCKLE) then
-			delay = delay * 2
+			delay = delay * constants.ComboKnuckleSlowMul
 		end
 
 		if owner.MeleePowerAttackMul and owner.MeleePowerAttackMul > 1 then
@@ -159,17 +159,18 @@ function SWEP:DealDamage()
 	self:SetNextSecondaryFire( time + delay )
 
 	if hitent:IsValid() then
+		local constants = GAMEMODE.SkillConstants
 		local damagemultiplier = owner:GetTotalAdditiveModifier("UnarmedDamageMul", "MeleeDamageMultiplier")
 		if owner:IsSkillActive(SKILL_LASTSTAND) then
-			if owner:Health() <= owner:GetMaxHealth() * 0.25 then
-				damagemultiplier = damagemultiplier * 2
+			if owner:Health() <= owner:GetMaxHealth() * (constants.LastStandHealthThresholdPercent / 100) then
+				damagemultiplier = damagemultiplier * constants.LastStandDamageBonus
 			else
-				damagemultiplier = damagemultiplier * 0.85
+				damagemultiplier = damagemultiplier * constants.LastStandDamagePenalty
 			end
 		end
 
 		if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
-			damagemultiplier = damagemultiplier * 3.5
+			damagemultiplier = damagemultiplier * constants.GlassWeaponsDamageBonus
 			owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
 		end
 

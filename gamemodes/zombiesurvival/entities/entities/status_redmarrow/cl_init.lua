@@ -64,6 +64,6 @@ function ENT:DrawTranslucent()
 			particle:SetGravity(Vector(0, 0, -200))
 		end
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 end

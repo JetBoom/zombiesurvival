@@ -33,7 +33,7 @@ SWEP.NextZoom = 0
 SWEP.ReloadSpeed = 0.59
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.07)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Darter' Bolt Pistol", "Deals less damage but has much higher velocity", function(wept)
+local branch1 = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Darter' Bolt Pistol", "Deals less damage but has much higher velocity", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.9
 	wept.Primary.ProjVelocity = 2300
 	if SERVER then
@@ -42,7 +42,8 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Darter' Bolt Pistol", "Deals less damag
 		end
 	end
 end)
-local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Hurler' Bolt Pistol", "Greater maximum accuracy, less damage at close range and more damage from afar", function(wept)
+branch1.TranslationID = "slinger_branch_1"
+local branch2 = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Hurler' Bolt Pistol", "Greater maximum accuracy, less damage at close range and more damage from afar", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.75
 	wept.ConeMin = 0.3
 	if SERVER then
@@ -51,8 +52,10 @@ local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 2, "'Hurler' Bolt Pistol", "G
 		end
 	end
 end)
-branch.Colors = {Color(255, 160, 150), Color(215, 120, 150), Color(175, 100, 140)}
-branch.NewNames = {"Range", "Seeker", "Searcher"}
+branch2.Colors = {Color(255, 160, 150), Color(215, 120, 150), Color(175, 100, 140)}
+branch2.TranslationID = "slinger_branch_2"
+branch2.NewNames = {"Range", "Seeker", "Searcher"}
+branch2.NewNameIDs = {"range", "seeker", "searcher"}
 
 function SWEP:SendReloadAnimation()
 	self:SendWeaponAnim(ACT_VM_DRAW)

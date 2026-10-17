@@ -43,10 +43,11 @@ SWEP.AllowQualityWeapons = true
 SWEP.Weaken = false
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MELEE_IMPACT_DELAY, -0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Meat Grapple", "Deals less damage but zombies affected by it take more damage from any source", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Meat Grapple", "Deals less damage but zombies affected by it take more damage from any source", function(wept)
 	wept.Weaken = true
 	wept.MeleeDamage = wept.MeleeDamage * 0.65
 end)
+branch.TranslationID = "hook_branch_1"
 
 function SWEP:PlaySwingSound()
 	self:EmitSound("weapons/iceaxe/iceaxe_swing1.wav", 75, math.random(95, 105))

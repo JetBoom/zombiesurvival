@@ -38,7 +38,7 @@ function ENT:OnRemove()
 		particle:SetRollDelta(math.Rand(-3, 3))
 		particle:SetColor(245, 175, 60)
 	end
-	for i=1, 75 do
+	for i=1, 30 do
 		particle = emitter:Add("effects/splash2", pos)
 		particle:SetDieTime(0.6)
 		particle:SetColor(255, 130, 0)
@@ -50,5 +50,5 @@ function ENT:OnRemove()
 		particle:SetEndLength(15)
 		particle:SetVelocity(VectorRand():GetNormal() * 200)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

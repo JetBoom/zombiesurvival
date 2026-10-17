@@ -14,13 +14,13 @@ end
 
 function ENT:SetAmount(pl, amount)
 	local diff = amount - self:GetAmount(pl)
-	pl:SetFrags(amount)
+	pl:SetZSScore(amount)
 	pl.BrainsEaten = pl.BrainsEaten + diff
 	pl:CheckRedeem()
 end
 
 function ENT:GetAmount(pl)
-	return pl:Frags()
+	return pl:GetZSScore()
 end
 
 function ENT:AcceptInput(name, activator, caller, args)

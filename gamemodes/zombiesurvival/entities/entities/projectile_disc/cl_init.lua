@@ -7,12 +7,15 @@ function ENT:Draw()
 	self:DrawModel()
 	render.SetColorModulation(1, 1, 1)
 
+	if CurTime() < (self.NextEmit or 0) then return end
+	self.NextEmit = CurTime() + 0.05
+
 	local pos = self:GetPos()
 
 	local emitter = ParticleEmitter(pos)
 	emitter:SetNearClip(24, 32)
 	local particle
-	for i=0, 1 do
+	for i = 0, 1 do
 		particle = emitter:Add(matGlow, pos)
 		particle:SetVelocity(VectorRand() * 5)
 		particle:SetDieTime(0.4)
@@ -23,10 +26,11 @@ function ENT:Draw()
 		particle:SetRollDelta(math.Rand(-10, 10))
 		particle:SetColor(110, 210, 255)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end
 
 function ENT:Initialize()
 	self:SetModelScale(0.3, 0)
 	self:DrawShadow(false)
+	self.NextEmit = 0
 end

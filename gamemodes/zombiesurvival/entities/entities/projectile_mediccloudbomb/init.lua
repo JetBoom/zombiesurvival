@@ -10,12 +10,17 @@ function ENT:Initialize()
 end
 
 function ENT:OnRemove()
-	local ent = ents.Create("env_mediccloud")
-	if ent:IsValid() then
-		ent:SetPos(self.HitPos or self:GetPos())
-		ent:SetOwner(self.Owner or self:GetOwner())
-		ent:Spawn()
-	end
+    local ent = ents.Create("env_mediccloud")
+    if ent:IsValid() then
+        ent.MedicCloudHealAmount = self.MedicCloudHealAmount
+        ent.MedicCloudTickTime   = self.MedicCloudTickTime
+        ent.MedicCloudTicks      = self.MedicCloudTicks
+        ent.MedicCloudRadius     = self.MedicCloudRadius
+
+        ent:SetPos(self.HitPos or self:GetPos())
+        ent:SetOwner(self.Owner or self:GetOwner())
+        ent:Spawn()
+    end
 end
 
 function ENT:PhysicsCollide(data, phys)

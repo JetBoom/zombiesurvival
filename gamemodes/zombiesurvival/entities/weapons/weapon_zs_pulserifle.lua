@@ -55,7 +55,7 @@ SWEP.FireAnimSpeed = 0.4
 SWEP.LegDamage = 5.5
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.014, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Servitor' Pulse Rifle", "Refreshes zapper cooldown on kill, more leg damage, reduced accuracy and reload speed", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Servitor' Pulse Rifle", "Refreshes zapper cooldown on kill, more leg damage, reduced accuracy and reload speed", function(wept)
 	wept.ConeMin = 2.25
 	wept.ConeMax = 3.75
 	wept.ReloadSpeed = 0.85
@@ -73,6 +73,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Servitor' Pulse Rifle", "Refreshes zapp
 		end
 	end
 end)
+branch.TranslationID = "pulserifle_branch_1"
 
 function SWEP.BulletCallback(attacker, tr, dmginfo)
 	local ent = tr.Entity

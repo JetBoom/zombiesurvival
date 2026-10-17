@@ -35,8 +35,6 @@ CLASS.Mass = DEFAULT_MASS * CLASS.ModelScale * 0.5
 
 CLASS.CantDuck = true
 
-CLASS.SWEP = "weapon_zs_asskicker"
-
 CLASS.BloodColor = -1
 
 local math_random = math.random
@@ -48,10 +46,14 @@ function CLASS:PlayerStepSoundTime(pl, iType, bWalking)
 	return GAMEMODE.BaseClass.PlayerStepSoundTime(GAMEMODE.BaseClass, pl, iType, bWalking) * self.ModelScale
 end
 
+local LEG_TOP_OFFSET = 32 * 1.33   -- = CLASS.Hull[2].z * 1.33
+
 function CLASS:ScalePlayerDamage(pl, hitgroup, dmginfo)
 	if not dmginfo:IsBulletDamage() then return true end
 
-	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC and dmginfo:GetDamagePosition().z > pl:LocalToWorld(Vector(0, 0, self.Hull[2].z * 1.33)).z then
+	if hitgroup ~= HITGROUP_LEFTLEG and hitgroup ~= HITGROUP_RIGHTLEG
+		and hitgroup ~= HITGROUP_GEAR and hitgroup ~= HITGROUP_GENERIC
+		and dmginfo:GetDamagePosition().z > pl:GetPos().z + LEG_TOP_OFFSET then
 		dmginfo:SetDamage(0)
 		dmginfo:ScaleDamage(0)
 	end

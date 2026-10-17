@@ -32,8 +32,11 @@ function ENT:Draw()
 	local wep = owner:GetActiveWeapon()
 	if wep:IsValid() and wep:GetClass() == "weapon_zs_t_resupplypack" then return end
 
-	local boneid = owner:LookupBone("ValveBiped.Bip01_Spine2")
-	if not boneid or boneid <= 0 then return end
+	if self.m_BoneID == nil then
+		self.m_BoneID = owner:LookupBone("ValveBiped.Bip01_Spine2") or 0
+	end
+	if self.m_BoneID <= 0 then return end
+	local boneid = self.m_BoneID
 
 	local bonepos, boneang = owner:GetBonePositionMatrixed(boneid)
 
@@ -59,7 +62,7 @@ function ENT:Draw()
 		local w, h = 420, 200
 		cam.Start3D2D(self:LocalToWorld(Vector(0, 0, self:OBBMaxs().z)), self:GetAngles(), 0.025)
 			draw.RoundedBox(64, w * -0.5, h * -0.5, w, h, color_black_alpha120)
-			draw.SimpleText(translate.Get("resupply_box"), "ZS3D2DFont2", 0, 0, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(translate.Get("resupply_box_trinket"), "ZS3D2DFont2", 0, 0, (MySelf.NextUse or 0) <= CurTime() and COLOR_GREEN or COLOR_DARKRED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		cam.End3D2D()
 	end
 end

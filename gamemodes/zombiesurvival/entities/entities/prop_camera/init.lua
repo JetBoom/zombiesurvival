@@ -25,7 +25,7 @@ function ENT:Initialize()
 		ent:Spawn()
 
 		self:DeleteOnRemove(ent)
-		self.Hitbox = ent
+		self.HitBox = ent
 	end
 end
 
@@ -91,7 +91,7 @@ end
 
 function ENT:SetObjectOwner(ent)
 	self:SetDTEntity(1, ent)
-	if self.HitBox then
-		self.HitBox:SetObjectOwner(ent)
-	end
+	-- The child prop_hitbox_camera does not have its own SetObjectOwner —
+	-- it delegates GetObjectOwner to the parent. Previously, the call never occurred
+	-- due to the Hitbox/HitBox typo, so it was never needed.
 end

@@ -13,7 +13,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.1)
 
 	local owner = self:GetOwner()
 	if not owner:IsValid() then owner = self end

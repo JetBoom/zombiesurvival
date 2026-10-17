@@ -41,22 +41,25 @@ function SWEP:SecondaryAttack()
 
 	Menu = vgui.Create("DFrame")
 	Menu:SetDeleteOnClose(false)
-	Menu:SetSize(200, 100)
-	Menu:SetTitle("Select a message")
+	Menu:SetSize(220, 100)
+	Menu:SetTitle(translate.Get("messagebeacon_select_message"))
 	Menu:Center()
 	Menu.Choice = 1
 
 	local choice = vgui.Create("DComboBox", Menu)
+	StyleZSComboBox(choice)
 	for k, v in ipairs(GAMEMODE.ValidBeaconMessages) do
 		choice:AddChoice(translate.Get(v), k)
 	end
-	choice:ChooseOption(GAMEMODE.ValidBeaconMessages[1], 1)
+
+	choice:ChooseOptionID(1)
+
 	choice:SizeToContents()
 	choice:SetWide(Menu:GetWide() - 16)
 	choice:Center()
 	choice.OnSelect = onselect
 
-	local ok = EasyButton(Menu, "OK", 8, 4)
+	local ok = EasyButton(Menu, translate.Get("okay_button"), 8, 4)
 	ok:AlignBottom(8)
 	ok:CenterHorizontal()
 	ok.DoClick = okclick

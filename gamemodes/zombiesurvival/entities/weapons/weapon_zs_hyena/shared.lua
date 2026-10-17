@@ -27,19 +27,23 @@ SWEP.Tier = 3
 
 SWEP.MaxBombs = 3
 
+SWEP.StickyBombChargeTime = 3
+
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_RELOAD_SPEED, 0.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Lynx' Cryo Sticky Launcher", "Fires cryo bombs that deal less damage but slow zombies", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Lynx' Cryo Sticky Launcher", "Fires cryo bombs that deal less damage but slow zombies", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.8
 	if SERVER then
 		wept.EntModify = function(self, ent)
 			self:SetNextSecondaryFire(CurTime() + 0.2)
 			ent:SetDTBool(0, true)
+			ent:SetChargeTime(self.StickyBombChargeTime)
 		end
 	end
 	if CLIENT then
 		wept.VElements.clipbase.color = Color(30, 95, 150)
 	end
 end)
+branch.TranslationID = "hyena_branch_1"
 
 function SWEP:CanPrimaryAttack()
 	if self.BaseClass.CanPrimaryAttack(self) then

@@ -46,5 +46,5 @@ function ENT:OnRemove()
 			particle:SetRoll(math.Rand(0, 360))
 		end
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

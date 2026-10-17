@@ -59,7 +59,9 @@ local P_Team = M_Player.Team
 local temp_attacker
 local temp_hb
 local function ManualTraceFilter(ent)
-	if ent == temp_attacker or ent == temp_hb or getmetatable(ent) == M_Player and P_Team(ent) == TEAM_HUMAN then
+	if ent == temp_attacker
+	or ent == temp_hb
+	or ent:IsPlayer() and P_Team(ent) == TEAM_HUMAN then
 		return false
 	end
 
@@ -123,13 +125,14 @@ function ENT:GetScanFilter()
 	return filter
 end
 
--- Getting all of some team is straining every frame when there's 5 or so turrets.
-local NextCache = 0
+-- Per-turret cached filter. Resets 1 second after the last rebuild.
 function ENT:GetCachedScanFilter()
-	if CurTime() < NextCache and self.CachedFilter then return self.CachedFilter end
+	if self.NextFilterCache and CurTime() < self.NextFilterCache and self.CachedFilter then
+		return self.CachedFilter
+	end
 
 	self.CachedFilter = self:GetScanFilter()
-	NextCache = CurTime() + 1
+	self.NextFilterCache = CurTime() + 1
 
 	return self.CachedFilter
 end

@@ -76,7 +76,7 @@ function ENT:Think()
 			particle:SetEndSize(math.Rand(12, 14))
 			particle:SetColor(49, 110, 255)
 
-			emitter:Finish() emitter = nil collectgarbage("step", 64)
+			emitter:Finish()
 		end
 	elseif self:GetState() == 1 then
 		self.AmbientSound:Stop()

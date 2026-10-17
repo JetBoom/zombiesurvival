@@ -11,9 +11,7 @@ function ENT:Initialize()
 	self.ScanningSound = CreateSound(self, self.ScanSound)
 	self.ShootingSound = CreateSound(self, "npc/combine_gunship/gunship_weapon_fire_loop6.wav")
 
-	local size = self.SearchDistance + 32
-	local nsize = -size
-	self:SetRenderBounds(Vector(nsize, nsize, nsize * 0.25), Vector(size, size, size * 0.25))
+    self:SetRenderBounds(Vector(-40, -40, -16), Vector(40, 40, 64))
 
 	hook.Add("CreateMove", self, self.CreateMove)
 	hook.Add("ShouldDrawLocalPlayer", self, self.ShouldDrawLocalPlayer)
@@ -92,7 +90,7 @@ function ENT:Draw()
 		particle:SetCollide(true)
 		particle:SetBounce(0.2)
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 
 	if not MySelf:IsValid() or MySelf:Team() ~= TEAM_HUMAN then return end
@@ -126,12 +124,12 @@ function ENT:Draw()
 		end
 
 		if ammo > 0 then
-			draw_SimpleText("["..ammo.." / "..self.MaxAmmo.."]", "DefaultFontBold", x, 55, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			draw_SimpleText(translate.Format("deployable_ammo_count_x_y", ammo, self.MaxAmmo), "DefaultFontBold", x, 55, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		elseif flash then
 			draw_SimpleText(translate.Get("empty"), "DefaultFontBold", x, 55, COLOR_RED, TEXT_ALIGN_CENTER)
 		end
 
-		draw_SimpleText("CH. "..self:GetChannel().." / "..GAMEMODE.MaxChannels["turret"], "DefaultFontSmall", x, 70, COLOR_WHITE, TEXT_ALIGN_CENTER)
+		draw_SimpleText(translate.Format("channel_x_of_y", self:GetChannel(), GAMEMODE.MaxChannels["turret"]), "DefaultFontSmall", x, 70, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 	cam_End3D2D()
 end
@@ -242,15 +240,21 @@ function ENT:ShouldDrawLocalPlayer(pl)
 end
 
 local trace_cam = {mask = MASK_VISIBLE, mins = Vector(-4, -4, -4), maxs = Vector(4, 4, 4)}
+
+local temp_turret
+local function TurretCamFilter(ent)
+	return ent:IsPlayer() or ent == temp_turret
+end
+
 function ENT:CalcView(pl, origin, angles, fov, znear, zfar)
 	if self:GetObjectOwner() ~= pl or not self:GetManualControl() then return end
 
-	local filter = player.GetAll()
-	filter[#filter + 1] = self
+	temp_turret = self
 	trace_cam.start = self:ShootPos()
 	trace_cam.endpos = trace_cam.start
-	trace_cam.filter = filter
+	trace_cam.filter = TurretCamFilter
 	local tr = util.TraceHull(trace_cam)
+	temp_turret = nil
 
 	return {origin = tr.HitPos + tr.HitNormal * 3, angles = angles}
 end

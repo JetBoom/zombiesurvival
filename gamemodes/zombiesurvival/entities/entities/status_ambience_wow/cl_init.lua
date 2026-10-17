@@ -19,6 +19,9 @@ function ENT:Think()
 	if owner:IsValid() then
 		self.AmbientSound:PlayEx(0.7, 20 + 15 * math.min(1, owner:GetVelocity():Length() / 200))
 	end
+
+	self:NextThink(CurTime() + 0.1)
+	return true
 end
 
 function ENT:OnRemove()
@@ -28,6 +31,8 @@ end
 local matGlow = Material("sprites/light_glow02_add")
 local matWhite = Material("models/debug/debugwhite")
 function ENT:DrawTranslucent()
+	local COL_DEFAULT    = Color(255, 255, 255)
+	local COL_SPAWN_PROT = Color(0, 76, 0)
 	local pl = self:GetOwner()
 	if not pl:IsValid() or pl == MySelf and not pl:ShouldDrawLocalPlayer() then return end
 
@@ -49,7 +54,7 @@ function ENT:DrawTranslucent()
 	render.SuppressEngineLighting(false)
 	render.ModelMaterialOverride(nil)
 
-	local col = spawnprotection and Color(0, 0.3 * 255, 0) or Color(255, 255, 255)
+	local col = spawnprotection and COL_SPAWN_PROT or COL_DEFAULT
 
 	render.SetMaterial(matGlow)
 	render.DrawSprite(pos, 64, 64, col)
@@ -80,7 +85,7 @@ function ENT:DrawTranslucent()
 			particle:SetColor(col.r,col.g,col.b)
 		end
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 
 	local dlight = DynamicLight(self:EntIndex())

@@ -60,5 +60,5 @@ function ENT:Draw()
 		particle:SetVelocity(dir * 5)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

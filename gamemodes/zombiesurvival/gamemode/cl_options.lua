@@ -25,14 +25,14 @@ GM.RemortColors = {
 }
 
 GM.SpeedToText = {
-	[SPEED_NORMAL] = "Normal",
-	[SPEED_SLOWEST] = "Very Slow",
-	[SPEED_SLOWER] = "Quite Slow",
-	[SPEED_SLOW] = "Slow",
-	[SPEED_FAST] = "Fast",
-	[SPEED_FASTER] = "Quite Fast",
-	[SPEED_FASTEST] = "Very Fast",
-	[-1] = "Ultra Slow",
+	[SPEED_NORMAL]  = "speed_normal",
+	[SPEED_SLOWEST] = "speed_very_slow",
+	[SPEED_SLOWER]  = "speed_quite_slow",
+	[SPEED_SLOW]    = "speed_slow",
+	[SPEED_FAST]    = "speed_fast",
+	[SPEED_FASTER]  = "speed_quite_fast",
+	[SPEED_FASTEST] = "speed_very_fast",
+	[-1]            = "speed_ultra_slow",
 }
 
 GM.AmmoToPurchaseNames = {
@@ -48,17 +48,17 @@ GM.AmmoToPurchaseNames = {
 }
 
 GM.WeaponStatBarVals = {
-	{"MeleeDamage", "Damage", 2, 140, false},
-	{"MeleeRange", "Range", 30, 100, false},
-	{"MeleeSize", "Size", 0.2, 3, false},
+	{"MeleeDamage", "weapon_stat_damage",      2, 140, false},
+	{"MeleeRange",  "weapon_stat_range",       30, 100, false},
+	{"MeleeSize",   "weapon_stat_size",        0.2, 3, false},
 
-	{"Damage", "Damage", 1, 105, false, "Primary"},
-	{"Delay", "Attack Delay", 0.05, 2, true, "Primary"},
-	{"ClipSize", "Clip Size", 1, 35, false, "Primary"},
+	{"Damage",      "weapon_stat_damage",      1, 105, false, "Primary"},
+	{"Delay",       "weapon_stat_attack_delay",0.05, 2, true, "Primary"},
+	{"ClipSize",    "weapon_stat_clip_size",   1, 35, false, "Primary"},
 
-	{"ConeMin", "Min Spread", 0, 5, true},
-	{"ConeMax", "Max Spread", 1.5, 7, true},
-	{"WalkSpeed", "Move Speed", 200, 250, false}
+	{"ConeMin",     "weapon_stat_min_spread",  0, 5, true},
+	{"ConeMax",     "weapon_stat_max_spread",  1.5, 7, true},
+	{"WalkSpeed",   "weapon_stat_move_speed",  200, 250, false}
 }
 
 GM.LifeStatsLifeTime = 5
@@ -239,6 +239,11 @@ cvars.AddChangeCallback("zs_messagebeaconshow", function(cvar, oldvalue, newvalu
 	GAMEMODE.MessageBeaconShow = tonumber(newvalue) == 1
 end)
 
+GM.ShowWElements = CreateClientConVar("zs_wepelements", "0", true, false):GetBool()
+cvars.AddChangeCallback("zs_wepelements", function(cvar, oldvalue, newvalue)
+	GAMEMODE.ShowWElements = tonumber(newvalue) == 1
+end)
+
 GM.WeaponHUDMode = CreateClientConVar("zs_weaponhudmode", "0", true, false):GetInt()
 cvars.AddChangeCallback("zs_weaponhudmode", function(cvar, oldvalue, newvalue)
 	GAMEMODE.WeaponHUDMode = tonumber(newvalue) or 0
@@ -303,3 +308,8 @@ end)
 if GM.BeatSetZombie == "default" then
 	GM.BeatSetZombie = GM.BeatSetZombieDefault
 end
+
+GM.NotifyStack = math.Clamp(CreateClientConVar("zs_notifystack", 0, true, false):GetInt(), 0, 2)
+cvars.AddChangeCallback("zs_notifystack", function(cvar, oldvalue, newvalue)
+	GAMEMODE.NotifyStack = math.Clamp(tonumber(newvalue) or 0, 0, 2)
+end)

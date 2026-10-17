@@ -2,6 +2,8 @@ ENT.Type = "anim"
 
 ENT.IsStatus = true
 
+ENT.DieTime = 0 
+
 function ENT:OnInitialize()
 end
 

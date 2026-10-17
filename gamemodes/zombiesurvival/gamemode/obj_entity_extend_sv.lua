@@ -27,7 +27,10 @@ end
 function meta:HealPlayer(pl, amount, pointmul, nobymsg, poisononly)
 	local healed, rmv = 0, 0
 
-	local health, maxhealth = pl:Health(), pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
+	local C = GAMEMODE.SkillConstants
+
+	local health, maxhealth = pl:Health(), pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * (C.FrailHealthCapPercent / 100)) or pl:GetMaxHealth()
+
 	local missing_health = maxhealth - health
 	local poison = pl:GetPoisonDamage()
 	local bleed = pl:GetBleedDamage()
@@ -251,15 +254,21 @@ function meta:FindByNameHammer(name, activator, caller)
 end
 
 function meta:IsNailed()
-	if self:IsValid() and self.Nails then -- In case we're the world.
+	local cached = self._IsNailedCache
+	if cached ~= nil then return cached end
+
+	local result = false
+	if self:IsValid() and self.Nails then
 		for _, nail in pairs(self.Nails) do
 			if nail and nail:IsValid() and (nail:GetAttachEntity() == self or nail:GetBaseEntity() == self) then
-				return true
+				result = true
+				break
 			end
 		end
 	end
 
-	return false
+	self._IsNailedCache = result
+	return result
 end
 
 function meta:IsNailedToWorld(hierarchy)
@@ -358,12 +367,27 @@ function meta:GetPropsInContraption()
 	return #allcons
 end
 
+local HUMAN_NEARBY_RADIUS_SQR = 262144   -- 512^2
+local HUMAN_NEARBY_CACHE_TIME = 0.25     -- second
+
 function meta:HumanNearby()
+	local now = CurTime()
+	local cached = self._HumanNearbyCache
+	if cached and now < cached.expires then
+		return cached.value
+	end
+
+	local mypos = self:GetPos()
+	local result = false
 	for _, pl in pairs(team.GetPlayers(TEAM_HUMAN)) do
-		if pl:Alive() and self:GetPos():DistToSqr(pl:GetPos()) <= 262144 then -- 512^2
-			return true
+		if pl:Alive() and mypos:DistToSqr(pl:GetPos()) <= HUMAN_NEARBY_RADIUS_SQR then
+			result = true
+			break
 		end
 	end
+
+	self._HumanNearbyCache = { value = result, expires = now + HUMAN_NEARBY_CACHE_TIME }
+	return result
 end
 
 function meta:ResetLastBarricadeAttacker(attacker, dmginfo)
@@ -392,14 +416,30 @@ end
 
 -- Return true to override default behavior.
 function meta:DamageNails(attacker, inflictor, damage, dmginfo)
-	if not self:IsNailed() or self.m_NailsDontAbsorb then return end
+	if self.m_NailsDontAbsorb then return end
 
-	-- Props that don't have barricade health yet might still be nailed to something.
-	local nails = self:GetLivingNails()
+	local selfNails = self.Nails
+	if not selfNails then return end
+
+	-- One pass over the nails: collect the live ones immediately and determine isattach.
+	local nails = {}
 	local isattach = false
-	for i, nail in ipairs(nails) do
-		isattach = self == nail:GetAttachEntity() or isattach
+	local anyNail = false
+	for i = 1, #selfNails do
+		local nail = selfNails[i]
+		if nail and nail:IsValid() then
+			anyNail = true
+			if nail:GetNailHealth() > 0 then
+				nails[#nails + 1] = nail
+			end
+			if not isattach and nail:GetAttachEntity() == self then
+				isattach = true
+			end
+		end
 	end
+
+	-- Analog of IsNailed(): if there are no valid nails at all — exit.
+	if not anyNail then return end
 
 	if self:GetBarricadeHealth() <= 0 and not isattach then return end
 
@@ -423,8 +463,9 @@ function meta:DamageNails(attacker, inflictor, damage, dmginfo)
 
 	if self.ReinforceEnd and CurTime() < self.ReinforceEnd and self.ReinforceApplier and self.ReinforceApplier:IsValidLivingHuman() then
 		local applier = self.ReinforceApplier
-		local multi = 0.92
-		local dmgbefore = damage * 0.08
+		local C = GAMEMODE.SkillConstants
+		local multi = 1 - (C.ReinforcerDamageReductionPercent / 100)
+		local dmgbefore = damage * (C.ReinforcerDamageReductionPercent / 100)
 		local points = dmgbefore / 8
 
 		dmginfo:SetDamage(dmginfo:GetDamage() * multi)
@@ -580,6 +621,7 @@ function meta:RemoveNail(nail, dontremoveentity, removedby, forceremoveconstrain
 
 	-- Only remove the constraint if it's the last nail.
 	if othernails == 0 and cons:IsValid() then
+		self._IsNailedCache = nil
 		if self.PropHealth and self:GetBarricadeHealth() > 0 then
 			local repairs_frac = self:GetBarricadeRepairs() / self:GetMaxBarricadeRepairs()
 
@@ -711,6 +753,18 @@ function meta:DealProjectileTraceDamage(damage, tr, owner)
 	damageinfo:SetDamagePosition(tr.HitPos)
 	damageinfo:SetAttacker(owner)
 	damageinfo:SetInflictor(self:ProjectileDamageSource())
+
+	-- DamageInfo has a zero force vector by default. Source
+	-- accumulates forces from all DamageInfo during a frame and warns
+	-- "AddMultiDamage: g_MultiDamage.GetDamageForce() == vec3_origin"
+	-- if the sum is zero. Take the projectile velocity (this is the
+	-- physically correct impulse) or, if the projectile has already
+	-- stopped, synthesize from the hit normal.
+	local force = self:GetVelocity()
+	if force:IsZero() then
+		force = (tr.Normal or self:GetForward() or Vector(0, 0, 1)) * (damage * 70)
+	end
+	damageinfo:SetDamageForce(force)
 
 	local vel
 	if ent:IsPlayer() then

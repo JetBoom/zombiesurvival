@@ -56,10 +56,6 @@ function CLASS:CalcMainActivity(pl, velocity)
 		return ACT_HL2MP_SWIM_PISTOL, -1
 	end
 
-	if pl:WaterLevel() >= 3 then
-		return ACT_HL2MP_SWIM_PISTOL, -1
-	end
-
 	local len = velocity:Length2DSqr()
 	if len <= 1 then
 		if pl:Crouching() and pl:OnGround() then

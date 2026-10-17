@@ -1,0 +1,171 @@
+LANGUAGE = {}
+
+LANGUAGE.__map_signature = "6f7e03574dd254ec11fcdc2e942c29f1"
+
+-- ============================================================
+-- Source: func_breakable
+-- ============================================================
+
+LANGUAGE[">>BUNKER ESCAPE<<"] = ">>BUNKER ESCAPE<<"
+
+LANGUAGE[">>DOCK ESCAPE<<"] = ">>DOCK ESCAPE<<"
+
+LANGUAGE[">>HELIPAD ESCAPE<<"] = ">>HELIPAD ESCAPE<<"
+
+
+-- ============================================================
+-- Source: func_button
+-- ============================================================
+
+LANGUAGE[">>COVER THE DOOR<<"] = ">>COVER THE DOOR<<"
+
+LANGUAGE[">>LADDER BROKEN ! YOU ARE DEAD IF YOU STILL THERE<<"] = ">>LADDER BROKEN ! YOU ARE DEAD IF YOU STILL THERE<<"
+
+LANGUAGE[">>SYSTEM ENABLE IN 20s<<"] = ">>SYSTEM ENABLE IN 20s<<"
+
+LANGUAGE[">>SYSTEM ENABLE IN 40s<<"] = ">>SYSTEM ENABLE IN 40s<<"
+
+LANGUAGE[">>SYSTEM ENABLE IN 5s<<"] = ">>SYSTEM ENABLE IN 5s<<"
+
+LANGUAGE[">>TAKE CARE !<<"] = ">>TAKE CARE !<<"
+
+LANGUAGE[">>TAKE THE LADDER ! BREAKING IN 10s<<"] = ">>TAKE THE LADDER ! BREAKING IN 10s<<"
+
+LANGUAGE[">>TAKE THE LADDER ! BREAKING IN 5s<<"] = ">>TAKE THE LADDER ! BREAKING IN 5s<<"
+
+LANGUAGE[">>THAT WINDOW DON'T LOOK VERY STRONG<<"] = ">>THAT WINDOW DON'T LOOK VERY STRONG<<"
+
+
+-- ============================================================
+-- Source: func_door_rotating
+-- ============================================================
+
+LANGUAGE[">>ZM USE THE MANUAL BUTTON TO OPEN THE DOOR<<"] = ">>ZM USE THE MANUAL BUTTON TO OPEN THE DOOR<<"
+
+
+-- ============================================================
+-- logic_relay — relay for chained outputs
+-- ============================================================
+
+LANGUAGE[">>BACKUP SYSTEM : DISABLE<<"] = ">>BACKUP SYSTEM : DISABLE<<"
+
+LANGUAGE[">>BOAT LEAVING IN 20s<<"] = ">>BOAT LEAVING IN 20s<<"
+
+LANGUAGE[">>BOAT LEAVING IN 45s<<"] = ">>BOAT LEAVING IN 45s<<"
+
+LANGUAGE[">>BOAT LEAVING IN 5s<<"] = ">>BOAT LEAVING IN 5s<<"
+
+LANGUAGE[">>BRACHIOSAURUS PADDOCKS : DISABLE<<"] = ">>BRACHIOSAURUS PADDOCKS : DISABLE<<"
+
+LANGUAGE[">>BUNKER LOCKDOWN IN 20s<<"] = ">>BUNKER LOCKDOWN IN 20s<<"
+
+LANGUAGE[">>BUNKER LOCKDOWN IN 45s<<"] = ">>BUNKER LOCKDOWN IN 45s<<"
+
+LANGUAGE[">>BUNKER LOCKDOWN IN 5s<<"] = ">>BUNKER LOCKDOWN IN 5s<<"
+
+LANGUAGE[">>CHECKING PADDOCKS<<"] = ">>CHECKING PADDOCKS<<"
+
+LANGUAGE[">>COVER 6s<<"] = ">>COVER 6s<<"
+
+LANGUAGE[">>CT : COVER UNTIL T-REX BREAK THE FENCE<<"] = ">>CT : COVER UNTIL T-REX BREAK THE FENCE<<"
+
+LANGUAGE[">>DILOPHAUSAURUS PADDOCKS : DISABLE<<"] = ">>DILOPHAUSAURUS PADDOCKS : DISABLE<<"
+
+LANGUAGE[">>DOOR SECURITY SYSTEM : DISABLE<<"] = ">>DOOR SECURITY SYSTEM : DISABLE<<"
+
+LANGUAGE[">>GALLIMIMUS PADDOCKS : DISABLE<<"] = ">>GALLIMIMUS PADDOCKS : DISABLE<<"
+
+LANGUAGE[">>GLOBAL FAILURE OF ALL SYSTEMS<<"] = ">>GLOBAL FAILURE OF ALL SYSTEMS<<"
+
+LANGUAGE[">>GLOBAL FENCE PERIMETER : DISABLE<<"] = ">>GLOBAL FENCE PERIMETER : DISABLE<<"
+
+LANGUAGE[">>HELICOPTER ON WAY<<"] = ">>HELICOPTER ON WAY<<"
+
+LANGUAGE[">>JEEPS LEAVING IN 5s AND 8s<<"] = ">>JEEPS LEAVING IN 5s AND 8s<<"
+
+LANGUAGE[">>LIGHT POWER GRID : DISABLE<<"] = ">>LIGHT POWER GRID : DISABLE<<"
+
+LANGUAGE[">>LYSINE CONTINGENGY ACTIVATED<<"] = ">>LYSINE CONTINGENGY ACTIVATED<<"
+
+LANGUAGE[">>LYSINE CONTINGENGY ACTIVATION IN 15s<<"] = ">>LYSINE CONTINGENGY ACTIVATION IN 15s<<"
+
+LANGUAGE[">>MAP BY LeGrem<<"] = ">>MAP BY LeGrem<<"
+
+LANGUAGE[">>PHONE COMMUNICATION : DISABLE<<"] = ">>PHONE COMMUNICATION : DISABLE<<"
+
+LANGUAGE[">>PREPARE TO COVER<<"] = ">>PREPARE TO COVER<<"
+
+LANGUAGE[">>RESERVE PADDOCKS 1 : DISABLE<<"] = ">>RESERVE PADDOCKS 1 : DISABLE<<"
+
+LANGUAGE[">>RESERVE PADDOCKS 2 : DISABLE<<"] = ">>RESERVE PADDOCKS 2 : DISABLE<<"
+
+LANGUAGE[">>RUN. REX BLOCK THE ZOMBIES<<"] = ">>RUN. REX BLOCK THE ZOMBIES<<"
+
+LANGUAGE[">>SYSTEM CHECKING PROCESS<<"] = ">>SYSTEM CHECKING PROCESS<<"
+
+LANGUAGE[">>T-REX PADDOCKS : DISABLE<<"] = ">>T-REX PADDOCKS : DISABLE<<"
+
+LANGUAGE[">>THE BOAT IS LEAVING THE DOCK<<"] = ">>THE BOAT IS LEAVING THE DOCK<<"
+
+LANGUAGE[">>TRICERATOPS PADDOCKS : DISABLE<<"] = ">>TRICERATOPS PADDOCKS : DISABLE<<"
+
+LANGUAGE[">>VIDEO SYSTEM : DISABLE<<"] = ">>VIDEO SYSTEM : DISABLE<<"
+
+LANGUAGE[">>VISITOR RIDE SYSTEM : DISABLE<<"] = ">>VISITOR RIDE SYSTEM : DISABLE<<"
+
+LANGUAGE[">>WAIT T-REX HELP<<"] = ">>WAIT T-REX HELP<<"
+
+
+-- ============================================================
+-- Source: path_track
+-- ============================================================
+
+LANGUAGE[">>GO INTO THE OFFICE AND PRESS THE BUTTON<<"] = ">>GO INTO THE OFFICE AND PRESS THE BUTTON<<"
+
+LANGUAGE[">>TAKEOFF IN 7s<<"] = ">>TAKEOFF IN 7s<<"
+
+LANGUAGE[">>TAKEOFF<<"] = ">>TAKEOFF<<"
+
+
+-- ============================================================
+-- trigger_once — single-fire touch trigger
+-- ============================================================
+
+LANGUAGE[">>CLIMB TO THE TREE ! TAKE CARE !<<"] = ">>CLIMB TO THE TREE ! TAKE CARE !<<"
+
+LANGUAGE[">>CT COVER UNTIL T-REX ATTACK<<"] = ">>CT COVER UNTIL T-REX ATTACK<<"
+
+LANGUAGE[">>EXPLOSION IN 25s !<<"] = ">>EXPLOSION IN 25s !<<"
+
+LANGUAGE[">>FOLLOW THE RED PIPE<<"] = ">>FOLLOW THE RED PIPE<<"
+
+LANGUAGE[">>FOLLOW THE SIGN ON THE WALL<<"] = ">>FOLLOW THE SIGN ON THE WALL<<"
+
+LANGUAGE[">>GO TO THE BUNKER AND RESTORE THE POWER<<"] = ">>GO TO THE BUNKER AND RESTORE THE POWER<<"
+
+LANGUAGE[">>GO TO THE CONTROL ROOM RESTART THE SYSTEM<<"] = ">>GO TO THE CONTROL ROOM RESTART THE SYSTEM<<"
+
+LANGUAGE[">>GO TO THE MAIN DOOR<<"] = ">>GO TO THE MAIN DOOR<<"
+
+LANGUAGE[">>PLANK BROKEN ! FIND THE HOLE IN THE FENCE ON LEFT<<"] = ">>PLANK BROKEN ! FIND THE HOLE IN THE FENCE ON LEFT<<"
+
+LANGUAGE[">>RESTART THE POWER IN Jurassic Park<<"] = ">>RESTART THE POWER IN Jurassic Park<<"
+
+LANGUAGE[">>RESTORE THE POWER TO OPEN THE DOOR<<"] = ">>RESTORE THE POWER TO OPEN THE DOOR<<"
+
+LANGUAGE[">>RUN !<<"] = ">>RUN !<<"
+
+LANGUAGE[">>TRIGGER THE C4 TO BLOW UP THE TREE<<"] = ">>TRIGGER THE C4 TO BLOW UP THE TREE<<"
+
+LANGUAGE[">>WELCOME TO JURASSIC PARK<<"] = ">>WELCOME TO JURASSIC PARK<<"
+
+LANGUAGE[">>ZOMBIES CLIB THE HILL<<"] = ">>ZOMBIES CLIB THE HILL<<"
+
+
+-- ============================================================
+-- Source: weapon_elite
+-- ============================================================
+
+LANGUAGE[">>>>Flamethrower has been picked<<<<"] = ">>>>Flamethrower has been picked<<<<"
+
+LANGUAGE[">>>>Tazer has been picked<<<<"] = ">>>>Tazer has been picked<<<<"

@@ -30,7 +30,7 @@ SWEP.ConeMin = 0
 
 SWEP.ReloadSpeed = 0.85
 
-SWEP.BuffDuration = 10
+SWEP.BuffDuration = GAMEMODE.SkillConstants.StrengthShotgunBaseDuration
 
 SWEP.IronSightsPos = Vector(-5.95, 3, 2.75)
 SWEP.IronSightsAng = Vector(-0.15, -1, 2)
@@ -38,8 +38,8 @@ SWEP.IronSightsAng = Vector(-0.15, -1, 2)
 SWEP.AllowQualityWeapons = true
 
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 5)
-GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_BUFF_DURATION, 2)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Defence Shot Gun", "Provides players with a defence boost instead of a strength boost", function(wept)
+GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_BUFF_DURATION, GAMEMODE.SkillConstants.StrengthShotgunDurationPerTier or 2)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Defence Shot Gun", "Provides players with a defence boost instead of a strength boost", function(wept)
 	if SERVER then
 		wept.EntModify = function(self, ent)
 			ent:SetDTBool(0, true)
@@ -52,6 +52,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Defence Shot Gun", "Provides players wit
 		end
 	end
 end)
+branch.TranslationID = "strengthshot_branch_1"
 
 function SWEP:GetFireDelay()
 	local owner = self:GetOwner()
@@ -85,5 +86,5 @@ function SWEP:SecondaryAttack()
 	if CLIENT then
 		self:EmitSound(locked and "npc/scanner/combat_scan4.wav" or "npc/scanner/scanner_scan5.wav", 65, locked and 75 or 200)
 	end
-	self:SetSeekedPlayer(locked and targetent)
+	self:SetSeekedPlayer(locked and targetent or nil)
 end

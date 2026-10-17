@@ -39,11 +39,6 @@ hook.Add("EntityKeyValue", "zombieescape", function(ent, key, value)
 		return true
 	end
 
-	-- Some maps have brushes that regenerate or set health to dumb values. We don't want them. Although this can break maps I can't think of a way to remove the output instead.
-	--[[if (ent:GetClass() == "trigger_multiple" or ent:GetClass() == "trigger_once") and string.find(string.lower(value), "%!.*%,.+%,health") then
-		ent.ZEDelete = true
-	end]]
-
 	-- Samuel Maddock's fix for setparentattachment
 	-- https://github.com/JetBoom/zombiesurvival/pull/178/commits/74aaeb2c2ffc8d5a848945162618de00aacbec72#diff-9fc6a6639c31f62902ca6b7a2f812044L29
 	if value:lower():find("setparentattachment") then
@@ -57,6 +52,11 @@ hook.Add("EntityKeyValue", "zombieescape", function(ent, key, value)
 end)
 
 hook.Add("InitPostEntityMap", "zombieescape", function(fromze)
+	-- New map / round restart — allow preparation again.
+	if not fromze then
+		ZE_CleanupDone = false
+	end
+
 	for _, ent in pairs(ents.FindByClass("filter_activator_team")) do
 		if ent.ZEFix then
 			ent:SetKeyValue("filterteam", ent.ZEFix)
@@ -102,33 +102,64 @@ end)
 
 hook.Add("OnWaveStateChanged", "zombieescape", function()
 	if GAMEMODE:GetWave() == 1 and GAMEMODE:GetWaveActive() then
+		-- If the wave was forced via ULX or another addon — Think
+		-- would skip its own preparation, so we call it here.
+		-- In the normal flow the flag is already true and the function just exits.
+		ZE_StartWavePreparations()
+
 		for _, pl in pairs(player.GetAll()) do
+			pl.ZEFreeze = nil
 			pl:Freeze(false)
 			pl:GodDisable()
 		end
 	end
 end)
 
+-- ============================================================
+-- One-time map preparation before wave start
+-- ------------------------------------------------------------
+-- In the normal flow, called from Think when freeze ends.
+-- If an admin starts the wave via ULX (ulx roundactive 1) — Think
+-- doesn't have time to fire, and the map is left without weapon_* from BSP.
+-- So the same function is triggered from OnWaveStateChanged.
+--
+-- Idempotent: the flag is reset on map reload.
+-- ============================================================
+local ZE_CleanupDone = false
+
+local function ZE_StartWavePreparations()
+	if ZE_CleanupDone then return end
+	ZE_CleanupDone = true
+
+	game.CleanUpMap(false, GAMEMODE.CleanupFilter)
+	gamemode.Call("InitPostEntityMap", true)
+
+	for _, pl in pairs(team.GetPlayers(TEAM_HUMAN)) do
+		pl.ZEFreeze = nil
+		pl:Freeze(false)
+		pl:GodDisable()
+		local ent = GAMEMODE:PlayerSelectSpawn(pl)
+		if IsValid(ent) then
+			pl:SetPos(ent:GetPos())
+		end
+	end
+end
+
 local CheckTime
 local FreezeTime = true
 local NextDamage = 0
 hook.Add("Think", "zombieescape", function()
+	-- ─── Safety 1: if wave > 0 but cleanup hasn't been done — do it. ───
+	-- Fires on wave activation by any means: naturally, via ULX
+	-- roundactive, manually SetWaveActive from another addon.
+	if GAMEMODE:GetWaveActive() and not ZE_CleanupDone then
+		ZE_StartWavePreparations()
+	end
+
 	if GAMEMODE:GetWave() == 0 then
 		if FreezeTime and CurTime() >= GAMEMODE:GetWaveStart() - GAMEMODE.ZE_FreezeTime then
 			FreezeTime = false
-
-			game.CleanUpMap(false, GAMEMODE.CleanupFilter)
-			gamemode.Call("InitPostEntityMap", true)
-
-			for _, pl in pairs(team.GetPlayers(TEAM_HUMAN)) do
-				pl.ZEFreeze = nil
-				pl:Freeze(false)
-				pl:GodDisable()
-				local ent = GAMEMODE:PlayerSelectSpawn(pl)
-				if IsValid(ent) then
-					pl:SetPos(ent:GetPos())
-				end
-			end
+			ZE_StartWavePreparations()
 		end
 
 		return
@@ -136,6 +167,19 @@ hook.Add("Think", "zombieescape", function()
 
 	FreezeTime = true
 
+	-- ─── Safety 2: unfreeze. ───
+	-- If the wave is active but a player still has ZEFreeze — clear it.
+	if GAMEMODE:GetWaveActive() then
+		for _, pl in pairs(player.GetAll()) do
+			if pl.ZEFreeze then
+				pl.ZEFreeze = nil
+				pl:Freeze(false)
+				pl:GodDisable()
+			end
+		end
+	end
+
+	-- ─── Then — the regular code (unchanged). ───
 	if CurTime() >= GAMEMODE:GetWaveStart() + GAMEMODE.ZE_TimeLimit and CurTime() >= NextDamage then
 		NextDamage = CurTime() + 1
 
@@ -172,6 +216,30 @@ hook.Add("DoPlayerDeath", "zombieescape", function(pl, attacker, dmginfo)
 			pl.NextSpawnTime = CurTime() + 9999
 		else
 			pl.NextSpawnTime = CurTime() + 5
+		end
+	end
+end)
+
+-- ============================================================
+-- Universal unfreeze
+-- ------------------------------------------------------------
+-- Backup safety net: if the wave is already active but a player
+-- still has the ZEFreeze flag — unfreeze. Fires on any wave
+-- activation: normal Think, ULX roundactive, manual SetWaveActive
+-- from another addon, etc.
+--
+-- Does nothing if GetWaveActive() == false.
+-- Does nothing if there is no ZEFreeze flag (normal round flow
+-- is unaffected — the flag is cleared by the same hooks as before).
+-- ============================================================
+hook.Add("Think", "zombieescape_unfreeze_watcher", function()
+	if not GAMEMODE:GetWaveActive() then return end
+
+	for _, pl in pairs(player.GetAll()) do
+		if pl.ZEFreeze then
+			pl.ZEFreeze = nil
+			pl:Freeze(false)
+			pl:GodDisable()
 		end
 	end
 end)

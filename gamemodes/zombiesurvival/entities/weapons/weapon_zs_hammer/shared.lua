@@ -27,6 +27,7 @@ SWEP.MeleeSize = 0.875
 SWEP.MaxStock = 5
 
 SWEP.UseMelee1 = true
+SWEP.IsTool = true
 
 SWEP.NoPropThrowing = true
 

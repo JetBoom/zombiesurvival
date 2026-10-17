@@ -6,8 +6,14 @@ function ENT:Initialize()
 	self:SetModel("models/combine_scanner.mdl")
 	self:SetUseType(SIMPLE_USE)
 
+	-- PhysicsInitBox creates a physics object with a custom box.
+	-- The subsequent PhysicsInit(SOLID_VPHYSICS) destroys this box
+	-- and sets the collision from the combine_scanner model, which is noticeably
+	-- larger and offset forward. Because of this, when turning, the corners of the box
+	-- pass through walls and the drone gets "stuck".
+	-- Keep only the box.
 	self:PhysicsInitBox(Vector(-30, -17, -14.15), Vector(18.29, 11.86, 15))
-	self:PhysicsInit(SOLID_VPHYSICS)
+	self:SetSolid(SOLID_VPHYSICS)
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
@@ -187,9 +193,48 @@ function ENT:PhysicsSimulate(phys, frametime)
 		if owner:KeyDown(IN_GRENADE1) then
 			movedir = movedir - Vector(0, 0, 0.5)
 		end
-		local angdiff = math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw)
-		if math.abs(angdiff) > 4 then
-			phys:AddAngleVelocity(Vector(0, 0, math.Clamp(angdiff, -64, 64) * frametime * 100 - phys:GetAngleVelocity().z * 0.95))
+		-- P-controller for turning: desired angular velocity
+		-- is proportional to the deviation, but limited by maxTurnRate.
+		-- SetAngleVelocity (not Add) is set every physics tick,
+		-- so drag doesn't have time to "eat up" the turn, and the speed itself
+		-- is limited → turning is fast, but smooth.
+				local angdiff = math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw)
+		local absdiff = math.abs(angdiff)
+
+		if absdiff > 1 then
+			local maxTurnRate = 540
+			local desiredRate = math.Clamp(angdiff * 20, -maxTurnRate, maxTurnRate)
+
+			-- Stuck detector. We request fast rotation, but the body
+			-- effectively doesn't rotate → the box is blocked by geometry,
+			-- the P-controller is useless. In this case, we snap yaw.
+			local actualRate = phys:GetAngleVelocity().z
+			if math.abs(desiredRate) > 100 and math.abs(actualRate) < 30 and absdiff > 30 then
+				self._StuckTicks = (self._StuckTicks or 0) + 1
+			else
+				self._StuckTicks = 0
+			end
+
+			if self._StuckTicks >= 3 then
+				-- Physics is constrained. Instead of an instant snap — rotation
+				-- by a limited step per tick. 45°/tick ≈ 2700°/sec,
+				-- i.e. 180° in 4 ticks (~70 ms). The eye sees a fast,
+				-- but smooth turn, not a teleport.
+				local step = math.Clamp(angdiff, -45, 45)
+				local newyaw = phys:GetAngles().yaw + step
+
+				phys:SetAngles(Angle(0, newyaw, 0))
+				phys:SetAngleVelocity(vector_origin)
+
+				-- _StuckTicks is NOT reset, so we can continue
+				-- the stepwise turn until the angular deviation
+				-- drops below the threshold.
+			else
+				phys:SetAngleVelocity(Vector(0, 0, desiredRate))
+			end
+		else
+			phys:SetAngleVelocity(vector_origin)
+			self._StuckTicks = 0
 		end
 	end
 
@@ -218,7 +263,9 @@ function ENT:PhysicsSimulate(phys, frametime)
 	end
 
 	phys:EnableGravity(false)
-	phys:SetAngleDragCoefficient(20000)
+	-- 20000 completely canceled out the angular velocity — the drone couldn't turn.
+	-- 500 leaves slight damping, but doesn't interfere with turning.
+	phys:SetAngleDragCoefficient(500)
 	phys:SetVelocityInstantaneous(vel)
 
 	self:SetPhysicsAttacker(owner)
@@ -296,8 +343,11 @@ function ENT:FireTurret(src, dir)
 			self:SetAmmo(curammo - 1)
 
 			owner:LagCompensation(true)
-			self:FireBulletsLua(src, dir, 5, 1, 16.5, owner, nil, "AR2Tracer", self.BulletCallback, nil, nil, self.GunRange, nil, self)
+			local ok, err = pcall(self.FireBulletsLua, self, src, dir, 5, 1, 16.5, owner, nil, "AR2Tracer", self.BulletCallback, nil, nil, self.GunRange, nil, self)
 			owner:LagCompensation(false)
+			if not ok then
+				ErrorNoHalt("[prop_drone] FireBulletsLua error: " .. tostring(err) .. "\n")
+			end
 		else
 			self:SetNextFire(CurTime() + 2)
 			self:EmitSound("npc/turret_floor/die.wav")

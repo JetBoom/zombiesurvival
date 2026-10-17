@@ -3,20 +3,107 @@ local function pointslabelThink(self)
 	if self.m_LastPoints ~= points then
 		self.m_LastPoints = points
 
-		self:SetText("Points to spend: "..points)
+		self:SetText(translate.Format("points_to_spend_x", points))
 		self:SizeToContents()
 	end
 end
 
-hook.Add("Think", "ArsenalMenuThink", function()
-	local pan = GAMEMODE.ArsenalInterface
-	if pan and pan:IsValid() and pan:IsVisible() then
-		local mx, my = gui.MousePos()
-		local x, y = pan:GetPos()
-		if mx < x - 16 or my < y - 16 or mx > x + pan:GetWide() + 16 or my > y + pan:GetTall() + 16 then
-			pan:SetVisible(false)
+-- Robust skill-name translation helper
+function GM:GetSkillDisplayName(skillid)
+    if not skillid then return nil end
+    local skill = self.Skills and self.Skills[skillid]
+    if not skill then return tostring(skillid) end
+
+    -- translate.SkillName first tries the skill_name_<id> key itself,
+    -- and if it doesn't exist — returns skill.Name.
+    return translate.SkillName(skillid, skill)
+end
+
+function GM:GetShopItemDisplayName(tab)
+	if not tab then return "" end
+
+	if tab.SWEP then
+		local wep = weapons.Get(tab.SWEP)
+		if wep then return translate.WeaponName(wep) end
+		local invdata = self.ZSInventoryItemData[tab.SWEP]
+		if invdata and invdata.TranslationID then
+			local translated = translate.ItemName(invdata.TranslationID, invdata.TranslationPrefix)
+			if translated then return translated end
 		end
 	end
+
+	-- "#key" — localization key. If DisplayCount is specified — substitute the number.
+	local n = tab.Name or ""
+	if string.sub(n, 1, 1) == "#" then
+		local key = string.sub(n, 2)
+		if tab.DisplayCount then
+			return translate.Format(key, tab.DisplayCount)
+		end
+		return translate.Get(key)
+	end
+
+	return n
+end
+
+function GM:GetShopItemDisplayDesc(tab)
+	if not tab then return "" end
+	if tab.SWEP then
+		local wep = weapons.Get(tab.SWEP)
+		if wep then return translate.WeaponDesc(wep) end
+		local invdata = self.ZSInventoryItemData[tab.SWEP]
+		if invdata then
+			return translate.ItemDescription(invdata, invdata.TranslationPrefix or "item")
+		end
+	end
+
+	local d = tab.Description or ""
+	if string.sub(d, 1, 1) == "#" then
+		local key = string.sub(d, 2)
+		if tab.DisplayCount then
+			return translate.Format(key, tab.DisplayCount)
+		end
+		return translate.Get(key)
+	end
+	return d
+end
+
+local wasOpen = false
+hook.Add("Think", "ArsenalMenuThink", function()
+	local pan = GAMEMODE.ArsenalInterface
+	local rem = GAMEMODE.RemantlerInterface
+
+	local panValid = pan and pan:IsValid() and pan:IsVisible()
+	local remValid = rem and rem:IsValid() and rem:IsVisible()
+	local isOpen = panValid or remValid
+
+	-- Close the open panel if the cursor has moved far beyond its bounds.
+	local function CheckPanelClose(pnl)
+		if not (pnl and pnl:IsValid() and pnl:IsVisible()) then return end
+
+		local mx, my = gui.MousePos()
+		local x, y = pnl:GetPos()
+		if mx < x - 16 or my < y - 16
+			or mx > x + pnl:GetWide() + 16
+			or my > y + pnl:GetTall() + 16 then
+			pnl:SetVisible(false)
+			return true
+		end
+	end
+
+	if panValid and CheckPanelClose(pan) then isOpen = false end
+	if remValid and CheckPanelClose(rem) then isOpen = false end
+
+	-- When closing the arsenal/remantler, close all open DMenus.
+	if wasOpen and not isOpen then
+		for _, pnl in ipairs(vgui.GetAll()) do
+			if IsValid(pnl) and pnl.ClassName == "DMenu"
+				and not pnl:IsMarkedForDeletion() then
+				pnl:Remove()
+			end
+		end
+	end
+
+	wasOpen = isOpen
 end)
 
 local function ArsenalMenuCenterMouse(self)
@@ -78,9 +165,10 @@ local function ItemPanelThink(self)
 			if stocks ~= self.m_LastStocks then
 				self.m_LastStocks = stocks
 
-				self.StockLabel:SetText(stocks.." remaining")
-				self.StockLabel:SizeToContents()
-				self.StockLabel:AlignRight(10)
+				self.StockLabel:SetText(translate.Format("x_remaining", stocks))
+				-- Size and position are fixed at creation time (see AddShopItem).
+				-- SizeToContents/AlignRight here break the width constraint,
+				-- so they were removed.
 				self.StockLabel:SetTextColor(stocks > 0 and COLOR_GRAY or COLOR_RED)
 				self.StockLabel:InvalidateLayout()
 			end
@@ -124,6 +212,10 @@ function GM:ViewerStatBarUpdate(viewer, display, sweptable)
 		for k, stat in pairs(GAMEMODE.WeaponStatBarVals) do
 			local statval = stat[6] and sweptable[stat[6]][stat[1]] or sweptable[stat[1]]
 			if not done[stat] and statval and statval ~= -1 then
+				if stat[1] == "ClipSize" and not sweptable.RequiredClip then
+					continue
+				end
+
 				statshow = stat
 				done[stat] = true
 
@@ -141,19 +233,21 @@ function GM:ViewerStatBarUpdate(viewer, display, sweptable)
 		if statshow[1] == "Damage" and sweptable.Primary.NumShots and sweptable.Primary.NumShots > 1 then
 			stattext = statnum .. " x " .. sweptable.Primary.NumShots-- .. " (" .. (statnum * sweptable.Primary.NumShots) .. ")"
 		elseif statshow[1] == "WalkSpeed" then
-			stattext = speedtotext[SPEED_NORMAL]
+			-- SpeedToText now stores translation keys, not display strings.
+			local speedkey = speedtotext[SPEED_NORMAL]
 			if speedtotext[sweptable[statshow[1]]] then
-				stattext = speedtotext[sweptable[statshow[1]]]
+				speedkey = speedtotext[sweptable[statshow[1]]]
 			elseif sweptable[statshow[1]] < SPEED_SLOWEST then
-				stattext = speedtotext[-1]
+				speedkey = speedtotext[-1]
 			end
+			stattext = translate.Get(speedkey)
 		elseif statshow[1] == "ClipSize" then
 			stattext = statnum / sweptable.RequiredClip
 		else
 			stattext = statnum
 		end
 
-		viewer.ItemStats[i]:SetText(statshow[2])
+		viewer.ItemStats[i]:SetText(translate.Get(statshow[2]))
 		viewer.ItemStatValues[i]:SetText(stattext)
 
 		if statshow[1] == "Damage" then
@@ -171,25 +265,51 @@ function GM:ViewerStatBarUpdate(viewer, display, sweptable)
 end
 
 function GM:HasPurchaseableAmmo(sweptable)
-	if sweptable.Primary and self.AmmoToPurchaseNames[sweptable.Primary.Ammo] then
+	if sweptable and sweptable.Primary and self.AmmoToPurchaseNames[sweptable.Primary.Ammo] then
 		return true
 	end
 end
 
 function GM:SupplyItemViewerDetail(viewer, sweptable, shoptbl)
-	viewer.m_Title:SetText(sweptable.PrintName)
-	viewer.m_Title:PerformLayout()
+	if not (viewer and viewer:IsValid() and viewer.m_Title) then return end
+	if not shoptbl then return end
 
-	local desctext = sweptable.Description or ""
-	if not self.ZSInventoryItemData[shoptbl.SWEP] then
-		viewer.ModelPanel:SetModel(sweptable.WorldModel)
-		local mins, maxs = viewer.ModelPanel.Entity:GetRenderBounds()
-		viewer.ModelPanel:SetCamPos(mins:Distance(maxs) * Vector(1.15, 0.75, 0.5))
-		viewer.ModelPanel:SetLookAt((mins + maxs) / 2)
+	-- Ammunition and other items without SWEP: they only have Name/Description.
+	if not sweptable then
+		viewer.m_Title:SetText(self:GetShopItemDisplayName(shoptbl))
+
+		viewer.ModelPanel:SetModel("")
+		viewer.m_VBG:SetVisible(false)
+
+		viewer.m_Desc:MoveBelow(viewer.m_Title, 20)
+		viewer.m_Desc:SetFont("ZSBodyTextFontBig")
+		viewer.m_Desc:SetText(self:GetShopItemDisplayDesc(shoptbl))
+
+		self:ViewerStatBarUpdate(viewer, true, {})
+
+		viewer.m_AmmoType:SetText("")
+		viewer.m_AmmoIcon:SetVisible(false)
+		return
+	end
+
+	local is_invitem = self.ZSInventoryItemData[shoptbl.SWEP] ~= nil
+	local title, desctext
+	if is_invitem then
+		title = translate.ItemName(sweptable.TranslationID, sweptable.TranslationPrefix) or sweptable.PrintName
+		desctext = translate.ItemDescription(sweptable, sweptable.TranslationPrefix or "item")
+	else
+		title = translate.WeaponName(sweptable)
+		desctext = translate.WeaponDesc(sweptable) or ""
+	end
+
+	viewer.m_Title:SetText(title)
+
+	if not is_invitem then
+		viewer.ModelPanel:SetSWEPPreview(sweptable, GAMEMODE.ShowWElements ~= false)
 		viewer.m_VBG:SetVisible(true)
 
 		if sweptable.NoDismantle then
-			desctext = desctext .. "\nCannot be dismantled for scrap."
+			desctext = desctext .. "\n" .. translate.Get("cannot_dismantle_scrap")
 		end
 
 		viewer.m_Desc:MoveBelow(viewer.m_VBG, 8)
@@ -208,8 +328,7 @@ function GM:SupplyItemViewerDetail(viewer, sweptable, shoptbl)
 	if self:HasPurchaseableAmmo(sweptable) and self.AmmoNames[string.lower(sweptable.Primary.Ammo)] then
 		local lower = string.lower(sweptable.Primary.Ammo)
 
-		viewer.m_AmmoType:SetText(self.AmmoNames[lower])
-		viewer.m_AmmoType:PerformLayout()
+		viewer.m_AmmoType:SetText(translate.AmmoName(lower, "ps"))
 
 		local ki = killicon.Get(self.AmmoIcons[lower])
 
@@ -245,44 +364,96 @@ local function ItemPanelDoClick(self)
 	local screenscale = BetterScreenScale()
 	local canammo = GAMEMODE:HasPurchaseableAmmo(sweptable)
 
-	local purb = viewer.m_PurchaseB
-	purb.ID = self.ID
-	purb.DoClick = function() RunConsoleCommand("zs_pointsshopbuy", self.ID, self.NoPoints and "scrap") end
-	purb:SetPos(canammo and viewer:GetWide() / 4 - viewer:GetWide() / 8 - 20 or viewer:GetWide() / 4, viewer:GetTall() - 64 * screenscale)
-	purb:SetVisible(true)
+	local padding = 16 * screenscale
+	local gap     = 8 * screenscale
+	local minPurchaseW = 120 * screenscale
+	local minAmmoW     = 70 * screenscale
 
-	local purl = viewer.m_PurchaseLabel
-	purl:SetPos(purb:GetWide() / 2 - purl:GetWide() / 2, purb:GetTall() * 0.35 - purl:GetTall() * 0.5)
-	purl:SetVisible(true)
+	local ammoButton = viewer.m_AmmoB
+	local ammoLabel  = viewer.m_AmmoL
+	local ammoPrice  = viewer.m_AmmoPrice
 
-	local ppurbl = viewer.m_PurchasePrice
-	local price = self.NoPoints and math.ceil(GAMEMODE:PointsToScrap(shoptbl.Worth)) or math.floor(shoptbl.Worth * (MySelf.ArsenalDiscount or 1))
-	ppurbl:SetText(price .. (self.NoPoints and " Scrap" or " Points"))
-	ppurbl:SizeToContents()
-	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
-	ppurbl:SetVisible(true)
-
-	purb = viewer.m_AmmoB
 	if canammo then
-		purb.AmmoType = GAMEMODE.AmmoToPurchaseNames[sweptable.Primary.Ammo]
-		purb.DoClick = function() RunConsoleCommand("zs_pointsshopbuy", "ps_"..purb.AmmoType) end
+		ammoButton.AmmoType = GAMEMODE.AmmoToPurchaseNames[sweptable.Primary.Ammo]
+		ammoButton.DoClick = function() RunConsoleCommand("zs_pointsshopbuy", "ps_"..ammoButton.AmmoType) end
+
+		local ammosig = "ps_" .. ammoButton.AmmoType
+		local ammoitem = GAMEMODE.Items[ammosig]
+		local ammoPriceValue
+		if ammoitem and ammoitem.Price then
+			ammoPriceValue = math.floor(ammoitem.Price * (MySelf.ArsenalDiscount or 1))
+		else
+			ammoPriceValue = math.floor(9 * (MySelf.ArsenalDiscount or 1))
+		end
+		ammoPrice:SetText(translate.Format("price_points_fmt", ammoPriceValue))
+		ammoPrice:SizeToContents()
+		ammoLabel:SizeToContents()
 	end
-	purb:SetPos(viewer:GetWide() * (3/4) - purb:GetWide() / 2, viewer:GetTall() - 64 * screenscale)
-	purb:SetVisible(canammo)
 
-	purl = viewer.m_AmmoL
-	purl:SetPos(purb:GetWide() / 2 - purl:GetWide() / 2, purb:GetTall() * 0.35 - purl:GetTall() * 0.5)
-	purl:SetVisible(canammo)
+	local ammoRight = viewer:GetWide() * 0.875
+	local ammoMaxW  = math.max(minAmmoW, ammoRight - 4 - (minPurchaseW + gap + 8))
+	local ammoContentW = math.max(ammoLabel:GetWide(), math.min(ammoPrice:GetWide(), viewer:GetWide() * 0.4)) + padding * 2
+	local ammoW = math.Clamp(ammoContentW, minAmmoW, ammoMaxW)
+	ammoButton:SetWide(ammoW)
 
-	ppurbl = viewer.m_AmmoPrice
-	price = math.floor(9 * (MySelf.ArsenalDiscount or 1))
-	ppurbl:SetText(price .. " Points")
-	ppurbl:SizeToContents()
-	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
-	ppurbl:SetVisible(canammo)
-end
+	local maxAmmoPriceW = ammoW - padding
+	if ammoPrice:GetWide() > maxAmmoPriceW then
+		ammoPrice:SetSize(maxAmmoPriceW, ammoPrice:GetTall())
+	end
 
-local function ArsenalMenuThink(self)
+	local ammoX = ammoRight - ammoW
+	ammoButton:SetPos(ammoX, viewer:GetTall() - 64 * screenscale)
+	ammoButton:SetVisible(canammo)
+
+	ammoLabel:SetPos(ammoW / 2 - ammoLabel:GetWide() / 2, ammoButton:GetTall() * 0.35 - ammoLabel:GetTall() * 0.5)
+	ammoLabel:SetVisible(canammo)
+
+	ammoPrice:SetPos(ammoW / 2 - ammoPrice:GetWide() / 2, ammoButton:GetTall() * 0.75 - ammoPrice:GetTall() * 0.5)
+	ammoPrice:SetVisible(canammo)
+
+	local purchaseButton = viewer.m_PurchaseB
+	local purchaseLabel  = viewer.m_PurchaseLabel
+	local purchasePrice  = viewer.m_PurchasePrice
+
+	purchaseButton.ID = self.ID
+	purchaseButton.DoClick = function() RunConsoleCommand("zs_pointsshopbuy", self.ID, self.NoPoints and "scrap") end
+	purchaseLabel:SetVisible(true)
+
+	local price = self.NoPoints and math.ceil(GAMEMODE:PointsToScrap(shoptbl.Worth)) or math.floor(shoptbl.Worth * (MySelf.ArsenalDiscount or 1))
+	purchasePrice:SetText(translate.Format(self.NoPoints and "price_scrap_fmt" or "price_points_fmt", price))
+	purchasePrice:SizeToContents()
+	purchaseLabel:SizeToContents()
+
+	local purchaseRight
+	if canammo then
+		purchaseRight = ammoX - gap
+	else
+		purchaseRight = viewer:GetWide() - 4
+	end
+
+	local purchaseAvailableW = math.max(40 * screenscale, purchaseRight - 4)
+	local purchaseContentW = math.max(purchaseLabel:GetWide(), math.min(purchasePrice:GetWide(), viewer:GetWide() * 0.4)) + padding * 2
+	local purchaseW = math.Clamp(purchaseContentW, math.min(minPurchaseW, purchaseAvailableW), purchaseAvailableW)
+	purchaseButton:SetWide(purchaseW)
+
+	local maxPurchasePriceW = purchaseW - padding
+	if purchasePrice:GetWide() > maxPurchasePriceW then
+		purchasePrice:SetSize(maxPurchasePriceW, purchasePrice:GetTall())
+	end
+
+	local purchaseX
+	if canammo then
+		purchaseX = purchaseRight - purchaseW
+	else
+		purchaseX = (viewer:GetWide() - purchaseW) * 0.5
+	end
+
+	purchaseButton:SetPos(purchaseX, viewer:GetTall() - 64 * screenscale)
+	purchaseButton:SetVisible(true)
+
+	purchaseLabel:SetPos(purchaseW / 2 - purchaseLabel:GetWide() / 2, purchaseButton:GetTall() * 0.35 - purchaseLabel:GetTall() * 0.5)
+	purchasePrice:SetPos(purchaseW / 2 - purchasePrice:GetWide() / 2, purchaseButton:GetTall() * 0.75 - purchasePrice:GetTall() * 0.5)
+	purchasePrice:SetVisible(true)
 end
 
 function GM:AttachKillicon(kitbl, itempan, mdlframe, ammo, missing_skill)
@@ -340,6 +511,7 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 	local screenscale = BetterScreenScale()
 
 	local nottrinkets = tab.Category ~= ITEMCAT_TRINKETS
+	local reqskill = tab.SkillRequirement and GAMEMODE.Skills[tab.SkillRequirement]
 	local missing_skill = tab.SkillRequirement and not MySelf:IsSkillActive(tab.SkillRequirement)
 	local wid = 280
 
@@ -354,7 +526,10 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 	itempan.DoClick = ItemPanelDoClick
 	itempan.DoRightClick = function()
 		local menu = DermaMenu(itempan)
-		menu:AddOption("Buy", function() RunConsoleCommand("zs_pointsshopbuy", itempan.ID, itempan.NoPoints and "scrap") end)
+		local opt = menu:AddOption(translate.Get("buy_option"), function()
+			RunConsoleCommand("zs_pointsshopbuy", itempan.ID, itempan.NoPoints and "scrap") end)
+		opt:SetTextColor(color_black)
+		menu:SetBackgroundColor(Color(240, 240, 240, 255))
 		menu:Open()
 	end
 	list:AddItem(itempan)
@@ -370,14 +545,12 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 		if kitbl then
 			self:AttachKillicon(kitbl, itempan, mdlframe, tab.Category == ITEMCAT_AMMO, missing_skill)
 		elseif tab.Model then
-			if tab.Model then
-				local mdlpanel = vgui.Create("DModelPanel", mdlframe)
-				mdlpanel:SetSize(mdlframe:GetSize())
-				mdlpanel:SetModel(tab.Model)
-				local mins, maxs = mdlpanel.Entity:GetRenderBounds()
-				mdlpanel:SetCamPos(mins:Distance(maxs) * Vector(0.75, 0.75, 0.5))
-				mdlpanel:SetLookAt((mins + maxs) / 2)
-			end
+			local mdlpanel = vgui.Create("DModelPanel", mdlframe)
+			mdlpanel:SetSize(mdlframe:GetSize())
+			mdlpanel:SetModel(tab.Model)
+			local mins, maxs = mdlpanel.Entity:GetRenderBounds()
+			mdlpanel:SetCamPos(mins:Distance(maxs) * Vector(0.75, 0.75, 0.5))
+			mdlpanel:SetLookAt((mins + maxs) / 2)
 		end
 	end
 
@@ -386,9 +559,20 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 		counter:SetItemID(i)
 	end
 
-	local name = tab.Name or ""
-	local namelab = EasyLabel(itempan, name, "ZSHUDFontSmaller", COLOR_WHITE)
-	namelab:SetPos(12 * screenscale, itempan:GetTall() * (nottrinkets and 0.8 or 0.7) - namelab:GetTall() * 0.5)
+	local namelab = vgui.Create("DLabelAutoScroll", itempan)
+	namelab:SetFont("ZSHUDFontSmaller")
+	namelab:SetTextColor(COLOR_WHITE)
+	namelab:SetScrollingMode("time")
+	namelab:SetContentAlignment(4)
+	namelab:SetText(self:GetShopItemDisplayName(tab))
+	namelab:SetSize(
+		itempan:GetWide() - 24 * screenscale,
+		draw.GetFontHeight("ZSHUDFontSmaller") + 2
+	)
+	namelab:SetPos(
+		12 * screenscale,
+		itempan:GetTall() * (nottrinkets and 0.8 or 0.7) - namelab:GetTall() * 0.5
+	)
 	if missing_skill then
 		namelab:SetAlpha(30)
 	end
@@ -396,26 +580,57 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 
 	local alignri = (issub and (320 + 32) or (nopointshop and 32 or 20)) * screenscale
 
-	local pricelabel = EasyLabel(itempan, "", "ZSHUDFontTiny")
+	local pricelabel = vgui.Create("DLabelAutoScroll", itempan)
+	pricelabel:SetFont(ZS_TinyFontWithOutline())
+	pricelabel:SetContentAlignment(8) -- right-aligned inside the label
+	pricelabel:SetTextColor(COLOR_WHITE)
+	pricelabel:SetScrollingMode("time")
+
 	if missing_skill then
 		pricelabel:SetTextColor(COLOR_RED)
-		pricelabel:SetText(GAMEMODE.Skills[tab.SkillRequirement].Name)
+		pricelabel:SetText(self:GetSkillDisplayName(tab.SkillRequirement) or translate.Get("missing_skill"))
 	else
 		local points = math.floor(tab.Price * (MySelf.ArsenalDiscount or 1))
 		local price = tostring(points)
 		if nopointshop then
 			price = tostring(math.ceil(self:PointsToScrap(tab.Price)))
 		end
-		pricelabel:SetText(price..(nopointshop and " Scrap" or " Points"))
+		pricelabel:SetText(translate.Format(nopointshop and "price_scrap_fmt" or "price_points_fmt", price))
 	end
+
+	-- Stretch the bar to the left edge of the panel: long skill names
+	-- will be fully visible, without the need for hovering/scrolling.
+	-- Measure with the mixed font (see ZS_MeasureMixedText), otherwise for
+	-- Cyrillic the width comes out huge and the label slides away.
 	pricelabel:SizeToContents()
 	pricelabel:AlignRight(alignri)
 
 	if tab.MaxStock then
-		local stocklabel = EasyLabel(itempan, tab.MaxStock.." remaining", "ZSHUDFontTiny")
-		stocklabel:SizeToContents()
-		stocklabel:AlignRight(alignri)
-		stocklabel:SetPos(itempan:GetWide() - stocklabel:GetWide(), itempan:GetTall() * 0.45 - stocklabel:GetTall() * 0.5)
+		-- DLabelAutoScroll instead of DLabel: if the text is wider than the
+		-- available space, it scrolls inside its own frame but never
+		-- overlaps the weapon icon.
+		local stocklabel = vgui.Create("DLabelAutoScroll", itempan)
+		stocklabel:SetFont("ZSHUDFontTiny")
+		stocklabel:SetTextColor(COLOR_GRAY)
+		stocklabel:SetScrollingMode("time")
+		stocklabel:SetContentAlignment(6)  -- 6 = middle-right inside its own frame
+		stocklabel:SetText(translate.Format("x_remaining", tab.MaxStock))
+
+		-- Left border: right edge of the weapon icon + small gap.
+		-- For trinkets there is no icon — then take the minimum margin from the edge.
+		local iconLeft = nottrinkets
+			and (wid / 4) * screenscale + 4 * screenscale
+			or (4 * screenscale)
+
+		-- Right border: as in the original — panel edge.
+		local stockRight = itempan:GetWide() - 7 * screenscale
+
+		local stockW = math.max(40 * screenscale, stockRight - iconLeft)
+		local stockH = draw.GetFontHeight("ZSHUDFontTiny") + 2
+
+		stocklabel:SetSize(stockW, stockH)
+		stocklabel:SetPos(stockRight - stockW, itempan:GetTall() * 0.45 - stockH * 0.5)
+
 		itempan.StockLabel = stocklabel
 	end
 	pricelabel:SetPos(
@@ -428,9 +643,19 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 	end
 
 	if not nottrinkets and tab.SubCategory then
-		local catlabel = EasyLabel(itempan, GAMEMODE.ItemSubCategories[tab.SubCategory], "ZSBodyTextFont")
-		catlabel:SizeToContents()
-		catlabel:SetPos(10, itempan:GetTall() * 0.3 - catlabel:GetTall() * 0.5)
+		local catlabel = vgui.Create("DLabelAutoScroll", itempan)
+		catlabel:SetFont(ZS_BodyTextFont())
+		catlabel:SetTextColor(COLOR_WHITE)
+		catlabel:SetScrollingMode("time")
+		catlabel:SetContentAlignment(4)
+		catlabel:SetText(translate.Get(GAMEMODE.ItemSubCategories[tab.SubCategory]))
+
+		local catX = 10
+		local catRightLimit = pricelabel:GetX() - 6 * screenscale
+		local catW = math.max(20, catRightLimit - catX)
+
+		catlabel:SetSize(catW, draw.GetFontHeight("ZSBodyTextFont") + 2)
+		catlabel:SetPos(catX, itempan:GetTall() * 0.3 - catlabel:GetTall() * 0.5)
 	end
 
 	return itempan
@@ -440,7 +665,7 @@ function GM:ConfigureMenuTabs(tabs, tabhei, callback)
 	local screenscale = BetterScreenScale()
 
 	for _, tab in pairs(tabs) do
-		tab:SetFont(screenscale > 0.85 and "ZSHUDFontTiny" or "DefaultFontAA")
+		tab:SetFont(screenscale > 0.85 and ZS_TinyFont() or "DefaultFontAA")
 		tab.GetTabHeight = function()
 			return tabhei
 		end
@@ -489,88 +714,120 @@ function PANEL:Paint(w, h)
 end
 vgui.Register("ZSItemStatBar", PANEL, "Panel")
 
-function GM:CreateItemViewerGenericElems(viewer)
-	local screenscale = BetterScreenScale()
+function GM:CreateItemViewerGenericElems(viewer, scrollMode)
+    local screenscale = BetterScreenScale()
+    scrollMode = scrollMode or "time"
 
-	local vtitle = EasyLabel(viewer, "", "ZSHUDFontSmaller", COLOR_GRAY)
-	vtitle:SetContentAlignment(8)
-	vtitle:SetSize(viewer:GetWide(), 24 * screenscale)
-	viewer.m_Title = vtitle
+    local vtitle = EasyLabel(viewer, "", "ZSHUDFontSmaller", COLOR_GRAY)
+    vtitle:SetContentAlignment(8)
+    vtitle:SetSize(viewer:GetWide(), draw.GetFontHeight("ZSHUDFontSmaller") + 8 * screenscale)
+    viewer.m_Title = vtitle
 
-	local vammot = EasyLabel(viewer, "", "ZSBodyTextFontBig", COLOR_GRAY)
-	vammot:SetContentAlignment(8)
-	vammot:SetSize(viewer:GetWide(), 16 * screenscale)
-	vammot:MoveBelow(vtitle, 20)
-	vammot:CenterHorizontal(0.35)
-	viewer.m_AmmoType = vammot
+    local vammot = EasyLabel(viewer, "", "ZSBodyTextFontBig", COLOR_GRAY)
+    vammot:SetContentAlignment(8)
+    vammot:SetSize(viewer:GetWide(), draw.GetFontHeight("ZSBodyTextFontBig") + 4 * screenscale)
+    vammot:MoveBelow(vtitle, 20)
+    vammot:CenterHorizontal(0.35)
+    viewer.m_AmmoType = vammot
 
-	local vammoi = vgui.Create("DImage", viewer)
-	vammoi:SetSize(40, 40)
-	vammoi:MoveBelow(vtitle, 8)
-	vammoi:CenterHorizontal(0.7)
-	viewer.m_AmmoIcon = vammoi
+    local vammoi = vgui.Create("DImage", viewer)
+    vammoi:SetSize(40, 40)
+    vammoi:MoveBelow(vtitle, 8)
+    vammoi:CenterHorizontal(0.7)
+    viewer.m_AmmoIcon = vammoi
 
-	local vbg = vgui.Create("DPanel", viewer)
-	vbg:SetSize(200 * screenscale, 100 * screenscale)
-	vbg:CenterHorizontal()
-	vbg:MoveBelow(vammot, 24)
-	vbg:SetBackgroundColor(Color(0, 0, 0, 255))
-	vbg:SetVisible(false)
-	viewer.m_VBG = vbg
+    local vbg = vgui.Create("DPanel", viewer)
+    vbg:SetSize(200 * screenscale, 100 * screenscale)
+    vbg:CenterHorizontal()
+    vbg:MoveBelow(vammot, 24)
+    vbg:SetBackgroundColor(Color(0, 0, 0, 255))
+    vbg:SetVisible(false)
+    viewer.m_VBG = vbg
 
-	local modelpanel = vgui.Create("DModelPanelEx", vbg)
-	modelpanel:SetModel("")
-	modelpanel:AutoCam()
-	modelpanel:Dock(FILL)
-	modelpanel:SetDirectionalLight(BOX_TOP, Color(100, 255, 100))
-	modelpanel:SetDirectionalLight(BOX_FRONT, Color(255, 100, 100))
-	viewer.ModelPanel = modelpanel
+    local modelpanel = vgui.Create("DModelPanelEx", vbg)
+    modelpanel:SetModel("")
+    modelpanel:AutoCam()
+    modelpanel:Dock(FILL)
+    modelpanel:SetDirectionalLight(BOX_TOP, Color(100, 255, 100))
+    modelpanel:SetDirectionalLight(BOX_FRONT, Color(255, 100, 100))
+    viewer.ModelPanel = modelpanel
 
-	local itemdesc = vgui.Create("DLabel", viewer)
-	itemdesc:SetFont("ZSBodyTextFont")
-	itemdesc:SetTextColor(COLOR_GRAY)
-	itemdesc:SetMultiline(true)
-	itemdesc:SetWrap(true)
-	itemdesc:SetAutoStretchVertical(true)
-	itemdesc:SetWide(viewer:GetWide() - 16)
-	itemdesc:CenterHorizontal()
-	itemdesc:SetText("")
-	itemdesc:MoveBelow(vbg, 8)
-	viewer.m_Desc = itemdesc
+    local itemdesc = vgui.Create("DLabel", viewer)
+    itemdesc:SetFont("ZSBodyTextFont")
+    itemdesc:SetTextColor(COLOR_GRAY)
+    itemdesc:SetMultiline(true)
+    itemdesc:SetWrap(true)
+    itemdesc:SetAutoStretchVertical(true)
+    itemdesc:SetWide(viewer:GetWide() - 16)
+    itemdesc:CenterHorizontal()
+    itemdesc:SetText("")
+    itemdesc:MoveBelow(vbg, 8)
+    viewer.m_Desc = itemdesc
 
-	local itemstats, itemsbs, itemsvs = {}, {}, {}
-	for i = 1, 6 do
-		local itemstat = vgui.Create("DLabel", viewer)
-		itemstat:SetFont("ZSBodyTextFont")
-		itemstat:SetTextColor(COLOR_GRAY)
-		itemstat:SetWide(viewer:GetWide() * 0.35)
-		itemstat:SetText("")
-		itemstat:CenterHorizontal(0.2)
-		itemstat:SetContentAlignment(8)
-		itemstat:MoveBelow(i == 1 and vbg or itemstats[i-1], (i == 1 and 100 or 8) * screenscale)
-		table.insert(itemstats, itemstat)
+    -- Bar geometry (fractions of the viewer width) — same values as
+    -- below in SetWide/CenterHorizontal for itemsb.
+    local BAR_CENTER = 0.55
+    local BAR_WIDTH  = 0.35
+    local BAR_LEFT   = BAR_CENTER - BAR_WIDTH * 0.5   -- 0.375
+    local BAR_RIGHT  = BAR_CENTER + BAR_WIDTH * 0.5   -- 0.725
 
-		local itemsb = vgui.Create("ZSItemStatBar", viewer)
-		itemsb:SetWide(viewer:GetWide() * 0.35)
-		itemsb:SetTall(8 * screenscale)
-		itemsb:CenterHorizontal(0.55)
-		itemsb:SetVisible(false)
-		itemsb:MoveBelow(i == 1 and vbg or itemstats[i-1], ((i == 1 and 100 or 8) + 6) * screenscale)
-		table.insert(itemsbs, itemsb)
+    local edgeMargin  = 0 * screenscale   -- from the viewer edge
+    local innerMargin = 3 * screenscale   -- between text and the bar
 
-		local itemsv = vgui.Create("DLabel", viewer)
-		itemsv:SetFont("ZSBodyTextFont")
-		itemsv:SetTextColor(COLOR_GRAY)
-		itemsv:SetWide(viewer:GetWide() * 0.3)
-		itemsv:SetText("")
-		itemsv:CenterHorizontal(0.85)
-		itemsv:SetContentAlignment(8)
-		itemsv:MoveBelow(i == 1 and vbg or itemstats[i-1], (i == 1 and 100 or 8) * screenscale)
-		table.insert(itemsvs, itemsv)
-	end
-	viewer.ItemStats = itemstats
-	viewer.ItemStatValues = itemsvs
-	viewer.ItemStatBars = itemsbs
+    -- Left column (stat names): from the left edge to the left edge of the bar.
+    local statW = math.max(40, viewer:GetWide() * BAR_LEFT
+                               - edgeMargin - innerMargin)
+    local statX = edgeMargin
+
+    -- Right column (values): from the right edge of the bar to the right edge of the viewer.
+    local valW = math.max(40, viewer:GetWide() * (1 - BAR_RIGHT)
+                              - edgeMargin - innerMargin)
+    local valX = viewer:GetWide() * BAR_RIGHT + innerMargin
+
+    local rowH = draw.GetFontHeight("ZSBodyTextFont") + 2
+
+    local itemstats, itemsbs, itemsvs = {}, {}, {}
+    for i = 1, 6 do
+        -- Stat name: fills all the room to the left of the bar.
+        -- For long text it scrolls inside this area
+        -- (SetScissorRect in DLabelAutoScroll clips to its bounds).
+        local itemstat = vgui.Create("DLabelAutoScroll", viewer)
+        itemstat:SetFont("ZSBodyTextFont")
+        itemstat:SetTextColor(COLOR_GRAY)
+        itemstat:SetScrollingMode(scrollMode)
+        itemstat:SetIgnoreRootBounds(true)
+        itemstat:SetText("")
+        itemstat:SetContentAlignment(8)
+        itemstat:SetSize(statW, rowH)
+        itemstat:SetX(statX)
+        itemstat:MoveBelow(i == 1 and vbg or itemstats[i-1], (i == 1 and 100 or 8) * screenscale)
+        table.insert(itemstats, itemstat)
+
+        -- Bar — unchanged.
+        local itemsb = vgui.Create("ZSItemStatBar", viewer)
+        itemsb:SetWide(viewer:GetWide() * BAR_WIDTH)
+        itemsb:SetTall(8 * screenscale)
+        itemsb:CenterHorizontal(BAR_CENTER)
+        itemsb:SetVisible(false)
+        itemsb:MoveBelow(i == 1 and vbg or itemstats[i-1], ((i == 1 and 100 or 8) + 6) * screenscale)
+        table.insert(itemsbs, itemsb)
+
+        -- Value: fills all the room to the right of the bar.
+        local itemsv = vgui.Create("DLabelAutoScroll", viewer)
+        itemsv:SetFont("ZSBodyTextFont")
+        itemsv:SetTextColor(COLOR_GRAY)
+        itemsv:SetScrollingMode(scrollMode)
+        itemsv:SetIgnoreRootBounds(true)
+        itemsv:SetSize(valW, rowH)               -- ← вместо SetWide(...*0.3)
+        itemsv:SetText("")
+        itemsv:SetContentAlignment(8)
+        itemsv:SetX(valX)                        -- ← вместо CenterHorizontal(0.85)
+        itemsv:MoveBelow(i == 1 and vbg or itemstats[i-1], (i == 1 and 100 or 8) * screenscale)
+        table.insert(itemsvs, itemsv)
+    end
+    viewer.ItemStats = itemstats
+    viewer.ItemStatValues = itemsvs
+    viewer.ItemStatBars = itemsbs
 end
 
 MENU_POINTSHOP = 1
@@ -602,7 +859,8 @@ function GM:CreateItemInfoViewer(frame, propertysheet, topspace, bottomspace, me
 	end
 	frame.Viewer = viewer
 
-	self:CreateItemViewerGenericElems(viewer)
+	local scrollMode = (menutype == MENU_WORTH) and "cursor" or "time"
+	self:CreateItemViewerGenericElems(viewer, scrollMode)
 
 	local purchaseb = vgui.Create("DButton", viewer)
 	purchaseb:SetText("")
@@ -610,12 +868,17 @@ function GM:CreateItemInfoViewer(frame, propertysheet, topspace, bottomspace, me
 	purchaseb:SetVisible(false)
 	viewer.m_PurchaseB = purchaseb
 
-	local namelab = EasyLabel(purchaseb, "Purchase", "ZSBodyTextFontBig", COLOR_WHITE)
+	local namelab = EasyLabel(purchaseb, translate.Get("purchase_button"), "ZSBodyTextFontBig", COLOR_WHITE)
 	namelab:SetVisible(false)
+	namelab:SetMouseInputEnabled(false)
 	viewer.m_PurchaseLabel = namelab
 
-	local pricelab = EasyLabel(purchaseb, "", "ZSBodyTextFont", COLOR_WHITE)
+	local pricelab = vgui.Create("DLabelAutoScroll", purchaseb)
+	pricelab:SetFont("ZSBodyTextFont")
+	pricelab:SetTextColor(COLOR_WHITE)
+	pricelab:SetContentAlignment(5)
 	pricelab:SetVisible(false)
+	pricelab:SetMouseInputEnabled(false)
 	viewer.m_PurchasePrice = pricelab
 
 	local ammopb = vgui.Create("DButton", viewer)
@@ -624,12 +887,18 @@ function GM:CreateItemInfoViewer(frame, propertysheet, topspace, bottomspace, me
 	ammopb:SetVisible(false)
 	viewer.m_AmmoB = ammopb
 
-	namelab = EasyLabel(ammopb, "Ammo", "ZSBodyTextFontBig", COLOR_WHITE)
+	namelab = EasyLabel(ammopb, translate.Get("ammo_button"), "ZSBodyTextFontBig", COLOR_WHITE)
 	namelab:SetVisible(false)
+	namelab:SetMouseInputEnabled(false)
 	viewer.m_AmmoL = namelab
 
-	pricelab = EasyLabel(ammopb, "", "ZSBodyTextFont", COLOR_WHITE)
+	pricelab = vgui.Create("DLabelAutoScroll", ammopb)
+	pricelab:SetFont("ZSBodyTextFont")
+	pricelab:SetTextColor(COLOR_WHITE)
+	pricelab:SetContentAlignment(5)
 	pricelab:SetVisible(false)
+	pricelab:SetMouseInputEnabled(false)
+	
 	viewer.m_AmmoPrice = pricelab
 end
 
@@ -642,7 +911,7 @@ function GM:OpenArsenalMenu()
 
 	local screenscale = BetterScreenScale()
 	local wid, hei = math.min(ScrW(), 900) * screenscale, math.min(ScrH(), 800) * screenscale
-	local tabhei = 24 * screenscale
+    local tabhei = ZS_GetTabHeight and ZS_GetTabHeight(screenscale, 24 * screenscale) or 24 * screenscale
 
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(wid, hei)
@@ -654,15 +923,14 @@ function GM:OpenArsenalMenu()
 	if frame.btnMinim and frame.btnMinim:IsValid() then frame.btnMinim:SetVisible(false) end
 	if frame.btnMaxim and frame.btnMaxim:IsValid() then frame.btnMaxim:SetVisible(false) end
 	frame.CenterMouse = ArsenalMenuCenterMouse
-	frame.Think = ArsenalMenuThink
 	self.ArsenalInterface = frame
 
 	local topspace = vgui.Create("DPanel", frame)
 	topspace:SetWide(wid - 16)
 
-	local title = EasyLabel(topspace, "The Points Shop", "ZSHUDFontSmall", COLOR_WHITE)
+	local title = EasyLabel(topspace, translate.Get("points_shop_title"), "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
-	local subtitle = EasyLabel(topspace, "For all of your zombie apocalypse needs!", "ZSHUDFontTiny", COLOR_WHITE)
+	local subtitle = EasyLabel(topspace, translate.Get("points_shop_subtitle"), "ZSHUDFontTiny", COLOR_WHITE)
 	subtitle:CenterHorizontal()
 	subtitle:MoveBelow(title, 4)
 
@@ -671,7 +939,7 @@ function GM:OpenArsenalMenu()
 	topspace:AlignTop(8)
 	topspace:CenterHorizontal()
 
-	local wsb = EasyButton(topspace, "Worth Menu", 8, 4)
+	local wsb = EasyButton(topspace, translate.Get("worth_menu_button"), 8, 4)
 	wsb:SetFont("ZSHUDFontSmaller")
 	wsb:SizeToContents()
 	wsb:AlignRight(8)
@@ -681,7 +949,7 @@ function GM:OpenArsenalMenu()
 	local bottomspace = vgui.Create("DPanel", frame)
 	bottomspace:SetWide(topspace:GetWide())
 
-	local pointslabel = EasyLabel(bottomspace, "Points to spend: 0", "ZSHUDFontTiny", COLOR_GREEN)
+	local pointslabel = EasyLabel(bottomspace, translate.Format("points_to_spend_x", 0), "ZSHUDFontTiny", COLOR_GREEN)
 	pointslabel:AlignTop(4)
 	pointslabel:AlignLeft(8)
 	pointslabel.Think = pointslabelThink
@@ -741,18 +1009,19 @@ function GM:OpenArsenalMenu()
 
 			local subcats = GAMEMODE.ItemSubCategories
 			if usecats then
-				local ind, tbn = 1
-				for i = ind, (trinkets and #subcats or 5) do
-					local ispacer = trinkets and ((i-1) % 3)+1 or i
+				local ind = 1
+				local numCats = trinkets and #subcats or 5
+				local perRow = trinkets and 3 or 5
+
+				-- Pass 1: build all buttons / grids, remember them. Layout
+				-- is done afterwards so we can use each button's measured
+				-- width (translations differ a lot in length).
+				for i = ind, numCats do
 					local start = i == (catid == ITEMCAT_GUNS and 2 or ind)
 
-					tbn = EasyButton(tabpane, trinkets and subcats[i] or ("Tier " .. i), 2, 8)
-					tbn:SetFont(trinkets and "ZSHUDFontSmallest" or "ZSHUDFontSmall")
+					local tbn = EasyButton(tabpane, trinkets and translate.Get(subcats[i]) or translate.Format("tier_x", i), 2, 8)
+					tbn:SetFont(trinkets and ZS_SmallestFont() or ZS_SmallFont())
 					tbn:SetAlpha(start and 255 or 70)
-					tbn:AlignRight((trinkets and -35 or -15) * screenscale -
-						(ispacer - ind) * (ind == 1 and (trinkets and 190 or 110) or 145) * screenscale
-					)
-					tbn:AlignTop(trinkets and i <= 3 and 0 or trinkets and 28 or 16)
 					tbn:SetContentAlignment(5)
 					tbn:SizeToContents()
 					tbn.DoClick = function(me)
@@ -766,11 +1035,109 @@ function GM:OpenArsenalMenu()
 					tabpane.Grids[i]:SetVisible(start)
 					tabpane.Buttons[i] = tbn
 				end
+
+				-- Pass 2 postponed: DPropertySheet sets the sizes of its
+				-- panels only on its next layout, so
+				-- tabpane:GetWide() here == 0. Arrange the buttons
+				-- through PerformLayout, when the width is already real.
+				local catStep     = (trinkets and 190 or 110) * screenscale
+				local catLeftPad  = 15 * screenscale
+				local catRightPad = 15 * screenscale
+				local catGap      = 8 * screenscale
+
+				local baseFonts = trinkets
+					and {ZS_SmallestFont(), ZS_TinyFont()}
+					or  {ZS_SmallFont(), ZS_SmallerFont(), ZS_SmallestFont(), ZS_TinyFont()}
+
+				local capturedInd     = ind
+				local capturedNumCats = numCats
+				local capturedPerRow  = perRow
+
+				local origLayout = tabpane.PerformLayout
+				tabpane.PerformLayout = function(me)
+					if origLayout then origLayout(me) end
+					if me._DoingCatsLayout then return end
+					me._DoingCatsLayout = true
+
+					local panelW = me:GetWide()
+					if panelW > 0 then
+						local rows = math.ceil(capturedNumCats / capturedPerRow)
+
+						for rowIdx = 1, rows do
+							local first = capturedInd + (rowIdx - 1) * capturedPerRow
+							local last  = math.min(first + capturedPerRow - 1, capturedNumCats)
+							local ids = {}
+							for i = first, last do
+								if me.Buttons[i] then ids[#ids + 1] = i end
+							end
+
+							if #ids > 0 then
+								local yPos = trinkets and ((rowIdx - 1) * 28) or 16
+
+								-- Original layout fits if all buttons except
+								-- the last are not wider than catStep (otherwise
+								-- they overlap the neighbor) and the leftmost one
+								-- doesn't go past catLeftPad.
+								local function OrigFits()
+									for k = 1, #ids - 1 do
+										if me.Buttons[ids[k]]:GetWide() > catStep then return false end
+									end
+									local leftX = panelW - catRightPad - (#ids - 1) * catStep - me.Buttons[ids[1]]:GetWide()
+									return leftX >= catLeftPad
+								end
+
+								local function TightFits()
+									local totalW = 0
+									for _, i in ipairs(ids) do totalW = totalW + me.Buttons[i]:GetWide() end
+									totalW = totalW + (#ids - 1) * catGap
+									return totalW <= panelW - catLeftPad - catRightPad
+								end
+
+								local mode = nil
+								for _, f in ipairs(baseFonts) do
+									for _, i in ipairs(ids) do
+										if me.Buttons[i]._LastCatFont ~= f then
+											me.Buttons[i]:SetFont(f)
+											me.Buttons[i]:SizeToContents()
+											me.Buttons[i]._LastCatFont = f
+										end
+									end
+									if OrigFits() then mode = "orig" break end
+									if TightFits() then mode = "tight" break end
+								end
+								if not mode then mode = "tight" end
+
+								if mode == "orig" then
+									-- 1:1 with the original. For English we always
+									-- land here.
+									local rightEdge = panelW - catRightPad
+									for idx = #ids, 1, -1 do
+										local i = ids[idx]
+										local w = me.Buttons[i]:GetWide()
+										me.Buttons[i]:SetPos(math.max(catLeftPad, rightEdge - w), yPos)
+										rightEdge = rightEdge - catStep
+									end
+								else
+									-- Tight layout: real widths + gap, no overlaps.
+									local rightEdge = panelW - catRightPad
+									for idx = #ids, 1, -1 do
+										local i = ids[idx]
+										local w = me.Buttons[i]:GetWide()
+										me.Buttons[i]:SetPos(rightEdge - w, yPos)
+										rightEdge = rightEdge - w - catGap
+									end
+								end
+							end
+						end
+					end
+
+					me._DoingCatsLayout = nil
+				end
 			else
 				tabpane.Grid = mkgrid()
 			end
 
-			local sheet = propertysheet:AddSheet(catname, tabpane, GAMEMODE.ItemCategoryIcons[catid], false, false)
+			local sheet = propertysheet:AddSheet(translate.Get(catname), tabpane, GAMEMODE.ItemCategoryIcons[catid], false, false)
 			sheet.Panel:SetPos(0, tabhei + 2)
 
 			for i, tab in ipairs(GAMEMODE.Items) do

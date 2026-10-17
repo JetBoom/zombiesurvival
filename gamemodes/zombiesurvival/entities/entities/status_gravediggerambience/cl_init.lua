@@ -18,6 +18,8 @@ function ENT:Think()
 	if owner:IsValid() then
 		self.AmbientSound:PlayEx(0.6, 50 + math.Rand(-15, 15) + math.sin(RealTime() * 4) * 10)
 	end
+	self:NextThink(CurTime() + 0.1)
+	return true
 end
 
 function ENT:Draw()

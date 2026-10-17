@@ -53,19 +53,20 @@ function ENT:Think()
 			end
 		else
 			self:Remove()
+			return
 		end
-	end
-
-	if self.Exploded and not self.ColChange then
-		self.ColChange = true
-		self:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	end
 
 	if self.DieTime < CurTime() then
 		self:Remove()
+		return
 	end
 
-	self:NextThink(CurTime())
+	-- PhysicsCollide calls NextThink(CurTime()) on its own, so we won't
+    -- miss the moment of collision. There's no point in running it
+    -- 60 times per second between ticks—20 is enough (which more than covers NextDamage)
+	-- = 0.35 с).
+	self:NextThink(CurTime() + 0.05)
 	return true
 end
 
@@ -87,10 +88,14 @@ function ENT:Hit(vHitPos, vHitNormal, vel, hitent)
 
 		self:GetPhysicsObject():SetVelocityInstantaneous(vector_origin)
 		self:SetParent(hitent)
+
+		-- Previously this was in Think (the ColChange flag);
+		-- a one-time group change — this is exactly where it belongs.
+		self:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	end
 end
 
 function ENT:PhysicsCollide(data, phys)
-	self.PhysicsData = data
+	self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	self:NextThink(CurTime())
 end

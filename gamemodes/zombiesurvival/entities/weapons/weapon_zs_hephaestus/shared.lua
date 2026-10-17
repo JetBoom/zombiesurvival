@@ -20,6 +20,7 @@ SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "pulse"
 SWEP.Primary.DefaultClip = 30
+SWEP.NoMagazine = true
 
 SWEP.ConeMax = 3
 SWEP.ConeMin = 1.5
@@ -31,7 +32,7 @@ SWEP.ChargeDelay = 0.12
 SWEP.Tier = 5
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.01)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Prometheus' Tau Cannon", "Bounces at low angles, three weaker shots, charges faster, increased fire delay", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Prometheus' Tau Cannon", "Bounces at low angles, three weaker shots, charges faster, increased fire delay", function(wept)
 	wept.Primary.Delay = wept.Primary.Delay * 1.4
 	wept.Primary.Damage = wept.Primary.Damage * 1.2/3
 	wept.Primary.NumShots = 3
@@ -54,6 +55,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Prometheus' Tau Cannon", "Bounces at lo
 		return {impact = false}
 	end
 end)
+branch.TranslationID = "hephaestus_branch_1"
 
 SWEP.WalkSpeed = SPEED_SLOW
 SWEP.FireAnimSpeed = 1

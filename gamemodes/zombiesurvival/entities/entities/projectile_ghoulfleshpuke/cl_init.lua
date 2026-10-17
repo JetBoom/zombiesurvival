@@ -30,5 +30,5 @@ function ENT:Draw()
 	particle:SetLighting(true)
 	particle:SetColor(190, 125, 255)
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

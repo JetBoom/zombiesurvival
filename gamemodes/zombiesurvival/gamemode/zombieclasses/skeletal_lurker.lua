@@ -30,6 +30,10 @@ CLASS.IsTorso = true
 CLASS.Skeletal = true
 CLASS.SkeletalRes = true
 
+CLASS.CorpseUseBaseModel = true
+CLASS.CorpseHideMainModel = true
+CLASS.CorpsePlainOverrideModel = true
+
 local math_random = math.random
 local ACT_IDLE = ACT_IDLE
 local ACT_WALK = ACT_WALK
@@ -87,24 +91,13 @@ end
 
 if SERVER then
 function CLASS:ProcessDamage(pl, dmginfo)
-	if bit_band(dmginfo:GetDamageType(), DMG_BULLET) ~= 0 then
-		dmginfo:SetDamage(dmginfo:GetDamage() * 0.36)
-	elseif bit_band(dmginfo:GetDamageType(), DMG_SLASH) == 0 and bit_band(dmginfo:GetDamageType(), DMG_CLUB) == 0 then
-		dmginfo:SetDamage(dmginfo:GetDamage() * 0.45)
-	end
+    if bit_band(dmginfo:GetDamageType(), DMG_BULLET) ~= 0 then
+        dmginfo:SetDamage(dmginfo:GetDamage() * 0.36)
+    elseif bit_band(dmginfo:GetDamageType(), DMG_SLASH) == 0 and bit_band(dmginfo:GetDamageType(), DMG_CLUB) == 0 then
+        dmginfo:SetDamage(dmginfo:GetDamage() * 0.45)
+    end
 end
 
-function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo, assister)
-	local fakedeath = pl:FakeDeath(462, 1, 1, 1)
-	if fakedeath and fakedeath:IsValid() then
-		fakedeath:SetModel(self.OverrideModel)
-		fakedeath:SetPos(fakedeath:GetPos() - fakedeath:GetDeathAngles():Up() * 46)
-
-		self:ManipulateOverrideModel(pl, fakedeath)
-	end
-
-	return true
-end
 end
 
 if not CLIENT then return end

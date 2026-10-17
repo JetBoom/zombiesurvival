@@ -33,4 +33,4 @@ function PANEL:RemoveChangedFunction()
 	self.OnChanged = empty
 end
 
-vgui.Register("DEXChangingLabel", PANEL, "DEXChangingLabel")
+vgui.Register("DEXChangingLabel", PANEL, "DLabel")

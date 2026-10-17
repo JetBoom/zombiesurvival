@@ -50,12 +50,13 @@ SWEP.Tier = 2
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.5, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.05, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_FIRE_DELAY, -0.1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Annabelle' Birdshot Rifle", "Fires a spread of less accurate shots that deal more total damage", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Annabelle' Birdshot Rifle", "Fires a spread of less accurate shots that deal more total damage", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage / 5
 	wept.Primary.NumShots = 6
 	wept.ConeMin = wept.ConeMin * 8
 	wept.ConeMax = wept.ConeMax * 2
 end)
+branch.TranslationID = "annabelle_branch_1"
 
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 75, math.random(95, 103), 0.8)

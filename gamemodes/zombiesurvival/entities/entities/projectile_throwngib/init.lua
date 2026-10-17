@@ -43,8 +43,8 @@ end
 
 function ENT:PhysicsCollide(data, phys)
 	if not self:HitFence(data, phys) then
-		self.PhysicsData = data
+		self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	end
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + 0.1)
 end

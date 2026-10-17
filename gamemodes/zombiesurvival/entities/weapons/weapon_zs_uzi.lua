@@ -52,7 +52,7 @@ SWEP.IronSightsAng = Vector(3, -3, -10)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.58, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.27, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 3, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Disperser' Uzi", "Decreases the clip size but increases the fire rate, and the last few shots bounce", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Disperser' Uzi", "Decreases the clip size but increases the fire rate, and the last few shots bounce", function(wept)
 	wept.Primary.ClipSize = math.floor(wept.Primary.ClipSize * 0.53)
 	wept.Primary.Delay = 0.06
 
@@ -70,3 +70,4 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Disperser' Uzi", "Decreases the clip si
 		end
 	end
 end)
+branch.TranslationID = "uzi_branch_1"

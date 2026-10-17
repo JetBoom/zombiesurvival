@@ -22,8 +22,15 @@ end
 
 function ENT:OnDamaged(damage, attacker, inflictor, dmginfo)
 	if CurTime() >= self.m_NextStrainSound then
-		self.m_NextStrainSound = CurTime() + math.min(damage * 0.025, 1)
-		self:EmitSound("physics/metal/metal_box_impact_hard"..math.random(3)..".wav", math.Clamp(damage * 2.5, 60, 80), math.min(255, 150 + (1 - (self:GetNailHealth() / self:GetMaxNailHealth())) * 100))
+		-- The trigger threshold is higher for small amounts of damage: 20 simultaneous bots
+		-- dealing 10 damage units should not produce 20 sounds per second from a single leg.
+		local cooldown = math.Clamp(damage * 0.05, 0.15, 1)
+		self.m_NextStrainSound = CurTime() + cooldown
+		self:EmitSound(
+			"physics/metal/metal_box_impact_hard"..math.random(3)..".wav",
+			math.Clamp(damage * 2.5, 60, 80),
+			math.min(255, 150 + (1 - (self:GetNailHealth() / self:GetMaxNailHealth())) * 100)
+		)
 	end
 end
 
@@ -33,6 +40,9 @@ function ENT:AttachTo(baseent, attachent, physbone, physbone2)
 
 	if not baseent.Nails then baseent.Nails = {} end
 	if not attachent.Nails then attachent.Nails = {} end
+
+	baseent._IsNailedCache = nil
+	attachent._IsNailedCache = nil
 
 	table.insert(baseent.Nails, self)
 	table.insert(attachent.Nails, self)

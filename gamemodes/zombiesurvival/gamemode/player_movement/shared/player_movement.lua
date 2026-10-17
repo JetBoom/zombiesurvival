@@ -30,7 +30,7 @@ local M_GetSideSpeed = M_CMoveData.GetSideSpeed
 function GM:SetupMove(pl, move, cmd)
 end
 
-local fw, sd, pt, vel, mul, phase
+local fw, sd, pt, vel, mul, phase, legdmg
 function GM:Move(pl, move)
 	pt = E_GetTable(pl)
 

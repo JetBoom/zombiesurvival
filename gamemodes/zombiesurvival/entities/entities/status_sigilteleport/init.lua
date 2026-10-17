@@ -1,13 +1,15 @@
 INC_SERVER()
 
+function ENT:Initialize()
+	hook.Add("EntityTakeDamage", self, self.EntityTakeDamage)
+end
+
 function ENT:PlayerSet(pPlayer, bExists)
 	pPlayer:SendLua("MySelf:EmitSound(\"buttons/button1.wav\", 50, 35, 0.5)")
 
 	if self:GetStartTime() == 0 then
 		self:SetStartTime(CurTime())
 	end
-
-	hook.Add("EntityTakeDamage", self, self.EntityTakeDamage)
 end
 
 function ENT:Think()

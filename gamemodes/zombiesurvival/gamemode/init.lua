@@ -10,12 +10,18 @@ This was my first ever gamemode. A lot of stuff is from years ago and some stuff
 
 ]]
 
+AddCSLuaFile("addon_compatibility/sh_tfa_compat.lua")
+AddCSLuaFile("addon_compatibility/cl_tfa_compat.lua")
+include("addon_compatibility/sh_tfa_compat.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 AddCSLuaFile("sh_translate.lua")
+AddCSLuaFile("sh_titles.lua")
 AddCSLuaFile("sh_colors.lua")
 AddCSLuaFile("sh_serialization.lua")
+AddCSLuaFile("sh_skillconstants.lua")
+include("sh_skillconstants.lua")
 AddCSLuaFile("sh_globals.lua")
 AddCSLuaFile("sh_util.lua")
 AddCSLuaFile("sh_options.lua")
@@ -24,10 +30,15 @@ AddCSLuaFile("sh_animations.lua")
 AddCSLuaFile("sh_sigils.lua")
 AddCSLuaFile("sh_channel.lua")
 AddCSLuaFile("sh_weaponquality.lua")
+AddCSLuaFile("sh_maptext.lua")
+AddCSLuaFile("addon_compatibility/sh_sourceweapon_compat.lua")
+include("addon_compatibility/sh_sourceweapon_compat.lua")
 
 AddCSLuaFile("vault/shared.lua")
 
-AddCSLuaFile("cl_draw.lua")
+AddCSLuaFile("cl_fontfallback.lua")
+AddCSLuaFile("cl_maptext_entities.lua")
+AddCSLuaFile("cl_chatcapture.lua")
 AddCSLuaFile("cl_net.lua")
 AddCSLuaFile("cl_util.lua")
 AddCSLuaFile("cl_options.lua")
@@ -38,8 +49,10 @@ AddCSLuaFile("cl_deathnotice.lua")
 AddCSLuaFile("cl_floatingscore.lua")
 AddCSLuaFile("cl_dermaskin.lua")
 AddCSLuaFile("cl_hint.lua")
+AddCSLuaFile("cl_weaponselect.lua")
 AddCSLuaFile("cl_thirdperson.lua")
 AddCSLuaFile("cl_voicesets.lua")
+AddCSLuaFile("cl_zombiecorpse.lua")
 
 AddCSLuaFile("skillweb/sh_skillweb.lua")
 AddCSLuaFile("skillweb/cl_skillweb.lua")
@@ -61,6 +74,7 @@ AddCSLuaFile("vgui/dteamheading.lua")
 AddCSLuaFile("vgui/dsidemenu.lua")
 AddCSLuaFile("vgui/dspawnmenu.lua")
 AddCSLuaFile("vgui/dmodelkillicon.lua")
+AddCSLuaFile("vgui/dlabelautoscroll.lua")
 
 AddCSLuaFile("vgui/dexroundedpanel.lua")
 AddCSLuaFile("vgui/dexroundedframe.lua")
@@ -98,6 +112,7 @@ include("sv_playerspawnentities.lua")
 include("sv_profiling.lua")
 include("sv_sigils.lua")
 include("sv_concommands.lua")
+include("addon_compatibility/sv_ulx_compat.lua")
 
 include("itemstocks/sv_stock.lua")
 
@@ -109,6 +124,8 @@ include("skillweb/sv_skillweb.lua")
 include("sv_zombieescape.lua")
 
 include("zsbots/init.lua")
+
+include("sv_maptext_entities.lua")
 
 include_library("statistics")
 
@@ -217,10 +234,10 @@ function GM:TryHumanPickup(pl, entity)
 end
 
 function GM:AddResources()
-	resource.AddFile("resource/fonts/typenoksidi.ttf")
-	resource.AddFile("resource/fonts/hidden.ttf")
-	resource.AddFile("resource/fonts/ghoulfriaoe.ttf")
-	resource.AddFile("resource/fonts/remingtonnoiseless.ttf")
+	resource.AddFile("resource/fonts/typenoksidi_v2.ttf")
+	resource.AddFile("resource/fonts/hidden_v2.ttf")
+	resource.AddFile("resource/fonts/ghoulfriaoe_v2.1.ttf")
+	resource.AddFile("resource/fonts/remingtonnoiseless_v2.ttf")
 
 	resource.AddFile("particles/vman_explosion.pcf")
 
@@ -521,6 +538,8 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("voice_zombiedeath")
 	util.AddNetworkString("voice_pain")
 	util.AddNetworkString("voice_zombiepain")
+	util.AddNetworkString("zs_maptext_display")
+	util.AddNetworkString("zs_maptext_capture")
 end
 
 function GM:IsClassicMode()
@@ -1182,7 +1201,14 @@ function GM:SortZombieSpawnDistances(allplayers)
 
 	local maxdist = 1280000000--12800000
 	for _, pl in pairs(allplayers) do
-		if pl:Team() == TEAM_UNDEAD then
+		if pl.IsZSBot then
+			plpos = pl:GetPos()
+			dist = maxdist
+			for __, ent in pairs(zspawns) do
+				dist = math.min(dist, ent:NearestPoint(plpos):DistToSqr(plpos))
+			end
+			pl._ZombieSpawnDistance = dist
+		elseif pl:Team() == TEAM_UNDEAD then
 			pl._ZombieSpawnDistance = sortbysigils and maxdist + 2 or -2
 		elseif pl:GetInfo("zs_alwaysvolunteer") == "1" then
 			pl._ZombieSpawnDistance = sortbysigils and maxdist + 1 or -1
@@ -1266,7 +1292,7 @@ function GM:Think()
 			end
 
 			if P_GetPhantomHealth(pl) > 0 and P_Alive(pl) and pl:IsSkillActive(SKILL_BLOODLUST) then
-				pl:SetPhantomHealth(math_max(0, P_GetPhantomHealth(pl) - 5 * FrameTime()))
+				pl:SetPhantomHealth(math_max(0, P_GetPhantomHealth(pl) - GAMEMODE.SkillConstants.BloodlustDecayPerSecond * FrameTime()))
 			end
 		end
 	end
@@ -1306,11 +1332,15 @@ function GM:Think()
 					pl:GiveStatus("drown")
 				end
 
-				local healmax = pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
+				local healmax = pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * (self.SkillConstants.FrailHealthCapPercent / 100)) or pl:GetMaxHealth()
 
-				if pl:IsSkillActive(SKILL_REGENERATOR) and time >= pl.NextRegenerate and pl:Health() < math.min(healmax, pl:GetMaxHealth() * 0.6) then
-					pl.NextRegenerate = time + 6
-					pl:SetHealth(math.min(healmax, pl:Health() + 1))
+				local C = self.SkillConstants
+
+				if pl:IsSkillActive(SKILL_REGENERATOR)
+					and time >= pl.NextRegenerate
+					and pl:Health() < math.min(healmax, pl:GetMaxHealth() * (C.RegeneratorHealthThresholdPercent / 100)) then
+					pl.NextRegenerate = time + C.RegeneratorInterval
+					pl:SetHealth(math.min(healmax, pl:Health() + C.RegeneratorHealAmount))
 				end
 
 				if pl:HasTrinket("regenimplant") and time >= pl.NextRegenTrinket and pl:Health() < healmax then
@@ -1318,9 +1348,12 @@ function GM:Think()
 					pl:SetHealth(math.min(healmax, pl:Health() + 1))
 				end
 
-				if pl:IsSkillActive(SKILL_BLOODARMOR) and pl.MaxBloodArmor > 0 and time >= pl.NextBloodArmorRegen and pl:GetBloodArmor() < pl.MaxBloodArmor then
-					pl.NextBloodArmorRegen = time + 8
-					pl:SetBloodArmor(math.min(pl.MaxBloodArmor, pl:GetBloodArmor() + (1 * pl.BloodarmorGainMul)))
+				if pl:IsSkillActive(SKILL_BLOODARMOR)
+					and pl.MaxBloodArmor > 0
+					and time >= pl.NextBloodArmorRegen
+					and pl:GetBloodArmor() < pl.MaxBloodArmor then
+					pl.NextBloodArmorRegen = time + C.BloodArmorRegenInterval
+					pl:SetBloodArmor(math.min(pl.MaxBloodArmor, pl:GetBloodArmor() + (C.BloodArmorRegenAmount * pl.BloodarmorGainMul)))
 				end
 
 				if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and pl:IsSkillActive(SKILL_CARDIOTONIC) then
@@ -1435,7 +1468,8 @@ GM.LastCalculatedBossTime = 0
 function GM:CalculateNextBoss()
 	local zombies = {}
 	for _, ent in pairs(team.GetPlayers(TEAM_UNDEAD)) do
-		if ent:GetInfo("zs_nobosspick") == "0" and not ent:GetZombieClassTable().Boss then
+		local nobosspick = ent:IsBot() or ent:GetInfo("zs_nobosspick") == "0"
+		if nobosspick and not ent:GetZombieClassTable().Boss then
 			table.insert(zombies, ent)
 		end
 	end
@@ -1528,7 +1562,7 @@ function GM:CalculateInfliction(victim, attacker)
 
 					for _, pl in pairs(player.GetAll()) do
 						pl:CenterNotify(COLOR_RED, translate.ClientFormat(pl, "infliction_reached", v.Infliction * 100))
-						pl:CenterNotify(translate.ClientFormat(pl, "x_unlocked", translate.ClientGet(pl, v.TranslationName)))
+						pl:CenterNotify(translate.ClientFormat(pl, "x_unlocked", translate.ClientGet(pl, v.TranslationName), 1))
 					end
 				end
 			end
@@ -1841,6 +1875,7 @@ function GM:RestartGame()
 		pl:SetFrags(0)
 		pl:SetDeaths(0)
 		pl:SetPoints(0)
+		pl:SetZSScore(0)
 		if not pl.IsZSBot then
 			pl:ChangeTeam(TEAM_HUMAN)
 		end
@@ -1874,6 +1909,7 @@ function GM:RestartGame()
 end
 
 function GM:InitPostEntityMap(fromze)
+    gamemode.Call("ClearMapTexts")
 	pcall(gamemode.Call, "LoadMapEditorFile")
 
 	gamemode.Call("SetupSpawnPoints")
@@ -1882,6 +1918,7 @@ function GM:InitPostEntityMap(fromze)
 		gamemode.Call("ReplaceMapWeapons")
 		gamemode.Call("ReplaceMapAmmo")
 		gamemode.Call("ReplaceMapBatteries")
+		gamemode.Call("ReplaceMapTextEntities")
 	end
 	gamemode.Call("CreateZombieGas")
 	gamemode.Call("SetupProps")
@@ -2059,63 +2096,84 @@ function GM:ScalePlayerDamage(pl, hitgroup, dmginfo)
 	end
 end
 
+function GM:PlayerTraceAttack(pl, dmginfo, dir, trace)
+	if pl:CallZombieFunction("PlayerTraceAttack", dmginfo, dir, trace) then
+		return true
+	end
+end
+
 function GM:PlayerReady(pl)
-	gamemode.Call("PlayerReadyRound", pl)
+    gamemode.Call("PlayerReadyRound", pl)
 
-	self:PlayerReadyVault(pl)
+    if not self:IsBotNetNoop(pl) then
+        self:PlayerReadyVault(pl)
+    end
 
-	pl.PlayerReady = true
+    pl.PlayerReady = true
 end
 
 function GM:PlayerReadyRound(pl)
-	if not pl:IsValid() then return end
+    if not pl:IsValid() then return end
 
-	self:FullGameUpdate(pl)
-	pl:UpdateAllZombieClasses()
+    local netnoop = self:IsBotNetNoop(pl)
 
-	local classid = pl:GetZombieClass()
-	pl:SetZombieClass(classid, true, pl)
+    -- the bot doesn't need net traffic.
+    if not netnoop then
+        self:FullGameUpdate(pl)
+        pl:UpdateAllZombieClasses()
 
-	if self.OverrideStartingWorth then
-		pl:SendLua("GAMEMODE.StartingWorth="..tostring(self.StartingWorth))
-	end
+        local classid = pl:GetZombieClass()
+        pl:SetZombieClass(classid, true, pl)  -- broadcast only
 
-	if pl:Team() == TEAM_UNDEAD then
-		-- This is just so they get updated on what class they are and have their hulls set up right.
-		pl:DoHulls(classid, TEAM_UNDEAD)
-	elseif pl:Team() == TEAM_HUMAN then
-		if self:GetWave() <= 0 and self.StartingWorth > 0 and not self.StartingLoadout and not self.ZombieEscape then
-			pl:SendLua("InitialWorthMenu()")
-		else
-			gamemode.Call("GiveDefaultOrRandomEquipment", pl)
-		end
-	end
+        if self.OverrideStartingWorth then
+            pl:SendLua("GAMEMODE.StartingWorth="..tostring(self.StartingWorth))
+        end
+    end
 
-	net.Start("zs_currentround")
-		net.WriteUInt(self.CurrentRound, 6)
-	net.Send(pl)
+    if pl:Team() == TEAM_UNDEAD then
+        pl:DoHulls(pl:GetZombieClass(), TEAM_UNDEAD)
 
-	if self.RoundEnded then
-		pl:SendLua("gamemode.Call(\"EndRound\", "..tostring(ROUNDWINNER)..", \""..game.GetMapNext().."\")")
-		gamemode.Call("DoHonorableMentions", pl)
-	end
+    elseif pl:Team() == TEAM_HUMAN then
+        -- Weapons are needed by ALL people, including bots.
+        if self:GetWave() <= 0 and self.StartingWorth > 0 and not self.StartingLoadout and not self.ZombieEscape then
+            if netnoop then
+                -- The bot has no client to open the menu. We give it a random loadout right away, otherwise it’ll spend the entire zero wave without guns.
+                gamemode.Call("GiveRandomEquipment", pl)
+            else
+                pl:SendLua("InitialWorthMenu()")
+            end
+        else
+            gamemode.Call("GiveDefaultOrRandomEquipment", pl)
+        end
+    end
 
-	if pl:GetInfo("zs_noredeem") == "1" then
-		pl.NoRedeeming = true
-	end
+    if not netnoop then
+        net.Start("zs_currentround")
+            net.WriteUInt(self.CurrentRound, 6)
+        net.Send(pl)
 
-	if self:GetWave() == 0 then
-		self:SendZombieVolunteers(pl, true)
-	end
+        if self.RoundEnded then
+            pl:SendLua("gamemode.Call(\"EndRound\", "..tostring(ROUNDWINNER)..", \""..game.GetMapNext().."\")")
+            gamemode.Call("DoHonorableMentions", pl)
+        end
 
-	if self:IsClassicMode() then
-		pl:SendLua("SetGlobalBool(\"classicmode\", true)")
-	elseif self:IsBabyMode() then
-		pl:SendLua("SetGlobalBool(\"babymode\", true)")
-	end
+        if self:GetWave() == 0 then
+            self:SendZombieVolunteers(pl, true)
+        end
 
-	self:RefreshItemStocks(pl)
-	self:ClassUnlocksUpdate(pl)
+        if self:IsClassicMode() then
+            pl:SendLua("SetGlobalBool(\"classicmode\", true)")
+        elseif self:IsBabyMode() then
+            pl:SendLua("SetGlobalBool(\"babymode\", true)")
+        end
+
+        self:RefreshItemStocks(pl)
+        self:ClassUnlocksUpdate(pl)
+    end
+
+    if pl:GetInfo("zs_noredeem") == "1" then
+        pl.NoRedeeming = true
+    end
 end
 
 function GM:FullGameUpdate(pl)
@@ -2187,19 +2245,21 @@ function GM:AttemptHumanDynamicSpawn(pl)
 end
 
 function GM:PlayerInitialSpawn(pl)
-	pl.MaxBloodArmor = GAMEMODE.ZombieEscape and 0 or 10
-	pl.NextFlashlightSwitch = 0
-	pl.NextPainSound = 0
-	pl.NextFlinch = 0
-	pl.LastSentESW = 0
-	pl.m_LastWaveStartSpawn = 0
-	pl.m_LastGasHeal = 0
+    pl.MaxBloodArmor = GAMEMODE.ZombieEscape and 0 or 10
+    pl.NextFlashlightSwitch = 0
+    pl.NextPainSound = 0
+    pl.NextFlinch = 0
+    pl.LastSentESW = 0
+    pl.m_LastWaveStartSpawn = 0
+    pl.m_LastGasHeal = 0
 
-	self:InitializeVault(pl)
+    if not self:IsBotNetNoop(pl) then
+        self:InitializeVault(pl)
+    end
 
-	gamemode.Call("PlayerInitialSpawnRound", pl)
+    gamemode.Call("PlayerInitialSpawnRound", pl)
 
-	self.PeakPopulation = math.max(self.PeakPopulation, #player.GetAll())
+    self.PeakPopulation = math.max(self.PeakPopulation, #player.GetAll())
 end
 
 function GM:PlayerInitialSpawnRound(pl)
@@ -2268,7 +2328,9 @@ function GM:PlayerInitialSpawnRound(pl)
 	--local nosend = not pl.DidInitPostEntity
 	pl.DamageVulnerability = nil
 
-	self:LoadVault(pl)
+    if not self:IsBotNetNoop(pl) then
+        self:LoadVault(pl)
+    end
 
 	local uniqueid = pl:UniqueID()
 
@@ -3106,15 +3168,16 @@ end
 function GM:OnPlayerChangedTeam(pl, oldteam, newteam)
 	if newteam == TEAM_UNDEAD then
 		pl:SetPoints(0)
-
-		--pl.WaveBarricadeDamage = 0
-		--pl.WaveHumanDamage = 0
+		pl:SetZSScore(0)
 		pl.DamagedBy = {}
-
 		pl:SetBarricadeGhosting(false)
 		self.CheckedOut[pl:UniqueID()] = true
 	elseif newteam == TEAM_HUMAN then
 		self.PreviouslyDied[pl:UniqueID()] = nil
+
+		if pl.IsZSBot then
+			self.CheckedOut[pl:UniqueID()] = nil
+		end
 
 		if self.PointSaving > 0 and pl.PointsVault ~= nil and not self.ZombieEscape and not self:IsClassicMode() then
 			pl:SetPoints(math.floor(pl.PointsVault))
@@ -3341,12 +3404,12 @@ function GM:PlayerHurt(victim, attacker, healthremaining, damage)
 			victim:ResetSpeed(nil, healthremaining)
 		end
 
-		if healthremaining < victim:GetMaxHealth() * 0.5 and victim:GetBloodArmor() < victim.MaxBloodArmor + 10 and victim:HasTrinket("bloodpack") then
-			victim:SetBloodArmor(math.min(victim:GetBloodArmor() + (20 * victim.BloodarmorGainMul), victim.MaxBloodArmor + (20 * victim.MaxBloodArmorMul)))
+		if healthremaining < victim:GetMaxHealth() * (self.SkillConstants.BloodpackHealthThresholdPercent / 100) and victim:GetBloodArmor() < victim.MaxBloodArmor + 10 and victim:HasTrinket("bloodpack") then
+			victim:SetBloodArmor(math.min(victim:GetBloodArmor() + (self.SkillConstants.BloodpackArmorAmount * victim.BloodarmorGainMul), victim.MaxBloodArmor + (20 * victim.MaxBloodArmorMul)))
 			victim:TakeInventoryItem("trinket_bloodpack")
 
 			net.Start("zs_trinketconsumed")
-				net.WriteString("Blood Transfusion Pack")
+				net.WriteString(translate.ClientGet(victim, "trinket_name_bloodpack"))
 			net.Send(victim)
 		end
 	else
@@ -3702,15 +3765,21 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 		util.Effect("headshot", effectdata, true, true)
 	end
 
-	if not pl:CallZombieFunction5("OnKilled", attacker, inflictor, suicide, headshot, dmginfo) then
-		if pl:Health() <= -70 and not pl.NoGibs and not self.ZombieEscape then
-			pl:Gib(dmginfo)
-		elseif not pl.KnockedDown then
-			pl:CreateRagdoll()
-		end
-	end
+    local killed = pl:CallZombieFunction5("OnKilled", attacker, inflictor, suicide, headshot, dmginfo)
+
+    if not killed then
+        if pl:Health() <= -70 and not pl.NoGibs and not self.ZombieEscape then
+            pl:Gib(dmginfo)
+        elseif not pl.KnockedDown then
+            pl:CreateRagdoll()
+        end
+    end
 
 	pl:RemoveStatus("overridemodel", false, true)
+
+	if P_Team(pl) == TEAM_UNDEAD then
+		pl:SetRenderMode(RENDERMODE_NONE)
+	end
 
 	local revive = false
 	local assistpl
@@ -3877,7 +3946,7 @@ function GM:PlayerCanPickupItem(pl, ent)
 		local class = ent:GetClass()
 		if class == "item_healthkit" or class == "item_healthvial" then
 			local healamount = #class == 14 and 25 or 10
-			if pl:Health() + healamount > math.floor(pl:GetMaxHealth() * 0.25) then
+			if pl:Health() + healamount > math.floor(pl:GetMaxHealth() * (self.SkillConstants.FrailHealthCapPercent / 100)) then
 				return false
 			end
 		end
@@ -3925,7 +3994,13 @@ function GM:PlayerSpawn(pl)
 	pl:WipePlayerInventory()
 	pl:GiveAmmo(1, "dummy", true) -- Fixes empty weapon deploy bug.
 	pl:RemoveStatus("confusion", false, true)
-	pl:RemoveFlags(FL_ONGROUND) -- fixes :OnGround() returning true on spawn even if they're not on the ground.
+	-- Don't clear FL_ONGROUND — it breaks the engine animation state:
+	-- the engine treats the player as "falling" for one tick and gets
+	-- stuck in the jump pose until the first real jump (and mutes
+	-- footstep sounds). SetGroundEntity(NULL) detaches from the ground
+	-- but doesn't touch the flag — physics restores the correct state
+	-- on the next tick.
+	pl:SetGroundEntity(NULL)
 
 	if pl:GetMaterial() ~= "" then
 		pl:SetMaterial("")
@@ -4095,6 +4170,7 @@ function GM:PlayerSpawn(pl)
 		--pl:SetCustomCollisionCheck(false)
 		pl:CollisionRulesChanged()
 
+		-- human-only block inside PlayerSpawn
 		if not self.NoSkills then
 			pl.ActivatedHumanSkills = true
 			pl.AdjustedStartPointsSkill = nil
@@ -4104,9 +4180,11 @@ function GM:PlayerSpawn(pl)
 
 		pl.StowageCaches = 0
 
-		net.Start("zs_stowagecaches")
-			net.WriteInt(pl.StowageCaches, 8)
-		net.Send(pl)
+		if not self:IsBotNetNoop(pl) then
+			net.Start("zs_stowagecaches")
+				net.WriteInt(pl.StowageCaches, 8)
+			net.Send(pl)
+		end
 
 		pl:ResetSpeed()
 		pl:ResetJumpPower()
@@ -4158,6 +4236,14 @@ function GM:PlayerSpawn(pl)
 		end
 	end
 
+	if pl:IsBot() and not pl.PlayerReady then
+		timer.Simple(0, function()
+			if IsValid(pl) and not pl.PlayerReady then
+				gamemode.Call("PlayerReady", pl)
+			end
+		end)
+	end
+
 	local wcol = Vector(pl:GetInfo("cl_weaponcolor"))
 	wcol.x = math.Clamp(wcol.x, 0, 2.5)
 	wcol.y = math.Clamp(wcol.y, 0, 2.5)
@@ -4166,6 +4252,8 @@ function GM:PlayerSpawn(pl)
 end
 
 function GM:SetWave(wave)
+	self:InvalidateClassUnlockCache()
+
 	local previouslylocked = {}
 	local UnlockedClasses = {}
 	for classid, classtab in ipairs(GAMEMODE.ZombieClasses) do
@@ -4202,18 +4290,47 @@ function GM:SetWave(wave)
 	end
 
 	if #UnlockedClasses > 0 then
-		for _, pl in pairs(player.GetAll()) do
-			local classnames = {}
-			for __, classid in pairs(UnlockedClasses) do
-				local classtbl = self.ZombieClasses[classid]
-
-				table.insert(classnames, translate.ClientGet(pl, classtbl.TranslationName))
-			end
-			net.Start("zs_classunlock")
-				net.WriteString(string.AndSeparate(classnames))
-			net.Send(pl)
-		end
+	local function ClientGetOr(pl, id, default)
+		local v = translate.ClientGet(pl, id)
+		if v == "@"..id.."@" then return default end
+		return v
 	end
+
+	for _, pl in pairs(player.GetAll()) do
+		local classnames = {}
+		for __, classid in pairs(UnlockedClasses) do
+			local classtbl = self.ZombieClasses[classid]
+			table.insert(classnames, translate.ClientGet(pl, classtbl.TranslationName))
+		end
+
+		local listSep  = ClientGetOr(pl, "list_separator",      ", ")
+		local andSep   = ClientGetOr(pl, "and_separator",       " and ")
+		local finalSep = ClientGetOr(pl, "final_and_separator", ", and ")
+
+		local lower = translate.GetLowercaseAfterComma() == "1"
+
+		local scripts = { "any" }
+		local configured = translate.GetLowercaseScripts()
+		if configured and configured ~= "" then
+			scripts = string.Explode(",", configured:gsub("%s", ""))
+		end
+
+		local transform
+		if lower then
+			transform = function(text)
+				if string.HasScript(text, scripts) then
+					return string.utf8lower(text)
+				end
+				return text
+			end
+		end
+
+		net.Start("zs_classunlock")
+			net.WriteString(string.AndSeparate(classnames, listSep, andSep, finalSep, transform))
+			net.WriteUInt(#UnlockedClasses, 8)
+		net.Send(pl)
+	end
+end
 end
 
 GM.NextEscapeDamage = 0
@@ -4455,10 +4572,10 @@ net.Receive("zs_changeclass", function(len, sender)
 	if not gamemode.Call("IsClassUnlocked", classname) then
 		sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "class_not_unlocked_will_be_unlocked_x", classtab.Wave))
 	elseif sender:GetZombieClassTable().Name == classname and not sender.DeathClass then
-		sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "you_are_already_a_x", translate.ClientGet(sender, classtab.TranslationName)))
+		sender:CenterNotify(COLOR_RED, translate.ClientFormat(sender, "you_are_already_a_x", translate.ClassName(translate.ClientGet(sender, classtab.TranslationName))))
 	else
 		sender.DeathClass = classtab.Index
-		sender:CenterNotify(translate.ClientFormat(sender, "you_will_spawn_as_a_x", translate.ClientGet(sender, classtab.TranslationName)))
+		sender:CenterNotify(translate.ClientFormat(sender, "you_will_spawn_as_a_x", translate.ClassName(translate.ClientGet(sender, classtab.TranslationName))))
 
 		if suicide and sender:Alive() and GAMEMODE:GetWaveActive() and (CurTime() < GAMEMODE:GetWaveEnd() - 4 or GAMEMODE:GetWaveEnd() < 0) and not sender:GetZombieClassTable().Boss and gamemode.Call("CanPlayerSuicide", sender) then
 			sender:Kill()
@@ -4499,3 +4616,44 @@ net.Receive("zs_nestspec", function(len, sender)
 		sender:SpectateEntity(nest)
 	end
 end)
+
+include("addon_compatibility/sv_tfa_compat.lua")
+
+-- ============================================================
+-- Server-side bone setup for zombie classes with BuildBonePositions.
+--
+-- ManipulateBonePosition affects hitboxes ONLY on the side where
+-- it's called. BuildBonePositions runs on the client (via cl_init
+-- Think loop) so the client sees the hunched model, but the server
+-- still traces against the default hitbox positions. Result:
+--   * hits on the visible head/arms → miss (server hitbox is elsewhere);
+--   * hits in the empty air → hit (server hitbox is there).
+-- Running the same loop on the server aligns hitboxes with the model.
+-- ============================================================
+local ZombieClassesNeedBonesSV = {}
+
+local function RebuildZombieBoneSetSV()
+	ZombieClassesNeedBonesSV = {}
+	local classes = GAMEMODE and GAMEMODE.ZombieClasses
+	if not classes then return end
+	for _, v in ipairs(classes) do
+		if type(v) == "table" and v.BuildBonePositions then
+			ZombieClassesNeedBonesSV[v.Index] = true
+		end
+	end
+end
+hook.Add("InitPostEntity", "ZS_RebuildZombieBoneSetSV", RebuildZombieBoneSetSV)
+
+local function ZombieBoneSetupThinkSV()
+	for _, pl in player.Iterator() do
+		local classid = pl:Team() == TEAM_UNDEAD and pl:GetZombieClass()
+		if classid and ZombieClassesNeedBonesSV[classid] then
+			local tab = pl:GetZombieClassTable()
+			if tab and tab.BuildBonePositions then
+				pl:ResetBones()
+				tab.BuildBonePositions(tab, pl)
+			end
+		end
+	end
+end
+hook.Add("Think", "ZS_ZombieBoneSetupThinkSV", ZombieBoneSetupThinkSV)

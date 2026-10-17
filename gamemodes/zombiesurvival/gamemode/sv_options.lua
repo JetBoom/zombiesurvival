@@ -110,6 +110,15 @@ cvars.AddChangeCallback("zs_onlyzombiescangibdoors", function(cvar, oldvalue, ne
 	GAMEMODE.OnlyUndeadCanGibDoors = tobool(newvalue)
 end)
 
+-- Disables heavy systems for bots (Vault, Skills, all net.Send and SendLua,
+-- UpdateAllZombieClasses, zs_hands, etc.). Does not affect gameplay logic
+-- (commands, weapons, DoHulls, spawning).
+GM.OptimizeBots = CreateConVar("zs_optimize_bots", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY, "Skip net/I/O systems for bots. Gameplay systems (skills, loadout) are untouched."):GetBool()
+
+cvars.AddChangeCallback("zs_optimize_bots", function(_, _, newvalue)
+    GAMEMODE.OptimizeBots = tonumber(newvalue) == 1
+end)
+
 local function GetMostKey(key, top)
 	top = top or 0
 	local toppl

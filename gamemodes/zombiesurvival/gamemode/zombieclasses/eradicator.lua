@@ -16,6 +16,8 @@ CLASS.SWEP = "weapon_zs_eradicator"
 
 CLASS.Model = Model("models/player/zombie_classic_hbfix.mdl")
 CLASS.OverrideModel = Model("models/Zombie/Poison.mdl")
+CLASS.CorpseUseBaseModel = true
+CLASS.CorpseHideMainModel = true
 
 CLASS.VoicePitch = 0.6
 

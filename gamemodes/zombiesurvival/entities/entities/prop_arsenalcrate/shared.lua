@@ -12,7 +12,7 @@ function ENT:SetObjectHealth(health)
 	self:SetDTFloat(0, health)
 	if health <= 0 and not self.Destroyed then
 		self.Destroyed = true
-		self:FakePopBreak()
+		self:FakePropBreak()
 	end
 end
 

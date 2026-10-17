@@ -45,10 +45,11 @@ SWEP.HoldType = "slam"
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_HEALCOOLDOWN, -0.8)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALRANGE, 4, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALING, 1.5)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Restoration Kit", "Always uses the same amount of ammo, increased cooldown", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Restoration Kit", "Always uses the same amount of ammo, increased cooldown", function(wept)
 	wept.FixUsage = true
 	wept.Primary.Delay = wept.Primary.Delay * 1.3
 end)
+branch.TranslationID = "medicalkit_branch_1"
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
@@ -184,6 +185,26 @@ function SWEP:DrawWeaponSelection(x, y, w, h, alpha)
 	self:BaseDrawWeaponSelection(x, y, w, h, alpha)
 end
 
+-- DrawHUD is called every frame. translate.WeaponName(self) traverses
+-- the Base chain, checks wpn_name_<id> and does several
+-- translate.Exists lookups — cheap, but not free at 60+ fps.
+--
+-- Cache for exactly one frame: FrameNumber() changes every frame, so
+-- any language switch (or late-arriving language file) is guaranteed
+-- to propagate on the next render, no manual invalidation needed.
+local cachedName, cachedFrame
+
+local function GetMedicalKitName(wep)
+	local frame = FrameNumber()
+	if cachedName and cachedFrame == frame then
+		return cachedName
+	end
+
+	cachedName = translate.WeaponName(wep) or wep.PrintName or "Medical Kit"
+	cachedFrame = frame
+	return cachedName
+end
+
 local texGradDown = surface.GetTextureID("VGUI/gradient_down")
 function SWEP:DrawHUD()
 	local wid, hei = 384, 16
@@ -204,7 +225,7 @@ function SWEP:DrawHUD()
 		surface.DrawOutlinedRect(x, y, wid, hei)
 	end
 
-	draw.SimpleText(self.PrintName, "ZSHUDFontSmall", x, texty, COLOR_GREEN, TEXT_ALIGN_LEFT)
+	draw.SimpleText(GetMedicalKitName(self), "ZSHUDFontSmall", x, texty, COLOR_GREEN, TEXT_ALIGN_LEFT)
 
 	local charges = self:GetPrimaryAmmoCount()
 	if charges > 0 then

@@ -304,6 +304,22 @@ function meta:TakeSpecialDamage(damage, damagetype, attacker, inflictor, hitpos,
 	end
 	dmginfo:SetDamageType(damagetype)
 
+	-- The damageforce parameter is declared in the function signature,
+	-- but was never applied — every TakeSpecialDamage went to the engine
+	-- with zero force and triggered Warning from AddMultiDamage.
+	-- If the caller passed a force — use it. Otherwise synthesize from
+	-- the "target center → nearest point of source" direction, so that
+	-- Source doesn't complain.
+	if damageforce then
+		dmginfo:SetDamageForce(damageforce)
+	else
+		local dir = self:LocalToWorld(self:OBBCenter()) - nearestpos
+		if dir:IsZero() then
+			dir = Vector(0, 0, 1)
+		end
+		dmginfo:SetDamageForce(dir:GetNormalized() * damage * 70)
+	end
+
 	local vel = self:GetVelocity()
 	self:TakeDamageInfo(dmginfo)
 	if self:IsPlayer() and attacker ~= self then
@@ -567,6 +583,21 @@ end
 -- Workaround for DispatchTraceAttack not interacting with some entities. Replace me after appropriate binding exists.
 local OldDispatch = meta.DispatchTraceAttack
 function meta:DispatchTraceAttack(dmginfo, tr, dir)
+	if dmginfo:GetDamage() > 0 and dmginfo:GetDamageForce():IsZero() then
+		local force = dir
+		if not force or not isvector(force) or force:IsZero() then
+			local attacker = dmginfo:GetAttacker()
+			if isentity(attacker) and attacker:IsValid() then
+				force = attacker:WorldSpaceCenter() - self:WorldSpaceCenter()
+			end
+			if not force or force:IsZero() then
+				force = Vector(0, 0, 1)
+			end
+		end
+
+		dmginfo:SetDamageForce(force:GetNormalized() * dmginfo:GetDamage() * 70)
+	end
+
 	if self.NoTraceAttack then
 		self:TakeDamageInfo(dmginfo)
 	else

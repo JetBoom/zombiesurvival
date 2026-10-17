@@ -42,7 +42,7 @@ SWEP.Heal = 10
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_BUFF_DURATION, 3)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_HEALING, 1.1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Invigorator' Strength Rifle", "Strength boost instead of defence, and makes zombies more vulnerable to damage instead", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Invigorator' Strength Rifle", "Strength boost instead of defence, and makes zombies more vulnerable to damage instead", function(wept)
 	if SERVER then
 		wept.EntModify = function(self, ent)
 			local owner = self:GetOwner()
@@ -58,6 +58,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Invigorator' Strength Rifle", "Strength
 		end
 	end
 end)
+branch.TranslationID = "medicrifle_branch_1"
 
 function SWEP:EmitFireSound()
 	self:EmitSound("weapons/ar2/npc_ar2_altfire.wav", 70, math.random(137, 143), 0.85)
@@ -95,7 +96,7 @@ function SWEP:SecondaryAttack()
 	if CLIENT then
 		self:EmitSound(locked and "npc/scanner/combat_scan4.wav" or "npc/scanner/scanner_scan5.wav", 65, locked and 75 or 200)
 	end
-	self:SetSeekedPlayer(locked and targetent)
+	self:SetSeekedPlayer(locked and targetent or nil)
 end
 
 function SWEP:SetSeekedPlayer(ent)

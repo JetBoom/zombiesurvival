@@ -17,7 +17,7 @@ local aOffset2 = Angle(0, 270, 90)
 
 function ENT:RenderInfo(pos, ang, owner)
 	cam.Start3D2D(pos, ang, 0.055)
-		draw.SimpleText(translate.Get("weapon_remantler"), "ZS3D2DFont2", 0, -50, COLOR_GREEN, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(translate.Get("weapon_remantler_3d"), "ZS3D2DFont2", 0, -50, COLOR_GREEN, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		if owner:IsValid() and owner:IsPlayer() then
 			draw.SimpleText(owner:ClippedName(), "ZS3D2DFont2", 0, 160, owner == MySelf and COLOR_LBLUE or COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -29,15 +29,15 @@ function ENT:RenderInfo(pos, ang, owner)
 			if #contents > 32 then
 				contents = string.sub(contents, 1, 30)..".."
 			end
-			draw.SimpleText(contents, "ZS3D2DFont2Small", 0, 235, contents == "EMPTY" and COLOR_RED or COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(contents, "ZS3D2DFont2Small", 0, 235, contents == translate.Get("empty") and COLOR_RED or COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end]]
 
 		if owner == MySelf then
-			draw.SimpleText(self:GetScraps() .. " Scrap", "ZS3D2DFont2Big", 0, 290, COLOR_GRAY, TEXT_ALIGN_CENTER)
-			--[[local ammotype = MySelf:GetResupplyAmmoType()
-			ammotype = GAMEMODE.AmmoNames[ammotype] or ammotype
+			draw.SimpleText(translate.Format("scrap_amount_x_3d", self:GetScraps()), "ZS3D2DFont2Big", 0, 290, COLOR_GRAY, TEXT_ALIGN_CENTER)
+			--[[local ammotype = translate.AmmoName(GAMEMODE.CachedResupplyAmmoType)
+			ammotype = translate.AmmoName(GAMEMODE.CachedResupplyAmmoType)
 
-			draw.SimpleText("["..ammotype.."]", "ZS3D2DFont2Small", 0, 360, COLOR_GRAY, TEXT_ALIGN_CENTER)]]
+			draw.SimpleText(translate.Format("deployable_ammotype_format", ammotype), "ZS3D2DFont2Small", 0, 360, COLOR_GRAY, TEXT_ALIGN_CENTER)]]
 		end
 	cam.End3D2D()
 end
@@ -57,5 +57,5 @@ net.Receive("zs_remantlercontent", function(length)
 	local readstring = net.ReadString()
 
 	ent.WepClass = readstring ~= "" and readstring or nil
-	ent.Contents = readstring ~= "" and weapons.Get(readstring).PrintName or "EMPTY"
+	ent.Contents = readstring ~= "" and weapons.Get(readstring).PrintName or translate.Get("EMPTY")
 end)

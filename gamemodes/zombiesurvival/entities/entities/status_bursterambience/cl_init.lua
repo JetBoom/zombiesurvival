@@ -20,6 +20,8 @@ function ENT:Think()
 	if owner:IsValid() then
 		self.AmbientSound:PlayEx(0.55, 85 + math.sin(RealTime()))
 	end
+	self:NextThink(CurTime() + 0.1)
+	return true
 end
 
 function ENT:Draw()
@@ -51,5 +53,5 @@ function ENT:Draw()
 	particle:SetColor(100, 235, 100)
 	particle:SetLighting(true)
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

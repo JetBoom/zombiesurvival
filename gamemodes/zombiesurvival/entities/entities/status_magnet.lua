@@ -13,8 +13,13 @@ ENT.Classes = table.ToAssoc(
 ENT.Force = 50
 ENT.ForceDelay = 0.25
 
+-- If the object is already flying toward us — WorldVisible isn't needed: physics will
+-- pull it in anyway. Tracing is the most expensive part of this Think.
+local FAST_ENOUGH_SQR = 1000   -- ~31 units/s
+
 function ENT:Think()
 	local owner = self:GetOwner()
+	if not IsValid(owner) then return end
 
 	if owner:Team() == TEAM_UNDEAD then
 		self:Remove()
@@ -22,26 +27,45 @@ function ENT:Think()
 	end
 
 	local activeweapon = owner:GetActiveWeapon()
-	if not activeweapon:IsValid() or not activeweapon.IsMagnet then return end
+	if not activeweapon:IsValid() or not activeweapon.IsMagnet then
+		self:NextThink(CurTime() + self.ForceDelay)
+		return true
+	end
 
-	local pos = self:GetPos()
-	for _, ent in pairs(ents.FindInSphere(pos, self.Radius)) do
-		local class = ent:GetClass()
-		local ownsitem = not ent.NoPickupsOwner or ent.NoPickupsOwner == owner
-		local droppedrecent = not ent.DroppedTime or ent.DroppedTime + 4 < CurTime()
+	local pos      = self:GetPos()
+	local classes  = self.Classes
+	local force    = self.Force
+	local curtime  = CurTime()
+	local radius   = self.Radius
 
-		if ent and ent:IsValid() and self.Classes[class] and WorldVisible(pos, ent:NearestPoint(pos)) and droppedrecent and ownsitem then
-			local phys = ent:GetPhysicsObject()
-			local dir = (pos - ent:NearestPoint(pos)):GetNormalized()
-			phys:ApplyForceCenter(phys:GetMass() * self.Force * dir)
-			ent:SetPhysicsAttacker(owner, 4)
+	for _, ent in pairs(ents.FindInSphere(pos, radius)) do
+		if not ent:IsValid() then continue end
 
-			if (ent:GetPos() - pos):LengthSqr() <= 5600 and ent.GiveToActivator then
-				ent:GiveToActivator(owner)
-			end
+		if not classes[ent:GetClass()] then continue end
+
+		local phys = ent:GetPhysicsObject()
+		if not phys:IsValid() or not phys:IsMoveable() then continue end
+
+		if ent.NoPickupsOwner and ent.NoPickupsOwner ~= owner then continue end
+		if ent.DroppedTime and ent.DroppedTime + 4 >= curtime then continue end
+
+		local nearest = ent:NearestPoint(pos)
+		local vel     = phys:GetVelocity()
+
+		-- It's already moving toward us pretty fast — we're skipping the trace.
+		if vel:LengthSqr() < FAST_ENOUGH_SQR and not WorldVisible(pos, nearest) then
+			continue
+		end
+
+		local dir = (pos - nearest):GetNormalized()
+		phys:ApplyForceCenter(phys:GetMass() * force * dir)
+		ent:SetPhysicsAttacker(owner, 4)
+
+		if (ent:GetPos() - pos):LengthSqr() <= 5600 and ent.GiveToActivator then
+			ent:GiveToActivator(owner)
 		end
 	end
 
-	self:NextThink(CurTime() + self.ForceDelay)
+	self:NextThink(curtime + self.ForceDelay)
 	return true
 end

@@ -206,6 +206,7 @@ function ENT:PhysicsSimulate(phys, frametime)
 	local trace = {mask = MASK_HOVER, filter = self, start = self:GetPos()}
 	local tr, tr2
 
+	-- Keyboard-controlled movement — only in control mode.
 	if self:BeingControlled() then
 		trace.endpos = trace.start - Vector(0, 0, self.HoverHeight * 0.333)
 		tr = util.TraceLine(trace)
@@ -228,6 +229,7 @@ function ENT:PhysicsSimulate(phys, frametime)
 		if owner:KeyDown(IN_GRENADE1) then
 			movedir = movedir - Vector(0, 0, 0.5)
 		end
+
 		trace.endpos = trace.start + Vector(0, 0, self.HoverHeight * 0.5)
 		tr2 = util.TraceLine(trace)
 
@@ -249,6 +251,9 @@ function ENT:PhysicsSimulate(phys, frametime)
 		vel = vel * self.MaxSpeed
 	end
 
+	-- Hover effect — always works so that the manhack levitates
+	-- out of control, as before. Previously, the entire block executed
+	-- without a condition, but that was exactly what was right for levitation.
 	if movedir == vector_origin and vel:Length() <= self.HoverSpeed then
 		trace.endpos = trace.start + Vector(0, 0, self.HoverHeight * -2)
 		tr = util.TraceLine(trace)
@@ -262,12 +267,17 @@ function ENT:PhysicsSimulate(phys, frametime)
 	phys:SetAngleDragCoefficient(10000)
 	phys:SetVelocityInstantaneous(vel)
 
-	local diff = math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw)
-	local z = math.Clamp(diff, -32, 32) * frametime * 10
-	local curz = phys:GetAngleVelocity().z
-	z = z - curz * (frametime * math.min(1, math.abs(z - curz) ^ 2 * 0.02))
+	-- Alignment to the owner's yaw — only in control mode.
+	-- Previously, this block was outside the if, causing the manhack to turn
+	-- toward the player's mouse even when control was disabled.
+	if self:BeingControlled() then
+		local diff = math.AngleDifference(eyeangles.yaw, phys:GetAngles().yaw)
+		local z = math.Clamp(diff, -32, 32) * frametime * 10
+		local curz = phys:GetAngleVelocity().z
+		z = z - curz * (frametime * math.min(1, math.abs(z - curz) ^ 2 * 0.02))
 
-	phys:AddAngleVelocity(Vector(0, 0, z))
+		phys:AddAngleVelocity(Vector(0, 0, z))
+	end
 
 	self:SetPhysicsAttacker(owner)
 

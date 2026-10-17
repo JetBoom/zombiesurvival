@@ -6,6 +6,29 @@ local render_ModelMaterialOverride = render.ModelMaterialOverride
 local render_SetColorModulation = render.SetColorModulation
 local render_SuppressEngineLighting = render.SuppressEngineLighting
 
+-- ============================================================
+-- Single sorted list of skill IDs.
+-- Built once, used by all net.Receive handlers.
+-- Must be declared BEFORE the first net.Receive.
+-- ============================================================
+local SortedSkillIDs = nil
+local function GetSortedSkillIDs()
+	if SortedSkillIDs then return SortedSkillIDs end
+
+	local ids = {}
+	for skillid in pairs(GAMEMODE.Skills) do
+		ids[#ids + 1] = skillid
+	end
+	table.sort(ids)
+
+	SortedSkillIDs = ids
+	return ids
+end
+
+hook.Add("OnReloaded", "ZS_SkillWeb_InvalidateSortedIDs", function()
+	SortedSkillIDs = nil
+end)
+
 net.Receive("zs_skills_notify", function(length)
 	if GAMEMODE.SkillWeb then
 		GAMEMODE.SkillWeb:DisplayMessage(net.ReadString(), net.ReadBool() and COLOR_RED or COLOR_GREEN)
@@ -39,7 +62,9 @@ end)
 net.Receive("zs_skills_active", function(length)
 	local t = {}
 
-	for skillid in pairs(GAMEMODE.Skills) do
+	local ids = GetSortedSkillIDs()
+
+	for _, skillid in ipairs(ids) do
 		if net.ReadBool() then
 			t[skillid] = true
 		end
@@ -57,19 +82,22 @@ net.Receive("zs_skills_init", function(length)
 	local desired = {}
 	local active = {}
 
-	for skillid in pairs(GAMEMODE.Skills) do
+	local ids = GetSortedSkillIDs()
+
+	for _, skillid in ipairs(ids) do
 		if net.ReadBool() then
 			unlocked[skillid] = true
 		end
 	end
 
-	for skillid in pairs(GAMEMODE.Skills) do
+	for _, skillid in ipairs(ids) do
 		if net.ReadBool() then
 			desired[skillid] = true
 		end
 	end
+
 	if net.ReadBool() then
-		for skillid in pairs(GAMEMODE.Skills) do
+		for _, skillid in ipairs(ids) do
 			if net.ReadBool() then
 				active[skillid] = true
 			end
@@ -86,9 +114,11 @@ end)
 net.Receive("zs_skills_desired", function(length)
 	local t = {}
 
-	for skillid in pairs(GAMEMODE.Skills) do
+	local ids = GetSortedSkillIDs()
+
+	for _, skillid in ipairs(ids) do
 		if net.ReadBool() then
-			t[#t + 1] = skillid
+			t[skillid] = true
 		end
 	end
 
@@ -104,9 +134,11 @@ end)
 net.Receive("zs_skills_unlocked", function(length)
 	local t = {}
 
-	for skillid in pairs(GAMEMODE.Skills) do
+	local ids = GetSortedSkillIDs()
+
+	for _, skillid in ipairs(ids) do
 		if net.ReadBool() then
-			t[#t + 1] = skillid
+			t[skillid] = true
 		end
 	end
 
@@ -122,7 +154,7 @@ net.Receive("zs_skills_nextreset", function(length)
 		local days = math.floor(GAMEMODE.NextSkillReset / 86400)
 		local btn = GAMEMODE.SkillWeb.Reset
 
-		btn:SetText(GAMEMODE.NextSkillReset <= 0 and "Reset" or (days .. " days left"))
+		btn:SetText(GAMEMODE.NextSkillReset <= 0 and translate.Get("skillweb_reset_button") or translate.Format("skillweb_reset_days_left", days))
 		btn:SetDisabled(GAMEMODE.NextSkillReset > 0)
 	end
 end)
@@ -199,9 +231,235 @@ function GM:GenerateFromSkillWebGrid()
 	print(table.concat(lines, "\n"))
 end
 
+local LABEL_WRAP_WIDTH  = 440
+local LABEL_MAX_LINES   = 3 
+
 local hoveredskill
 
-local REMORT_SKILL = {Name = "Remort", Description = "Go even further beyond.\nLose all skills, experience, skill points, and levels.\nStart at level 1 but with 1 extra skill point.\nCan remort multiple times for multiple extra skill points."}
+-- ============================================================
+-- Adaptive line height for node labels.
+--
+-- Logic:
+--   1. Measure actual line height via ZS_MeasureMixedText,
+--      which already accounts for the fact that some lines are
+--      drawn with the base font (Ghoulish Fright AOE) and some
+--      with a twin font (Tahoma etc.).
+--   2. Detect which scripts are present in the text and pick
+--      the appropriate multipliers. CJK glyphs are square and
+--      need almost the full em-box; Latin GFA is narrow and
+--      needs ~0.6; Cyrillic Tahoma is slightly taller than Latin.
+--   3. Take the largest multiplier from the mixed text so that
+--      CJK glyphs don't overlap.
+-- ============================================================
+
+-- Codepoint ranges by script. Rough but covers all locales
+-- for which ZS has translations (or which are reasonable to add).
+local SCRIPT_RANGES = {
+    latin      = {{0x0041,0x005A},{0x0061,0x007A},{0x00C0,0x024F}},
+    cyrillic   = {{0x0400,0x04FF},{0x0500,0x052F}},
+    greek      = {{0x0370,0x03FF},{0x1F00,0x1FFF}},
+    armenian   = {{0x0530,0x058F}},
+    georgian   = {{0x10A0,0x10FF},{0x2D00,0x2D2D}},
+    hebrew     = {{0x0590,0x05FF}},
+    arabic     = {{0x0600,0x06FF},{0x0750,0x077F},{0xFB50,0xFDFF},{0xFE70,0xFEFF}},
+    devanagari = {{0x0900,0x097F}},
+    thai       = {{0x0E00,0x0E7F}},
+    kana       = {{0x3040,0x309F},{0x30A0,0x30FF}},
+    hangul     = {{0xAC00,0xD7AF},{0x1100,0x11FF},{0x3130,0x318F}},
+    cjk        = {{0x3400,0x4DBF},{0x4E00,0x9FFF},{0xF900,0xFAFF},{0x20000,0x2A6DF}},
+}
+
+-- Multiplier against measured height. Lower value = tighter
+-- lines. Values picked empirically for standard fonts
+-- Tahoma / Segoe UI / YaHei / SimHei and the decorative GFA.
+local SCRIPT_MUL = {
+    latin      = 0.62,
+    cyrillic   = 0.68,
+    greek      = 0.68,
+    armenian   = 0.68,
+    georgian   = 0.68,
+    hebrew     = 0.72,
+    arabic     = 0.78,
+    devanagari = 0.85,
+    thai       = 0.85,
+    kana       = 0.92,
+    hangul     = 0.92,
+    cjk        = 0.92,
+    default    = 0.70,   -- fallback for unknown scripts
+}
+
+local function CodeInRanges(code, ranges)
+    for _, r in ipairs(ranges) do
+        if code >= r[1] and code <= r[2] then return true end
+    end
+    return false
+end
+
+local function DetectScript(code)
+    for name, ranges in pairs(SCRIPT_RANGES) do
+        if CodeInRanges(code, ranges) then return name end
+    end
+    return nil
+end
+
+-- Returns the largest multiplier across all scripts in the text.
+-- If nothing is recognized — SCRIPT_MUL.default.
+local function PickScriptMul(lines)
+    local bestMul = 0
+
+    for _, line in ipairs(lines) do
+        local ok = pcall(function()
+            for _, code in utf8.codes(line) do
+                local script = DetectScript(code)
+                if script then
+                    local mul = SCRIPT_MUL[script] or SCRIPT_MUL.default
+                    if mul > bestMul then bestMul = mul end
+                end
+            end
+        end)
+        -- Ignore utf8 errors — they are not critical.
+    end
+
+    return bestMul > 0 and bestMul or SCRIPT_MUL.default
+end
+
+local LineHeightCache = {}
+local LineHeightCacheCount = 0
+local LH_CACHE_MAX = 256
+local function ComputeLineHeight(lines, font)
+    if not lines or #lines == 0 then return 1 end
+
+    -- Cache by (first line + line count + font).
+    local key = (lines[1] or "") .. "\1" .. #lines .. "\1" .. (font or "")
+    local cached = LineHeightCache[key]
+    if cached then return cached end
+
+    -- 1. Actual max height across all lines.
+    local maxH = 0
+    for _, line in ipairs(lines) do
+        local _, h
+        if ZS_MeasureMixedText then
+            _, h = ZS_MeasureMixedText(line, font)
+        end
+        if not h or h <= 0 then
+            surface.SetFont(font)
+            _, h = surface.GetTextSize(line)
+        end
+        maxH = math.max(maxH, h or 0)
+    end
+    if maxH <= 0 then maxH = draw.GetFontHeight(font) end
+
+    -- 2. Script multiplier.
+    local mul = PickScriptMul(lines)
+
+    -- 3. Very long blocks (5+ lines) visually "stick together" more
+    --    than short ones — tighten slightly. Don't do this for CJK:
+    --    there the gap is already at the minimum.
+    if #lines >= 5 and mul < 0.85 then
+        mul = mul - 0.02
+    end
+
+    local result = math.max(1, math.floor(maxH * mul))
+
+    if LineHeightCacheCount >= LH_CACHE_MAX then
+        LineHeightCache = {}
+        LineHeightCacheCount = 0
+    end
+    LineHeightCache[key] = result
+    LineHeightCacheCount = LineHeightCacheCount + 1
+
+    return result
+end
+
+local REMORT_SKILL = {Name = "skill_remort_name", Description = "skill_remort_desc"}
+
+-- Scrolling button. A DLabelAutoScroll is created inside the DButton,
+-- filling the whole button area. The button's own text is cleared
+-- so the engine doesn't draw a duplicate on top of the label.
+local function ScrollingButton(parent, text, font, scrollMode)
+    local btn = vgui.Create("DButton", parent)
+    btn:SetText("")
+
+    btn.ScrollText      = text or ""
+    btn.ScrollFont      = font or "ZSHUDFontSmallest"
+    btn.ScrollMode      = scrollMode or "time"
+    btn.ScrollTimeStart = RealTime()
+
+    local basePaint = btn.Paint
+    btn.Paint = function(me, w, h)
+        if basePaint then basePaint(me, w, h) end
+
+        local txt = me.ScrollText
+        if not txt or txt == "" then return end
+
+        local f = me.ScrollFont
+        if type(f) ~= "string" then f = "ZSHUDFontSmallest" end
+
+        local col
+        if me:GetDisabled() then
+            col = COLOR_DARKGRAY
+        elseif me:IsDown() then
+            col = COLOR_WHITE
+        elseif me:IsHovered() then
+            col = COLOR_WHITE
+        else
+            col = COLOR_GRAY
+        end
+
+        local tw
+        if ZS_MeasureMixedText then
+            tw = ZS_MeasureMixedText(txt, f)
+        else
+            surface.SetFont(f)
+            tw = surface.GetTextSize(txt)
+        end
+
+        if tw <= w - 4 or me.ScrollMode ~= "time" then
+            draw.SimpleText(txt, f, w * 0.5, h * 0.5, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            return
+        end
+
+        local travel     = tw - (w - 4)
+        local speed      = 40
+        local pause      = 1.2
+        local scrollTime = travel / speed
+        local cycle      = (scrollTime + pause) * 2
+        local t          = (RealTime() - me.ScrollTimeStart) % cycle
+
+        local frac
+        if t < pause then
+            frac = 0
+        elseif t < pause + scrollTime then
+            frac = (t - pause) / scrollTime
+        elseif t < pause + scrollTime + pause then
+            frac = 1
+        else
+            frac = 1 - (t - pause - scrollTime - pause) / scrollTime
+        end
+
+        local x = 2 - travel * frac
+        local sx, sy = me:LocalToScreen(0, 0)
+        render.SetScissorRect(sx + 2, sy, sx + w - 2, sy + h, true)
+            draw.SimpleText(txt, f, x, h * 0.5, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        render.SetScissorRect(0, 0, 0, 0, false)
+    end
+
+    btn.SetText = function(me, t)
+        me.ScrollText      = tostring(t or "")
+        me.ScrollTimeStart = RealTime()
+    end
+    btn.GetText = function(me)
+        return me.ScrollText or ""
+    end
+    btn.SetFont = function(me, f)
+        me.ScrollFont = f or "ZSHUDFontSmallest"
+    end
+    btn.GetFont = function(me)
+        return me.ScrollFont or "ZSHUDFontSmallest"
+    end
+
+    return btn
+end
 
 local PANEL = {}
 
@@ -306,14 +564,17 @@ function PANEL:Init()
 	bottomleftup:DockPadding(10, 10, 10, 10)
 	bottomleftup:SetSize(190 * screenscale, 120 * screenscale)
 
+	local quickFont = "ZSHUDFontSmaller"
+	local quickRowH = draw.GetFontHeight(quickFont) + 2
 	local quickstats = {}
 	for i=1,3 do
-		local hpstat = vgui.Create("DLabel", bottomleftup)
-		hpstat:SetFont("ZSHUDFontSmaller")
+		local hpstat = vgui.Create("DLabelAutoScroll", bottomleftup)
+		hpstat:SetFont(quickFont)
 		hpstat:SetTextColor(COLOR_WHITE)
 		hpstat:SetContentAlignment(8)
+		hpstat:SetScrollingMode("time")
+		hpstat:SetTall(quickRowH)
 		hpstat:Dock(TOP)
-		hpstat:SizeToContents()
 		hpstat:SetText("---")
 		table.insert(quickstats, hpstat)
 	end
@@ -321,12 +582,9 @@ function PANEL:Init()
 	local dropdown = vgui.Create("DComboBox", bottomleft)
 	dropdown:Dock(TOP)
 	dropdown:SetMouseInputEnabled(true)
-	dropdown:SetTextColor(color_black)
+	StyleZSComboBox(dropdown)
 
-	local delbtn = vgui.Create("DButton", bottomleft)
-	delbtn:SetFont("ZSHUDFontSmallest")
-	delbtn:SetText("Delete")
-	delbtn:SizeToContents()
+	local delbtn = ScrollingButton(bottomleft, translate.Get("skillweb_delete_button"), "ZSHUDFontSmallest", "time")
 	delbtn:SetTall(bottomleft:GetTall() / 5)
 	delbtn:Dock(BOTTOM)
 	delbtn.DoClick = function(me)
@@ -349,34 +607,44 @@ function PANEL:Init()
 		UpdateDropDown(dropdown)
 	end
 
-	local savebtn = vgui.Create("DButton", bottomleft)
-	savebtn:SetFont("ZSHUDFontSmallest")
-	savebtn:SetText("Save")
-	savebtn:SizeToContents()
+	local savebtn = ScrollingButton(bottomleft, translate.Get("skillweb_save_button"), "ZSHUDFontSmallest", "time")
 	savebtn:SetTall(bottomleft:GetTall() / 5)
 	savebtn:Dock(BOTTOM)
 	savebtn.DoClick = function(me)
 		surface.PlaySound("zombiesurvival/ui/misc1.ogg")
 
-		local frame = Derma_StringRequest("Save skill loadout", "Enter a name for this skill loadout.", "Name",
+		local function RestoreSkillWebPopup()
+			if IsValid(self) then
+				self:MakePopup()
+			end
+		end
+
+		local frame = Derma_StringRequest(translate.Get("skillweb_save_loadout_title"), translate.Get("skillweb_save_loadout_prompt"), translate.Get("skillweb_save_loadout_default"),
 		function(strTextOut)
 			SaveSkillLoadout(strTextOut)
 			UpdateDropDown(dropdown)
 
-			self:DisplayMessage("Skill loadout '" .. strTextOut .."' saved!", COLOR_GREEN)
+			self:DisplayMessage(translate.Format("skillweb_loadout_saved", strTextOut), COLOR_GREEN)
+			RestoreSkillWebPopup()
 		end,
-		function(strTextOut) end,
-		"OK", "Cancel")
+		function(strTextOut)
+			RestoreSkillWebPopup()
+		end,
+		translate.Get("skillweb_ok_button"), translate.Get("skillweb_cancel_button"))
 
 		frame:GetChildren()[5]:GetChildren()[2]:SetTextColor(Color(30, 30, 30))
+
+		local oldRemove = frame.OnRemove
+		frame.OnRemove = function(me2, ...)
+			if oldRemove then oldRemove(me2, ...) end
+
+			timer.Simple(0, RestoreSkillWebPopup)
+		end
 	end
 
 	UpdateDropDown(dropdown)
 
-	local loadbtn = vgui.Create("DButton", bottomleft)
-	loadbtn:SetFont("ZSHUDFontSmallest")
-	loadbtn:SetText("Load")
-	loadbtn:SizeToContents()
+	local loadbtn = ScrollingButton(bottomleft, translate.Get("skillweb_load_button"), "ZSHUDFontSmallest", "time")
 	loadbtn:SetTall(bottomleft:GetTall() / 5)
 	loadbtn:Dock(BOTTOM)
 	loadbtn.DoClick = function(me)
@@ -397,26 +665,26 @@ function PANEL:Init()
 			net.WriteTable(newloadout)
 		net.SendToServer()
 
-		self:DisplayMessage("Skill loadout '" .. nlname .."' loaded!", COLOR_GREEN)
+		self:DisplayMessage(translate.Format("skillweb_loadout_loaded", nlname), COLOR_GREEN)
 	end
 
 	local bottomlefttop = vgui.Create("DEXRoundedPanel", self)
-	bottomlefttop:DockPadding(10, 10, 10, 10)
+	bottomlefttop:DockPadding(8, 8, 8, 8)
 	bottomlefttop:SetSize(160 * screenscale, 130 * screenscale)
 
-	local activateall = vgui.Create("DButton", bottomlefttop)
-	activateall:SetFont("ZSHUDFontSmallest")
-	activateall:SetText("Activate All")
-	activateall:SizeToContents()
-	activateall:SetTall(activateall:GetTall())
+	local smallRowH = draw.GetFontHeight("ZSHUDFontSmallest") + 8
+	local resetRowH = draw.GetFontHeight("ZSHUDFontSmaller") + 8
+
+	local activateall = ScrollingButton(bottomlefttop, translate.Get("skillweb_activate_all"), "ZSHUDFontSmallest", "time")
 	activateall:Dock(TOP)
+	activateall:SetTall(smallRowH)
 	activateall.DoClick = function(me)
 		surface.PlaySound("zombiesurvival/ui/misc1.ogg")
 
 		if #MySelf:GetUnlockedSkills() == 0 then
-			self:DisplayMessage("You have no skills to activate!", COLOR_RED)
+			self:DisplayMessage(translate.Get("skillweb_no_skills_activate"), COLOR_RED)
 		else
-			self:DisplayMessage("All unlocked skills activated.", COLOR_GREEN)
+			self:DisplayMessage(translate.Get("skillweb_all_activated"), COLOR_GREEN)
 		end
 
 		net.Start("zs_skills_all_desired")
@@ -424,20 +692,17 @@ function PANEL:Init()
 		net.SendToServer()
 	end
 
-	local deactivateall = vgui.Create("DButton", bottomlefttop)
-	deactivateall:SetFont("ZSHUDFontSmallest")
-	deactivateall:SetText("Deactivate All")
-	deactivateall:SizeToContents()
-	deactivateall:SetTall(deactivateall:GetTall())
-	deactivateall:DockMargin(0, 5, 0, 0)
+	local deactivateall = ScrollingButton(bottomlefttop, translate.Get("skillweb_deactivate_all"), "ZSHUDFontSmallest", "time")
+	deactivateall:DockMargin(0, 4, 0, 0)
 	deactivateall:Dock(TOP)
+	deactivateall:SetTall(smallRowH)
 	deactivateall.DoClick = function(me)
 		surface.PlaySound("zombiesurvival/ui/misc1.ogg")
 
 		if #MySelf:GetUnlockedSkills() == 0 then
-			self:DisplayMessage("You have no skills to deactivate!", COLOR_RED)
+			self:DisplayMessage(translate.Get("skillweb_no_skills_deactivate"), COLOR_RED)
 		else
-			self:DisplayMessage("All unlocked skills deactivated.", COLOR_RED)
+			self:DisplayMessage(translate.Get("skillweb_all_deactivated"), COLOR_RED)
 		end
 
 		net.Start("zs_skills_all_desired")
@@ -448,21 +713,18 @@ function PANEL:Init()
 	local resettime = GAMEMODE.NextSkillReset or 0
 	local days = math.floor(resettime / 86400)
 
-	local reset = vgui.Create("DButton", bottomlefttop)
-	reset:SetFont("ZSHUDFontSmaller")
-	reset:SetText(resettime <= 0 and "Reset" or (days .. " days left"))
-	reset:SetDisabled(resettime > 0)
-	reset:SizeToContents()
-	reset:SetTall(reset:GetTall())
-	reset:DockMargin(0, 5, 0, 0)
+	local reset = ScrollingButton(bottomlefttop, resettime <= 0 and translate.Get("skillweb_reset_button") or translate.Format("skillweb_reset_days_left", days), "ZSHUDFontSmaller", "time")
+	reset:DockMargin(0, 4, 0, 0)
 	reset:Dock(TOP)
+	reset:SetTall(resetRowH)
+	reset:SetDisabled(resettime > 0)
 	reset.DoClick = function(me)
 		Derma_Query(
-			"Reset all skills and refund SP?\nYou can only do this once per week.",
-			"Warning",
-			"OK",
+			translate.Get("skillweb_reset_query"),
+			translate.Get("skillweb_warning_title"),
+			translate.Get("skillweb_ok_button"),
 			function() net.Start("zs_skills_reset") net.SendToServer() end,
-			"Cancel",
+			translate.Get("skillweb_cancel_button"),
 			function() end
 		)
 	end
@@ -471,9 +733,7 @@ function PANEL:Init()
 	topright:SetSize(160 * screenscale, 64 * screenscale)
 	topright:DockPadding(10, 10, 10, 10)
 
-	local quit = vgui.Create("DButton", topright)
-	quit:SetText("Quit")
-	quit:SetFont("ZSHUDFont")
+	local quit = ScrollingButton(topright, translate.Get("skillweb_quit"), "ZSHUDFont", "time")
 	quit:Dock(FILL)
 	quit.DoClick = function()
 		self:Remove()
@@ -483,20 +743,26 @@ function PANEL:Init()
 	bottom:SetSize(600 * screenscale, math.Clamp(84 * screenscale, 70, 125))
 	bottom:DockPadding(10, 10, 10, 10)
 
-	local spremaining = vgui.Create("DEXChangingLabel", bottom)
-	spremaining:SetChangeFunction(function()
-		return "Unused skill points: "..MySelf:GetZSSPRemaining()
-	end, true)
-	spremaining:SetChangedFunction(function()
-		if MySelf:GetZSSPRemaining() >= 1 then
-			spremaining:SetTextColor(COLOR_GRAY)
-		else
-			spremaining:SetTextColor(COLOR_RED)
-		end
-	end)
+	local spremaining = vgui.Create("DLabelAutoScroll", bottom)
 	spremaining:SetFont("ZSHUDFontSmall")
+	spremaining:SetTextColor(COLOR_GRAY)
 	spremaining:SetContentAlignment(5)
+	spremaining:SetScrollingMode("time")
+	spremaining:SetTall(draw.GetFontHeight("ZSHUDFontSmall") + 2)
 	spremaining:Dock(TOP)
+	spremaining.m_LastValue = nil
+	spremaining.Think = function(me)
+		local val = translate.Format("skillweb_sp_remaining", MySelf:GetZSSPRemaining())
+		if me.m_LastValue ~= val then
+			me.m_LastValue = val
+			me:SetText(val)
+			if MySelf:GetZSSPRemaining() >= 1 then
+				me:SetTextColor(COLOR_GRAY)
+			else
+				me:SetTextColor(COLOR_RED)
+			end
+		end
+	end
 
 	local expbar = vgui.Create("Panel", bottom)
 	expbar.Paint = function(me, w, h)
@@ -506,16 +772,11 @@ function PANEL:Init()
 	expbar:Dock(BOTTOM)
 
 	local contextmenu = vgui.Create("Panel", self)
-	contextmenu:SetSize(128 * screenscale, 128 * screenscale)
 	contextmenu:SetVisible(false)
 
 	local button = vgui.Create("DButton", contextmenu)
-	button:SetText("Activate")
 	button:SetFont("ZSHUDFontSmall")
 	button:SetDisabled(false)
-	button:SetSize(128 * screenscale, 32 * screenscale)
-	button:AlignTop()
-	button:CenterHorizontal()
 	button.DoClick = function(me)
 		local skillid = contextmenu.SkillID
 		local name = allskills[skillid].Name
@@ -525,21 +786,21 @@ function PANEL:Init()
 				net.WriteBool(false)
 			net.SendToServer()
 
-			self:DisplayMessage(name.." deactivated.")
+			self:DisplayMessage(translate.Format("skillweb_deactivated_x", name))
 		elseif MySelf:IsSkillUnlocked(skillid) then
 			net.Start("zs_skill_is_desired")
 				net.WriteUInt(skillid, 16)
 				net.WriteBool(true)
 			net.SendToServer()
 
-			self:DisplayMessage(name.." activated.", COLOR_DARKGREEN)
+			self:DisplayMessage(translate.Format("skillweb_activated_x", name), COLOR_DARKGREEN)
 		else
 			net.Start("zs_skill_is_unlocked")
 				net.WriteUInt(skillid, 16)
 				net.WriteBool(true)
 			net.SendToServer()
 
-			self:DisplayMessage(name.." unlocked and activated!", COLOR_GREEN)
+			self:DisplayMessage(translate.Format("skillweb_unlocked_activated_x", name), COLOR_GREEN)
 		end
 
 		contextmenu:SetVisible(false)
@@ -568,7 +829,7 @@ function PANEL:Init()
 	local warningtext = vgui.Create("DLabel", self)
 	warningtext:SetTextColor(COLOR_RED)
 	warningtext:SetFont("ZSHUDFontSmall")
-	warningtext:SetText("Changes applied on respawn!")
+	warningtext:SetText(translate.Get("skillweb_changes_warning"))
 	warningtext:SizeToContents()
 	warningtext:SetKeyboardInputEnabled(false)
 	warningtext:SetMouseInputEnabled(false)
@@ -612,9 +873,16 @@ function PANEL:Init()
 
 	self:UpdateQuickStats()
 
+	self:SizeContextMenu(translate.Get("skillweb_context_activate"))
 	net.Start("zs_skills_refunded")
 	net.SendToServer()
 end
+
+local QUICKSTAT_KEYS = {
+	"skillweb_quickstat_health",
+	"skillweb_quickstat_speed",
+	"skillweb_quickstat_worth",
+}
 
 function PANEL:UpdateQuickStats()
 	local skillmodifiers = {}
@@ -629,9 +897,9 @@ function PANEL:UpdateQuickStats()
 	end
 
 	for i=1,3 do
-		local prefix = i == 1 and "Health" or i == 2 and "Speed" or "Worth"
+		local prefix = translate.Get(QUICKSTAT_KEYS[i])
 		local val = i == 2 and SPEED_NORMAL or 100
-		self.QuickStats[i]:SetText(prefix .. " : " .. (val + (skillmodifiers[i] or 0)))
+		self.QuickStats[i]:SetText(translate.Format("skillweb_quickstat_format", prefix, val + (skillmodifiers[i] or 0)))
 	end
 end
 
@@ -642,6 +910,51 @@ function PANEL:DisplayMessage(msg, col)
 	self.MessageBox:SetVisible(true)
 
 	timer.Create("SKillWebMessageRemove", 4, 1, function() if self:IsValid() then self.MessageBox:SetVisible(false) end end)
+end
+
+function PANEL:SizeContextMenu(text)
+	local cm = self.ContextMenu
+	local btn = cm and cm.Button
+	if not (cm and cm:IsValid() and btn and btn:IsValid()) then return end
+
+	local screenscale = BetterScreenScale()
+
+	btn:SetWrap(false)
+	btn:SetAutoStretchVertical(false)
+	btn:SetContentAlignment(5)
+
+	btn:SetFont("ZSHUDFontSmall")
+	btn:SetText(text)
+
+	local measureFont = btn:GetFont() or "ZSHUDFontSmall"
+
+	local tw, th = 0, 0
+	if ZS_MeasureMixedText then
+		tw, th = ZS_MeasureMixedText(text, measureFont)
+	end
+	if not tw or tw <= 0 then
+		surface.SetFont(measureFont)
+		tw, th = surface.GetTextSize(text)
+	end
+
+	tw = tonumber(tw) or 0
+	th = tonumber(th) or 0
+	if tw <= 0 then tw = 100 end
+	if th <= 0 then th = draw.GetFontHeight(measureFont) end
+
+	local padW = 32 * screenscale
+	local padH = 14 * screenscale
+
+	local btnW = math.ceil(tw + padW)
+	local btnH = math.ceil(th + padH)
+
+	local minW = math.ceil(64 * screenscale)
+	if btnW < minW then btnW = minW end
+
+	cm:SetSize(btnW, btnH)
+	btn:SetSize(btnW, btnH)
+	btn:SetPos(0, 0)
+	btn:InvalidateLayout(true)
 end
 
 PANEL.NextWarningThink = 0
@@ -657,18 +970,21 @@ function PANEL:Think()
 
 	local display_warning = false
 	local desired = table.ToAssoc(MySelf:GetDesiredActiveSkills())
-	local active = MySelf:GetActiveSkills()
-	for k, v in pairs(desired) do
-		if v and not active[k] then
+	local active  = MySelf:GetActiveSkills()
+
+	for k in pairs(desired) do
+		if not active[k] then
 			display_warning = true
 			break
 		end
 	end
 
-	for k, v in pairs(active) do
-		if v and not desired[k] then
-			display_warning = true
-			break
+	if not display_warning then
+		for k in pairs(active) do
+			if not desired[k] then
+				display_warning = true
+				break
+			end
 		end
 	end
 
@@ -730,23 +1046,26 @@ function PANEL:GenerateSplines()
 end
 
 function PANEL:PerformLayout()
+	local screenscale = BetterScreenScale()
+	local gap = 10 * screenscale
+
 	self.Top:AlignTop(8)
 	self.Top:CenterHorizontal()
 
-	self.BottomLeftTop:AlignLeft(ScrH() * 0.2)
-	self.BottomLeftTop:AlignBottom(10)
+	self.BottomLeft:AlignLeft(gap)
+	self.BottomLeft:AlignBottom(gap)
 
-	self.BottomLeftUp:AlignLeft(10)
-	self.BottomLeftUp:AlignBottom(ScrW() * 0.08)
+	self.BottomLeftUp:AlignLeft(gap)
+	self.BottomLeftUp:AlignBottom(gap + self.BottomLeft:GetTall() + gap)
 
-	self.BottomLeft:AlignLeft(10)
-	self.BottomLeft:AlignBottom(10)
+	self.BottomLeftTop:AlignLeft(gap + self.BottomLeft:GetWide() + gap)
+	self.BottomLeftTop:AlignBottom(gap)
 
-	self.Bottom:AlignBottom(10)
+	self.Bottom:AlignBottom(gap)
 	self.Bottom:CenterHorizontal()
 
-	self.TopRight:AlignRight(10)
-	self.TopRight:AlignTop(10)
+	self.TopRight:AlignRight(gap)
+	self.TopRight:AlignTop(gap)
 
 	self.MessageBox:CenterHorizontal()
 	self.MessageBox:AlignTop(ScrH() * 0.65)
@@ -864,7 +1183,8 @@ function PANEL:Paint(w, h)
 
 	local particles = self.Particles
 	render.SetMaterial(matSmoke)
-	for i, particle in pairs(particles) do
+	for i = 1, #particles do
+		local particle = particles[i]
 		particle[2] = particle[2] + particle[3] * dt
 		colSmoke.a = particle[5]
 		render.DrawQuadEasy(particle[1], to_camera, particle[4], particle[4], colSmoke, particle[2])
@@ -928,7 +1248,7 @@ function PANEL:Paint(w, h)
 
 							pos_a = nodepos + Vector(-16, 0, 0)
 							pos_b = othernodepos + Vector(-16, 0, 0)
-							splines = skill.Splines and skill.Splines[connectid]
+							local splines = skill.Splines and skill.Splines[connectid]
 							if splines then
 								local numsplines = #splines
 								render_StartBeam(#splines)
@@ -1013,9 +1333,30 @@ function PANEL:Paint(w, h)
 			render_SetColorModulation(1, 1, 1)
 
 			if self.DesiredZoom < 9500 then
-				local colo = skill.Disabled and COLOR_DARKGRAY or selected and color_white or notunlockable and COLOR_MIDGRAY or COLOR_GRAY
+				local colo = skill.Disabled and COLOR_DARKGRAY
+					or selected and color_white
+					or notunlockable and COLOR_MIDGRAY
+					or COLOR_GRAY
+				local font = skillid <= -1 and "ZS3D2DFont2Big" or "ZS3D2DFont2"
+				local displayname = translate.SkillName(skillid, skill)
 
-				draw_SimpleText(skill.Name, skillid <= -1 and "ZS3D2DFont2Big" or "ZS3D2DFont2", 0, 0, colo, TEXT_ALIGN_CENTER)
+				-- WrapTextLines returns a table, but if displayname
+				-- is nil or the function returns nil in some unhandled
+				-- case — guard it, otherwise ipairs will error.
+				local lines = displayname
+					and string.WrapTextLines(
+						displayname,
+						font,
+						LABEL_WRAP_WIDTH,
+						selected and 99 or LABEL_MAX_LINES
+					)
+					or { "" }
+
+				local lineH = ComputeLineHeight(lines, font)
+
+				for i, line in ipairs(lines) do
+					draw.DrawText(line, font, 0, (i - 1) * lineH, colo, TEXT_ALIGN_CENTER)
+				end
 			end
 
 			DisableClipping(false)
@@ -1065,17 +1406,30 @@ function PANEL:Paint(w, h)
 
 		if hoveredskill then
 			skill = hoveredskill < -1 and TREE_SKILLS[-hoveredskill - 1] or hoveredskill == -1 and REMORT_SKILL or GAMEMODE.Skills[hoveredskill]
-			self.SkillName:SetText(skill.Name)
+			self.SkillName:SetText(translate.SkillName(hoveredskill, skill))
 			self.SkillName:SizeToContents()
 
-			desc = string.Explode("\n", skill.Description)
+			desc = string.Explode("\n", translate.SkillDescription(hoveredskill, skill))
 			local txt, colid
 			for i=1, 5 do
 				txt = desc[i] or " "
 				if txt:sub(1, 1) == "^" then
 					colid = tonumber(txt:sub(2, 2)) or 0
 					txt = txt:sub(3)
-					self.SkillDesc[i]:SetTextColor(util.ColorIDToColor(colid, COLOR_GRAY))
+
+					if colid == 1 then
+						self.SkillDesc[i]:SetTextColor(COLOR_RED)
+					elseif colid == 2 then
+						self.SkillDesc[i]:SetTextColor(COLOR_GREEN)
+					elseif colid == 3 then
+						self.SkillDesc[i]:SetTextColor(COLOR_BLUE)
+					elseif colid == 4 then
+						self.SkillDesc[i]:SetTextColor(COLOR_YELLOW)
+					elseif colid == 5 then
+						self.SkillDesc[i]:SetTextColor(COLOR_PURPLE)
+					else
+						self.SkillDesc[i]:SetTextColor(COLOR_GRAY)
+					end
 				else
 					self.SkillDesc[i]:SetTextColor(COLOR_GRAY)
 				end
@@ -1104,64 +1458,61 @@ function PANEL:Paint(w, h)
 end
 
 function PANEL:OnMousePressed(mc)
-	if mc == MOUSE_LEFT then
-		local contextmenu = self.ContextMenu
+	if mc ~= MOUSE_LEFT then return end
 
-		if hoveredskill then
-			local mx, my = gui.MousePos()
-			local can_remort = MySelf:CanSkillsRemort()
-			contextmenu:SetPos(mx - contextmenu:GetWide() / 2, my - contextmenu:GetTall() / 2)
-
-			if hoveredskill == -1 and can_remort then
-				Derma_Query(
-					"Are you ABSOLUTELY sure you want to remort?\nYou will revert to level 1, lose all skills, but have 1 extra SP.\nThis cannot be undone!",
-					"Warning",
-					"OK",
-					function() net.Start("zs_skills_remort") net.SendToServer() end,
-					"Cancel",
-					function() end
-				)
-
-				return
-			elseif hoveredskill == -1 then
-				self:DisplayMessage("You need to be level 50 to remort!", COLOR_RED)
-				surface.PlaySound("buttons/button8.wav")
-
-				return
-			elseif MySelf:IsSkillDesired(hoveredskill) then
-				if GAMEMODE.Skills[hoveredskill].AlwaysActive then
-					self:DisplayMessage("You can't deactivate this skill!", COLOR_RED)
-					surface.PlaySound("buttons/button8.wav")
-
-					return
-				end
-
-				contextmenu.Button:SetText("Deactivate")
-			elseif MySelf:IsSkillUnlocked(hoveredskill) then
-				contextmenu.Button:SetText("Activate")
-			elseif MySelf:SkillCanUnlock(hoveredskill) then
-				if MySelf:GetZSSPRemaining() >= 1 then
-					contextmenu.Button:SetText("Unlock")
-				else
-					self:DisplayMessage("You need SP to unlock this skill!", COLOR_RED)
-					surface.PlaySound("buttons/button8.wav")
-
-					return
-				end
-			else
-				self:DisplayMessage("You need to unlock an adjacent skill and meet any listed requirements!", COLOR_RED)
-				surface.PlaySound("buttons/button8.wav")
-
-				return
-			end
-
-			contextmenu.SkillID = hoveredskill
-
-			contextmenu:SetVisible(true)
-		else
-			contextmenu:SetVisible(false)
-		end
+	local contextmenu = self.ContextMenu
+	if not hoveredskill then
+		contextmenu:SetVisible(false)
+		return
 	end
+
+	local mx, my = gui.MousePos()
+	local can_remort = MySelf:CanSkillsRemort()
+	local btnText
+
+	if hoveredskill == -1 and can_remort then
+		Derma_Query(
+			translate.Format("skillweb_remort_query", GAMEMODE.RemortSkillPoints),
+			translate.Get("skillweb_warning_title"),
+			translate.Get("skillweb_ok_button"),
+			function() net.Start("zs_skills_remort") net.SendToServer() end,
+			translate.Get("skillweb_cancel_button"),
+			function() end
+		)
+		return
+	elseif hoveredskill == -1 then
+		self:DisplayMessage(translate.Format("skillweb_need_level_x", GAMEMODE.MaxLevel), COLOR_RED)
+		surface.PlaySound("buttons/button8.wav")
+		return
+	elseif MySelf:IsSkillDesired(hoveredskill) then
+		local skill = GAMEMODE.Skills[hoveredskill]
+		if skill and skill.AlwaysActive then
+			self:DisplayMessage(translate.Get("skillweb_cant_deactivate"), COLOR_RED)
+			surface.PlaySound("buttons/button8.wav")
+			return
+		end
+		btnText = translate.Get("skillweb_context_deactivate")
+	elseif MySelf:IsSkillUnlocked(hoveredskill) then
+		btnText = translate.Get("skillweb_context_activate")
+	elseif MySelf:SkillCanUnlock(hoveredskill) then
+		if MySelf:GetZSSPRemaining() >= 1 then
+			btnText = translate.Get("skillweb_context_unlock")
+		else
+			self:DisplayMessage(translate.Get("skillweb_need_sp_unlock"), COLOR_RED)
+			surface.PlaySound("buttons/button8.wav")
+			return
+		end
+	else
+		self:DisplayMessage(translate.Get("skillweb_need_adjacent"), COLOR_RED)
+		surface.PlaySound("buttons/button8.wav")
+		return
+	end
+
+	self:SizeContextMenu(btnText)
+
+	contextmenu.SkillID = hoveredskill
+	contextmenu:SetPos(mx - contextmenu:GetWide() / 2, my - contextmenu:GetTall() / 2)
+	contextmenu:SetVisible(true)
 end
 
 function PANEL:OnMouseWheeled(delta)
@@ -1200,9 +1551,23 @@ function GM:DrawXPBar(x, y, w, h, xpw, barwm, hm, level)
 	surface.SetDrawColor(0, 170, 0, 160)
 	surface.DrawRect(x, y + 2, barw * progress, 2)
 
-	if level == GAMEMODE.MaxLevel then
-		draw_SimpleText("Level MAX"..append, "ZSXPBar", xpw / 2, h / 2 + y, COLOR_GREEN, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	local maxstr
+	if rlevel > 0 then
+		maxstr = translate.Format("skillweb_level_max_remort", rlevel)
 	else
+		maxstr = translate.Get("skillweb_level_max")
+	end
+
+	if level == GAMEMODE.MaxLevel then
+		draw_SimpleText(maxstr, "ZSXPBar", xpw / 2, h / 2 + y, COLOR_GREEN, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	else
+		local levelstr
+		if rlevel > 0 then
+			levelstr = translate.Format("skillweb_level_remort", level, rlevel)
+		else
+			levelstr = translate.Format("skillweb_level", level)
+		end
+
 		if progress > 0 then
 			local lx = x + barw * progress - 1
 			surface.SetDrawColor(255, 255, 255, 20 + math.abs(math.sin(RealTime() * 2)) * 170)
@@ -1213,8 +1578,8 @@ function GM:DrawXPBar(x, y, w, h, xpw, barwm, hm, level)
 			surface.DrawLine(lx, y - 1, lx, y + 5)
 		end
 
-		draw_SimpleText("Level "..level..append, "ZSXPBar", x, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw_SimpleText(string.CommaSeparate(xp).." / "..string.CommaSeparate(GAMEMODE:XPForLevel(level + 1)).." XP", "ZSXPBar", x + barw, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw_SimpleText(levelstr, "ZSXPBar", x, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw_SimpleText(translate.Format("skillweb_xp_progress", string.CommaSeparate(xp), string.CommaSeparate(GAMEMODE:XPForLevel(level + 1))), "ZSXPBar", x + barw, h / 2 + y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -1270,7 +1635,7 @@ function PANEL:Paint(w, h)
 	local sp = MySelf:GetZSSPRemaining()
 	if sp > 0 then
 		colFlash.a = 90 + math.abs(math.sin(RealTime() * 2)) * 160
-		draw_SimpleText(sp.." SP", "ZSHUDFontSmallest", w - 2, h / 2, colFlash, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw_SimpleText(translate.Format("skillweb_sp_short", sp), "ZSHUDFontSmallest", w - 2, h / 2, colFlash, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -1319,6 +1684,7 @@ end
 
 function meta:SetDesiredActiveSkills(skills, nosend)
 	self.DesiredActiveSkills = table.ToKeyValues(skills)
+	self.DesiredActiveSkillsAssoc = nil
 end
 
 function meta:SetActiveSkills(skills, nosend)
@@ -1327,4 +1693,5 @@ end
 
 function meta:SetUnlockedSkills(skills, nosend)
 	self.UnlockedSkills = table.ToKeyValues(skills)
+	self.UnlockedSkillsAssoc = nil
 end

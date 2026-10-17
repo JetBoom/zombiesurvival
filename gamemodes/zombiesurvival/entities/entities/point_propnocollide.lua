@@ -73,6 +73,10 @@ function ENT:Think()
 		return
 	end
 
+	-- If someone is right up close (which usually requires an immediate reaction),
+    -- we continue to process every frame; otherwise, once every 0.1 seconds.
+	local nextthink = 0.1
+
 	local pushout = false
 	local timeout = self:GetTimeOut() > 0 and CurTime() >= self:GetTimeOut()
 	--local teamid = self:GetTeam()
@@ -107,6 +111,6 @@ function ENT:Think()
 		self:Remove()
 	end
 
-	self:NextThink(CurTime())
+	self:NextThink(CurTime() + nextthink)
 	return true
 end

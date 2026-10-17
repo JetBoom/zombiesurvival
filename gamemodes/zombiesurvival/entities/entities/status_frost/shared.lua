@@ -22,6 +22,16 @@ function ENT:Initialize()
 	end
 end
 
+function ENT:OnRemove()
+	self.BaseClass.OnRemove(self)
+
+	if CLIENT then
+		hook.Remove("PrePlayerDraw", self)
+		hook.Remove("PostPlayerDraw", self)
+		hook.Remove("RenderScreenspaceEffects", self)
+	end
+end
+
 function ENT:PlayerSet()
 	self:SetStartTime(CurTime())
 end

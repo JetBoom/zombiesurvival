@@ -10,5 +10,7 @@ function ENT:GetHint()
 
 	if self:GetTranslated() then return translate.Get(hint) end
 
-	return hint
+	-- The server sent the original text as is. We translate it
+	-- on the client into the player's language.
+	return translate.MapText(hint)
 end

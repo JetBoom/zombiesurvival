@@ -134,5 +134,5 @@ function ENT:Draw()
 		particle:SetCollide(true)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

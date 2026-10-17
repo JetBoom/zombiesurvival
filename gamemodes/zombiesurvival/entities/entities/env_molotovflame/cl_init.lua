@@ -25,16 +25,18 @@ function ENT:Draw()
 	local time = CurTime()
 	local pos = self:GetPos()
 
-	local dlight = DynamicLight(self:EntIndex())
-	if dlight then
-		dlight.Pos = pos
-		dlight.r = 255
-		dlight.g = 190
-		dlight.b = 30
-		dlight.Brightness = 8
-		dlight.Size = self.Radius / 2
-		dlight.Decay = self.Radius * 2
-		dlight.DieTime = time + 0.75
+	if MySelf:IsValid() and MySelf:GetPos():DistToSqr(pos) <= 262144 then  -- 512^2
+		local dlight = DynamicLight(self:EntIndex())
+		if dlight then
+			dlight.Pos = pos
+			dlight.r = 255
+			dlight.g = 190
+			dlight.b = 30
+			dlight.Brightness = 8
+			dlight.Size = self.Radius / 2
+			dlight.Decay = self.Radius * 2
+			dlight.DieTime = time + 0.75
+		end
 	end
 
 	if time < self.NextEmit then return end
@@ -59,5 +61,5 @@ function ENT:Draw()
 		particle:SetCollide(true)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

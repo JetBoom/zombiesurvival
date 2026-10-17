@@ -28,7 +28,7 @@ function ENT:Think()
 		particle:SetRoll(math.Rand(-0.2, 0.2))
 		particle:SetColor(50, 50, 50)
 
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 
 	if curtime >= self.NextTickSound then

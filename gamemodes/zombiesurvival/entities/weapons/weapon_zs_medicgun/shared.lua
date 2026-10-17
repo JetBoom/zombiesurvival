@@ -73,7 +73,7 @@ function SWEP:SecondaryAttack()
 	if CLIENT then
 		self:EmitSound(locked and "npc/scanner/combat_scan4.wav" or "npc/scanner/scanner_scan5.wav", 65, locked and 75 or 200)
 	end
-	self:SetSeekedPlayer(locked and targetent)
+	self:SetSeekedPlayer(locked and targetent or nil)
 end
 
 function SWEP:SetSeekedPlayer(ent)

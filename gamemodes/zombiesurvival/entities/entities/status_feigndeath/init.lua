@@ -41,11 +41,12 @@ function ENT:Think()
 		end
 	end
 
-	self:NextThink(fCurTime)
+	self:NextThink(fCurTime + 0.1)
 	return true
 end
 
 function ENT:OnRemove()
+	hook.Remove("Move", self)
 	local parent = self:GetOwner()
 	if parent:IsValid() then
 		parent.FeignDeath = nil

@@ -21,6 +21,7 @@ SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "impactmine"
 SWEP.Primary.DefaultClip = 7
+SWEP.ShowReserveAmmo = true
 
 SWEP.ReloadSound = Sound("weapons/ar2/ar2_reload.wav")
 
@@ -34,7 +35,7 @@ SWEP.UseHands = true
 SWEP.MaxMines = 6
 
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAXIMUM_MINES, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Sparkler' Laser Miner", "Fires damaging laser trip mines that last several seconds", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Sparkler' Laser Miner", "Fires damaging laser trip mines that last several seconds", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.22
 	if SERVER then
 		wept.EntModify = function(self, ent)
@@ -44,6 +45,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Sparkler' Laser Miner", "Fires damaging
 		end
 	end
 end)
+branch.TranslationID = "minelayer_branch_1"
 
 function SWEP:CanPrimaryAttack()
 	if self.BaseClass.CanPrimaryAttack(self) then

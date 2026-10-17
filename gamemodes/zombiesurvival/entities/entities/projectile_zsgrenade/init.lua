@@ -26,9 +26,15 @@ end
 function ENT:Think()
 	if self.Exploded then
 		self:Remove()
-	elseif self.DieTime <= CurTime() then
-		self:Explode()
+		return
 	end
+	if self.DieTime <= CurTime() then
+		self:Explode()
+		return
+	end
+
+	self:NextThink(CurTime() + 0.05)
+	return true
 end
 
 function ENT:Explode()

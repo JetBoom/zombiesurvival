@@ -29,7 +29,13 @@ function ENT:Think()
 			if endtime - 1 <= ct then
 				if not self.m_DidSetModel then
 					self.m_DidSetModel = true
-					rag:SetModel(GAMEMODE.ZombieClasses["Zombie"].Model)
+					-- Protection against nil fields: the Zombie class may not be loaded
+					-- (for example, in custom ZS builds or during early spawning).
+					local zclass = GAMEMODE.ZombieClasses and GAMEMODE.ZombieClasses["Zombie"]
+					local mdl = zclass and zclass.Model
+					if mdl then
+						rag:SetModel(mdl)
+					end
 				end
 				local delta = math.max(0.01, endtime - ct)
 				for i = 0, rag:GetPhysicsObjectCount() do

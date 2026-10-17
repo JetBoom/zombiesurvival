@@ -32,7 +32,7 @@ function ENT:OnRemove()
 		particle:SetBounce(0.8)
 		particle:SetGravity(grav)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end
 
 local matExpert = Material("zombiesurvival/padlock.png")
@@ -90,7 +90,7 @@ function ENT:DrawTranslucent()
 			particle:SetRoll(math.Rand(0, 360))
 			particle:SetRollDelta(math.Rand(-20, 20))
 		end
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 
 		self.NextEmit = CurTime() + math.Rand(4.2, 5.8)
 	end
@@ -123,7 +123,7 @@ function ENT:DrawTranslucent()
 						end
 					end
 				else
-					displayowner = "(DEAD) "..displayowner
+					displayowner = translate.Format("nail_owner_dead", displayowner)
 					redname = true
 				end
 			end
@@ -201,7 +201,7 @@ function ENT:DrawTranslucent()
 					col.a = 125 * vis
 
 					draw.SimpleText(displayowner, "ZS3D2DUnstyleSmallest", 0, y + 20, col, TEXT_ALIGN_CENTER)
-					draw.SimpleText(math.floor(nhp) .. "/" .. math.floor(self:GetMaxNailHealth()), "ZS3D2DUnstyleTiny", x + 25, y - 30, col, TEXT_ALIGN_CENTER)
+					draw.SimpleText(translate.Format("nail_hp_format", math.floor(nhp), math.floor(self:GetMaxNailHealth())), "ZS3D2DUnstyleTiny", x + 25, y - 30, col, TEXT_ALIGN_CENTER)
 				end
 			end
 		cam.End3D2D()

@@ -35,6 +35,8 @@ SWEP.MeleeDamage = 125
 SWEP.MeleeRange = 75
 SWEP.MeleeSize = 2.75
 SWEP.MeleeKnockBack = 225
+SWEP.ExecutionThreshold = 0.1
+SWEP.ExecutionThresholdPercent = 10
 
 SWEP.Primary.Delay = 1.35
 
@@ -64,11 +66,13 @@ function SWEP:PlayHitFleshSound()
 end
 
 function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
-	if hitent:IsValid() and hitent:IsPlayer() and hitent:Alive() and hitent:Health() <= hitent:GetMaxHealthEx() * 0.1 and gamemode.Call("PlayerShouldTakeDamage", hitent, self:GetOwner()) then
-		if SERVER then
-			hitent:SetWasHitInHead()
-		end
-		hitent:TakeSpecialDamage(hitent:Health(), DMG_DIRECT, self:GetOwner(), self, tr.HitPos)
-		hitent:EmitSound("npc/roller/blade_out.wav", 80, 75)
-	end
+    if hitent:IsValid() and hitent:IsPlayer() and hitent:Alive()
+        and hitent:Health() <= hitent:GetMaxHealthEx() * self.ExecutionThreshold
+        and gamemode.Call("PlayerShouldTakeDamage", hitent, self:GetOwner()) then
+        if SERVER then
+            hitent:SetWasHitInHead()
+        end
+        hitent:TakeSpecialDamage(hitent:Health(), DMG_DIRECT, self:GetOwner(), self, tr.HitPos)
+        hitent:EmitSound("npc/roller/blade_out.wav", 80, 75)
+    end
 end

@@ -17,7 +17,7 @@ function GM:ShouldSaveVault(pl)
 end
 
 function GM:ShouldLoadVault(pl)
-	return not pl:IsBot()
+    return not pl:IsBot()
 end
 
 --[[function GM:ShouldUseVault(pl)

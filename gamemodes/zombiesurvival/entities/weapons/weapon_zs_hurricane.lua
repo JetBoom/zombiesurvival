@@ -83,7 +83,7 @@ SWEP.IronSightsPos = Vector(-6.425, 5, 1.02)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MAX_SPREAD, -0.5375, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_MIN_SPREAD, -0.3125, 1)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 1, 1)
-GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Typhoon' Pulse SMG", "Less damage, more accuracy, and gains damage if spooled", function(wept)
+local branch = GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Typhoon' Pulse SMG", "Less damage, more accuracy, and gains damage if spooled", function(wept)
 	wept.Primary.Damage = wept.Primary.Damage * 0.82
 	wept.Primary.Delay = wept.Primary.Delay * 2.3
 	wept.ConeMax = wept.ConeMax * 0.5
@@ -106,6 +106,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "'Typhoon' Pulse SMG", "Less damage, more
 		BaseClass.Think(self)
 	end
 end)
+branch.TranslationID = "hurricane_branch_1"
 
 function SWEP.BulletCallback(attacker, tr, dmginfo)
 	local ent = tr.Entity

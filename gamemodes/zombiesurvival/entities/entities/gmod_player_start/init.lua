@@ -24,7 +24,7 @@ function ENT:KeyValue(key, value)
 	if key == "spawnflags" then
 		local sf = tonumber(value)
 		for i=15, 0, -1 do
-			local bit = math.pow(2, i)
+			local bit = 2 ^ i
 			if sf - bit >= 0 then
 				if bit == 8 then self.RedTeam = true self.Entity:GetTable().RedTeam = true
 				elseif bit == 4 then self.GreenTeam = true self.Entity:GetTable().GreenTeam = true

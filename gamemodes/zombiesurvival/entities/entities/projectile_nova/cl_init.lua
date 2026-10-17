@@ -38,7 +38,7 @@ function ENT:Draw()
 			particle:SetRollDelta(math.Rand(-10, 10))
 			particle:SetColor(255, alt and 180 or 100, 100)
 		end
-		emitter:Finish() emitter = nil collectgarbage("step", 64)
+		emitter:Finish()
 	end
 end
 
@@ -87,7 +87,7 @@ function ENT:OnRemove()
 		particle:SetEndLength(5)
 		particle:SetVelocity(VectorRand():GetNormal() * 100)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end
 
 function ENT:Initialize()

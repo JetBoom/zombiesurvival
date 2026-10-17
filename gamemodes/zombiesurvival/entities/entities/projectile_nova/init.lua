@@ -61,7 +61,7 @@ function ENT:Think()
 		end
 		self:DealProjectileTraceDamage(self.ProjDamage or 77, tr, owner)
 		if tr.Entity:IsPlayer() then
-			tr.Entity:AddLegDamageExt(5.5, owner, source, SLOWTYPE_PULSE)
+			tr.Entity:AddLegDamageExt(5.5, owner, self, SLOWTYPE_PULSE)
 		end
 		if self.PointsMultiplier then
 			POINTSMULTIPLIER = nil

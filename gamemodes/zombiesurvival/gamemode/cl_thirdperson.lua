@@ -69,8 +69,17 @@ local trace_crosshair = {mask = MASK_SHOT--[[, mins = Vector(-1, -1, -1), maxs =
 local maxdiff = 70
 
 local myteam = 0
+local myent = NULL
 local function IgnoreTeam(ent)
-	return not (ent:IsPlayer() and ent:Team() == myteam)
+	-- Ignore self.
+	if ent == myent then return false end
+	-- Entities parented to self (e.g. status_arsenalpack / status_resupplypack on the back).
+	if ent:GetParent() == myent then return false end
+	-- Entities whose owner is us (in case someone uses only SetOwner).
+	if ent:GetOwner() == myent then return false end
+	-- Ignore teammates (including ourselves, though we filtered that above).
+	if ent:IsPlayer() and ent:Team() == myteam then return false end
+	return true
 end
 function GM:CalcViewOTS(pl, origin, angles, fov, znear, zfar)
 	local camPos = origin - otscameraangles:Forward() * 28 + otsdesiredright * 12 * otscameraangles:Right() -- - otscameraangles:Up() * 2
@@ -82,6 +91,7 @@ function GM:CalcViewOTS(pl, origin, angles, fov, znear, zfar)
 	camPos = util.TraceHull(trace_wall).HitPos
 
 	myteam = pl:Team()
+	myent = pl
 	trace_crosshair.start = camPos
 	trace_crosshair.endpos = camPos + otscameraangles:Forward() * 32768
 	trace_crosshair.filter = IgnoreTeam

@@ -5,6 +5,7 @@ ENT.Sound2 = Sound("ambient/levels/labs/teleport_mechanism_windup3.wav")
 ENT.ParticleMaterial = "sprites/glow04_noz"
 
 function ENT:Initialize()
+	hook.Add("EntityTakeDamage", self, self.EntityTakeDamage)
 	self:DrawShadow(false)
 	self:SetRenderBounds(Vector(-40, -40, -18), Vector(40, 40, 80))
 
@@ -60,7 +61,7 @@ function ENT:Think()
 		self:SetParticleColor(particle)
 	end
 
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 
 	self:NextThink(CurTime() + 0.05)
 	return true

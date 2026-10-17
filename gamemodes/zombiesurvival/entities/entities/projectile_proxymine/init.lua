@@ -54,7 +54,7 @@ function ENT:PhysicsCollide(data, phys)
 	end
 
 	self.Planted = true
-	self.PhysicsData = data
+	self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	self:EmitSound("weapons/c4/c4_plant.wav", 85, 130)
 end
 

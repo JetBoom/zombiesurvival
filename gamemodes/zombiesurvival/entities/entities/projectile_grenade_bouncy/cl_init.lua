@@ -65,5 +65,5 @@ function ENT:OnRemove()
 		particle:SetEndLength(15)
 		particle:SetVelocity(VectorRand():GetNormal() * 200)
 	end
-	emitter:Finish() emitter = nil collectgarbage("step", 64)
+	emitter:Finish()
 end

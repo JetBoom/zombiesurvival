@@ -22,6 +22,7 @@ function ENT:Think()
 
 	if self.Exploded then
 		self:Remove()
+		return
 	end
 
 	if CurTime() > self.NextShoot then
@@ -32,6 +33,9 @@ function ENT:Think()
 
 		self:FireBulletsLua(self:GetPos() + self:GetForward() * 10, self:GetForward(), 5, 1, self.ProjDamage, owner, 0.01, "tracer_pcutter", BulletCallback, nil, nil, nil, nil, self)
 	end
+
+	self:NextThink(CurTime() + 0.05)
+	return true
 end
 
 function ENT:OnRemove()
@@ -56,7 +60,7 @@ end
 
 function ENT:PhysicsCollide(data, phys)
 	if not self:HitFence(data, phys) then
-		self.PhysicsData = data
+		self.PhysicsData = {HitPos = data.HitPos, HitNormal = data.HitNormal, HitEntity = data.HitEntity, OurOldVelocity = data.OurOldVelocity}
 	end
 
 	self:NextThink(CurTime())

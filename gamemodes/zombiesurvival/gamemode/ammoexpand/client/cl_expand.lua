@@ -16,10 +16,10 @@ local function GetIDFromNameOrID(id_or_name)
 end
 
 function M_Player:GetAmmoCount(id_or_name)
-	if LocalPlayer() ~= self then return 0 end
-
 	local id = GetIDFromNameOrID(id_or_name)
+
 	if id then
+		if LocalPlayer() ~= self then return 0 end
 		return CUSTOM_AMMO_COUNT[id] or 0
 	end
 
@@ -27,10 +27,10 @@ function M_Player:GetAmmoCount(id_or_name)
 end
 
 function M_Player:SetAmmo(amount, id_or_name)
-	if LocalPlayer() ~= self then return end
-
 	local id = GetIDFromNameOrID(id_or_name)
+
 	if id then
+		if LocalPlayer() ~= self then return end
 		CUSTOM_AMMO_COUNT[id] = amount
 	else
 		old_Player_SetAmmo(self, amount, id_or_name)
@@ -38,10 +38,10 @@ function M_Player:SetAmmo(amount, id_or_name)
 end
 
 function M_Player:RemoveAmmo(amount, id_or_name)
-	if LocalPlayer() ~= self then return end
-
 	local id = GetIDFromNameOrID(id_or_name)
+
 	if id then
+		if LocalPlayer() ~= self then return end
 		CUSTOM_AMMO_COUNT[id] = math.max((CUSTOM_AMMO_COUNT[id] or 0) - amount, 0)
 	else
 		old_Player_RemoveAmmo(self, amount, id_or_name)
